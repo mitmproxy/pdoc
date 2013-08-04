@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm -rf docs/*
+# epydoc --docformat restructuredtext -v --html --name nflgame \ 
+epydoc -v --html --name nflvid \
+  --no-private \
+  -o ./doc/ nflvid
+
