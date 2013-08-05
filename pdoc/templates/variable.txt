@@ -1,2 +1,0 @@
-${var.name}
-${var.docstring | indent}

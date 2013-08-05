@@ -42,7 +42,10 @@ __tpl_lookup = TemplateLookup(directories=__tpl_dir,
                                           'cache_type': 'memory'})
 
 
-def html(module_name, (a, (b, c)), abc=123, xyz=789, *args, **kws):
+def html(module_name, abc=123, xyz=789, *args, **kws):
+    """
+    Test.
+    """
     pass
 
 
@@ -51,7 +54,8 @@ def text(module_name):
     Returns the documentation for the module `module_name` in plain
     text format. The module must be importable.
     """
-    return Module(importlib.import_module(module_name)).text()
+    mod = Module(importlib.import_module(module_name))
+    return _tpl_text('module', module=mod)
 
 
 def _tpl_html(tpl_name, **kwargs):
@@ -59,25 +63,8 @@ def _tpl_html(tpl_name, **kwargs):
     Return an HTML template string formatted with the given keyword
     arguments.
     """
-    t = __tpl_lookup.get_template('/%s.html' % tpl_name)
+    t = __tpl_lookup.get_template('/%s.html.mako' % tpl_name)
     return t.render(**kwargs).strip()
-
-
-def _indent(s, spaces=4):
-    """
-    Inserts `spaces` after each string of new lines in `s`
-    and before the start of the string.
-    """
-    new, _ = re.subn('(\n+)', '\\1%s' % (' ' * spaces), s)
-    return (' ' * spaces) + new.strip()
-
-
-def _underline(s):
-    """
-    Inserts a new line following by the '-' character N times,
-    where N is the length of `s`.
-    """
-    return s + ('\n%s' % ('-' * len(s)))
 
 
 def _tpl_text(tpl_name, **kwargs):
@@ -85,17 +72,17 @@ def _tpl_text(tpl_name, **kwargs):
     Return a text template string formatted with the given keyword
     arguments.
     """
-    kwargs['indent'] = _indent
-    t = __tpl_lookup.get_template('/%s.txt' % tpl_name)
-    new, _ = re.subn('\n\n\n\n+', '\n\n\n', t.render(**kwargs).strip())
+    t = __tpl_lookup.get_template('/%s.txt.mako' % tpl_name)
+    new, _ = re.subn('\n\n\n+', '\n\n', t.render(**kwargs).strip())
     return new
 
 
-def _fetch_var_docstrings(module, obj):
-    return _extract_var_docstrings(module, ast.parse(inspect.getsource(obj)))
+def _fetch_var_docstrings(module, obj, cls=None):
+    tree = ast.parse(inspect.getsource(obj))
+    return _extract_var_docstrings(module, tree, cls=cls)
 
 
-def _extract_var_docstrings(module, ast_tree):
+def _extract_var_docstrings(module, ast_tree, cls=None):
     vs = {}
     children = list(ast.iter_child_nodes(ast_tree))
     for i, child in enumerate(children):
@@ -111,7 +98,7 @@ def _extract_var_docstrings(module, ast_tree):
             else:
                 continue
             docstring = children[i+1].value.s
-            vs[name] = Variable(module, name, docstring)
+            vs[name] = Variable(module, name, docstring, cls=cls)
     return vs
 
 
@@ -143,41 +130,23 @@ class Doc (object):
         self.docstring = inspect.cleandoc(docstring or '')
         """The docstring for this object."""
 
-    def __cmp__(self, other):
-        return cmp(self.name, other.name)
+    def refname(self):
+        """
+        Returns an appropriate reference name for this documentation
+        object. Usually this is its fully qualified path.
+
+        e.g., The refname for this method is `pdoc.Doc.refname`.
+        """
+        assert False, 'subclass responsibility'
+
+    def __lt__(self, other):
+        return self.name < other.name
 
     def is_empty(self):
         """
         Returns true if the docstring for this object is empty.
         """
         return len(self.docstring.strip()) == 0
-
-    def text(self):
-        """
-        Returns the plain text output for this documentation object.
-        """
-        assert False, 'subclass responsibility'
-
-    def text_ref(self):
-        """
-        Returns a plain text reference for this documentation object.
-        This typically includes the name preceded by its module name.
-        """
-        assert False, 'subclass responsibility'
-
-    def html(self):
-        """
-        Returns the HTML output for this documentation object.
-        """
-        assert False, 'subclass responsibility'
-
-    def html_ref(self):
-        """
-        Returns an HTML reference for this documentation object.
-        This typically includes the name preceded by its module name
-        with a hyperlink to its documentation.
-        """
-        assert False, 'subclass responsibility'
 
 
 class Module (Doc):
@@ -191,6 +160,12 @@ class Module (Doc):
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
+
+        self.refdoc = {}
+        """
+        The same as `pdoc.Module.doc`, but maps fully qualified
+        identifier names to documentation objects.
+        """
 
         try:
             self.doc = _fetch_var_docstrings(self.module, self.module)
@@ -207,7 +182,7 @@ class Module (Doc):
         all not starting with an underscore are public.)
         """
 
-        for name, obj in self.public.iteritems():
+        for name, obj in self.public.items():
             # Skip any identifiers that already have doco.
             if name in self.doc and not self.doc[name].is_empty():
                 continue
@@ -223,7 +198,8 @@ class Module (Doc):
                 self.doc[name] = Module(obj)
 
         # Now try documenting sub-modules recursively if this is a package.
-        if hasattr(self.module, '__file__'):
+        if not hasattr(self.module, '__all__') \
+                and hasattr(self.module, '__file__'):
             pkgdir = os.path.dirname(self.module.__file__)
             if self.module.__package__ is not None \
                     and hasattr(self.module, '__path__') \
@@ -241,8 +217,12 @@ class Module (Doc):
                         continue
                     self.doc[m.name] = m
 
-    def text(self):
-        return _tpl_text('module', module=self)
+        # Build the reference name dictionary.
+        for basename, docobj in self.doc.items():
+            self.refdoc[docobj.refname()] = docobj
+
+    def refname(self):
+        return self.name
 
     def mro(self, cls):
         """
@@ -255,8 +235,8 @@ class Module (Doc):
         """
         def clsname(c):
             return '%s.%s' % (c.__module__, c.__name__)
-        return map(lambda c: self.find_ident(clsname(c)),
-                   inspect.getmro(cls.cls))
+        return list(map(lambda c: self.find_ident(clsname(c)),
+                        inspect.getmro(cls.cls)))
 
     def descendents(self, cls):
         """
@@ -267,10 +247,14 @@ class Module (Doc):
         `External`. Objects belonging to the former are exported
         classes either in this module or in one of its sub-modules.
         """
+        if cls.cls == type or not hasattr(cls, '__subclasses__'):
+            # Is this right?
+            return []
+
         def clsname(c):
             return '%s.%s' % (c.__module__, c.__name__)
-        return map(lambda c: self.find_ident(clsname(c)),
-                   cls.cls.__subclasses__())
+        return list(map(lambda c: self.find_ident(clsname(c)),
+                        cls.cls.__subclasses__()))
 
     def find_ident(self, name):
         """
@@ -284,30 +268,12 @@ class Module (Doc):
         returned. If one cannot be found, then an instance of
         `External` is returned populated with the given identifier.
         """
-        pieces = name.split('.')
-
-        # A lone identifier without a path. Just check current module.
-        if len(pieces) == 1:
-            return self.doc.get(name, External(name))
-
-        # If the identifier isn't prefixed with this module path,
-        # then there's no hope for resolution.
-        if not name.startswith(self.name):
-            return External(name)
-
-        # If this identifier is expected to be in this module, fetch or die.
-        if self.name.count('.') + 1 == name.count('.'):
-            return self.doc.get(pieces[-1], External(name))
-
-        # Look for a sub-module and hand it off.
-        parts = self.name.count('.') + 1
-        if len(pieces) < parts + 1:
-            return External(name)
-
-        subname = '.'.join(pieces[0:parts + 1])
-        if subname in self.doc:
-            return self.doc[subname].find_ident(name)
-
+        if name in self.refdoc:
+            return self.refdoc[name]
+        for module in self.submodules():
+            o = module.find_ident(name)
+            if not isinstance(o, External):
+                return o
         return External(name)
 
     def variables(self):
@@ -371,7 +337,7 @@ class Module (Doc):
                     for name in members['__all__']}
         else:
             return {name: obj
-                    for name, obj in members.iteritems()
+                    for name, obj in members.items()
                     if self.is_exported(name, inspect.getmodule(obj))}
 
 
@@ -379,8 +345,6 @@ class Class (Doc):
     """
     Representation of a class's documentation.
     """
-
-    Cauchy = 5
 
     def __init__(self, module, class_obj):
         self.cls = class_obj
@@ -407,34 +371,32 @@ class Class (Doc):
 
         try:
             cls_ast = ast.parse(inspect.getsource(self.cls)).body[0]
-            self.doc = _extract_var_docstrings(self.module, cls_ast)
+            self.doc = _extract_var_docstrings(self.module, cls_ast, cls=self)
             if '__init__' in self.public:
                 for n in cls_ast.body:
                     if isinstance(n, ast.FunctionDef) and n.name == '__init__':
-                        self.doc_init = _extract_var_docstrings(self.module, n)
+                        self.doc_init = _extract_var_docstrings(self.module,
+                                                                n, cls=self)
                         break
         except IOError:
             pass
         except TypeError:
             pass
 
-        for name, obj in self.public.iteritems():
+        for name, obj in self.public.items():
             # Skip any identifiers that already have doco.
             if name in self.doc and not self.doc[name].is_empty():
                 continue
 
-            # At the class level, we only variables and methods.
+            # At the class level, we only document variables and methods.
             # We've already gathered class and instance variable doco above.
             if inspect.ismethod(obj):
-                self.doc[name] = Function(self.module, obj.__func__)
+                self.doc[name] = Function(self.module, obj.__func__, cls=self)
             elif not inspect.isbuiltin(obj) \
                     and not inspect.isroutine(obj):
-                self.doc[name] = Variable(self.module, name, '')
+                self.doc[name] = Variable(self.module, name, '', cls=self)
 
-    def text(self):
-        return _tpl_text('class', cls=self)
-
-    def text_ref(self):
+    def refname(self):
         return '%s.%s' % (self.cls.__module__, self.cls.__name__)
 
     def class_variables(self):
@@ -457,7 +419,7 @@ class Class (Doc):
         """
         Returns all documented methods as Function objects in the
         class, sorted alphabetically with __new__ and __init__ always
-        coming first..
+        coming first.
         """
         vs = filter(lambda o: isinstance(o, Function), self.doc.values())
         return sorted(vs)
@@ -467,7 +429,7 @@ class Class (Doc):
             return name in ('__init__', '__new__') or _is_exported(name)
 
         idents = dict(inspect.getmembers(self.cls))
-        return {name: o for name, o in idents.iteritems() if exported(name)}
+        return {name: o for name, o in idents.items() if exported(name)}
 
 
 class Function (Doc):
@@ -478,15 +440,24 @@ class Function (Doc):
     ClassVariable = 5
     """Doco for class variable."""
 
-    def __init__(self, module, func_obj):
+    def __init__(self, module, func_obj, cls=None):
         self.func = func_obj
         """The function object."""
+
+        self.cls = cls
+        """
+        The Class documentation object if this is a method.
+        If not, this is None.
+        """
 
         super(Function, self).__init__(module, self.func.__name__,
                                        inspect.getdoc(self.func))
 
-    def text(self):
-        return _tpl_text('function', func=self)
+    def refname(self):
+        if self.cls is None:
+            return '%s.%s' % (self.module.name, self.name)
+        else:
+            return '%s.%s' % (self.cls.refname(), self.name)
 
     def spec(self):
         """
@@ -503,7 +474,7 @@ class Function (Doc):
         and default values.
         """
         def fmt_param(el):
-            if isinstance(el, basestring):
+            if isinstance(el, str) or isinstance(el, unicode):
                 return el
             else:
                 return '(%s)' % (', '.join(map(fmt_param, el)))
@@ -526,16 +497,16 @@ class Function (Doc):
             params.append('**%s' % s.keywords)
         return params
 
-    def __cmp__(self, other):
+    def __lt__(self, other):
         # Push __new__ and __init__ to the top.
         if '__new__' in (self.name, other.name):
-            return cmp(0 if self.name == '__new__' else 1,
-                       0 if other.name == '__new__' else 1)
+            return (0 if self.name == '__new__' else 1 <
+                    0 if other.name == '__new__' else 1)
         elif '__init__' in (self.name, other.name):
-            return cmp(0 if self.name == '__init__' else 1,
-                       0 if other.name == '__init__' else 1)
+            return (1 if self.name == '__init__' else 0 <
+                    1 if other.name == '__init__' else 0)
         else:
-            return cmp(self.name, other.name)
+            return self.name < other.name
 
 
 class Variable (Doc):
@@ -543,11 +514,20 @@ class Variable (Doc):
     Representation of a variable's documentation. This includes
     module, class and instance variables.
     """
-    def __init__(self, module, name, docstring):
+    def __init__(self, module, name, docstring, cls=None):
         super(Variable, self).__init__(module, name, docstring)
 
-    def text(self):
-        return _tpl_text('variable', var=self)
+        self.cls = cls
+        """
+        The Class documentation object if this is a method.
+        If not, this is None.
+        """
+
+    def refname(self):
+        if self.cls is None:
+            return '%s.%s' % (self.module.name, self.name)
+        else:
+            return '%s.%s' % (self.cls.refname(), self.name)
 
 
 class External (Doc):
@@ -560,5 +540,5 @@ class External (Doc):
     def __init__(self, name):
         super(External, self).__init__(None, name, '')
 
-    def text_ref(self):
+    def refname(self):
         return '%s (ext)' % self.name
