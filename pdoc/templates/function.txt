@@ -1,0 +1,2 @@
+${func.name}(${func.spec()})
+${func.docstring | indent}

@@ -12,7 +12,7 @@ pypi-meta:
 
 pep8:
 	pep8-python2 pdoc/*.py
-	pep8-python2 scripts/{generate-docs,pdoc}
+	pep8-python2 scripts/pdoc
 
 push:
 	git push origin master

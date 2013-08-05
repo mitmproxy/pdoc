@@ -1,0 +1,26 @@
+#!/usr/bin/env python2
+
+from __future__ import print_function
+import argparse
+
+import pdoc
+
+parser = argparse.ArgumentParser(
+    description='Automatically generate API docs for Python packages.',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+aa = parser.add_argument
+aa('package_name', type=str,
+   help='The Python package name. The package must be importable.')
+args = parser.parse_args()
+
+# print(pdoc.text(args.package_name))
+
+try:
+    print(pdoc.text(args.package_name))
+except IOError as e:
+    # This seems to happen for long documentation.
+    # This is obviously a hack. What's the real cause? Dunno.
+    if e.errno == 32:
+        pass
+    else:
+        raise e

@@ -1,0 +1,49 @@
+Module ${module.name}
+
+${module.docstring}
+
+<%
+  variables = module.variables()
+  classes = module.classes()
+  functions = module.functions()
+  submodules = module.submodules()
+%>
+
+
+% if len(variables) > 0:
+Variables
+---------
+    % for v in variables:
+${v.text()}
+
+    % endfor
+% endif
+
+
+% if len(functions) > 0:
+Functions
+---------
+    % for f in functions:
+${f.text()}
+
+    % endfor
+% endif
+
+
+% if len(classes) > 0:
+Classes
+-------
+    % for c in classes:
+${c.text()}
+
+    % endfor
+% endif
+
+
+% if len(submodules) > 0:
+Sub-modules
+-----------
+    % for m in submodules:
+    ${m.name}
+    % endfor
+% endif

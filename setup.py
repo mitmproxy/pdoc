@@ -42,6 +42,7 @@ setup(
     platforms='ANY',
     packages=['pdoc'],
     package_dir={'pdoc': 'pdoc'},
+    package_data={'pdoc': ['templates/*.html', 'templates/*.css']},
     data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL']),
                 ('share/doc/pdoc/doc', docfiles)],
     scripts=['scripts/pdoc']
