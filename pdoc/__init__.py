@@ -236,9 +236,7 @@ class Module (Doc):
                     fullname = '%s.%s' % (self.name, root)
                     try:
                         m = Module(importlib.import_module(fullname))
-                    except IOError:
-                        continue
-                    except ImportError:
+                    except:
                         continue
 
                     # Always add to submodules, but only add to the public
