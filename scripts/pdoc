@@ -11,12 +11,31 @@ parser = argparse.ArgumentParser(
 aa = parser.add_argument
 aa('package_name', type=str,
    help='The Python package name. The package must be importable.')
+aa('ident_name', type=str, nargs='?',
+   help='When specified, only identifiers containing the name given '
+        'will be shown in the output. Search is case sensitive.')
+aa('--html', action='store_true',
+   help='When set, the output will be HTML formatted.')
 args = parser.parse_args()
 
-# print(pdoc.text(args.package_name))
+docfilter = lambda _: True
+if args.ident_name and len(args.ident_name.strip()) > 0:
+    search = args.ident_name.strip()
+
+    def docfilter(o):
+        rname = o.refname
+        if rname.find(search) > -1 or search.find(o.name) > -1:
+            return True
+        if isinstance(o, pdoc.Class):
+            return search in o.doc or search in o.doc_init
+        return False
+if args.html:
+    output = pdoc.html(args.package_name, docfilter=docfilter)
+else:
+    output = pdoc.text(args.package_name, docfilter=docfilter)
 
 try:
-    print(pdoc.text(args.package_name))
+    print(output)
 except IOError as e:
     # This seems to happen for long documentation.
     # This is obviously a hack. What's the real cause? Dunno.

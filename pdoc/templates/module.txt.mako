@@ -30,6 +30,7 @@ ${cls.docstring | indent}
 % endif
 <%
   class_vars = cls.class_variables()
+  static_methods = cls.functions()
   inst_vars = cls.instance_variables()
   methods = cls.methods()
   mro = cls.module.mro(cls)
@@ -39,7 +40,7 @@ ${cls.docstring | indent}
     Ancestors (in MRO)
     ------------------
     % for c in mro:
-    ${c.refname()}
+    ${c.refname}
     % endfor
 
 % endif
@@ -47,7 +48,7 @@ ${cls.docstring | indent}
     Descendents
     -----------
     % for c in descendents:
-    ${c.refname()}
+    ${c.refname}
     % endfor
 
 % endif
@@ -56,6 +57,14 @@ ${cls.docstring | indent}
     ---------------
     % for v in class_vars:
 ${capture(variable, v) | indent}
+
+    % endfor
+% endif
+% if len(static_methods) > 0:
+    Static methods
+    --------------
+    % for f in static_methods:
+${capture(function, f) | indent}
 
     % endfor
 % endif
@@ -87,8 +96,9 @@ ${capture(function, m) | indent}
 %>
 
 Module ${module.name}
-
+% if not module._filtering:
 ${module.docstring}
+% endif
 
 
 % if len(variables) > 0:
