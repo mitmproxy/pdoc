@@ -7,6 +7,9 @@ docs:
 pypi: docs
 	sudo python2 setup.py register sdist upload
 
+tags:
+	ctags -R
+
 pypi-meta:
 	python2 setup.py register
 
