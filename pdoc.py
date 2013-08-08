@@ -29,17 +29,26 @@ from __future__ import print_function
 import ast
 import imp
 import inspect
+import os
 import os.path as path
 import pkgutil
 import re
 import sys
 
 from mako.lookup import TemplateLookup
+from mako.exceptions import TopLevelLookupException
 
-_tpl_dir = path.join(path.split(__file__)[0], 'templates')
-_tpl_lookup = TemplateLookup(directories=_tpl_dir,
-                             cache_args={'cached': True,
-                                         'cache_type': 'memory'})
+html_module_suffix = '.m.html'
+"""
+The suffix to use for module HTML files. By default, this is set to
+`.m.html`, where the extra `.m` is used to differentiate a package's
+`index.html` from a submodule called `index`.
+"""
+
+html_package_name = 'index.html'
+"""
+The file name to use for a package's `__init__.py` module.
+"""
 
 import_path = sys.path[:]
 """
@@ -47,6 +56,22 @@ A list of paths to restrict imports to. Any module that cannot be
 found in `import_path` will not be imported. By default, it is set to a
 copy of `sys.path` at initialization.
 """
+
+template_path = [
+    path.join(sys.prefix, 'share', 'pdoc'),
+    path.join(path.dirname(__file__), 'templates'),  # For my dev environment.
+]
+"""
+A list of paths to search for Mako templates used to produce the
+plain text and HTML output. Each path is tried until a template is
+found.
+"""
+if os.getenv('XDG_CONFIG_HOME'):
+    template_path.insert(0, path.join(os.getenv('XDG_CONFIG_HOME'), 'pdoc'))
+
+_tpl_lookup = TemplateLookup(directories=template_path,
+                             cache_args={'cached': True,
+                                         'cache_type': 'memory'})
 
 
 def html(module_name,
@@ -99,6 +124,20 @@ def text(module_name,
                  docfilter=docfilter,
                  allsubmodules=allsubmodules)
     return mod.text()
+
+
+def _get_tpl(name):
+    """
+    Returns the Mako template with the given name.
+    If the template cannot be found, a nicer error message is
+    displayed.
+    """
+    try:
+        t = _tpl_lookup.get_template(name)
+    except TopLevelLookupException:
+        locs = [path.join(p, name.lstrip('/')) for p in template_path]
+        raise IOError(2, 'No template at any of: %s' % ', '.join(locs))
+    return t
 
 
 def _eprint(*args, **kwargs):
@@ -328,11 +367,18 @@ class Module (Doc):
             if isinstance(docobj, Class):
                 docobj._fill_inheritance()
 
+        # Finally look for more docstrings in the __pdoc override.
+        for refname, docstring in getattr(self.module, '__pdoc', {}).items():
+            dobj = self.find_ident(refname)
+            if isinstance(dobj, External):
+                continue
+            dobj.docstring = inspect.cleandoc(docstring)
+
     def text(self):
         """
         Returns the documentation for this module as plain text.
         """
-        t = _tpl_lookup.get_template('/module.txt.mako')
+        t = _get_tpl('/module.txt.mako')
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 
@@ -349,7 +395,7 @@ class Module (Doc):
 
         `kwargs` is passed to the `mako` render function.
         """
-        t = _tpl_lookup.get_template('/module.html.mako')
+        t = _get_tpl('/module.html.mako')
         t = t.render(module=self,
                      external_links=external_links,
                      link_prefix=link_prefix,

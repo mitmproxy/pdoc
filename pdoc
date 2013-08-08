@@ -2,7 +2,6 @@
 
 from __future__ import print_function
 import argparse
-import distutils.sysconfig as sysconfig
 import BaseHTTPServer
 import datetime
 import os
@@ -25,7 +24,8 @@ aa('module_name', type=str, nargs='?',
    help='The Python package name. The package must be importable.')
 aa('ident_name', type=str, nargs='?',
    help='When specified, only identifiers containing the name given '
-        'will be shown in the output. Search is case sensitive.')
+        'will be shown in the output. Search is case sensitive. '
+        'Has no effect when --http is set.')
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
 aa('--html-dir', type=str, default='.',
@@ -39,13 +39,16 @@ aa('--all-submodules', action='store_true',
 aa('--external-links', action='store_true',
    help='When set, identifiers to external modules are turned into links. '
         'This is automatically set when using --http.')
+aa('--template-dir', type=str, default=None,
+   help='Specify a directory containing Mako templates.')
 aa('--link-prefix', type=str, default='',
    help='A prefix to use for every link in the generated documentation. '
-        'No link prefix results in all links being relative.')
+        'No link prefix results in all links being relative. '
+        'Has no effect when combined with --http.')
 aa('--http', action='store_true',
    help='When set, pdoc will run as an HTTP server providing documentation '
-        'of all installed modules. Only modules found in sys.path will be '
-        'listed, but by default does not include the standard library.')
+        'of all installed modules. Only modules found in PYTHONPATH will be '
+        'listed.')
 aa('--http-dir', type=str, default=default_http_dir,
    help='The directory to cache HTML documentation when running as an HTTP '
         'server.')
@@ -107,6 +110,8 @@ class WebDoc (BaseHTTPServer.BaseHTTPRequestHandler):
         if self.path == '/':
             modules = []
             for (imp, name, ispkg) in pkgutil.iter_modules(pdoc.import_path):
+                if name == 'setup' and not ispkg:
+                    continue
                 modules.append((name, quick_desc(imp, name, ispkg)))
             modules = sorted(modules)
 
@@ -192,7 +197,9 @@ class WebDoc (BaseHTTPServer.BaseHTTPRequestHandler):
     def resolve_ext(self, import_path):
         def exists(p):
             p = path.join(args.html_dir, p)
-            pkg, mod = path.join(p, '__init__.html'), p + '.html'
+            pkg = path.join(p, pdoc.html_package_name)
+            mod = p + pdoc.html_module_suffix
+
             if path.isfile(pkg):
                 return pkg[len(args.html_dir):]
             elif path.isfile(mod):
@@ -209,20 +216,20 @@ class WebDoc (BaseHTTPServer.BaseHTTPRequestHandler):
 
     @property
     def file_path(self):
-        fp = path.join(args.html_dir, *self.clean_path.split('/'))
+        fp = path.join(args.html_dir, *self.import_path.split('.'))
         if path.isdir(fp):
-            fp = path.join(fp, '__init__.html')
-        elif not fp.endswith('.html'):
-            fp += '.html'
+            fp = path.join(fp, pdoc.html_package_name)
+        else:
+            fp += pdoc.html_module_suffix
         return fp
 
     @property
     def import_path(self):
         pieces = self.clean_path.split('/')
-        if pieces[-1].startswith('__init__.html'):
+        if pieces[-1].startswith(pdoc.html_package_name):
             pieces = pieces[:-1]
-        if pieces[-1].endswith('.html'):
-            pieces[-1], _ = os.path.splitext(pieces[-1])
+        if pieces[-1].endswith(pdoc.html_module_suffix):
+            pieces[-1] = pieces[-1][:-len(pdoc.html_module_suffix)]
         return '.'.join(pieces)
 
     @property
@@ -248,9 +255,9 @@ def last_modified(fp):
 def module_file(m):
     mbase = path.join(args.html_dir, *m.name.split('.'))
     if m.is_package():
-        return path.join(mbase, '__init__.html')
+        return path.join(mbase, pdoc.html_package_name)
     else:
-        return '%s.html' % mbase
+        return '%s%s' % (mbase, pdoc.html_module_suffix)
 
 
 def quit_if_exists(m):
@@ -329,14 +336,15 @@ if __name__ == '__main__':
     if not args.http and args.module_name is None:
         _eprint('No module name specified.')
         sys.exit(1)
+    if args.template_dir is not None:
+        pdoc.template_path.insert(0, args.template_dir)
     if args.http:
         args.html = True
         args.external_links = True
         args.html_dir = args.http_dir
         args.overwrite = True
         args.only_pypath = True
-        if len(args.link_prefix) == 0:
-            args.link_prefix = '/'
+        args.link_prefix = '/'
 
     # If PYTHONPATH is set, let it override everything if we want it to.
     pypath = os.getenv('PYTHONPATH')
@@ -375,9 +383,9 @@ if __name__ == '__main__':
     # HTML output depends on whether the module being documented is a package
     # or not. If not, then output is written to {MODULE_NAME}.html in
     # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
-    # is created, and output is written to {MODULE_NAME}/__init__.html.
-    # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.html and
-    # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/__init__.html. And
+    # is created, and output is written to {MODULE_NAME}/index.html.
+    # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
+    # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
     # so on... The same rules apply for `http_dir` when `pdoc` is run as an
     # HTTP server.
     if not args.http:
