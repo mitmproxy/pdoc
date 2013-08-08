@@ -27,11 +27,12 @@ in either HTML or plain text using the covenience functions
 """
 from __future__ import print_function
 import ast
-import importlib
+import imp
 import inspect
-import os
 import os.path as path
+import pkgutil
 import re
+import sys
 
 from mako.lookup import TemplateLookup
 
@@ -40,8 +41,17 @@ _tpl_lookup = TemplateLookup(directories=_tpl_dir,
                              cache_args={'cached': True,
                                          'cache_type': 'memory'})
 
+import_path = sys.path[:]
+"""
+A list of paths to restrict imports to. Any module that cannot be
+found in `import_path` will not be imported. By default, it is set to a
+copy of `sys.path` at initialization.
+"""
 
-def html(module_name, docfilter=None):
+
+def html(module_name,
+         docfilter=None, allsubmodules=False,
+         external_links=False, link_prefix=''):
     """
     Returns the documentation for the module `module_name` in HTML
     format. The module must be importable.
@@ -51,12 +61,26 @@ def html(module_name, docfilter=None):
     argument function that takes a documentation object and returns
     `True` or `False`. If `False`, that object will not be included in
     the output.
+
+    If `allsubmodules` is True, then every submodule of this
+    module that can be found will be included in the
+    documentation, regardless of whether `__all__` contains it.
+
+    If `external_links` is True, then identifiers to external modules
+    are always turned into links.
+
+    If `link_prefix` is set, then all links will have that prefix.
+    Otherwise, links are always relative.
     """
-    mod = Module(importlib.import_module(module_name), docfilter=docfilter)
-    return mod.html()
+    mod = Module(import_module(module_name),
+                 docfilter=docfilter,
+                 allsubmodules=allsubmodules)
+    return mod.html(external_links=external_links,
+                    link_prefix=link_prefix)
 
 
-def text(module_name, docfilter=None):
+def text(module_name,
+         docfilter=None, allsubmodules=False):
     """
     Returns the documentation for the module `module_name` in plain
     text format. The module must be importable.
@@ -66,9 +90,62 @@ def text(module_name, docfilter=None):
     argument function that takes a documentation object and returns
     True of False. If False, that object will not be included in
     the output.
+
+    If `allsubmodules` is True, then every submodule of this
+    module that can be found will be included in the
+    documentation, regardless of whether `__all__` contains it.
     """
-    mod = Module(importlib.import_module(module_name), docfilter=docfilter)
+    mod = Module(import_module(module_name),
+                 docfilter=docfilter,
+                 allsubmodules=allsubmodules)
     return mod.text()
+
+
+def _eprint(*args, **kwargs):
+    kwargs['file'] = sys.stderr
+    print(*args, **kwargs)
+
+
+def import_module(module_name):
+    """
+    A simple wrapper around `__import__` and `reload`, where `reload`
+    is called when `module_name` is in `sys.modules`.
+    """
+    # Raises an exception if the parent module cannot be imported.
+    # This hopefully ensures that we only explicitly import modules
+    # contained in `pdoc.import_path`.
+    if import_path == sys.path:
+        imp.find_module(module_name.split('.')[0])
+    else:
+        imp.find_module(module_name.split('.')[0], import_path)
+
+    if module_name in sys.modules:
+        return sys.modules[module_name]
+    else:
+        __import__(module_name)
+        return sys.modules[module_name]
+
+
+def _safe_import(module_name):
+    """
+    A function for mini-sandboxing a module import. Returns None
+    if the import was unsuccessful and the module object otherwise.
+
+    In this instance, "sandboxing" means suppressing errors and
+    redirecting stdout/stderr to null.
+    """
+    class _Null (object):
+        def write(self, *_):
+            pass
+
+    sout, serr = sys.stdout, sys.stderr
+    sys.stdout, sys.stderr = _Null(), _Null()
+    try:
+        m = import_module(module_name)
+    except:
+        m = None
+    sys.stdout, sys.stderr = sout, serr
+    return m
 
 
 def _fetch_var_docstrings(module, obj, cls=None):
@@ -80,11 +157,7 @@ def _extract_var_docstrings(module, ast_tree, cls=None):
     vs = {}
     children = list(ast.iter_child_nodes(ast_tree))
     for i, child in enumerate(children):
-        if (isinstance(child, ast.Assign)
-                and len(child.targets) == 1
-                and i+1 < len(children)
-                and isinstance(children[i+1], ast.Expr)
-                and isinstance(children[i+1].value, ast.Str)):
+        if isinstance(child, ast.Assign) and len(child.targets) == 1:
             if isinstance(child.targets[0], ast.Name):
                 name = child.targets[0].id
             elif isinstance(child.targets[0], ast.Attribute):
@@ -93,7 +166,13 @@ def _extract_var_docstrings(module, ast_tree, cls=None):
                 continue
             if not _is_exported(name):
                 continue
-            docstring = children[i+1].value.s
+
+            docstring = ''
+            if (i+1 < len(children)
+                    and isinstance(children[i+1], ast.Expr)
+                    and isinstance(children[i+1].value, ast.Str)):
+                docstring = children[i+1].value.s
+
             vs[name] = Variable(module, name, docstring, cls=cls)
     return vs
 
@@ -152,7 +231,7 @@ class Module (Doc):
     Representation of a module's documentation.
     """
 
-    def __init__(self, module, docfilter=None):
+    def __init__(self, module, docfilter=None, allsubmodules=False):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
@@ -162,11 +241,16 @@ class Module (Doc):
         `classes`, `functions`, `variables` and `submodules`.
         The filter is propagated to the analogous methods on a
         `Class` object.
+
+        If `allsubmodules` is True, then every submodule of this
+        module that can be found will be included in the
+        documentation, regardless of whether `__all__` contains it.
         """
         super(Module, self).__init__(module, module.__name__,
                                      inspect.getdoc(module))
         self._filtering = docfilter is not None
         self._docfilter = (lambda _: True) if docfilter is None else docfilter
+        self._allsubmodules = allsubmodules
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
@@ -179,9 +263,7 @@ class Module (Doc):
 
         try:
             self.doc = _fetch_var_docstrings(self, self.module)
-        except IOError:
-            pass
-        except TypeError:
+        except:
             pass
 
         self.public = self.__fetch_public_objs()
@@ -205,45 +287,28 @@ class Module (Doc):
                 self.doc[name] = Function(self, obj)
             elif inspect.isclass(obj):
                 self.doc[name] = Class(self, obj)
-            elif inspect.ismodule(obj) and self.is_submodule(obj):
+            elif inspect.ismodule(obj) and self.is_submodule(obj.__name__):
                 # Only document modules that are submodules.
-                self.doc[name] = Module(obj)
-
-        # Now try documenting sub-modules recursively if this is a package.
-        self.__submodules = {}
-        """
-        A dictionary of submodules that may or may not be exposed in
-        the public API of this module.
-
-        This information is tracked so that we can faciliate
-        linking between modules in the same package.
-        """
-        # Populate with sub-modules that we found inside this module's source.
-        for name, obj in self.doc.items():
-            if isinstance(obj, Module):
-                self.__submodules[name] = obj
+                module = self.__new_submodule(obj)
+                self.doc[name] = module
 
         # Now scan the directory if this is a package for all modules.
-        if hasattr(self.module, '__file__'):
-            pkgdir = os.path.dirname(self.module.__file__)
-            if self.is_package() and path.isdir(pkgdir):
-                for f in os.listdir(pkgdir):
-                    if not f.endswith('.py') or f.startswith('.'):
-                        continue
-                    root, _ = path.splitext(f)
-                    if root == '__init__' or root in self.__submodules:
-                        continue
-                    fullname = '%s.%s' % (self.name, root)
-                    try:
-                        m = Module(importlib.import_module(fullname))
-                    except:
-                        continue
+        pkgdir = getattr(self.module, '__path__', [])
+        for (_, root, _) in pkgutil.iter_modules(pkgdir):
+            if root in self.doc:  # Ignore if this module was already doc'd.
+                continue
 
-                    # Always add to submodules, but only add to the public
-                    # documentation if we consider this module exported.
-                    self.__submodules[m.name] = m
-                    if self.is_exported(m.name, self.module):
-                        self.doc[m.name] = m
+            # Ignore if it isn't exported, unless we've specifically requested
+            # to document all submodules.
+            if not self._allsubmodules \
+                    and not self.is_exported(root, self.module):
+                continue
+
+            fullname = '%s.%s' % (self.name, root)
+            m = _safe_import(fullname)
+            if m is None:
+                continue
+            self.doc[root] = self.__new_submodule(m)
 
         # Build the reference name dictionary.
         for basename, docobj in self.doc.items():
@@ -258,6 +323,11 @@ class Module (Doc):
                 for f in docobj.functions():
                     self.refdoc[f.refname] = f
 
+        # Now see if we can grab inheritance relationships between classes.
+        for docobj in self.doc.values():
+            if isinstance(docobj, Class):
+                docobj._fill_inheritance()
+
     def text(self):
         """
         Returns the documentation for this module as plain text.
@@ -266,13 +336,25 @@ class Module (Doc):
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 
-    def html(self):
+    def html(self, external_links=False, link_prefix='', **kwargs):
         """
         Returns the documentation for this module as
         self-contained HTML.
+
+        If `external_links` is True, then identifiers to external
+        modules are always turned into links.
+
+        If `link_prefix` is set, then all links will be absolute
+        with the prefix given. Otherwise, links are always relative.
+
+        `kwargs` is passed to the `mako` render function.
         """
         t = _tpl_lookup.get_template('/module.html.mako')
-        return t.render(module=self).strip()
+        t = t.render(module=self,
+                     external_links=external_links,
+                     link_prefix=link_prefix,
+                     **kwargs)
+        return t.strip()
 
     def is_package(self):
         """
@@ -281,8 +363,7 @@ class Module (Doc):
         Works by checking if `__package__` is not None and whether
         it has the `__path__` attribute.
         """
-        return (self.module.__package__ is not None
-                and hasattr(self.module, '__path__'))
+        return hasattr(self.module, '__path__')
 
     @property
     def refname(self):
@@ -348,7 +429,7 @@ class Module (Doc):
         """
         if name in self.refdoc:
             return self.refdoc[name]
-        for module in self.__submodules.values():
+        for module in self.submodules():
             o = module.find_ident(name)
             if not isinstance(o, External):
                 return o
@@ -386,10 +467,11 @@ class Module (Doc):
         p = lambda o: isinstance(o, Module) and self._docfilter(o)
         return sorted(filter(p, self.doc.values()))
 
-    def is_exported(self, name, module=None):
+    def is_exported(self, name, module):
         """
         Returns true if and only if `pdoc` considers `name` to be
-        a public identifier for this module.
+        a public identifier for this module where `name` was defined
+        in the Python module `module`.
 
         If this module has an `__all__` attribute, then `name` is
         considered to be exported if and only if it is a member of
@@ -410,15 +492,23 @@ class Module (Doc):
             return False
         return True
 
-    def is_submodule(self, module_obj):
-        parent, sub = self.name.lower(), module_obj.__name__.lower()
-        return sub.startswith('%s.' % parent)
+    def is_submodule(self, name):
+        return self.name != name and name.startswith(self.name)
 
     def __fetch_public_objs(self):
         members = dict(inspect.getmembers(self.module))
         return {name: obj
                 for name, obj in members.items()
                 if self.is_exported(name, inspect.getmodule(obj))}
+
+    def __new_submodule(self, obj):
+        """
+        Create a new submodule documentation object for this
+        submodule and pass along any settings in this module.
+        """
+        return Module(obj,
+                      docfilter=self._docfilter,
+                      allsubmodules=self._allsubmodules)
 
 
 class Class (Doc):
@@ -458,9 +548,7 @@ class Class (Doc):
                         self.doc_init = _extract_var_docstrings(self.module,
                                                                 n, cls=self)
                         break
-        except IOError:
-            pass
-        except TypeError:
+        except:
             pass
 
         for name, obj in self.public.items():
@@ -473,9 +561,11 @@ class Class (Doc):
             if inspect.ismethod(obj):
                 self.doc[name] = Function(self.module, obj.__func__,
                                           cls=self, method=True)
+                self.doc[name].name = name
             elif inspect.isfunction(obj):
                 self.doc[name] = Function(self.module, obj,
                                           cls=self, method=False)
+                self.doc[name].name = name
             elif isinstance(obj, property):
                 docstring = ''
                 if hasattr(obj, '__doc__'):
@@ -485,6 +575,28 @@ class Class (Doc):
             elif not inspect.isbuiltin(obj) \
                     and not inspect.isroutine(obj):
                 self.doc[name] = Variable(self.module, name, '', cls=self)
+
+    def _fill_inheritance(self):
+        mro = filter(lambda c: c != self and isinstance(c, Class),
+                     self.module.mro(self))
+
+        def search(d):
+            for c in mro:
+                if d.name in c.doc_init \
+                        and isinstance(d, type(c.doc_init[d.name])):
+                    return c.doc_init[d.name]
+                if d.name in c.doc \
+                        and isinstance(d, type(c.doc[d.name])):
+                    return c.doc[d.name]
+            return None
+        for d in self.doc_init.values():
+            dinherit = search(d)
+            if dinherit is not None:
+                d.inherits = dinherit
+        for d in self.doc.values():
+            dinherit = search(d)
+            if dinherit is not None:
+                d.inherits = dinherit
 
     @property
     def refname(self):
@@ -599,7 +711,7 @@ class Function (Doc):
         for i, param in enumerate(s.args):
             if s.defaults is not None and len(s.args) - i <= len(s.defaults):
                 defind = len(s.defaults) - (len(s.args) - i)
-                params.append('%s=%s' % (param, s.defaults[defind]))
+                params.append('%s=%s' % (param, repr(s.defaults[defind])))
             else:
                 params.append(fmt_param(param))
         if s.varargs is not None:
