@@ -1,4 +1,6 @@
 """
+Wat wat.
+
 Module pdoc provides types and functions for accessing the public
 documentation of a Python module. This includes module level
 variables, modules (and sub-modules), functions, classes and class
