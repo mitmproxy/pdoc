@@ -239,6 +239,10 @@ class WebDoc (BaseHTTPServer.BaseHTTPRequestHandler):
             new = new[0:new.index('#')]
         return new.lstrip('/')
 
+    def address_string(self):
+        host, port = self.client_address[:2]
+        return host
+
 
 def _eprint(*args, **kwargs):
     kwargs['file'] = sys.stderr

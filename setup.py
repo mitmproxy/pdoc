@@ -42,7 +42,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    requires=['mako', 'markdown'],
+    requires=['mako', 'markdown', 'pygments'],
     provides=['pdoc'],
     platforms='ANY',
     py_modules = ['pdoc'],
