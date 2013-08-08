@@ -1,2 +1,4 @@
 .*.swp
 tags
+build
+doc
