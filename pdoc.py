@@ -337,8 +337,12 @@ class Module (Doc):
                 self.doc[name] = module
 
         # Now scan the directory if this is a package for all modules.
-        pkgdir = getattr(self.module, '__path__',
-                         [path.dirname(self.module.__file__)])
+        if not hasattr(self.module, '__path__') \
+                and not hasattr(self.module, '__file__'):
+            pkgdir = []
+        else:
+            pkgdir = getattr(self.module, '__path__',
+                             [path.dirname(self.module.__file__)])
         for (_, root, _) in pkgutil.iter_modules(pkgdir):
             if root in self.doc:  # Ignore if this module was already doc'd.
                 continue
