@@ -413,7 +413,6 @@ if __name__ == '__main__':
     try:
         module = pdoc.import_module(args.module_name)
     except Exception as e:
-        _eprint(e)
         module = None
 
     # Get the module that we're documenting. Accommodate for import paths,
