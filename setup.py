@@ -17,7 +17,7 @@ setup(
     name='pdoc',
     author='Andrew Gallant',
     author_email='pdoc@burntsushi.net',
-    version='0.0.1',
+    version='0.0.2',
     license='UNLICENSE',
     description='A simple program to auto generate API documentation for '
                 'Python libraries.',
@@ -38,7 +38,7 @@ setup(
     ],
     platforms='ANY',
     py_modules = ['pdoc'],
-    data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL'
+    data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL',
                                     'doc/pdoc.m.html']),
                 ('share/pdoc/', glob('templates/*')),
                ],
