@@ -436,7 +436,7 @@ if __name__ == '__main__':
         else:
             module = pdoc.import_module(args.module_name)
     module = pdoc.Module(module, docfilter=docfilter,
-                          allsubmodules=args.all_submodules)
+                         allsubmodules=args.all_submodules)
 
     # Plain text?
     if not args.html:
