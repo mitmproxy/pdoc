@@ -514,7 +514,7 @@
   }
 
     .item .class {
-      margin: 0 0 25px 30px;
+      margin: -15px 0 25px 30px;
     }
 
       .item .class ul.class_list {
