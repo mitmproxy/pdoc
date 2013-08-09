@@ -16,7 +16,7 @@ import subprocess
 import sys
 import tempfile
 
-import pdoc as _pdoc
+import pdoc
 
 version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
@@ -91,13 +91,13 @@ class WebDoc (BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             modules = []
-            for (imp, name, ispkg) in pkgutil.iter_modules(_pdoc.import_path):
+            for (imp, name, ispkg) in pkgutil.iter_modules(pdoc.import_path):
                 if name == 'setup' and not ispkg:
                     continue
                 modules.append((name, quick_desc(imp, name, ispkg)))
             modules = sorted(modules)
 
-            out = _pdoc._tpl_lookup.get_template('/html.mako')
+            out = pdoc._tpl_lookup.get_template('/html.mako')
             out = out.render(modules=modules, link_prefix=args.link_prefix)
             out = out.strip()
         elif self.path.endswith('.ext'):
@@ -198,8 +198,8 @@ class WebDoc (BaseHTTPRequestHandler):
     def resolve_ext(self, import_path):
         def exists(p):
             p = path.join(args.html_dir, p)
-            pkg = path.join(p, _pdoc.html_package_name)
-            mod = p + _pdoc.html_module_suffix
+            pkg = path.join(p, pdoc.html_package_name)
+            mod = p + pdoc.html_module_suffix
 
             if path.isfile(pkg):
                 return pkg[len(args.html_dir):]
@@ -219,18 +219,18 @@ class WebDoc (BaseHTTPRequestHandler):
     def file_path(self):
         fp = path.join(args.html_dir, *self.import_path.split('.'))
         if path.isdir(fp):
-            fp = path.join(fp, _pdoc.html_package_name)
+            fp = path.join(fp, pdoc.html_package_name)
         else:
-            fp += _pdoc.html_module_suffix
+            fp += pdoc.html_module_suffix
         return fp
 
     @property
     def import_path(self):
         pieces = self.clean_path.split('/')
-        if pieces[-1].startswith(_pdoc.html_package_name):
+        if pieces[-1].startswith(pdoc.html_package_name):
             pieces = pieces[:-1]
-        if pieces[-1].endswith(_pdoc.html_module_suffix):
-            pieces[-1] = pieces[-1][:-len(_pdoc.html_module_suffix)]
+        if pieces[-1].endswith(pdoc.html_module_suffix):
+            pieces[-1] = pieces[-1][:-len(pdoc.html_module_suffix)]
         return '.'.join(pieces)
 
     @property
@@ -285,9 +285,9 @@ def last_modified(fp):
 def module_file(m):
     mbase = path.join(args.html_dir, *m.name.split('.'))
     if m.is_package():
-        return path.join(mbase, _pdoc.html_package_name)
+        return path.join(mbase, pdoc.html_package_name)
     else:
-        return '%s%s' % (mbase, _pdoc.html_module_suffix)
+        return '%s%s' % (mbase, pdoc.html_module_suffix)
 
 
 def quit_if_exists(m):
@@ -333,7 +333,8 @@ def process_html_out(impath):
     # to support reloading of modules. It's just too difficult to get
     # modules to reload in the same process.
 
-    cmd = [sys.executable, 'pdoc',
+    cmd = [sys.executable,
+           path.realpath(__file__),
            '--html',
            '--html-dir', args.html_dir,
            '--http-html',
@@ -368,7 +369,7 @@ if __name__ == '__main__':
         _eprint('No module name specified.')
         sys.exit(1)
     if args.template_dir is not None:
-        _pdoc.template_path.insert(0, args.template_dir)
+        pdoc.template_path.insert(0, args.template_dir)
     if args.http:
         args.html = True
         args.external_links = True
@@ -380,7 +381,7 @@ if __name__ == '__main__':
     # If PYTHONPATH is set, let it override everything if we want it to.
     pypath = os.getenv('PYTHONPATH')
     if args.only_pypath and pypath is not None and len(pypath) > 0:
-        _pdoc.import_path = pypath.split(':')
+        pdoc.import_path = pypath.split(':')
 
     if args.http:
         if args.module_name is not None:
@@ -401,7 +402,7 @@ if __name__ == '__main__':
             rname = o.refname
             if rname.find(search) > -1 or search.find(o.name) > -1:
                 return True
-            if isinstance(o, _pdoc.Class):
+            if isinstance(o, pdoc.Class):
                 return search in o.doc or search in o.doc_init
             return False
 
@@ -410,8 +411,9 @@ if __name__ == '__main__':
     # specify the absolute path, which is guaranteed not to be a
     # Python import path.
     try:
-        module = _pdoc.import_module(args.module_name)
-    except:
+        module = pdoc.import_module(args.module_name)
+    except Exception as e:
+        _eprint(e)
         module = None
 
     # Get the module that we're documenting. Accommodate for import paths,
@@ -433,8 +435,8 @@ if __name__ == '__main__':
                 module = imp.load_source('__pdoc_file_module__', fp, f)
                 module.__pdoc_module_name = module_name
         else:
-            module = _pdoc.import_module(args.module_name)
-    module = _pdoc.Module(module, docfilter=docfilter,
+            module = pdoc.import_module(args.module_name)
+    module = pdoc.Module(module, docfilter=docfilter,
                           allsubmodules=args.all_submodules)
 
     # Plain text?
