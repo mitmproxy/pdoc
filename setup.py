@@ -13,11 +13,17 @@ places just as epydoc does. Namely, docstrings proceeding module level
 variables, class variables and instance variables in __init__ methods. This is 
 done by traversing the ast of the source text.'''
 
+install_requires = ['mako', 'markdown']
+try:  # Is this really the right way? Couldn't find anything better...
+    import argparse
+except ImportError:
+    install_requires.append('argparse')
+
 setup(
     name='pdoc',
     author='Andrew Gallant',
     author_email='pdoc@burntsushi.net',
-    version='0.0.2',
+    version='0.0.7',
     license='UNLICENSE',
     description='A simple program to auto generate API documentation for '
                 'Python libraries.',
@@ -45,6 +51,6 @@ setup(
     scripts=['pdoc'],
     provides=['pdoc'],
     requires=['argparse', 'mako', 'markdown'],
-    install_requires=['mako', 'markdown'],
+    install_requires=install_requires,
     extras_require={'syntax_highlighting': ['pygments']},
 )
