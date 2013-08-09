@@ -430,10 +430,8 @@ class Module (Doc):
         `External`. Objects belonging to the former are exported
         classes either in this module or in one of its sub-modules.
         """
-        def clsname(c):
-            return '%s.%s' % (c.__module__, c.__name__)
-        return list(map(lambda c: self.find_ident(clsname(c)),
-                        inspect.getmro(cls.cls)))
+        ups = inspect.getmro(cls.cls)
+        return list(map(lambda c: self.find_class(c), ups))
 
     def descendents(self, cls):
         """
@@ -448,10 +446,8 @@ class Module (Doc):
             # Is this right?
             return []
 
-        def clsname(c):
-            return '%s.%s' % (c.__module__, c.__name__)
-        return list(map(lambda c: self.find_ident(clsname(c)),
-                        cls.cls.__subclasses__()))
+        downs = cls.cls.__subclasses__()
+        return list(map(lambda c: self.find_class(c), downs))
 
     def is_public(self, name):
         """
@@ -464,6 +460,20 @@ class Module (Doc):
         `pdoc.Module.is_public`.
         """
         return name in self.refdoc
+
+    def find_class(self, cls):
+        """
+        Given a Python `cls` object, try to find it in this module
+        or in any of the exported identifiers of the submodules.
+        """
+        for doc_cls in self.classes():
+            if cls is doc_cls.cls:
+                return doc_cls
+        for module in self.submodules():
+            doc_cls = module.find_class(cls)
+            if not isinstance(doc_cls, External):
+                return doc_cls
+        return External('%s.%s' % (cls.__module__, cls.__name__))
 
     def find_ident(self, name):
         """
