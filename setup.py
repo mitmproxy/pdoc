@@ -38,7 +38,7 @@ setup(
     ],
     platforms='ANY',
     py_modules = ['pdoc'],
-    data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL',
+    data_files=[('share/doc/pdoc', ['README.md', 'UNLICENSE', 'INSTALL',
                                     'doc/pdoc.m.html']),
                 ('share/pdoc/', glob('templates/*')),
                ],
