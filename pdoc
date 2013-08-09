@@ -7,6 +7,7 @@ try:
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
 import datetime
+from distutils import sysconfig
 import imp
 import os
 import os.path as path
@@ -66,6 +67,9 @@ aa('--http-dir', type=str, default=default_http_dir,
 aa('--only-pypath', action='store_true',
    help='When set, only modules in your PYTHONPATH will be documented. '
         'This is always enabled when --http is used.')
+aa('--http-site', action='store_true',
+   help='When set, the "site-packages" directory is included in the list of '
+        'import paths when running as an HTTP server.')
 aa('--http-host', type=str, default='localhost',
    help='The host on which to run the HTTP server.')
 aa('--http-port', type=int, default=8080,
@@ -345,6 +349,8 @@ def process_html_out(impath):
         cmd.append('--external-links')
     if args.all_submodules:
         cmd.append('--all-submodules')
+    if args.http_site:
+        cmd.append('--http-site')
     cmd.append(impath)
 
     # Can we make a good faith attempt to support 2.6?
@@ -382,6 +388,8 @@ if __name__ == '__main__':
     pypath = os.getenv('PYTHONPATH')
     if args.only_pypath and pypath is not None and len(pypath) > 0:
         pdoc.import_path = pypath.split(':')
+    if (args.http or args.http_html) and args.http_site:
+        pdoc.import_path.append(sysconfig.get_python_lib())
 
     if args.http:
         if args.module_name is not None:
