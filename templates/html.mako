@@ -185,6 +185,19 @@
     submodules = module.submodules()
   %>
 
+  <%def name="show_func(f)">
+    <div class="item">
+      <a name="${f.refname}"></a>
+      <div class="name">
+        <table cellspacing="0" cellpadding="0">
+          <tr><td>def ${ident(f.name)}(</td><td>${f.spec()})</td></tr>
+        </table>
+      </div>
+      ${show_inheritance(f)}
+      ${show_desc(f.docstring)}
+    </div>
+  </%def>
+
   % if 'http_server' in context.keys() and http_server:
       <p id="nav">
           <a href="/">All packages</a>
@@ -278,11 +291,7 @@
   <a name="header-functions"></a>
   <h2>Functions</h2>
   % for f in functions:
-      <div class="item">
-        <a name="${f.refname}"></a>
-        <p class="name">def ${ident(f.name)}(${f.spec()})</p>
-        ${show_desc(f.docstring)}
-      </div>
+      ${show_func(f)}
   % endfor
   % endif
 
@@ -325,12 +334,7 @@
           % if len(smethods) > 0:
               <h3>Static methods</h3>
               % for f in smethods:
-                  <div class="item">
-                    <a name="${f.refname}"></a>
-                    <p class="name">def ${ident(f.name)}(${f.spec()})</p>
-                    ${show_inheritance(f)}
-                    ${show_desc(f.docstring)}
-                  </div>
+                  ${show_func(f)}
               % endfor
           % endif
           % if len(inst_vars) > 0:
@@ -477,6 +481,7 @@
 
     table#module-list tr td:first-child {
       padding-right: 10px;
+      white-space: nowrap;
     }
 
     table#module-list td {
@@ -487,6 +492,17 @@
       table#module-list td p {
         margin: 0 0 7px 0;
       }
+
+  .name table {
+  }
+
+    .name table tr td:first-child {
+      white-space: nowrap;
+    }
+
+    .name table tr td {
+      vertical-align: top;
+    }
 
   ul#index {
     padding: 0;
