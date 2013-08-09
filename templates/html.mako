@@ -3,7 +3,11 @@
   import sys
 
   import markdown
-  import pygments.formatters
+  try:
+      import pygments.formatters
+      use_pygments = True
+  except ImportError:
+      use_pygments = False
 
   import pdoc
 
@@ -35,8 +39,11 @@
       s, _ = re.subn('\b\n\b', ' ', s)
       if not module_list:
           s, _ = re.subn('`[^`]+`', linkify, s)
-      s = markdown.markdown(s.strip(),
-                            extensions=['codehilite(linenums=False)'])
+      
+      extensions = []
+      if use_pygments:
+          extensions = ['codehilite(linenums=False)']
+      s = markdown.markdown(s.strip(), extensions=extensions)
       return s
 
 
@@ -381,7 +388,7 @@
       <meta name="description" content="${module.docstring | glimpse, trim}">
   % endif
 
-  <%namespace name="css" file="module.css.mako" />
+  <%namespace name="css" file="css.mako" />
   <style type="text/css">
   ${css.pre()}
   </style>
@@ -548,9 +555,11 @@
   /*****************************/
   </style>
 
-  <style type="text/css">
-  ${pygments.formatters.HtmlFormatter().get_style_defs('.codehilite')}
-  </style>
+  % if use_pygments:
+    <style type="text/css">
+    ${pygments.formatters.HtmlFormatter().get_style_defs('.codehilite')}
+    </style>
+  % endif
 
   <style type="text/css">
   ${css.post()}

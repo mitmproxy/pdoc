@@ -1,6 +1,4 @@
 """
-Wat wat.
-
 Module pdoc provides types and functions for accessing the public
 documentation of a Python module. This includes module level
 variables, modules (and sub-modules), functions, classes and class
@@ -27,7 +25,7 @@ in either HTML or plain text using the covenience functions
 `pdoc.html` and `pdoc.text`, or the corresponding methods
 `pdoc.Module.html` and `pdoc.Module.text`.
 """
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 import ast
 import imp
 import inspect
@@ -128,6 +126,30 @@ def text(module_name,
     return mod.text()
 
 
+def import_module(module_name):
+    """
+    A simple wrapper around `__import__` and `reload`, where `reload`
+    is called when `module_name` is in `sys.modules`.
+    """
+    # Raises an exception if the parent module cannot be imported.
+    # This hopefully ensures that we only explicitly import modules
+    # contained in `pdoc.import_path`.
+    if import_path == sys.path:
+        # Such a kludge. Allow documentation for __builtin__ if we haven't
+        # mangled `sys.path`. But what if other packages do it?
+        # Not sure what to do here. Probably the right response is not to
+        # care if you can see doco for __builtin__.
+        imp.find_module(module_name.split('.')[0])
+    else:
+        imp.find_module(module_name.split('.')[0], import_path)
+
+    if module_name in sys.modules:
+        return sys.modules[module_name]
+    else:
+        __import__(module_name)
+        return sys.modules[module_name]
+
+
 def _get_tpl(name):
     """
     Returns the Mako template with the given name.
@@ -145,26 +167,6 @@ def _get_tpl(name):
 def _eprint(*args, **kwargs):
     kwargs['file'] = sys.stderr
     print(*args, **kwargs)
-
-
-def import_module(module_name):
-    """
-    A simple wrapper around `__import__` and `reload`, where `reload`
-    is called when `module_name` is in `sys.modules`.
-    """
-    # Raises an exception if the parent module cannot be imported.
-    # This hopefully ensures that we only explicitly import modules
-    # contained in `pdoc.import_path`.
-    if import_path == sys.path:
-        imp.find_module(module_name.split('.')[0])
-    else:
-        imp.find_module(module_name.split('.')[0], import_path)
-
-    if module_name in sys.modules:
-        return sys.modules[module_name]
-    else:
-        __import__(module_name)
-        return sys.modules[module_name]
 
 
 def _safe_import(module_name):
@@ -287,8 +289,9 @@ class Module (Doc):
         module that can be found will be included in the
         documentation, regardless of whether `__all__` contains it.
         """
-        super(Module, self).__init__(module, module.__name__,
-                                     inspect.getdoc(module))
+        name = getattr(module, '__pdoc_module_name', module.__name__)
+        super(Module, self).__init__(module, name, inspect.getdoc(module))
+
         self._filtering = docfilter is not None
         self._docfilter = (lambda _: True) if docfilter is None else docfilter
         self._allsubmodules = allsubmodules
@@ -334,7 +337,8 @@ class Module (Doc):
                 self.doc[name] = module
 
         # Now scan the directory if this is a package for all modules.
-        pkgdir = getattr(self.module, '__path__', [])
+        pkgdir = getattr(self.module, '__path__',
+                         [path.dirname(self.module.__file__)])
         for (_, root, _) in pkgutil.iter_modules(pkgdir):
             if root in self.doc:  # Ignore if this module was already doc'd.
                 continue
@@ -380,7 +384,7 @@ class Module (Doc):
         """
         Returns the documentation for this module as plain text.
         """
-        t = _get_tpl('/module.txt.mako')
+        t = _get_tpl('/txt.mako')
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 
@@ -397,7 +401,7 @@ class Module (Doc):
 
         `kwargs` is passed to the `mako` render function.
         """
-        t = _get_tpl('/module.html.mako')
+        t = _get_tpl('/html.mako')
         t = t.render(module=self,
                      external_links=external_links,
                      link_prefix=link_prefix,
@@ -536,7 +540,7 @@ class Module (Doc):
             return name in self.module.__all__
         if not _is_exported(name):
             return False
-        if module is not None and self.name != module.__name__:
+        if module is not None and self.module.__name__ != module.__name__:
             return False
         return True
 
@@ -545,9 +549,9 @@ class Module (Doc):
 
     def __fetch_public_objs(self):
         members = dict(inspect.getmembers(self.module))
-        return {name: obj
-                for name, obj in members.items()
-                if self.is_exported(name, inspect.getmodule(obj))}
+        return dict([(name, obj)
+                     for name, obj in members.items()
+                     if self.is_exported(name, inspect.getmodule(obj))])
 
     def __new_submodule(self, obj):
         """
@@ -648,7 +652,7 @@ class Class (Doc):
 
     @property
     def refname(self):
-        return '%s.%s' % (self.cls.__module__, self.cls.__name__)
+        return '%s.%s' % (self.module.refname, self.cls.__name__)
 
     def class_variables(self):
         """
@@ -692,7 +696,9 @@ class Class (Doc):
             return name in ('__init__', '__new__') or _is_exported(name)
 
         idents = dict(inspect.getmembers(self.cls))
-        return {name: o for name, o in idents.items() if exported(name)}
+        return dict([(name, o)
+                     for name, o in idents.items()
+                     if exported(name)])
 
 
 class Function (Doc):
@@ -726,7 +732,7 @@ class Function (Doc):
     @property
     def refname(self):
         if self.cls is None:
-            return '%s.%s' % (self.module.name, self.name)
+            return '%s.%s' % (self.module.refname, self.name)
         else:
             return '%s.%s' % (self.cls.refname, self.name)
 
@@ -799,7 +805,7 @@ class Variable (Doc):
     @property
     def refname(self):
         if self.cls is None:
-            return '%s.%s' % (self.module.name, self.name)
+            return '%s.%s' % (self.module.refname, self.name)
         else:
             return '%s.%s' % (self.cls.refname, self.name)
 

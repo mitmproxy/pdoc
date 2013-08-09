@@ -1,6 +1,5 @@
 from distutils.core import setup
 from glob import glob
-# import os 
 
 longdesc = \
 '''A simple program (and library) to auto generate API documentation for Python 
@@ -13,11 +12,6 @@ PEP 8 and PEP 257, pdoc also looks for documentation of representation in some
 places just as epydoc does. Namely, docstrings proceeding module level 
 variables, class variables and instance variables in __init__ methods. This is 
 done by traversing the ast of the source text.'''
-
-# try: 
-    # docfiles = map(lambda s: 'doc/%s' % s, list(os.walk('doc'))[0][2]) 
-# except IndexError: 
-    # docfiles = [] 
 
 setup(
     name='pdoc',
@@ -42,12 +36,15 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    requires=['mako', 'markdown', 'pygments'],
-    provides=['pdoc'],
     platforms='ANY',
     py_modules = ['pdoc'],
-    data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL']),
+    data_files=[('share/doc/pdoc', ['README.md', 'COPYING', 'INSTALL'
+                                    'doc/pdoc.m.html']),
                 ('share/pdoc/', glob('templates/*')),
                ],
-    scripts=['pdoc']
+    scripts=['pdoc'],
+    provides=['pdoc'],
+    requires=['argparse', 'mako', 'markdown'],
+    install_requires=['mako', 'markdown'],
+    extras_require={'syntax_highlighting': ['pygments']},
 )
