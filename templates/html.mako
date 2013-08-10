@@ -360,12 +360,7 @@
           % if len(methods) > 0:
               <h3>Methods</h3>
               % for f in methods:
-                  <div class="item">
-                    <a name="${f.refname}"></a>
-                    <p class="name">def ${ident(f.name)}(${f.spec()})</p>
-                    ${show_inheritance(f)}
-                    ${show_desc(f.docstring)}
-                  </div>
+                  ${show_func(f)}
               % endfor
           % endif
         </div>
