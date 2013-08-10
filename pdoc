@@ -222,8 +222,9 @@ class WebDoc (BaseHTTPRequestHandler):
     @property
     def file_path(self):
         fp = path.join(args.html_dir, *self.import_path.split('.'))
-        if path.isdir(fp):
-            fp = path.join(fp, pdoc.html_package_name)
+        pkgp = path.join(fp, pdoc.html_package_name)
+        if path.isdir(fp) and path.isfile(pkgp):
+            fp = pkgp
         else:
             fp += pdoc.html_module_suffix
         return fp
