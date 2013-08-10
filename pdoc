@@ -243,7 +243,7 @@ class WebDoc (BaseHTTPRequestHandler):
         new, _ = re.subn('//+', '/', self.path)
         if '#' in new:
             new = new[0:new.index('#')]
-        return new.lstrip('/')
+        return new.strip('/')
 
 
 def quick_desc(imp, name, ispkg):
