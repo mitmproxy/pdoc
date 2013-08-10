@@ -1,11 +1,17 @@
+all:
+	@echo "Specify a target."
+
+docs:
+	pdoc --html --html-dir ./doc --overwrite ./pdoc.py
+
 pypi:
 	sudo python2 setup.py register sdist upload
 
-tags:
-	ctags -R
-
-pypi-meta:
-	python2 setup.py register
+dev-install: docs
+	[[ -n "$$VIRTUAL_ENV" ]] || exit
+	rm -rf ./dist
+	python2 setup.py sdist
+	pip install -U dist/*.tar.gz
 
 pep8:
 	pep8-python2 pdoc.py pdoc

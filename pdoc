@@ -441,6 +441,8 @@ if __name__ == '__main__':
             # It is hidden from view via the `Module` class.
             with open(fp) as f:
                 module = imp.load_source('__pdoc_file_module__', fp, f)
+                if isdir:
+                    module.__path__ = [path.realpath(args.module_name)]
                 module.__pdoc_module_name = module_name
         else:
             module = pdoc.import_module(args.module_name)

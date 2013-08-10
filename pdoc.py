@@ -58,7 +58,7 @@ copy of `sys.path` at initialization.
 """
 
 template_path = [
-    path.join(sys.prefix, 'share', 'pdoc'),
+    path.join(sys.prefix, 'share', 'pdoc', 'templates'),
     path.join(path.dirname(__file__), 'templates'),  # For my dev environment.
 ]
 """
