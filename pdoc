@@ -178,7 +178,7 @@ class WebDoc (BaseHTTPRequestHandler):
             mfile = pkgutil.get_loader(self.import_path).get_filename()
         except Exception as e:
             _eprint('Could not load %s: %s' % (impath, e))
-            return None
+            mfile = None
 
         # Check the file system first before trying an import.
         fp = self.file_path
