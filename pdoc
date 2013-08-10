@@ -357,10 +357,6 @@ def process_html_out(impath):
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = p.communicate()[0].strip().decode('utf-8')
-    try:
-        p.stdin.close()  # Why are people so stoopid?
-    except:
-        pass
     if p.returncode > 0:
         err = subprocess.CalledProcessError(p.returncode, cmd)
         err.output = out
@@ -370,6 +366,13 @@ def process_html_out(impath):
 
 
 if __name__ == '__main__':
+    # We close stdin because some modules, upon import, are not very polite
+    # and block on stdin.
+    try:
+        sys.stdin.close()
+    except:
+        pass
+
     if not args.http and args.module_name is None:
         _eprint('No module name specified.')
         sys.exit(1)
