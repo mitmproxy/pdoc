@@ -172,7 +172,7 @@
 % if len(modules) == 0:
     <p>No modules found.</p>
 % else:
-    <table id="module-list" border="0" cellpadding="0" cellspacing="0">
+    <table id="module-list">
     % for name, desc in modules:
         <tr>
           <td><a href="${link_prefix}${name}">${name}</a></td>
@@ -197,9 +197,8 @@
 
   <%def name="show_func(f)">
     <div class="item">
-      <a name="${f.refname}"></a>
-      <div class="name">
-        <table cellspacing="0" cellpadding="0">
+      <div class="name" id="${f.refname}">
+        <table>
           <tr><td>def ${ident(f.name)}(</td><td>${f.spec()})</td></tr>
         </table>
       </div>
@@ -286,8 +285,7 @@
   </ul>
 
   % if len(variables) > 0:
-  <a name="header-variables"></a>
-  <h2>Module variables</h2>
+  <h2 id="header-variables">Module variables</h2>
   % for v in variables:
       <div class="item">
         <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
@@ -297,16 +295,14 @@
   % endif
 
   % if len(functions) > 0:
-  <a name="header-functions"></a>
-  <h2>Functions</h2>
+  <h2 id="header-functions">Functions</h2>
   % for f in functions:
       ${show_func(f)}
   % endfor
   % endif
 
   % if len(classes) > 0:
-  <a name="header-classes"></a>
-  <h2>Classes</h2>
+  <h2 id="header-classes">Classes</h2>
   % for c in classes:
       <%
         class_vars = c.class_variables()
@@ -316,8 +312,7 @@
         mro = c.module.mro(c)
       %>
       <div class="item">
-        <a name="${c.refname}"></a>
-        <p class="name">class ${ident(c.name)}</p>
+        <p id="${c.refname}" class="name">class ${ident(c.name)}</p>
         ${show_desc(c)}
 
         <div class="class">
@@ -333,8 +328,7 @@
               <h3>Class variables</h3>
               % for v in class_vars:
                   <div class="item">
-                    <a name="${v.refname}"></a>
-                    <p class="name">var ${ident(v.name)}</p>
+                    <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
                     ${show_inheritance(v)}
                     ${show_desc(v)}
                   </div>
@@ -350,8 +344,7 @@
               <h3>Instance variables</h3>
               % for v in inst_vars:
                   <div class="item">
-                    <a name="${v.refname}"></a>
-                    <p class="name">var ${ident(v.name)}</p>
+                    <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
                     ${show_inheritance(v)}
                     ${show_desc(v)}
                   </div>
@@ -369,8 +362,7 @@
   % endif
 
   % if len(submodules) > 0:
-  <a name="header-submodules"></a>
-  <h2>Sub-modules</h2>
+  <h2 id="header-submodules">Sub-modules</h2>
   % for m in submodules:
       <div class="item">
         <p class="name">${link(m.refname)}</p>
