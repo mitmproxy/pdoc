@@ -135,9 +135,19 @@
           return refname
       return '<a href="%s">%s</a>' % (url, name)
 %>
-<%def name="show_desc(docstring)">
-  % if len(docstring.strip()) > 0:
+<%def name="show_desc(d, limit=None)">
+  <%
+    inherits = hasattr(d, 'inherits') and len(d.docstring) == 0
+    docstring = (d.inherits.docstring if inherits else d.docstring).strip()
+    if limit is not None:
+        docstring = glimpse(docstring, limit)
+  %>
+  % if len(docstring) > 0:
+    % if inherits:
+      <div class="desc inherited">${docstring | mark}</div>
+    % else:
       <div class="desc">${docstring | mark}</div>
+    % endif
   % else:
       <div class="empty_desc">&nbsp;</div>
   % endif
@@ -194,7 +204,7 @@
         </table>
       </div>
       ${show_inheritance(f)}
-      ${show_desc(f.docstring)}
+      ${show_desc(f)}
     </div>
   </%def>
 
@@ -280,9 +290,8 @@
   <h2>Module variables</h2>
   % for v in variables:
       <div class="item">
-        <a name="${v.refname}"></a>
-        <p class="name">var ${ident(v.name)}</p>
-        ${show_desc(v.docstring)}
+        <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
+        ${show_desc(v)}
       </div>
   % endfor
   % endif
@@ -309,7 +318,7 @@
       <div class="item">
         <a name="${c.refname}"></a>
         <p class="name">class ${ident(c.name)}</p>
-        ${show_desc(c.docstring)}
+        ${show_desc(c)}
 
         <div class="class">
           % if len(mro) > 0:
@@ -327,7 +336,7 @@
                     <a name="${v.refname}"></a>
                     <p class="name">var ${ident(v.name)}</p>
                     ${show_inheritance(v)}
-                    ${show_desc(v.docstring)}
+                    ${show_desc(v)}
                   </div>
               % endfor
           % endif
@@ -344,7 +353,7 @@
                     <a name="${v.refname}"></a>
                     <p class="name">var ${ident(v.name)}</p>
                     ${show_inheritance(v)}
-                    ${show_desc(v.docstring)}
+                    ${show_desc(v)}
                   </div>
               % endfor
           % endif
@@ -370,7 +379,7 @@
   % for m in submodules:
       <div class="item">
         <p class="name">${link(m.refname)}</p>
-        ${show_desc(glimpse(m.docstring, 300))}
+        ${show_desc(m, limit=300)}
       </div>
   % endfor
   % endif
@@ -553,6 +562,10 @@
     .item .inheritance {
       margin: 3px 0 10px 0;
       padding: 0 8px;
+    }
+
+    .item .inherited {
+      color: #666;
     }
 
     .item .desc {
