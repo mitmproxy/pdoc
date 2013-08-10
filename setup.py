@@ -23,7 +23,7 @@ setup(
     name='pdoc',
     author='Andrew Gallant',
     author_email='pdoc@burntsushi.net',
-    version='0.0.9',
+    version='0.0.10',
     license='UNLICENSE',
     description='A simple program to auto generate API documentation for '
                 'Python libraries.',
