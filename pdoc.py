@@ -262,6 +262,11 @@ class Doc (object):
     a class's ancestor list.)
     """
     def __init__(self, name, module, docstring):
+        """
+        Initializes a documentation object, where `name` is the public
+        identifier name, `module` is a `pdoc.Module` object, and
+        `docstring` is a string containing the docstring for `name`.
+        """
         self.module = module
         """
         The module documentation object that this object was defined
@@ -637,22 +642,31 @@ class Class (Doc):
     """
 
     def __init__(self, name, module, class_obj):
-        self.cls = class_obj
-        """The class object."""
+        """
+        Same as `pdoc.Doc.__init__`, except `class_obj` must be a
+        Python class object. The docstring is gathered automatically.
+        """
+        super(Class, self).__init__(name, module, inspect.getdoc(class_obj))
 
-        super(Class, self).__init__(name, module, inspect.getdoc(self.cls))
+        self.cls = class_obj
+        """The class Python object."""
 
         self.doc = {}
-        """A mapping from identifier name to a documentation object."""
+        """A mapping from identifier name to a `pdoc.Doc` objects."""
 
         self.doc_init = {}
         """
-        A special version of self.doc that contains documentation for
-        instance variables found in the `__init__` method.
+        A special version of `pdoc.Class.doc` that contains
+        documentation for instance variables found in the `__init__`
+        method.
         """
 
         public = self.__public_objs()
         try:
+            # First try and find docstrings for class variables.
+            # Then move on to finding docstrings for instance variables.
+            # This must be optional, since not all modules have source
+            # code available.
             cls_ast = ast.parse(inspect.getsource(self.cls)).body[0]
             self.doc = _var_docstrings(cls_ast, self.module, cls=self)
 
@@ -664,6 +678,7 @@ class Class (Doc):
         except:
             pass
 
+        # Convert the public Python objects to documentation objects.
         for name, obj in public.items():
             # Skip any identifiers that already have doco.
             if name in self.doc and not self.doc[name].is_empty():
@@ -712,6 +727,8 @@ class Class (Doc):
         Returns all documented methods as `pdoc.Function` objects in
         the class, sorted alphabetically with `__new__` and `__init__`
         always coming first.
+
+        Unfortunately, this also includes class methods.
         """
         p = lambda o: (isinstance(o, Function)
                        and o.method
@@ -779,27 +796,37 @@ class Class (Doc):
 
 class Function (Doc):
     """
-    Representation of a function's documentation.
+    Representation of documentation for a Python function or method.
     """
 
     def __init__(self, name, module, func_obj, cls=None, method=False):
+        """
+        Same as `pdoc.Doc.__init__`, except `func_obj` must be a
+        Python function object. The docstring is gathered automatically.
+
+        `cls` should be set when this is a method or a static function
+        beloing to a class. `cls` should be a `pdoc.Class` object.
+
+        `method` should be `True` when the function is a method. In
+        all other cases, it should be `False`.
+        """
+        super(Function, self).__init__(name, module, inspect.getdoc(func_obj))
+
         self.func = func_obj
-        """The function object."""
+        """The Python function object."""
 
         self.cls = cls
         """
-        The Class documentation object if this is a method.
-        If not, this is None.
+        The `pdoc.Class` documentation object if this is a method. If
+        not, this is None.
         """
 
         self.method = method
         """
         Whether this function is a method or not.
 
-        Static class methods have this set to False.
+        In particular, static class methods have this set to False.
         """
-
-        super(Function, self).__init__(name, module, inspect.getdoc(self.func))
 
     @property
     def refname(self):
@@ -811,16 +838,16 @@ class Function (Doc):
     def spec(self):
         """
         Returns a nicely formatted spec of the function's parameter
-        list. This includes argument lists, keyword arguments and
-        default values.
+        list as a string. This includes argument lists, keyword
+        arguments and default values.
         """
         return ', '.join(self.params())
 
     def params(self):
         """
-        Returns a nicely formatted list of parameters to this
-        function. This includes argument lists, keyword arguments
-        and default values.
+        Returns a list where each element is a nicely formatted
+        parameter of this function. This includes argument lists,
+        keyword arguments and default values.
         """
         def fmt_param(el):
             if isinstance(el, str) or isinstance(el, unicode):
@@ -849,13 +876,9 @@ class Function (Doc):
     def __lt__(self, other):
         # Push __new__ and __init__ to the top.
         if '__new__' in (self.name, other.name):
-            if self.name == other.name:
-                return False
-            return self.name == '__new__'
+            return self.name != other.name and self.name == '__new__'
         elif '__init__' in (self.name, other.name):
-            if self.name == other.name:
-                return False
-            return self.name == '__init__'
+            return self.name != other.name and self.name == '__init__'
         else:
             return self.name < other.name
 
@@ -865,13 +888,19 @@ class Variable (Doc):
     Representation of a variable's documentation. This includes
     module, class and instance variables.
     """
+
     def __init__(self, name, module, docstring, cls=None):
+        """
+        Same as `pdoc.Doc.__init__`, except `cls` should be provided
+        as a `pdoc.Class` object when this is a class or instance
+        variable.
+        """
         super(Variable, self).__init__(name, module, docstring)
 
         self.cls = cls
         """
-        The Class documentation object if this is a method.
-        If not, this is None.
+        The `podc.Class` object if this is a class or instance
+        variable. If not, this is None.
         """
 
     @property
@@ -885,12 +914,35 @@ class Variable (Doc):
 class External (Doc):
     """
     A representation of an external identifier. The textual
-    representation is the same as an internal identifier, but the
-    HTML version will lack a link while the internal identifier
-    will link to its documentation.
+    representation is the same as an internal identifier, but without
+    any context. (Usually this makes linking more difficult.)
+
+    External identifiers are also used to represent something that is
+    not exported but appears somewhere in the public interface (like
+    the ancestor list of a class).
     """
     def __init__(self, name):
+        """
+        Initializes an external identifier with `name`, where `name`
+        should be a fully qualified name.
+        """
         super(External, self).__init__(name, None, '')
+        __pdoc__['External.docstring'] = \
+            """
+            An empty string. External identifiers do not have
+            docstrings.
+            """
+        __pdoc__['External.module'] = \
+            """
+            Always `None`. External identifiers have no associated
+            `pdoc.Module`.
+            """
+        __pdoc__['External.name'] = \
+            """
+            Always equivalent to `pdoc.External.refname` since external
+            identifiers are always expressed in their fully qualified
+            form.
+            """
 
     @property
     def refname(self):
