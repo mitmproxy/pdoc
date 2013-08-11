@@ -137,7 +137,9 @@
 %>
 <%def name="show_desc(d, limit=None)">
   <%
-    inherits = hasattr(d, 'inherits') and len(d.docstring) == 0
+    inherits = (hasattr(d, 'inherits')
+                   and (len(d.docstring) == 0
+                        or d.docstring == d.inherits.docstring))
     docstring = (d.inherits.docstring if inherits else d.docstring).strip()
     if limit is not None:
         docstring = glimpse(docstring, limit)
@@ -197,14 +199,16 @@
 
   <%def name="show_func(f)">
     <div class="item">
-      <div class="name" id="${f.refname}">
-        <table>
-          <tr><td>def ${ident(f.name)}(</td><td>${f.spec()})</td></tr>
-        </table>
+      <div class="name def" id="${f.refname}">
+        <p>def ${ident(f.name)}(</p><p>${f.spec()})</p>
       </div>
       ${show_inheritance(f)}
       ${show_desc(f)}
     </div>
+  </%def>
+
+  <%def name="show_func_index(f)">
+    <p>${link(f.refname)}(</p><p>${f.spec()})</p>
   </%def>
 
   % if 'http_server' in context.keys() and http_server:
@@ -225,7 +229,7 @@
 
   <ul id="index">
   % if len(variables) > 0:
-    <li><a href="#header-variables">Module variables</a>
+    <li><h3><a href="#header-variables">Module variables</a></h3>
       <ul>
         % for v in variables:
           <li class="mono">${link(v.refname)}</li>
@@ -235,17 +239,17 @@
   % endif
 
   % if len(functions) > 0:
-    <li><a href="#header-functions">Functions</a>
+    <li><h3><a href="#header-functions">Functions</a></h3>
       <ul>
         % for f in functions:
-          <li class="mono">${link(f.refname) | trim}(${f.spec()})</li>
+          <li class="mono def">${show_func_index(f)}</li>
         % endfor
       </ul>
     </li>
   % endif
 
   % if len(classes) > 0:
-    <li><a href="#header-classes">Classes</a>
+    <li><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         % for c in classes:
           <li class="mono">${link(c.refname)}
@@ -256,14 +260,14 @@
             % if len(smethods) > 0:
               <ul>
               % for f in smethods:
-                <li>${link(f.refname)}</li>
+                <li class="def">${show_func_index(f)}</li>
               % endfor
               </ul>
             % endif
             % if len(methods) > 0:
               <ul>
               % for f in methods:
-                <li>${link(f.refname)}</li>
+                <li class="def">${show_func_index(f)}</li>
               % endfor
               </ul>
             % endif
@@ -274,7 +278,7 @@
   % endif
 
   % if len(submodules) > 0:
-    <li><a href="#header-submodules">Sub-modules</a>
+    <li><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
         % for m in submodules:
           <li class="mono">${link(m.refname)}</li>
@@ -410,7 +414,7 @@
   #container {
     width: 840px;
     background-color: #fdfdfd;
-    color: #333;
+    color: #111;
     margin: 0 auto;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
@@ -429,7 +433,7 @@
 
   h3 {
     margin: 0;
-    font-size: 110%;
+    font-size: 105%;
   }
 
   #nav {
@@ -451,7 +455,7 @@
   }
 
   code, .mono, .name {
-    font-family: "Cousine", "Ubuntu Mono", "DejaVu Sans Mono", monospace;
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
   }
 
   .ident {
@@ -489,15 +493,22 @@
         margin: 0 0 7px 0;
       }
 
-  .name table {
+  .def {
+    display: table;
   }
 
-    .name table tr td:first-child {
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
       white-space: nowrap;
     }
 
-    .name table tr td {
-      vertical-align: top;
+    .def p:last-child {
+      width: 100%;
     }
 
   ul#index {
@@ -535,6 +546,7 @@
 
     .item .name {
       background: #e8e8e8;
+      width: 100%;
       padding: 4px;
       margin: 0 0 8px 0;
       font-size: 110%;
