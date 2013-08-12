@@ -38,6 +38,11 @@ import sys
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
+__version__ = '0.0.11'
+"""
+The current version of pdoc. This value is read from `setup.py`.
+"""
+
 html_module_suffix = '.m.html'
 """
 The suffix to use for module HTML files. By default, this is set to

@@ -19,11 +19,19 @@ try:  # Is this really the right way? Couldn't find anything better...
 except ImportError:
     install_requires.append('argparse')
 
+version = '0.0.0'
+with open('pdoc.py') as f:
+    for line in f:
+        if line.startswith('__version__'):
+            exec(line.strip())
+            version = __version__
+            break
+
 setup(
     name='pdoc',
     author='Andrew Gallant',
     author_email='pdoc@burntsushi.net',
-    version='0.0.10',
+    version=version,
     license='UNLICENSE',
     description='A simple program to auto generate API documentation for '
                 'Python libraries.',
