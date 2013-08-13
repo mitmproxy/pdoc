@@ -1,18 +1,17 @@
 """
 Module pdoc provides types and functions for accessing the public
-documentation of a Python module. This includes module level
-variables, modules (and sub-modules), functions, classes and class
-and instance variables. Docstrings are taken from modules, functions,
-and classes using special `__doc__` attribute. Docstrings for any of
-the variables are extracted by examining the module's abstract syntax
-tree.
+documentation of a Python module. This includes module level variables,
+modules (and sub-modules), functions, classes and class and instance
+variables. Docstrings are taken from modules, functions, and classes
+using special `__doc__` attribute. Docstrings for any of the variables
+are extracted by examining the module's abstract syntax tree.
 
 The public interface of a module is determined through one of two
 ways. If `__all__` is defined in the module, then all identifiers in
 that list will be considered public. No other identifiers will be
 considered as public. Conversely, if `__all__` is not defined, then
-`pdoc` will heuristically determine the public interface. There are two
-simple rules that are applied to each identifier in the module:
+`pdoc` will heuristically determine the public interface. There are
+three rules that are applied to each identifier in the module:
 
 1. If the name starts with an underscore, it is **not** public.
 
@@ -20,10 +19,11 @@ simple rules that are applied to each identifier in the module:
 
 3. If the name is a direct sub-module, then it is public.
 
-Once documentation for a module is created, it can be outputted
-in either HTML or plain text using the covenience functions
-`pdoc.html` and `pdoc.text`, or the corresponding methods
-`pdoc.Module.html` and `pdoc.Module.text`.
+Once documentation for a module is created with
+`pdoc.Module`.`pdoc.Module.__init__`, it can be outputted in either
+HTML or plain text using the covenience functions `pdoc.html` and
+`pdoc.text`, or the corresponding methods
+`pdoc.Module`.`pdoc.Module.html` and `pdoc.Module`.`pdoc.Module.text`.
 """
 from __future__ import absolute_import, division, print_function
 import ast
