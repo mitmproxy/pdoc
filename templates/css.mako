@@ -37,7 +37,7 @@
   }
 
   a {
-    color: #069;
+    color: #058;
     text-decoration: none;
   }
 
@@ -49,7 +49,7 @@
     line-height: 1.35em;
   }
 
-  code, .mono, .name {
+  pre, code, .mono, .name {
     font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
   }
 
@@ -61,14 +61,19 @@
     background: #e8e8e8;
   } 
 
-  .codehilite {
-    margin: 0 30px;
-  }
-  
   pre {
     background: #e8e8e8;
     padding: 6px;
+    margin: 0 30px;
   }
+
+  .codehilite {
+    margin: 0 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
 
   table#module-list {
     font-size: 110%;
@@ -200,16 +205,12 @@
     }
 
     .source_link {
-      font-size: 115%;
+      font-weight: bold;
     }
 
     .source {
       display: none;
     }
-
-      .source .codehilite {
-        margin: 0;
-      }
 
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;
