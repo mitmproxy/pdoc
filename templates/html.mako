@@ -22,6 +22,11 @@
 
   def eprint(s):
       print >> sys.stderr, s
+  
+  def decode(s):
+      if hasattr(s, 'decode'):
+          return s.decode('utf-8', 'replace')
+      return s
 
   def ident(s):
       return '<span class="ident">%s</span>' % s
@@ -152,7 +157,7 @@
   % if show_source_code and d.source is not None and len(d.source) > 0:
     <p class="source_link"><a href="javascript:void(0);" onclick="toggle('${sourceid(d)}', this);">Show source.</a></p>
     <div id="${sourceid(d)}" class="source">
-      ${clean_source_lines(d.source)}
+      ${decode(clean_source_lines(d.source))}
     </div>
   % endif
 </%def>
@@ -214,10 +219,11 @@
 
 <%def name="show_column_list(items, numcols=3)">
   <%
+    items = list(items)
     columns = [None] * numcols
     per = len(items) // numcols
     which_add1 = len(items) % numcols
-    for c in xrange(numcols):
+    for c in range(numcols):
       numthis = per + 1 if c < which_add1 else per
       columns[c] = items[0:numthis]
       items = items[numthis:]
