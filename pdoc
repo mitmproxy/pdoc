@@ -410,6 +410,9 @@ if __name__ == '__main__':
 
         # Run the HTTP server.
         httpd = HTTPServer((args.http_host, args.http_port), WebDoc)
+        print('pdoc server ready at http://%s:%d'
+              % (args.http_host, args.http_port), file=sys.stderr)
+
         httpd.serve_forever()
         httpd.server_close()
         sys.exit(0)
