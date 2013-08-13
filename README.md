@@ -46,7 +46,7 @@ Documentation for the `pdoc` library is available from `pdoc` itself:
 Example usage
 -------------
 `pdoc` will accept a Python module file, package directory or an import path.
-For example, to view the documentation for the `csv` in the console:
+For example, to view the documentation for the `csv` module in the console:
 
     pdoc csv
 
