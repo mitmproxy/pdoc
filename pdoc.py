@@ -81,7 +81,7 @@ _tpl_lookup = TemplateLookup(directories=template_path,
 
 
 def html(module_name, docfilter=None, allsubmodules=False,
-         external_links=False, link_prefix=''):
+         external_links=False, link_prefix='', source=True):
     """
     Returns the documentation for the module `module_name` in HTML
     format. The module must be importable.
@@ -101,12 +101,16 @@ def html(module_name, docfilter=None, allsubmodules=False,
 
     If `link_prefix` is `True`, then all links will have that prefix.
     Otherwise, links are always relative.
+
+    If `source` is `True`, then source code will be retrieved for
+    every Python object whenever possible. This can dramatically
+    decrease performance when documenting large modules.
     """
     mod = Module(import_module(module_name),
                  docfilter=docfilter,
                  allsubmodules=allsubmodules)
     return mod.html(external_links=external_links,
-                    link_prefix=link_prefix)
+                    link_prefix=link_prefix, source=source)
 
 
 def text(module_name, docfilter=None, allsubmodules=False):
@@ -159,6 +163,18 @@ def import_module(module_name):
     else:
         __import__(module_name)
         return sys.modules[module_name]
+
+
+def _source(obj):
+    """
+    Returns the source code of the Python object `obj` as a list of
+    lines. If the source code doesn't exist, then the empty list is
+    returned.
+    """
+    try:
+        return inspect.getsourcelines(obj)[0]
+    except:
+        return []
 
 
 def _get_tpl(name):
@@ -288,6 +304,15 @@ class Doc (object):
         The docstring for this object. It has already been cleaned
         by `inspect.cleandoc`.
         """
+
+    @property
+    def source(self):
+        """
+        Returns the source code for the underlying Python object as a
+        list of lines. If the source code can't be retrieved, then the
+        empty list is returned.
+        """
+        assert False, 'subclass responsibility'
 
     @property
     def refname(self):
@@ -442,7 +467,8 @@ class Module (Doc):
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 
-    def html(self, external_links=False, link_prefix='', **kwargs):
+    def html(self, external_links=False, link_prefix='',
+             source=True, **kwargs):
         """
         Returns the documentation for this module as
         self-contained HTML.
@@ -453,12 +479,17 @@ class Module (Doc):
         If `link_prefix` is `True`, then all links will have that
         prefix. Otherwise, links are always relative.
 
+        If `source` is `True`, then source code will be retrieved for
+        every Python object whenever possible. This can dramatically
+        decrease performance when documenting large modules.
+
         `kwargs` is passed to the `mako` render function.
         """
         t = _get_tpl('/html.mako')
         t = t.render(module=self,
                      external_links=external_links,
                      link_prefix=link_prefix,
+                     show_source_code=source,
                      **kwargs)
         return t.strip()
 
@@ -470,6 +501,10 @@ class Module (Doc):
         has the `__path__` attribute.
         """
         return hasattr(self.module, '__path__')
+
+    @property
+    def source(self):
+        return _source(self.module)
 
     @property
     def refname(self):
@@ -648,7 +683,7 @@ class Class (Doc):
 
     def __init__(self, name, module, class_obj):
         """
-        Same as `pdoc.Doc.__init__`, except `class_obj` must be a
+        Same as `pdoc.Doc)__init__`, except `class_obj` must be a
         Python class object. The docstring is gathered automatically.
         """
         super(Class, self).__init__(name, module, inspect.getdoc(class_obj))
@@ -704,6 +739,10 @@ class Class (Doc):
             elif not inspect.isbuiltin(obj) \
                     and not inspect.isroutine(obj):
                 self.doc[name] = Variable(name, self.module, '', cls=self)
+
+    @property
+    def source(self):
+        return _source(self.cls)
 
     @property
     def refname(self):
@@ -834,6 +873,10 @@ class Function (Doc):
         """
 
     @property
+    def source(self):
+        return _source(self.func)
+
+    @property
     def refname(self):
         if self.cls is None:
             return '%s.%s' % (self.module.refname, self.name)
@@ -909,6 +952,10 @@ class Variable (Doc):
         """
 
     @property
+    def source(self):
+        return []
+
+    @property
     def refname(self):
         if self.cls is None:
             return '%s.%s' % (self.module.refname, self.name)
@@ -948,6 +995,10 @@ class External (Doc):
             identifiers are always expressed in their fully qualified
             form.
             """
+
+    @property
+    def source(self):
+        return []
 
     @property
     def refname(self):

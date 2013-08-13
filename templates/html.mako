@@ -4,7 +4,9 @@
 
   import markdown
   try:
+      import pygments
       import pygments.formatters
+      import pygments.lexers
       use_pygments = True
   except ImportError:
       use_pygments = False
@@ -13,18 +15,32 @@
 
   # From language reference, but adds '.' to allow fully qualified names.
   pyident = re.compile('^[a-zA-Z_][a-zA-Z0-9_.]+$')
+  indent = re.compile('^\s*')
 
   # Whether we're showing the module list or a single module.
   module_list = 'modules' in context.keys()
 
-
   def eprint(s):
       print >> sys.stderr, s
-
 
   def ident(s):
       return '<span class="ident">%s</span>' % s
 
+  def sourceid(dobj):
+      return 'source-%s' % dobj.refname
+
+  def clean_source_lines(lines):
+      """
+      Cleans the source code so that pygments can render it well.
+
+      Returns one string with all of the source code.
+      """
+      base_indent = len(indent.match(lines[0]).group(0))
+      lines = [line[base_indent:] for line in lines]
+
+      pylex = pygments.lexers.PythonLexer()
+      htmlform = pygments.formatters.HtmlFormatter(cssclass='codehilite')
+      return pygments.highlight(''.join(lines), pylex, htmlform)
 
   def linkify(match):
       matched = match.group(0)
@@ -34,11 +50,11 @@
           return matched
       return '[`%s`](%s)' % (name, url)
 
-
-  def mark(s):
-      s, _ = re.subn('\b\n\b', ' ', s)
-      if not module_list:
-          s, _ = re.subn('`[^`]+`', linkify, s)
+  def mark(s, linky=True):
+      if linky:
+        s, _ = re.subn('\b\n\b', ' ', s)
+        if not module_list:
+            s, _ = re.subn('`[^`]+`', linkify, s)
       
       extensions = []
       if use_pygments:
@@ -46,12 +62,10 @@
       s = markdown.markdown(s.strip(), extensions=extensions)
       return s
 
-
   def glimpse(s, length=100):
       if len(s) < length:
           return s
       return s[0:length] + '...'
-
 
   def module_url(m):
       """
@@ -79,7 +93,6 @@
           url += pdoc.html_module_suffix
       return link_prefix + url
 
-
   def external_url(refname):
       """
       Attempts to guess an absolute URL for the external identifier
@@ -91,10 +104,8 @@
       """
       return '/%s.ext' % refname
 
-
   def is_external_linkable(name):
       return external_links and pyident.match(name) and '.' in name
-
 
   def lookup(refname):
       """
@@ -135,6 +146,15 @@
           return refname
       return '<a href="%s">%s</a>' % (url, name)
 %>
+<%def name="show_source(d)">
+  % if show_source_code and d.source is not None and len(d.source) > 0:
+    <p class="source_link"><a href="javascript:void(0);" onclick="toggle('${sourceid(d)}', this);">Show source.</a></p>
+    <div id="${sourceid(d)}" class="source">
+      ${clean_source_lines(d.source)}
+    </div>
+  % endif
+</%def>
+
 <%def name="show_desc(d, limit=None)">
   <%
     inherits = (hasattr(d, 'inherits')
@@ -150,9 +170,8 @@
     % else:
       <div class="desc">${docstring | mark}</div>
     % endif
-  % else:
-      <div class="empty_desc">&nbsp;</div>
   % endif
+  <div class="source_cont">${show_source(d)}</div>
 </%def>
 
 <%def name="show_inheritance(d)">
@@ -189,6 +208,27 @@
 % endif
 </%def>
 
+<%def name="show_column_list(items, numcols=3)">
+  <%
+    columns = [None] * numcols
+    per = len(items) // numcols
+    which_add1 = len(items) % numcols
+    for c in xrange(numcols):
+      numthis = per + 1 if c < which_add1 else per
+      columns[c] = items[0:numthis]
+      items = items[numthis:]
+  %>
+  <div class="column_list">
+    % for column in columns:
+      <ul>
+        % for item in column:
+          <li class="mono">${item}</li>
+        % endfor
+      </ul>
+    % endfor
+  </div>
+</%def>
+
 <%def name="show_module(module)">
   <%
     variables = module.variables()
@@ -207,10 +247,6 @@
     </div>
   </%def>
 
-  <%def name="show_func_index(f)">
-    <p>${link(f.refname)}(</p><p>${f.spec()})</p>
-  </%def>
-
   % if 'http_server' in context.keys() and http_server:
       <p id="nav">
           <a href="/">All packages</a>
@@ -224,27 +260,20 @@
 
   <h1>Module ${module.name}</h1>
   ${module.docstring | mark}
+  ${show_source(module)}
 
   <h2>Index</h2>
 
   <ul id="index">
   % if len(variables) > 0:
     <li><h3><a href="#header-variables">Module variables</a></h3>
-      <ul>
-        % for v in variables:
-          <li class="mono">${link(v.refname)}</li>
-        % endfor
-      </ul>
+      ${show_column_list(map(lambda v: link(v.refname), variables))}
     </li>
   % endif
 
   % if len(functions) > 0:
     <li><h3><a href="#header-functions">Functions</a></h3>
-      <ul>
-        % for f in functions:
-          <li class="mono def">${show_func_index(f)}</li>
-        % endfor
-      </ul>
+      ${show_column_list(map(lambda f: link(f.refname), functions))}
     </li>
   % endif
 
@@ -254,22 +283,10 @@
         % for c in classes:
           <li class="mono">${link(c.refname)}
             <%
-              smethods = c.functions()
-              methods = c.methods()
+              methods = c.functions() + c.methods()
             %>
-            % if len(smethods) > 0:
-              <ul>
-              % for f in smethods:
-                <li class="def">${show_func_index(f)}</li>
-              % endfor
-              </ul>
-            % endif
             % if len(methods) > 0:
-              <ul>
-              % for f in methods:
-                <li class="def">${show_func_index(f)}</li>
-              % endfor
-              </ul>
+              ${show_column_list(map(lambda f: link(f.refname), methods))}
             % endif
           </li>
         % endfor
@@ -398,189 +415,7 @@
   </style>
 
   <style type="text/css">
-  /*****************************/
-  /**
-   * Above and below this section is HTML5 Boilerplate.
-   * In this section is specific CSS for pdoc.
-   */
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: #ddd;
-    height: 100%;
-  }
-
-  #container {
-    width: 840px;
-    background-color: #fdfdfd;
-    color: #111;
-    margin: 0 auto;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    padding: 20px;
-    min-height: 100%;
-  }
-
-  h1 {
-    margin: 0 0 10px 0;
-  }
-
-  h2 {
-    margin: 25px 0 10px 0;
-    clear: both;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 105%;
-  }
-
-  #nav {
-    font-size: 130%;
-    margin: 0 0 15px 0;
-  }
-
-  a {
-    color: #069;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #e08524;
-  }
-
-  p {
-    line-height: 1.35em;
-  }
-
-  code, .mono, .name {
-    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
-  }
-
-  .ident {
-    color: #900;
-  }
-
-  code {
-    background: #e8e8e8;
-  } 
-
-  .codehilite {
-    margin: 0 30px 0 30px;
-  }
-  
-  pre {
-    background: #e8e8e8;
-    padding: 6px;
-  }
-
-  table#module-list {
-    font-size: 110%;
-  }
-
-    table#module-list tr td:first-child {
-      padding-right: 10px;
-      white-space: nowrap;
-    }
-
-    table#module-list td {
-      vertical-align: top;
-      padding-bottom: 8px;
-    }
-
-      table#module-list td p {
-        margin: 0 0 7px 0;
-      }
-
-  .def {
-    display: table;
-  }
-
-    .def p {
-      display: table-cell;
-      vertical-align: top;
-      text-align: left;
-    }
-
-    .def p:first-child {
-      white-space: nowrap;
-    }
-
-    .def p:last-child {
-      width: 100%;
-    }
-
-  ul#index {
-    padding: 0;
-    margin: 0;
-  }
-
-    ul#index li {
-      margin-bottom: 18px;
-    }
-
-      ul#index ul li {
-        margin-bottom: 8px;
-      }
-
-  ul#index, ul#index ul {
-    list-style-type: none;
-  }
-
-  ul#index ul {
-    margin: 0 0 10px 30px;
-    padding: 0;
-  }
-
-  .item {
-  }
-
-    .item .class {
-      margin: -15px 0 25px 30px;
-    }
-
-      .item .class ul.class_list {
-        margin: 0 0 20px 0;
-      }
-
-    .item .name {
-      background: #e8e8e8;
-      width: 100%;
-      padding: 4px;
-      margin: 0 0 8px 0;
-      font-size: 110%;
-      font-weight: bold;
-    }
-
-    .item .empty_desc {
-      margin: 0 0 5px 0;
-      padding: 0;
-    }
-
-    .item .inheritance {
-      margin: 3px 0 10px 0;
-      padding: 0 8px;
-    }
-
-    .item .inherited {
-      color: #666;
-    }
-
-    .item .desc {
-      padding: 0 8px;
-      margin: 0 0 25px 0;
-    }
-
-      .item .desc p {
-        margin: 0 0 10px 0;
-      }
-
-  .desc h1, .desc h2, .desc h3 {
-    font-size: 100% !important;
-  }
-
-  /*****************************/
+  ${css.pdoc()}
   </style>
 
   % if use_pygments:
@@ -592,6 +427,21 @@
   <style type="text/css">
   ${css.post()}
   </style>
+
+  <script type="text/javascript">
+    function toggle(id, $link) {
+      $node = document.getElementById(id);
+      if (!$node)
+        return;
+      if (!$node.style.display || $node.style.display == 'none') {
+        $node.style.display = 'block';
+        $link.innerHTML = 'Hide source.';
+      } else {
+        $node.style.display = 'none';
+        $link.innerHTML = 'Show source.';
+      }
+    }
+  </script>
 </head>
 <body>
 <div id="container">

@@ -39,6 +39,9 @@ aa('--html', action='store_true',
 aa('--html-dir', type=str, default='.',
    help='The directory to output HTML files to. This option is ignored when '
         'outputting documentation as plain text.')
+aa('--html-no-source', action='store_true',
+   help='When set, source code will not be viewable in the generated HTML. '
+        'This can speed up the time required to document large modules.')
 aa('--overwrite', action='store_true',
    help='Overwrites any existing HTML files instead of producing an error.')
 aa('--all-submodules', action='store_true',
@@ -321,7 +324,8 @@ def html_out(m):
         with open(f, 'w+') as w:
             out = m.html(external_links=args.external_links,
                          link_prefix=args.link_prefix,
-                         http_server=args.http_html)
+                         http_server=args.http_html,
+                         source=not args.html_no_source)
             print(out, file=w)
     except Exception as e:
         try:
@@ -351,6 +355,8 @@ def process_html_out(impath):
         cmd.append('--all-submodules')
     if args.only_pypath:
         cmd.append('--only-pypath')
+    if args.html_no_source:
+        cmd.append('--html-no-source')
     cmd.append(impath)
 
     # Can we make a good faith attempt to support 2.6?
