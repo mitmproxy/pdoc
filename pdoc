@@ -7,7 +7,6 @@ try:
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
 import datetime
-from distutils import sysconfig
 import imp
 import os
 import os.path as path
@@ -79,6 +78,8 @@ aa('--http-port', type=int, default=8080,
    help='The port on which to run the HTTP server.')
 aa('--http-html', action='store_true',
    help='Internal use only. Do not set.')
+aa('--version', action='store_true',
+   help='Print the version of pdoc and exit.')
 args = parser.parse_args()
 
 
@@ -373,6 +374,10 @@ def process_html_out(impath):
 
 
 if __name__ == '__main__':
+    if args.version:
+        print(pdoc.__version__)
+        sys.exit(0)
+
     # We close stdin because some modules, upon import, are not very polite
     # and block on stdin.
     try:
