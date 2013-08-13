@@ -173,7 +173,9 @@
       <div class="desc">${docstring | mark}</div>
     % endif
   % endif
-  <div class="source_cont">${show_source(d)}</div>
+  % if not isinstance(d, pdoc.Module):
+    <div class="source_cont">${show_source(d)}</div>
+  % endif
 </%def>
 
 <%def name="show_inheritance(d)">
