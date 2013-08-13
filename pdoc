@@ -6,6 +6,7 @@ try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
+import codecs
 import datetime
 import imp
 import os
@@ -187,7 +188,7 @@ class WebDoc (BaseHTTPRequestHandler):
         # Check the file system first before trying an import.
         fp = self.file_path
         if last_modified(mfile) < last_modified(fp) and os.access(fp, os.R_OK):
-            with open(fp) as f:
+            with codecs.open(fp, 'r', 'utf-8') as f:
                 return f.read()
 
         # Regenerate the HTML by shelling out to pdoc.
@@ -200,7 +201,7 @@ class WebDoc (BaseHTTPRequestHandler):
                     (' '.join(e.cmd), e.returncode, e.output))
             return None
 
-        with open(self.file_path) as f:
+        with codecs.open(self.file_path, 'r', 'utf-8') as f:
             return f.read()
 
     def resolve_ext(self, import_path):
@@ -256,7 +257,7 @@ def quick_desc(imp, name, ispkg):
     else:
         fp = path.join(imp.path, '%s.py' % name)
     if os.path.isfile(fp):
-        with open(fp) as f:
+        with codecs.open(fp, 'r', 'utf-8') as f:
             quotes = None
             doco = []
             for i, line in enumerate(f):
@@ -322,7 +323,7 @@ def html_out(m):
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
     try:
-        with open(f, 'w+') as w:
+        with codecs.open(f, 'w+', 'utf-8') as w:
             out = m.html(external_links=args.external_links,
                          link_prefix=args.link_prefix,
                          http_server=args.http_html,
