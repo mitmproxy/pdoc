@@ -681,7 +681,7 @@ class Class (Doc):
 
     def __init__(self, name, module, class_obj):
         """
-        Same as `pdoc.Doc)__init__`, except `class_obj` must be a
+        Same as `pdoc.Doc.__init__`, except `class_obj` must be a
         Python class object. The docstring is gathered automatically.
         """
         super(Class, self).__init__(name, module, inspect.getdoc(class_obj))
