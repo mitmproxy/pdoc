@@ -14,6 +14,8 @@ Prominent features include:
 * Usage is simple. Just write your documentation as Markdown. There are no 
   added special syntax rules.
 * `pdoc` respects your `__all__` variable when present.
+* `pdoc` will automatically link identifiers in your documentation to its
+  corresponding documentation.
 * When `pdoc` is run as an HTTP server, external linking is supported between 
   packages.
 * When available, source code for modules, functions and classes can be viewed 
@@ -21,6 +23,9 @@ Prominent features include:
 * Inheritance is used when possible to infer docstrings for class members.
 
 `pdoc` has been tested on Python 2.6, 2.7 and 3.3.
+
+For more details, please see
+[pdoc's module documentation](http://pdoc.burntsushi.net/pdoc).
 
 
 Installation
@@ -40,7 +45,8 @@ When it's installed, source code will have syntax highlighting.
 Documentation
 -------------
 Documentation for the `pdoc` library is available from `pdoc` itself:
-[pdoc.burntsushi.net/pdoc](http://pdoc.burntsushi.net/pdoc).
+[pdoc.burntsushi.net/pdoc](http://pdoc.burntsushi.net/pdoc). The documentation 
+includes a more in depth description of the features listed above.
 
 
 Example usage
@@ -85,13 +91,13 @@ It's [in the public domain](http://unlicense.org).
 
 Motivation
 ----------
-At the time of writing, there are three tools available to me to provide 
+At the time of writing, there are three tools I know of that provide automatic
 documentation for my Python packages. Those tools are
 [pydoc](http://docs.python.org/2/library/pydoc.html),
 [epydoc](http://epydoc.sourceforge.net) and
 [sphinx](http://sphinx-doc.org). `pydoc` does not provide facilities for 
 documenting data representation and its HTML output is impossible for me to use 
-productively. `sphinx` is a tool I have been unable to get working despite 
+productively. `sphinx` is a tool I have been unable to get working despite
 trying and failing several times over the past couple years. More to the point, 
 automatic API documentation does not seem to be a primary goal of `sphinx`, 
 where prose seems more preferrable. If the documentation for my API is not with 
