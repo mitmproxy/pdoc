@@ -13,7 +13,7 @@
     margin: 0 auto;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
-    padding: 20px;
+    padding: 10px 25px;
     min-height: 100%;
   }
 
@@ -23,17 +23,15 @@
 
   h2 {
     margin: 25px 0 10px 0;
-    clear: both;
   }
 
   h3 {
-    margin: 0;
-    font-size: 105%;
+    margin: 25px 0 10px 0;
   }
 
-  #nav {
-    font-size: 130%;
-    margin: 0 0 15px 0;
+  h4 {
+    margin: 0;
+    font-size: 105%;
   }
 
   a {
@@ -116,6 +114,11 @@
     margin: 0;
   }
 
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+
     ul#index li {
       margin-bottom: 18px;
     }
@@ -124,14 +127,14 @@
         margin-bottom: 8px;
       }
 
-  ul#index, ul#index ul {
-    list-style-type: none;
-  }
+    ul#index, ul#index ul {
+      list-style-type: none;
+    }
 
-  ul#index ul {
-    margin: 0 0 10px 20px;
-    padding: 0;
-  }
+    ul#index ul {
+      margin: 0 0 10px 20px;
+      padding: 0;
+    }
 
   .column_list {
     width: 100%;
@@ -169,7 +172,6 @@
 
     .item .name {
       background: #e8e8e8;
-      width: 100%;
       padding: 4px;
       margin: 0 0 8px 0;
       font-size: 110%;
@@ -200,8 +202,8 @@
       }
 
     .source_cont {
-      margin: 10px 0 0 0;
-      padding: 0 8px;
+      margin: 10px 8px 0 8px;
+      padding: 0;
     }
 
     .source_link {
@@ -210,7 +212,14 @@
 
     .source {
       display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
     }
+
+      .source .codehilite {
+        margin: 0;
+      }
 
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;

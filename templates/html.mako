@@ -271,27 +271,29 @@
   <h1>Module ${module.name}</h1>
   ${module.docstring | mark}
   ${show_source(module)}
+  <hr>
 
   <h2>Index</h2>
 
   <ul id="index">
   % if len(variables) > 0:
-    <li><h3><a href="#header-variables">Module variables</a></h3>
+    <li><h4><a href="#header-variables">Module variables</a></h4>
       ${show_column_list(map(lambda v: link(v.refname), variables))}
     </li>
   % endif
 
   % if len(functions) > 0:
-    <li><h3><a href="#header-functions">Functions</a></h3>
+    <li><h4><a href="#header-functions">Functions</a></h4>
       ${show_column_list(map(lambda f: link(f.refname), functions))}
     </li>
   % endif
 
   % if len(classes) > 0:
-    <li><h3><a href="#header-classes">Classes</a></h3>
+    <li><h4><a href="#header-classes">Classes</a></h4>
       <ul>
         % for c in classes:
-          <li class="mono">${link(c.refname)}
+          <li class="mono">
+            <span class="class_name">${link(c.refname)}</span>
             <%
               methods = c.functions() + c.methods()
             %>
@@ -305,7 +307,7 @@
   % endif
 
   % if len(submodules) > 0:
-    <li><h3><a href="#header-submodules">Sub-modules</a></h3>
+    <li><h4><a href="#header-submodules">Sub-modules</a></h4>
       <ul>
         % for m in submodules:
           <li class="mono">${link(m.refname)}</li>
@@ -348,7 +350,7 @@
 
         <div class="class">
           % if len(mro) > 0:
-              <h3>Ancestors (in MRO)</h3>
+              <h4>Ancestors (in MRO)</h4>
               <ul class="class_list">
               % for cls in mro:
                 <li>${link(cls.refname)}</li>
@@ -356,7 +358,7 @@
               </ul>
           % endif
           % if len(class_vars) > 0:
-              <h3>Class variables</h3>
+              <h4>Class variables</h4>
               % for v in class_vars:
                   <div class="item">
                     <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
@@ -366,13 +368,13 @@
               % endfor
           % endif
           % if len(smethods) > 0:
-              <h3>Static methods</h3>
+              <h4>Static methods</h4>
               % for f in smethods:
                   ${show_func(f)}
               % endfor
           % endif
           % if len(inst_vars) > 0:
-              <h3>Instance variables</h3>
+              <h4>Instance variables</h4>
               % for v in inst_vars:
                   <div class="item">
                     <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
@@ -382,7 +384,7 @@
               % endfor
           % endif
           % if len(methods) > 0:
-              <h3>Methods</h3>
+              <h4>Methods</h4>
               % for f in methods:
                   ${show_func(f)}
               % endfor
