@@ -346,6 +346,13 @@ class Module (Doc):
     Representation of a module's documentation.
     """
 
+    __pdoc__['Module.module'] = 'The Python module object.'
+    __pdoc__['Module.name'] = \
+        """
+        The name of this module with respect to the context in which
+        it was imported. It is always an absolute import path.
+        """
+
     def __init__(self, module, docfilter=None, allsubmodules=False):
         """
         Creates a `Module` documentation object given the actual
@@ -368,13 +375,6 @@ class Module (Doc):
         self._filtering = docfilter is not None
         self._docfilter = (lambda _: True) if docfilter is None else docfilter
         self._allsubmodules = allsubmodules
-
-        __pdoc__['Module.module'] = 'The Python module object.'
-        __pdoc__['Module.name'] = \
-            """
-            The name of this module with respect to the context in which
-            it was imported. It is always an absolute import path.
-            """
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
@@ -978,28 +978,30 @@ class External (Doc):
     not exported but appears somewhere in the public interface (like
     the ancestor list of a class).
     """
+
+    __pdoc__['External.docstring'] = \
+        """
+        An empty string. External identifiers do not have
+        docstrings.
+        """
+    __pdoc__['External.module'] = \
+        """
+        Always `None`. External identifiers have no associated
+        `pdoc.Module`.
+        """
+    __pdoc__['External.name'] = \
+        """
+        Always equivalent to `pdoc.External.refname` since external
+        identifiers are always expressed in their fully qualified
+        form.
+        """
+
     def __init__(self, name):
         """
         Initializes an external identifier with `name`, where `name`
         should be a fully qualified name.
         """
         super(External, self).__init__(name, None, '')
-        __pdoc__['External.docstring'] = \
-            """
-            An empty string. External identifiers do not have
-            docstrings.
-            """
-        __pdoc__['External.module'] = \
-            """
-            Always `None`. External identifiers have no associated
-            `pdoc.Module`.
-            """
-        __pdoc__['External.name'] = \
-            """
-            Always equivalent to `pdoc.External.refname` since external
-            identifiers are always expressed in their fully qualified
-            form.
-            """
 
     @property
     def source(self):
