@@ -22,6 +22,14 @@
     margin: 0 0 15px 0;
   }
 
+  #top {
+    display: block;
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    font-size: 140%;
+  }
+
   h1 {
     margin: 0 0 10px 0;
   }

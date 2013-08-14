@@ -456,6 +456,8 @@
   </script>
 </head>
 <body>
+<a href="#" id="top">Top</a>
+
 <div id="container">
 
 % if module_list:
