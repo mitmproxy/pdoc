@@ -468,7 +468,7 @@ class Module (Doc):
         """
         Returns the documentation for this module as plain text.
         """
-        t = _get_tpl('/txt.mako')
+        t = _get_tpl('/text.mako')
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 
