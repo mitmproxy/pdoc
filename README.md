@@ -1,4 +1,4 @@
-`pdoc` is a library and a command line program to determine the public 
+`pdoc` is a library and a command line program to discover the public 
 interface of a Python module or package. The `pdoc` script can be used to 
 generate plain text or HTML of a module's public interface, or it can be used 
 to run an HTTP server that serves generated HTML for installed modules.
