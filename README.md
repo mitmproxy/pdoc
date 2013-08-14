@@ -46,7 +46,7 @@ Documentation for the `pdoc` library is available from `pdoc` itself:
 Example usage
 -------------
 `pdoc` will accept a Python module file, package directory or an import path.
-For example, to view the documentation for the `csv` in the console:
+For example, to view the documentation for the `csv` module in the console:
 
     pdoc csv
 
@@ -91,7 +91,7 @@ documentation for my Python packages. Those tools are
 [epydoc](http://epydoc.sourceforge.net) and
 [sphinx](http://sphinx-doc.org). `pydoc` does not provide facilities for 
 documenting data representation and its HTML output is impossible for me to use 
-productively. `sphinx` is tool I have been unable to get working despite trying 
+productively. `sphinx` is a tool I have been unable to get working despite trying 
 and failing several times over the past couple years. More to the point, 
 automatic API documentation does not seem to be a primary goal of `sphinx`, 
 where prose seems more preferrable. If the documentation for my API is not with 
