@@ -68,11 +68,7 @@ aa('--http-dir', type=str, default=default_http_dir,
    help='The directory to cache HTML documentation when running as an HTTP '
         'server.')
 aa('--only-pypath', action='store_true',
-   help='When set, only modules in your PYTHONPATH will be documented. '
-        'This is always enabled when --http is used.')
-aa('--http-std-paths', action='store_true',
-   help='When set, sys.path will not be modified. In essence, this disables '
-        '--only-pypath, which is set by default when --http is set.')
+   help='When set, only modules in your PYTHONPATH will be documented.')
 aa('--http-host', type=str, default='localhost',
    help='The host on which to run the HTTP server.')
 aa('--http-port', type=int, default=8080,
@@ -104,7 +100,7 @@ class WebDoc (BaseHTTPRequestHandler):
                 if name == 'setup' and not ispkg:
                     continue
                 modules.append((name, quick_desc(imp, name, ispkg)))
-            modules = sorted(modules)
+            modules = sorted(modules, key=lambda x: x[0].lower())
 
             out = pdoc._tpl_lookup.get_template('/html.mako')
             out = out.render(modules=modules, link_prefix=args.link_prefix)
@@ -140,7 +136,7 @@ class WebDoc (BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 self.echo('External identifier <code>%s</code> not found.'
-                          % self.import_path)
+                          % import_path)
                 return
             self.send_response(302)
             self.send_header('Location', resolved)
@@ -396,13 +392,12 @@ if __name__ == '__main__':
         args.external_links = True
         args.html_dir = args.http_dir
         args.overwrite = True
-        args.only_pypath = not args.http_std_paths
         args.link_prefix = '/'
 
     # If PYTHONPATH is set, let it override everything if we want it to.
     pypath = os.getenv('PYTHONPATH')
     if args.only_pypath and pypath is not None and len(pypath) > 0:
-        pdoc.import_path = pypath.split(':')
+        pdoc.import_path = pypath.split(path.pathsep)
 
     if args.http:
         if args.module_name is not None:
