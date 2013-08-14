@@ -79,7 +79,7 @@
   }
 
   .codehilite {
-    margin: 0 30px;
+    margin: 0 30px 10px 30px;
   }
 
     .codehilite pre {
