@@ -149,13 +149,11 @@ def import_module(module_name):
     # Raises an exception if the parent module cannot be imported.
     # This hopefully ensures that we only explicitly import modules
     # contained in `pdoc.import_path`.
-    if import_path == sys.path:
+    if import_path != sys.path:
         # Such a kludge. Allow documentation for __builtin__ if we haven't
         # mangled `sys.path`. But what if other packages do it?
         # Not sure what to do here. Probably the right response is not to
         # care if you can see doco for __builtin__.
-        imp.find_module(module_name.split('.')[0])
-    else:
         imp.find_module(module_name.split('.')[0], import_path)
 
     if module_name in sys.modules:
