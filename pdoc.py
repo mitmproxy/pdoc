@@ -136,9 +136,9 @@ def text(module_name, docfilter=None, allsubmodules=False):
 
 def import_module(module_name):
     """
-    A single point of truth for importing modules to be documented
-    by `pdoc`. In particular, it makes sure that the top module
-    in `module_name` can be imported by using only the paths in
+    Imports a module. A single point of truth for importing modules to
+    be documented by `pdoc`. In particular, it makes sure that the top
+    module in `module_name` can be imported by using only the paths in
     `pdoc.import_path`.
 
     If a module has already been imported, then its corresponding entry
@@ -146,14 +146,21 @@ def import_module(module_name):
     changed on disk cannot be re-imported in the same process and have
     its documentation updated.
     """
-    # Raises an exception if the parent module cannot be imported.
-    # This hopefully ensures that we only explicitly import modules
-    # contained in `pdoc.import_path`.
     if import_path != sys.path:
-        # Such a kludge. Allow documentation for __builtin__ if we haven't
-        # mangled `sys.path`. But what if other packages do it?
-        # Not sure what to do here. Probably the right response is not to
-        # care if you can see doco for __builtin__.
+        # Such a kludge. Only restrict imports if the `import_path` has
+        # been changed. We don't want to always restrict imports, since
+        # providing a path to `imp.find_module` stops it from searching
+        # in special locations for built ins or frozen modules.
+        #
+        # The problem here is that this relies on the `sys.path` not being
+        # independently changed since the initialization of this module.
+        # If it is changed, then some packages may fail.
+        #
+        # Any other options available?
+
+        # Raises an exception if the parent module cannot be imported.
+        # This hopefully ensures that we only explicitly import modules
+        # contained in `pdoc.import_path`.
         imp.find_module(module_name.split('.')[0], import_path)
 
     if module_name in sys.modules:
