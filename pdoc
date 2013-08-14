@@ -303,7 +303,7 @@ def module_file(m):
 def quit_if_exists(m):
     def check_file(f):
         if os.access(f, os.R_OK):
-            _eprint('%s already exists. Delete it or run with --overwrite', f)
+            _eprint('%s already exists. Delete it or run with --overwrite' % f)
             sys.exit(1)
 
     if args.overwrite:
