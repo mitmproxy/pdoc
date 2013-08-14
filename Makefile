@@ -4,10 +4,17 @@ all:
 docs:
 	pdoc --html --html-dir ./doc --overwrite ./pdoc.py
 
-pypi:
+pypi: README.rst
 	sudo python2 setup.py register sdist upload
 
-dev-install: docs
+README.rst: pdoc.py pdoc-docstring
+	pandoc -f markdown -t rst -o README.rst pdoc-docstring
+	rm -f pdoc-docstring
+
+pdoc-docstring: pdoc.py
+	./extract-docstring > pdoc-docstring
+
+dev-install: docs README.rst
 	[[ -n "$$VIRTUAL_ENV" ]] || exit
 	rm -rf ./dist
 	python2 setup.py sdist

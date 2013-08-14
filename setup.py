@@ -1,16 +1,6 @@
-import codecs
 from distutils.core import setup
 from glob import glob
-
-longdesc = []
-with codecs.open('pdoc.py', 'r', 'utf-8') as f:
-    for i, line in enumerate(f):
-        if i == 0:
-            continue
-        if line.startswith('"""'):
-            break
-        longdesc.append(line)
-longdesc = ''.join(longdesc)
+import os.path as path
 
 install_requires = ['mako', 'markdown']
 try:  # Is this really the right way? Couldn't find anything better...
@@ -18,8 +8,10 @@ try:  # Is this really the right way? Couldn't find anything better...
 except ImportError:
     install_requires.append('argparse')
 
+cwd = path.dirname(__file__)
+longdesc = open(path.join(cwd, 'README.rst')).read()
 version = '0.0.0'
-with open('pdoc.py') as f:
+with open(path.join(cwd, 'pdoc.py')) as f:
     for line in f:
         if line.startswith('__version__'):
             exec(line.strip())
@@ -32,8 +24,8 @@ setup(
     author_email='pdoc@burntsushi.net',
     version=version,
     license='UNLICENSE',
-    description='A simple program to auto generate API documentation for '
-                'Python libraries.',
+    description='A simple program and library to auto generate API '
+                'documentation for Python modules.',
     long_description=longdesc,
     url='https://github.com/BurntSushi/pdoc',
     classifiers=[
@@ -51,7 +43,8 @@ setup(
     ],
     platforms='ANY',
     py_modules = ['pdoc'],
-    data_files=[('share/pdoc', ['README.md', 'UNLICENSE', 'INSTALL']),
+    data_files=[('share/pdoc', ['README.md', 'README.rst',
+                                'UNLICENSE', 'INSTALL']),
                 ('share/pdoc/doc', ['doc/pdoc.m.html']),
                 ('share/pdoc/templates', glob('templates/*')),
                ],
