@@ -8,7 +8,7 @@
       Inserts `spaces` after each string of new lines in `s`
       and before the start of the string.
       """
-      new, _ = re.subn('(\n+)', '\\1%s' % (' ' * spaces), s)
+      new = re.sub('(\n+)', '\\1%s' % (' ' * spaces), s)
       return (' ' * spaces) + new.strip()
 %>
 
