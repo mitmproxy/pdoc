@@ -96,6 +96,7 @@ ${capture(function, m) | indent}
 %>
 
 Module ${module.name}
+-------${'-' * len(module.name)}
 % if not module._filtering:
 ${module.docstring}
 % endif
