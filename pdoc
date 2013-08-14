@@ -418,7 +418,7 @@ if __name__ == '__main__':
         httpd.server_close()
         sys.exit(0)
 
-    docfilter = lambda _: True
+    docfilter = None
     if args.ident_name and len(args.ident_name.strip()) > 0:
         search = args.ident_name.strip()
 
