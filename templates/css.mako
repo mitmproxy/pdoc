@@ -17,6 +17,11 @@
     min-height: 100%;
   }
 
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
   h1 {
     margin: 0 0 10px 0;
   }
