@@ -10,7 +10,7 @@ except ImportError:
     install_requires.append('argparse')
 
 cwd = path.dirname(__file__)
-longdesc = codecs.open(path.join(cwd, 'README.rst'), 'r', 'utf-8').read()
+longdesc = codecs.open(path.join(cwd, 'longdesc.rst'), 'r', 'utf-8').read()
 version = '0.0.0'
 with codecs.open(path.join(cwd, 'pdoc.py'), 'r', 'utf-8') as f:
     for line in f:
@@ -44,7 +44,7 @@ setup(
     ],
     platforms='ANY',
     py_modules = ['pdoc'],
-    data_files=[('share/pdoc', ['README.md', 'README.rst',
+    data_files=[('share/pdoc', ['README.md', 'longdesc.rst',
                                 'UNLICENSE', 'INSTALL']),
                 ('share/pdoc/doc', ['doc/pdoc.m.html']),
                 ('share/pdoc/templates', glob('templates/*')),
