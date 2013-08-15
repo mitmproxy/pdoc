@@ -244,6 +244,9 @@ class WebDoc (BaseHTTPRequestHandler):
             new = new[0:new.index('#')]
         return new.strip('/')
 
+    def address_string(self):
+        return '%s:%s' % (self.client_address[0], self.client_address[1])
+
 
 def quick_desc(imp, name, ispkg):
     if ispkg:
