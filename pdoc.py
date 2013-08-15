@@ -52,7 +52,7 @@ example, <code>\`pdoc.Doc.docstring\`</code> is correct while
 
 If the `pdoc` script is used to run an HTTP server, then external
 linking to other packages installed is possible. No extra work is
-necessary&mdash;simply use the fully qualified path. For example,
+necessary; simply use the fully qualified path. For example,
 <code>\`nflvid.slice\`</code> will create a link to the `nflvid.slice`
 function, which is **not** a part of `pdoc` at all.
 
