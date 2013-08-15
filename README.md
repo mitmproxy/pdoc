@@ -5,6 +5,9 @@ to run an HTTP server that serves generated HTML for installed modules.
 It is intended that `pdoc` will be a replacement for the unmaintained
 [epydoc](http://epydoc.sourceforge.net).
 
+To see what generated documentation looks like, check out the
+[documentation for pdoc](http://pdoc.burntsushi.net/pdoc).
+
 Prominent features include:
 
 * Support for documenting data representation by traversing the abstract syntax 
@@ -26,10 +29,9 @@ Prominent features include:
   in the HTML documentation.
 * Inheritance is used when possible to infer docstrings for class members.
 
-`pdoc` has been tested on Python 2.6, 2.7 and 3.3.
+The above features are explained in more detail in pdoc's documentation.
 
-For more details, please see
-[pdoc's module documentation](http://pdoc.burntsushi.net/pdoc).
+`pdoc` has been tested on Python 2.6, 2.7 and 3.3.
 
 
 Installation
