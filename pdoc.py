@@ -573,6 +573,9 @@ class Module (Doc):
                     self.doc[name] = self.__new_submodule(name, obj)
             elif name in vardocs:
                 self.doc[name] = vardocs[name]
+            else:
+                # Catch all for variables.
+                self.doc[name] = Variable(name, self, '', cls=None)
 
         # Now scan the directory if this is a package for all modules.
         if not hasattr(self.module, '__path__') \
