@@ -1062,7 +1062,7 @@ class Function (Doc):
             else:
                 return '(%s)' % (', '.join(map(fmt_param, el)))
         try:
-            getspec = getattr(inspect, 'getfullargspec', 'getargspec')
+            getspec = getattr(inspect, 'getfullargspec', inspect.getargspec)
             s = getspec(self.func)
         except TypeError:
             # I guess this is for C builtin functions?
