@@ -1,3 +1,4 @@
+import codecs
 from distutils.core import setup
 from glob import glob
 import os.path as path
@@ -9,9 +10,9 @@ except ImportError:
     install_requires.append('argparse')
 
 cwd = path.dirname(__file__)
-longdesc = open(path.join(cwd, 'README.rst')).read()
+longdesc = codecs.open(path.join(cwd, 'README.rst'), 'r', 'utf-8').read()
 version = '0.0.0'
-with open(path.join(cwd, 'pdoc.py')) as f:
+with codecs.open(path.join(cwd, 'pdoc.py'), 'r', 'utf-8') as f:
     for line in f:
         if line.startswith('__version__'):
             exec(line.strip())
