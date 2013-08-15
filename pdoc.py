@@ -404,7 +404,8 @@ def _var_docstrings(tree, module, cls=None, init=False):
                 name = child.targets[0].attr
             else:
                 continue
-            if not _is_exported(name):
+            if not _is_exported(name) \
+                    and name not in getattr(module, '__all__', []):
                 continue
 
             docstring = ''
