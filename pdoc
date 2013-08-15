@@ -34,6 +34,8 @@ aa('ident_name', type=str, nargs='?',
    help='When specified, only identifiers containing the name given '
         'will be shown in the output. Search is case sensitive. '
         'Has no effect when --http is set.')
+aa('--version', action='store_true',
+   help='Print the version of pdoc and exit.')
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
 aa('--html-dir', type=str, default='.',
@@ -51,15 +53,15 @@ aa('--external-links', action='store_true',
    help='When set, identifiers to external modules are turned into links. '
         'This is automatically set when using --http.')
 aa('--template-dir', type=str, default=None,
-   help='Specify a directory containing Mako templates.')
+   help='Specify a directory containing Mako templates. '
+        'Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and '
+        'pdoc will automatically find them.')
 aa('--link-prefix', type=str, default='',
    help='A prefix to use for every link in the generated documentation. '
         'No link prefix results in all links being relative. '
         'Has no effect when combined with --http.')
-aa('--force-module-name', type=str, default=None,
-   help='Sometimes it is necessary to specify a module name when documenting '
-        'Python modules in the file system. You will receive an error message '
-        'if this is necessary to use.')
+aa('--only-pypath', action='store_true',
+   help='When set, only modules in your PYTHONPATH will be documented.')
 aa('--http', action='store_true',
    help='When set, pdoc will run as an HTTP server providing documentation '
         'of all installed modules. Only modules found in PYTHONPATH will be '
@@ -67,16 +69,12 @@ aa('--http', action='store_true',
 aa('--http-dir', type=str, default=default_http_dir,
    help='The directory to cache HTML documentation when running as an HTTP '
         'server.')
-aa('--only-pypath', action='store_true',
-   help='When set, only modules in your PYTHONPATH will be documented.')
 aa('--http-host', type=str, default='localhost',
    help='The host on which to run the HTTP server.')
 aa('--http-port', type=int, default=8080,
    help='The port on which to run the HTTP server.')
 aa('--http-html', action='store_true',
    help='Internal use only. Do not set.')
-aa('--version', action='store_true',
-   help='Print the version of pdoc and exit.')
 args = parser.parse_args()
 
 
