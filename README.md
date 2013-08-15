@@ -79,8 +79,7 @@ Generate HTML with the `--html` switch:
 
 A file called `csv.m.html` will be written to the current directory.
 
-Or start an HTTP server that shows documentation for modules found only in your 
-`PYTHONPATH` environment variable:
+Or start an HTTP server that shows documentation for any installed module:
 
     pdoc --http
 
