@@ -113,6 +113,6 @@ maintaining it.
 Finally, `epydoc` is what I had been using for several years. The last release 
 was in 2008 and it is not compatible with Python 3. In addition to the web
 pages it produces being difficult for me to browse, it is over 25,000 lines
-of code. By comparison, `pdoc` is under 3,000 lines of code. (Only 1,500 of
+of code. By comparison, `pdoc` is around 3,000 lines of code. (Only ~1,600 of
 those lines is Python code. The rest is mostly HTML and CSS in Mako templates.)
 
