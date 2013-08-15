@@ -1062,7 +1062,8 @@ class Function (Doc):
             else:
                 return '(%s)' % (', '.join(map(fmt_param, el)))
         try:
-            s = inspect.getargspec(self.func)
+            getspec = getattr(inspect, 'getfullargspec', 'getargspec')
+            s = getspec(self.func)
         except TypeError:
             # I guess this is for C builtin functions?
             return ['...']
@@ -1076,8 +1077,12 @@ class Function (Doc):
                 params.append(fmt_param(param))
         if s.varargs is not None:
             params.append('*%s' % s.varargs)
-        if s.keywords is not None:
-            params.append('**%s' % s.keywords)
+
+        # TODO: This needs to be adjusted in Python 3. There's more stuff
+        #       returned from getfullargspec than what we're looking at here.
+        keywords = getattr(s, 'varkw', 'keywords')
+        if keywords is not None:
+            params.append('**%s' % keywords)
         return params
 
     def __lt__(self, other):
