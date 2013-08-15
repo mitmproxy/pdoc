@@ -1,8 +1,8 @@
 """
 Module pdoc provides types and functions for accessing the public
-documentation of a Python module. This includes module level variables,
-modules (and sub-modules), functions, classes and class and instance
-variables. Docstrings are taken from modules, functions, and classes
+documentation of a Python module. This includes modules (and
+sub-modules), functions, classes and module, class and instance
+variables.  Docstrings are taken from modules, functions, and classes
 using special `__doc__` attribute. Docstrings for any of the variables
 are extracted by examining the module's abstract syntax tree.
 
