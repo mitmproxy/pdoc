@@ -17,7 +17,7 @@ pdoc-docstring: pdoc.py
 dev-install: docs README.rst
 	[[ -n "$$VIRTUAL_ENV" ]] || exit
 	rm -rf ./dist
-	python2 setup.py sdist
+	python setup.py sdist
 	pip install -U dist/*.tar.gz
 
 pep8:
