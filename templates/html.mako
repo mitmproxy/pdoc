@@ -24,8 +24,8 @@
       print >> sys.stderr, s
   
   def decode(s):
-      if hasattr(s, 'decode'):
-          return s.decode('utf-8', 'replace')
+      if sys.version_info[0] < 3 and isinstance(s, str):
+          return s.decode('utf-8', 'ignore')
       return s
 
   def ident(s):
