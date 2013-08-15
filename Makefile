@@ -4,7 +4,7 @@ all:
 docs:
 	pdoc --html --html-dir ./doc --overwrite ./pdoc.py
 
-pypi: longdesc.rst
+pypi: docs longdesc.rst
 	sudo python2 setup.py register sdist upload
 
 longdesc.rst: pdoc.py docstring
