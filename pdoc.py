@@ -2,9 +2,9 @@
 Module pdoc provides types and functions for accessing the public
 documentation of a Python module. This includes modules (and
 sub-modules), functions, classes and module, class and instance
-variables.  Docstrings are taken from modules, functions, and classes
-using special `__doc__` attribute. Docstrings for any of the variables
-are extracted by examining the module's abstract syntax tree.
+variables.  Docstrings are taken from modules, functions and classes
+using the special `__doc__` attribute. Docstrings for variables are
+extracted by examining the module's abstract syntax tree.
 
 The public interface of a module is determined through one of two
 ways. If `__all__` is defined in the module, then all identifiers in
@@ -19,11 +19,10 @@ three rules that are applied to each identifier in the module:
 
 3. If the name refers to an immediate sub-module, then it is public.
 
-Once documentation for a module is created with
-`pdoc.Module`.`pdoc.Module.__init__`, it can be output as either
-HTML or plain text using the covenience functions `pdoc.html` and
-`pdoc.text`, or the corresponding methods
-`pdoc.Module`.`pdoc.Module.html` and `pdoc.Module`.`pdoc.Module.text`.
+Once documentation for a module is created with `pdoc.Module`, it
+can be output as either HTML or plain text using the covenience
+functions `pdoc.html` and `pdoc.text`, or the corresponding methods
+`pdoc.Module.html` and `pdoc.Module.text`.
 
 Alternatively, you may run an HTTP server with the `pdoc` script
 included with this module.
@@ -37,8 +36,8 @@ on all three.
 
 Contributing
 ------------
-[`pdoc` is on GitHub](https://github.com/BurntSushi/pdoc).
-Pull requests and bug reports are welcome.
+`pdoc` [is on GitHub](https://github.com/BurntSushi/pdoc). Pull
+requests and bug reports are welcome.
 
 
 Linking to other identifiers
@@ -110,8 +109,8 @@ sample:
     None
 
 In Python, the docstring for `B.test` is empty, even though one was
-defined in `A.test`. If `pdoc` generates documentation for the above,
-then it will automatically attach the docstring for `A.test` to
+defined in `A.test`. If `pdoc` generates documentation for the above
+code, then it will automatically attach the docstring for `A.test` to
 `B.test` only if `B.test` does not have a docstring. In the default
 HTML output, an inherited docstring is grey.
 
@@ -159,15 +158,9 @@ attaching a docstring to something. A good example of this is a
     __pdoc__ = {}
 
     Table = namedtuple('Table', ['types', 'names', 'rows'])
-    __pdoc__['Table.types'] = '''
-    Types for each column in the table.
-    '''
-    __pdoc__['Table.names'] = '''
-    The names of each column in the table.
-    '''
-    __pdoc__['Table.rows'] = '''
-    A list of lists corresponding to each row in the table.
-    '''
+    __pdoc__['Table.types'] = 'Types for each column in the table.'
+    __pdoc__['Table.names'] = 'The names of each column in the table.'
+    __pdoc__['Table.rows'] = 'Lists corresponding to each row in the table.'
 
 `pdoc` will then show `Table` as a class with documentation for the
 `types`, `names` and `rows` members.
