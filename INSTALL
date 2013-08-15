@@ -1,6 +1,6 @@
 It should be as straight-forward as
 
-  sudo python2 setup.py install
+  sudo python setup.py install
 
 You should now be able to view API documentation on the fly:
 

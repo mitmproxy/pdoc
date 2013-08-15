@@ -45,7 +45,7 @@ setup(
     platforms='ANY',
     py_modules = ['pdoc'],
     data_files=[('share/pdoc', ['README.md', 'longdesc.rst',
-                                'UNLICENSE', 'INSTALL']),
+                                'UNLICENSE', 'INSTALL', 'CHANGELOG']),
                 ('share/pdoc/doc', ['doc/pdoc.m.html']),
                 ('share/pdoc/templates', glob('templates/*')),
                ],
