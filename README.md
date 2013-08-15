@@ -2,6 +2,8 @@
 interface of a Python module or package. The `pdoc` script can be used to 
 generate plain text or HTML of a module's public interface, or it can be used 
 to run an HTTP server that serves generated HTML for installed modules.
+It is intended that `pdoc` will be a replacement for the unmaintained
+[epydoc](http://epydoc.sourceforge.net).
 
 Prominent features include:
 
@@ -14,10 +16,12 @@ Prominent features include:
 * Usage is simple. Just write your documentation as Markdown. There are no 
   added special syntax rules.
 * `pdoc` respects your `__all__` variable when present.
-* `pdoc` will automatically link identifiers in your documentation to its
+* `pdoc` will automatically link identifiers in your docstrings to its
   corresponding documentation.
 * When `pdoc` is run as an HTTP server, external linking is supported between 
   packages.
+* The `pdoc` HTTP server will cache generated documentation and automatically
+  regenerate it if the source code has been updated.
 * When available, source code for modules, functions and classes can be viewed 
   in the HTML documentation.
 * Inheritance is used when possible to infer docstrings for class members.
@@ -30,7 +34,8 @@ For more details, please see
 
 Installation
 ------------
-`pdoc` is on PyPI and is installable via `pip`:
+`pdoc` is [on PyPI](https://pypi.python.org/pypi/pdoc) and is installable via 
+`pip`:
 
     pip install pdoc
 
@@ -64,6 +69,10 @@ Submodules are fine too:
 
     pdoc multiprocessing.pool
 
+You can also filter the documentation with a keyword:
+
+    pdoc csv reader
+
 Generate HTML with the `--html` switch:
 
     pdoc --html csv
@@ -75,9 +84,7 @@ Or start an HTTP server that shows documentation for modules found only in your
 
     pdoc --http
 
-Then open your web browser to `http://localhost:8080`. However, you won't be 
-able to see documentation for the standard library. To see that, add the
-`--http-std-paths` switch.
+Then open your web browser to `http://localhost:8080`.
 
 There are many other options to explore. You can see them all by running:
 
@@ -98,10 +105,11 @@ documentation for my Python packages. Those tools are
 [sphinx](http://sphinx-doc.org). `pydoc` does not provide facilities for 
 documenting data representation and its HTML output is impossible for me to use 
 productively. `sphinx` is a tool I have been unable to get working despite
-trying and failing several times over the past couple years. More to the point, 
-automatic API documentation does not seem to be a primary goal of `sphinx`, 
-where prose seems more preferrable. If the documentation for my API is not with 
-my source code, then I have no hope of maintaining it.
+trying and failing several times over the past couple years. Moreover, 
+automatic API documentation does not seem to be a primary goal of `sphinx`,
+where prose separate from the source code seems encouraged. If the 
+documentation for my module is not with my source code, then I have no hope of 
+maintaining it.
 
 Finally, `epydoc` is what I had been using for several years. The last release 
 was in 2008 and it is not compatible with Python 3. In addition to the web
