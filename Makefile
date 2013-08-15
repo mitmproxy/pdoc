@@ -7,12 +7,12 @@ docs:
 pypi: longdesc.rst
 	sudo python2 setup.py register sdist upload
 
-longdesc.rst: pdoc.py pdoc-docstring
-	pandoc -f markdown -t rst -o longdesc.rst pdoc-docstring
-	rm -f pdoc-docstring
+longdesc.rst: pdoc.py docstring
+	pandoc -f markdown -t rst -o longdesc.rst docstring
+	rm -f docstring
 
-pdoc-docstring: pdoc.py
-	./extract-docstring > pdoc-docstring
+docstring: pdoc.py
+	./extract-docstring > docstring
 
 dev-install: docs longdesc.rst
 	[[ -n "$$VIRTUAL_ENV" ]] || exit
