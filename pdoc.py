@@ -1080,7 +1080,7 @@ class Function (Doc):
 
         # TODO: This needs to be adjusted in Python 3. There's more stuff
         #       returned from getfullargspec than what we're looking at here.
-        keywords = getattr(s, 'varkw', 'keywords')
+        keywords = getattr(s, 'varkw', s.keywords)
         if keywords is not None:
             params.append('**%s' % keywords)
         return params
