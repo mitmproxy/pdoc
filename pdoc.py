@@ -882,6 +882,9 @@ class Class (Doc):
             # Skip any identifiers that already have doco.
             if name in self.doc and not self.doc[name].is_empty():
                 continue
+            if name in self.doc_init:
+                # Let instance members override class members.
+                continue
 
             if inspect.ismethod(obj):
                 self.doc[name] = Function(name, self.module, obj.__func__,
