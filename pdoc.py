@@ -898,7 +898,11 @@ class Class (Doc):
                                                cls=self)
             elif not inspect.isbuiltin(obj) \
                     and not inspect.isroutine(obj):
-                self.doc[name] = Variable(name, self.module, '', cls=self)
+                if name in getattr(self.cls, '__slots__', []):
+                    self.doc_init[name] = Variable(name, self.module,
+                                                   '', cls=self)
+                else:
+                    self.doc[name] = Variable(name, self.module, '', cls=self)
 
     @property
     def source(self):
