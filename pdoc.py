@@ -611,7 +611,7 @@ class Module (Doc):
                 for f in docobj.functions():
                     self.refdoc[f.refname] = f
 
-        # Finally look for more docstrings in the __pdoc override.
+        # Finally look for more docstrings in the __pdoc__ override.
         for name, docstring in getattr(self.module, '__pdoc__', {}).items():
             dobj = self.find_ident('%s.%s' % (self.refname, name))
             if isinstance(dobj, External):
@@ -893,9 +893,7 @@ class Class (Doc):
                 self.doc[name] = Function(name, self.module, obj,
                                           cls=self, method=False)
             elif isinstance(obj, property):
-                docstring = ''
-                if hasattr(obj, '__doc__'):
-                    docstring = obj.__doc__
+                docstring = getattr(obj, '__doc__', '')
                 self.doc_init[name] = Variable(name, self.module, docstring,
                                                cls=self)
             elif not inspect.isbuiltin(obj) \
