@@ -1,3 +1,9 @@
+0.1.5
+=====
+  - Fixed a bug with an improper use of getattr.
+  - Made pdoc aware of __slots__. (Every identifier in __slots__
+    is automatically interpreted as an instance variable.)
+
 0.1.4
 =====
   - Fixed bug where getargspec wasn't being used in Python 2.x.
