@@ -933,8 +933,8 @@ class Class (Doc):
     def methods(self):
         """
         Returns all documented methods as `pdoc.Function` objects in
-        the class, sorted alphabetically with `__new__` and `__init__`
-        always coming first.
+        the class, sorted alphabetically with `__init__` always coming
+        first.
 
         Unfortunately, this also includes class methods.
         """
@@ -992,11 +992,11 @@ class Class (Doc):
     def __public_objs(self):
         """
         Returns a dictionary mapping a public identifier name to a
-        Python object. This counts `__init__` and `__new__` methods
-        as being public.
+        Python object. This counts the `__init__` method as being
+        public.
         """
         def exported(name):
-            return name in ('__init__', '__new__') or _is_exported(name)
+            return name == '__init__' or _is_exported(name)
 
         idents = dict(inspect.getmembers(self.cls))
         return dict([(n, o) for n, o in idents.items() if exported(n)])
@@ -1091,10 +1091,8 @@ class Function (Doc):
         return params
 
     def __lt__(self, other):
-        # Push __new__ and __init__ to the top.
-        if '__new__' in (self.name, other.name):
-            return self.name != other.name and self.name == '__new__'
-        elif '__init__' in (self.name, other.name):
+        # Push __init__ to the top.
+        if '__init__' in (self.name, other.name):
             return self.name != other.name and self.name == '__init__'
         else:
             return self.name < other.name
