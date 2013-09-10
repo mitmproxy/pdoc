@@ -1,7 +1,11 @@
-0.1.6
+0.1.7
 =====
   - Removed __new__ from the public interface. I think __init__
     is sufficient.
+
+0.1.6
+=====
+  - Fixed bug #1.
 
 0.1.5
 =====

@@ -188,7 +188,7 @@ import sys
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 """
 The current version of pdoc. This value is read from `setup.py`.
 """
@@ -1085,7 +1085,7 @@ class Function (Doc):
 
         # TODO: This needs to be adjusted in Python 3. There's more stuff
         #       returned from getfullargspec than what we're looking at here.
-        keywords = getattr(s, 'varkw', s.keywords)
+        keywords = getattr(s, 'varkw', getattr(s, 'keywords', None))
         if keywords is not None:
             params.append('**%s' % keywords)
         return params
