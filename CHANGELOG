@@ -1,3 +1,8 @@
+0.1.8
+=====
+  - pdoc now interprets `__pdoc__[key] = None` as an explicit way
+    to hide `key` from the public interface of its module.
+
 0.1.7
 =====
   - Removed __new__ from the public interface. I think __init__
