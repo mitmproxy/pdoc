@@ -176,6 +176,9 @@ Note that assignments to ``__pdoc__`` need to placed where they'll be
 executed when the module is imported. For example, at the top level of a
 module or in the definition of a class.
 
+If ``__pdoc__[key] = None``, then ``key`` will not be included in the
+public interface of the module.
+
 License
 -------
 
