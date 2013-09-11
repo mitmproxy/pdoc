@@ -169,6 +169,9 @@ Note that assignments to `__pdoc__` need to placed where they'll be
 executed when the module is imported. For example, at the top level
 of a module or in the definition of a class.
 
+If `__pdoc__[key] = None`, then `key` will not be included in the
+public interface of the module.
+
 
 License
 -------
@@ -613,7 +616,13 @@ class Module (Doc):
 
         # Finally look for more docstrings in the __pdoc__ override.
         for name, docstring in getattr(self.module, '__pdoc__', {}).items():
-            dobj = self.find_ident('%s.%s' % (self.refname, name))
+            refname = '%s.%s' % (self.refname, name)
+            if docstring is None:
+                self.doc.pop(name, None)
+                self.refdoc.pop(refname, None)
+                continue
+
+            dobj = self.find_ident(refname)
             if isinstance(dobj, External):
                 continue
             dobj.docstring = inspect.cleandoc(docstring)
@@ -995,8 +1004,14 @@ class Class (Doc):
         Python object. This counts the `__init__` method as being
         public.
         """
+        _pdoc = getattr(self.module.module, '__pdoc__', {})
+
+        def forced_out(name):
+            return _pdoc.get('%s.%s' % (self.name, name), False) is None
+
         def exported(name):
-            return name == '__init__' or _is_exported(name)
+            exported = name == '__init__' or _is_exported(name)
+            return not forced_out(name) and exported
 
         idents = dict(inspect.getmembers(self.cls))
         return dict([(n, o) for n, o in idents.items() if exported(n)])
