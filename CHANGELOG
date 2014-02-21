@@ -1,3 +1,9 @@
+0.2.0
+=====
+  - Fix issue #2 by making pdoc a package instead of a module.
+    The templates are now included as package_data, which seems
+    to be more portable (its final location is more predictable).
+
 0.1.8
 =====
   - pdoc now interprets `__pdoc__[key] = None` as an explicit way
