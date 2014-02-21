@@ -1,6 +1,5 @@
 import codecs
 from distutils.core import setup
-from glob import glob
 import os.path as path
 
 install_requires = ['mako', 'markdown']
@@ -12,7 +11,7 @@ except ImportError:
 cwd = path.dirname(__file__)
 longdesc = codecs.open(path.join(cwd, 'longdesc.rst'), 'r', 'utf-8').read()
 version = '0.0.0'
-with codecs.open(path.join(cwd, 'pdoc.py'), 'r', 'utf-8') as f:
+with codecs.open(path.join(cwd, 'pdoc', '__init__.py'), 'r', 'utf-8') as f:
     for line in f:
         if line.startswith('__version__'):
             exec(line.strip())
@@ -43,13 +42,13 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     platforms='ANY',
-    py_modules = ['pdoc'],
+    packages=['pdoc'],
+    package_data={'pdoc': ['templates/*']},
     data_files=[('share/pdoc', ['README.md', 'longdesc.rst',
                                 'UNLICENSE', 'INSTALL', 'CHANGELOG']),
-                ('share/pdoc/doc', ['doc/pdoc.m.html']),
-                ('share/pdoc/templates', glob('templates/*')),
+                ('share/doc/pdoc', ['doc/pdoc/index.html']),
                ],
-    scripts=['pdoc'],
+    scripts=['scripts/pdoc'],
     provides=['pdoc'],
     requires=['argparse', 'mako', 'markdown'],
     install_requires=install_requires,

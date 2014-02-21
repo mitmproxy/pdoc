@@ -216,8 +216,7 @@ copy of `sys.path` at initialization.
 """
 
 template_path = [
-    path.join(sys.prefix, 'share', 'pdoc', 'templates'),
-    path.join(path.dirname(__file__), 'templates'),  # For my dev environment.
+    path.join(path.dirname(__file__), 'templates'),
 ]
 """
 A list of paths to search for Mako templates used to produce the

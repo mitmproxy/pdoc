@@ -3,7 +3,7 @@
 import codecs
 
 docstring = []
-with codecs.open('pdoc.py', 'r', 'utf-8') as f:
+with codecs.open('pdoc/__init__.py', 'r', 'utf-8') as f:
     for i, line in enumerate(f):
         if i == 0:
             continue
