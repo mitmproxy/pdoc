@@ -191,7 +191,7 @@ import sys
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 """
 The current version of pdoc. This value is read from `setup.py`.
 """
