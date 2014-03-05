@@ -1,3 +1,8 @@
+0.2.1
+=====
+  - Fixes #5 by trying to find source for decorated functions.
+    (@austin1howard)
+
 0.2.0
 =====
   - Fix issue #2 by making pdoc a package instead of a module.
