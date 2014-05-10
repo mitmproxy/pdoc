@@ -249,6 +249,10 @@ class WebDoc (BaseHTTPRequestHandler):
 
 
 def quick_desc(imp, name, ispkg):
+    if not hasattr(imp, 'path'):
+        # See issue #7.
+        return ''
+
     if ispkg:
         fp = path.join(imp.path, name, '__init__.py')
     else:
