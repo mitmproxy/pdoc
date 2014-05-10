@@ -1327,7 +1327,7 @@ public interface of the module.</p>
 <span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
 <span class="kn">from</span> <span class="nn">mako.exceptions</span> <span class="kn">import</span> <span class="n">TopLevelLookupException</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.2.0&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.2.1&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The current version of pdoc. This value is read from `setup.py`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1461,11 +1461,21 @@ public interface of the module.</p>
 <span class="k">def</span> <span class="nf">_source</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the source code of the Python object `obj` as a list of</span>
-<span class="sd">    lines. If the source code doesn&#39;t exist, then the empty list is</span>
-<span class="sd">    returned.</span>
+<span class="sd">    lines. If the source code doesn&#39;t exist, try to get the source code</span>
+<span class="sd">    of `obj.__wrapped__`. In Python 3.2 and above, this is automatically added to decorated</span>
+<span class="sd">    functions as a reference to the original function. In previous versions of Python, this</span>
+<span class="sd">    behavior can be accomplished by use of the</span>
+<span class="sd">    [decorator module](http://pypi.python.org/pypi/decorator/3.4.0).</span>
+
+<span class="sd">    If neither of</span>
+<span class="sd">    these have source code, then the empty list is returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsourcelines</span><span class="p">(</span><span class="n">obj</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsourcelines</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">__wrapped__</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
 
@@ -1602,9 +1612,15 @@ public interface of the module.</p>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the source code for the underlying Python object as a</span>
-<span class="sd">        list of lines. If the source code can&#39;t be retrieved, then the</span>
-<span class="sd">        empty list is returned.</span>
+<span class="sd">        Returns the source code of the Python object `obj` as a list of</span>
+<span class="sd">        lines. If the source code doesn&#39;t exist, try to get the source code</span>
+<span class="sd">        of `obj.__wrapped__`. In Python 3.2 and above, this is automatically added to decorated</span>
+<span class="sd">        functions as a reference to the original function. In previous versions of Python, this</span>
+<span class="sd">        behavior can be accomplished by use of the</span>
+<span class="sd">        [decorator module](http://pypi.python.org/pypi/decorator/3.4.0).</span>
+
+<span class="sd">        If neither of</span>
+<span class="sd">        these have source code, then the empty list is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;subclass responsibility&#39;</span>
 
@@ -3022,9 +3038,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc inherited"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc inherited"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -3327,9 +3348,15 @@ a class's ancestor list.)</p></div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the source code for the underlying Python object as a</span>
-<span class="sd">        list of lines. If the source code can&#39;t be retrieved, then the</span>
-<span class="sd">        empty list is returned.</span>
+<span class="sd">        Returns the source code of the Python object `obj` as a list of</span>
+<span class="sd">        lines. If the source code doesn&#39;t exist, try to get the source code</span>
+<span class="sd">        of `obj.__wrapped__`. In Python 3.2 and above, this is automatically added to decorated</span>
+<span class="sd">        functions as a reference to the original function. In previous versions of Python, this</span>
+<span class="sd">        behavior can be accomplished by use of the</span>
+<span class="sd">        [decorator module](http://pypi.python.org/pypi/decorator/3.4.0).</span>
+
+<span class="sd">        If neither of</span>
+<span class="sd">        these have source code, then the empty list is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;subclass responsibility&#39;</span>
 
@@ -3422,9 +3449,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -3647,9 +3679,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc inherited"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc inherited"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -3945,9 +3982,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc inherited"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc inherited"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -4587,9 +4629,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc inherited"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc inherited"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -5340,9 +5387,14 @@ documentation object must provide this property.</p>
 
                     
   
-      <div class="desc inherited"><p>Returns the source code for the underlying Python object as a
-list of lines. If the source code can't be retrieved, then the
-empty list is returned.</p></div>
+      <div class="desc inherited"><p>Returns the source code of the Python object <code>obj</code> as a list of
+lines. If the source code doesn't exist, try to get the source code
+of <code>obj.__wrapped__</code>. In Python 3.2 and above, this is automatically added to decorated
+functions as a reference to the original function. In previous versions of Python, this
+behavior can be accomplished by use of the
+<a href="http://pypi.python.org/pypi/decorator/3.4.0">decorator module</a>.</p>
+<p>If neither of
+these have source code, then the empty list is returned.</p></div>
     <div class="source_cont">
 </div>
 
@@ -5424,7 +5476,7 @@ variable.</p></div>
 <p style="text-align: right;">
   Documentation generated by
   <code><a href="https://github.com/BurntSushi/pdoc">pdoc</a></code>
-  0.2.0.
+  0.2.1.
 
   pdoc is in the public domain with the
   <a href="http://unlicense.org">UNLICENSE</a>.
