@@ -391,7 +391,7 @@ if __name__ == '__main__':
         _eprint('No module name specified.')
         sys.exit(1)
     if args.template_dir is not None:
-        pdoc.template_path.insert(0, args.template_dir)
+        pdoc.tpl_lookup.directories.insert(0, args.template_dir)
     if args.http:
         args.html = True
         args.external_links = True

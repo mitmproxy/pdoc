@@ -215,7 +215,7 @@ found in `import_path` will not be imported. By default, it is set to a
 copy of `sys.path` at initialization.
 """
 
-template_path = [
+_template_path = [
     path.join(path.dirname(__file__), 'templates'),
 ]
 """
@@ -224,12 +224,17 @@ plain text and HTML output. Each path is tried until a template is
 found.
 """
 if os.getenv('XDG_CONFIG_HOME'):
-    template_path.insert(0, path.join(os.getenv('XDG_CONFIG_HOME'), 'pdoc'))
+    _template_path.insert(0, path.join(os.getenv('XDG_CONFIG_HOME'), 'pdoc'))
 
 __pdoc__ = {}
-_tpl_lookup = TemplateLookup(directories=template_path,
+tpl_lookup = TemplateLookup(directories=_template_path,
                              cache_args={'cached': True,
                                          'cache_type': 'memory'})
+"""
+A `mako.lookup.TemplateLookup` object that knows how to load templates
+from the file system. You may add additional paths by modifying the
+object's `directories` attribute.
+"""
 
 
 def html(module_name, docfilter=None, allsubmodules=False,
@@ -350,9 +355,9 @@ def _get_tpl(name):
     cannot be found, a nicer error message is displayed.
     """
     try:
-        t = _tpl_lookup.get_template(name)
+        t = tpl_lookup.get_template(name)
     except TopLevelLookupException:
-        locs = [path.join(p, name.lstrip('/')) for p in template_path]
+        locs = [path.join(p, name.lstrip('/')) for p in _template_path]
         raise IOError(2, 'No template at any of: %s' % ', '.join(locs))
     return t
 
