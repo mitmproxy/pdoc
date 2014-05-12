@@ -1,3 +1,7 @@
+0.2.3
+=====
+  - Fixed #10 (the --template-dir flag now works).
+
 0.2.2
 =====
   - Fixes #7 by ignoring module loaders that lack a 'path' attribute.

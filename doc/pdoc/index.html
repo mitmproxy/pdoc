@@ -1327,7 +1327,7 @@ public interface of the module.</p>
 <span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
 <span class="kn">from</span> <span class="nn">mako.exceptions</span> <span class="kn">import</span> <span class="n">TopLevelLookupException</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.2.2&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.2.3&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The current version of pdoc. This value is read from `setup.py`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1351,7 +1351,7 @@ public interface of the module.</p>
 <span class="sd">copy of `sys.path` at initialization.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">template_path</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">_template_path</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;templates&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1360,12 +1360,17 @@ public interface of the module.</p>
 <span class="sd">found.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;XDG_CONFIG_HOME&#39;</span><span class="p">):</span>
-    <span class="n">template_path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;XDG_CONFIG_HOME&#39;</span><span class="p">),</span> <span class="s">&#39;pdoc&#39;</span><span class="p">))</span>
+    <span class="n">_template_path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;XDG_CONFIG_HOME&#39;</span><span class="p">),</span> <span class="s">&#39;pdoc&#39;</span><span class="p">))</span>
 
 <span class="n">__pdoc__</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">_tpl_lookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="n">template_path</span><span class="p">,</span>
+<span class="n">tpl_lookup</span> <span class="o">=</span> <span class="n">TemplateLookup</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="n">_template_path</span><span class="p">,</span>
                              <span class="n">cache_args</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;cached&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
                                          <span class="s">&#39;cache_type&#39;</span><span class="p">:</span> <span class="s">&#39;memory&#39;</span><span class="p">})</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A `mako.lookup.TemplateLookup` object that knows how to load templates</span>
+<span class="sd">from the file system. You may add additional paths by modifying the</span>
+<span class="sd">object&#39;s `directories` attribute.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">docfilter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">allsubmodules</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -1486,9 +1491,9 @@ public interface of the module.</p>
 <span class="sd">    cannot be found, a nicer error message is displayed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">_tpl_lookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">tpl_lookup</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">TopLevelLookupException</span><span class="p">:</span>
-        <span class="n">locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">template_path</span><span class="p">]</span>
+        <span class="n">locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_template_path</span><span class="p">]</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;No template at any of: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">locs</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">t</span>
 
@@ -2353,13 +2358,12 @@ public interface of the module.</p>
   <div class="column_list">
       <ul>
           <li class="mono"><a href="#pdoc.html_module_suffix">html_module_suffix</a></li>
+      </ul>
+      <ul>
           <li class="mono"><a href="#pdoc.html_package_name">html_package_name</a></li>
       </ul>
       <ul>
           <li class="mono"><a href="#pdoc.import_path">import_path</a></li>
-      </ul>
-      <ul>
-          <li class="mono"><a href="#pdoc.template_path">template_path</a></li>
       </ul>
   </div>
 
@@ -2538,17 +2542,6 @@ public interface of the module.</p>
       <div class="desc"><p>A list of paths to restrict imports to. Any module that cannot be
 found in <code>import_path</code> will not be imported. By default, it is set to a
 copy of <code>sys.path</code> at initialization.</p></div>
-    <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-        <p id="pdoc.template_path" class="name">var <span class="ident">template_path</span></p>
-        
-  
-      <div class="desc"><p>A list of paths to search for Mako templates used to produce the
-plain text and HTML output. Each path is tried until a template is
-found.</p></div>
     <div class="source_cont">
 </div>
 
@@ -5476,7 +5469,7 @@ variable.</p></div>
 <p style="text-align: right;">
   Documentation generated by
   <code><a href="https://github.com/BurntSushi/pdoc">pdoc</a></code>
-  0.2.2.
+  0.2.3.
 
   pdoc is in the public domain with the
   <a href="http://unlicense.org">UNLICENSE</a>.
