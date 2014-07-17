@@ -77,7 +77,6 @@
   def module_url(m):
       """
       Returns a URL for `m`, which must be an instance of `Module`.
-      Also, `m` must be a submodule of the module being documented.
 
       Namely, '.' import separators are replaced with '/' URL
       separators. Also, packages are translated as directories
@@ -89,11 +88,16 @@
       if module.name == m.name:
           return ''
 
-      if len(link_prefix) > 0:
-          base = m.name
-      else:
-          base = m.name[len(module.name)+1:]
-      url = base.replace('.', '/')
+      # ignore common prefix of m and the current module
+      my_parts = module.name.split('.')
+      target_parts = m.name.split('.')
+      while my_parts and target_parts and my_parts[0] == target_parts[0]:
+          my_parts.pop(0)
+          target_parts.pop(0)
+      # Build relative url, moving up the hierarchy to the common ancestor and then down
+      url = '../' * (len(my_parts) - 1) + '/'.join(target_parts)
+
+      # Add filename
       if m.is_package():
           url += '/%s' % pdoc.html_package_name
       else:
