@@ -346,7 +346,14 @@
         descendents = c.module.descendents(c)
       %>
       <div class="item">
-        <p id="${c.refname}" class="name">class ${ident(c.name)}</p>
+        <p id="${c.refname}" class="name">
+          % if issubclass(c.cls, BaseException):
+              exception
+          % else:
+              class
+          % endif
+          ${ident(c.name)}
+        </p>
         ${show_desc(c)}
 
         <div class="class">
