@@ -318,7 +318,7 @@ def quit_if_exists(m):
         check_file(path.dirname(f))
 
 
-def html_out(m):
+def html_out(m, basemodule):
     f = module_file(m)
     dirpath = path.dirname(f)
     if not os.access(dirpath, os.R_OK):
@@ -328,7 +328,8 @@ def html_out(m):
             out = m.html(external_links=args.external_links,
                          link_prefix=args.link_prefix,
                          http_server=args.http_html,
-                         source=not args.html_no_source)
+                         source=not args.html_no_source,
+                         basemodule=basemodule)
             print(out, file=w)
     except Exception as e:
         try:
@@ -337,7 +338,7 @@ def html_out(m):
             pass
         raise e
     for submodule in m.submodules():
-        html_out(submodule)
+        html_out(submodule, basemodule)
 
 
 def process_html_out(impath):
@@ -488,5 +489,5 @@ if __name__ == '__main__':
     # HTTP server.
     if not args.http:
         quit_if_exists(module)
-        html_out(module)
+        html_out(module, module)
         sys.exit(0)
