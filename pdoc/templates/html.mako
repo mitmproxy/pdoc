@@ -22,7 +22,7 @@
 
   def eprint(s):
       print >> sys.stderr, s
-  
+
   def decode(s):
       if sys.version_info[0] < 3 and isinstance(s, str):
           return s.decode('utf-8', 'ignore')
@@ -62,7 +62,7 @@
         s, _ = re.subn('\b\n\b', ' ', s)
         if not module_list:
             s, _ = re.subn('`[^`]+`', linkify, s)
-      
+
       extensions = []
       if use_pygments:
           extensions = ['codehilite(linenums=False)']
@@ -83,7 +83,7 @@
       separators. Also, packages are translated as directories
       containing `index.html` corresponding to the `__init__` module,
       while modules are translated as regular HTML files with an
-      `.m.html` suffix. (Given default values of 
+      `.m.html` suffix. (Given default values of
       `pdoc.html_module_suffix` and `pdoc.html_package_name`.)
       """
       if module.name == m.name:
@@ -343,6 +343,7 @@
         inst_vars = c.instance_variables()
         methods = c.methods()
         mro = c.module.mro(c)
+        descendents = c.module.descendents(c)
       %>
       <div class="item">
         <p id="${c.refname}" class="name">class ${ident(c.name)}</p>
@@ -353,6 +354,14 @@
               <h4>Ancestors (in MRO)</h4>
               <ul class="class_list">
               % for cls in mro:
+                <li>${link(cls.refname)}</li>
+              % endfor
+              </ul>
+          % endif
+          % if len(descendents) > 0:
+              <h4>Descendents</h4>
+              <ul class="class_list">
+              % for cls in descendents:
                 <li>${link(cls.refname)}</li>
               % endfor
               </ul>
