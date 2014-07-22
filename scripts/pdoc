@@ -100,7 +100,7 @@ class WebDoc (BaseHTTPRequestHandler):
                 modules.append((name, quick_desc(imp, name, ispkg)))
             modules = sorted(modules, key=lambda x: x[0].lower())
 
-            out = pdoc._tpl_lookup.get_template('/html.mako')
+            out = pdoc.tpl_lookup.get_template('/html.mako')
             out = out.render(modules=modules, link_prefix=args.link_prefix)
             out = out.strip()
         elif self.path.endswith('.ext'):
