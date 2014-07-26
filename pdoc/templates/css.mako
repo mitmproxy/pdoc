@@ -70,7 +70,7 @@
 
   code {
     background: #e8e8e8;
-  } 
+  }
 
   pre {
     background: #e8e8e8;
@@ -170,6 +170,11 @@
       width: 32%;
       margin: 0 !important;
     }
+
+      .column_list li {
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
 
   .item {
     margin: 0 0 25px 0;
