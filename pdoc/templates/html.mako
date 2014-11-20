@@ -455,7 +455,9 @@
 
 <div id="container">
 	% if module_list:
-		${show_module_list(modules)}
+		<article id="content">
+			${show_module_list(modules)}
+		</article>
 	% else:
 		${module_index(module)}
 		<article id="content">

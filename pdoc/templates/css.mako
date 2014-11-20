@@ -34,6 +34,8 @@
     position: fixed;
     bottom: 5px;
     left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
   }
 
   #footer {
@@ -52,7 +54,8 @@
   }
   h1 {
     font-size: 2.5em;
-    margin: .15em 0 .75em 0;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
   }
 
   h2 {
