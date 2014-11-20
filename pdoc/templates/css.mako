@@ -2,21 +2,28 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: #ddd;
     height: 100%;
   }
-
-  #container {
-    width: 840px;
-    background-color: #fdfdfd;
-    color: #111;
-    margin: 0 auto;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
-    padding: 10px 25px;
-    min-height: 100%;
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
   }
-
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
   #nav {
     font-size: 130%;
     margin: 0 0 15px 0;
@@ -25,17 +32,32 @@
   #top {
     display: block;
     position: fixed;
-    top: 5px;
+    bottom: 5px;
     left: 5px;
-    font-size: 140%;
   }
 
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
   h1 {
-    margin: 0 0 10px 0;
+    font-size: 2.5em;
+    margin: .15em 0 .75em 0;
   }
 
   h2 {
-    margin: 25px 0 10px 0;
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
   }
 
   h3 {
@@ -50,32 +72,38 @@
   a {
     color: #058;
     text-decoration: none;
+    transition: color .3s ease-in-out;
   }
 
   a:hover {
     color: #e08524;
-  }
-
-  p {
-    line-height: 1.35em;
+    transition: color .3s ease-in-out;
   }
 
   pre, code, .mono, .name {
     font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
   }
 
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
   .ident {
     color: #900;
   }
 
   code {
-    background: #e8e8e8;
+    background: #f9f9f9;
   } 
 
   pre {
-    background: #e8e8e8;
-    padding: 6px;
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
     margin: 0 30px;
+    padding: 15px 30px;
   }
 
   .codehilite {
@@ -85,6 +113,7 @@
     .codehilite pre {
       margin: 0;
     }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
 
   table#module-list {
     font-size: 110%;
@@ -122,57 +151,22 @@
       width: 100%;
     }
 
-  ul#index {
-    padding: 0;
-    margin: 0;
-  }
 
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
     ul#index .class_name {
       /* font-size: 110%; */
       font-weight: bold;
     }
-
-    ul#index li {
-      margin-bottom: 18px;
-    }
-
-      ul#index ul li {
-        margin-bottom: 8px;
-      }
-
-    ul#index, ul#index ul {
-      list-style-type: none;
-    }
-
-    ul#index ul {
-      margin: 0 0 10px 20px;
-      padding: 0;
-    }
-
-  .column_list {
-    width: 100%;
-    display: inline-block;
-    margin-left: 20px;
-  }
-
-  .column_list:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    height: 0;
-    content: " ";
-    clear: both;
-  }
-
-    .column_list ul {
-      float: left;
-      text-align: left;
-      width: 32%;
-      margin: 0 !important;
+    #index ul {
+      margin: 0;
     }
 
   .item {
-    margin: 0 0 25px 0;
+    margin: 0 0 15px 0;
   }
 
     .item .class {
@@ -184,12 +178,17 @@
       }
 
     .item .name {
-      background: #e8e8e8;
-      padding: 4px;
-      margin: 0 0 8px 0;
-      font-size: 110%;
+      background: #fafafa;
+      margin: 0;
       font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
     }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
 
     .item .empty_desc {
       margin: 0 0 5px 0;
@@ -197,8 +196,7 @@
     }
 
     .item .inheritance {
-      margin: 3px 0 10px 0;
-      padding: 0 8px;
+      margin: 3px 0 0 30px;
     }
 
     .item .inherited {
@@ -215,13 +213,27 @@
       }
 
     .source_cont {
-      margin: 10px 8px 0 8px;
+      margin: 0;
       padding: 0;
     }
 
-    .source_link {
-      font-weight: bold;
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
     }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
 
     .source {
       display: none;
@@ -237,10 +249,55 @@
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;
   }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
 
   /*****************************/
 </%def>
 <%def name="pre()">
+* {
+  box-sizing: border-box;
+}
 /*! normalize.css v1.1.1 | MIT License | git.io/normalize */
 
 /* ==========================================================================
