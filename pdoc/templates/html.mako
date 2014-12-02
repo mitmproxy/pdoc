@@ -22,7 +22,7 @@
 
   def eprint(s):
 	  print >> sys.stderr, s
-  
+
   def decode(s):
 	  if sys.version_info[0] < 3 and isinstance(s, str):
 		  return s.decode('utf-8', 'ignore')
@@ -62,10 +62,10 @@
 		s, _ = re.subn('\b\n\b', ' ', s)
 		if not module_list:
 			s, _ = re.subn('`[^`]+`', linkify, s)
-	  
+
 	  extensions = []
 	  if use_pygments:
-		  extensions = ['codehilite(linenums=False)']
+		  extensions = ['markdown.extensions.codehilite(linenums=False)']
 	  s = markdown.markdown(s.strip(), extensions=extensions)
 	  return s
 
@@ -83,7 +83,7 @@
 	  separators. Also, packages are translated as directories
 	  containing `index.html` corresponding to the `__init__` module,
 	  while modules are translated as regular HTML files with an
-	  `.m.html` suffix. (Given default values of 
+	  `.m.html` suffix. (Given default values of
 	  `pdoc.html_module_suffix` and `pdoc.html_package_name`.)
 	  """
 	  if module.name == m.name:
