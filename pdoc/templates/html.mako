@@ -56,7 +56,7 @@
 
   def mark(s, linky=True):
     if linky:
-    s, _ = re.subn('\b\n\b', ' ', s)
+      s, _ = re.subn('\b\n\b', ' ', s)
     if not module_list:
       s, _ = re.subn('`[^`]+`', linkify, s)
 
