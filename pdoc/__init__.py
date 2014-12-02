@@ -228,8 +228,8 @@ if os.getenv('XDG_CONFIG_HOME'):
 
 __pdoc__ = {}
 tpl_lookup = TemplateLookup(directories=_template_path,
-                             cache_args={'cached': True,
-                                         'cache_type': 'memory'})
+                            cache_args={'cached': True,
+                                        'cache_type': 'memory'})
 """
 A `mako.lookup.TemplateLookup` object that knows how to load templates
 from the file system. You may add additional paths by modifying the
@@ -479,14 +479,11 @@ class Doc (object):
     def source(self):
         """
         Returns the source code of the Python object `obj` as a list of
-        lines. If the source code doesn't exist, try to get the source code
-        of `obj.__wrapped__`. In Python 3.2 and above, this is automatically added to decorated
-        functions as a reference to the original function. In previous versions of Python, this
-        behavior can be accomplished by use of the
-        [decorator module](http://pypi.python.org/pypi/decorator/3.4.0).
+        lines. This tries to extract the source from the special
+        `__wrapped__` attribute if it exists. Otherwise, it falls back
+        to `inspect.getsourcelines`.
 
-        If neither of
-        these have source code, then the empty list is returned.
+        If neither works, then the empty list is returned.
         """
         assert False, 'subclass responsibility'
 
