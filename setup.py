@@ -2,7 +2,7 @@ import codecs
 from distutils.core import setup
 import os.path as path
 
-install_requires = ['mako', 'markdown']
+install_requires = ['mako', 'markdown < 2.5']
 try:  # Is this really the right way? Couldn't find anything better...
     import argparse
 except ImportError:
