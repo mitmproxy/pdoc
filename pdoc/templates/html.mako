@@ -20,9 +20,6 @@
   # Whether we're showing the module list or a single module.
   module_list = 'modules' in context.keys()
 
-  def eprint(s):
-    print >> sys.stderr, s
-
   def decode(s):
     if sys.version_info[0] < 3 and isinstance(s, str):
       return s.decode('utf-8', 'ignore')
