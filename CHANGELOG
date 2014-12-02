@@ -1,3 +1,13 @@
+0.3.1
+=====
+  - Source code is extracted from __wrapped__ if it exists, and then
+    falls back to inspect.getsourcelines. This reverses the behavior
+    implemented in #6.
+  - Fix Python 2.6 compatibility by requiring Markdown < 2.5 (#19).
+    Markdown 2.5 dropped support for Python 2.6.
+  - Get rid of tabs that sneaked in from #17.
+  - Fix pep8 violations.
+
 0.3.0
 =====
   - Major HTML face lift. Kudos to @knadh!
