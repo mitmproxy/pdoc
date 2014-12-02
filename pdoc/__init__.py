@@ -330,21 +330,18 @@ def import_module(module_name):
 def _source(obj):
     """
     Returns the source code of the Python object `obj` as a list of
-    lines. If the source code doesn't exist, try to get the source code
-    of `obj.__wrapped__`. In Python 3.2 and above, this is automatically added to decorated
-    functions as a reference to the original function. In previous versions of Python, this
-    behavior can be accomplished by use of the
-    [decorator module](http://pypi.python.org/pypi/decorator/3.4.0).
+    lines. This tries to extract the source from the special
+    `__wrapped__` attribute if it exists. Otherwise, it falls back
+    to `inspect.getsourcelines`.
 
-    If neither of
-    these have source code, then the empty list is returned.
+    If neither works, then the empty list is returned.
     """
     try:
-        return inspect.getsourcelines(obj)[0]
+        return inspect.getsourcelines(obj.__wrapped__)[0]
     except:
         pass
     try:
-        return inspect.getsourcelines(obj.__wrapped__)[0]
+        return inspect.getsourcelines(obj)[0]
     except:
         return []
 
