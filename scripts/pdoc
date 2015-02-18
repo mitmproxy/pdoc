@@ -40,8 +40,8 @@ aa('--markdown', action='store_true',
    help='When set, the output will be markdown formatted.')
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
-aa('--html-dir', type=str, default='.',
-   help='The directory to output HTML files to. This option is ignored when '
+aa('--output-dir', type=str, default='.',
+   help='The directory to output HTML or markdown files to. This option is ignored when '
         'outputting documentation as plain text.')
 aa('--html-no-source', action='store_true',
    help='When set, source code will not be viewable in the generated HTML. '
@@ -202,14 +202,14 @@ class WebDoc (BaseHTTPRequestHandler):
 
     def resolve_ext(self, import_path):
         def exists(p):
-            p = path.join(args.html_dir, p)
+            p = path.join(args.output_dir, p)
             pkg = path.join(p, pdoc.html_package_name)
             mod = p + pdoc.html_module_suffix
 
             if path.isfile(pkg):
-                return pkg[len(args.html_dir):]
+                return pkg[len(args.output_dir):]
             elif path.isfile(mod):
-                return mod[len(args.html_dir):]
+                return mod[len(args.output_dir):]
             return None
 
         parts = import_path.split('.')
@@ -222,7 +222,7 @@ class WebDoc (BaseHTTPRequestHandler):
 
     @property
     def file_path(self):
-        fp = path.join(args.html_dir, *self.import_path.split('.'))
+        fp = path.join(args.output_dir, *self.import_path.split('.'))
         pkgp = path.join(fp, pdoc.html_package_name)
         if path.isdir(fp) and path.isfile(pkgp):
             fp = pkgp
@@ -296,7 +296,7 @@ def last_modified(fp):
 
 
 def module_file_html(m):
-    mbase = path.join(args.html_dir, *m.name.split('.'))
+    mbase = path.join(args.output_dir, *m.name.split('.'))
     if m.is_package():
         return path.join(mbase, pdoc.html_package_name)
     else:
@@ -304,7 +304,7 @@ def module_file_html(m):
 
 
 def module_file_md(m):
-    mbase = path.join(args.html_dir, *m.name.split('.'))
+    mbase = path.join(args.output_dir, *m.name.split('.'))
     if m.is_package():
         return path.join(mbase, pdoc.markdown_package_name)
     else:
@@ -379,7 +379,7 @@ def process_html_out(impath):
     cmd = [sys.executable,
            path.realpath(__file__),
            '--html',
-           '--html-dir', args.html_dir,
+           '--output-dir', args.output_dir,
            '--http-html',
            '--overwrite',
            '--link-prefix', args.link_prefix]
@@ -426,7 +426,7 @@ if __name__ == '__main__':
     if args.http:
         args.html = True
         args.external_links = True
-        args.html_dir = args.http_dir
+        args.output_dir = args.http_dir
         args.overwrite = True
         args.link_prefix = '/'
 
@@ -516,7 +516,7 @@ if __name__ == '__main__':
 
     # HTML output depends on whether the module being documented is a package
     # or not. If not, then output is written to {MODULE_NAME}.html in
-    # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
+    # `output-dir`. If it is a package, then a directory called {MODULE_NAME}
     # is created, and output is written to {MODULE_NAME}/index.html.
     # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
     # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
