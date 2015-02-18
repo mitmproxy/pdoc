@@ -208,6 +208,18 @@ html_package_name = 'index.html'
 The file name to use for a package's `__init__.py` module.
 """
 
+markdown_module_suffix = '.m.md'
+"""
+The suffix to use for module markdown files. By default, this is set to
+`.m.md`, where the extra `.m` is used to differentiate a package's
+`index.md` from a submodule called `index`.
+"""
+
+markdown_package_name = 'index.md'
+"""
+The file name to use for a package's `__init__.py` module.
+"""
+
 import_path = sys.path[:]
 """
 A list of paths to restrict imports to. Any module that cannot be
@@ -289,6 +301,27 @@ def text(module_name, docfilter=None, allsubmodules=False):
                  docfilter=docfilter,
                  allsubmodules=allsubmodules)
     return mod.text()
+
+
+def markdown(module_name, docfilter=None, allsubmodules=False):
+    """
+    Returns the documentation for the module `module_name` in
+    markdown format. The module must be importable.
+
+    `docfilter` is an optional predicate that controls which
+    documentation objects are shown in the output. It is a single
+    argument function that takes a documentation object and returns
+    True of False. If False, that object will not be included in the
+    output.
+
+    If `allsubmodules` is `True`, then every submodule of this module
+    that can be found will be included in the documentation, regardless
+    of whether `__all__` contains it.
+    """
+    mod = Module(import_module(module_name),
+                 docfilter=docfilter,
+                 allsubmodules=allsubmodules)
+    return mod.markdown()
 
 
 def import_module(module_name):
@@ -646,6 +679,14 @@ class Module (Doc):
         Returns the documentation for this module as plain text.
         """
         t = _get_tpl('/text.mako')
+        text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
+        return text
+
+    def markdown(self):
+        """
+        Returns the documentation for this module as plain markdown.
+        """
+        t = _get_tpl('/md.mako')
         text, _ = re.subn('\n\n\n+', '\n\n', t.render(module=self).strip())
         return text
 

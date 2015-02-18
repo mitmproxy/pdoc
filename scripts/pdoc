@@ -36,6 +36,8 @@ aa('ident_name', type=str, nargs='?',
         'Has no effect when --http is set.')
 aa('--version', action='store_true',
    help='Print the version of pdoc and exit.')
+aa('--markdown', action='store_true',
+   help='When set, the output will be markdown formatted.')
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
 aa('--html-dir', type=str, default='.',
@@ -293,12 +295,21 @@ def last_modified(fp):
         return datetime.datetime.min
 
 
-def module_file(m):
+def module_file_html(m):
     mbase = path.join(args.html_dir, *m.name.split('.'))
     if m.is_package():
         return path.join(mbase, pdoc.html_package_name)
     else:
         return '%s%s' % (mbase, pdoc.html_module_suffix)
+
+
+def module_file_md(m):
+    mbase = path.join(args.html_dir, *m.name.split('.'))
+    if m.is_package():
+        return path.join(mbase, pdoc.markdown_package_name)
+    else:
+        return '%s%s' % (mbase, pdoc.markdown_module_suffix)
+
 
 
 def quit_if_exists(m):
@@ -309,17 +320,18 @@ def quit_if_exists(m):
 
     if args.overwrite:
         return
-    f = module_file(m)
-    check_file(f)
 
-    # If this is a package, make sure the package directory doesn't exist
-    # either.
-    if m.is_package():
-        check_file(path.dirname(f))
+    for f in (module_file_html(m), module_file_md(m)):
+        check_file(f)
+
+        # If this is a package, make sure the package directory doesn't exist
+        # either.
+        if m.is_package():
+            check_file(path.dirname(f))
 
 
 def html_out(m):
-    f = module_file(m)
+    f = module_file_html(m)
     dirpath = path.dirname(f)
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
@@ -338,6 +350,25 @@ def html_out(m):
         raise e
     for submodule in m.submodules():
         html_out(submodule)
+
+
+def markdown_out(m):
+    f = module_file_md(m)
+    dirpath = path.dirname(f)
+    if not os.access(dirpath, os.R_OK):
+        os.makedirs(dirpath)
+    try:
+        with codecs.open(f, 'w+', 'utf-8') as w:
+            out = m.markdown()
+            print(out, file=w)
+    except Exception as e:
+        try:
+            os.unlink(f)
+        except:
+            pass
+        raise e
+    for submodule in m.submodules():
+        markdown_out(submodule)
 
 
 def process_html_out(impath):
@@ -465,7 +496,7 @@ if __name__ == '__main__':
                          allsubmodules=args.all_submodules)
 
     # Plain text?
-    if not args.html:
+    if not args.html and not args.markdown:
         output = module.text()
         try:
             print(output)
@@ -476,6 +507,11 @@ if __name__ == '__main__':
                 pass
             else:
                 raise e
+        sys.exit(0)
+
+    if args.markdown:
+        quit_if_exists(module)
+        markdown_out(module)
         sys.exit(0)
 
     # HTML output depends on whether the module being documented is a package
