@@ -26,7 +26,7 @@ parser = argparse.ArgumentParser(
     description='Automatically generate API docs for Python modules.',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 aa = parser.add_argument
-aa('module_name', type=str, nargs='?',
+aa('module_names', type=str, nargs='*', default=[],
    help='The Python module name. This may be an import path resolvable in '
         'the current environment, or a file path to a Python module or '
         'package.')
@@ -77,6 +77,12 @@ aa('--http-port', type=int, default=8080,
    help='The port on which to run the HTTP server.')
 aa('--http-html', action='store_true',
    help='Internal use only. Do not set.')
+aa('--walk-path', action='store_true',
+   help='Generate the docs for modules in a directory tree by walking the'
+        'tree either top-down or bottom-up')
+aa('--walk-path-followlinks', action='store_true',
+   help='Set followlinks to True to visit directories pointed to by symlinks,'
+        'on systems that support them.')
 args = parser.parse_args()
 
 
@@ -318,9 +324,6 @@ def quit_if_exists(m):
             _eprint('%s already exists. Delete it or run with --overwrite' % f)
             sys.exit(1)
 
-    if args.overwrite:
-        return
-
     for f in (module_file_html(m), module_file_md(m)):
         check_file(f)
 
@@ -406,6 +409,25 @@ def process_html_out(impath):
         print(out)
 
 
+def walk_modules(path, followlinks=False):
+    names = []
+    for p in path:
+        if os.path.isfile(p):
+            names.append(os.path.basename(p))
+            continue
+        for root, dirs, files in os.walk(p, followlinks):
+            for f in files:
+                if f == '__init__.py':
+                    names.append(root)
+                elif len(f) > 3 and f[-3:] == '.py':
+                    names.append(os.path.join(root, f))
+                else:
+                    with open(os.path.join(root, f)) as fi:
+                        if 'python' in fi.readline():
+                            names.append(os.path.join(root, f))
+    return names
+
+
 if __name__ == '__main__':
     if args.version:
         print(pdoc.__version__)
@@ -418,17 +440,12 @@ if __name__ == '__main__':
     except:
         pass
 
-    if not args.http and args.module_name is None:
+    if not args.http and not args.module_names:
         _eprint('No module name specified.')
         sys.exit(1)
+
     if args.template_dir is not None:
         pdoc.tpl_lookup.directories.insert(0, args.template_dir)
-    if args.http:
-        args.html = True
-        args.external_links = True
-        args.output_dir = args.http_dir
-        args.overwrite = True
-        args.link_prefix = '/'
 
     # If PYTHONPATH is set, let it override everything if we want it to.
     pypath = os.getenv('PYTHONPATH')
@@ -436,7 +453,13 @@ if __name__ == '__main__':
         pdoc.import_path = pypath.split(path.pathsep)
 
     if args.http:
-        if args.module_name is not None:
+        args.html = True
+        args.external_links = True
+        args.output_dir = args.http_dir
+        args.overwrite = True
+        args.link_prefix = '/'
+
+        if args.module_names:
             _eprint('Module names cannot be given with --http set.')
             sys.exit(1)
 
@@ -465,64 +488,71 @@ if __name__ == '__main__':
     # import paths over files. If a file is really necessary, then
     # specify the absolute path, which is guaranteed not to be a
     # Python import path.
-    try:
-        module = pdoc.import_module(args.module_name)
-    except Exception as e:
-        module = None
-
-    # Get the module that we're documenting. Accommodate for import paths,
-    # files and directories.
-    if module is None:
-        isdir = path.isdir(args.module_name)
-        isfile = path.isfile(args.module_name)
-        if isdir or isfile:
-            fp = path.realpath(args.module_name)
-            module_name = path.basename(fp)
-            if isdir:
-                fp = path.join(fp, '__init__.py')
-            else:
-                module_name, _ = path.splitext(module_name)
-
-            # Use a special module name to avoid import conflicts.
-            # It is hidden from view via the `Module` class.
-            with open(fp) as f:
-                module = imp.load_source('__pdoc_file_module__', fp, f)
-                if isdir:
-                    module.__path__ = [path.realpath(args.module_name)]
-                module.__pdoc_module_name = module_name
-        else:
-            module = pdoc.import_module(args.module_name)
-    module = pdoc.Module(module, docfilter=docfilter,
-                         allsubmodules=args.all_submodules)
-
-    # Plain text?
-    if not args.html and not args.markdown:
-        output = module.text()
+    modules = []
+    if args.walk_path:
+        args.module_names = walk_modules(args.module_names,
+                                         args.walk_path_followlinks)
+    for module_name in args.module_names:
         try:
-            print(output)
-        except IOError as e:
-            # This seems to happen for long documentation.
-            # This is obviously a hack. What's the real cause? Dunno.
-            if e.errno == 32:
-                pass
+            module = pdoc.import_module(module_name)
+        except Exception as e:
+            # Get the module that we're documenting. Accommodate for import paths,
+            # files and directories.
+            isdir = path.isdir(module_name)
+            isfile = path.isfile(module_name)
+            if isdir or isfile:
+                fp = path.realpath(module_name)
+                module_name = path.basename(fp)
+                if isdir:
+                    fp = path.join(fp, '__init__.py')
+                else:
+                    module_name, _ = path.splitext(module_name)
+
+                # Use a special module name to avoid import conflicts.
+                # It is hidden from view via the `Module` class.
+                with open(fp) as f:
+                    module = imp.load_source('__pdoc_file_module__', fp, f)
+                    if isdir:
+                        module.__path__ = [path.realpath(module_name)]
+                    module.__pdoc_module_name = module_name
             else:
-                raise e
-        sys.exit(0)
+                module = pdoc.import_module(module_name)
+        modules.append(
+            pdoc.Module(
+                module, docfilter=docfilter,
+                allsubmodules=args.all_submodules
+                )
+            )
 
-    if args.markdown:
-        quit_if_exists(module)
-        markdown_out(module)
-        sys.exit(0)
 
-    # HTML output depends on whether the module being documented is a package
-    # or not. If not, then output is written to {MODULE_NAME}.html in
-    # `output-dir`. If it is a package, then a directory called {MODULE_NAME}
-    # is created, and output is written to {MODULE_NAME}/index.html.
-    # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
-    # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
-    # so on... The same rules apply for `http_dir` when `pdoc` is run as an
-    # HTTP server.
-    if not args.http:
-        quit_if_exists(module)
-        html_out(module)
-        sys.exit(0)
+    for module in modules:
+        # Plain text?
+        if not args.html and not args.markdown:
+            output = module.text()
+            try:
+                print(output)
+            except IOError as e:
+                # This seems to happen for long documentation.
+                # This is obviously a hack. What's the real cause? Dunno.
+                if e.errno == 32:
+                    pass
+                else:
+                    raise e
+
+        elif args.markdown:
+            if not args.overwrite:
+                quit_if_exists(module)
+            markdown_out(module)
+
+        # HTML output depends on whether the module being documented is a package
+        # or not. If not, then output is written to {MODULE_NAME}.html in
+        # `output-dir`. If it is a package, then a directory called {MODULE_NAME}
+        # is created, and output is written to {MODULE_NAME}/index.html.
+        # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
+        # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
+        # so on... The same rules apply for `http_dir` when `pdoc` is run as an
+        # HTTP server.
+        else:
+            if not args.overwrite:
+                quit_if_exists(module)
+            html_out(module)

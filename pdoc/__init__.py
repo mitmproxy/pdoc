@@ -353,11 +353,9 @@ def import_module(module_name):
         # contained in `pdoc.import_path`.
         imp.find_module(module_name.split('.')[0], import_path)
 
-    if module_name in sys.modules:
-        return sys.modules[module_name]
-    else:
+    if module_name not in sys.modules:
         __import__(module_name)
-        return sys.modules[module_name]
+    return sys.modules[module_name]
 
 
 def _source(obj):
