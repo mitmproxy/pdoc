@@ -41,8 +41,8 @@ aa('--markdown', action='store_true',
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
 aa('--output-dir', type=str, default='.',
-   help='The directory to output HTML or markdown files to. This option is ignored when '
-        'outputting documentation as plain text.')
+   help='The directory to output HTML or markdown files to.'
+        'This option is ignored when outputting documentation as plain text.')
 aa('--html-no-source', action='store_true',
    help='When set, source code will not be viewable in the generated HTML. '
         'This can speed up the time required to document large modules.')
@@ -317,7 +317,6 @@ def module_file_md(m):
         return '%s%s' % (mbase, pdoc.markdown_module_suffix)
 
 
-
 def quit_if_exists(m):
     def check_file(f):
         if os.access(f, os.R_OK):
@@ -496,8 +495,8 @@ if __name__ == '__main__':
         try:
             module = pdoc.import_module(module_name)
         except Exception as e:
-            # Get the module that we're documenting. Accommodate for import paths,
-            # files and directories.
+            # Get the module that we're documenting.
+            # Accommodate for import paths, files and directories.
             isdir = path.isdir(module_name)
             isfile = path.isfile(module_name)
             if isdir or isfile:
@@ -523,7 +522,6 @@ if __name__ == '__main__':
                 allsubmodules=args.all_submodules
                 )
             )
-
 
     for module in modules:
         # Plain text?
