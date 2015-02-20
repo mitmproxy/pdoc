@@ -416,14 +416,23 @@ def walk_modules(path, followlinks=False):
             continue
         for root, dirs, files in os.walk(p, followlinks):
             for f in files:
+                filepath = os.path.join(root, f)
+                if os.path.islink(filepath):
+                    if followlinks:
+                        filepath = os.readlink(filepath)
+                    else:
+                        continue
                 if f == '__init__.py':
                     names.append(root)
                 elif len(f) > 3 and f[-3:] == '.py':
-                    names.append(os.path.join(root, f))
-                else:
-                    with open(os.path.join(root, f)) as fi:
-                        if 'python' in fi.readline():
-                            names.append(os.path.join(root, f))
+                    names.append(filepath)
+                elif '.' not in f:
+                    try:
+                        with open(filepath) as fi:
+                            if 'python' in fi.readline():
+                                names.append(filepath)
+                    except IOError as e:
+                        print(e)
     return names
 
 
