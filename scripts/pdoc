@@ -40,7 +40,7 @@ aa('--markdown', action='store_true',
    help='When set, the output will be markdown formatted.')
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
-aa('--output-dir', type=str, default='.',
+aa('--output-dir', '--html-dir', type=str, default='.', dest='output_dir',
    help='The directory to output HTML or markdown files to.'
         'This option is ignored when outputting documentation as plain text.')
 aa('--html-no-source', action='store_true',
