@@ -519,7 +519,11 @@ if __name__ == '__main__':
                 # Use a special module name to avoid import conflicts.
                 # It is hidden from view via the `Module` class.
                 with open(fp) as f:
-                    module = imp.load_source('__pdoc_file_module__', fp, f)
+                    try:
+                        module = imp.load_source('__pdoc_file_module__', fp, f)
+                    except ImportError as e:
+                        print("Can not import module %s" % module_name)
+                        print(e)
                     if isdir:
                         module.__path__ = [path.realpath(module_name)]
                     module.__pdoc_module_name = module_name
