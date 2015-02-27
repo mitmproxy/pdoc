@@ -410,29 +410,39 @@ def process_html_out(impath):
 
 def walk_modules(path, followlinks=False):
     names = []
+
+    def walk(root, names, followlinks):
+        dir_items = os.listdir(root)
+        if '__init__.py' in dir_items:
+            names.append(root)
+            return None
+        for item in dir_items:
+            item = os.path.join(root, item)
+            if os.path.islink(item):
+                if followlinks:
+                    item = os.readlink(item)
+                    if len(item) > 0 and item[0] == '.':
+                        item = os.path.join(root, item.lstrip('.'))
+                else:
+                    continue
+            if os.path.isdir(item):
+                walk(item, names, followlinks)
+            elif os.path.isfile(item):
+                if len(item) > 3 and item[-3:] == '.py':
+                    names.append(item)
+                elif '.' not in item:
+                    try:
+                        with open(item) as fi:
+                            if 'python' in fi.readline():
+                                names.append(item)
+                    except IOError as e:
+                        print(e)
+
     for p in path:
         if os.path.isfile(p):
             names.append(os.path.basename(p))
             continue
-        for root, dirs, files in os.walk(p, followlinks):
-            for f in files:
-                filepath = os.path.join(root, f)
-                if os.path.islink(filepath):
-                    if followlinks:
-                        filepath = os.readlink(filepath)
-                    else:
-                        continue
-                if f == '__init__.py':
-                    names.append(root)
-                elif len(f) > 3 and f[-3:] == '.py':
-                    names.append(filepath)
-                elif '.' not in f:
-                    try:
-                        with open(filepath) as fi:
-                            if 'python' in fi.readline():
-                                names.append(filepath)
-                    except IOError as e:
-                        print(e)
+        walk(p, names, followlinks)
     return names
 
 
