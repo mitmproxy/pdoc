@@ -502,12 +502,21 @@ if __name__ == '__main__':
                                          args.walk_path_followlinks)
     for module_name in args.module_names:
         try:
-            module = pdoc.import_module(module_name)
+            isdir = path.isdir(module_name)
+            isfile = path.isfile(module_name)
+            if isdir:
+                sys.path.insert(1, os.path.join(module_name, os.pardir))
+                name = os.path.basename(module_name.rstrip('/\\'))
+            elif isfile and os.path.basename(module_name) == '__init__.py':
+                name = os.path.dirname(module_name)
+                sys.path.insert(1, os.path.join(name, os.pardir))
+                name = os.path.basename(name)
+            else:
+                name = module_name
+            module = pdoc.import_module(name)
         except Exception as e:
             # Get the module that we're documenting.
             # Accommodate for import paths, files and directories.
-            isdir = path.isdir(module_name)
-            isfile = path.isfile(module_name)
             if isdir or isfile:
                 fp = path.realpath(module_name)
                 module_name = path.basename(fp)
