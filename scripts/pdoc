@@ -16,8 +16,10 @@ import re
 import subprocess
 import sys
 import tempfile
+import yaml
 
 import pdoc
+
 
 version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
@@ -43,6 +45,9 @@ aa('--html', action='store_true',
 aa('--output-dir', '--html-dir', type=str, default='.', dest='output_dir',
    help='The directory to output HTML or markdown files to.'
         'This option is ignored when outputting documentation as plain text.')
+aa('--mkdocs-config', action='store_true', dest='mkdocs',
+   help='Create mkdocs yaml.'
+        'Requared output-dir option.')
 aa('--html-no-source', action='store_true',
    help='When set, source code will not be viewable in the generated HTML. '
         'This can speed up the time required to document large modules.')
@@ -446,6 +451,60 @@ def walk_modules(path, followlinks=False):
     return names
 
 
+def create_mkdocs_yaml(docs_dir):
+    config_path = os.path.join(*(docs_dir, os.pardir, 'mkdocs.yml'))
+
+    try:
+        with open(config_path) as f:
+            config = dict(yaml.load(f.read()))
+    except IOError:
+        config = {'site_name': 'My Docs', 'docs_dir': '', 'pages': []}
+
+    filenames = []
+    for root, dirs, files in os.walk(docs_dir):
+        for f in files:
+            path = os.path.join(root, f)
+            path = path.replace(docs_dir, '', 1)
+            path = path.lstrip(os.sep)
+            filenames.append(path)
+
+    config['docs_dir'] = docs_dir
+
+    if 'pages' not in config:
+        config['pages'] = []
+    else:
+        for p in config['pages']:
+            try:
+                filenames.remove(p[0])
+            except ValueError:
+                config['pages'].remove(p)
+
+    for f in filenames:
+        page = ["\"%s\"" % f]
+        for c in ('-', '_'):
+            f = f.replace(c, ' ')
+        f = f.replace(pdoc.markdown_module_suffix, '')
+        if f == 'index.md':
+            path = ['Home']
+        elif os.path.basename(f) == 'index.md':
+            path = f.split(os.sep)
+            del path[-1]
+        else:
+            path = f.split(os.sep)
+        for p in path:
+            page.append("\"%s\"" % p)
+        config['pages'].append(page)
+
+    for k in config:
+        if type(config[k]) is str:
+            config[k] = "\"%s\"" % config[k]
+
+    config = yaml.dump(config).replace('"', '')
+
+    with open(config_path, 'w') as f:
+        f.write(config)
+
+
 if __name__ == '__main__':
     if args.version:
         print(pdoc.__version__)
@@ -458,7 +517,8 @@ if __name__ == '__main__':
     except:
         pass
 
-    if not args.http and not args.module_names:
+    if not args.http and not args.module_names \
+        and not (args.mkdocs and args.output_dir):
         _eprint('No module name specified.')
         sys.exit(1)
 
@@ -582,7 +642,12 @@ if __name__ == '__main__':
         # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
         # so on... The same rules apply for `http_dir` when `pdoc` is run as an
         # HTTP server.
-        else:
+        elif args.html:
             if not args.overwrite:
                 quit_if_exists(module)
             html_out(module)
+
+    if args.mkdocs and not args.output_dir:
+        _eprint('mkdocs-config option requared output-dir option.')
+    elif args.mkdocs and args.output_dir:
+        create_mkdocs_yaml(args.output_dir)
