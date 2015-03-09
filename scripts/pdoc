@@ -491,6 +491,11 @@ def create_mkdocs_yaml(docs_dir):
             del path[-1]
         else:
             path = f.split(os.sep)
+        if len(path) > 2:
+            f, l = path[0], path[-1]
+            path = []
+            path.append(f)
+            path.append(l)
         for p in path:
             page.append("\"%s\"" % p)
         config['pages'].append(page)
