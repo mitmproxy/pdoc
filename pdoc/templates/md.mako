@@ -9,52 +9,81 @@
       else:
           return d.docstring
 
-  def nl2br(str):
-      str = str.replace("\r\n\r\n", "\r\n\r\n    ")
-      str.replace("\r\n", "  \r\n")
-      str = str.replace("\n\n", "\n\n    ")
-      str.replace("\n", "  \n")
-      str = str.replace("\r\r", "\r\r    ")
-      str.replace("\r", "  \r")
-      return str
+  def nl2br(string):
+      string = string.replace("\r\n\r\n", "\r\n\r\n    ")
+      string.replace("\r\n", "  \r\n")
+      string = string.replace("\n\n", "\n\n    ")
+      string.replace("\n", "  \n")
+      string = string.replace("\r\r", "\r\r    ")
+      string.replace("\r", "  \r")
+      return string
 
-  def h1(str):
-      str = "# " + str
-      return str
+  def h1(string):
+      string = "# " + string
+      return string
 
-  def h2(str):
-      str = "## " + str
-      return str
+  def h2(string):
+      string = "## " + string
+      return string
 
-  def h3(str):
-      str = "### " + str
-      return str
+  def h3(string):
+      string = "### " + string
+      return string
 
-  def h4(str):
-      str = "#### " + str
-      return str
+  def h4(string):
+      string = "#### " + string
+      return string
 
-  def h6(str):
-      str = "##### " + str
-      return str
+  def h6(string):
+      string = "##### " + string
+      return string
 
-  def h6(str):
-      str = "###### " + str
-      return str
+  def h6(string):
+      string = "###### " + string
+      return string
 
+  def makeup(string):
+      strings = string.splitlines()
+      dd = re.compile(r':')
+      li = re.compile(r'^([0-9]+[\.)]|\*|\-\+)')
+      snc = re.compile(r'^[A-Z]\w?')
+      code = re.compile(r'^(#!|\.{1,3}|>{1,3})')
+      qu = re.compile(r'^`{1,3}')
+      codeblock = False
+      for i, s in enumerate(strings):
+          s = s.lstrip()
+          if snc.search(s) and i != 0:
+              strings[i-1] += '  '
+          if dd.search(s):
+              s += '  '
+          if li.search(s):
+              s = '\n' + s
+          if qu.search(s):
+              codeblock = not codeblock
+          if code.search(s) and not codeblock:
+              s = '```\n' + s
+              codeblock = True
+          if s == '' and codeblock:
+              s = '```'
+              codeblock = False
+          strings[i] = s
+      if codeblock:
+          strings.append('```')
+          codeblock = False
+      return '\n'.join(strings)
 %>
 
 <%def name="function(func)" filter="trim">
 **${func.name}** (${func.spec()})
 
-    ${docstring(func) | nl2br}  
+    ${docstring(func) | makeup,nl2br}
 
 </%def>
 
 <%def name="variable(var)" filter="trim">
 **${var.name}**
 
-    ${docstring(var) | nl2br}  
+    ${docstring(var) | makeup,nl2br}
 
 </%def>
 
@@ -62,7 +91,7 @@
 ${cls.name | h4} \
 % if len(cls.docstring) > 0:
 
-${cls.docstring}  
+${cls.docstring | makeup}
 
 % endif
 <%
@@ -133,9 +162,9 @@ ${"Methods" | h6}
 
 Module ${module.name}
 -------${'-' * len(module.name)}
-% if not module._filtering:
-${module.docstring}
-% endif
+
+${module.docstring | makeup}
+
 
 
 % if len(variables) > 0:
