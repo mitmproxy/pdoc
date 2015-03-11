@@ -1049,7 +1049,7 @@ class Function (Doc):
         """
         super(Function, self).__init__(name, module, inspect.getdoc(func_obj))
 
-        self.func = func_obj
+        self.func = inspect.unwrap(func_obj)
         """The Python function object."""
 
         self.cls = cls
