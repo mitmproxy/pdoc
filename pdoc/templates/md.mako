@@ -2,6 +2,8 @@
 
 <%!
   import re
+  from os.path import join
+  from pdoc import markdown_module_suffix, markdown_package_name
 
   def docstring(d):
       if len(d.docstring) == 0 and hasattr(d, 'inherits'):
@@ -71,6 +73,20 @@
           strings.append('```')
           codeblock = False
       return '\n'.join(strings)
+
+  def submodule_link(submodule, module):
+      path = submodule.name
+      path = path.replace(module.name, '', 1)
+      path = path.lstrip('.')
+      path = path.split('.')
+      if submodule.is_package():
+          path.append(markdown_package_name)
+      else:
+          e = path[-1]
+          del path[-1]
+          path.append(e + markdown_module_suffix)
+      path = join(*path)
+      return path
 %>
 
 <%def name="function(func)" filter="trim">
@@ -201,7 +217,7 @@ ${class_(c)}
 Sub-modules
 -----------
 % for m in submodules:
-- ${m.name}
+- [${m.name}](${submodule_link(m, module)})
 
 % endfor
 % endif

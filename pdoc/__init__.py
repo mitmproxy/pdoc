@@ -208,7 +208,7 @@ html_package_name = 'index.html'
 The file name to use for a package's `__init__.py` module.
 """
 
-markdown_module_suffix = '.m.md'
+markdown_module_suffix = '.md'
 """
 The suffix to use for module markdown files. By default, this is set to
 `.m.md`, where the extra `.m` is used to differentiate a package's

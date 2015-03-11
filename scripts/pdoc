@@ -483,13 +483,13 @@ def create_mkdocs_yaml(docs_dir):
         page = ["\"%s\"" % f]
         for c in ('-', '_'):
             f = f.replace(c, ' ')
-        f = f.replace(pdoc.markdown_module_suffix, '')
         if f == 'index.md':
             path = ['Home']
-        elif os.path.basename(f) == 'index.md':
+        elif os.path.basename(f) == pdoc.markdown_package_name:
             path = f.split(os.sep)
             del path[-1]
         else:
+            f = f.replace(pdoc.markdown_module_suffix, '')
             path = f.split(os.sep)
         if len(path) > 2:
             f, l = path[0], path[-1]
