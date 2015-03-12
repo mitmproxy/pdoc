@@ -1096,6 +1096,9 @@ class Function (Doc):
         """
         params_spec = ', '.join(self.params())
         result_spec = self.result()
+        # TODO: it actually makes the return annotation, be displayed
+        # at the end of the arguments list, inside the parenthesis. This
+        # should be fixed.
         return (
             params_spec
             if result_spec is None
@@ -1113,8 +1116,14 @@ class Function (Doc):
             # I guess this is for C builtin functions?
             return None
         annotations = s.annotations if hasattr(s, 'annotations') else {}
-        ann = annotations['return'] if 'return' in annotations else None
-        return self.ann_clean(ann) if ann is not None else None
+        # Don't check for `annotations['return']` being `None` as the
+        # return annotation may be explicitly the `None` expression; so check
+        # for the existence of an entry, explicitly too.
+        if 'return' in annotations:
+            ann = annotations['return']
+            return self.ann_clean(ann)
+        else:
+            return None
 
     def params(self):
         """
