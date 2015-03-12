@@ -1083,9 +1083,11 @@ class Function (Doc):
         """
         # TODO: check if it's enough for most of typical annotation's
         # expressions.
+        module_prefix = '%s.' % self.func.__module__
         text = repr(ann)
-        text = text.replace("<class '", "")
+        text = text.replace("<class '", '')
         text = text.replace("'>", "")
+        text = text.replace(module_prefix, '')
         return text
 
     def spec(self):
