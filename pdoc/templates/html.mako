@@ -196,7 +196,7 @@
 <%def name="show_module_list(modules)">
 <p id="nav">
   <span><a href="/local">Local packages</a></span>
-  <span><a href="/all">All packages</a></span>
+  <span><a href="/">All packages</a></span>
 </p>
 <h1>Python module list</h1>
 
@@ -482,3 +482,4 @@
 </div>
 </body>
 </html>
+Show source 
