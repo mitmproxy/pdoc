@@ -80,7 +80,7 @@ args = parser.parse_args()
 
 class WebDoc (BaseHTTPRequestHandler):
     def do_HEAD(self):
-        if self.path != '/':
+        if self.path not in {'/', '/local'}:
             out = self.html()
             if out is None:
                 self.send_response(404)
@@ -92,11 +92,19 @@ class WebDoc (BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        if self.path == '/':
+        if self.path in {'/', '/local'}:
+            is_local = self.path == '/local'
+            is_all = not is_local
+            cwd = os.getcwd()
+            cwd_slash = os.path.join(cwd, '')
             modules = []
             for (imp, name, ispkg) in pkgutil.iter_modules(pdoc.import_path):
-                if name == 'setup' and not ispkg:
-                    continue
+                if is_all:
+                    if name == 'setup' and not ispkg:
+                        continue
+                elif is_local:
+                    if imp.path != cwd and not imp.path.startswith(cwd_slash):
+                        continue
                 modules.append((name, quick_desc(imp, name, ispkg)))
             modules = sorted(modules, key=lambda x: x[0].lower())
 
