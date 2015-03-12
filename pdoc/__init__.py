@@ -1096,13 +1096,10 @@ class Function (Doc):
         """
         params_spec = ', '.join(self.params())
         result_spec = self.result()
-        # TODO: it actually makes the return annotation, be displayed
-        # at the end of the arguments list, inside the parenthesis. This
-        # should be fixed.
         return (
-            params_spec
+            '(%s)' % params_spec
             if result_spec is None
-            else '%s -> %s' % (params_spec, result_spec))
+            else '(%s) -> %s' % (params_spec, result_spec))
 
     def result(self):
         """
