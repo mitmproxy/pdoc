@@ -194,6 +194,10 @@
 </%def>
 
 <%def name="show_module_list(modules)">
+<p id="nav">
+  <span><a href="/local">Local packages</a></span>
+  <span><a href="/all">All packages</a></span>
+</p>
 <h1>Python module list</h1>
 
 % if len(modules) == 0:
@@ -242,11 +246,12 @@
 
   % if 'http_server' in context.keys() and http_server:
     <p id="nav">
-      <a href="/">All packages</a>
+      <span><a href="/local">Local packages</a></span>
+      <span><a href="/">All packages</a></span>
       <% parts = module.name.split('.')[:-1] %>
       % for i, m in enumerate(parts):
         <% parent = '.'.join(parts[:i+1]) %>
-        :: <a href="/${parent.replace('.', '/')}">${parent}</a>
+        <span>::&nbsp;<a href="/${parent.replace('.', '/')}">${parent}</a></span>
       % endfor
     </p>
   % endif
