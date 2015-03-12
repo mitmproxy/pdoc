@@ -1076,6 +1076,18 @@ class Function (Doc):
         else:
             return '%s.%s' % (self.cls.refname, self.name)
 
+    def ann_clean(self, ann):
+        """
+        Returns a clean representation of an annotation. Actually
+        it makes all `<class 'xyz'>` appears as `xyz`.
+        """
+        # TODO: check if it's enough for most of typical annotation's
+        # expressions.
+        text = repr(ann)
+        text = text.replace("<class '", "")
+        text = text.replace("'>", "")
+        return text
+
     def spec(self):
         """
         Returns a nicely formatted spec of the function's parameter
@@ -1102,7 +1114,7 @@ class Function (Doc):
             return None
         annotations = s.annotations if hasattr(s, 'annotations') else {}
         ann = annotations['return'] if 'return' in annotations else None
-        return repr(ann) if ann is not None else None
+        return self.ann_clean(ann) if ann is not None else None
 
     def params(self):
         """
@@ -1133,7 +1145,7 @@ class Function (Doc):
                 if ann is None:
                     text = '%s=%s' % (param, default_repr)
                 else:
-                    ann_repr = repr(ann)
+                    ann_repr = self.ann_clean(ann)
                     text = '%s: %s=%s' % (param, ann_repr, default_repr)
                 params.append(text)
             else:
@@ -1141,7 +1153,7 @@ class Function (Doc):
                 if ann is None:
                     text = param_repr
                 else:
-                    ann_repr = repr(ann)
+                    ann_repr = self.ann_clean(ann)
                     text = '%s: %s' % (param_repr, ann_repr)
                 params.append(text)
         if s.varargs is not None:
