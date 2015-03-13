@@ -78,9 +78,8 @@ aa('--http-html', action='store_true',
 args = parser.parse_args()
 
 
-class WebDoc (BaseHTTPRequestHandler):
     def do_HEAD(self):
-        if self.path not in {'/', '/local'}:
+        if self.path not in {'/', '/local-packages'}:
             out = self.html()
             if out is None:
                 self.send_response(404)
@@ -92,8 +91,8 @@ class WebDoc (BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        if self.path in {'/', '/local'}:
-            is_local = self.path == '/local'
+        if self.path in {'/', '/local-packages'}:
+            is_local = self.path == '/local-packages'
             is_all = not is_local
             cwd = os.getcwd()
             cwd_slash = os.path.join(cwd, '')
