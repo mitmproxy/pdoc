@@ -594,21 +594,23 @@ class Module (Doc):
         else:
             pkgdir = getattr(self.module, '__path__',
                              [path.dirname(self.module.__file__)])
-        for (_, root, _) in pkgutil.iter_modules(pkgdir):
-            if root in self.doc:  # Ignore if this module was already doc'd.
-                continue
+        if self.is_package():
+            for (_, root, _) in pkgutil.iter_modules(pkgdir):
+                # Ignore if this module was already doc'd.
+                if root in self.doc:
+                    continue
 
-            # Ignore if it isn't exported, unless we've specifically requested
-            # to document all submodules.
-            if not self._allsubmodules \
-                    and not self.__is_exported(root, self.module):
-                continue
+                # Ignore if it isn't exported, unless we've specifically
+                # requested to document all submodules.
+                if not self._allsubmodules \
+                        and not self.__is_exported(root, self.module):
+                    continue
 
-            fullname = '%s.%s' % (self.name, root)
-            m = _safe_import(fullname)
-            if m is None:
-                continue
-            self.doc[root] = self.__new_submodule(root, m)
+                fullname = '%s.%s' % (self.name, root)
+                m = _safe_import(fullname)
+                if m is None:
+                    continue
+                self.doc[root] = self.__new_submodule(root, m)
 
         # Now see if we can grab inheritance relationships between classes.
         for docobj in self.doc.values():
