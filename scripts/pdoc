@@ -461,12 +461,17 @@ def create_mkdocs_yaml(docs_dir):
         config = {'site_name': 'My Docs', 'docs_dir': '', 'pages': []}
 
     filenames = []
+    pname = pdoc.markdown_package_name
+    mname = pdoc.markdown_module_suffix
     for root, dirs, files in os.walk(docs_dir):
         for f in files:
-            path = os.path.join(root, f)
-            path = path.replace(docs_dir, '', 1)
-            path = path.lstrip(os.sep)
-            filenames.append(path)
+            for s in [pname, mname, '.md', '.markdown']:
+                if f[-len(s):] == s:
+                    path = os.path.join(root, f)
+                    path = path.replace(docs_dir, '', 1)
+                    path = path.lstrip(os.sep)
+                    filenames.append(path)
+                    break
 
     config['docs_dir'] = docs_dir
 
@@ -485,11 +490,11 @@ def create_mkdocs_yaml(docs_dir):
             f = f.replace(c, ' ')
         if f == 'index.md':
             path = ['Home']
-        elif os.path.basename(f) == pdoc.markdown_package_name:
+        elif os.path.basename(f) == pname:
             path = f.split(os.sep)
             del path[-1]
         else:
-            f = f.replace(pdoc.markdown_module_suffix, '')
+            f = f.replace(mname, '')
             path = f.split(os.sep)
         if len(path) > 2:
             f, l = path[0], path[-1]
