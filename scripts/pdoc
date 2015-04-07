@@ -1,22 +1,25 @@
 #!/usr/bin/env python2
 
 from __future__ import absolute_import, division, print_function
+
+import os
+import re
+import sys
+import imp
+import yaml
+import codecs
+import pkgutil
 import argparse
+import datetime
+import tempfile
+import subprocess
+import os.path as path
+from operator import itemgetter
+
 try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
-import codecs
-import datetime
-import imp
-import os
-import os.path as path
-import pkgutil
-import re
-import subprocess
-import sys
-import tempfile
-import yaml
 
 import pdoc
 
@@ -504,6 +507,16 @@ def create_mkdocs_yaml(docs_dir):
         for p in path:
             page.append("\"%s\"" % p)
         config['pages'].append(page)
+
+    # sorting
+    home = ['index.md', 'Home']
+    if home in config['pages']:
+        config['pages'].remove(home)
+    else:
+        home = None
+    config['pages'] = sorted(config['pages'], key=itemgetter(1))
+    if home:
+        config['pages'].insert(0, home)
 
     for k in config:
         if type(config[k]) is str:
