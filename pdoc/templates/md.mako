@@ -13,11 +13,15 @@
 
   def nl2br(string):
       string = string.replace("\r\n\r\n", "\r\n\r\n    ")
-      string.replace("\r\n", "  \r\n")
+      string = string.replace("\r\n  \r\n", "\r\n  \r\n    ")
+      #string.replace("\r\n", "  \r\n")
       string = string.replace("\n\n", "\n\n    ")
-      string.replace("\n", "  \n")
+      string = string.replace("\n  \n", "\n  \n    ")
+      #string.replace("\n", "  \n")
       string = string.replace("\r\r", "\r\r    ")
-      string.replace("\r", "  \r")
+      string = string.replace("\r  \r", "\r  \r    ")
+      #string.replace("\r", "  \r")
+      string = string.replace("    ```", "```")
       return string
 
   def h1(string):
@@ -36,7 +40,7 @@
       string = "#### " + string
       return string
 
-  def h6(string):
+  def h5(string):
       string = "##### " + string
       return string
 
@@ -46,18 +50,21 @@
 
   def makeup(string):
       strings = string.splitlines()
+      p = re.compile(r':\s*$')
       dd = re.compile(r':')
       li = re.compile(r'^([0-9]+[\.)]|\*|\-\+)')
       snc = re.compile(r'^[A-Z]\w?')
       code = re.compile(r'^(#!|\.{1,3}|>{1,3})')
-      qu = re.compile(r'^`{1,3}')
+      qu = re.compile(r'^`{3}')
       codeblock = False
       for i, s in enumerate(strings):
           s = s.lstrip()
           if snc.search(s) and i != 0:
               strings[i-1] += '  '
-          if dd.search(s):
+          if p.search(s):
               s += '  '
+          elif  dd.search(s):
+              s = '\n* ' + s
           if li.search(s):
               s = '\n' + s
           if qu.search(s):
@@ -119,7 +126,7 @@ ${cls.docstring | makeup}
   descendents = cls.module.descendents(cls)
 %>
 % if len(mro) > 0:
-${"Ancestors (in MRO)" | h6}
+${"Ancestors (in MRO)" | h5}
 % for c in mro:
 - ${c.refname}
 
@@ -127,7 +134,7 @@ ${"Ancestors (in MRO)" | h6}
 % endif
 
 % if len(descendents) > 0:
-${"Descendents" | h6}
+${"Descendents" | h5}
 % for c in descendents:
 - ${c.refname}
 
@@ -135,7 +142,7 @@ ${"Descendents" | h6}
 % endif
 
 % if len(class_vars) > 0:
-${"Class variables" | h6}
+${"Class variables" | h5}
 % for v in class_vars:
 - ${capture(variable, v)}
 
@@ -143,7 +150,7 @@ ${"Class variables" | h6}
 % endif
 
 % if len(static_methods) > 0:
-${"Static methods" | h6}
+${"Static methods" | h5}
 % for f in static_methods:
 - ${capture(function, f)}
 
@@ -151,7 +158,7 @@ ${"Static methods" | h6}
 % endif
 
 % if len(inst_vars) > 0:
-${"Instance variables" | h6}
+${"Instance variables" | h5}
 % for v in inst_vars:
 - ${capture(variable, v)}
 
@@ -159,7 +166,7 @@ ${"Instance variables" | h6}
 % endif
 
 % if len(methods) > 0:
-${"Methods" | h6}
+${"Methods" | h5}
 % for m in methods:
 - ${capture(function, m)}
 
@@ -221,3 +228,4 @@ Sub-modules
 
 % endfor
 % endif
+
