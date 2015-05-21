@@ -570,7 +570,7 @@ class Module (Doc):
             # modules and module level variables.
             if inspect.isfunction(obj) or inspect.isbuiltin(obj):
                 self.doc[name] = Function(name, self, obj)
-            elif inspect.ismethod(obj):
+            elif inspect.ismethod(obj) or inspect.ismethoddescriptor(obj):
                 self.doc[name] = Function(name, self, obj)
             elif inspect.isclass(obj):
                 self.doc[name] = Class(name, self, obj)
@@ -912,6 +912,9 @@ class Class (Doc):
             if inspect.ismethod(obj):
                 self.doc[name] = Function(name, self.module, obj.__func__,
                                           cls=self, method=True)
+            elif inspect.ismethoddescriptor(obj):
+                self.doc[name] = Function(name, self.module, obj,
+                                          cls=self, method=False)
             elif inspect.isfunction(obj):
                 self.doc[name] = Function(name, self.module, obj,
                                           cls=self, method=False)
