@@ -13,7 +13,6 @@
   }
   #content {
     width: 70%;
-    max-width: 850px;
     float: left;
     padding: 30px 60px;
     border-left: 1px solid #ddd;
