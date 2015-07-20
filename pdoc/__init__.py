@@ -559,6 +559,7 @@ class Module (Doc):
             vardocs = _var_docstrings(tree, self, cls=None)
         except:
             pass
+        self._declared_variables = vardocs.keys()
 
         public = self.__public_objs()
         for name, obj in public.items():
@@ -830,7 +831,7 @@ class Module (Doc):
         if not _is_exported(name):
             return False
         if module is not None and self.module.__name__ != module.__name__:
-            return False
+            return name in self._declared_variables
         return True
 
     def __public_objs(self):
