@@ -330,12 +330,12 @@ def html_out(m):
                          http_server=args.http_html,
                          source=not args.html_no_source)
             print(out, file=w)
-    except Exception as e:
+    except Exception:
         try:
             os.unlink(f)
         except:
             pass
-        raise e
+        raise
     for submodule in m.submodules():
         html_out(submodule)
 
