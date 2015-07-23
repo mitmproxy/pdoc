@@ -6,6 +6,7 @@ try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
+import builtins
 import codecs
 import datetime
 import imp
@@ -211,6 +212,8 @@ class WebDoc (BaseHTTPRequestHandler):
             return None
 
         parts = import_path.split('.')
+        # `xrange` is `range` with Python3.
+        xrange = xrange if hasattr(builtins, 'xrange') else range
         for i in xrange(len(parts), 0, -1):
             p = path.join(*parts[0:i])
             realp = exists(p)
@@ -330,12 +333,12 @@ def html_out(m):
                          http_server=args.http_html,
                          source=not args.html_no_source)
             print(out, file=w)
-    except Exception as e:
+    except Exception:
         try:
             os.unlink(f)
         except:
             pass
-        raise e
+        raise
     for submodule in m.submodules():
         html_out(submodule)
 
