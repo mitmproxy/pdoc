@@ -1,28 +1,29 @@
+from sys import version_info as v
+if any([v < (2, 7), (3,) < v < (3, 3)]):
+    raise Exception("Unsupported Python version %d.%d. Requires Python >= 2.7 "
+                    "or >= 3.3." % v[:2])
+from setuptools import setup, find_packages
 import codecs
-from distutils.core import setup
-import os.path as path
-
-install_requires = ['mako', 'markdown < 2.5']
-try:  # Is this really the right way? Couldn't find anything better...
-    import argparse
-except ImportError:
-    install_requires.append('argparse')
+from os import path
 
 cwd = path.dirname(__file__)
-longdesc = codecs.open(path.join(cwd, 'longdesc.rst'), 'r', 'utf-8').read()
-version = '0.0.0'
-with codecs.open(path.join(cwd, 'pdoc', '__init__.py'), 'r', 'utf-8') as f:
-    for line in f:
-        if line.startswith('__version__'):
-            exec(line.strip())
-            version = __version__
-            break
+with codecs.open(path.join(cwd, 'longdesc.rst'), 'r', 'utf-8') as f:
+    longdesc = f.read()
 
 setup(
     name='pdoc',
     author='Andrew Gallant',
     author_email='pdoc@burntsushi.net',
-    version=version,
+    use_scm_version={
+        'version_scheme': 'guess-next-dev',
+        'local_scheme': 'dirty-tag',
+        'write_to': 'pdoc/_version.py'
+    },
+
+    setup_requires=[
+        'setuptools>=18.0',
+        'setuptools-scm>1.5.4'
+    ],
     license='UNLICENSE',
     description='A simple program and library to auto generate API '
                 'documentation for Python modules.',
@@ -42,15 +43,22 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     platforms='ANY',
-    packages=['pdoc'],
+    packages=find_packages(),
     package_data={'pdoc': ['templates/*']},
     data_files=[('share/pdoc', ['README.md', 'longdesc.rst',
                                 'UNLICENSE', 'INSTALL', 'CHANGELOG']),
                 ('share/doc/pdoc', ['doc/pdoc/index.html']),
                ],
-    scripts=['scripts/pdoc'],
     provides=['pdoc'],
-    requires=['argparse', 'mako', 'markdown'],
-    install_requires=install_requires,
-    extras_require={'syntax_highlighting': ['pygments']},
+    install_requires=[
+        'mako', 'markdown'
+    ],    
+    extras_require={
+        'syntax_highlighting': ['pygments']
+    },
+    entry_points={
+        'console_scripts': [
+            'pdoc = pdoc.__main__:main',
+        ],
+    },    
 )

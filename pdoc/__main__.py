@@ -6,7 +6,6 @@ try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
-import builtins
 import codecs
 import datetime
 import imp
@@ -20,7 +19,12 @@ import tempfile
 
 import pdoc
 
-version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
+try:
+    from builtins import range as xrange
+except ImportError:
+    pass
+    
+version_suffix = '%d.%d' % (sys.version_info[:2])
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
 
 parser = argparse.ArgumentParser(
@@ -212,8 +216,6 @@ class WebDoc (BaseHTTPRequestHandler):
             return None
 
         parts = import_path.split('.')
-        # `xrange` is `range` with Python3.
-        xrange = xrange if hasattr(builtins, 'xrange') else range
         for i in xrange(len(parts), 0, -1):
             p = path.join(*parts[0:i])
             realp = exists(p)
@@ -378,7 +380,7 @@ def process_html_out(impath):
         print(out)
 
 
-if __name__ == '__main__':
+def main():
     if args.version:
         print(pdoc.__version__)
         sys.exit(0)
@@ -493,3 +495,6 @@ if __name__ == '__main__':
         quit_if_exists(module)
         html_out(module)
         sys.exit(0)
+
+if __name__=="__main__":
+    main_()
