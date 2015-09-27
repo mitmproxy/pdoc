@@ -29,8 +29,8 @@ included with this module.
 Compatibility
 -------------
 
-``pdoc`` has been tested on Python 2.6, 2.7 and 3.3. It seems to work on
-all three.
+``pdoc`` has been tested on Python 2.7, 3.3, 3.4 and 3.5. It seems to work on
+all five.
 
 Contributing
 ------------
