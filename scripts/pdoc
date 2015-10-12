@@ -363,6 +363,9 @@ def process_html_out(impath):
         cmd.append('--only-pypath')
     if args.html_no_source:
         cmd.append('--html-no-source')
+    if args.template_dir:
+        cmd.append('--template-dir')
+        cmd.append(args.template_dir)
     cmd.append(impath)
 
     # Can we make a good faith attempt to support 2.6?
