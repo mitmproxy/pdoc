@@ -3,3 +3,6 @@ tags
 build
 MANIFEST
 dist
+*.egg-info
+*.pyc
+*.pyo
