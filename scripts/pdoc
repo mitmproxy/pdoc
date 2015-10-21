@@ -6,7 +6,6 @@ try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
     from http.server import BaseHTTPRequestHandler, HTTPServer
-import builtins
 import codecs
 import datetime
 import imp
@@ -19,6 +18,12 @@ import sys
 import tempfile
 
 import pdoc
+
+# `xrange` is `range` with Python3.
+try:
+    xrange = xrange
+except NameError:
+    xrange = range
 
 version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
@@ -212,8 +217,6 @@ class WebDoc (BaseHTTPRequestHandler):
             return None
 
         parts = import_path.split('.')
-        # `xrange` is `range` with Python3.
-        xrange = xrange if hasattr(builtins, 'xrange') else range
         for i in xrange(len(parts), 0, -1):
             p = path.join(*parts[0:i])
             realp = exists(p)
