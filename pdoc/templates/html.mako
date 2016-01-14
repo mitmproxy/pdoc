@@ -38,6 +38,11 @@
     Returns one string with all of the source code.
     """
     base_indent = len(indent.match(lines[0]).group(0))
+    base_indent = 0
+    for line in lines:
+      if len(line.strip()) > 0:
+        base_indent = len(indent.match(lines[0]).group(0))
+        break
     lines = [line[base_indent:] for line in lines]
     if not use_pygments:  # :-(
       return '<pre><code>%s</code></pre>' % (''.join(lines))
