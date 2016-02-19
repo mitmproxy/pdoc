@@ -475,9 +475,8 @@
     </p>
 
     <p>pdoc is in the public domain with the
-      <a href="http://unlicense.org">UNLICENSE</a></p>
-
-    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+      <a href="http://unlicense.org">UNLICENSE</a>
+    </p>
   </footer>
 </div>
 </body>
