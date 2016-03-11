@@ -3,6 +3,7 @@ tags
 build
 MANIFEST
 dist
+pdoc/_version.py
 *.egg-info
 *.pyc
 *.pyo

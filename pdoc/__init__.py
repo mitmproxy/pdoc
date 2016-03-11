@@ -191,7 +191,8 @@ import sys
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
-__version__ = '0.3.1'
+from ._version import version as __version__
+
 """
 The current version of pdoc. This value is read from `setup.py`.
 """
@@ -571,7 +572,7 @@ class Module (Doc):
             # modules and module level variables.
             if inspect.isfunction(obj) or inspect.isbuiltin(obj):
                 self.doc[name] = Function(name, self, obj)
-            elif inspect.ismethod(obj):
+            elif inspect.ismethod(obj) or inspect.ismethoddescriptor(obj):
                 self.doc[name] = Function(name, self, obj)
             elif inspect.isclass(obj):
                 self.doc[name] = Class(name, self, obj)
@@ -915,6 +916,9 @@ class Class (Doc):
             if inspect.ismethod(obj):
                 self.doc[name] = Function(name, self.module, obj.__func__,
                                           cls=self, method=True)
+            elif inspect.ismethoddescriptor(obj):
+                self.doc[name] = Function(name, self.module, obj,
+                                          cls=self, method=False)
             elif inspect.isfunction(obj):
                 self.doc[name] = Function(name, self.module, obj,
                                           cls=self, method=False)
@@ -1103,7 +1107,37 @@ class Function (Doc):
             s = getspec(self.func)
         except TypeError:
             # I guess this is for C builtin functions?
-            return ['...']
+            # try to get signature from 1st line in docstring
+            try:
+                docstring_line1 = self.docstring.splitlines()[0]
+                # if 1st line does not end with '*', keep
+                # appending lines till we find one that does.
+                nline = 0
+                if not docstring_line1.endswith('*'):
+                    endswithstar = False; nline = 1
+                    while not endswithstar:
+                        next_line = self.docstring.splitlines()[nline]
+                        if not next_line.startswith(' '):
+                            docstring_line1 += ' '
+                        docstring_line1 += next_line
+                        endswithstar = next_line.endswith('*')
+                        nline += 1
+            except IndexError:
+                docstring_line1 = None
+            sig = ['...']
+            if docstring_line1 is not None:
+                try:
+                    func_name = docstring_line1.split('(')[0].split('`')[1]
+                    if func_name == self.name:
+                        sig =\
+                        [docstring_line1.partition('(')[-1].rpartition(')')[0]]
+                    # remove 1st line (or lines) from docstring
+                    # (the ones that contain the function signature)
+                    self.docstring =\
+                    ''.join(self.docstring.splitlines(True)[nline+1:])
+                except:
+                    pass
+            return sig
 
         params = []
         for i, param in enumerate(s.args):

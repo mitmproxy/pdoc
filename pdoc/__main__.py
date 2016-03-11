@@ -26,6 +26,7 @@ except NameError:
     xrange = range
 
 version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
+
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
 
 parser = argparse.ArgumentParser(
@@ -384,7 +385,7 @@ def process_html_out(impath):
         print(out)
 
 
-if __name__ == '__main__':
+def main():
     if args.version:
         print(pdoc.__version__)
         sys.exit(0)
@@ -499,3 +500,6 @@ if __name__ == '__main__':
         quit_if_exists(module)
         html_out(module)
         sys.exit(0)
+
+if __name__=="__main__":
+    main_()
