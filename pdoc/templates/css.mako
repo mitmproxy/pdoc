@@ -14,7 +14,7 @@
   #content {
     width: 70%;
     margin-left: 25%;
-    max-width: 850px;
+    max-width: 90%;
     float: left;
     padding: 30px 60px;
     border-left: 1px solid #ddd;
@@ -99,10 +99,6 @@
   }
   .ident {
     color: #900;
-  }
-
-  code {
-    background: #f9f9f9;
   }
 
   pre {
@@ -245,7 +241,7 @@
     .source {
       display: none;
       max-height: 600px;
-      overflow-y: scroll;
+      overflow-y: auto;
       margin-bottom: 15px;
     }
 
@@ -272,7 +268,7 @@
         width: auto;
     }
     #content {
-      width: 65%;
+      width: 95%;
       margin-left: auto;
       border-left: none;
       padding: 30px;
@@ -544,7 +540,7 @@ pre,
 samp {
     font-family: monospace, serif;
     _font-family: 'courier new', monospace;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 
 /**

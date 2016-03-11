@@ -419,6 +419,11 @@
   % endif
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+
+  <!-- highlight.js for highlighting source code. -->
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
+
   <%namespace name="css" file="css.mako" />
   <style type="text/css">
   ${css.pre()}
@@ -479,5 +484,6 @@
     </p>
   </footer>
 </div>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
