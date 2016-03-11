@@ -19,14 +19,6 @@ import tempfile
 
 import pdoc
 
-<<<<<<< HEAD:pdoc/__main__.py
-try:
-    from builtins import range as xrange
-except ImportError:
-    pass
-    
-version_suffix = '%d.%d' % (sys.version_info[:2])
-=======
 # `xrange` is `range` with Python3.
 try:
     xrange = xrange
@@ -34,7 +26,7 @@ except NameError:
     xrange = range
 
 version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
->>>>>>> upstream/master:scripts/pdoc
+
 default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
 
 parser = argparse.ArgumentParser(
