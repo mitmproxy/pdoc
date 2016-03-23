@@ -324,17 +324,22 @@ def quit_if_exists(m):
         check_file(path.dirname(f))
 
 
-def html_out(m):
+def html_out(m, html=True):
     f = module_file(m)
+    if not html:
+        f = module_file(m).replace(".html", ".md")
     dirpath = path.dirname(f)
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
     try:
         with codecs.open(f, 'w+', 'utf-8') as w:
-            out = m.html(external_links=args.external_links,
-                         link_prefix=args.link_prefix,
-                         http_server=args.http_html,
-                         source=not args.html_no_source)
+            if not html:
+                out = m.text()
+            else:
+                out = m.html(external_links=args.external_links,
+                             link_prefix=args.link_prefix,
+                             http_server=args.http_html,
+                             source=not args.html_no_source)
             print(out, file=w)
     except Exception:
         try:
@@ -343,7 +348,7 @@ def html_out(m):
             pass
         raise
     for submodule in m.submodules():
-        html_out(submodule)
+        html_out(submodule, html)
 
 
 def process_html_out(impath):
@@ -474,7 +479,7 @@ if __name__ == '__main__':
                          allsubmodules=args.all_submodules)
 
     # Plain text?
-    if not args.html:
+    if not args.html and not args.all_submodules:
         output = module.text()
         try:
             print(output)
@@ -497,5 +502,5 @@ if __name__ == '__main__':
     # HTTP server.
     if not args.http:
         quit_if_exists(module)
-        html_out(module)
+        html_out(module, args.html)
         sys.exit(0)
