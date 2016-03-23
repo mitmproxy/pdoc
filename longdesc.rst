@@ -148,7 +148,7 @@ instance variables.
 
 Class and instance variables can also have inherited docstrings.
 
-**Thirdly and finally**, docstrings can be overrided with a special
+**Thirdly and finally**, docstrings can be overridden with a special
 ``__pdoc__`` dictionary that ``pdoc`` inspects if it exists. The keys of
 ``__pdoc__`` should be identifiers within the scope of the module. (In
 the case of an instance variable ``self.variable`` for class ``A``, its
