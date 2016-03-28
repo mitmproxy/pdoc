@@ -419,6 +419,11 @@
   % endif
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+
+  <!-- highlight.js for highlighting source code. -->
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
+
   <%namespace name="css" file="css.mako" />
   <style type="text/css">
   ${css.pre()}
@@ -475,10 +480,10 @@
     </p>
 
     <p>pdoc is in the public domain with the
-      <a href="http://unlicense.org">UNLICENSE</a></p>
-
-    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+      <a href="http://unlicense.org">UNLICENSE</a>
+    </p>
   </footer>
 </div>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

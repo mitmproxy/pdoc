@@ -13,16 +13,20 @@
   }
   #content {
     width: 70%;
-    max-width: 850px;
+    margin-left: 25%;
+    max-width: 90%;
     float: left;
     padding: 30px 60px;
     border-left: 1px solid #ddd;
   }
   #sidebar {
+    position: fixed;
+    height: 100%;
     width: 25%;
     float: left;
     padding: 30px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   #nav {
     font-size: 130%;
@@ -97,10 +101,6 @@
     color: #900;
   }
 
-  code {
-    background: #f9f9f9;
-  } 
-
   pre {
     background: #fefefe;
     border: 1px solid #ddd;
@@ -116,7 +116,7 @@
     .codehilite pre {
       margin: 0;
     }
-    .codehilite .err { background: #ff3300; color: #fff !important; } 
+    .codehilite .err { background: #ff3300; color: #fff !important; }
 
   table#module-list {
     font-size: 110%;
@@ -227,7 +227,7 @@
       text-transform: uppercase;
       color: #fff;
       text-shadow: 1px 1px 0 #f4b700;
-      
+
       padding: 3px 8px;
       border-radius: 2px;
       transition: background .3s ease-in-out;
@@ -241,7 +241,7 @@
     .source {
       display: none;
       max-height: 600px;
-      overflow-y: scroll;
+      overflow-y: auto;
       margin-bottom: 15px;
     }
 
@@ -252,16 +252,26 @@
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;
   }
+
+  .desc {
+    white-space: pre-wrap;
+  }
+
   .clear {
     clear: both;
   }
 
   @media all and (max-width: 950px) {
     #sidebar {
-      width: 35%;
+        position: inherit;
+        float: none;
+        width: auto;
     }
     #content {
-      width: 65%;
+      width: 95%;
+      margin-left: auto;
+      border-left: none;
+      padding: 30px;
     }
   }
   @media all and (max-width: 650px) {
@@ -530,7 +540,7 @@ pre,
 samp {
     font-family: monospace, serif;
     _font-family: 'courier new', monospace;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 
 /**
