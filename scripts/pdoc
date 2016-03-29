@@ -81,6 +81,11 @@ aa('--http-port', type=int, default=8080,
    help='The port on which to run the HTTP server.')
 aa('--http-html', action='store_true',
    help='Internal use only. Do not set.')
+aa('--markdown', action='store_true',
+   help='When set, the output will be Markdown formatted.')
+aa('--markdown-dir', type=str, default='.',
+   help='The directory to output Markdown files to. This option is ignored when '
+        'outputting documentation as plain text.')
 args = parser.parse_args()
 
 
@@ -300,11 +305,18 @@ def last_modified(fp):
 
 
 def module_file(m):
-    mbase = path.join(args.html_dir, *m.name.split('.'))
-    if m.is_package():
-        return path.join(mbase, pdoc.html_package_name)
-    else:
-        return '%s%s' % (mbase, pdoc.html_module_suffix)
+    if args.html:
+        mbase = path.join(args.html_dir, *m.name.split('.'))
+        if m.is_package():
+            return path.join(mbase, pdoc.html_package_name)
+        else:
+            return '%s%s' % (mbase, pdoc.html_module_suffix)
+    elif args.markdown:
+        mbase = path.join(args.markdown_dir, *m.name.split('.'))
+        if m.is_package():
+            return path.join(mbase, "index.md")
+        else:
+            return '%s%s' % (mbase, ".m.md")
 
 
 def quit_if_exists(m):
@@ -344,6 +356,25 @@ def html_out(m):
         raise
     for submodule in m.submodules():
         html_out(submodule)
+
+
+def markdown_out(m):
+    f = module_file(m)
+    dirpath = path.dirname(f)
+    if not os.access(dirpath, os.R_OK):
+        os.makedirs(dirpath)
+    try:
+        with codecs.open(f, 'w+', 'utf-8') as w:
+            out = m.markdown()
+            print(out, file=w)
+    except Exception:
+        try:
+            os.unlink(f)
+        except:
+            pass
+        raise
+    for submodule in m.submodules():
+        markdown_out(submodule)
 
 
 def process_html_out(impath):
@@ -472,6 +503,11 @@ if __name__ == '__main__':
             module = pdoc.import_module(args.module_name)
     module = pdoc.Module(module, docfilter=docfilter,
                          allsubmodules=args.all_submodules)
+
+    if args.markdown:
+        quit_if_exists(module)
+        markdown_out(module)
+        sys.exit(0)
 
     # Plain text?
     if not args.html:

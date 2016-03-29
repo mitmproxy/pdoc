@@ -678,6 +678,14 @@ class Module (Doc):
                      **kwargs)
         return t.strip()
 
+    def markdown(self):
+        """
+        Returns the documentation for this module as markdown.
+        """
+        t = _get_tpl('/markdown.mako')
+        markdown = t.render(module=self).strip()
+        return markdown
+
     def is_package(self):
         """
         Returns `True` if this module is a package.
