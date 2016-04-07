@@ -70,9 +70,8 @@
                s, flags=re.MULTILINE)
     return s
 
-  Preprocessors = {
-    'GOOGLE': _pproc_google
-  }
+  class Preprocessors:
+    GOOGLE = _pproc_google
 
   def mark(s, linky=True):
     if linky:
