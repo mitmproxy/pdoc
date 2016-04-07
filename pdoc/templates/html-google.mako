@@ -69,6 +69,17 @@
 
     extensions = []
 
+    if style == "GOOGLE":
+      s = re.sub(r"(Arguments|Returns|Raises)\:$",
+                 r"<h2 style='font-size:125% !important'>\1</h2>",
+                 s, flags=re.MULTILINE)
+
+      s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
+                 r"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>\1</b>: ",
+                 s, flags=re.MULTILINE)
+
+      extensions.append('markdown.extensions.nl2br')
+
     if use_pygments:
       extensions.append('markdown.extensions.codehilite(linenums=False)')
 
