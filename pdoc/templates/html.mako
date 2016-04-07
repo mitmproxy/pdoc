@@ -13,8 +13,6 @@
 
   import pdoc
 
-  style = "GOOGLE"
-
   # From language reference, but adds '.' to allow fully qualified names.
   pyident = re.compile('^[a-zA-Z_][a-zA-Z0-9_.]+$')
   indent = re.compile('^\s*')
@@ -61,6 +59,21 @@
       return matched
     return '[`%s`](%s)' % (name, url)
 
+
+  def _pproc_google(s):
+    s = re.sub(r"(Arguments|Returns|Raises)\:$",
+               r"<h2 style='font-size:125% !important'>\1</h2>",
+               s, flags=re.MULTILINE)
+
+    s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
+               r"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>\1</b>: ",
+               s, flags=re.MULTILINE)
+    return s
+
+  Preprocessors = {
+    'GOOGLE': _pproc_google
+  }
+
   def mark(s, linky=True):
     if linky:
       s, _ = re.subn('\b\n\b', ' ', s)
@@ -71,6 +84,10 @@
 
     if use_pygments:
       extensions.append('markdown.extensions.codehilite(linenums=False)')
+
+    if preprocessor:
+        extensions.append('markdown.extensions.nl2br')
+        s = preprocessor(s)
 
     s = markdown.markdown(s.strip(), extensions=extensions)
     return s
