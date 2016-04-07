@@ -13,6 +13,8 @@
 
   import pdoc
 
+  style = "GOOGLE"
+
   # From language reference, but adds '.' to allow fully qualified names.
   pyident = re.compile('^[a-zA-Z_][a-zA-Z0-9_.]+$')
   indent = re.compile('^\s*')
@@ -65,9 +67,20 @@
     if not module_list:
       s, _ = re.subn('`[^`]+`', linkify, s)
 
-    extensions = []
+    if style == "GOOGLE":
+      s = re.sub(r"(Arguments|Returns|Raises)\:$",
+                 r"<h2 style='font-size:125% !important'>\1</h2>",
+                 s, flags=re.MULTILINE)
+
+      s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
+                 r"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>\1</b>: ",
+                 s, flags=re.MULTILINE)
+
+      extensions.append('markdown.extensions.nl2br')
+
     if use_pygments:
-      extensions = ['markdown.extensions.codehilite(linenums=False)']
+      extensions.append('markdown.extensions.codehilite(linenums=False)')
+
     s = markdown.markdown(s.strip(), extensions=extensions)
     return s
 
