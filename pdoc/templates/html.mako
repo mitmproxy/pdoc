@@ -66,12 +66,13 @@
                s, flags=re.MULTILINE)
 
     s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
-               r"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>\1</b>: ",
+               r"&emsp;&emsp;&emsp;&emsp;<b>\1</b>: ",
                s, flags=re.MULTILINE)
     return s
 
-  class Preprocessors:
-    GOOGLE = _pproc_google
+  Preprocessors = {
+    'google': _pproc_google
+  }
 
   def mark(s, linky=True):
     if linky:
