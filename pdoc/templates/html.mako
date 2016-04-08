@@ -85,9 +85,11 @@
     if use_pygments:
       extensions.append('markdown.extensions.codehilite(linenums=False)')
 
-    if preprocessor:
-        extensions.append('markdown.extensions.nl2br')
-        s = preprocessor(s)
+    # We may want to make this optional as well?
+    extensions.append('markdown.extensions.nl2br')
+
+    if docstring_style:
+        s = Preprocessors[docstring_style](s)
 
     s = markdown.markdown(s.strip(), extensions=extensions)
     return s
