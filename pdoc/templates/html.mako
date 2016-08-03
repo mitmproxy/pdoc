@@ -68,6 +68,10 @@
     s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
                r"&emsp;&emsp;&emsp;&emsp;<b>\1</b>: ",
                s, flags=re.MULTILINE)
+
+    s = re.sub(r"^\s*(None)",
+               r"&emsp;&emsp;&emsp;&emsp;<b>\1</b>",
+               s, flags=re.MULTILINE)
     return s
 
   Preprocessors = {
