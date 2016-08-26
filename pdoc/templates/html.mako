@@ -170,6 +170,8 @@
            and (len(d.docstring) == 0
             or d.docstring == d.inherits.docstring))
   docstring = (d.inherits.docstring if inherits else d.docstring).strip()
+  if docstring.count('\n') >= 1:
+    docstring = '<pre>{}</pre>'.format(docstring)
   if limit is not None:
     docstring = glimpse(docstring, limit)
   %>
