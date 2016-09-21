@@ -92,6 +92,14 @@ There are many other options to explore. You can see them all by running:
     pdoc --help
 
 
+Virtualenv
+----------
+
+`pdoc` works well with `virtualenv`. If you are documenting a project that is
+installed within a `virtualenv` environment, you should be able to install `pdoc`
+directly into that environment and use it with no further configuration.
+
+
 Submodule loading
 -----------------
 
