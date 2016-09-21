@@ -92,6 +92,28 @@ There are many other options to explore. You can see them all by running:
     pdoc --help
 
 
+Submodule loading
+-----------------
+
+`pdoc` uses idiomatic Python when loading your modules. Therefore, for `pdoc`
+to find any submodules of the input module you specify on the command line,
+those modules must be available through Python's ordinary module loading process.
+
+This is not a problem for globally installed modules like `sys`, but can be
+a problem for your own sub-modules depending on how you have installed them.
+
+To ensure that `pdoc` can load any submodules imported by the modules you
+are generating documentation for, you should add the appropriate directories
+to your `PYTHONPATH` environment variable.
+
+For example, if a local module `a.py` imports `b.py` that is installed as
+`/home/jsmith/pylib/b.py`, then you should make sure that your `PYTHONPATH`
+includes `/home/jsmith/pylib`. 
+
+If `pdoc` cannot load any modules imported by the input module, it will exit
+with an error message indicating which module could not be loaded.
+
+
 License
 -------
 It's [in the public domain](http://unlicense.org).
