@@ -2,7 +2,7 @@ import codecs
 from distutils.core import setup
 import os.path as path
 
-install_requires = ['mako', 'markdown < 2.5']
+install_requires = ['mako', 'markdown2']
 try:  # Is this really the right way? Couldn't find anything better...
     import argparse
 except ImportError:
@@ -50,7 +50,7 @@ setup(
                ],
     scripts=['scripts/pdoc'],
     provides=['pdoc'],
-    requires=['argparse', 'mako', 'markdown'],
+    requires=['argparse', 'mako', 'markdown2'],
     install_requires=install_requires,
     extras_require={'syntax_highlighting': ['pygments']},
 )
