@@ -373,20 +373,22 @@
 </%def>
 
 <%def name="list_module_tree(list_module, current_module)">
-  <ul>
-  % for m in list_module.submodules():
-    <%
-    url = top_module_url(current_module)
-    url += "/".join(m.name.split(".")[1:])
-    if m.is_package():
-      url += '/%s' % pdoc.html_package_name
-    else:
-      url += pdoc.html_module_suffix
-    %>
-    <li class="mono"><a href="${url}">${m.refname}</a></li>
-    ${list_module_tree(m, current_module)}
-  % endfor
-  </ul>
+  % if list_module.submodules():    
+    <ul>
+    % for m in list_module.submodules():
+      <%
+      url = top_module_url(current_module)
+      url += "/".join(m.name.split(".")[1:])
+      if m.is_package():
+        url += '/%s' % pdoc.html_package_name
+      else:
+        url += pdoc.html_module_suffix
+      %>
+      <li class="mono"><a href="${url}">${m.refname}</a></li>
+      ${list_module_tree(m, current_module)}
+    % endfor
+    </ul>
+  % endif
 </%def>
 
 <%def name="module_index(module)">
