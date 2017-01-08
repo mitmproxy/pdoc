@@ -20,6 +20,26 @@
   # Whether we're showing the module list or a single module.
   module_list = 'modules' in context.keys()
 
+
+  def top_module(module):
+    top_module_name = module.name.split('.')[0]
+    return pdoc.Module(sys.modules[top_module_name])
+
+  def top_module_url(module):
+    top_module_name = module.name.split('.')[0]
+    if link_prefix:
+      if link_prefix.endswith("/"):
+        url = "%s%s/" % (link_prefix, top_module_name)
+      else:
+        url = "%s/%s/" % (link_prefix, top_module_name)
+    else:
+      url = (module.name.count('.') - 1) * "../"
+      if module.is_package() and "." in module.name:
+        url += "../"
+      if url == "":
+        url = "./"
+    return url
+
   def decode(s):
     if sys.version_info[0] < 3 and isinstance(s, str):
       return s.decode('utf-8', 'ignore')
@@ -352,6 +372,23 @@
   </section>
 </%def>
 
+<%def name="list_module_tree(list_module, current_module)">
+  <ul>
+  % for m in list_module.submodules():
+    <%
+    url = top_module_url(current_module)
+    url += "/".join(m.name.split(".")[1:])
+    if m.is_package():
+      url += '/%s' % pdoc.html_package_name
+    else:
+      url += pdoc.html_module_suffix
+    %>
+    <li class="mono"><a href="${url}">${m.refname}</a></li>
+    ${list_module_tree(m, current_module)}
+  % endfor
+  </ul>
+</%def>
+
 <%def name="module_index(module)">
   <%
   variables = module.variables()
@@ -392,15 +429,10 @@
     </li>
     % endif
 
-    % if len(submodules) > 0:
-    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
-      <ul>
-      % for m in submodules:
-        <li class="mono">${link(m.refname)}</li>
-      % endfor
-      </ul>
-    </li>
-    % endif
+    <% top_module_link = "%s%s" % (top_module_url(module), pdoc.html_package_name) %>
+    <li class="set"><h3>Module Index :: <a href="${top_module_link}">${module.name.split('.')[0]}</a></h3>
+    ${list_module_tree(top_module(module), module)}
+
     </ul>
   </div>
 </%def>
