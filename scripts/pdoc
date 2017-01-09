@@ -107,7 +107,7 @@ class WebDoc (BaseHTTPRequestHandler):
             modules = sorted(modules, key=lambda x: x[0].lower())
 
             out = pdoc.tpl_lookup.get_template('/html.mako')
-            out = out.render(modules=modules, link_prefix=args.link_prefix, args=args)
+            out = out.render(modules=modules, link_prefix=args.link_prefix)
             out = out.strip()
         elif self.path.endswith('.ext'):
             # External links are a bit weird. You should view them as a giant
@@ -340,7 +340,7 @@ def html_out(m, html=True):
                              link_prefix=args.link_prefix,
                              http_server=args.http_html,
                              source=not args.html_no_source,
-                             args=args)
+                             top_module=args.module_name)
             print(out, file=w)
     except Exception:
         try:

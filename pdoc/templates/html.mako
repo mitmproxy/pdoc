@@ -22,9 +22,8 @@
 
 
   def get_top_module(module):
-    if ('args' in context.keys() and hasattr(context['args'], 'module_name') and
-        module.name.startswith(context['args'].module_name)):
-      top_module_name = context['args'].module_name
+    if 'top_module' in context.keys() and module.name.startswith(context["top_module"]):
+      top_module_name = context["top_module"]
     else:
       top_module_name = module.name.split('.')[0]
 
