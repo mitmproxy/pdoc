@@ -21,24 +21,14 @@
   module_list = 'modules' in context.keys()
 
 
-  def top_module(module):
-    top_module_name = module.name.split('.')[0]
-    return pdoc.Module(sys.modules[top_module_name])
-
-  def top_module_url(module):
-    top_module_name = module.name.split('.')[0]
-    if link_prefix:
-      if link_prefix.endswith("/"):
-        url = "%s%s/" % (link_prefix, top_module_name)
-      else:
-        url = "%s/%s/" % (link_prefix, top_module_name)
+  def get_top_module(module):
+    if ('args' in context.keys() and hasattr(context['args'], 'module_name') and
+        module.name.startswith(context['args'].module_name)):
+      top_module_name = context['args'].module_name
     else:
-      url = (module.name.count('.') - 1) * "../"
-      if module.is_package() and "." in module.name:
-        url += "../"
-      if url == "":
-        url = "./"
-    return url
+      top_module_name = module.name.split('.')[0]
+
+    return pdoc.Module(sys.modules[top_module_name])
 
   def decode(s):
     if sys.version_info[0] < 3 and isinstance(s, str):
@@ -96,10 +86,10 @@
       return s
     return s[0:length] + '...'
 
-  def module_url(m):
+  def module_url(m, relative_to_m=module):
     """
     Returns a URL for `m`, which must be an instance of `Module`.
-    Also, `m` must be a submodule of the module being documented.
+    relative_to_m default to the module being documented
 
     Namely, '.' import separators are replaced with '/' URL
     separators. Also, packages are translated as directories
@@ -108,14 +98,16 @@
     `.m.html` suffix. (Given default values of
     `pdoc.html_module_suffix` and `pdoc.html_package_name`.)
     """
-    if module.name == m.name:
+    if relative_to_m.name == m.name:
       return ''
 
     if len(link_prefix) > 0:
-      base = m.name
+      url = m.name.replace('.', '/')
     else:
-      base = m.name[len(module.name)+1:]
-    url = base.replace('.', '/')
+      url = relative_to_m.name.count('.') * '../'
+      if relative_to_m.is_package():
+        url += "../"
+      url = url + m.name.replace('.', '/')
     if m.is_package():
       url += '/%s' % pdoc.html_package_name
     else:
@@ -376,15 +368,7 @@
   % if list_module.submodules():    
     <ul>
     % for m in list_module.submodules():
-      <%
-      url = top_module_url(current_module)
-      url += "/".join(m.name.split(".")[1:])
-      if m.is_package():
-        url += '/%s' % pdoc.html_package_name
-      else:
-        url += pdoc.html_module_suffix
-      %>
-      <li class="mono"><a href="${url}">${m.refname}</a></li>
+      <li class="mono"><a href="${module_url(m, current_module)}">${m.refname}</a></li>
       ${list_module_tree(m, current_module)}
     % endfor
     </ul>
@@ -431,9 +415,11 @@
     </li>
     % endif
 
-    <% top_module_link = "%s%s" % (top_module_url(module), pdoc.html_package_name) %>
-    <li class="set"><h3>Module Index :: <a href="${top_module_link}">${module.name.split('.')[0]}</a></h3>
-    ${list_module_tree(top_module(module), module)}
+    <%
+    top_module = get_top_module(module)
+    %>
+    <li class="set"><h3>Module Index :: <a href="${module_url(top_module, module)}">${top_module.name}</a></h3>
+    ${list_module_tree(top_module, module)}
 
     </ul>
   </div>
