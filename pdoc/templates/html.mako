@@ -238,7 +238,7 @@
   <%def name="show_func(f)">
   <div class="item">
     <div class="name def" id="${f.refname}">
-    <p>def ${ident(f.name)}(</p><p>${f.spec() | h})</p>
+    <p>${f.funcdef()} ${ident(f.name)}(</p><p>${f.spec() | h})</p>
     </div>
     ${show_inheritance(f)}
     ${show_desc(f)}
