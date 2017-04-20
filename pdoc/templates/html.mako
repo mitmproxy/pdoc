@@ -47,7 +47,11 @@
     if not use_pygments:  # :-(
       return '<pre><code>%s</code></pre>' % (''.join(lines))
 
-    pylex = pygments.lexers.PythonLexer()
+    if sys.version_info[0] < 3:
+        pylex = pygments.lexers.PythonLexer()
+    else:
+        pylex = pygments.lexers.Python3Lexer()
+
     htmlform = pygments.formatters.HtmlFormatter(cssclass='codehilite')
     return pygments.highlight(''.join(lines), pylex, htmlform)
 
