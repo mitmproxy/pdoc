@@ -992,8 +992,7 @@ class Class (Doc):
         variables are only discoverable by traversing the abstract
         syntax tree.
         """
-        mro = filter(lambda c: c != self and isinstance(c, Class),
-                     self.module.mro(self))
+        mro = [c for c in self.module.mro(self) if c != self and isinstance(c, Class)]
 
         def search(d, fdoc):
             for c in mro:
