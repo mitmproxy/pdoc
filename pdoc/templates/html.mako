@@ -20,6 +20,15 @@
   # Whether we're showing the module list or a single module.
   module_list = 'modules' in context.keys()
 
+
+  def get_top_module(module):
+    if 'top_module' in context.keys() and module.name.startswith(context["top_module"]):
+      top_module_name = context["top_module"]
+    else:
+      top_module_name = module.name.split('.')[0]
+
+    return pdoc.Module(sys.modules[top_module_name])
+
   def decode(s):
     if sys.version_info[0] < 3 and isinstance(s, str):
       return s.decode('utf-8', 'ignore')
@@ -76,10 +85,10 @@
       return s
     return s[0:length] + '...'
 
-  def module_url(m):
+  def module_url(m, relative_to_m=module):
     """
     Returns a URL for `m`, which must be an instance of `Module`.
-    Also, `m` must be a submodule of the module being documented.
+    relative_to_m default to the module being documented
 
     Namely, '.' import separators are replaced with '/' URL
     separators. Also, packages are translated as directories
@@ -88,14 +97,16 @@
     `.m.html` suffix. (Given default values of
     `pdoc.html_module_suffix` and `pdoc.html_package_name`.)
     """
-    if module.name == m.name:
+    if relative_to_m.name == m.name:
       return ''
 
     if len(link_prefix) > 0:
-      base = m.name
+      url = m.name.replace('.', '/')
     else:
-      base = m.name[len(module.name)+1:]
-    url = base.replace('.', '/')
+      url = relative_to_m.name.count('.') * '../'
+      if relative_to_m.is_package():
+        url += "../"
+      url = url + m.name.replace('.', '/')
     if m.is_package():
       url += '/%s' % pdoc.html_package_name
     else:
@@ -352,6 +363,17 @@
   </section>
 </%def>
 
+<%def name="list_module_tree(list_module, current_module)">
+  % if list_module.submodules():    
+    <ul>
+    % for m in list_module.submodules():
+      <li class="mono"><a href="${module_url(m, current_module)}">${m.refname}</a></li>
+      ${list_module_tree(m, current_module)}
+    % endfor
+    </ul>
+  % endif
+</%def>
+
 <%def name="module_index(module)">
   <%
   variables = module.variables()
@@ -392,15 +414,12 @@
     </li>
     % endif
 
-    % if len(submodules) > 0:
-    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
-      <ul>
-      % for m in submodules:
-        <li class="mono">${link(m.refname)}</li>
-      % endfor
-      </ul>
-    </li>
-    % endif
+    <%
+    top_module = get_top_module(module)
+    %>
+    <li class="set"><h3>Module Index :: <a href="${module_url(top_module, module)}">${top_module.name}</a></h3>
+    ${list_module_tree(top_module, module)}
+
     </ul>
   </div>
 </%def>

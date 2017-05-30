@@ -339,7 +339,8 @@ def html_out(m, html=True):
                 out = m.html(external_links=args.external_links,
                              link_prefix=args.link_prefix,
                              http_server=args.http_html,
-                             source=not args.html_no_source)
+                             source=not args.html_no_source,
+                             top_module=args.module_name)
             print(out, file=w)
     except Exception:
         try:
