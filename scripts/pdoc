@@ -77,6 +77,9 @@ aa('--http-dir', type=str, default=default_http_dir,
         'server.')
 aa('--http-host', type=str, default='localhost',
    help='The host on which to run the HTTP server.')
+aa('--docstring-style', type=str, default=None,
+   help='If using "google" or "numpy" docstring style, set here.',
+   choices=['google', 'numpy'])
 aa('--http-port', type=int, default=8080,
    help='The port on which to run the HTTP server.')
 aa('--http-html', action='store_true',
@@ -339,7 +342,8 @@ def html_out(m, html=True):
                 out = m.html(external_links=args.external_links,
                              link_prefix=args.link_prefix,
                              http_server=args.http_html,
-                             source=not args.html_no_source)
+                             source=not args.html_no_source,
+                             docstring_style=args.docstring_style)
             print(out, file=w)
     except Exception:
         try:

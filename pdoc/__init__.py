@@ -238,7 +238,8 @@ object's `directories` attribute.
 
 
 def html(module_name, docfilter=None, allsubmodules=False,
-         external_links=False, link_prefix='', source=True):
+         external_links=False, link_prefix='', source=True,
+         docstring_style=None):
     """
     Returns the documentation for the module `module_name` in HTML
     format. The module must be importable.
@@ -262,12 +263,16 @@ def html(module_name, docfilter=None, allsubmodules=False,
     If `source` is `True`, then source code will be retrieved for
     every Python object whenever possible. This can dramatically
     decrease performance when documenting large modules.
+
+    If `docstring_style` is set, then the docstring will be processed
+    through a Preprocessor before being sent for rendering in Mako.
     """
     mod = Module(import_module(module_name),
                  docfilter=docfilter,
                  allsubmodules=allsubmodules)
     return mod.html(external_links=external_links,
-                    link_prefix=link_prefix, source=source)
+                    link_prefix=link_prefix, source=source,
+                    docstring_style=docstring_style)
 
 
 def text(module_name, docfilter=None, allsubmodules=False):
@@ -653,7 +658,7 @@ class Module (Doc):
         return text
 
     def html(self, external_links=False, link_prefix='',
-             source=True, **kwargs):
+             source=True, docstring_style=None, **kwargs):
         """
         Returns the documentation for this module as
         self-contained HTML.
@@ -668,6 +673,9 @@ class Module (Doc):
         every Python object whenever possible. This can dramatically
         decrease performance when documenting large modules.
 
+        If `docstring_style` is set, then the docstring will be processed
+        through a Preprocessor before being sent for rendering in Mako.
+
         `kwargs` is passed to the `mako` render function.
         """
         t = _get_tpl('/html.mako')
@@ -675,6 +683,7 @@ class Module (Doc):
                      external_links=external_links,
                      link_prefix=link_prefix,
                      show_source_code=source,
+                     docstring_style=docstring_style,
                      **kwargs)
         return t.strip()
 

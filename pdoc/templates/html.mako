@@ -59,6 +59,25 @@
       return matched
     return '[`%s`](%s)' % (name, url)
 
+
+  def _pproc_google(s):
+    s = re.sub(r"(Arguments|Returns|Raises)\:$",
+               r"<h2 style='font-size:125% !important'>\1</h2>",
+               s, flags=re.MULTILINE)
+
+    s = re.sub(r"^\s*(.+[\(.+\)]*)\: ",
+               r"&emsp;&emsp;&emsp;&emsp;<b>\1</b>: ",
+               s, flags=re.MULTILINE)
+
+    s = re.sub(r"^\s*(None)",
+               r"&emsp;&emsp;&emsp;&emsp;<b>\1</b>",
+               s, flags=re.MULTILINE)
+    return s
+
+  Preprocessors = {
+    'google': _pproc_google
+  }
+
   def mark(s, linky=True):
     if linky:
       s, _ = re.subn('\b\n\b', ' ', s)
@@ -66,8 +85,16 @@
       s, _ = re.subn('`[^`]+`', linkify, s)
 
     extensions = []
+
     if use_pygments:
-      extensions = ['markdown.extensions.codehilite(linenums=False)']
+      extensions.append('markdown.extensions.codehilite(linenums=False)')
+
+    # We may want to make this optional as well?
+    extensions.append('markdown.extensions.nl2br')
+
+    if docstring_style:
+        s = Preprocessors[docstring_style](s)
+
     s = markdown.markdown(s.strip(), extensions=extensions)
     return s
 
