@@ -28,6 +28,9 @@
     font-size: 130%;
     margin: 0 0 15px 0;
   }
+  #nav > * + * {
+    margin-left: 1em;
+  }
 
   #top {
     display: block;
