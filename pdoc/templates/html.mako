@@ -254,6 +254,20 @@
         :: <a href="/${parent.replace('.', '/')}">${parent}</a>
       % endfor
     </p>
+  % else:
+    <p id="nav">
+      <% parts = module.name.split('.') %>
+      % for i, m in enumerate(parts[:-1]):
+            <%
+            url = (len(parts) - (i+1+1)) * "../"
+            if module.is_package():
+                url += "../"
+            url += "%s" % pdoc.html_package_name
+            %>
+            <a href="${url}">${m}</a> ::
+      % endfor
+      <a href="${module_url(module)}">${module.refname}</a>
+    </p>
   % endif
 
   <header id="section-intro">
