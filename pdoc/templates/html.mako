@@ -2,6 +2,8 @@
   import re
   import sys
 
+  import docutils
+  import docutils.core
   import markdown
   try:
     import pygments
@@ -65,11 +67,19 @@
     if not module_list:
       s, _ = re.subn('`[^`]+`', linkify, s)
 
-    extensions = []
-    if use_pygments:
-      extensions = ['markdown.extensions.codehilite(linenums=False)']
-    s = markdown.markdown(s.strip(), extensions=extensions)
-    return s
+    if docformat == "markdown":
+      extensions = []
+      if use_pygments:
+        extensions = ['markdown.extensions.codehilite(linenums=False)']
+      m = markdown.markdown(s.strip(), extensions=extensions)
+    elif docformat == "restructuredtext":
+      m = docutils.core.publish_parts(s, writer_name='html')['html_body']
+    else:
+      # e.g. plaintext
+      m = "<pre>%s</pre>" % s
+    # For debugging:
+    # m = "<p>Given:</p><pre>%s</pre>\n<p>Treated as %s, giving:</p>\n%s" % (s, docformat, m)
+    return m
 
   def glimpse(s, length=100):
     if len(s) < length:
