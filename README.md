@@ -16,8 +16,8 @@ Prominent features include:
   [namedtuple](http://docs.python.org/2.7/library/collections.html#namedtuple-factory-function-for-tuples-with-named-fields)),
   the special variable `__pdoc__` can be used in your module to
   document any identifier in your public interface.
-* Usage is simple. Just write your documentation as Markdown. There are no 
-  added special syntax rules.
+* Usage is simple. Just write all your docstring documentation as Markdown
+  (default), or reStructuredText. There are no added special syntax rules.
 * `pdoc` respects your `__all__` variable when present.
 * `pdoc` will automatically link identifiers in your docstrings to its
   corresponding documentation.

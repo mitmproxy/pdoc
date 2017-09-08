@@ -42,6 +42,9 @@ aa('ident_name', type=str, nargs='?',
         'Has no effect when --http is set.')
 aa('--version', action='store_true',
    help='Print the version of pdoc and exit.')
+aa('--docformat', type=str, default='markdown',
+   help='The markup language used for the docstring content.',
+   choices=['markdown', 'restructuredtext', 'plaintext'])
 aa('--html', action='store_true',
    help='When set, the output will be HTML formatted.')
 aa('--html-dir', type=str, default='.',
@@ -339,7 +342,8 @@ def html_out(m, html=True):
                 out = m.html(external_links=args.external_links,
                              link_prefix=args.link_prefix,
                              http_server=args.http_html,
-                             source=not args.html_no_source)
+                             source=not args.html_no_source,
+			     docformat=args.docformat)
             print(out, file=w)
     except Exception:
         try:

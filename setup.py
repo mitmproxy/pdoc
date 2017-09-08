@@ -50,7 +50,7 @@ setup(
                ],
     scripts=['scripts/pdoc'],
     provides=['pdoc'],
-    requires=['argparse', 'mako', 'markdown'],
+    requires=['argparse', 'docutils', 'mako', 'markdown'],
     install_requires=install_requires,
     extras_require={'syntax_highlighting': ['pygments']},
 )
