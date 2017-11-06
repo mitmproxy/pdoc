@@ -48,7 +48,7 @@ setup(
                                 'UNLICENSE', 'INSTALL', 'CHANGELOG']),
                 ('share/doc/pdoc', ['doc/pdoc/index.html']),
                ],
-    scripts=['scripts/pdoc'],
+    entry_points={'console_scripts':['pdoc = pdoc.cli:cli'] },
     provides=['pdoc'],
     requires=['argparse', 'mako', 'markdown'],
     install_requires=install_requires,
