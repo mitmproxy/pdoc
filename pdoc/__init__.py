@@ -1114,11 +1114,20 @@ class Function (Doc):
         if s.varargs is not None:
             params.append('*%s' % s.varargs)
 
-        # TODO: This needs to be adjusted in Python 3. There's more stuff
-        #       returned from getfullargspec than what we're looking at here.
+        kwonlyargs = getattr(s, 'kwonlyargs', None)
+        if kwonlyargs:
+            if s.varargs is None:
+                params.append('*')
+            for param in kwonlyargs:
+                try:
+                    params.append('%s=%s' % (param, repr(s.kwonlydefaults[param])))
+                except KeyError:
+                    params.append(param)
+
         keywords = getattr(s, 'varkw', getattr(s, 'keywords', None))
         if keywords is not None:
             params.append('**%s' % keywords)
+        # TODO: The only thing now missing for Python 3 are type annotations
         return params
 
     def __lt__(self, other):
