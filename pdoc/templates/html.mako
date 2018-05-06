@@ -1,4 +1,5 @@
 <%
+  import os
   import re
   import sys
 
@@ -91,13 +92,15 @@
     if module.name == m.name:
       return ''
 
-    if len(link_prefix) > 0:
-      base = m.name
-    else:
-      base = m.name[len(module.name)+1:]
-    url = base.replace('.', '/')
+    base = m.name.replace('.', '/')
+    if len(link_prefix) == 0:
+      base = os.path.relpath(base, module.name.replace('.', '/'))
+    url = (base[len('../'):] if base.startswith('../') else
+           '' if base == '..' else
+           base)
     if m.is_package():
-      url += '/%s' % pdoc.html_package_name
+      index = pdoc.html_package_name
+      url = url + '/' + index if url else index
     else:
       url += pdoc.html_module_suffix
     return link_prefix + url
