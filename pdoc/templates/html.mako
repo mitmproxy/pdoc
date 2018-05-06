@@ -361,10 +361,18 @@
   classes = module.classes()
   functions = module.functions()
   submodules = module.submodules()
+  supermodule = module.supermodule
   %>
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
+    % if supermodule:
+    <li class="set"><h3>Super-module</h3>
+      <ul>
+        <li class="mono">${link(supermodule.refname)}</li>
+      </ul>
+    </li>
+    % endif
     % if len(variables) > 0:
     <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
       ${show_column_list(map(lambda v: link(v.refname), variables))}
