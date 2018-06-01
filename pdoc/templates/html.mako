@@ -173,7 +173,7 @@
   inherits = (hasattr(d, 'inherits')
            and (len(d.docstring) == 0
             or d.docstring == d.inherits.docstring))
-  docstring = (d.inherits.docstring if inherits else d.docstring).strip()
+  docstring = decode(d.inherits.docstring if inherits else d.docstring).strip()
   if limit is not None:
     docstring = glimpse(docstring, limit)
   %>
