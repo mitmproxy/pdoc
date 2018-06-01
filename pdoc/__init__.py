@@ -1078,6 +1078,33 @@ class Function (Doc):
         else:
             return '%s.%s' % (self.cls.refname, self.name)
 
+    def funcdef(self):
+        """
+        Generates the string of keywords used to define the function, for example `def` or
+        `async def`.
+        """
+        keywords = []
+
+        if self._is_async():
+            keywords.append("async")
+
+        keywords.append("def")
+
+        return " ".join(keywords)
+
+    def _is_async(self):
+        """
+        Returns whether is function is asynchronous, either as a coroutine or an async
+        generator.
+        """
+        try:
+            # Both of these are required because coroutines aren't classified as async
+            # generators and vice versa.
+            return inspect.iscoroutinefunction(self.func) or \
+                   inspect.isasyncgenfunction(self.func)
+        except AttributeError:
+            return False
+
     def spec(self):
         """
         Returns a nicely formatted spec of the function's parameter
