@@ -42,7 +42,7 @@ Installation
     pip install pdoc
 
 Dependencies are [mako](https://pypi.python.org/pypi/Mako) and
-[markdown](https://pypi.python.org/pypi/Markdown). (If you're using Python
+[markdown2](https://pypi.python.org/pypi/markdown2). (If you're using Python
 2.6, then you'll also need [argparse](https://pypi.python.org/pypi/argparse).)
 
 [Pygments](https://pypi.python.org/pypi/Pygments) is an optional dependency. 

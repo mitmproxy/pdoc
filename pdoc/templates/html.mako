@@ -3,7 +3,7 @@
   import re
   import sys
 
-  import markdown
+  import markdown2
   try:
     import pygments
     import pygments.formatters
@@ -70,10 +70,8 @@
     if not module_list:
       s, _ = re.subn('`[^`]+`', linkify, s)
 
-    extensions = []
-    if use_pygments:
-      extensions = ['markdown.extensions.codehilite(linenums=False)']
-    s = markdown.markdown(s.strip(), extensions=extensions)
+    extensions = ["fenced-code-blocks"]
+    s = markdown2.markdown(s.strip(), extras=extensions)
     return s
 
   def glimpse(s, length=100):
