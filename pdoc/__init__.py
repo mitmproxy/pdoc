@@ -1051,7 +1051,7 @@ class Function (Doc):
         """
         super(Function, self).__init__(name, module, inspect.getdoc(func_obj))
 
-        self.func = func_obj
+        self.func = inspect.unwrap(func_obj)
         """The Python function object."""
 
         self.cls = cls
@@ -1078,19 +1078,59 @@ class Function (Doc):
         else:
             return '%s.%s' % (self.cls.refname, self.name)
 
+    def ann_clean(self, ann):
+        """
+        Returns a clean representation of an annotation. Actually
+        it makes all `<class 'xyz'>` appears as `xyz`.
+        """
+        # TODO: check if it's enough for most of typical annotation's
+        # expressions.
+        module_prefix = '%s.' % self.func.__module__
+        text = repr(ann)
+        text = text.replace("<class '", '')
+        text = text.replace("'>", "")
+        text = text.replace(module_prefix, '')
+        return text
+
     def spec(self):
         """
         Returns a nicely formatted spec of the function's parameter
         list as a string. This includes argument lists, keyword
-        arguments and default values.
+        arguments, default values and result (`return`) if any.
         """
-        return ', '.join(self.params())
+        params_spec = ', '.join(self.params())
+        result_spec = self.result()
+        return (
+            '(%s)' % params_spec
+            if result_spec is None
+            else '(%s) -> %s' % (params_spec, result_spec))
+
+    def result(self):
+        """
+        Returns a representation of the `return` annotation if any, or `None`
+        otherwise.
+        """
+        try:
+            getspec = getattr(inspect, 'getfullargspec', inspect.getargspec)
+            s = getspec(self.func)
+        except TypeError:
+            # I guess this is for C builtin functions?
+            return None
+        annotations = s.annotations if hasattr(s, 'annotations') else {}
+        # Don't check for `annotations['return']` being `None` as the
+        # return annotation may be explicitly the `None` expression; so check
+        # for the existence of an entry, explicitly too.
+        if 'return' in annotations:
+            ann = annotations['return']
+            return self.ann_clean(ann)
+        else:
+            return None
 
     def params(self):
         """
         Returns a list where each element is a nicely formatted
         parameter of this function. This includes argument lists,
-        keyword arguments and default values.
+        keyword arguments, default values and annotations if any.
         """
         def fmt_param(el):
             if isinstance(el, str) or isinstance(el, unicode):
@@ -1104,13 +1144,28 @@ class Function (Doc):
             # I guess this is for C builtin functions?
             return ['...']
 
+        # `annotations` exists only with `getfullargspec`, not `getargspec`.
+        annotations = s.annotations if hasattr(s, 'annotations') else {}
         params = []
         for i, param in enumerate(s.args):
+            ann = annotations[param] if param in annotations else None
             if s.defaults is not None and len(s.args) - i <= len(s.defaults):
                 defind = len(s.defaults) - (len(s.args) - i)
-                params.append('%s=%s' % (param, repr(s.defaults[defind])))
+                default_repr = repr(s.defaults[defind])
+                if ann is None:
+                    text = '%s=%s' % (param, default_repr)
+                else:
+                    ann_repr = self.ann_clean(ann)
+                    text = '%s: %s=%s' % (param, ann_repr, default_repr)
+                params.append(text)
             else:
-                params.append(fmt_param(param))
+                param_repr = fmt_param(param)
+                if ann is None:
+                    text = param_repr
+                else:
+                    ann_repr = self.ann_clean(ann)
+                    text = '%s: %s' % (param_repr, ann_repr)
+                params.append(text)
         if s.varargs is not None:
             params.append('*%s' % s.varargs)
 
@@ -1120,6 +1175,13 @@ class Function (Doc):
         if keywords is not None:
             params.append('**%s' % keywords)
         return params
+
+    def __lt__(self, other):
+        # Push __init__ to the top.
+        if '__init__' in (self.name, other.name):
+            return self.name != other.name and self.name == '__init__'
+        else:
+            return self.name < other.name
 
     def __lt__(self, other):
         # Push __init__ to the top.
