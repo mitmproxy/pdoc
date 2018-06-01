@@ -389,7 +389,9 @@ def process_html_out(impath):
         print(out)
 
 
-if __name__ == '__main__':
+def cli():
+    """ Command-line entry point """
+
     if args.version:
         print(pdoc.__version__)
         sys.exit(0)
@@ -504,3 +506,6 @@ if __name__ == '__main__':
         quit_if_exists(module)
         html_out(module, args.html)
         sys.exit(0)
+
+if __name__ == '__main__':
+    cli()
