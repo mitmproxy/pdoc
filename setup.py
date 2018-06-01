@@ -52,5 +52,5 @@ setup(
     provides=['pdoc'],
     requires=['argparse', 'mako', 'markdown'],
     install_requires=install_requires,
-    extras_require={'syntax_highlighting': ['pygments']},
+    extras_require={'syntax_highlighting': ['pygments>=0.10']},
 )
