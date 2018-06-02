@@ -48,8 +48,11 @@ setup(
     extras_require={
         "dev": {
             "flake8>=3.5, <3.6",
-            "pytest-cov>=2.5.1,<3",
             "pytest>=3.3,<4",
+            "pytest-cov>=2.5.1,<3",
+            "pytest-faulthandler>=1.3.1,<2",
+            "pytest-timeout>=1.2.1,<2",
+            "pytest-xdist>=1.22,<2",
         }
     },
     install_requires=["mako", "markdown", "pygments"],

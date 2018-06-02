@@ -1,0 +1,52 @@
+sudo: false
+language: python
+
+branches:
+  except:
+    - requires-io-master
+
+env:
+  global:
+    - CI_DEPS=codecov>=2.0.5
+    - CI_COMMANDS=codecov
+
+git:
+  depth: 10000
+
+matrix:
+  fast_finish: true
+  include:
+    - python: 3.6
+      env: TOXENV=py36
+      sudo: required
+    - python: "3.7-dev"
+      env: TOXENV=py37
+
+install:
+  - pip install tox virtualenv setuptools
+
+script:
+  # All these steps MUST succeed for the job to be successful!
+  # Using the after_success block DOES NOT capture errors.
+  # Pull requests might break our build - we need to check this.
+  # Pull requests are not allowed to upload build artifacts - enforced by cibuild script.
+  - |
+    if [[ $TRAVIS_COMMIT_MESSAGE = *"[notest]"* ]]; then
+      echo "!!!! Skipping tests."
+    else
+      tox -- --verbose --cov-report=term
+    fi
+
+
+notifications:
+  slack:
+      -rooms:
+          mitmproxy:YaDGC9Gt9TEM7o8zkC2OLNsu
+      on_success: change
+      on_failure: change
+      on_start: never
+
+cache:
+  directories:
+    - $HOME/.pyenv
+    - $HOME/.cache/pip
