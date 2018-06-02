@@ -6,3 +6,5 @@ dist
 *.egg-info
 *.pyc
 *.pyo
+venv
+.pytest_cache
