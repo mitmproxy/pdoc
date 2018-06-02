@@ -8,3 +8,4 @@ dist
 *.pyo
 venv
 .pytest_cache
+.coverage
