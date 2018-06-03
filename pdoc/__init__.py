@@ -178,7 +178,6 @@ License
 `pdoc` is in the public domain via the
 [UNLICENSE](http://unlicense.org).
 """
-from __future__ import absolute_import, division, print_function
 import ast
 import imp
 import inspect

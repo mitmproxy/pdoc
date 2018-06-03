@@ -5,13 +5,9 @@
   import sys
 
   import markdown
-  try:
-    import pygments
-    import pygments.formatters
-    import pygments.lexers
-    use_pygments = True
-  except ImportError:
-    use_pygments = False
+  import pygments
+  import pygments.formatters
+  import pygments.lexers
 
   import pdoc
 
@@ -46,8 +42,6 @@
         base_indent = len(indent.match(lines[0]).group(0))
         break
     lines = [line[base_indent:] for line in lines]
-    if not use_pygments:  # :-(
-      return '<pre><code>%s</code></pre>' % (''.join(lines))
 
     if sys.version_info[0] < 3:
         pylex = pygments.lexers.PythonLexer()
@@ -71,9 +65,7 @@
     if not module_list:
       s, _ = re.subn('`[^`]+`', linkify, s)
 
-    extensions = []
-    if use_pygments:
-      extensions = ['markdown.extensions.codehilite(linenums=False)']
+    extensions = ['markdown.extensions.codehilite(linenums=False)']
     s = markdown.markdown(s.strip(), extensions=extensions)
     return s
 
@@ -444,11 +436,9 @@
   ${css.pdoc()}
   </style>
 
-  % if use_pygments:
   <style type="text/css">
   ${pygments.formatters.HtmlFormatter().get_style_defs('.codehilite')}
   </style>
-  % endif
 
   <style type="text/css">
   ${css.post()}

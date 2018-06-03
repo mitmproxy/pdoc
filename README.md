@@ -1,3 +1,7 @@
+
+[![Build Status](https://travis-ci.org/mitmproxy/pdoc.svg?branch=master)](https://travis-ci.org/mitmproxy/pdoc)
+
+
 `pdoc` is a library and a command line program to discover the public
 interface of a Python module or package. The `pdoc` script can be used to
 generate plain text or HTML of a module's public interface, or it can be used

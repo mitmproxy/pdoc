@@ -1,12 +1,8 @@
 #!/usr/bin/env python2
 
-from __future__ import absolute_import, division, print_function
 import argparse
 
-try:
-    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-except ImportError:
-    from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import codecs
 import datetime
 import imp
@@ -19,12 +15,6 @@ import sys
 import tempfile
 
 import pdoc
-
-# `xrange` is `range` with Python3.
-try:
-    xrange = xrange
-except NameError:
-    xrange = range
 
 version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 default_http_dir = path.join(tempfile.gettempdir(), "pdoc-%s" % version_suffix)
