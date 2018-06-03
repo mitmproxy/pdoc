@@ -697,15 +697,16 @@ class Module (Doc):
 
     def mro(self, cls):
         """
-        Returns a method resolution list of documentation objects
+        Returns a method resolution list of ancestor documentation objects
         for `cls`, which must be a documentation object.
 
         The list will contain objects belonging to `pdoc.Class` or
         `pdoc.External`. Objects belonging to the former are exported
         classes either in this module or in one of its sub-modules.
         """
-        ups = inspect.getmro(cls.cls)
-        return list(map(lambda c: self.find_class(c), ups))
+        return [self.find_class(c)
+                for c in inspect.getmro(cls.cls)
+                if c not in (cls.cls, object)]
 
     def descendents(self, cls):
         """
