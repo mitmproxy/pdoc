@@ -10,6 +10,7 @@
   import pygments.lexers
 
   import pdoc.doc
+  import pdoc.render
 
   # From language reference, but adds '.' to allow fully qualified names.
   pyident = re.compile('^[a-zA-Z_][a-zA-Z0-9_.]+$')
@@ -96,10 +97,10 @@
            '' if base == '..' else
            base)
     if m.is_package():
-      index = pdoc.doc.html_package_name
+      index = pdoc.render.html_package_name
       url = url + '/' + index if url else index
     else:
-      url += pdoc.doc.html_module_suffix
+      url += pdoc.render.html_module_suffix
     return link_prefix + url
 
   def external_url(refname):

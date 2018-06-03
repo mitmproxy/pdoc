@@ -9,6 +9,7 @@ import tempfile
 import pdoc.web
 import pdoc.doc
 import pdoc.extract
+import pdoc.render
 
 version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 default_http_dir = os.path.join(tempfile.gettempdir(), "pdoc-%s" % version_suffix)
@@ -118,9 +119,9 @@ def _eprint(*args, **kwargs):
 def module_file(args, m):
     mbase = os.path.join(args.html_dir, *m.name.split("."))
     if m.is_package():
-        return os.path.join(mbase, pdoc.doc.html_package_name)
+        return os.path.join(mbase, pdoc.render.html_package_name)
     else:
-        return "%s%s" % (mbase, pdoc.doc.html_module_suffix)
+        return "%s%s" % (mbase, pdoc.render.html_module_suffix)
 
 
 def quit_if_exists(args, m):
@@ -150,12 +151,12 @@ def html_out(args, m, html=True):
     try:
         with codecs.open(f, "w+", "utf-8") as w:
             if not html:
-                out = m.text()
+                out = pdoc.render.text(m)
             else:
-                out = m.html(
+                out = pdoc.render.html(
+                    m,
                     external_links=args.external_links,
                     link_prefix=args.link_prefix,
-                    http_server=args.http_html,
                     source=not args.html_no_source,
                 )
             print(out, file=w)
@@ -226,7 +227,7 @@ def main():
 
     # Plain text?
     if not args.html and not args.all_submodules:
-        output = module.text()
+        output = pdoc.render.text(module)
         try:
             print(output)
         except IOError as e:

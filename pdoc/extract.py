@@ -52,4 +52,3 @@ def extract_module(spec: str):
             return importlib.import_module(spec)
         except ModuleNotFoundError:
             raise ExtractError(f"Module not found: {spec}")
-

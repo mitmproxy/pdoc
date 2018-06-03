@@ -11,3 +11,4 @@ venv
 .coverage
 .tox
 .mypy_cache
+tmp
