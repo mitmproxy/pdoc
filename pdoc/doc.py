@@ -938,8 +938,8 @@ class Function(Doc):
 
     def funcdef(self):
         """
-        Generates the string of keywords used to define the function, for example `def` or
-        `async def`.
+        Generates the string of keywords used to define the function, for
+        example `def` or `async def`.
         """
         keywords = []
 
@@ -952,12 +952,12 @@ class Function(Doc):
 
     def _is_async(self):
         """
-        Returns whether is function is asynchronous, either as a coroutine or an async
-        generator.
+        Returns whether is function is asynchronous, either as a coroutine or an
+        async generator.
         """
         try:
-            # Both of these are required because coroutines aren't classified as async
-            # generators and vice versa.
+            # Both of these are required because coroutines aren't classified as
+            # async generators and vice versa.
             return inspect.iscoroutinefunction(self.func) or inspect.isasyncgenfunction(
                 self.func
             )

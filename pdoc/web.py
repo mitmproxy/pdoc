@@ -3,54 +3,9 @@ import pkgutil
 import re
 import os.path
 import codecs
-import sys
-import subprocess
-import datetime
 import logging
 
 import pdoc.doc
-
-
-def last_modified(fp):
-    try:
-        return datetime.datetime.fromtimestamp(os.stat(fp).st_mtime)
-    except:
-        return datetime.datetime.min
-
-
-def process_html_out(args, impath):
-    # This unfortunate kludge is the only reasonable way I could think of
-    # to support reloading of modules. It's just too difficult to get
-    # modules to reload in the same process.
-
-    cmd = [
-        sys.executable,
-        os.path.realpath(__file__),
-        "--html",
-        "--html-dir",
-        args.html_dir,
-        "--http-html",
-        "--overwrite",
-        "--link-prefix",
-        args.link_prefix,
-    ]
-    if args.external_links:
-        cmd.append("--external-links")
-    if args.all_submodules:
-        cmd.append("--all-submodules")
-    if args.only_pypath:
-        cmd.append("--only-pypath")
-    if args.html_no_source:
-        cmd.append("--html-no-source")
-    if args.template_dir:
-        cmd.append("--template-dir")
-        cmd.append(args.template_dir)
-    cmd.append(impath)
-
-    # Can we make a good faith attempt to support 2.6?
-    # YES WE CAN!
-    subprocess.check_call(cmd)
-    print(sys.executable)
 
 
 def quick_desc(imp, name, ispkg):
