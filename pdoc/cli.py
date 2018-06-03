@@ -1,7 +1,6 @@
 import argparse
 
 import codecs
-import imp
 import os
 import os.path
 import sys
@@ -9,6 +8,7 @@ import tempfile
 
 import pdoc.web
 import pdoc.doc
+import pdoc.extract
 
 version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 default_http_dir = os.path.join(tempfile.gettempdir(), "pdoc-%s" % version_suffix)
@@ -81,11 +81,6 @@ aa(
     help="A prefix to use for every link in the generated documentation. "
     "No link prefix results in all links being relative. "
     "Has no effect when combined with --http.",
-)
-aa(
-    "--only-pypath",
-    action="store_true",
-    help="When set, only modules in your PYTHONPATH will be documented.",
 )
 aa(
     "--http",
@@ -182,13 +177,6 @@ def main():
         print(pdoc.doc.__version__)
         sys.exit(0)
 
-    # We close stdin because some modules, upon import, are not very polite
-    # and block on stdin.
-    try:
-        sys.stdin.close()
-    except:
-        pass
-
     if not args.http and args.module_name is None:
         _eprint("No module name specified.")
         sys.exit(1)
@@ -200,11 +188,6 @@ def main():
         args.html_dir = args.http_dir
         args.overwrite = True
         args.link_prefix = "/"
-
-    # If PYTHONPATH is set, let it override everything if we want it to.
-    pypath = os.getenv("PYTHONPATH")
-    if args.only_pypath and pypath is not None and len(pypath) > 0:
-        pdoc.doc.import_path = pypath.split(os.path.pathsep)
 
     if args.http:
         if args.module_name is not None:
@@ -234,38 +217,12 @@ def main():
                 return search in o.doc or search in o.doc_init
             return False
 
-    # Try to do a real import first. I think it's better to prefer
-    # import paths over files. If a file is really necessary, then
-    # specify the absolute path, which is guaranteed not to be a
-    # Python import path.
     try:
-        module = pdoc.doc.import_module(args.module_name)
-    except Exception as e:
-        module = None
-
-    # Get the module that we're documenting. Accommodate for import paths,
-    # files and directories.
-    if module is None:
-        isdir = os.path.isdir(args.module_name)
-        isfile = os.path.isfile(args.module_name)
-        if isdir or isfile:
-            fp = os.path.realpath(args.module_name)
-            module_name = os.path.basename(fp)
-            if isdir:
-                fp = os.path.join(fp, "__init__.py")
-            else:
-                module_name, _ = os.path.splitext(module_name)
-
-            # Use a special module name to avoid import conflicts.
-            # It is hidden from view via the `Module` class.
-            with open(fp) as f:
-                module = imp.load_source("__pdoc_file_module__", fp, f)
-                if isdir:
-                    module.__path__ = [os.path.realpath(args.module_name)]
-                module.__pdoc_module_name = module_name
-        else:
-            module = pdoc.doc.import_module(args.module_name)
-    module = pdoc.doc.Module(module, docfilter=docfilter, allsubmodules=args.all_submodules)
+        m = pdoc.extract.extract_module(args.module_name)
+    except pdoc.extract.ExtractError as e:
+        _eprint(str(e))
+        sys.exit(1)
+    module = pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules)
 
     # Plain text?
     if not args.html and not args.all_submodules:

@@ -1,14 +1,15 @@
 import ast
-import imp
 import inspect
 import os
 import os.path as path
 import pkgutil
 import re
-import sys
 
 from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
+
+import pdoc.extract
+
 
 __version__ = "0.3.2"
 """
@@ -25,13 +26,6 @@ The suffix to use for module HTML files. By default, this is set to
 html_package_name = "index.html"
 """
 The file name to use for a package's `__init__.py` module.
-"""
-
-import_path = sys.path[:]
-"""
-A list of paths to restrict imports to. Any module that cannot be
-found in `import_path` will not be imported. By default, it is set to a
-copy of `sys.path` at initialization.
 """
 
 _template_path = [path.join(path.dirname(__file__), "templates")]
@@ -87,7 +81,7 @@ def html(
     decrease performance when documenting large modules.
     """
     mod = Module(
-        import_module(module_name), docfilter=docfilter, allsubmodules=allsubmodules
+        pdoc.extract.extract_module(module_name), docfilter=docfilter, allsubmodules=allsubmodules
     )
     return mod.html(
         external_links=external_links, link_prefix=link_prefix, source=source
@@ -110,45 +104,9 @@ def text(module_name, docfilter=None, allsubmodules=False):
     of whether `__all__` contains it.
     """
     mod = Module(
-        import_module(module_name), docfilter=docfilter, allsubmodules=allsubmodules
+        pdoc.extract.extract_module(module_name), docfilter=docfilter, allsubmodules=allsubmodules
     )
     return mod.text()
-
-
-def import_module(module_name):
-    """
-    Imports a module. A single point of truth for importing modules to
-    be documented by `pdoc`. In particular, it makes sure that the top
-    module in `module_name` can be imported by using only the paths in
-    `pdoc.import_path`.
-
-    If a module has already been imported, then its corresponding entry
-    in `sys.modules` is returned. This means that modules that have
-    changed on disk cannot be re-imported in the same process and have
-    its documentation updated.
-    """
-    if import_path != sys.path:
-        # Such a kludge. Only restrict imports if the `import_path` has
-        # been changed. We don't want to always restrict imports, since
-        # providing a path to `imp.find_module` stops it from searching
-        # in special locations for built ins or frozen modules.
-        #
-        # The problem here is that this relies on the `sys.path` not being
-        # independently changed since the initialization of this module.
-        # If it is changed, then some packages may fail.
-        #
-        # Any other options available?
-
-        # Raises an exception if the parent module cannot be imported.
-        # This hopefully ensures that we only explicitly import modules
-        # contained in `pdoc.import_path`.
-        imp.find_module(module_name.split(".")[0], import_path)
-
-    if module_name in sys.modules:
-        return sys.modules[module_name]
-    else:
-        __import__(module_name)
-        return sys.modules[module_name]
 
 
 def _source(obj):
@@ -181,28 +139,6 @@ def _get_tpl(name):
         locs = [path.join(p, name.lstrip("/")) for p in _template_path]
         raise IOError(2, "No template at any of: %s" % ", ".join(locs))
     return t
-
-
-def _safe_import(module_name):
-    """
-    A function for safely importing `module_name`, where errors are
-    suppressed and `stdout` and `stderr` are redirected to a null
-    device. The obligation is on the caller to close `stdin` in order
-    to avoid impolite modules from blocking on `stdin` when imported.
-    """
-
-    class _Null(object):
-        def write(self, *_):
-            pass
-
-    sout, serr = sys.stdout, sys.stderr
-    sys.stdout, sys.stderr = _Null(), _Null()
-    try:
-        m = import_module(module_name)
-    except:
-        m = None
-    sys.stdout, sys.stderr = sout, serr
-    return m
 
 
 def _var_docstrings(tree, module, cls=None, init=False):
@@ -436,7 +372,7 @@ class Module(Doc):
                     continue
 
                 fullname = "%s.%s" % (self.name, root)
-                m = _safe_import(fullname)
+                m = pdoc.extract.extract_module(fullname)
                 if m is None:
                     continue
                 self.doc[root] = self.__new_submodule(root, m)
