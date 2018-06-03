@@ -13,6 +13,7 @@ The current version of pdoc. This value is read from `setup.py`.
 
 __pdoc__ = {}
 
+
 def _source(obj):
     """
     Returns the source code of the Python object `obj` as a list of

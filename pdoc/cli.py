@@ -4,7 +4,6 @@ import codecs
 import os
 import os.path
 import sys
-import tempfile
 
 import pdoc.web
 import pdoc.doc
@@ -12,7 +11,6 @@ import pdoc.extract
 import pdoc.render
 
 version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
-default_http_dir = os.path.join(tempfile.gettempdir(), "pdoc-%s" % version_suffix)
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -89,12 +87,6 @@ aa(
     help="When set, pdoc will run as an HTTP server providing documentation "
     "of all installed modules. Only modules found in PYTHONPATH will be "
     "listed.",
-)
-aa(
-    "--http-dir",
-    type=str,
-    default=default_http_dir,
-    help="The directory to cache HTML documentation when running as an HTTP " "server.",
 )
 aa(
     "--http-host",
@@ -186,7 +178,6 @@ def main():
     if args.http:
         args.html = True
         args.external_links = True
-        args.html_dir = args.http_dir
         args.overwrite = True
         args.link_prefix = "/"
 
@@ -245,8 +236,7 @@ def main():
     # is created, and output is written to {MODULE_NAME}/index.html.
     # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
     # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
-    # so on... The same rules apply for `http_dir` when `pdoc` is run as an
-    # HTTP server.
+    # so on...
     if not args.http:
         quit_if_exists(args, module)
         html_out(args, module, args.html)
