@@ -30,13 +30,12 @@ included with this module.
 
 Compatibility
 -------------
-`pdoc` has been tested on Python 2.6, 2.7 and 3.3. It seems to work
-on all three.
+`pdoc` requires Python 3.6 or later.
 
 
 Contributing
 ------------
-`pdoc` [is on GitHub](https://github.com/BurntSushi/pdoc). Pull
+`pdoc` [is on GitHub](https://github.com/mitmproxy/pdoc). Pull
 requests and bug reports are welcome.
 
 
@@ -171,12 +170,6 @@ of a module or in the definition of a class.
 
 If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
-
-
-License
--------
-`pdoc` is in the public domain via the
-[UNLICENSE](http://unlicense.org).
 """
 import ast
 import imp

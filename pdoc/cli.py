@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import argparse
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
