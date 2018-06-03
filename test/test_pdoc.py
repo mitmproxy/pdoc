@@ -2,4 +2,4 @@ import pdoc
 
 
 def test_pdoc():
-    print(pdoc)
+    assert pdoc

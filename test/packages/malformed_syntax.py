@@ -1,0 +1,3 @@
+
+# Syntax error
+class

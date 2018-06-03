@@ -183,12 +183,6 @@ def _get_tpl(name):
     return t
 
 
-def _eprint(*args, **kwargs):
-    """Print to stderr."""
-    kwargs["file"] = sys.stderr
-    print(*args, **kwargs)
-
-
 def _safe_import(module_name):
     """
     A function for safely importing `module_name`, where errors are
