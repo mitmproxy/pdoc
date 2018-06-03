@@ -1,5 +1,6 @@
 ## -*- coding: utf-8 -*-
 <%
+  import os
   import re
   import sys
 
@@ -96,13 +97,15 @@
     if module.name == m.name:
       return ''
 
-    if len(link_prefix) > 0:
-      base = m.name
-    else:
-      base = m.name[len(module.name)+1:]
-    url = base.replace('.', '/')
+    base = m.name.replace('.', '/')
+    if len(link_prefix) == 0:
+      base = os.path.relpath(base, module.name.replace('.', '/'))
+    url = (base[len('../'):] if base.startswith('../') else
+           '' if base == '..' else
+           base)
     if m.is_package():
-      url += '/%s' % pdoc.html_package_name
+      index = pdoc.html_package_name
+      url = url + '/' + index if url else index
     else:
       url += pdoc.html_module_suffix
     return link_prefix + url
@@ -363,10 +366,18 @@
   classes = module.classes()
   functions = module.functions()
   submodules = module.submodules()
+  supermodule = module.supermodule
   %>
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
+    % if supermodule:
+    <li class="set"><h3>Super-module</h3>
+      <ul>
+        <li class="mono">${link(supermodule.refname)}</li>
+      </ul>
+    </li>
+    % endif
     % if len(variables) > 0:
     <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
       ${show_column_list(map(lambda v: link(v.refname), variables))}

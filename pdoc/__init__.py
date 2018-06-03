@@ -521,7 +521,8 @@ class Module (Doc):
         it was imported. It is always an absolute import path.
         """
 
-    def __init__(self, module, docfilter=None, allsubmodules=False):
+    def __init__(self, module, docfilter=None, allsubmodules=False,
+                 supermodule=None):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
@@ -543,6 +544,7 @@ class Module (Doc):
         self._filtering = docfilter is not None
         self._docfilter = (lambda _: True) if docfilter is None else docfilter
         self._allsubmodules = allsubmodules
+        self.supermodule = supermodule
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
@@ -750,9 +752,9 @@ class Module (Doc):
                 return doc_cls
         return External('%s.%s' % (cls.__module__, cls.__name__))
 
-    def find_ident(self, name):
+    def find_ident(self, name, _seen=None):
         """
-        Searches this module and **all** of its sub-modules for an
+        Searches this module and **all** of its sub/super-modules for an
         identifier with name `name` in its list of exported
         identifiers according to `pdoc`. Note that unexported
         sub-modules are searched.
@@ -764,12 +766,26 @@ class Module (Doc):
         returned. If one cannot be found, then an instance of
         `External` is returned populated with the given identifier.
         """
+        _seen = _seen or set()
+        if self in _seen:
+            return None
+        _seen.add(self)
+
+        if name == self.refname:
+            return self
         if name in self.refdoc:
             return self.refdoc[name]
         for module in self.submodules():
-            o = module.find_ident(name)
-            if not isinstance(o, External):
+            o = module.find_ident(name, _seen=_seen)
+            if not isinstance(o, (External, type(None))):
                 return o
+        # Traverse also up-level super-modules
+        module = self.supermodule
+        while module is not None:
+            o = module.find_ident(name, _seen=_seen)
+            if not isinstance(o, (External, type(None))):
+                return o
+            module = module.supermodule
         return External(name)
 
     def variables(self):
@@ -859,7 +875,8 @@ class Module (Doc):
         obj.__dict__['__pdoc_module_name'] = '%s.%s' % (self.refname, name)
         return Module(obj,
                       docfilter=self._docfilter,
-                      allsubmodules=self._allsubmodules)
+                      allsubmodules=self._allsubmodules,
+                      supermodule=self)
 
 
 class Class (Doc):
