@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 import argparse
+
 try:
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 except ImportError:
@@ -25,68 +26,115 @@ try:
 except NameError:
     xrange = range
 
-version_suffix = '%d.%d' % (sys.version_info[0], sys.version_info[1])
-default_http_dir = path.join(tempfile.gettempdir(), 'pdoc-%s' % version_suffix)
+version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
+default_http_dir = path.join(tempfile.gettempdir(), "pdoc-%s" % version_suffix)
 
 parser = argparse.ArgumentParser(
-    description='Automatically generate API docs for Python modules.',
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    description="Automatically generate API docs for Python modules.",
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+)
 aa = parser.add_argument
-aa('module_name', type=str, nargs='?',
-   help='The Python module name. This may be an import path resolvable in '
-        'the current environment, or a file path to a Python module or '
-        'package.')
-aa('ident_name', type=str, nargs='?',
-   help='When specified, only identifiers containing the name given '
-        'will be shown in the output. Search is case sensitive. '
-        'Has no effect when --http is set.')
-aa('--version', action='store_true',
-   help='Print the version of pdoc and exit.')
-aa('--html', action='store_true',
-   help='When set, the output will be HTML formatted.')
-aa('--html-dir', type=str, default='.',
-   help='The directory to output HTML files to. This option is ignored when '
-        'outputting documentation as plain text.')
-aa('--html-no-source', action='store_true',
-   help='When set, source code will not be viewable in the generated HTML. '
-        'This can speed up the time required to document large modules.')
-aa('--overwrite', action='store_true',
-   help='Overwrites any existing HTML files instead of producing an error.')
-aa('--all-submodules', action='store_true',
-   help='When set, every submodule will be included, regardless of whether '
-        '__all__ is set and contains the submodule.')
-aa('--external-links', action='store_true',
-   help='When set, identifiers to external modules are turned into links. '
-        'This is automatically set when using --http.')
-aa('--template-dir', type=str, default=None,
-   help='Specify a directory containing Mako templates. '
-        'Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and '
-        'pdoc will automatically find them.')
-aa('--link-prefix', type=str, default='',
-   help='A prefix to use for every link in the generated documentation. '
-        'No link prefix results in all links being relative. '
-        'Has no effect when combined with --http.')
-aa('--only-pypath', action='store_true',
-   help='When set, only modules in your PYTHONPATH will be documented.')
-aa('--http', action='store_true',
-   help='When set, pdoc will run as an HTTP server providing documentation '
-        'of all installed modules. Only modules found in PYTHONPATH will be '
-        'listed.')
-aa('--http-dir', type=str, default=default_http_dir,
-   help='The directory to cache HTML documentation when running as an HTTP '
-        'server.')
-aa('--http-host', type=str, default='localhost',
-   help='The host on which to run the HTTP server.')
-aa('--http-port', type=int, default=8080,
-   help='The port on which to run the HTTP server.')
-aa('--http-html', action='store_true',
-   help='Internal use only. Do not set.')
+aa(
+    "module_name",
+    type=str,
+    nargs="?",
+    help="The Python module name. This may be an import path resolvable in "
+    "the current environment, or a file path to a Python module or "
+    "package.",
+)
+aa(
+    "ident_name",
+    type=str,
+    nargs="?",
+    help="When specified, only identifiers containing the name given "
+    "will be shown in the output. Search is case sensitive. "
+    "Has no effect when --http is set.",
+)
+aa("--version", action="store_true", help="Print the version of pdoc and exit.")
+aa("--html", action="store_true", help="When set, the output will be HTML formatted.")
+aa(
+    "--html-dir",
+    type=str,
+    default=".",
+    help="The directory to output HTML files to. This option is ignored when "
+    "outputting documentation as plain text.",
+)
+aa(
+    "--html-no-source",
+    action="store_true",
+    help="When set, source code will not be viewable in the generated HTML. "
+    "This can speed up the time required to document large modules.",
+)
+aa(
+    "--overwrite",
+    action="store_true",
+    help="Overwrites any existing HTML files instead of producing an error.",
+)
+aa(
+    "--all-submodules",
+    action="store_true",
+    help="When set, every submodule will be included, regardless of whether "
+    "__all__ is set and contains the submodule.",
+)
+aa(
+    "--external-links",
+    action="store_true",
+    help="When set, identifiers to external modules are turned into links. "
+    "This is automatically set when using --http.",
+)
+aa(
+    "--template-dir",
+    type=str,
+    default=None,
+    help="Specify a directory containing Mako templates. "
+    "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
+    "pdoc will automatically find them.",
+)
+aa(
+    "--link-prefix",
+    type=str,
+    default="",
+    help="A prefix to use for every link in the generated documentation. "
+    "No link prefix results in all links being relative. "
+    "Has no effect when combined with --http.",
+)
+aa(
+    "--only-pypath",
+    action="store_true",
+    help="When set, only modules in your PYTHONPATH will be documented.",
+)
+aa(
+    "--http",
+    action="store_true",
+    help="When set, pdoc will run as an HTTP server providing documentation "
+    "of all installed modules. Only modules found in PYTHONPATH will be "
+    "listed.",
+)
+aa(
+    "--http-dir",
+    type=str,
+    default=default_http_dir,
+    help="The directory to cache HTML documentation when running as an HTTP " "server.",
+)
+aa(
+    "--http-host",
+    type=str,
+    default="localhost",
+    help="The host on which to run the HTTP server.",
+)
+aa(
+    "--http-port",
+    type=int,
+    default=8080,
+    help="The port on which to run the HTTP server.",
+)
+aa("--http-html", action="store_true", help="Internal use only. Do not set.")
 args = parser.parse_args()
 
 
-class WebDoc (BaseHTTPRequestHandler):
+class WebDoc(BaseHTTPRequestHandler):
     def do_HEAD(self):
-        if self.path != '/':
+        if self.path != "/":
             out = self.html()
             if out is None:
                 self.send_response(404)
@@ -94,22 +142,22 @@ class WebDoc (BaseHTTPRequestHandler):
                 return
 
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header("Content-type", "text/html")
         self.end_headers()
 
     def do_GET(self):
-        if self.path == '/':
+        if self.path == "/":
             modules = []
             for (imp, name, ispkg) in pkgutil.iter_modules(pdoc.import_path):
-                if name == 'setup' and not ispkg:
+                if name == "setup" and not ispkg:
                     continue
                 modules.append((name, quick_desc(imp, name, ispkg)))
             modules = sorted(modules, key=lambda x: x[0].lower())
 
-            out = pdoc.tpl_lookup.get_template('/html.mako')
+            out = pdoc.tpl_lookup.get_template("/html.mako")
             out = out.render(modules=modules, link_prefix=args.link_prefix)
             out = out.strip()
-        elif self.path.endswith('.ext'):
+        elif self.path.endswith(".ext"):
             # External links are a bit weird. You should view them as a giant
             # hack. Basically, the idea is to "guess" where something lives
             # when documenting another module and hope that guess can actually
@@ -123,47 +171,50 @@ class WebDoc (BaseHTTPRequestHandler):
             # parent module in the external path. If all goes well, that
             # module will then be able to find the external identifier.
 
-            import_path = self.path[:-4].lstrip('/')
+            import_path = self.path[:-4].lstrip("/")
             resolved = self.resolve_ext(import_path)
             if resolved is None:  # Try to generate the HTML...
-                _eprint('Generating HTML for %s on the fly...' % import_path)
+                _eprint("Generating HTML for %s on the fly..." % import_path)
                 try:
-                    process_html_out(import_path.split('.')[0])
+                    process_html_out(import_path.split(".")[0])
                 except subprocess.CalledProcessError as e:
-                    _eprint('Could not run "%s" (exit code: %d): %s' %
-                            (' '.join(e.cmd), e.returncode, e.output))
+                    _eprint(
+                        'Could not run "%s" (exit code: %d): %s'
+                        % (" ".join(e.cmd), e.returncode, e.output)
+                    )
 
                 # Try looking once more.
                 resolved = self.resolve_ext(import_path)
             if resolved is None:  # All hope is lost.
                 self.send_response(404)
-                self.send_header('Content-type', 'text/html')
+                self.send_header("Content-type", "text/html")
                 self.end_headers()
-                self.echo('External identifier <code>%s</code> not found.'
-                          % import_path)
+                self.echo(
+                    "External identifier <code>%s</code> not found." % import_path
+                )
                 return
             self.send_response(302)
-            self.send_header('Location', resolved)
+            self.send_header("Location", resolved)
             self.end_headers()
             return
         else:
             out = self.html()
             if out is None:
                 self.send_response(404)
-                self.send_header('Content-type', 'text/html')
+                self.send_header("Content-type", "text/html")
                 self.end_headers()
 
-                err = 'Module <code>%s</code> not found.' % self.import_path
+                err = "Module <code>%s</code> not found." % self.import_path
                 self.echo(err)
                 return
 
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header("Content-type", "text/html")
         self.end_headers()
         self.echo(out)
 
     def echo(self, s):
-        self.wfile.write(s.encode('utf-8'))
+        self.wfile.write(s.encode("utf-8"))
 
     def html(self):
         """
@@ -174,7 +225,7 @@ class WebDoc (BaseHTTPRequestHandler):
         """
 
         # Deny favico shortcut early.
-        if self.path == '/favicon.ico':
+        if self.path == "/favicon.ico":
             return None
 
         # Look for the module file without importing it.
@@ -182,26 +233,28 @@ class WebDoc (BaseHTTPRequestHandler):
         try:
             mfile = pkgutil.get_loader(self.import_path).get_filename()
         except Exception as e:
-            _eprint('Could not load %s: %s' % (impath, e))
+            _eprint("Could not load %s: %s" % (impath, e))
             mfile = None
 
         # Check the file system first before trying an import.
         fp = self.file_path
         if last_modified(mfile) < last_modified(fp) and os.access(fp, os.R_OK):
-            with codecs.open(fp, 'r', 'utf-8') as f:
+            with codecs.open(fp, "r", "utf-8") as f:
                 return f.read()
 
         # Regenerate the HTML by shelling out to pdoc.
         # This ensures that the documentation is generated from a fresh import.
-        _eprint('Generating HTML for %s' % impath)
+        _eprint("Generating HTML for %s" % impath)
         try:
             process_html_out(impath)
         except subprocess.CalledProcessError as e:
-            _eprint('Could not run "%s" (exit code: %d): %s' %
-                    (' '.join(e.cmd), e.returncode, e.output))
+            _eprint(
+                'Could not run "%s" (exit code: %d): %s'
+                % (" ".join(e.cmd), e.returncode, e.output)
+            )
             return None
 
-        with codecs.open(self.file_path, 'r', 'utf-8') as f:
+        with codecs.open(self.file_path, "r", "utf-8") as f:
             return f.read()
 
     def resolve_ext(self, import_path):
@@ -211,22 +264,22 @@ class WebDoc (BaseHTTPRequestHandler):
             mod = p + pdoc.html_module_suffix
 
             if path.isfile(pkg):
-                return pkg[len(args.html_dir):]
+                return pkg[len(args.html_dir) :]
             elif path.isfile(mod):
-                return mod[len(args.html_dir):]
+                return mod[len(args.html_dir) :]
             return None
 
-        parts = import_path.split('.')
+        parts = import_path.split(".")
         for i in xrange(len(parts), 0, -1):
             p = path.join(*parts[0:i])
             realp = exists(p)
             if realp is not None:
-                return '/%s#%s' % (realp.lstrip('/'), import_path)
+                return "/%s#%s" % (realp.lstrip("/"), import_path)
         return None
 
     @property
     def file_path(self):
-        fp = path.join(args.html_dir, *self.import_path.split('.'))
+        fp = path.join(args.html_dir, *self.import_path.split("."))
         pkgp = path.join(fp, pdoc.html_package_name)
         if path.isdir(fp) and path.isfile(pkgp):
             fp = pkgp
@@ -236,35 +289,35 @@ class WebDoc (BaseHTTPRequestHandler):
 
     @property
     def import_path(self):
-        pieces = self.clean_path.split('/')
+        pieces = self.clean_path.split("/")
         if pieces[-1].startswith(pdoc.html_package_name):
             pieces = pieces[:-1]
         if pieces[-1].endswith(pdoc.html_module_suffix):
-            pieces[-1] = pieces[-1][:-len(pdoc.html_module_suffix)]
-        return '.'.join(pieces)
+            pieces[-1] = pieces[-1][: -len(pdoc.html_module_suffix)]
+        return ".".join(pieces)
 
     @property
     def clean_path(self):
-        new, _ = re.subn('//+', '/', self.path)
-        if '#' in new:
-            new = new[0:new.index('#')]
-        return new.strip('/')
+        new, _ = re.subn("//+", "/", self.path)
+        if "#" in new:
+            new = new[0 : new.index("#")]
+        return new.strip("/")
 
     def address_string(self):
-        return '%s:%s' % (self.client_address[0], self.client_address[1])
+        return "%s:%s" % (self.client_address[0], self.client_address[1])
 
 
 def quick_desc(imp, name, ispkg):
-    if not hasattr(imp, 'path'):
+    if not hasattr(imp, "path"):
         # See issue #7.
-        return ''
+        return ""
 
     if ispkg:
-        fp = path.join(imp.path, name, '__init__.py')
+        fp = path.join(imp.path, name, "__init__.py")
     else:
-        fp = path.join(imp.path, '%s.py' % name)
+        fp = path.join(imp.path, "%s.py" % name)
     if os.path.isfile(fp):
-        with codecs.open(fp, 'r', 'utf-8') as f:
+        with codecs.open(fp, "r", "utf-8") as f:
             quotes = None
             doco = []
             for i, line in enumerate(f):
@@ -280,15 +333,15 @@ def quick_desc(imp, name, ispkg):
                     break
                 else:
                     doco.append(line)
-            desc = '\n'.join(doco)
+            desc = "\n".join(doco)
             if len(desc) > 200:
-                desc = desc[0:200] + '...'
+                desc = desc[0:200] + "..."
             return desc
-    return ''
+    return ""
 
 
 def _eprint(*args, **kwargs):
-    kwargs['file'] = sys.stderr
+    kwargs["file"] = sys.stderr
     print(*args, **kwargs)
 
 
@@ -300,17 +353,17 @@ def last_modified(fp):
 
 
 def module_file(m):
-    mbase = path.join(args.html_dir, *m.name.split('.'))
+    mbase = path.join(args.html_dir, *m.name.split("."))
     if m.is_package():
         return path.join(mbase, pdoc.html_package_name)
     else:
-        return '%s%s' % (mbase, pdoc.html_module_suffix)
+        return "%s%s" % (mbase, pdoc.html_module_suffix)
 
 
 def quit_if_exists(m):
     def check_file(f):
         if os.access(f, os.R_OK):
-            _eprint('%s already exists. Delete it or run with --overwrite' % f)
+            _eprint("%s already exists. Delete it or run with --overwrite" % f)
             sys.exit(1)
 
     if args.overwrite:
@@ -332,14 +385,16 @@ def html_out(m, html=True):
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
     try:
-        with codecs.open(f, 'w+', 'utf-8') as w:
+        with codecs.open(f, "w+", "utf-8") as w:
             if not html:
                 out = m.text()
             else:
-                out = m.html(external_links=args.external_links,
-                             link_prefix=args.link_prefix,
-                             http_server=args.http_html,
-                             source=not args.html_no_source)
+                out = m.html(
+                    external_links=args.external_links,
+                    link_prefix=args.link_prefix,
+                    http_server=args.http_html,
+                    source=not args.html_no_source,
+                )
             print(out, file=w)
     except Exception:
         try:
@@ -356,31 +411,36 @@ def process_html_out(impath):
     # to support reloading of modules. It's just too difficult to get
     # modules to reload in the same process.
 
-    cmd = [sys.executable,
-           path.realpath(__file__),
-           '--html',
-           '--html-dir', args.html_dir,
-           '--http-html',
-           '--overwrite',
-           '--link-prefix', args.link_prefix]
+    cmd = [
+        sys.executable,
+        path.realpath(__file__),
+        "--html",
+        "--html-dir",
+        args.html_dir,
+        "--http-html",
+        "--overwrite",
+        "--link-prefix",
+        args.link_prefix,
+    ]
     if args.external_links:
-        cmd.append('--external-links')
+        cmd.append("--external-links")
     if args.all_submodules:
-        cmd.append('--all-submodules')
+        cmd.append("--all-submodules")
     if args.only_pypath:
-        cmd.append('--only-pypath')
+        cmd.append("--only-pypath")
     if args.html_no_source:
-        cmd.append('--html-no-source')
+        cmd.append("--html-no-source")
     if args.template_dir:
-        cmd.append('--template-dir')
+        cmd.append("--template-dir")
         cmd.append(args.template_dir)
     cmd.append(impath)
 
     # Can we make a good faith attempt to support 2.6?
     # YES WE CAN!
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out = p.communicate()[0].strip().decode('utf-8')
+    p = subprocess.Popen(
+        cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
+    out = p.communicate()[0].strip().decode("utf-8")
     if p.returncode > 0:
         err = subprocess.CalledProcessError(p.returncode, cmd)
         err.output = out
@@ -404,7 +464,7 @@ def cli():
         pass
 
     if not args.http and args.module_name is None:
-        _eprint('No module name specified.')
+        _eprint("No module name specified.")
         sys.exit(1)
     if args.template_dir is not None:
         pdoc.tpl_lookup.directories.insert(0, args.template_dir)
@@ -413,22 +473,24 @@ def cli():
         args.external_links = True
         args.html_dir = args.http_dir
         args.overwrite = True
-        args.link_prefix = '/'
+        args.link_prefix = "/"
 
     # If PYTHONPATH is set, let it override everything if we want it to.
-    pypath = os.getenv('PYTHONPATH')
+    pypath = os.getenv("PYTHONPATH")
     if args.only_pypath and pypath is not None and len(pypath) > 0:
         pdoc.import_path = pypath.split(path.pathsep)
 
     if args.http:
         if args.module_name is not None:
-            _eprint('Module names cannot be given with --http set.')
+            _eprint("Module names cannot be given with --http set.")
             sys.exit(1)
 
         # Run the HTTP server.
         httpd = HTTPServer((args.http_host, args.http_port), WebDoc)
-        print('pdoc server ready at http://%s:%d'
-              % (args.http_host, args.http_port), file=sys.stderr)
+        print(
+            "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
+            file=sys.stderr,
+        )
 
         httpd.serve_forever()
         httpd.server_close()
@@ -464,21 +526,20 @@ def cli():
             fp = path.realpath(args.module_name)
             module_name = path.basename(fp)
             if isdir:
-                fp = path.join(fp, '__init__.py')
+                fp = path.join(fp, "__init__.py")
             else:
                 module_name, _ = path.splitext(module_name)
 
             # Use a special module name to avoid import conflicts.
             # It is hidden from view via the `Module` class.
             with open(fp) as f:
-                module = imp.load_source('__pdoc_file_module__', fp, f)
+                module = imp.load_source("__pdoc_file_module__", fp, f)
                 if isdir:
                     module.__path__ = [path.realpath(args.module_name)]
                 module.__pdoc_module_name = module_name
         else:
             module = pdoc.import_module(args.module_name)
-    module = pdoc.Module(module, docfilter=docfilter,
-                         allsubmodules=args.all_submodules)
+    module = pdoc.Module(module, docfilter=docfilter, allsubmodules=args.all_submodules)
 
     # Plain text?
     if not args.html and not args.all_submodules:
@@ -507,5 +568,6 @@ def cli():
         html_out(module, args.html)
         sys.exit(0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     cli()
