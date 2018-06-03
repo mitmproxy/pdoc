@@ -113,7 +113,6 @@ aa(
     help="The port on which to run the HTTP server.",
 )
 aa("--http-html", action="store_true", help="Internal use only. Do not set.")
-args = parser.parse_args()
 
 
 def _eprint(*args, **kwargs):
@@ -121,7 +120,7 @@ def _eprint(*args, **kwargs):
     print(*args, **kwargs)
 
 
-def module_file(m):
+def module_file(args, m):
     mbase = os.path.join(args.html_dir, *m.name.split("."))
     if m.is_package():
         return os.path.join(mbase, pdoc.doc.html_package_name)
@@ -129,7 +128,7 @@ def module_file(m):
         return "%s%s" % (mbase, pdoc.doc.html_module_suffix)
 
 
-def quit_if_exists(m):
+def quit_if_exists(args, m):
     def check_file(f):
         if os.access(f, os.R_OK):
             _eprint("%s already exists. Delete it or run with --overwrite" % f)
@@ -137,7 +136,7 @@ def quit_if_exists(m):
 
     if args.overwrite:
         return
-    f = module_file(m)
+    f = module_file(args, m)
     check_file(f)
 
     # If this is a package, make sure the package directory doesn't exist
@@ -146,10 +145,10 @@ def quit_if_exists(m):
         check_file(os.path.dirname(f))
 
 
-def html_out(m, html=True):
-    f = module_file(m)
+def html_out(args, m, html=True):
+    f = module_file(args, m)
     if not html:
-        f = module_file(m).replace(".html", ".md")
+        f = module_file(args, m).replace(".html", ".md")
     dirpath = os.path.dirname(f)
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
@@ -172,11 +171,12 @@ def html_out(m, html=True):
             pass
         raise
     for submodule in m.submodules():
-        html_out(submodule, html)
+        html_out(args, submodule, html)
 
 
-def cli():
+def main():
     """ Command-line entry point """
+    args = parser.parse_args()
 
     if args.version:
         print(pdoc.doc.__version__)
@@ -290,10 +290,10 @@ def cli():
     # so on... The same rules apply for `http_dir` when `pdoc` is run as an
     # HTTP server.
     if not args.http:
-        quit_if_exists(module)
-        html_out(module, args.html)
+        quit_if_exists(args, module)
+        html_out(args, module, args.html)
         sys.exit(0)
 
 
 if __name__ == "__main__":
-    cli()
+    main()

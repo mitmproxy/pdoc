@@ -43,7 +43,7 @@ setup(
         ),
         ("share/doc/pdoc", ["doc/pdoc/index.html"]),
     ],
-    entry_points={"console_scripts": ["pdoc = pdoc.cli:cli"]},
+    entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
     provides=["pdoc"],
     extras_require={
         "dev": {
