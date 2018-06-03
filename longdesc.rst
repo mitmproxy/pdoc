@@ -35,7 +35,7 @@ all three.
 Contributing
 ------------
 
-``pdoc`` `is on GitHub <https://github.com/BurntSushi/pdoc>`__. Pull
+``pdoc`` `is on GitHub <https://github.com/mitmproxy/pdoc>`__. Pull
 requests and bug reports are welcome.
 
 Linking to other identifiers
