@@ -1,21 +1,12 @@
-import contextlib
-import os
-
 import pytest
 
 import pdoc.extract
 
-
-@contextlib.contextmanager
-def tdir():
-    old_dir = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    yield
-    os.chdir(old_dir)
+import tutils
 
 
 def test_extract_module():
-    with tdir():
+    with tutils.tdir():
         with pytest.raises(pdoc.extract.ExtractError, match="File not found"):
             pdoc.extract.extract_module("./modules/nonexistent.py")
         with pytest.raises(pdoc.extract.ExtractError, match="Module not found"):

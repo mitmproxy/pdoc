@@ -1,166 +1,17 @@
 ## -*- coding: utf-8 -*-
 <%
-  import os
-  import re
-  import sys
+import pygments
+import pdoc.doc
+import pdoc.html_helpers as hh
 
-  import markdown
-  import pygments
-  import pygments.formatters
-  import pygments.lexers
-
-  import pdoc.doc
-  import pdoc.render
-
-  # From language reference, but adds '.' to allow fully qualified names.
-  pyident = re.compile('^[a-zA-Z_][a-zA-Z0-9_.]+$')
-  indent = re.compile('^\s*')
-
-  # Whether we're showing the module list or a single module.
-  module_list = 'modules' in context.keys()
-
-  def decode(s):
-    if sys.version_info[0] < 3 and isinstance(s, str):
-      return s.decode('utf-8', 'ignore')
-    return s
-
-  def ident(s):
-    return '<span class="ident">%s</span>' % s
-
-  def sourceid(dobj):
-    return 'source-%s' % dobj.refname
-
-  def clean_source_lines(lines):
-    """
-    Cleans the source code so that pygments can render it well.
-
-    Returns one string with all of the source code.
-    """
-    base_indent = len(indent.match(lines[0]).group(0))
-    base_indent = 0
-    for line in lines:
-      if len(line.strip()) > 0:
-        base_indent = len(indent.match(lines[0]).group(0))
-        break
-    lines = [line[base_indent:] for line in lines]
-
-    if sys.version_info[0] < 3:
-        pylex = pygments.lexers.PythonLexer()
-    else:
-        pylex = pygments.lexers.Python3Lexer()
-
-    htmlform = pygments.formatters.HtmlFormatter(cssclass='codehilite')
-    return pygments.highlight(''.join(lines), pylex, htmlform)
-
-  def linkify(match):
-    matched = match.group(0)
-    ident = matched[1:-1]
-    name, url = lookup(ident)
-    if name is None:
-      return matched
-    return '[`%s`](%s)' % (name, url)
-
-  def mark(s, linky=True):
-    if linky:
-      s, _ = re.subn('\b\n\b', ' ', s)
-    if not module_list:
-      s, _ = re.subn('`[^`]+`', linkify, s)
-
-    extensions = ['markdown.extensions.codehilite(linenums=False)']
-    s = markdown.markdown(s.strip(), extensions=extensions)
-    return s
-
-  def glimpse(s, length=100):
-    if len(s) < length:
-      return s
-    return s[0:length] + '...'
-
-  def module_url(m):
-    """
-    Returns a URL for `m`, which must be an instance of `Module`.
-    Also, `m` must be a submodule of the module being documented.
-
-    Namely, '.' import separators are replaced with '/' URL
-    separators. Also, packages are translated as directories
-    containing `index.html` corresponding to the `__init__` module,
-    while modules are translated as regular HTML files with an
-    `.m.html` suffix. (Given default values of
-    `pdoc.html_module_suffix` and `pdoc.html_package_name`.)
-    """
-    if module.name == m.name:
-      return ''
-
-    base = m.name.replace('.', '/')
-    if len(link_prefix) == 0:
-      base = os.path.relpath(base, module.name.replace('.', '/'))
-    url = (base[len('../'):] if base.startswith('../') else
-           '' if base == '..' else
-           base)
-    if m.is_package():
-      index = pdoc.render.html_package_name
-      url = url + '/' + index if url else index
-    else:
-      url += pdoc.render.html_module_suffix
-    return link_prefix + url
-
-  def external_url(refname):
-    """
-    Attempts to guess an absolute URL for the external identifier
-    given.
-
-    Note that this just returns the refname with an ".ext" suffix.
-    It will be up to whatever is interpreting the URLs to map it
-    to an appropriate documentation page.
-    """
-    return '/%s.ext' % refname
-
-  def is_external_linkable(name):
-    return external_links and pyident.match(name) and '.' in name
-
-  def lookup(refname):
-    """
-    Given a fully qualified identifier name, return its refname
-    with respect to the current module and a value for a `href`
-    attribute. If `refname` is not in the public interface of
-    this module or its submodules, then `None` is returned for
-    both return values. (Unless this module has enabled external
-    linking.)
-
-    In particular, this takes into account sub-modules and external
-    identifiers. If `refname` is in the public API of the current
-    module, then a local anchor link is given. If `refname` is in the
-    public API of a sub-module, then a link to a different page with
-    the appropriate anchor is given. Otherwise, `refname` is
-    considered external and no link is used.
-    """
-    d = module.find_ident(refname)
-    if isinstance(d, pdoc.doc.External):
-      if is_external_linkable(refname):
-        return d.refname, external_url(d.refname)
-      else:
-        return None, None
-    if isinstance(d, pdoc.doc.Module):
-      return d.refname, module_url(d)
-    if module.is_public(d.refname):
-      return d.name, '#%s' % d.refname
-    return d.refname, '%s#%s' % (module_url(d.module), d.refname)
-
-  def link(refname):
-    """
-    A convenience wrapper around `href` to produce the full
-    `a` tag if `refname` is found. Otherwise, plain text of
-    `refname` is returned.
-    """
-    name, url = lookup(refname)
-    if name is None:
-      return refname
-    return '<a href="%s">%s</a>' % (url, name)
+# Whether we're showing the module list or a single module.
+module_list = "modules" in context.keys()
 %>
 <%def name="show_source(d)">
   % if show_source_code and d.source is not None and len(d.source) > 0:
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('${sourceid(d)}', this);">Show source &equiv;</a></p>
-  <div id="${sourceid(d)}" class="source">
-    ${decode(clean_source_lines(d.source))}
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('${hh.sourceid(d)}', this);">Show source &equiv;</a></p>
+  <div id="${hh.sourceid(d)}" class="source">
+    ${hh.decode(hh.clean_source_lines(d.source))}
   </div>
   % endif
 </%def>
@@ -172,13 +23,13 @@
             or d.docstring == d.inherits.docstring))
   docstring = (d.inherits.docstring if inherits else d.docstring).strip()
   if limit is not None:
-    docstring = glimpse(docstring, limit)
+    docstring = hh.glimpse(docstring, limit)
   %>
   % if len(docstring) > 0:
   % if inherits:
-    <div class="desc inherited">${docstring | mark}</div>
+    <div class="desc inherited">${docstring | hh.mark}</div>
   % else:
-    <div class="desc">${docstring | mark}</div>
+    <div class="desc">${docstring | hh.mark}</div>
   % endif
   % endif
   % if not isinstance(d, pdoc.doc.Module):
@@ -191,9 +42,9 @@
     <p class="inheritance">
      <strong>Inheritance:</strong>
      % if hasattr(d.inherits, 'cls'):
-       <code>${link(d.inherits.cls.refname)}</code>.<code>${link(d.inherits.refname)}</code>
+       <code>${hh.link(module, d.inherits.cls.refname, link_prefix)}</code>.<code>${hh.link(module, d.inherits.refname, link_prefix)}</code>
      % else:
-       <code>${link(d.inherits.refname)}</code>
+       <code>${hh.link(module, d.inherits.refname), link_prefix}</code>
      % endif
     </p>
   % endif
@@ -211,7 +62,7 @@
       <td><a href="${link_prefix}${name}">${name}</a></td>
       <td>
       % if len(desc.strip()) > 0:
-        <div class="desc">${desc | mark}</div>
+        <div class="desc">${desc | hh.mark}</div>
       % endif
       </td>
     </tr>
@@ -239,7 +90,7 @@
   <%def name="show_func(f)">
   <div class="item">
     <div class="name def" id="${f.refname}">
-    <p>${f.funcdef()} ${ident(f.name)}(</p><p>${f.spec() | h})</p>
+    <p>${f.funcdef()} ${hh.ident(f.name)}(</p><p>${f.spec() | h})</p>
     </div>
     ${show_inheritance(f)}
     ${show_desc(f)}
@@ -259,7 +110,7 @@
 
   <header id="section-intro">
   <h1 class="title"><span class="name">${module.name}</span> module</h1>
-  ${module.docstring | mark}
+  ${module.docstring | hh.mark}
   ${show_source(module)}
   </header>
 
@@ -268,7 +119,7 @@
     <h2 class="section-title" id="header-variables">Module variables</h2>
     % for v in variables:
       <div class="item">
-      <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
+      <p id="${v.refname}" class="name">var ${hh.ident(v.name)}</p>
       ${show_desc(v)}
       </div>
     % endfor
@@ -292,7 +143,7 @@
       mro = c.module.mro(c)
       %>
       <div class="item">
-      <p id="${c.refname}" class="name">class ${ident(c.name)}</p>
+      <p id="${c.refname}" class="name">class ${hh.ident(c.name)}</p>
       ${show_desc(c)}
 
       <div class="class">
@@ -300,7 +151,7 @@
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
           % for cls in mro:
-          <li>${link(cls.refname)}</li>
+          <li>${hh.link(module, cls.refname, link_prefix)}</li>
           % endfor
           </ul>
         % endif
@@ -308,7 +159,7 @@
           <h3>Class variables</h3>
           % for v in class_vars:
             <div class="item">
-            <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
+            <p id="${v.refname}" class="name">var ${hh.ident(v.name)}</p>
             ${show_inheritance(v)}
             ${show_desc(v)}
             </div>
@@ -324,7 +175,7 @@
           <h3>Instance variables</h3>
           % for v in inst_vars:
             <div class="item">
-            <p id="${v.refname}" class="name">var ${ident(v.name)}</p>
+            <p id="${v.refname}" class="name">var ${hh.ident(v.name)}</p>
             ${show_inheritance(v)}
             ${show_desc(v)}
             </div>
@@ -345,7 +196,7 @@
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
     % for m in submodules:
       <div class="item">
-      <p class="name">${link(m.refname)}</p>
+      <p class="name">${hh.link(module, m.refname, link_prefix)}</p>
       ${show_desc(m, limit=300)}
       </div>
     % endfor
@@ -367,19 +218,19 @@
     % if supermodule:
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono">${link(supermodule.refname)}</li>
+        <li class="mono">${hh.link(module, supermodule.refname, link_prefix)}</li>
       </ul>
     </li>
     % endif
     % if len(variables) > 0:
     <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
-      ${show_column_list(map(lambda v: link(v.refname), variables))}
+      ${show_column_list(map(lambda v: hh.link(module, v.refname, link_prefix), variables))}
     </li>
     % endif
 
     % if len(functions) > 0:
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
-      ${show_column_list(map(lambda f: link(f.refname), functions))}
+      ${show_column_list(map(lambda f: hh.link(module, f.refname, link_prefix), functions))}
     </li>
     % endif
 
@@ -388,12 +239,12 @@
       <ul>
       % for c in classes:
         <li class="mono">
-        <span class="class_name">${link(c.refname)}</span>
+        <span class="class_name">${hh.link(module, c.refname, link_prefix)}</span>
         <%
           methods = c.functions() + c.methods()
         %>
         % if len(methods) > 0:
-          ${show_column_list(map(lambda f: link(f.refname), methods))}
+          ${show_column_list(map(lambda f: hh.link(module, f.refname, link_prefix), methods))}
         % endif
         </li>
       % endfor
@@ -405,7 +256,7 @@
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
       % for m in submodules:
-        <li class="mono">${link(m.refname)}</li>
+        <li class="mono">${hh.link(module, m.refname, link_prefix)}</li>
       % endfor
       </ul>
     </li>
@@ -424,7 +275,7 @@
     <meta name="description" content="A list of Python modules in sys.path" />
   % else:
     <title>${module.name} API documentation</title>
-    <meta name="description" content="${module.docstring | glimpse, trim}" />
+    <meta name="description" content="${module.docstring | hh.glimpse, trim}" />
   % endif
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>

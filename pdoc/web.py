@@ -6,6 +6,8 @@ import codecs
 import logging
 
 import pdoc.doc
+import pdoc.render
+import pdoc.extract
 
 
 def quick_desc(imp, name, ispkg):
@@ -129,13 +131,15 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         # Deny favico shortcut early.
         if self.path == "/favicon.ico":
             return None
-        return pdoc.doc.html(self.import_path)
+        return pdoc.render.html(
+            pdoc.doc.Module(pdoc.extract.extract_module(self.import_path))
+        )
 
     def resolve_ext(self, import_path):
         def exists(p):
             p = os.path.join(self.server.args.html_dir, p)
-            pkg = os.path.join(p, pdoc.doc.html_package_name)
-            mod = p + pdoc.doc.html_module_suffix
+            pkg = os.path.join(p, pdoc.render.html_package_name)
+            mod = p + pdoc.render.html_module_suffix
 
             if os.path.isfile(pkg):
                 return pkg[len(self.server.args.html_dir) :]
@@ -154,20 +158,20 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
     @property
     def file_path(self):
         fp = os.path.join(self.server.args.html_dir, *self.import_path.split("."))
-        pkgp = os.path.join(fp, pdoc.doc.html_package_name)
+        pkgp = os.path.join(fp, pdoc.render.html_package_name)
         if os.path.isdir(fp) and os.path.isfile(pkgp):
             fp = pkgp
         else:
-            fp += pdoc.doc.html_module_suffix
+            fp += pdoc.render.html_module_suffix
         return fp
 
     @property
     def import_path(self):
         pieces = self.clean_path.split("/")
-        if pieces[-1].startswith(pdoc.doc.html_package_name):
+        if pieces[-1].startswith(pdoc.render.html_package_name):
             pieces = pieces[:-1]
-        if pieces[-1].endswith(pdoc.doc.html_module_suffix):
-            pieces[-1] = pieces[-1][: -len(pdoc.doc.html_module_suffix)]
+        if pieces[-1].endswith(pdoc.render.html_module_suffix):
+            pieces[-1] = pieces[-1][: -len(pdoc.render.html_module_suffix)]
         return ".".join(pieces)
 
     @property
