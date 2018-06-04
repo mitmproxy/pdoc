@@ -83,7 +83,7 @@ def html(
     every Python object whenever possible. This can dramatically
     decrease performance when documenting large modules.
     """
-    t = _get_tpl("/html.mako")
+    t = _get_tpl("/html_module.mako")
     t = t.render(
         module=mod,
         external_links=external_links,
