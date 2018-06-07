@@ -18,22 +18,23 @@ parser = argparse.ArgumentParser(
 )
 aa = parser.add_argument
 aa(
-    "module_name",
+    "modules",
     type=str,
-    nargs="?",
-    help="The Python module name. This may be an import path resolvable in "
-    "the current environment, or a file path to a Python module or "
+    metavar="module",
+    nargs="+",
+    help="Python module names. These may be import paths resolvable in "
+    "the current environment, or file paths to a Python module or "
     "package.",
 )
+aa("--version", action="store_true", help="Print the version of pdoc and exit.")
 aa(
-    "ident_name",
+    "--filter",
     type=str,
-    nargs="?",
+    default=None,
     help="When specified, only identifiers containing the name given "
     "will be shown in the output. Search is case sensitive. "
     "Has no effect when --http is set.",
 )
-aa("--version", action="store_true", help="Print the version of pdoc and exit.")
 aa("--html", action="store_true", help="When set, the output will be HTML formatted.")
 aa(
     "--html-dir",
@@ -145,7 +146,7 @@ def html_out(args, m, html=True):
             if not html:
                 out = pdoc.render.text(m)
             else:
-                out = pdoc.render.html(
+                out = pdoc.render.html_module(
                     m,
                     external_links=args.external_links,
                     link_prefix=args.link_prefix,
@@ -170,36 +171,9 @@ def main():
         print(pdoc.doc.__version__)
         sys.exit(0)
 
-    if not args.http and args.module_name is None:
-        _eprint("No module name specified.")
-        sys.exit(1)
-    if args.template_dir is not None:
-        pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
-    if args.http:
-        args.html = True
-        args.external_links = True
-        args.overwrite = True
-        args.link_prefix = "/"
-
-    if args.http:
-        if args.module_name is not None:
-            _eprint("Module names cannot be given with --http set.")
-            sys.exit(1)
-
-        # Run the HTTP server.
-        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args)
-        print(
-            "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
-            file=sys.stderr,
-        )
-
-        httpd.serve_forever()
-        httpd.server_close()
-        sys.exit(0)
-
     docfilter = None
-    if args.ident_name and len(args.ident_name.strip()) > 0:
-        search = args.ident_name.strip()
+    if args.filter and len(args.filter.strip()) > 0:
+        search = args.filter.strip()
 
         def docfilter(o):
             rname = o.refname
@@ -209,38 +183,50 @@ def main():
                 return search in o.doc or search in o.doc_init
             return False
 
-    try:
-        m = pdoc.extract.extract_module(args.module_name)
-    except pdoc.extract.ExtractError as e:
-        _eprint(str(e))
-        sys.exit(1)
-    module = pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules)
-
-    # Plain text?
-    if not args.html and not args.all_submodules:
-        output = pdoc.render.text(module)
+    modules = []
+    for mod in args.modules:
         try:
-            print(output)
-        except IOError as e:
-            # This seems to happen for long documentation.
-            # This is obviously a hack. What's the real cause? Dunno.
-            if e.errno == 32:
-                pass
-            else:
-                raise e
-        sys.exit(0)
+            m = pdoc.extract.extract_module(mod)
+        except pdoc.extract.ExtractError as e:
+            _eprint(str(e))
+            sys.exit(1)
+        modules.append(pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules))
 
-    # HTML output depends on whether the module being documented is a package
-    # or not. If not, then output is written to {MODULE_NAME}.html in
-    # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
-    # is created, and output is written to {MODULE_NAME}/index.html.
-    # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
-    # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
-    # so on...
-    if not args.http:
-        quit_if_exists(args, module)
-        html_out(args, module, args.html)
+    if args.template_dir is not None:
+        pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
+    if args.http:
+        args.html = True
+        args.external_links = True
+        args.overwrite = True
+        args.link_prefix = "/"
+
+    if args.http:
+        # Run the HTTP server.
+        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, modules)
+        print(
+            "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
+            file=sys.stderr,
+        )
+
+        httpd.serve_forever()
+        httpd.server_close()
         sys.exit(0)
+    # Plain text?
+    if not args.html:
+        for m in modules:
+            output = pdoc.render.text(m)
+            print(output)
+    elif not args.http:
+            # HTML output depends on whether the module being documented is a package
+            # or not. If not, then output is written to {MODULE_NAME}.html in
+            # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
+            # is created, and output is written to {MODULE_NAME}/index.html.
+            # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
+            # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
+            # so on...
+            quit_if_exists(args, module)
+            html_out(args, module, args.html)
+            sys.exit(0)
 
 
 if __name__ == "__main__":

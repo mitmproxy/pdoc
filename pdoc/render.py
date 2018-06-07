@@ -29,7 +29,6 @@ found.
 if os.getenv("XDG_CONFIG_HOME"):
     _template_path.insert(0, os.path.join(os.getenv("XDG_CONFIG_HOME"), "pdoc"))
 
-__pdoc__ = {}
 tpl_lookup = TemplateLookup(
     directories=_template_path, cache_args={"cached": True, "cache_type": "memory"}
 )
@@ -38,6 +37,9 @@ A `mako.lookup.TemplateLookup` object that knows how to load templates
 from the file system. You may add additional paths by modifying the
 object's `directories` attribute.
 """
+
+
+__pdoc__ = {}
 
 
 def _get_tpl(name):
@@ -53,7 +55,22 @@ def _get_tpl(name):
     return t
 
 
-def html(
+def html_index(
+    modules: typing.Sequence[typing.Tuple[str, pdoc.doc.Module]],
+    link_prefix: str = "/",
+):
+    """
+        Render an HTML module index.
+    """
+    t = _get_tpl("/html_index.mako")
+    t = t.render(
+        modules=modules,
+        link_prefix=link_prefix,
+    )
+    return t.strip()
+
+
+def html_module(
     mod: pdoc.doc.Module,
     external_links: bool = False,
     link_prefix: str = "/",

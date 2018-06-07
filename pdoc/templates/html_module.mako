@@ -4,10 +4,6 @@ import pygments
 import pdoc.doc
 import pdoc.html_helpers as hh
 %>
-<%
-# Whether we're showing the module list or a single module.
-module_list = "modules" in context.keys()
-%>
 
 <%inherit file="html_frame.mako"/>
 
@@ -52,27 +48,6 @@ module_list = "modules" in context.keys()
      % endif
     </p>
   % endif
-</%def>
-
-<%def name="show_module_list(modules)">
-<h1>Python module list</h1>
-
-% if len(modules) == 0:
-  <p>No modules found.</p>
-% else:
-  <table id="module-list">
-  % for name, desc in modules:
-    <tr>
-      <td><a href="${link_prefix}${name}">${name}</a></td>
-      <td>
-      % if len(desc.strip()) > 0:
-        <div class="desc">${desc | hh.mark}</div>
-      % endif
-      </td>
-    </tr>
-  % endfor
-  </table>
-% endif
 </%def>
 
 <%def name="show_column_list(items, numcols=3)">
@@ -270,18 +245,9 @@ module_list = "modules" in context.keys()
 </%def>
 
 <%block name="title">
-  % if module_list:
-    <title>Python module list</title>
-    <meta name="description" content="A list of Python modules in sys.path" />
-  % else:
-    <title>${module.name} API documentation</title>
-    <meta name="description" content="${module.docstring | hh.glimpse, trim}" />
-  % endif
+  <title>${module.name} API documentation</title>
+  <meta name="description" content="${module.docstring | hh.glimpse, trim}" />
 </%block>
 
-% if module_list:
-  <article id="content">${show_module_list(modules)}</article>
-% else:
-  ${module_index(module)}
-  <article id="content">${show_module(module)}</article>
-% endif
+${module_index(module)}
+<article id="content">${show_module(module)}</article>

@@ -117,8 +117,8 @@ def external_url(refname):
     return "/%s.ext" % refname
 
 
-def is_xternal_linkable(name):
-    return external_links and pyident.match(name) and "." in name
+def is_external_linkable(name):
+    return pyident.match(name) and "." in name
 
 
 def lookup(module, refname, link_prefix):
