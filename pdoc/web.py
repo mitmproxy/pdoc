@@ -1,44 +1,11 @@
 import http.server
-import pkgutil
 import re
 import os.path
-import codecs
 import logging
 
 import pdoc.doc
-
-
-def quick_desc(imp, name, ispkg):
-    if not hasattr(imp, "path"):
-        # See issue #7.
-        return ""
-
-    if ispkg:
-        fp = os.path.join(imp.path, name, "__init__.py")
-    else:
-        fp = os.path.join(imp.path, "%s.py" % name)
-    if os.path.isfile(fp):
-        with codecs.open(fp, "r", "utf-8") as f:
-            quotes = None
-            doco = []
-            for i, line in enumerate(f):
-                if i == 0:
-                    if len(line) >= 3 and line[0:3] in ("'''", '"""'):
-                        quotes = line[0:3]
-                        line = line[3:]
-                    else:
-                        break
-                line = line.rstrip()
-                if line.endswith(quotes):
-                    doco.append(line[0:-3])
-                    break
-                else:
-                    doco.append(line)
-            desc = "\n".join(doco)
-            if len(desc) > 200:
-                desc = desc[0:200] + "..."
-            return desc
-    return ""
+import pdoc.render
+import pdoc.extract
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
@@ -56,16 +23,11 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/":
-            modules = []
-            for (imp, name, ispkg) in pkgutil.iter_modules(pdoc.doc.import_path):
-                if name == "setup" and not ispkg:
-                    continue
-                modules.append((name, quick_desc(imp, name, ispkg)))
-            modules = sorted(modules, key=lambda x: x[0].lower())
-
-            out = pdoc.doc.tpl_lookup.get_template("/html.mako")
-            out = out.render(modules=modules, link_prefix=self.server.args.link_prefix)
-            out = out.strip()
+            midx = []
+            for m in self.server.modules:
+                midx.append((m.name, m.docstring))
+            midx = sorted(midx, key=lambda x: x[0].lower())
+            out = pdoc.render.html_index(midx, self.server.args.link_prefix)
         elif self.path.endswith(".ext"):
             # External links are a bit weird. You should view them as a giant
             # hack. Basically, the idea is to "guess" where something lives
@@ -129,13 +91,15 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         # Deny favico shortcut early.
         if self.path == "/favicon.ico":
             return None
-        return pdoc.doc.html(self.import_path)
+        return pdoc.render.html_module(
+            pdoc.doc.Module(pdoc.extract.extract_module(self.import_path))
+        )
 
     def resolve_ext(self, import_path):
         def exists(p):
             p = os.path.join(self.server.args.html_dir, p)
-            pkg = os.path.join(p, pdoc.doc.html_package_name)
-            mod = p + pdoc.doc.html_module_suffix
+            pkg = os.path.join(p, pdoc.render.html_package_name)
+            mod = p + pdoc.render.html_module_suffix
 
             if os.path.isfile(pkg):
                 return pkg[len(self.server.args.html_dir) :]
@@ -154,20 +118,20 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
     @property
     def file_path(self):
         fp = os.path.join(self.server.args.html_dir, *self.import_path.split("."))
-        pkgp = os.path.join(fp, pdoc.doc.html_package_name)
+        pkgp = os.path.join(fp, pdoc.render.html_package_name)
         if os.path.isdir(fp) and os.path.isfile(pkgp):
             fp = pkgp
         else:
-            fp += pdoc.doc.html_module_suffix
+            fp += pdoc.render.html_module_suffix
         return fp
 
     @property
     def import_path(self):
         pieces = self.clean_path.split("/")
-        if pieces[-1].startswith(pdoc.doc.html_package_name):
+        if pieces[-1].startswith(pdoc.render.html_package_name):
             pieces = pieces[:-1]
-        if pieces[-1].endswith(pdoc.doc.html_module_suffix):
-            pieces[-1] = pieces[-1][: -len(pdoc.doc.html_module_suffix)]
+        if pieces[-1].endswith(pdoc.render.html_module_suffix):
+            pieces[-1] = pieces[-1][: -len(pdoc.render.html_module_suffix)]
         return ".".join(pieces)
 
     @property
@@ -182,6 +146,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
 
 class DocServer(http.server.HTTPServer):
-    def __init__(self, addr, args):
+    def __init__(self, addr, args, modules):
         self.args = args
+        self.modules = modules
         super().__init__(addr, DocHandler)
