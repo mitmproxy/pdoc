@@ -17,6 +17,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 aa = parser.add_argument
+aa('--version', action='version', version='%(prog)s ' + pdoc.doc.__version__)
 aa(
     "modules",
     type=str,
@@ -26,7 +27,6 @@ aa(
     "the current environment, or file paths to a Python module or "
     "package.",
 )
-aa("--version", action="store_true", help="Print the version of pdoc and exit.")
 aa(
     "--filter",
     type=str,
@@ -166,10 +166,6 @@ def html_out(args, m, html=True):
 def main():
     """ Command-line entry point """
     args = parser.parse_args()
-
-    if args.version:
-        print(pdoc.doc.__version__)
-        sys.exit(0)
 
     docfilter = None
     if args.filter and len(args.filter.strip()) > 0:
