@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 aa = parser.add_argument
-aa('--version', action='version', version='%(prog)s ' + pdoc.doc.__version__)
+aa("--version", action="version", version="%(prog)s " + pdoc.doc.__version__)
 aa(
     "modules",
     type=str,
@@ -101,7 +101,6 @@ aa(
     default=8080,
     help="The port on which to run the HTTP server.",
 )
-aa("--http-html", action="store_true", help="Internal use only. Do not set.")
 
 
 def _eprint(*args, **kwargs):
@@ -163,7 +162,7 @@ def html_out(args, m, html=True):
         html_out(args, submodule, html)
 
 
-def main():
+def run():
     """ Command-line entry point """
     args = parser.parse_args()
 
@@ -186,7 +185,9 @@ def main():
         except pdoc.extract.ExtractError as e:
             _eprint(str(e))
             sys.exit(1)
-        modules.append(pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules))
+        modules.append(
+            pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules)
+        )
 
     if args.template_dir is not None:
         pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
@@ -203,16 +204,10 @@ def main():
             "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
             file=sys.stderr,
         )
-
         httpd.serve_forever()
         httpd.server_close()
-        sys.exit(0)
-    # Plain text?
-    if not args.html:
+    elif args.html:
         for m in modules:
-            output = pdoc.render.text(m)
-            print(output)
-    elif not args.http:
             # HTML output depends on whether the module being documented is a package
             # or not. If not, then output is written to {MODULE_NAME}.html in
             # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
@@ -220,10 +215,17 @@ def main():
             # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
             # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
             # so on...
-            quit_if_exists(args, module)
-            html_out(args, module, args.html)
-            sys.exit(0)
+            quit_if_exists(args, m)
+            html_out(args, m, args.html)
+    else:
+        # Plain text
+        for m in modules:
+            output = pdoc.render.text(m)
+            print(output)
 
 
-if __name__ == "__main__":
-    main()
+def main():
+    try:
+        run()
+    except KeyboardInterrupt:
+        pass

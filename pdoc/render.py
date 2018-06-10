@@ -56,17 +56,13 @@ def _get_tpl(name):
 
 
 def html_index(
-    modules: typing.Sequence[typing.Tuple[str, pdoc.doc.Module]],
-    link_prefix: str = "/",
+    modules: typing.Sequence[typing.Tuple[str, pdoc.doc.Module]], link_prefix: str = "/"
 ):
     """
         Render an HTML module index.
     """
     t = _get_tpl("/html_index.mako")
-    t = t.render(
-        modules=modules,
-        link_prefix=link_prefix,
-    )
+    t = t.render(modules=modules, link_prefix=link_prefix)
     return t.strip()
 
 
