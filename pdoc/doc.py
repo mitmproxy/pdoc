@@ -173,7 +173,7 @@ class Module(Doc):
         it was imported. It is always an absolute import path.
         """
 
-    def __init__(self, module, docfilter=None, allsubmodules=False, supermodule=None):
+    def __init__(self, module, docfilter=None, allsubmodules=True, supermodule=None):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
@@ -505,6 +505,11 @@ class Module(Doc):
             allsubmodules=self._allsubmodules,
             supermodule=self,
         )
+
+    def allmodules(self):
+        yield self
+        for i in self.submodules():
+            yield from i.allmodules()
 
 
 class Class(Doc):

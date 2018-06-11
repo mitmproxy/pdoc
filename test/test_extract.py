@@ -27,3 +27,4 @@ def test_extract_module():
         assert pdoc.extract.extract_module("html.parser")
         assert pdoc.extract.extract_module("packages.simple")
 
+

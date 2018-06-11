@@ -8,7 +8,7 @@ class ExtractError(Exception):
 
 def extract_module(spec: str):
     """
-        Extracts and returns a module objectd. The spec argument can have the
+        Extracts and returns a module object. The spec argument can have the
         following forms:
 
         Simple module: "foo.bar"

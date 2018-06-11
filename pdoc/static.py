@@ -8,8 +8,8 @@ class StaticError(Exception):
     pass
 
 
-def module_file(args, m):
-    mbase = os.path.join(args.html_dir, *m.name.split("."))
+def module_file(path, m):
+    mbase = os.path.join(path, *m.name.split("."))
     if m.is_package():
         return os.path.join(mbase, pdoc.render.html_package_name)
     else:
@@ -30,30 +30,30 @@ def quit_if_exists(args, m):
         check_file(os.path.dirname(f))
 
 
-def html_out(args, m, html=True):
-    f = module_file(args, m)
-    if not html:
-        f = module_file(args, m).replace(".html", ".md")
+def html_out(
+    path,
+    m,
+    external_links = True,
+    link_prefix = "",
+    source = False,
+):
+    f = module_file(path, m)
     dirpath = os.path.dirname(f)
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
-    try:
-        with codecs.open(f, "w+", "utf-8") as w:
-            if not html:
-                out = pdoc.render.text(m)
-            else:
-                out = pdoc.render.html_module(
-                    m,
-                    external_links=args.external_links,
-                    link_prefix=args.link_prefix,
-                    source=not args.html_no_source,
-                )
-            print(out, file=w)
-    except Exception:
-        try:
-            os.unlink(f)
-        except:
-            pass
-        raise
+    with codecs.open(f, "w+", "utf-8") as w:
+        out = pdoc.render.html_module(
+            m,
+            external_links=external_links,
+            link_prefix=link_prefix,
+            source=source,
+        )
+        print(out, file=w)
     for submodule in m.submodules():
-        html_out(args, submodule, html)
+        html_out(
+            path,
+            submodule,
+            external_links=external_links,
+            link_prefix=link_prefix,
+            source=source,
+        )
