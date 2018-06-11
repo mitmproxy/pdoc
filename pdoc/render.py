@@ -39,9 +39,6 @@ object's `directories` attribute.
 """
 
 
-__pdoc__ = {}
-
-
 def _get_tpl(name):
     """
     Returns the Mako template with the given name.  If the template
