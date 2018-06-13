@@ -129,9 +129,7 @@ def run():
         except pdoc.extract.ExtractError as e:
             _eprint(str(e))
             sys.exit(1)
-        modules.append(
-            pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules)
-        )
+        modules.append(m)
 
     if args.template_dir is not None:
         pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)

@@ -8,7 +8,7 @@ import tutils
 def test_html_module():
     with tutils.tdir():
         m = pdoc.extract.extract_module("./modules/one")
-        assert pdoc.render.html_module(pdoc.doc.Module(m))
+        assert pdoc.render.html_module(m)
 
 
 def test_html_module_index():

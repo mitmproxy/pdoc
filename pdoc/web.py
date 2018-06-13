@@ -91,9 +91,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         # Deny favico shortcut early.
         if self.path == "/favicon.ico":
             return None
-        return pdoc.render.html_module(
-            pdoc.doc.Module(pdoc.extract.extract_module(self.import_path))
-        )
+        return pdoc.render.html_module(pdoc.extract.extract_module(self.import_path))
 
     def resolve_ext(self, import_path):
         def exists(p):
