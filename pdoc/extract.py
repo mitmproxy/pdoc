@@ -9,47 +9,69 @@ class ExtractError(Exception):
     pass
 
 
-def _load_module(spec: str) -> (typing.Any, bool):
+def split_module_spec(spec: str) -> (str, str):
+    """
+        Splits a module specification into a base path (which may be empty), and a module name.
+
+        Raises ExtactError if the spec is invalid.
+    """
+    if not spec:
+        raise ExtractError("Empty module spec.")
+    if (os.sep in spec) or (os.altsep and os.altsep in spec):
+        dirname, fname = os.path.split(spec)
+        if fname.endswith(".py"):
+            mname, _ = os.path.splitext(fname)
+            return dirname, mname
+        else:
+            if "." in fname:
+                raise ExtractError(
+                    f"Invalid module name {fname}. "
+                    "Mixing path and module specifications is not supported."
+                )
+            return dirname, fname
+    else:
+        return "", spec
+
+
+def load_module(basedir: str, module: str) -> (typing.Any, bool):
     """
         Returns a module object, and whether the module is a package or not.
     """
     ispackage = False
-    if (os.sep in spec) or (os.altsep and os.altsep in spec):
-        if spec.endswith(".py"):
-            mname = os.path.splitext(os.path.basename(spec))[0]
-            location = spec
-            if not os.path.isfile(location):
-                raise ExtractError("File not found: %s" % location)
-            ispackage = False
+    if basedir:
+        mods = module.split(".")
+        dirname = os.path.join(basedir, *mods[:-1])
+        modname = mods[-1]
+
+        pkgloc = os.path.join(dirname, modname, "__init__.py")
+        fileloc = os.path.join(dirname, modname + ".py")
+
+        if os.path.exists(pkgloc):
+            location, ispackage = pkgloc, True
+        elif os.path.exists(fileloc):
+            location, ispackage = fileloc, False
         else:
-            mname = os.path.basename(spec)
-            if "." in mname:
-                raise ExtractError(
-                    f"Invalid module name {mname}. "
-                    "Mixing path and module specifications is not supported."
-                )
-            if os.path.isfile(spec + ".py"):
-                location = spec + ".py"
-                ispackage = False
-            elif os.path.isfile(os.path.join(spec, "__init__.py")):
-                location = os.path.join(spec, "__init__.py")
-                ispackage = True
-            else:
-                raise ExtractError(f"Module not found: {spec}")
-        ispec = importlib.util.spec_from_file_location(mname, location)
+            raise ExtractError(f"Module {module} not found in {basedir}")
+
+        ispec = importlib.util.spec_from_file_location(modname, location)
         module = importlib.util.module_from_spec(ispec)
-        # This can literally raise anything
         try:
+            # This can literally raise anything
             ispec.loader.exec_module(module)
         except Exception as e:
-            raise ExtractError(f"Error importing {spec}: {e}")
+            raise ExtractError(f"Error importing {location}: {e}")
         return module, ispackage
     else:
         try:
-            m = importlib.import_module(spec)
+            # This can literally raise anything
+            m = importlib.import_module(module)
         except ModuleNotFoundError:
-            raise ExtractError(f"Module not found: {spec}")
+            raise ExtractError(f"Module not found: {module}")
+        except Exception as e:
+            raise ExtractError(f"Error importing {module}: {e}")
         # This is the only case where we actually have to test whether we're a package
+        if getattr(m, "__package__", False) and getattr(m, "__path__", False):
+            ispackage = True
         return m, ispackage
 
 
@@ -67,5 +89,6 @@ def extract_module(spec: str):
         May raise ExtactError.
     """
     importlib.invalidate_caches()
-    m, _ = _load_module(spec)
+    dname, mname = split_module_spec(spec)
+    m, _ = load_module(dname, mname)
     return pdoc.doc.Module(m)
