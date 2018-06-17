@@ -39,9 +39,8 @@ setup(
     data_files=[
         (
             "share/pdoc",
-            ["README.md", "longdesc.rst", "UNLICENSE", "INSTALL", "CHANGELOG"],
+            ["README.md", "longdesc.rst", "LICENSE", "CHANGELOG"],
         ),
-        ("share/doc/pdoc", ["doc/pdoc/index.html"]),
     ],
     entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
     provides=["pdoc"],
