@@ -1,9 +1,5 @@
 import ast
 import inspect
-import os.path as path
-import pkgutil
-
-import pdoc.extract
 
 
 __version__ = "0.3.2"
@@ -173,28 +169,13 @@ class Module(Doc):
         it was imported. It is always an absolute import path.
         """
 
-    def __init__(self, module, docfilter=None, allsubmodules=True, supermodule=None):
+    def __init__(self, module, supermodule=None):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
-
-        `docfilter` is an optional predicate that controls which
-        documentation objects are returned in the following
-        methods: `pdoc.Module.classes`, `pdoc.Module.functions`,
-        `pdoc.Module.variables` and `pdoc.Module.submodules`. The
-        filter is propagated to the analogous methods on a `pdoc.Class`
-        object.
-
-        If `allsubmodules` is `True`, then every submodule of this
-        module that can be found will be included in the
-        documentation, regardless of whether `__all__` contains it.
         """
         name = getattr(module, "__pdoc_module_name", module.__name__)
         super(Module, self).__init__(name, module, inspect.getdoc(module))
-
-        self._filtering = docfilter is not None
-        self._docfilter = (lambda _: True) if docfilter is None else docfilter
-        self._allsubmodules = allsubmodules
         self.supermodule = supermodule
 
         self.doc = {}
@@ -205,6 +186,8 @@ class Module(Doc):
         The same as `pdoc.Module.doc`, but maps fully qualified
         identifier names to documentation objects.
         """
+
+        self.submodules = []
 
         vardocs = {}
         try:
@@ -228,46 +211,11 @@ class Module(Doc):
                 self.doc[name] = Function(name, self, obj)
             elif inspect.isclass(obj):
                 self.doc[name] = Class(name, self, obj)
-            elif inspect.ismodule(obj):
-                # Only document modules that are submodules or are forcefully
-                # exported by __all__.
-                if obj is not self.module and (
-                    self.__is_exported(name, obj) or self.is_submodule(obj.__name__)
-                ):
-                    self.doc[name] = self.__new_submodule(name, obj)
             elif name in vardocs:
                 self.doc[name] = vardocs[name]
             else:
                 # Catch all for variables.
                 self.doc[name] = Variable(name, self, "", cls=None)
-
-        # Now scan the directory if this is a package for all modules.
-        if not hasattr(self.module, "__path__") and not hasattr(
-            self.module, "__file__"
-        ):
-            pkgdir = []
-        else:
-            pkgdir = getattr(
-                self.module, "__path__", [path.dirname(self.module.__file__)]
-            )
-        if self.is_package():
-            for (_, root, _) in pkgutil.iter_modules(pkgdir):
-                # Ignore if this module was already doc'd.
-                if root in self.doc:
-                    continue
-
-                # Ignore if it isn't exported, unless we've specifically
-                # requested to document all submodules.
-                if not self._allsubmodules and not self.__is_exported(
-                    root, self.module
-                ):
-                    continue
-
-                fullname = "%s.%s" % (self.name, root)
-                m = pdoc.extract.extract_module(fullname)
-                if m is None:
-                    continue
-                self.doc[root] = self.__new_submodule(root, m)
 
         # Now see if we can grab inheritance relationships between classes.
         for docobj in self.doc.values():
@@ -299,15 +247,6 @@ class Module(Doc):
             if isinstance(dobj, External):
                 continue
             dobj.docstring = inspect.cleandoc(docstring)
-
-    def is_package(self):
-        """
-        Returns `True` if this module is a package.
-
-        Works by checking if `__package__` is not `None` and whether it
-        has the `__path__` attribute.
-        """
-        return hasattr(self.module, "__path__")
 
     @property
     def source(self):
@@ -368,7 +307,7 @@ class Module(Doc):
         for doc_cls in self.classes():
             if cls is doc_cls.cls:
                 return doc_cls
-        for module in self.submodules():
+        for module in self.submodules:
             doc_cls = module.find_class(cls)
             if not isinstance(doc_cls, External):
                 return doc_cls
@@ -397,7 +336,7 @@ class Module(Doc):
             return self
         if name in self.refdoc:
             return self.refdoc[name]
-        for module in self.submodules():
+        for module in self.submodules:
             o = module.find_ident(name, _seen=_seen)
             if not isinstance(o, (External, type(None))):
                 return o
@@ -415,7 +354,7 @@ class Module(Doc):
         Returns all documented module level variables in the module
         sorted alphabetically as a list of `pdoc.Variable`.
         """
-        p = lambda o: isinstance(o, Variable) and self._docfilter(o)
+        p = lambda o: isinstance(o, Variable)
         return sorted(filter(p, self.doc.values()))
 
     def classes(self):
@@ -423,7 +362,7 @@ class Module(Doc):
         Returns all documented module level classes in the module
         sorted alphabetically as a list of `pdoc.Class`.
         """
-        p = lambda o: isinstance(o, Class) and self._docfilter(o)
+        p = lambda o: isinstance(o, Class)
         return sorted(filter(p, self.doc.values()))
 
     def functions(self):
@@ -431,24 +370,8 @@ class Module(Doc):
         Returns all documented module level functions in the module
         sorted alphabetically as a list of `pdoc.Function`.
         """
-        p = lambda o: isinstance(o, Function) and self._docfilter(o)
+        p = lambda o: isinstance(o, Function)
         return sorted(filter(p, self.doc.values()))
-
-    def submodules(self):
-        """
-        Returns all documented sub-modules in the module sorted
-        alphabetically as a list of `pdoc.Module`.
-        """
-        p = lambda o: isinstance(o, Module) and self._docfilter(o)
-        return sorted(filter(p, self.doc.values()))
-
-    def is_submodule(self, name):
-        """
-        Returns `True` if and only if `name` starts with the full
-        import path of `self` and has length at least one greater than
-        `len(self.name)`.
-        """
-        return self.name != name and name.startswith(self.name)
 
     def __is_exported(self, name, module):
         """
@@ -487,23 +410,6 @@ class Module(Doc):
                 for name, obj in members.items()
                 if self.__is_exported(name, inspect.getmodule(obj))
             ]
-        )
-
-    def __new_submodule(self, name, obj):
-        """
-        Create a new submodule documentation object for this `obj`,
-        which must by a Python module object and pass along any
-        settings in this module.
-        """
-        # Forcefully set the module name so that it is always the absolute
-        # import path. We can't rely on `obj.__name__`, since it doesn't
-        # necessarily correspond to the public exported name of the module.
-        obj.__dict__["__pdoc_module_name"] = "%s.%s" % (self.refname, name)
-        return Module(
-            obj,
-            docfilter=self._docfilter,
-            allsubmodules=self._allsubmodules,
-            supermodule=self,
         )
 
     def allmodules(self):
@@ -592,7 +498,7 @@ class Class(Doc):
         Returns all documented class variables in the class, sorted
         alphabetically as a list of `pdoc.Variable`.
         """
-        p = lambda o: isinstance(o, Variable) and self.module._docfilter(o)
+        p = lambda o: isinstance(o, Variable)
         return sorted(filter(p, self.doc.values()))
 
     def instance_variables(self):
@@ -602,7 +508,7 @@ class Class(Doc):
         are attributes of `self` defined in a class's `__init__`
         method.
         """
-        p = lambda o: isinstance(o, Variable) and self.module._docfilter(o)
+        p = lambda o: isinstance(o, Variable)
         return sorted(filter(p, self.doc_init.values()))
 
     def methods(self):
@@ -614,7 +520,7 @@ class Class(Doc):
         Unfortunately, this also includes class methods.
         """
         p = lambda o: (
-            isinstance(o, Function) and o.method and self.module._docfilter(o)
+            isinstance(o, Function) and o.method
         )
         return sorted(filter(p, self.doc.values()))
 
@@ -624,7 +530,7 @@ class Class(Doc):
         objects in the class, sorted alphabetically.
         """
         p = lambda o: (
-            isinstance(o, Function) and not o.method and self.module._docfilter(o)
+            isinstance(o, Function) and not o.method
         )
         return sorted(filter(p, self.doc.values()))
 

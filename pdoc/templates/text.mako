@@ -98,14 +98,12 @@ ${capture(function, m) | indent}
   variables = module.variables()
   classes = module.classes()
   functions = module.functions()
-  submodules = module.submodules()
+  submodules = module.submodules
 %>
 
 Module ${module.name}
 -------${'-' * len(module.name)}
-% if not module._filtering:
 ${module.docstring}
-% endif
 
 
 % if len(variables) > 0:

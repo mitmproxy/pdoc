@@ -10,7 +10,7 @@ class StaticError(Exception):
 
 def module_file(path, m):
     mbase = os.path.join(path, *m.name.split("."))
-    if m.is_package():
+    if m.submodules:
         return os.path.join(mbase, pdoc.render.html_package_name)
     else:
         return "%s%s" % (mbase, pdoc.render.html_module_suffix)
@@ -26,7 +26,7 @@ def quit_if_exists(args, m):
     check_file(f)
     # If this is a package, make sure the package directory doesn't exist
     # either.
-    if m.is_package():
+    if m.submodules:
         check_file(os.path.dirname(f))
 
 
@@ -49,7 +49,7 @@ def html_out(
             source=source,
         )
         print(out, file=w)
-    for submodule in m.submodules():
+    for submodule in m.submodules:
         html_out(
             path,
             submodule,

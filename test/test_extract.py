@@ -51,11 +51,11 @@ def test_load_module(path, mod, expected, match):
             assert ispkg == expected
 
 
-def _test_extract_module():
+def test_extract_module():
     with tutils.tdir():
-        with pytest.raises(pdoc.extract.ExtractError, match="File not found"):
+        with pytest.raises(pdoc.extract.ExtractError, match="not found"):
             pdoc.extract.extract_module("./modules/nonexistent.py")
-        with pytest.raises(pdoc.extract.ExtractError, match="Module not found"):
+        with pytest.raises(pdoc.extract.ExtractError, match="not found"):
             pdoc.extract.extract_module("./modules/nonexistent/foo")
         with pytest.raises(pdoc.extract.ExtractError, match="Invalid module name"):
             pdoc.extract.extract_module("./modules/one.two")
@@ -69,9 +69,22 @@ def _test_extract_module():
         assert pdoc.extract.extract_module("./modules/one.py")
         assert pdoc.extract.extract_module("./modules/one")
         assert pdoc.extract.extract_module("./modules/dirmod")
-        # assert pdoc.extract.extract_module("./modules/submod")
+        assert pdoc.extract.extract_module("./modules/submods")
         assert pdoc.extract.extract_module("csv")
         assert pdoc.extract.extract_module("html.parser")
         assert pdoc.extract.extract_module("packages.simple")
 
 
+@pytest.mark.parametrize(
+    "path,modname,expected",
+    [
+        ("./modules", "one", []),
+        ("./modules", "dirmod", []),
+        ("./modules", "submods", ["submods.three", "submods.two"]),
+        ("./modules", "malformed", ["malformed.syntax"]),
+    ]
+)
+def test_submodules(path, modname, expected):
+    with tutils.tdir():
+        ret = pdoc.extract.submodules(path, modname)
+        assert ret == expected

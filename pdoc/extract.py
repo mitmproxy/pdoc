@@ -1,6 +1,7 @@
 import os
 import typing
 import importlib
+import pkgutil
 
 import pdoc.doc
 
@@ -75,6 +76,28 @@ def load_module(basedir: str, module: str) -> (typing.Any, bool):
         return m, ispackage
 
 
+def submodules(dname: str, mname: str) -> typing.Sequence[str]:
+    """
+        Returns a list of fully qualified submodules within a package, given a
+        base directory and a fully qualified module name.
+    """
+    loc = os.path.join(dname, *mname.split("."))
+    ret = []
+    for mi in pkgutil.iter_modules([loc], prefix=mname + "."):
+        ret.append(mi.name)
+    ret.sort()
+    return ret
+
+
+def _extract_module(dname: str, mname: str) -> typing.Any:
+    m, pkg = load_module(dname, mname)
+    mod = pdoc.doc.Module(m)
+    if pkg:
+        for i in submodules(dname, mname):
+            mod.submodules.append(_extract_module(dname, i))
+    return mod
+
+
 def extract_module(spec: str):
     """
         Extracts and returns a module object. The spec argument can have the
@@ -90,5 +113,4 @@ def extract_module(spec: str):
     """
     importlib.invalidate_caches()
     dname, mname = split_module_spec(spec)
-    m, _ = load_module(dname, mname)
-    return pdoc.doc.Module(m)
+    return _extract_module(dname, mname)

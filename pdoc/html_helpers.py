@@ -97,7 +97,7 @@ def module_url(parent, m, link_prefix):
     if len(link_prefix) == 0:
         base = os.path.relpath(base, parent.name.replace(".", "/"))
     url = base[len("../") :] if base.startswith("../") else "" if base == ".." else base
-    if m.is_package():
+    if m.submodules:
         index = pdoc.render.html_package_name
         url = url + "/" + index if url else index
     else:
