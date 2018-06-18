@@ -1,26 +1,23 @@
-import codecs
 from distutils.core import setup
-import os.path as path
+import os.path
+import re
 
-cwd = path.dirname(__file__)
-longdesc = codecs.open(path.join(cwd, "longdesc.rst"), "r", "utf-8").read()
-version = "0.0.0"
-with codecs.open(path.join(cwd, "pdoc", "__init__.py"), "r", "utf-8") as f:
-    for line in f:
-        if line.startswith("__version__"):
-            exec(line.strip())
-            version = __version__
-            break
+
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
+    long_description = f.read()
+with open(os.path.join(here, "pdoc", "version.py")) as f:
+    VERSION = re.search(r'VERSION = "(.+?)"', f.read()).group(1)
 
 setup(
     name="pdoc",
     author="Andrew Gallant",
     author_email="pdoc@burntsushi.net",
-    version=version,
+    version=VERSION,
     license="UNLICENSE",
     description="A simple program and library to auto generate API "
     "documentation for Python modules.",
-    long_description=longdesc,
+    long_description=long_description,
     url="https://github.com/BurntSushi/pdoc",
     classifiers=[
         "Topic :: Documentation",
@@ -36,12 +33,6 @@ setup(
     platforms="ANY",
     packages=["pdoc"],
     package_data={"pdoc": ["templates/*"]},
-    data_files=[
-        (
-            "share/pdoc",
-            ["README.md", "longdesc.rst", "LICENSE", "CHANGELOG"],
-        ),
-    ],
     entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
     provides=["pdoc"],
     extras_require={

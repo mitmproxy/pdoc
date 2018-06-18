@@ -19,7 +19,10 @@ def module_file(path, m):
 def quit_if_exists(args, m):
     def check_file(f):
         if os.access(f, os.R_OK):
-            raise StaticError("%s already exists. Delete it or run with --overwrite" % f)
+            raise StaticError(
+                "%s already exists. Delete it or run with --overwrite" % f
+            )
+
     if args.overwrite:
         return
     f = module_file(args, m)
@@ -30,23 +33,14 @@ def quit_if_exists(args, m):
         check_file(os.path.dirname(f))
 
 
-def html_out(
-    path,
-    m,
-    external_links = True,
-    link_prefix = "",
-    source = False,
-):
+def html_out(path, m, external_links=True, link_prefix="", source=False):
     f = module_file(path, m)
     dirpath = os.path.dirname(f)
     if not os.access(dirpath, os.R_OK):
         os.makedirs(dirpath)
     with codecs.open(f, "w+", "utf-8") as w:
         out = pdoc.render.html_module(
-            m,
-            external_links=external_links,
-            link_prefix=link_prefix,
-            source=source,
+            m, external_links=external_links, link_prefix=link_prefix, source=source
         )
         print(out, file=w)
     for submodule in m.submodules:

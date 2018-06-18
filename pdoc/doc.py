@@ -2,11 +2,6 @@ import ast
 import inspect
 
 
-__version__ = "0.3.2"
-"""
-The current version of pdoc. This value is read from `setup.py`.
-"""
-
 __pdoc__ = {}
 
 
@@ -427,7 +422,7 @@ class Class(Doc):
         Same as `pdoc.Doc.__init__`, except `class_obj` must be a
         Python class object. The docstring is gathered automatically.
         """
-        super(Class, self).__init__(name, module, inspect.getdoc(class_obj))
+        super().__init__(name, module, inspect.getdoc(class_obj))
 
         self.cls = class_obj
         """The class Python object."""
@@ -518,9 +513,7 @@ class Class(Doc):
 
         Unfortunately, this also includes class methods.
         """
-        p = lambda o: (
-            isinstance(o, Function) and o.method
-        )
+        p = lambda o: (isinstance(o, Function) and o.method)
         return sorted(filter(p, self.doc.values()))
 
     def functions(self):
@@ -528,9 +521,7 @@ class Class(Doc):
         Returns all documented static functions as `pdoc.Function`
         objects in the class, sorted alphabetically.
         """
-        p = lambda o: (
-            isinstance(o, Function) and not o.method
-        )
+        p = lambda o: (isinstance(o, Function) and not o.method)
         return sorted(filter(p, self.doc.values()))
 
     def _fill_inheritance(self):
@@ -604,7 +595,7 @@ class Function(Doc):
         `method` should be `True` when the function is a method. In
         all other cases, it should be `False`.
         """
-        super(Function, self).__init__(name, module, inspect.getdoc(func_obj))
+        super().__init__(name, module, inspect.getdoc(func_obj))
 
         self.func = func_obj
         """The Python function object."""
@@ -735,7 +726,7 @@ class Variable(Doc):
         as a `pdoc.Class` object when this is a class or instance
         variable.
         """
-        super(Variable, self).__init__(name, module, docstring)
+        super().__init__(name, module, docstring)
 
         self.cls = cls
         """
@@ -791,7 +782,7 @@ class External(Doc):
         Initializes an external identifier with `name`, where `name`
         should be a fully qualified name.
         """
-        super(External, self).__init__(name, None, "")
+        super().__init__(name, None, "")
 
     @property
     def source(self):

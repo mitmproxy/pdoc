@@ -6,16 +6,15 @@ import pdoc.doc
 import pdoc.extract
 import pdoc.render
 import pdoc.static
+import pdoc.version
 import pdoc.web
-
-version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 aa = parser.add_argument
-aa("--version", action="version", version="%(prog)s " + pdoc.doc.__version__)
+aa("--version", action="version", version="%(prog)s " + pdoc.version.VERSION)
 aa(
     "modules",
     type=str,
