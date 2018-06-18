@@ -189,15 +189,15 @@ import pdoc.html_helpers as hh
   classes = module.classes()
   functions = module.functions()
   submodules = module.submodules
-  supermodule = module.supermodule
+  parent = module.parent
   %>
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
-    % if supermodule:
+    % if parent:
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono">${hh.link(module, supermodule.refname, link_prefix)}</li>
+        <li class="mono">${hh.link(module, parent.refname, link_prefix)}</li>
       </ul>
     </li>
     % endif

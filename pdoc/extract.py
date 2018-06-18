@@ -89,12 +89,12 @@ def submodules(dname: str, mname: str) -> typing.Sequence[str]:
     return ret
 
 
-def _extract_module(dname: str, mname: str) -> typing.Any:
+def _extract_module(dname: str, mname: str, parent=None) -> typing.Any:
     m, pkg = load_module(dname, mname)
-    mod = pdoc.doc.Module(m)
+    mod = pdoc.doc.Module(mname, m, parent)
     if pkg:
         for i in submodules(dname, mname):
-            mod.submodules.append(_extract_module(dname, i))
+            mod.submodules.append(_extract_module(dname, i, parent=mod))
     return mod
 
 

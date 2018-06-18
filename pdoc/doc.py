@@ -169,14 +169,13 @@ class Module(Doc):
         it was imported. It is always an absolute import path.
         """
 
-    def __init__(self, module, supermodule=None):
+    def __init__(self, name, module, parent):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
         """
-        name = getattr(module, "__pdoc_module_name", module.__name__)
-        super(Module, self).__init__(name, module, inspect.getdoc(module))
-        self.supermodule = supermodule
+        super().__init__(name, module, inspect.getdoc(module))
+        self.parent = parent
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
@@ -341,12 +340,12 @@ class Module(Doc):
             if not isinstance(o, (External, type(None))):
                 return o
         # Traverse also up-level super-modules
-        module = self.supermodule
+        module = self.parent
         while module is not None:
             o = module.find_ident(name, _seen=_seen)
             if not isinstance(o, (External, type(None))):
                 return o
-            module = module.supermodule
+            module = module.parent
         return External(name)
 
     def variables(self):
@@ -414,7 +413,7 @@ class Module(Doc):
 
     def allmodules(self):
         yield self
-        for i in self.submodules():
+        for i in self.submodules:
             yield from i.allmodules()
 
 
