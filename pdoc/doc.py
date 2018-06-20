@@ -411,6 +411,12 @@ class Module(Doc):
         for i in self.submodules:
             yield from i.allmodules()
 
+    def toroot(self):
+        n = self
+        while n:
+            yield n
+            n = n.parent
+
 
 class Class(Doc):
     """

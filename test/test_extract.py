@@ -32,13 +32,13 @@ def test_split_module_spec(input, expected):
         ("", "email", True, None),
         ("", "csv", False, None),
         ("", "html.parser", False, None),
-        ("", "packages.simple", False, None),
+        ("", "onpath.simple", False, None),
 
         ("./modules", "nonexistent", False, "not found"),
         ("./modules/nonexistent", "foo", False, "not found"),
         ("", "nonexistent.module", False, "not found"),
         ("./modules/malformed", "syntax", False, "Error importing"),
-        ("", "packages.malformed_syntax", False, "Error importing"),
+        ("", "onpath.malformed_syntax", False, "Error importing"),
     ]
 )
 def test_load_module(path, mod, expected, match):
@@ -60,7 +60,7 @@ def test_load_module(path, mod, expected, match):
         ("nonexistent.module", None, "not found"),
         ("./modules/one.two", None, "Invalid module name"),
         ("./modules/malformed/syntax.py", None, "Error importing"),
-        ("packages.malformed_syntax", None, "Error importing"),
+        ("onpath.malformed_syntax", None, "Error importing"),
 
         ("./modules/one.py", ["one"], None),
         ("./modules/one", ["one"], None),
@@ -68,7 +68,7 @@ def test_load_module(path, mod, expected, match):
         ("./modules/submods", ["submods", "submods.three", "submods.two"], None),
         ("csv", ["csv"], None),
         ("html.parser", ["html.parser"], None),
-        ("packages.simple", ["packages.simple"], None),
+        ("onpath.simple", ["onpath.simple"], None),
     ],
 )
 def test_extract_module(path, expected, match):
