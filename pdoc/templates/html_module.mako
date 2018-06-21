@@ -63,7 +63,7 @@ import pdoc.html_helpers as hh
   variables = module.variables()
   classes = module.classes()
   functions = module.functions()
-  submodules = module.submodules()
+  submodules = module.submodules
   %>
 
   <%def name="show_func(f)">
@@ -188,7 +188,7 @@ import pdoc.html_helpers as hh
   variables = module.variables()
   classes = module.classes()
   functions = module.functions()
-  submodules = module.submodules()
+  submodules = module.submodules
   supermodule = module.supermodule
   %>
   <div id="sidebar">

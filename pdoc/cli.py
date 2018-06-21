@@ -1,14 +1,12 @@
 import argparse
 
-import codecs
-import os
-import os.path
 import sys
 
-import pdoc.web
 import pdoc.doc
 import pdoc.extract
 import pdoc.render
+import pdoc.static
+import pdoc.web
 
 version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 
@@ -17,7 +15,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 aa = parser.add_argument
-aa('--version', action='version', version='%(prog)s ' + pdoc.doc.__version__)
+aa("--version", action="version", version="%(prog)s " + pdoc.doc.__version__)
 aa(
     "modules",
     type=str,
@@ -101,7 +99,6 @@ aa(
     default=8080,
     help="The port on which to run the HTTP server.",
 )
-aa("--http-html", action="store_true", help="Internal use only. Do not set.")
 
 
 def _eprint(*args, **kwargs):
@@ -109,61 +106,7 @@ def _eprint(*args, **kwargs):
     print(*args, **kwargs)
 
 
-def module_file(args, m):
-    mbase = os.path.join(args.html_dir, *m.name.split("."))
-    if m.is_package():
-        return os.path.join(mbase, pdoc.render.html_package_name)
-    else:
-        return "%s%s" % (mbase, pdoc.render.html_module_suffix)
-
-
-def quit_if_exists(args, m):
-    def check_file(f):
-        if os.access(f, os.R_OK):
-            _eprint("%s already exists. Delete it or run with --overwrite" % f)
-            sys.exit(1)
-
-    if args.overwrite:
-        return
-    f = module_file(args, m)
-    check_file(f)
-
-    # If this is a package, make sure the package directory doesn't exist
-    # either.
-    if m.is_package():
-        check_file(os.path.dirname(f))
-
-
-def html_out(args, m, html=True):
-    f = module_file(args, m)
-    if not html:
-        f = module_file(args, m).replace(".html", ".md")
-    dirpath = os.path.dirname(f)
-    if not os.access(dirpath, os.R_OK):
-        os.makedirs(dirpath)
-    try:
-        with codecs.open(f, "w+", "utf-8") as w:
-            if not html:
-                out = pdoc.render.text(m)
-            else:
-                out = pdoc.render.html_module(
-                    m,
-                    external_links=args.external_links,
-                    link_prefix=args.link_prefix,
-                    source=not args.html_no_source,
-                )
-            print(out, file=w)
-    except Exception:
-        try:
-            os.unlink(f)
-        except:
-            pass
-        raise
-    for submodule in m.submodules():
-        html_out(args, submodule, html)
-
-
-def main():
+def run():
     """ Command-line entry point """
     args = parser.parse_args()
 
@@ -186,7 +129,7 @@ def main():
         except pdoc.extract.ExtractError as e:
             _eprint(str(e))
             sys.exit(1)
-        modules.append(pdoc.doc.Module(m, docfilter=docfilter, allsubmodules=args.all_submodules))
+        modules.append(m)
 
     if args.template_dir is not None:
         pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
@@ -203,16 +146,10 @@ def main():
             "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
             file=sys.stderr,
         )
-
         httpd.serve_forever()
         httpd.server_close()
-        sys.exit(0)
-    # Plain text?
-    if not args.html:
+    elif args.html:
         for m in modules:
-            output = pdoc.render.text(m)
-            print(output)
-    elif not args.http:
             # HTML output depends on whether the module being documented is a package
             # or not. If not, then output is written to {MODULE_NAME}.html in
             # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
@@ -220,10 +157,21 @@ def main():
             # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
             # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
             # so on...
-            quit_if_exists(args, module)
-            html_out(args, module, args.html)
-            sys.exit(0)
+            try:
+                pdoc.static.quit_if_exists(args, m)
+                pdoc.static.html_out(args, m, args.html)
+            except pdoc.static.StaticError as e:
+                _eprint(str(e))
+                sys.exit(1)
+    else:
+        # Plain text
+        for m in modules:
+            output = pdoc.render.text(m)
+            print(output)
 
 
-if __name__ == "__main__":
-    main()
+def main():
+    try:
+        run()
+    except KeyboardInterrupt:
+        pass
