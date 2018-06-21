@@ -41,6 +41,9 @@ def test_path_to_module():
 
 
 def test_static_single(tmpdir):
+    dst = pathlib.Path(tmpdir)
     with tutils.tdir():
         m = pdoc.extract.extract_module("./modules/one")
-        pdoc.static.html_out(tmpdir, m)
+        assert not pdoc.static.would_overwrite(dst, m)
+        pdoc.static.html_out(dst, m)
+        assert pdoc.static.would_overwrite(dst, m)

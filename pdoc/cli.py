@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 
 import sys
 
@@ -148,20 +149,11 @@ def run():
         httpd.serve_forever()
         httpd.server_close()
     elif args.html:
-        for m in modules:
-            # HTML output depends on whether the module being documented is a package
-            # or not. If not, then output is written to {MODULE_NAME}.html in
-            # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
-            # is created, and output is written to {MODULE_NAME}/index.html.
-            # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
-            # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
-            # so on...
-            try:
-                pdoc.static.quit_if_exists(args, m)
-                pdoc.static.html_out(args, m, args.html)
-            except pdoc.static.StaticError as e:
-                _eprint(str(e))
-                sys.exit(1)
+        dst = pathlib.Path(args.html_dir)
+        if not args.overwrite and pdoc.static.would_overwrite(dst, m):
+            _eprint("Rendering would overwrite files, but --overwite is not set")
+            sys.exit(1)
+        pdoc.static.html_out(dst, m)
     else:
         # Plain text
         for m in modules:
