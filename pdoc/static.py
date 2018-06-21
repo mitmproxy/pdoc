@@ -1,4 +1,5 @@
 import pathlib
+import typing
 
 import pdoc.render
 import pdoc.doc
@@ -23,7 +24,7 @@ def module_to_path(m: pdoc.doc.Module) -> pathlib.Path:
     return p
 
 
-def path_to_module(root: pdoc.doc.Module, path: pathlib.Path) -> pdoc.doc.Module:
+def path_to_module(roots: typing.Sequence[pdoc.doc.Module], path: pathlib.Path) -> pdoc.doc.Module:
     """
         Retrieves the matching module for a given path from a module tree.
     """
@@ -34,34 +35,45 @@ def path_to_module(root: pdoc.doc.Module, path: pathlib.Path) -> pdoc.doc.Module
         parts = parts[:-1]
     elif parts[-1] == "index.m":
         parts[-1] = "index"
-    mod = root.find_ident(".".join(parts))
-    if not isinstance(mod, pdoc.doc.Module):
-        raise StaticError(f"No matching module for {path}")
-    return mod
+    for root in roots:
+        mod = root.find_ident(".".join(parts))
+        if isinstance(mod, pdoc.doc.Module):
+            return mod
+    raise StaticError(f"No matching module for {path}")
 
 
-def would_overwrite(dst: pathlib.Path, root: pdoc.doc.Module) -> bool:
+def would_overwrite(dst: pathlib.Path, roots: typing.Sequence[pdoc.doc.Module]) -> bool:
     """
         Would rendering root to dst overwrite any file?
     """
-    for m in root.allmodules():
-        p = dst.joinpath(module_to_path(m))
+    if len(roots) > 1:
+        p = dst / "index.html"
         if p.exists():
             return True
+    for root in roots:
+        for m in root.allmodules():
+            p = dst.joinpath(module_to_path(m))
+            if p.exists():
+                return True
     return False
 
 
 def html_out(
     dst: pathlib.Path,
-    root: pdoc.doc.Module,
+    roots: typing.Sequence[pdoc.doc.Module],
     external_links: bool = True,
     link_prefix: str = "",
     source: bool = False,
 ):
-    for m in root.allmodules():
-        p = dst.joinpath(module_to_path(m))
-        p.parent.mkdir(parents=True, exist_ok=True)
-        out = pdoc.render.html_module(
-            m, external_links=external_links, link_prefix=link_prefix, source=source
-        )
-        p.write_text(out, encoding="utf-8")
+    if len(roots) > 1:
+        p = dst / "index.html"
+        idx = pdoc.render.html_index(roots, link_prefix=link_prefix)
+        p.write_text(idx, encoding="utf-8")
+    for root in roots:
+        for m in root.allmodules():
+            p = dst.joinpath(module_to_path(m))
+            p.parent.mkdir(parents=True, exist_ok=True)
+            out = pdoc.render.html_module(
+                m, external_links=external_links, link_prefix=link_prefix, source=source
+            )
+            p.write_text(out, encoding="utf-8")

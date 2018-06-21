@@ -122,14 +122,14 @@ def run():
                 return search in o.doc or search in o.doc_init
             return False
 
-    modules = []
+    roots = []
     for mod in args.modules:
         try:
             m = pdoc.extract.extract_module(mod)
         except pdoc.extract.ExtractError as e:
             _eprint(str(e))
             sys.exit(1)
-        modules.append(m)
+        roots.append(m)
 
     if args.template_dir is not None:
         pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
@@ -141,7 +141,7 @@ def run():
 
     if args.http:
         # Run the HTTP server.
-        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, modules)
+        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, roots)
         print(
             "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
             file=sys.stderr,
@@ -150,13 +150,13 @@ def run():
         httpd.server_close()
     elif args.html:
         dst = pathlib.Path(args.html_dir)
-        if not args.overwrite and pdoc.static.would_overwrite(dst, m):
+        if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
             _eprint("Rendering would overwrite files, but --overwite is not set")
             sys.exit(1)
-        pdoc.static.html_out(dst, m)
+        pdoc.static.html_out(dst, roots)
     else:
         # Plain text
-        for m in modules:
+        for m in roots:
             output = pdoc.render.text(m)
             print(output)
 

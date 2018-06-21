@@ -7,24 +7,20 @@ import pdoc.html_helpers as hh
 
 <%inherit file="html_frame.mako"/>
 
-<%def name="show_module_list(modules)">
+<%def name="show_module_list(roots)">
 <h1>Python module list</h1>
-% if len(modules) == 0:
-  <p>No modules found.</p>
-% else:
   <table id="module-list">
-  % for name, desc in modules:
+  % for root in roots:
     <tr>
-      <td><a href="${link_prefix}${name}">${name}</a></td>
+      <td><a href="${link_prefix}${root.name}">${root.name}</a></td>
       <td>
-      % if len(desc.strip()) > 0:
-        <div class="desc">${desc | hh.mark}</div>
+      % if len(root.docstring.strip()) > 0:
+        <div class="desc">${root.docstring | hh.mark}</div>
       % endif
       </td>
     </tr>
   % endfor
   </table>
-% endif
 </%def>
 
 <%block name="title">
@@ -32,4 +28,4 @@ import pdoc.html_helpers as hh
   <meta name="description" content="Python module index" />
 </%block>
 
-<article id="content">${show_module_list(modules)}</article>
+<article id="content">${show_module_list(roots)}</article>

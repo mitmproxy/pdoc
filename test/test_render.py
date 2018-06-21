@@ -13,9 +13,8 @@ def test_html_module():
 
 def test_html_module_index():
     with tutils.tdir():
-        assert pdoc.render.html_index(
-            modules = [
-                ("name", "desc"),
-                ("name2", "desc2"),
-            ]
-        )
+        roots = [
+            pdoc.extract.extract_module("./modules/one"),
+            pdoc.extract.extract_module("./modules/submods")
+        ]
+        assert pdoc.render.html_index(roots)
