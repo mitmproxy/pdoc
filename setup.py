@@ -39,6 +39,7 @@ setup(
         "dev": {
             "black",
             "flake8>=3.5, <3.6",
+            "mypy",
             "pytest>=3.3,<4",
             "pytest-cov>=2.5.1,<3",
             "pytest-faulthandler>=1.3.1,<2",

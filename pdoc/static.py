@@ -24,7 +24,9 @@ def module_to_path(m: pdoc.doc.Module) -> pathlib.Path:
     return p
 
 
-def path_to_module(roots: typing.Sequence[pdoc.doc.Module], path: pathlib.Path) -> pdoc.doc.Module:
+def path_to_module(
+    roots: typing.Sequence[pdoc.doc.Module], path: pathlib.Path
+) -> pdoc.doc.Module:
     """
         Retrieves the matching module for a given path from a module tree.
     """

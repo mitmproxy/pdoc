@@ -11,4 +11,3 @@ def tdir():
     os.chdir(os.path.dirname(__file__))
     yield
     os.chdir(old_dir)
-

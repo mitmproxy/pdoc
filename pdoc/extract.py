@@ -58,7 +58,7 @@ def load_module(basedir: str, module: str) -> typing.Tuple[typing.Any, bool]:
         mobj = importlib.util.module_from_spec(ispec)
         try:
             # This can literally raise anything
-            ispec.loader.exec_module(mobj) # type: ignore
+            ispec.loader.exec_module(mobj)  # type: ignore
         except Exception as e:
             raise ExtractError(f"Error importing {location}: {e}")
         return mobj, ispackage

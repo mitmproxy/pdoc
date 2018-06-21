@@ -50,9 +50,7 @@ def _get_tpl(name):
     return t
 
 
-def html_index(
-    roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/"
-) -> str:
+def html_index(roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
     """
         Render an HTML module index.
     """
