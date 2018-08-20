@@ -48,7 +48,6 @@ setup(
     provides=["pdoc"],
     extras_require={
         "dev": {
-            "black",
             "flake8>=3.5, <3.6",
             "pytest>=3.3,<4",
             "pytest-cov>=2.5.1,<3",
