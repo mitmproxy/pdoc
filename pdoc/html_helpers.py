@@ -2,7 +2,7 @@ import os
 import re
 import sys
 
-import markdown
+import markdown2
 import pygments
 import pygments.formatters
 import pygments.lexers
@@ -67,8 +67,8 @@ def mark(s, module_list=None, linky=True):
     # if not module_list:
     #     s, _ = re.subn("`[^`]+`", linkify, s)
 
-    extensions = ["markdown.extensions.codehilite(linenums=False)"]
-    s = markdown.markdown(s.strip(), extensions=extensions)
+    extensions = ["fenced-code-blocks"]
+    s = markdown2.markdown(s.strip(), extras=extensions)
     return s
 
 
