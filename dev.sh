@@ -8,6 +8,7 @@ python3 -m venv venv
 . venv/bin/activate
 pip3 install -U pip setuptools
 pip3 install -r requirements.txt
+pip3 install -U black
 
 echo ""
 echo "  * Created virtualenv environment in ./venv."
