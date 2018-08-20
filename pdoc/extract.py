@@ -25,10 +25,8 @@ def split_module_spec(spec: str) -> (str, str):
             return dirname, mname
         else:
             if "." in fname:
-                raise ExtractError(
-                    ("Invalid module name {fname}. "
-                    "Mixing path and module specifications is not supported.").format(fname)
-                )
+                raise ExtractError("Invalid module name {fname}. Mixing path and module specifications "
+                                   "is not supported.".format(fname=fname))
             return dirname, fname
     else:
         return "", spec
