@@ -26,8 +26,8 @@ def split_module_spec(spec: str) -> (str, str):
         else:
             if "." in fname:
                 raise ExtractError(
-                    f"Invalid module name {fname}. "
-                    "Mixing path and module specifications is not supported."
+                    ("Invalid module name {fname}. "
+                    "Mixing path and module specifications is not supported.").format(fname)
                 )
             return dirname, fname
     else:
@@ -52,7 +52,9 @@ def load_module(basedir: str, module: str) -> (typing.Any, bool):
         elif os.path.exists(fileloc):
             location, ispackage = fileloc, False
         else:
-            raise ExtractError(f"Module {module} not found in {basedir}")
+            raise ExtractError(
+                "Module {module} not found in {basedir}".format(module=module, basedir=basedir)
+            )
 
         ispec = importlib.util.spec_from_file_location(modname, location)
         module = importlib.util.module_from_spec(ispec)
@@ -60,16 +62,16 @@ def load_module(basedir: str, module: str) -> (typing.Any, bool):
             # This can literally raise anything
             ispec.loader.exec_module(module)
         except Exception as e:
-            raise ExtractError(f"Error importing {location}: {e}")
+            raise ExtractError("Error importing {location}: {e}".format(location=location, e=e))
         return module, ispackage
     else:
         try:
             # This can literally raise anything
             m = importlib.import_module(module)
-        except ModuleNotFoundError:
-            raise ExtractError(f"Module not found: {module}")
+        except ImportError:
+            raise ExtractError("Module not found: {module}".format(module=module))
         except Exception as e:
-            raise ExtractError(f"Error importing {module}: {e}")
+            raise ExtractError("Error importing {module}: {e}".format(module=module, e=e))
         # This is the only case where we actually have to test whether we're a package
         if getattr(m, "__package__", False) and getattr(m, "__path__", False):
             ispackage = True
