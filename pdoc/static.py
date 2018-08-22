@@ -9,7 +9,8 @@ class StaticError(Exception):
 
 
 def module_file(path, m):
-    mbase = os.path.join(path, *m.name.split("."))
+    # In Python 3.5, os.path.join() only accepts strings
+    mbase = os.path.join(str(path), *m.name.split("."))
     if m.submodules:
         return os.path.join(mbase, pdoc.render.html_package_name)
     else:

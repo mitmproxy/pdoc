@@ -84,7 +84,11 @@ def submodules(dname: str, mname: str) -> typing.Sequence[str]:
     loc = os.path.join(dname, *mname.split("."))
     ret = []
     for mi in pkgutil.iter_modules([loc], prefix=mname + "."):
-        ret.append(mi.name)
+        if isinstance(mi, tuple):
+            # Python 3.5 compat
+            ret.append(mi[1])
+        else:
+            ret.append(mi.name)
     ret.sort()
     return ret
 
