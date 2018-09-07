@@ -47,14 +47,18 @@ setup(
     entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
     provides=["pdoc"],
     extras_require={
-        "dev": {
+        "dev": [
             "flake8>=3.5, <3.6",
             "pytest>=3.3,<4",
             "pytest-cov>=2.5.1,<3",
             "pytest-faulthandler>=1.3.1,<2",
             "pytest-timeout>=1.2.1,<2",
             "pytest-xdist>=1.22,<2",
-        }
+        ]
     },
-    install_requires=["mako", "markdown", "pygments"],
+    install_requires=[
+        "mako>=1.0.7,<1.1",
+        "markdown>=2.6.11,<2.7",
+        "pygments>=2.2.0,<2.3",
+    ],
 )
