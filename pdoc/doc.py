@@ -1,5 +1,6 @@
 import ast
 import inspect
+import typing
 
 
 __version__ = "0.3.2"
@@ -80,6 +81,17 @@ def _is_exported(ident_name):
     `pdoc.Module.is_public`.
     """
     return not ident_name.startswith("_")
+
+
+def _is_static(cls: typing.Type, method_name: str) -> bool:
+    """
+    Returns `True` if the given method is a @staticmethod.
+    """
+    for c in inspect.getmro(cls):
+        if method_name in c.__dict__:
+            return isinstance(c.__dict__[method_name], staticmethod)
+    else:
+        ValueError("{method_name} not found in {cls}.".format(method_name=method_name, cls=cls))
 
 
 class Doc(object):
@@ -468,13 +480,9 @@ class Class(Doc):
                 # Let instance members override class members.
                 continue
 
-            if inspect.ismethod(obj):
+            if inspect.isfunction(obj):
                 self.doc[name] = Function(
-                    name, self.module, obj.__func__, cls=self, method=True
-                )
-            elif inspect.isfunction(obj):
-                self.doc[name] = Function(
-                    name, self.module, obj, cls=self, method=False
+                    name, self.module, obj, cls=self, method=not _is_static(self.cls, name)
                 )
             elif isinstance(obj, property):
                 docstring = getattr(obj, "__doc__", "")
