@@ -10,23 +10,29 @@ def test_simple():
         assert m
 
 
-class Parent:
-    @staticmethod
-    def bar():
+class Dummy:
+    def method(self):
         pass
 
-    def baz(self):
+    @classmethod
+    def class_method(cls):
+        pass
+
+    @staticmethod
+    def static_method():
         pass
 
 
-class Child(Parent):
-    @staticmethod
-    def baz():
+class DummyChild(Dummy):
+    def class_method(self):
         pass
 
 
 def test_is_static():
-    assert pdoc.doc._is_static(Parent, "bar")
-    assert not pdoc.doc._is_static(Parent, "baz")
-    assert pdoc.doc._is_static(Child, "bar")
-    assert pdoc.doc._is_static(Child, "baz")
+    assert pdoc.doc._is_method(Dummy, "method")
+    assert not pdoc.doc._is_method(Dummy, "class_method")
+    assert not pdoc.doc._is_method(Dummy, "static_method")
+
+    assert pdoc.doc._is_method(DummyChild, "method")
+    assert pdoc.doc._is_method(DummyChild, "class_method")
+    assert not pdoc.doc._is_method(Dummy, "static_method")
