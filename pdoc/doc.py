@@ -1,6 +1,10 @@
 import ast
 import inspect
 
+try:
+    unicode        # Python 2
+except NameError:
+    unicode = str  # Python 3
 
 __pdoc__ = {}
 
@@ -673,7 +677,7 @@ class Function(Doc):
         """
 
         def fmt_param(el):
-            if isinstance(el, str) or isinstance(el, unicode):
+            if isinstance(el, (str, unicode)):
                 return el
             else:
                 return "(%s)" % (", ".join(map(fmt_param, el)))
