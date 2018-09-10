@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 aa = parser.add_argument
-aa("--version", action="version", version="%(prog)s " + pdoc.doc.__version__)
+aa("--version", action="version", version="%(prog)s " + pdoc.__version__)
 aa(
     "modules",
     type=str,

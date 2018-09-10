@@ -171,3 +171,8 @@ of a module or in the definition of a class.
 If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
 """
+
+__version__ = "0.3.2"
+"""
+The current version of pdoc. This value is read from `setup.py`.
+"""

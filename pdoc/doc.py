@@ -3,11 +3,6 @@ import inspect
 import typing
 
 
-__version__ = "0.3.2"
-"""
-The current version of pdoc. This value is read from `setup.py`.
-"""
-
 __pdoc__ = {}
 
 

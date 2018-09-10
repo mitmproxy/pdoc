@@ -1,6 +1,6 @@
 
 [![Build Status](https://travis-ci.org/mitmproxy/pdoc.svg?branch=master)](https://travis-ci.org/mitmproxy/pdoc)
-
+[![PyPI Version](https://shields.mitmproxy.org/pypi/v/pdoc.svg)](https://pypi.org/project/pdoc/)
 
 `pdoc` is a library and a command line program to discover the public
 interface of a Python module or package. The `pdoc` script can be used to
@@ -38,7 +38,7 @@ Features
 
 The above features are explained in more detail in pdoc's documentation.
 
-`pdoc` is compatible with Python 3.6 and newer.
+`pdoc` is compatible with Python 3.5 and newer.
 
 
 Example usage
@@ -50,7 +50,7 @@ For example, to view the documentation for the `csv` module in the console:
 
 Or, you could view it by pointing at the file directly:
 
-    pdoc /usr/lib/python2.7/csv.py
+    pdoc /usr/lib/python3.7/csv.py
 
 Submodules are fine too:
 
