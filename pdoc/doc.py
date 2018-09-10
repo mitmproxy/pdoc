@@ -673,10 +673,7 @@ class Function(Doc):
         """
 
         def fmt_param(el):
-            if isinstance(el, str) or isinstance(el, unicode):
-                return el
-            else:
-                return "(%s)" % (", ".join(map(fmt_param, el)))
+            return el if isinstance(el, str) else "(%s)" % (", ".join(map(fmt_param, el)))
 
         try:
             getspec = getattr(inspect, "getfullargspec", inspect.getargspec)
