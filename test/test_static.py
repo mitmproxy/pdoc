@@ -24,7 +24,7 @@ def test_module_path(modspec, ident, path):
         submod = root.find_ident(ident)
 
         mp = pdoc.static.module_to_path(submod)
-        assert mp == pathlib.PosixPath(path)
+        assert mp == pathlib.Path(path)
 
         retmod = pdoc.static.path_to_module([root], mp)
         assert retmod.name == submod.name
@@ -41,7 +41,7 @@ def test_path_to_module():
 
 
 def test_static(tmpdir):
-    dst = pathlib.Path(tmpdir)
+    dst = pathlib.Path(str(tmpdir))
     with tutils.tdir():
         one = pdoc.extract.extract_module("./modules/one")
         two = pdoc.extract.extract_module("./modules/submods")

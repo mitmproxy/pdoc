@@ -60,7 +60,7 @@ def load_module(basedir: str, module: str) -> typing.Tuple[typing.Any, bool]:
             # This can literally raise anything
             ispec.loader.exec_module(mobj)  # type: ignore
         except Exception as e:
-            raise ExtractError("Error importing {location}: {e}".format(location=location, e=e)))
+            raise ExtractError("Error importing {location}: {e}".format(location=location, e=e))
         return mobj, ispackage
     else:
         try:

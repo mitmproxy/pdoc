@@ -41,7 +41,7 @@ def path_to_module(
         mod = root.find_ident(".".join(parts))
         if isinstance(mod, pdoc.doc.Module):
             return mod
-    raise StaticError(f"No matching module for {path}")
+    raise StaticError("No matching module for {path}".format(path=path))
 
 
 def would_overwrite(dst: pathlib.Path, roots: typing.Sequence[pdoc.doc.Module]) -> bool:

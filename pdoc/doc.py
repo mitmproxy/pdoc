@@ -92,7 +92,7 @@ def _is_method(cls: typing.Type, method_name: str) -> bool:
         if method_name in c.__dict__:
             return not isinstance(c.__dict__[method_name], staticmethod)
     else:
-        ValueError("{method_name} not found in {cls}.".format(method_name=method_name, cls=cls))
+        raise ValueError("{method_name} not found in {cls}.".format(method_name=method_name, cls=cls))
 
 
 class Doc(object):
