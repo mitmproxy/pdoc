@@ -182,14 +182,13 @@ class Module(Doc):
         it was imported. It is always an absolute import path.
         """
 
-    def __init__(self, module, supermodule=None):
+    def __init__(self, name, module, parent):
         """
         Creates a `Module` documentation object given the actual
         module Python object.
         """
-        name = getattr(module, "__pdoc_module_name", module.__name__)
-        super(Module, self).__init__(name, module, inspect.getdoc(module))
-        self.supermodule = supermodule
+        super().__init__(name, module, inspect.getdoc(module))
+        self.parent = parent
 
         self.doc = {}
         """A mapping from identifier name to a documentation object."""
@@ -354,12 +353,12 @@ class Module(Doc):
             if not isinstance(o, (External, type(None))):
                 return o
         # Traverse also up-level super-modules
-        module = self.supermodule
+        module = self.parent
         while module is not None:
             o = module.find_ident(name, _seen=_seen)
             if not isinstance(o, (External, type(None))):
                 return o
-            module = module.supermodule
+            module = module.parent
         return External(name)
 
     def variables(self):
@@ -427,8 +426,14 @@ class Module(Doc):
 
     def allmodules(self):
         yield self
-        for i in self.submodules():
+        for i in self.submodules:
             yield from i.allmodules()
+
+    def toroot(self):
+        n = self
+        while n:
+            yield n
+            n = n.parent
 
 
 class Class(Doc):
@@ -441,7 +446,7 @@ class Class(Doc):
         Same as `pdoc.Doc.__init__`, except `class_obj` must be a
         Python class object. The docstring is gathered automatically.
         """
-        super(Class, self).__init__(name, module, inspect.getdoc(class_obj))
+        super().__init__(name, module, inspect.getdoc(class_obj))
 
         self.cls = class_obj
         """The class Python object."""
@@ -528,9 +533,7 @@ class Class(Doc):
 
         Unfortunately, this also includes class methods.
         """
-        p = lambda o: (
-            isinstance(o, Function) and o.method
-        )
+        p = lambda o: (isinstance(o, Function) and o.method)
         return sorted(filter(p, self.doc.values()))
 
     def functions(self):
@@ -538,9 +541,7 @@ class Class(Doc):
         Returns all documented static functions as `pdoc.Function`
         objects in the class, sorted alphabetically.
         """
-        p = lambda o: (
-            isinstance(o, Function) and not o.method
-        )
+        p = lambda o: (isinstance(o, Function) and not o.method)
         return sorted(filter(p, self.doc.values()))
 
     def _fill_inheritance(self):
@@ -614,7 +615,7 @@ class Function(Doc):
         `method` should be `True` when the function is a method. In
         all other cases, it should be `False`.
         """
-        super(Function, self).__init__(name, module, inspect.getdoc(func_obj))
+        super().__init__(name, module, inspect.getdoc(func_obj))
 
         self.func = func_obj
         """The Python function object."""
@@ -687,7 +688,10 @@ class Function(Doc):
         """
 
         def fmt_param(el):
-            return el if isinstance(el, str) else "(%s)" % (", ".join(map(fmt_param, el)))
+            if isinstance(el, str):
+                return el
+            else:
+                return "(%s)" % (", ".join(map(fmt_param, el)))
 
         try:
             getspec = getattr(inspect, "getfullargspec", inspect.getargspec)
@@ -742,7 +746,7 @@ class Variable(Doc):
         as a `pdoc.Class` object when this is a class or instance
         variable.
         """
-        super(Variable, self).__init__(name, module, docstring)
+        super().__init__(name, module, docstring)
 
         self.cls = cls
         """
@@ -798,7 +802,7 @@ class External(Doc):
         Initializes an external identifier with `name`, where `name`
         should be a fully qualified name.
         """
-        super(External, self).__init__(name, None, "")
+        super().__init__(name, None, "")
 
     @property
     def source(self):

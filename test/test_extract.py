@@ -32,13 +32,13 @@ def test_split_module_spec(input, expected):
         ("", "email", True, None),
         ("", "csv", False, None),
         ("", "html.parser", False, None),
-        ("", "packages.simple", False, None),
+        ("", "onpath.simple", False, None),
 
         ("./modules", "nonexistent", False, "not found"),
         ("./modules/nonexistent", "foo", False, "not found"),
         ("", "nonexistent.module", False, "not found"),
         ("./modules/malformed", "syntax", False, "Error importing"),
-        ("", "packages.malformed_syntax", False, "Error importing"),
+        ("", "onpath.malformed_syntax", False, "Error importing"),
     ]
 )
 def test_load_module(path, mod, expected, match):
@@ -51,28 +51,34 @@ def test_load_module(path, mod, expected, match):
             assert ispkg == expected
 
 
-def test_extract_module():
-    with tutils.tdir():
-        with pytest.raises(pdoc.extract.ExtractError, match="not found"):
-            pdoc.extract.extract_module("./modules/nonexistent.py")
-        with pytest.raises(pdoc.extract.ExtractError, match="not found"):
-            pdoc.extract.extract_module("./modules/nonexistent/foo")
-        with pytest.raises(pdoc.extract.ExtractError, match="Invalid module name"):
-            pdoc.extract.extract_module("./modules/one.two")
-        with pytest.raises(pdoc.extract.ExtractError, match="Module not found"):
-            pdoc.extract.extract_module("nonexistent.module")
-        with pytest.raises(pdoc.extract.ExtractError, match="Error importing"):
-            pdoc.extract.extract_module("./modules/malformed/syntax.py")
-        with pytest.raises(pdoc.extract.ExtractError, match="Error importing"):
-            pdoc.extract.extract_module("packages/malformed_syntax")
+@pytest.mark.parametrize(
+    "path,expected,match",
+    [
+        ("./modules/nonexistent.py", None, "not found"),
+        ("./modules/nonexistent/foo", None, "not found"),
+        ("nonexistent", None, "not found"),
+        ("nonexistent.module", None, "not found"),
+        ("./modules/one.two", None, "Invalid module name"),
+        ("./modules/malformed/syntax.py", None, "Error importing"),
+        ("onpath.malformed_syntax", None, "Error importing"),
 
-        assert pdoc.extract.extract_module("./modules/one.py")
-        assert pdoc.extract.extract_module("./modules/one")
-        assert pdoc.extract.extract_module("./modules/dirmod")
-        assert pdoc.extract.extract_module("./modules/submods")
-        assert pdoc.extract.extract_module("csv")
-        assert pdoc.extract.extract_module("html.parser")
-        assert pdoc.extract.extract_module("packages.simple")
+        ("./modules/one.py", ["one"], None),
+        ("./modules/one", ["one"], None),
+        ("./modules/dirmod", ["dirmod"], None),
+        ("./modules/submods", ["submods", "submods.three", "submods.two"], None),
+        ("csv", ["csv"], None),
+        ("html.parser", ["html.parser"], None),
+        ("onpath.simple", ["onpath.simple"], None),
+    ],
+)
+def test_extract_module(path, expected, match):
+    with tutils.tdir():
+        if match:
+            with pytest.raises(pdoc.extract.ExtractError, match=match):
+                pdoc.extract.extract_module(path)
+        else:
+            ret = pdoc.extract.extract_module(path)
+            assert sorted([i.name for i in ret.allmodules()]) == expected
 
 
 @pytest.mark.parametrize(

@@ -4,7 +4,7 @@ from distutils.core import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(here, "longdesc.rst"), encoding='utf-8') as f:
+with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 with open(os.path.join(here, "pdoc", "__init__.py")) as f:
@@ -36,17 +36,12 @@ setup(
     platforms="ANY",
     packages=["pdoc"],
     package_data={"pdoc": ["templates/*"]},
-    data_files=[
-        (
-            "share/pdoc",
-            ["README.md", "longdesc.rst", "LICENSE", "CHANGELOG"],
-        ),
-    ],
     entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
     provides=["pdoc"],
     extras_require={
         "dev": [
             "flake8>=3.5, <3.6",
+            "mypy>=0.620, <0.621",
             "pytest>=3.3,<4",
             "pytest-cov>=2.5.1,<3",
             "pytest-faulthandler>=1.3.1,<2",

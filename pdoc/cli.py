@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 
 import sys
 
@@ -6,9 +7,8 @@ import pdoc.doc
 import pdoc.extract
 import pdoc.render
 import pdoc.static
+import pdoc.version
 import pdoc.web
-
-version_suffix = "%d.%d" % (sys.version_info[0], sys.version_info[1])
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -122,14 +122,14 @@ def run():
                 return search in o.doc or search in o.doc_init
             return False
 
-    modules = []
+    roots = []
     for mod in args.modules:
         try:
             m = pdoc.extract.extract_module(mod)
         except pdoc.extract.ExtractError as e:
             _eprint(str(e))
             sys.exit(1)
-        modules.append(m)
+        roots.append(m)
 
     if args.template_dir is not None:
         pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
@@ -141,7 +141,7 @@ def run():
 
     if args.http:
         # Run the HTTP server.
-        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, modules)
+        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, roots)
         print(
             "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
             file=sys.stderr,
@@ -149,23 +149,14 @@ def run():
         httpd.serve_forever()
         httpd.server_close()
     elif args.html:
-        for m in modules:
-            # HTML output depends on whether the module being documented is a package
-            # or not. If not, then output is written to {MODULE_NAME}.html in
-            # `html-dir`. If it is a package, then a directory called {MODULE_NAME}
-            # is created, and output is written to {MODULE_NAME}/index.html.
-            # Submodules are written to {MODULE_NAME}/{MODULE_NAME}.m.html and
-            # subpackages are written to {MODULE_NAME}/{MODULE_NAME}/index.html. And
-            # so on...
-            try:
-                pdoc.static.quit_if_exists(args, m)
-                pdoc.static.html_out(args, m, args.html)
-            except pdoc.static.StaticError as e:
-                _eprint(str(e))
-                sys.exit(1)
+        dst = pathlib.Path(args.html_dir)
+        if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
+            _eprint("Rendering would overwrite files, but --overwite is not set")
+            sys.exit(1)
+        pdoc.static.html_out(dst, roots)
     else:
         # Plain text
-        for m in modules:
+        for m in roots:
             output = pdoc.render.text(m)
             print(output)
 

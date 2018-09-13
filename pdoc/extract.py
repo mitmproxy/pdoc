@@ -10,7 +10,7 @@ class ExtractError(Exception):
     pass
 
 
-def split_module_spec(spec: str) -> (str, str):
+def split_module_spec(spec: str) -> typing.Tuple[str, str]:
     """
         Splits a module specification into a base path (which may be empty), and a module name.
 
@@ -32,7 +32,7 @@ def split_module_spec(spec: str) -> (str, str):
         return "", spec
 
 
-def load_module(basedir: str, module: str) -> (typing.Any, bool):
+def load_module(basedir: str, module: str) -> typing.Tuple[typing.Any, bool]:
     """
         Returns a module object, and whether the module is a package or not.
     """
@@ -55,13 +55,13 @@ def load_module(basedir: str, module: str) -> (typing.Any, bool):
             )
 
         ispec = importlib.util.spec_from_file_location(modname, location)
-        module = importlib.util.module_from_spec(ispec)
+        mobj = importlib.util.module_from_spec(ispec)
         try:
             # This can literally raise anything
-            ispec.loader.exec_module(module)
+            ispec.loader.exec_module(mobj)  # type: ignore
         except Exception as e:
-            raise ExtractError("Error importing {location}: {e}".format(location=location, e=e))
-        return module, ispackage
+            raise ExtractError("Error importing {location}: {e}".format(location=location, e=e)))
+        return mobj, ispackage
     else:
         try:
             # This can literally raise anything
@@ -93,12 +93,12 @@ def submodules(dname: str, mname: str) -> typing.Sequence[str]:
     return ret
 
 
-def _extract_module(dname: str, mname: str) -> typing.Any:
+def _extract_module(dname: str, mname: str, parent=None) -> typing.Any:
     m, pkg = load_module(dname, mname)
-    mod = pdoc.doc.Module(m)
+    mod = pdoc.doc.Module(mname, m, parent)
     if pkg:
         for i in submodules(dname, mname):
-            mod.submodules.append(_extract_module(dname, i))
+            mod.submodules.append(_extract_module(dname, i, parent=mod))
     return mod
 
 

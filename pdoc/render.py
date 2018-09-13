@@ -26,8 +26,6 @@ A list of paths to search for Mako templates used to produce the
 plain text and HTML output. Each path is tried until a template is
 found.
 """
-if os.getenv("XDG_CONFIG_HOME"):
-    _template_path.insert(0, os.path.join(os.getenv("XDG_CONFIG_HOME"), "pdoc"))
 
 tpl_lookup = TemplateLookup(
     directories=_template_path, cache_args={"cached": True, "cache_type": "memory"}
@@ -41,8 +39,8 @@ object's `directories` attribute.
 
 def _get_tpl(name):
     """
-    Returns the Mako template with the given name.  If the template
-    cannot be found, a nicer error message is displayed.
+    Returns the Mako template with the given name. If the template cannot be
+    found, a nicer error message is displayed.
     """
     try:
         t = tpl_lookup.get_template(name)
@@ -52,14 +50,12 @@ def _get_tpl(name):
     return t
 
 
-def html_index(
-    modules: typing.Sequence[typing.Tuple[str, pdoc.doc.Module]], link_prefix: str = "/"
-):
+def html_index(roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
     """
         Render an HTML module index.
     """
     t = _get_tpl("/html_index.mako")
-    t = t.render(modules=modules, link_prefix=link_prefix)
+    t = t.render(roots=roots, link_prefix=link_prefix)
     return t.strip()
 
 
@@ -68,7 +64,7 @@ def html_module(
     external_links: bool = False,
     link_prefix: str = "/",
     source: bool = True,
-):
+) -> str:
     """
     Returns the documentation for the module `module_name` in HTML
     format. The module must be importable.
@@ -107,7 +103,7 @@ def text(
     mod: pdoc.doc.Module,
     docfilter: typing.Optional[str] = None,
     allsubmodules: bool = False,
-):
+) -> str:
     """
     Returns the documentation for the module `module_name` in plain
     text format. The module must be importable.
