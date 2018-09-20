@@ -36,3 +36,10 @@ def test_is_static():
     assert pdoc.doc._is_method(DummyChild, "method")
     assert pdoc.doc._is_method(DummyChild, "class_method")
     assert not pdoc.doc._is_method(Dummy, "static_method")
+
+
+def test_repr():
+    name = 'submods.two'
+    mod, _ = pdoc.extract.load_module('./modules', name)
+    mod = pdoc.doc.Module(name, mod, None)
+    assert repr(mod) == "<pdoc.doc.Module '{}'>".format(name)

@@ -168,6 +168,11 @@ class Doc(object):
         """
         return len(self.docstring.strip()) == 0
 
+    def __repr__(self):
+        return '<{}.{} {!r}>'.format(self.__class__.__module__,
+                                     self.__class__.__qualname__,
+                                     self.refname)
+
 
 class Module(Doc):
     """
