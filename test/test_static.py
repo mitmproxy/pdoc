@@ -26,19 +26,6 @@ def test_module_path(modspec, ident, path):
         mp = pdoc.static.module_to_path(submod)
         assert mp == pathlib.Path(path)
 
-        retmod = pdoc.static.path_to_module([root], mp)
-        assert retmod.name == submod.name
-
-        retmod = pdoc.static.path_to_module([root], mp.with_suffix(""))
-        assert retmod.name == submod.name
-
-
-def test_path_to_module():
-    with tutils.tdir():
-        root = pdoc.extract.extract_module("./modules/submods")
-        with pytest.raises(pdoc.static.StaticError):
-            pdoc.static.path_to_module([root], pathlib.Path("nonexistent"))
-
 
 def test_static(tmpdir):
     dst = pathlib.Path(str(tmpdir))

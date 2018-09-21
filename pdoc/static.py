@@ -24,26 +24,6 @@ def module_to_path(m: pdoc.doc.Module) -> pathlib.Path:
     return p
 
 
-def path_to_module(
-    roots: typing.Sequence[pdoc.doc.Module], path: pathlib.Path
-) -> pdoc.doc.Module:
-    """
-        Retrieves the matching module for a given path from a module tree.
-    """
-    if path.suffix == ".html":
-        path = path.with_suffix("")
-    parts = list(path.parts)
-    if parts[-1] == "index":
-        parts = parts[:-1]
-    elif parts[-1] == "index.m":
-        parts[-1] = "index"
-    for root in roots:
-        mod = root.find_ident(".".join(parts))
-        if isinstance(mod, pdoc.doc.Module):
-            return mod
-    raise StaticError("No matching module for {path}".format(path=path))
-
-
 def would_overwrite(dst: pathlib.Path, roots: typing.Sequence[pdoc.doc.Module]) -> bool:
     """
         Would rendering root to dst overwrite any file?
