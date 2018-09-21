@@ -81,7 +81,7 @@ def glimpse(s, length=100):
 def module_url(parent, m, link_prefix):
     """
         Returns a URL for `m`, which must be an instance of `Module`.
-        Also, `m` must be a submodule of the module being documented.
+        `parent` is the Module being documented.
 
         Namely, '.' import separators are replaced with '/' URL
         separators. Also, packages are translated as directories
@@ -93,16 +93,18 @@ def module_url(parent, m, link_prefix):
     if parent.name == m.name:
         return ""
 
-    base = m.name.replace(".", "/")
-    if len(link_prefix) == 0:
-        base = os.path.relpath(base, parent.name.replace(".", "/"))
-    url = base[len("../") :] if base.startswith("../") else "" if base == ".." else base
-    if m.submodules:
-        index = pdoc.render.html_package_name
-        url = url + "/" + index if url else index
-    else:
-        url += pdoc.render.html_module_suffix
-    return link_prefix + url
+    # We use absolute paths, full name is ok
+    if len(link_prefix) > 0:
+        return link_prefix + pdoc.static.module_to_path(m).as_posix()
+
+    # Otherwise, compute relative path from current module to link target
+    url = os.path.relpath(str(pdoc.static.module_to_path(m)),
+                          str(pdoc.static.module_to_path(parent)))
+    # If documented module (parent) is not a package (directory),
+    # we have one set of '..' too many
+    if url.startswith('..'):# and not parent.submodules:
+        url = url[3:]
+    return url
 
 
 def external_url(refname):

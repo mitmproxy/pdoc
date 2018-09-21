@@ -8,11 +8,11 @@ from mako.exceptions import TopLevelLookupException
 import pdoc.doc
 
 
-html_module_suffix = ".m.html"
+html_module_suffix = ".html"
 """
 The suffix to use for module HTML files. By default, this is set to
-`.m.html`, where the extra `.m` is used to differentiate a package's
-`index.html` from a submodule called `index`.
+`.html`. An extra `.m` is used to differentiate a package's
+`index.html` from a submodule called `index`, resulting in `index.m.html`.
 """
 
 html_package_name = "index.html"

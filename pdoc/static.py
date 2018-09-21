@@ -15,12 +15,12 @@ def module_to_path(m: pdoc.doc.Module) -> pathlib.Path:
     """
     p = pathlib.Path(*m.name.split("."))
     if m.submodules:
-        p /= "index.html"
+        p /= pdoc.render.html_package_name
     else:
         if p.stem == "index":
-            p = p.with_suffix(".m.html")
+            p = p.with_suffix(".m" + pdoc.render.html_module_suffix)
         else:
-            p = p.with_suffix(".html")
+            p = p.with_suffix(pdoc.render.html_module_suffix)
     return p
 
 
@@ -49,7 +49,7 @@ def would_overwrite(dst: pathlib.Path, roots: typing.Sequence[pdoc.doc.Module]) 
         Would rendering root to dst overwrite any file?
     """
     if len(roots) > 1:
-        p = dst / "index.html"
+        p = dst / pdoc.render.html_package_name
         if p.exists():
             return True
     for root in roots:
