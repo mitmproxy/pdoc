@@ -1,6 +1,5 @@
 ## -*- coding: utf-8 -*-
 <%!
-import pygments
 import pdoc.doc
 import pdoc.html_helpers as hh
 %>

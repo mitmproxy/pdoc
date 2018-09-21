@@ -1,6 +1,5 @@
 ## -*- coding: utf-8 -*-
 <%!
-import pygments
 import pdoc.doc
 import pdoc.html_helpers as hh
 %>
@@ -10,9 +9,7 @@ import pdoc.html_helpers as hh
 <%def name="show_source(d)">
   % if show_source_code and d.source is not None and len(d.source) > 0:
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('${hh.sourceid(d)}', this);">Show source &equiv;</a></p>
-  <div id="${hh.sourceid(d)}" class="source">
-    ${hh.decode(hh.clean_source_lines(d.source))}
-  </div>
+  <pre id="${hh.sourceid(d)}" class="source"><code>${hh.clean_source_lines(d.source)}</code></pre>
   % endif
 </%def>
 

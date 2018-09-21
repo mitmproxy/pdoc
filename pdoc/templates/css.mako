@@ -105,18 +105,9 @@
     background: #fefefe;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 0 #f3f3f3;
-    margin: 0 30px;
-    padding: 15px 30px;
+    margin: 0 0 10px 30px;
+    padding: 0;
   }
-
-  .codehilite {
-    margin: 0 30px 10px 30px;
-  }
-
-    .codehilite pre {
-      margin: 0;
-    }
-    .codehilite .err { background: #ff3300; color: #fff !important; } 
 
   table#module-list {
     font-size: 110%;
@@ -244,10 +235,6 @@
       overflow-y: scroll;
       margin-bottom: 15px;
     }
-
-      .source .codehilite {
-        margin: 0;
-      }
 
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;

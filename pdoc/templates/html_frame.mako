@@ -1,6 +1,5 @@
 ## -*- coding: utf-8 -*-
 <%!
-import pygments
 import pdoc
 import pdoc.html_helpers as hh
 %>
@@ -17,9 +16,6 @@ import pdoc.html_helpers as hh
   <%namespace name="css" file="css.mako" />
   <style type="text/css">${css.pre()}</style>
   <style type="text/css">${css.pdoc()}</style>
-  <style type="text/css">
-  ${pygments.formatters.HtmlFormatter().get_style_defs('.codehilite')}
-  </style>
   <style type="text/css">${css.post()}</style>
 
   <script type="text/javascript">
@@ -48,5 +44,9 @@ import pdoc.html_helpers as hh
     </p>
   </footer>
 </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

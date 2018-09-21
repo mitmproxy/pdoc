@@ -52,6 +52,5 @@ setup(
     install_requires=[
         "mako>=1.0.7,<1.1",
         "markdown",
-        "pygments>=2.2.0,<2.3",
     ],
 )

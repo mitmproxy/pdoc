@@ -1,30 +1,18 @@
 import os
 import re
-import sys
 from functools import partial
 
 import markdown
-import pygments
-import pygments.formatters
-import pygments.lexers
 
 import pdoc.doc
 import pdoc.render
 
 # From language reference, but adds '.' to allow fully qualified names.
 pyident = re.compile("^[a-zA-Z_][a-zA-Z0-9_.]+$")
-indent = re.compile("^\s*")
-
-
-def decode(s):
-    if sys.version_info[0] < 3 and isinstance(s, str):
-        return s.decode("utf-8", "ignore")
-    return s
 
 _md = markdown.Markdown(
     output_format='html5',
     extensions=[
-        "markdown.extensions.codehilite(linenums=False)",
         "markdown.extensions.abbr",
         "markdown.extensions.fenced_code",
         "markdown.extensions.footnotes",
@@ -44,27 +32,17 @@ def sourceid(dobj):
     return "source-%s" % dobj.refname
 
 
-def clean_source_lines(lines):
+def clean_source_lines(lines, *, _indent=re.compile(r'^\s*').match):
     """
-  Cleans the source code so that pygments can render it well.
+        Cleans the source code so that the first non-empty line's
+        indentation is lstripped from it and subsequent lines.
 
-  Returns one string with all of the source code.
-  """
-    base_indent = len(indent.match(lines[0]).group(0))
-    base_indent = 0
-    for line in lines:
-        if len(line.strip()) > 0:
-            base_indent = len(indent.match(lines[0]).group(0))
-            break
+        Returns one string with all of the raw source code.
+    """
+    base_indent = next((len(_indent(line).group(0))
+                        for line in lines if line.rstrip()), 0)
     lines = [line[base_indent:] for line in lines]
-
-    if sys.version_info[0] < 3:
-        pylex = pygments.lexers.PythonLexer()
-    else:
-        pylex = pygments.lexers.Python3Lexer()
-
-    htmlform = pygments.formatters.HtmlFormatter(cssclass="codehilite")
-    return pygments.highlight("".join(lines), pylex, htmlform)
+    return ''.join(lines)
 
 
 def linkify(match, parent, link_prefix):
