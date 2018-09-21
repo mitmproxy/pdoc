@@ -2,7 +2,7 @@ import os
 import re
 import sys
 
-import markdown2
+import markdown
 import pygments
 import pygments.formatters
 import pygments.lexers
@@ -19,6 +19,20 @@ def decode(s):
     if sys.version_info[0] < 3 and isinstance(s, str):
         return s.decode("utf-8", "ignore")
     return s
+
+_md = markdown.Markdown(
+    output_format='html5',
+    extensions=[
+        "markdown.extensions.codehilite(linenums=False)",
+        "markdown.extensions.abbr",
+        "markdown.extensions.fenced_code",
+        "markdown.extensions.footnotes",
+        "markdown.extensions.tables",
+        "markdown.extensions.admonition",
+        "markdown.extensions.headerid",
+        "markdown.extensions.smarty",
+    ]
+)
 
 
 def ident(s):
@@ -66,9 +80,7 @@ def mark(s, module_list=None, linky=True):
         s, _ = re.subn("\b\n\b", " ", s)
     # if not module_list:
     #     s, _ = re.subn("`[^`]+`", linkify, s)
-
-    extensions = ["fenced-code-blocks"]
-    s = markdown2.markdown(s.strip(), extras=extensions)
+    s = _md.reset().convert(s.strip())
     return s
 
 
