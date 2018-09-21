@@ -67,7 +67,7 @@ def mark(s, parent, link_prefix, module_list=None, linky=True):
 def glimpse(s, length=100):
     if len(s) < length:
         return s
-    return s[0:length] + "..."
+    return s[0:length] + " …"
 
 
 def module_url(parent, m, link_prefix):

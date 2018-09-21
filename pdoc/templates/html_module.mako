@@ -188,7 +188,7 @@ import pdoc.html_helpers as hh
   submodules = module.submodules
   parent = module.parent
   %>
-  <div id="sidebar">
+  <nav id="sidebar">
     <h1>Index</h1>
     <ul id="index">
     % if parent:
@@ -238,7 +238,7 @@ import pdoc.html_helpers as hh
     </li>
     % endif
     </ul>
-  </div>
+  </nav>
 </%def>
 
 <%block name="title">
