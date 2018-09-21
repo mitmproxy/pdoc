@@ -153,7 +153,10 @@ def run():
         if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
             _eprint("Rendering would overwrite files, but --overwite is not set")
             sys.exit(1)
-        pdoc.static.html_out(dst, roots)
+        pdoc.static.html_out(dst, roots,
+                             external_links=args.external_links,
+                             link_prefix=args.link_prefix,
+                             source=not args.html_no_source)
     else:
         # Plain text
         for m in roots:
