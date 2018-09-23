@@ -223,7 +223,7 @@ import pdoc.html_helpers as hh
           methods = c.functions() + c.methods()
         %>
         % if len(methods) > 0:
-          ${show_column_list(map(lambda f: hh.link(module, f.refname, link_prefix), methods))}
+          ${show_column_list(map(lambda f: hh.link(module, f.refname, link_prefix, qualname=False), methods))}
         % endif
         </li>
       % endfor

@@ -520,8 +520,12 @@ class Class(Doc):
         return _source(self.cls)
 
     @property
+    def qualname(self):
+        return self.cls.__qualname__
+
+    @property
     def refname(self):
-        return "%s.%s" % (self.module.refname, self.cls.__name__)
+        return "%s.%s" % (self.module.refname, self.qualname)
 
     def class_variables(self):
         """
@@ -660,6 +664,11 @@ class Function(Doc):
         else:
             return "%s.%s" % (self.cls.refname, self.name)
 
+    @property
+    def qualname(self):
+        """Returns function's qualified name as in PEP-3155"""
+        return self.func.__qualname__
+
     def funcdef(self):
         """
         Generates the string of keywords used to define the function, for
@@ -780,6 +789,13 @@ class Variable(Doc):
             return "%s.%s" % (self.module.refname, self.name)
         else:
             return "%s.%s" % (self.cls.refname, self.name)
+
+    @property
+    def qualname(self):
+        if self.cls is None:
+            return self.name
+        else:
+            return "%s.%s" % (self.cls.qualname, self.name)
 
 
 class External(Doc):

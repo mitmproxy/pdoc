@@ -137,7 +137,7 @@ def is_external_linkable(name):
     return pyident.match(name) and "." in name
 
 
-def lookup(module, refname, link_prefix):
+def lookup(module, refname, link_prefix, get_qualname=True):
     """
         Given a fully qualified identifier name, return its refname
         with respect to the current module and a value for a `href`
@@ -161,18 +161,20 @@ def lookup(module, refname, link_prefix):
             return None, None
     if isinstance(d, pdoc.doc.Module):
         return d.refname, module_url(module, d, link_prefix)
+    suffix = '()' if isinstance(d, pdoc.doc.Function) else ''
+    name = d.qualname if get_qualname else d.name
     if module.is_public(d.refname):
-        return d.name, "#%s" % d.refname
-    return d.refname, "%s#%s" % (module_url(module, d.module, link_prefix), d.refname)
+        return name + suffix, "#%s" % d.refname
+    return name + suffix, "%s#%s" % (module_url(module, d.module, link_prefix), d.refname)
 
 
-def link(parent, refname, link_prefix):
+def link(parent, refname, link_prefix, qualname=True):
     """
         A convenience wrapper around `href` to produce the full
         `a` tag if `refname` is found. Otherwise, plain text of
         `refname` is returned.
     """
-    name, url = lookup(parent, refname, link_prefix)
+    name, url = lookup(parent, refname, link_prefix, qualname)
     if name is None:
         return refname
     return '<a href="%s">%s</a>' % (url, name)
