@@ -608,15 +608,18 @@ class Class(Doc):
         """
         _pdoc = getattr(self.module.module, "__pdoc__", {})
 
-        def forced_out(name):
+        def force_skipped(name):
             return _pdoc.get("%s.%s" % (self.name, name), False) is None
 
         def exported(name):
             exported = name == "__init__" or _is_exported(name)
-            return not forced_out(name) and exported
+            inheried = name not in self.cls.__dict__
+            return not inheried and not force_skipped(name) and exported
 
-        idents = dict(inspect.getmembers(self.cls))
-        return dict([(n, o) for n, o in idents.items() if exported(n)])
+        idents = {n:o
+                  for n, o in inspect.getmembers(self.cls)
+                  if exported(n)}
+        return idents
 
 
 class Function(Doc):
