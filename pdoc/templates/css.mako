@@ -167,8 +167,20 @@
       margin: 0 0 25px 30px;
     }
 
-      .item .class ul.class_list {
-        margin: 0 0 20px 0;
+      .item ul.class_list {
+        margin: 0;
+        list-style-type: none;
+        padding: 0 !important;
+        display: inline !important;
+      }
+      ul.class_list li {
+        display: inline;
+      }
+      ul.class_list li:after {
+        content: ',';
+      }
+      ul.class_list li:last-child:after {
+        content: normal;
       }
 
     .item .name {

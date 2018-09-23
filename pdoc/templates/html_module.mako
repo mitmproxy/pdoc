@@ -119,18 +119,18 @@ import pdoc.html_helpers as hh
       mro = c.module.mro(c)
       %>
       <div class="item">
-      <p id="${c.refname}" class="name">class ${hh.ident(c.name)}</p>
-      ${show_desc(c)}
-
-      <div class="class">
-        % if len(mro) > 0:
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
+      <div id="${c.refname}" class="name">class ${hh.ident(c.name)}
+          % if len(mro) > 0:
+          (<ul class="class_list">
           % for cls in mro:
           <li>${hh.link(module, cls.refname, link_prefix)}</li>
           % endfor
-          </ul>
+          </ul>)
         % endif
+      </div>
+      ${show_desc(c)}
+
+      <div class="class">
         % if len(class_vars) > 0:
           <h3>Class variables</h3>
           % for v in class_vars:
