@@ -204,7 +204,7 @@ class Module(Doc):
         identifier names to documentation objects.
         """
 
-        self.submodules = []
+        self._submodules = ()
 
         vardocs = {}
         try:
@@ -433,6 +433,17 @@ class Module(Doc):
         yield self
         for i in self.submodules:
             yield from i.allmodules()
+
+    @property
+    def submodules(self):
+        return self._submodules
+
+    @submodules.setter
+    def submodules(self, value: list):
+        self._submodules = tuple(submod for submod in value
+                                 if self.__is_exported(submod.name.rsplit('.', 1)[-1],
+                                                       getattr(submod.parent, 'module', None)))
+
 
     def toroot(self):
         n = self
