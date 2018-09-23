@@ -146,6 +146,7 @@
     }
 
 
+  .toc ul,
   #index {
     list-style-type: none;
     margin: 0;
@@ -277,10 +278,12 @@
       padding: 30px;
     }
 
+    .toc ul ul,
     #index ul {
       padding: 0;
       margin-bottom: 15px;
     }
+    .toc ul ul li,
     #index ul li {
       display: inline-block;
       margin-right: 30px;

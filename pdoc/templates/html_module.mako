@@ -190,6 +190,7 @@ import pdoc.html_helpers as hh
   %>
   <nav id="sidebar">
     <h1>Index</h1>
+    ${hh.extract_toc(module.docstring)}
     <ul id="index">
     % if parent:
     <li class="set"><h3>Super-module</h3>

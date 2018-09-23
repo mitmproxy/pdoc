@@ -20,6 +20,7 @@ _md = markdown.Markdown(
         "markdown.extensions.admonition",
         "markdown.extensions.headerid",
         "markdown.extensions.smarty",
+        "markdown.extensions.toc",
     ]
 )
 
@@ -62,6 +63,13 @@ def mark(s, parent, link_prefix, module_list=None, linky=True):
         s, _ = re.subn("`[^`]+`", _linkify, s)
     s = _md.reset().convert(s.strip())
     return s
+
+
+def extract_toc(s):
+    s = '[TOC]\n\n@CUT@' + s
+    s = _md.reset().convert(s.strip())
+    toc, _ = s.split('@CUT@', 1)
+    return toc
 
 
 def glimpse(s, length=100):
