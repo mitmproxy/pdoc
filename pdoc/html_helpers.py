@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+from functools import partial
 
 import markdown
 import pygments
@@ -66,7 +67,7 @@ def clean_source_lines(lines):
     return pygments.highlight("".join(lines), pylex, htmlform)
 
 
-def linkify(parent, match, link_prefix):
+def linkify(match, parent, link_prefix):
     matched = match.group(0)
     ident = matched[1:-1]
     name, url = lookup(parent, ident, link_prefix)
@@ -75,11 +76,12 @@ def linkify(parent, match, link_prefix):
     return "[`%s`](%s)" % (name, url)
 
 
-def mark(s, module_list=None, linky=True):
+def mark(s, parent, link_prefix, module_list=None, linky=True):
     if linky:
         s, _ = re.subn("\b\n\b", " ", s)
-    # if not module_list:
-    #     s, _ = re.subn("`[^`]+`", linkify, s)
+    if not module_list:
+        _linkify = partial(linkify, parent=parent, link_prefix=link_prefix)
+        s, _ = re.subn("`[^`]+`", _linkify, s)
     s = _md.reset().convert(s.strip())
     return s
 
