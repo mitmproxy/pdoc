@@ -6,6 +6,7 @@ from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
 
 import pdoc.doc
+import pdoc.markup
 
 
 html_module_suffix = ".m.html"
@@ -50,20 +51,25 @@ def _get_tpl(name):
     return t
 
 
-def html_index(roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
+def html_index(
+    roots: typing.Sequence[pdoc.doc.Module],
+    link_prefix: str,
+    markup: pdoc.markup.Markup,
+) -> str:
     """
         Render an HTML module index.
     """
     t = _get_tpl("/html_index.mako")
-    t = t.render(roots=roots, link_prefix=link_prefix)
+    t = t.render(roots=roots, link_prefix=link_prefix, markup=markup)
     return t.strip()
 
 
 def html_module(
-    mod: pdoc.doc.Module,
-    external_links: bool = False,
-    link_prefix: str = "/",
-    source: bool = True,
+    module: pdoc.doc.Module,
+    external_links: bool,
+    link_prefix: str,
+    source: bool,
+    markup: pdoc.markup.Markup,
 ) -> str:
     """
     Returns the documentation for the module `module_name` in HTML
@@ -91,10 +97,11 @@ def html_module(
     """
     t = _get_tpl("/html_module.mako")
     t = t.render(
-        module=mod,
+        module=module,
         external_links=external_links,
         link_prefix=link_prefix,
         show_source_code=source,
+        markup=markup,
     )
     return t.strip()
 

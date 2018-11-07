@@ -27,9 +27,9 @@ import pdoc.html_helpers as hh
   %>
   % if len(docstring) > 0:
   % if inherits:
-    <div class="desc inherited">${docstring | hh.mark}</div>
+    <div class="desc inherited">${docstring | hh.mark(markup)}</div>
   % else:
-    <div class="desc">${docstring | hh.mark}</div>
+    <div class="desc">${docstring | hh.mark(markup)}</div>
   % endif
   % endif
   % if not isinstance(d, pdoc.doc.Module):
@@ -89,7 +89,7 @@ import pdoc.html_helpers as hh
 
   <header id="section-intro">
   <h1 class="title"><span class="name">${module.name}</span> module</h1>
-  ${module.docstring | hh.mark}
+  ${module.docstring | hh.mark(markup)}
   ${show_source(module)}
   </header>
 

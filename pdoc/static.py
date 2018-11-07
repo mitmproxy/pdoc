@@ -63,19 +63,27 @@ def would_overwrite(dst: pathlib.Path, roots: typing.Sequence[pdoc.doc.Module]) 
 def html_out(
     dst: pathlib.Path,
     roots: typing.Sequence[pdoc.doc.Module],
-    external_links: bool = True,
-    link_prefix: str = "",
-    source: bool = False,
+    markup: pdoc.markup.Markup,
 ):
+    link_prefix = ''
+
     if len(roots) > 1:
         p = dst / "index.html"
-        idx = pdoc.render.html_index(roots, link_prefix=link_prefix)
+        idx = pdoc.render.html_index(
+            roots,
+            link_prefix=link_prefix,
+            markup = markup,
+        )
         p.write_text(idx, encoding="utf-8")
     for root in roots:
         for m in root.allmodules():
             p = dst.joinpath(module_to_path(m))
             p.parent.mkdir(parents=True, exist_ok=True)
             out = pdoc.render.html_module(
-                m, external_links=external_links, link_prefix=link_prefix, source=source
+                module=m,
+                external_links = True,
+                link_prefix = link_prefix,
+                source= False,
+                markup = markup,
             )
             p.write_text(out, encoding="utf-8")

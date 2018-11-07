@@ -8,14 +8,14 @@ import pdoc.html_helpers as hh
 <%inherit file="html_frame.mako"/>
 
 <%def name="show_module_list(roots)">
-<h1>Python module list</h1>
+  <h1>Python module list</h1>
   <table id="module-list">
   % for root in roots:
     <tr>
       <td><a href="${link_prefix}${root.name}">${root.name}</a></td>
       <td>
       % if len(root.docstring.strip()) > 0:
-        <div class="desc">${root.docstring | hh.mark}</div>
+        <div class="desc}">${root.docstring | hh.mark(markup)}</div>
       % endif
       </td>
     </tr>

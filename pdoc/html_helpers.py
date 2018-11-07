@@ -61,15 +61,11 @@ def linkify(parent, match, link_prefix):
     return "[`%s`](%s)" % (name, url)
 
 
-def mark(s, module_list=None, linky=True):
-    if linky:
-        s, _ = re.subn("\b\n\b", " ", s)
-    # if not module_list:
-    #     s, _ = re.subn("`[^`]+`", linkify, s)
-
-    extensions = ["fenced-code-blocks"]
-    s = markdown2.markdown(s.strip(), extras=extensions)
-    return s
+def mark(markup):
+    def _mark(s):
+        s = markup.convert(s)
+        return '<div class="%s">%s</div>' % (markup.css_class(), s)
+    return _mark
 
 
 def glimpse(s, length=100):

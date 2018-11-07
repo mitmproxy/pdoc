@@ -9,6 +9,7 @@ import pdoc.render
 import pdoc.static
 import pdoc.version
 import pdoc.web
+import pdoc.markup
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -99,7 +100,22 @@ aa(
     default=8080,
     help="The port on which to run the HTTP server.",
 )
+aa(
+    "--style",
+    type=str,
+    choices=['pre', 'markdown'],
+    default='markdown',
+    help='''
+        The style of docstrings. Docstrings are converted to HTML as this option.
+        "markdown" is Markdown (Default).
+        "pre" does not convert docstrings and just wrappd <pre>...</pre>.
+    ''',
+)
 
+Markups = {
+    'markdown': pdoc.markup.Markdown(),
+    'pre': pdoc.markup.Pre(),
+}
 
 def _eprint(*args, **kwargs):
     kwargs["file"] = sys.stderr
@@ -139,6 +155,8 @@ def run():
         args.overwrite = True
         args.link_prefix = "/"
 
+    args.markup = Markups[args.markup]
+
     if args.http:
         # Run the HTTP server.
         httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, roots)
@@ -153,7 +171,7 @@ def run():
         if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
             _eprint("Rendering would overwrite files, but --overwite is not set")
             sys.exit(1)
-        pdoc.static.html_out(dst, roots)
+        pdoc.static.html_out(dst, roots, args.markup)
     else:
         # Plain text
         for m in roots:

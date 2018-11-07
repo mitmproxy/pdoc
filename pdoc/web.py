@@ -23,11 +23,12 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/":
-            midx = []
-            for m in self.server.modules:
-                midx.append((m.name, m.docstring))
-            midx = sorted(midx, key=lambda x: x[0].lower())
-            out = pdoc.render.html_index(midx, self.server.args.link_prefix)
+            midx = sorted(self.server.modules, key=lambda x: x.name.lower())
+            out = pdoc.render.html_index(
+                midx,
+                self.server.args.link_prefix,
+                self.server.args.markup,
+            )
         elif self.path.endswith(".ext"):
             # External links are a bit weird. You should view them as a giant
             # hack. Basically, the idea is to "guess" where something lives
@@ -91,7 +92,15 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         # Deny favico shortcut early.
         if self.path == "/favicon.ico":
             return None
-        return pdoc.render.html_module(pdoc.extract.extract_module(self.import_path))
+        
+        module = pdoc.extract.extract_module(self.import_path)
+        return pdoc.render.html_module(
+            module=module,
+            external_links= False,
+            link_prefix= "/",
+            source=True,        
+            markup=self.server.args.markup,
+        )
 
     def resolve_ext(self, import_path):
         def exists(p):

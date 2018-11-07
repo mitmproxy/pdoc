@@ -252,6 +252,15 @@
   .desc h1, .desc h2, .desc h3 {
     font-size: 100% !important;
   }
+
+  .markup-pre pre {
+    background: inherit;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .clear {
     clear: both;
   }
