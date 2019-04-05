@@ -82,7 +82,9 @@
     color: #e08524;
     transition: color .3s ease-in-out;
   }
-
+  p, pre {
+    white-space: pre-wrap;
+  }
   pre, code, .mono, .name {
     font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
   }
