@@ -17,10 +17,7 @@ def module_to_path(m: pdoc.doc.Module) -> pathlib.Path:
     if m.submodules:
         p /= "index.html"
     else:
-        if p.stem == "index":
-            p = p.with_suffix(".m.html")
-        else:
-            p = p.with_suffix(".html")
+        p = p.with_suffix(".m.html")
     return p
 
 
@@ -30,7 +27,7 @@ def path_to_module(
     """
         Retrieves the matching module for a given path from a module tree.
     """
-    if path.suffix == ".html":
+    if path.suffix == ".m.html":
         path = path.with_suffix("")
     parts = list(path.parts)
     if parts[-1] == "index":
