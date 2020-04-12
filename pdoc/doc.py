@@ -610,7 +610,7 @@ class Function(Doc):
         Python function object. The docstring is gathered automatically.
 
         `cls` should be set when this is a method or a static function
-        beloing to a class. `cls` should be a `pdoc.Class` object.
+        belonging to a class. `cls` should be a `pdoc.Class` object.
 
         `method` should be `True` when the function is a method. In
         all other cases, it should be `False`.
