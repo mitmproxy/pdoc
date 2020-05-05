@@ -1,5 +1,6 @@
 sudo: false
-language: python
+dist: bionic
+language: c
 
 branches:
   except:
@@ -9,6 +10,7 @@ env:
   global:
     - CI_DEPS=codecov>=2.0.5
     - CI_COMMANDS=codecov
+    - PYTHON_INSTALL_PKGS="wheel virtualenv tox"
 
 git:
   depth: 10000
@@ -16,19 +18,15 @@ git:
 matrix:
   fast_finish: true
   include:
-    - python: 3.5
-      env: TOXENV=py35
-      sudo: required
-    - python: 3.6
-      env: TOXENV=py36
-      sudo: required
-    - python: 3.6
-      env: TOXENV=lint
-    - python: "3.7-dev"
-      env: TOXENV=py37
+    - env: PYTHON_VERSION="3.8.2" TOXENV=py38
+    - env: PYTHON_VERSION="3.7.6" TOXENV=py37
+    - env: PYTHON_VERSION="3.6.8" TOXENV=py36
+    - env: PYTHON_VERSION="3.5.4" TOXENV=py35
+    - env: PYTHON_VERSION="3.9.0a6" TOXENV=py39
+    - env: PYTHON_VERSION="3.8.2" TOXENV=lint
 
 install:
-  - pip install tox virtualenv setuptools
+  - python travis/travis_shim.py install
 
 script:
   # All these steps MUST succeed for the job to be successful!
@@ -36,11 +34,20 @@ script:
   # Pull requests might break our build - we need to check this.
   # Pull requests are not allowed to upload build artifacts - enforced by cibuild script.
   - |
+    source ~/.bash_profile
+    pyenv activate venv-$PYTHON_VERSION
+    set -eEu
     if [[ $TRAVIS_COMMIT_MESSAGE = *"[notest]"* ]]; then
       echo "!!!! Skipping tests."
     else
       tox -- --verbose --cov-report=term
     fi
+    pip install .
+    #
+    # Smoke test
+    #
+    pdoc  --html --html-dir htmldir --all-submodules pdoc
+    set +eEu
 
 
 notifications:

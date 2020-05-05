@@ -30,7 +30,7 @@ included with this module.
 
 Compatibility
 -------------
-`pdoc` requires Python 3.6 or later.
+`pdoc` requires Python 3.5 or later.
 
 
 Contributing
@@ -45,13 +45,13 @@ In your documentation, you may link to other identifiers in
 your module or submodules. Linking is automatically done for
 you whenever you surround an identifier with a back quote
 (grave). The identifier name must be fully qualified. For
-example, <code>\`pdoc.Doc.docstring\`</code> is correct while
-<code>\`Doc.docstring\`</code> is incorrect.
+example, <code>`pdoc.Doc.docstring`</code> is correct while
+<code>`Doc.docstring`</code> is incorrect.
 
 If the `pdoc` script is used to run an HTTP server, then external
 linking to other packages installed is possible. No extra work is
 necessary; simply use the fully qualified path. For example,
-<code>\`nflvid.slice\`</code> will create a link to the `nflvid.slice`
+<code>`nflvid.slice`</code> will create a link to the `nflvid.slice`
 function, which is **not** a part of `pdoc` at all.
 
 

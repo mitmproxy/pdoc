@@ -1,6 +1,6 @@
 import os
 import typing
-import importlib
+import importlib.util
 import pkgutil
 
 import pdoc.doc
