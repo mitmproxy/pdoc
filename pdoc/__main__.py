@@ -1,6 +1,5 @@
 import argparse
 import pathlib
-
 import sys
 
 import pdoc.doc
@@ -14,86 +13,85 @@ parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
-aa = parser.add_argument
-aa("--version", action="version", version="%(prog)s " + pdoc.__version__)
-aa(
+parser.add_argument("--version", action="version", version="%(prog)s " + pdoc.__version__)
+parser.add_argument(
     "modules",
     type=str,
     metavar="module",
     nargs="+",
     help="Python module names. These may be import paths resolvable in "
-    "the current environment, or file paths to a Python module or "
-    "package.",
+         "the current environment, or file paths to a Python module or "
+         "package.",
 )
-aa(
+parser.add_argument(
     "--filter",
     type=str,
     default=None,
     help="When specified, only identifiers containing the name given "
-    "will be shown in the output. Search is case sensitive. "
-    "Has no effect when --http is set.",
+         "will be shown in the output. Search is case sensitive. "
+         "Has no effect when --http is set.",
 )
-aa("--html", action="store_true", help="When set, the output will be HTML formatted.")
-aa(
+parser.add_argument("--html", action="store_true", help="When set, the output will be HTML formatted.")
+parser.add_argument(
     "--html-dir",
     type=str,
     default=".",
     help="The directory to output HTML files to. This option is ignored when "
-    "outputting documentation as plain text.",
+         "outputting documentation as plain text.",
 )
-aa(
+parser.add_argument(
     "--html-no-source",
     action="store_true",
     help="When set, source code will not be viewable in the generated HTML. "
-    "This can speed up the time required to document large modules.",
+         "This can speed up the time required to document large modules.",
 )
-aa(
+parser.add_argument(
     "--overwrite",
     action="store_true",
     help="Overwrites any existing HTML files instead of producing an error.",
 )
-aa(
+parser.add_argument(
     "--all-submodules",
     action="store_true",
     help="When set, every submodule will be included, regardless of whether "
-    "__all__ is set and contains the submodule.",
+         "__all__ is set and contains the submodule.",
 )
-aa(
+parser.add_argument(
     "--external-links",
     action="store_true",
     help="When set, identifiers to external modules are turned into links. "
-    "This is automatically set when using --http.",
+         "This is automatically set when using --http.",
 )
-aa(
+parser.add_argument(
     "--template-dir",
     type=str,
     default=None,
     help="Specify a directory containing Mako templates. "
-    "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
-    "pdoc will automatically find them.",
+         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
+         "pdoc will automatically find them.",
 )
-aa(
+parser.add_argument(
     "--link-prefix",
     type=str,
     default="",
     help="A prefix to use for every link in the generated documentation. "
-    "No link prefix results in all links being relative. "
-    "Has no effect when combined with --http.",
+         "No link prefix results in all links being relative. "
+         "Has no effect when combined with --http.",
 )
-aa(
+parser.add_argument(
     "--http",
     action="store_true",
     help="When set, pdoc will run as an HTTP server providing documentation "
-    "of all installed modules. Only modules found in PYTHONPATH will be "
-    "listed.",
+         "of all installed modules. Only modules found in PYTHONPATH will be "
+         "listed.",
 )
-aa(
+parser.add_argument(
     "--http-host",
     type=str,
     default="localhost",
     help="The host on which to run the HTTP server.",
 )
-aa(
+parser.add_argument(
     "--http-port",
     type=int,
     default=8080,
@@ -101,12 +99,7 @@ aa(
 )
 
 
-def _eprint(*args, **kwargs):
-    kwargs["file"] = sys.stderr
-    print(*args, **kwargs)
-
-
-def run():
+def cli():
     """ Command-line entry point """
     args = parser.parse_args()
 
@@ -127,7 +120,7 @@ def run():
         try:
             m = pdoc.extract.extract_module(mod)
         except pdoc.extract.ExtractError as e:
-            _eprint(str(e))
+            print(str(e), file=sys.stderr)
             sys.exit(1)
         roots.append(m)
 
@@ -143,7 +136,7 @@ def run():
         # Run the HTTP server.
         httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, roots)
         print(
-            "pdoc server ready at http://%s:%d" % (args.http_host, args.http_port),
+            f"pdoc server ready at http://{args.http_host}:{args.http_port}",
             file=sys.stderr,
         )
         httpd.serve_forever()
@@ -151,7 +144,7 @@ def run():
     elif args.html:
         dst = pathlib.Path(args.html_dir)
         if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
-            _eprint("Rendering would overwrite files, but --overwite is not set")
+            print("Rendering would overwrite files, but --overwite is not set", file=sys.stderr)
             sys.exit(1)
         pdoc.static.html_out(dst, roots)
     else:
@@ -161,8 +154,5 @@ def run():
             print(output)
 
 
-def main():
-    try:
-        run()
-    except KeyboardInterrupt:
-        pass
+if __name__ == "__main__":
+    cli()

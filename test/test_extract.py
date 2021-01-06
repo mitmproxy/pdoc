@@ -14,7 +14,7 @@ import tutils
         ("./bar.py", (".", "bar")),
         ("./bar.foo", None),
         ("", None),
-    ]
+    ],
 )
 def test_split_module_spec(input, expected):
     if expected is None:
@@ -33,13 +33,12 @@ def test_split_module_spec(input, expected):
         ("", "csv", False, None),
         ("", "html.parser", False, None),
         ("", "onpath.simple", False, None),
-
         ("./modules", "nonexistent", False, "not found"),
         ("./modules/nonexistent", "foo", False, "not found"),
         ("", "nonexistent.module", False, "not found"),
         ("./modules/malformed", "syntax", False, "Error importing"),
         ("", "onpath.malformed_syntax", False, "Error importing"),
-    ]
+    ],
 )
 def test_load_module(path, mod, expected, match):
     with tutils.tdir():
@@ -61,7 +60,6 @@ def test_load_module(path, mod, expected, match):
         ("./modules/one.two", None, "Invalid module name"),
         ("./modules/malformed/syntax.py", None, "Error importing"),
         ("onpath.malformed_syntax", None, "Error importing"),
-
         ("./modules/one.py", ["one"], None),
         ("./modules/one", ["one"], None),
         ("./modules/dirmod", ["dirmod"], None),
@@ -88,7 +86,7 @@ def test_extract_module(path, expected, match):
         ("./modules", "dirmod", []),
         ("./modules", "submods", ["submods.three", "submods.two"]),
         ("./modules", "malformed", ["malformed.syntax"]),
-    ]
+    ],
 )
 def test_submodules(path, modname, expected):
     with tutils.tdir():

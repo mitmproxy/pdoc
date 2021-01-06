@@ -1,3 +1,6 @@
+<p align="center">
+<img src="logo.svg" width="200" height="100" />
+</p>
 
 [![Build Status](https://travis-ci.org/mitmproxy/pdoc.svg?branch=master)](https://travis-ci.org/mitmproxy/pdoc)
 [![PyPI Version](https://shields.mitmproxy.org/pypi/v/pdoc.svg)](https://pypi.org/project/pdoc/)

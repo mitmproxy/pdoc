@@ -1,12 +1,12 @@
 import os.path
 import re
-import typing
+from collections import Sequence
+from typing import Optional
 
-from mako.lookup import TemplateLookup
 from mako.exceptions import TopLevelLookupException
+from mako.lookup import TemplateLookup
 
 import pdoc.doc
-
 
 html_module_suffix = ".m.html"
 """
@@ -46,13 +46,13 @@ def _get_tpl(name):
         t = tpl_lookup.get_template(name)
     except TopLevelLookupException:
         locs = [os.path.join(p, name.lstrip("/")) for p in _template_path]
-        raise IOError(2, "No template at any of: %s" % ", ".join(locs))
+        raise OSError(2, "No template at any of: %s" % ", ".join(locs))
     return t
 
 
-def html_index(roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
+def html_index(roots: Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
     """
-        Render an HTML module index.
+    Render an HTML module index.
     """
     t = _get_tpl("/html_index.mako")
     t = t.render(roots=roots, link_prefix=link_prefix)
@@ -101,7 +101,7 @@ def html_module(
 
 def text(
     mod: pdoc.doc.Module,
-    docfilter: typing.Optional[str] = None,
+    docfilter: Optional[str] = None,
     allsubmodules: bool = False,
 ) -> str:
     """

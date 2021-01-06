@@ -60,9 +60,9 @@ import pdoc.html_helpers as hh
 
 <%def name="show_module(module)">
   <%
-  variables = module.variables()
-  classes = module.classes()
-  functions = module.functions()
+  variables = module.variables
+  classes = module.classes
+  functions = module.functions
   submodules = module.submodules
   %>
 
@@ -185,9 +185,9 @@ import pdoc.html_helpers as hh
 
 <%def name="module_index(module)">
   <%
-  variables = module.variables()
-  classes = module.classes()
-  functions = module.functions()
+  variables = module.variables
+  classes = module.classes
+  functions = module.functions
   submodules = module.submodules
   parent = module.parent
   %>
@@ -245,7 +245,7 @@ import pdoc.html_helpers as hh
 </%def>
 
 <%block name="title">
-  <title>${module.name} API documentation</title>
+  <title>${module.qualname} API documentation</title>
   <meta name="description" content="${module.docstring | hh.glimpse, trim}" />
 </%block>
 

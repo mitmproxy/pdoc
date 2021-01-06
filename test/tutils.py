@@ -5,7 +5,7 @@ import os
 @contextlib.contextmanager
 def tdir():
     """
-        A small helper to place us within the test directory.
+    A small helper to place us within the test directory.
     """
     old_dir = os.getcwd()
     os.chdir(os.path.dirname(__file__))

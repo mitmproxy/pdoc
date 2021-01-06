@@ -10,12 +10,12 @@ import pdoc.html_helpers as hh
 <%def name="show_module_list(roots)">
 <h1>Python module list</h1>
   <table id="module-list">
-  % for root in roots:
+  % for name, doc in roots:
     <tr>
-      <td><a href="${link_prefix}${root.name}">${root.name}</a></td>
+      <td><a href="${link_prefix}${name}">${name}</a></td>
       <td>
-      % if len(root.docstring.strip()) > 0:
-        <div class="desc">${root.docstring | hh.mark}</div>
+      % if len(doc.strip()) > 0:
+        <div class="desc">${doc | hh.mark}</div>
       % endif
       </td>
     </tr>

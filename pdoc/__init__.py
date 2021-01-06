@@ -1,4 +1,4 @@
-"""
+r"""
 Module pdoc provides types and functions for accessing the public
 documentation of a Python module. This includes modules (and
 sub-modules), functions, classes and module, class and instance
@@ -30,7 +30,7 @@ included with this module.
 
 Compatibility
 -------------
-`pdoc` requires Python 3.6 or later.
+`pdoc` requires Python 3.9 or later.
 
 
 Contributing
@@ -172,7 +172,7 @@ If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
 """
 
-__version__ = "0.3.2"
+__version__ = "0.4"
 """
 The current version of pdoc. This value is read from `setup.py`.
 """

@@ -110,7 +110,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             p = os.path.join(*parts[0:i])
             realp = exists(p)
             if realp is not None:
-                return "/%s#%s" % (realp.lstrip("/"), import_path)
+                return "/{}#{}".format(realp.lstrip("/"), import_path)
         return None
 
     @property
@@ -140,7 +140,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         return new.strip("/")
 
     def address_string(self):
-        return "%s:%s" % (self.client_address[0], self.client_address[1])
+        return "{}:{}".format(self.client_address[0], self.client_address[1])
 
 
 class DocServer(http.server.HTTPServer):

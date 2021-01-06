@@ -16,7 +16,7 @@ import pdoc.static
         ("./modules/submods", "submods.three", "submods/three.html"),
         ("./modules/index", "index", "index/index.html"),
         ("./modules/index", "index.index", "index/index.m.html"),
-    ]
+    ],
 )
 def test_module_path(modspec, ident, path):
     with tutils.tdir():
