@@ -19,9 +19,9 @@ import tutils
 def test_split_module_spec(input, expected):
     if expected is None:
         with pytest.raises(pdoc.extract.ExtractError):
-            pdoc.extract.split_module_spec(input)
+            pdoc.extract.parse_spec(input)
     else:
-        assert pdoc.extract.split_module_spec(input) == expected
+        assert pdoc.extract.parse_spec(input) == expected
 
 
 @pytest.mark.parametrize(
@@ -44,9 +44,9 @@ def test_load_module(path, mod, expected, match):
     with tutils.tdir():
         if match:
             with pytest.raises(pdoc.extract.ExtractError, match=match):
-                pdoc.extract.load_module(path, mod)
+                pdoc.extract._import_module(path, mod)
         else:
-            _, ispkg = pdoc.extract.load_module(path, mod)
+            _, ispkg = pdoc.extract._import_module(path, mod)
             assert ispkg == expected
 
 

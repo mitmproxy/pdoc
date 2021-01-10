@@ -1,0 +1,34 @@
+<module demo  # This is a demo modul…
+    <var CONST_A: int = 42  # A happy constant>
+    <function def foo(a: str, b: demo.Foo, *, c: ~T = False) -> ~T: ...  # Do foo, but do it qu…>
+    <var CONST_B = yes  # A non-annotated cons…>
+    <var CONST_C: float  # An unset constant>
+    <class demo.Foo
+        <method def __init__(self): ...>
+        <var foo = lots of foo!  # The fooest of all at…>
+        <var a: int  # I am defined in the …>
+        <method def do_foo(self) -> demo.Foo: ...  # You can actually do …>
+        <method async def i_am_async(self) -> int: ...>>
+    <class demo.Bar
+        <method def __init__(self): ...  # inherited from demo.Foo.__init__>
+        <var bar: str  # I sneaked in. :)>
+        <class demo.Bar.Baz
+            <method def __init__(): ...>
+            <var baz = True>>
+        <var foo = lots of foo!  # inherited from demo.Foo.foo, The fooest of all at…>
+        <var a: int  # inherited from demo.Foo.a, I am defined in the …>
+        <method def do_foo(self) -> demo.Foo: ...  # inherited from demo.Foo.do_foo, You can actually do …>
+        <method async def i_am_async(self) -> int: ...  # inherited from demo.Foo.i_am_async>>
+    <function def wat(x: demo.Bar.Baz = 'a test') -> int: ...>
+    <class demo.DoubleInherit  # I am rich.
+        <method def __init__(self): ...  # inherited from demo.Foo.__init__>
+        <var foo = lots of foo!  # inherited from demo.Foo.foo, The fooest of all at…>
+        <var a: int  # inherited from demo.Foo.a, I am defined in the …>
+        <method def do_foo(self) -> demo.Foo: ...  # inherited from demo.Foo.do_foo, You can actually do …>
+        <method async def i_am_async(self) -> int: ...  # inherited from demo.Foo.i_am_async>
+        <var baz = True  # inherited from demo.Bar.Baz.baz>>
+    <class demo.DataDemo  # DataDemo(a: int, b: …
+        <method def __init__(self, a: int, b: str, c: bool) -> NoneType: ...>
+        <var a: int>
+        <var b: str  # I am documented!>
+        <var c: bool>>>

@@ -1,0 +1,233 @@
+{% extends "html_frame.jinja2" %}
+{% block title %}{{ module.module_name }}{% endblock %}
+{% block style %}
+    <style type="text/css">{{ pdoc.render.formatter.get_style_defs() }}</style>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            padding: 1rem;
+        }
+
+        nav {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        nav a {
+            text-decoration: none;
+        }
+
+        .attr {
+            margin: .2rem;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .classattr, .inherited {
+            margin-left: 1rem;
+        }
+
+        .function .def {
+            font-weight: 300;
+        }
+
+        .function .signature {
+            font-weight: 300;
+        }
+
+        dt, dd {
+            display: inline;
+        }
+
+        dd + dd:before {
+            content: ", ";
+        }
+
+        .int, .nonetype {
+            color: #666;
+        }
+
+        .str {
+            color: #BA2121;
+        }
+
+        nav .class:before {
+            content: "class ";
+            color: gray;
+        }
+
+        nav .function:after {
+            content: "()";
+            color: gray;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-weight: 300;
+        }
+
+        footer {
+            font-size: 20px;
+            text-align: right;
+            padding: 1rem;
+        }
+
+        footer svg {
+            max-width: 70px;
+            transition: all 200ms;
+            filter: grayscale(100%);
+        }
+
+        footer svg:hover {
+            filter: grayscale(0%);
+        }
+
+        section {
+            margin: 1rem;
+            border: solid gray 1px;
+        }
+    </style>
+{% endblock %}
+{% macro bases(cls) -%}
+    {% if cls.bases -%}
+        (
+        {%- for base in cls.bases -%}
+            {{ base | link(current=module.module_name) }}{% if loop.nextitem %}, {% endif %}
+        {%- endfor -%}
+        )
+    {%- endif %}
+{%- endmacro %}
+{% macro default_value(var) -%}
+    {% if var.default_value != pdoc.doc.empty %}
+        <span class="default_value">
+            = <span class="{{ var.default_value.__class__.__name__ }}">{{ var.default_value | repr }}</span>
+        </span>
+    {% endif %}
+{%- endmacro %}
+{% macro annotation(var) -%}
+    {% if var.annotation != pdoc.doc.empty -%}
+        <span class="annotation">: {{ pdoc.doc.type_repr(var.annotation) | linkify(current=module.module_name) -}}
+    </span>
+    {%- endif %}
+{%- endmacro %}
+{% macro function(fn) -%}
+{% set sig %}<span
+        class="signature">{{ fn.signature | string | linkify(current=module.module_name) }}</span>{% endset %}
+{% if fn.name == "__init__" %}
+    <div class="attr function">{{ fn.qualname.split(".")[-2] }}{{ sig }}</div>
+{% else %}
+    <div class="attr function"><span class="def">{{ fn.funcdef }} </span><span
+            class="name">{{ fn.name }}</span>{{ sig }}:
+    </div>
+{% endif %}
+{% endmacro %}
+{% macro variable(var) -%}
+    <div class="attr variable">{{ var.name }}{{ annotation(var) }}{{ default_value(var) }}</div>
+{%- endmacro %}
+{% macro docstring(var) -%}
+    {% if var.docstring %}
+        <div class="docstring">{{ var.docstring | markdown | linkify(current=module.module_name) }}</div>
+    {% endif %}
+{%- endmacro %}
+{% macro nav_members(members) -%}
+    {% if members %}
+        <ul>
+            {% for m in members %}
+                <li>
+                    {% if m.type == "class" %}
+                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+                        {{ nav_members(m.own_members) }}
+                    {% elif m.name != "__init__" %}
+                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+                    {% else %}
+                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{%- endmacro %}
+{% macro view_source(obj) -%}
+    <details>
+        <summary>View Source</summary>
+        {{ obj.source | highlight }}
+    </details>
+{%- endmacro %}
+{% block body %}
+    <nav>
+        <h1>Index</h1>
+        {% if module.submodules %}
+            <h2>Submodules</h2>
+            <ul>
+                {% for submodule in module.submodules %}
+                    <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.refname }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if module.members %}
+            <h2>Contents</h2>
+            {{ nav_members(module.members) }}
+        {% endif %}
+    </nav>
+    <main>
+        <h1>
+            {%- set modname = "" -%}
+            {% for part in module.module_name.split(".") %}
+                {%- set modname = (modname + "." + part).removeprefix(".") -%}
+                {{ modname }}
+                {%- if loop.nextitem %}.{% endif -%}
+            {% endfor %} module</h1>
+        {{ docstring(module) }}
+        {{ view_source(module) }}
+        {% for m in module.flattened_members %}
+            <section id="{{ m.qualname }}">
+                {% if m.type == "class" %}
+                    <div class="attr class">class {{ m.qualname }}{{ bases(m) }}:</div>
+                {% elif m.type == "function" %}
+                    {{ function(m) }}
+                {% else %}
+                    {{ variable(m) }}
+                {% endif %}
+                {{ docstring(m) }}
+                {% if m.type != "variable" %}
+                    {{ view_source(m) }}
+                {% endif %}
+                {% if m.type == "class" %}
+                    {% for m in m.own_members if m.type != "class" %}
+                        <div id="{{ m.qualname }}" class="classattr">
+                            {% if m.type == "function" %}
+                                {{ function(m) }}
+                            {% else %}
+                                {{ variable(m) }}
+                            {% endif %}
+                            {{ m.docstring }}
+                        </div>
+                    {% endfor %}
+                    {% if m.inherited_members %}
+                        <div class="inherited">Inherited Members
+                            <dl>
+                                {% for base, members in m.inherited_members.items() %}
+                                    <div>
+                                        <dt>{{ base | link(current=module.module_name) }}</dt>
+                                        {% for m2 in members -%}
+                                            <dd>{{ m2.declared_at | link(current=module.module_name,text=m2.name) }}</dd>
+                                        {%- endfor %}
+                                    </div>
+                                {% endfor %}
+                            </dl>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </section>
+        {% endfor %}
+    </main>
+{% endblock %}

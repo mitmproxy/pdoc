@@ -8,7 +8,7 @@ import pygments.formatters
 import pygments.lexers
 
 import pdoc.doc
-import pdoc.render
+import pdoc.render_old
 
 # From language reference, but adds '.' to allow fully qualified names.
 pyident = re.compile("^[a-zA-Z_][a-zA-Z0-9_.]+$")
@@ -98,10 +98,10 @@ def module_url(parent, m, link_prefix):
         base = os.path.relpath(base, parent.name.replace(".", "/"))
     url = base[len("../") :] if base.startswith("../") else "" if base == ".." else base
     if m.submodules:
-        index = pdoc.render.html_package_name
+        index = pdoc.render_old.html_package_name
         url = url + "/" + index if url else index
     else:
-        url += pdoc.render.html_module_suffix
+        url += pdoc.render_old.html_module_suffix
     return link_prefix + url
 
 
@@ -149,9 +149,7 @@ def lookup(module, refname, link_prefix):
         return d.refname, module_url(module, d, link_prefix)
     if module.is_public(d.refname):
         return d.name, "#%s" % d.refname
-    return d.refname, "{}#{}".format(
-        module_url(module, d.module, link_prefix), d.refname
-    )
+    return d.refname, "{}#{}".format(module_url(module, d.name, link_prefix), d.refname)
 
 
 def link(parent, refname, link_prefix):

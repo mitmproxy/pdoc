@@ -171,8 +171,59 @@ of a module or in the definition of a class.
 If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
 """
+import io
+from pathlib import Path
+from typing import Literal, Optional, Union
 
-__version__ = "0.4"
+from pdoc import extract, render, doc
+
+__version__ = "1.0"
 """
 The current version of pdoc. This value is read from `setup.py`.
 """
+
+
+def pdoc(
+    *modules: Union[Path, str],
+    output_directory: Optional[Path] = None,
+    format: Literal["html", "markdown"] = "html",
+    sort: bool = False,
+) -> object:
+    retval = io.StringIO()
+    if output_directory:
+
+        def write(mod: doc.Module):
+            outfile = output_directory / f"{mod.refname.replace('.', '/')}.html"
+            outfile.parent.mkdir(parents=True, exist_ok=True)
+            outfile.write_text(r(mod), "utf8")
+            for s in mod.submodules:
+                write(s)
+
+    else:
+
+        def write(mod: doc.Module):
+            retval.write(r(mod))
+
+    specs = [extract.parse_spec(mod) for mod in modules]
+    mods = [extract.extract_module(mod) for mod in specs]
+
+    render.roots = [s.name for s in specs]
+    render.sort = sort
+
+    if format == "html":
+        r = render.html_module
+    elif format == "markdown":
+        raise NotImplementedError
+    elif format == "repr":
+        r = repr
+    else:
+        raise ValueError(f"Invalid rendering format {format!r}.")
+
+    for mod in mods:
+        write(mod)
+
+        if not output_directory:
+            break
+    # TODO: Write index
+
+    return retval.getvalue()

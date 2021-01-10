@@ -1,123 +1,127 @@
-import os.path
+import importlib.util
 import re
-from collections import Sequence
-from typing import Optional
+from pathlib import Path
 
-from mako.exceptions import TopLevelLookupException
-from mako.lookup import TemplateLookup
+import markdown2
+import pygments.formatters.html
+import pygments.lexers.python
+import pygments.token
+import pytest
+from jinja2 import FileSystemLoader, Environment
+from markupsafe import Markup
 
 import pdoc.doc
 
-html_module_suffix = ".m.html"
-"""
-The suffix to use for module HTML files. By default, this is set to
-`.m.html`, where the extra `.m` is used to differentiate a package's
-`index.html` from a submodule called `index`.
-"""
+default_templates = Path(__file__).parent / "templates"
+lexer = pygments.lexers.python.PythonLexer()
+formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
+formatter.get_style_defs()
 
-html_package_name = "index.html"
-"""
-The file name to use for a package's `__init__.py` module.
-"""
-
-_template_path = [os.path.join(os.path.dirname(__file__), "templates")]
-"""
-A list of paths to search for Mako templates used to produce the
-plain text and HTML output. Each path is tried until a template is
-found.
-"""
-
-tpl_lookup = TemplateLookup(
-    directories=_template_path, cache_args={"cached": True, "cache_type": "memory"}
-)
-"""
-A `mako.lookup.TemplateLookup` object that knows how to load templates
-from the file system. You may add additional paths by modifying the
-object's `directories` attribute.
-"""
+roots: list[str] = []
+sort: bool = False
 
 
-def _get_tpl(name):
-    """
-    Returns the Mako template with the given name. If the template cannot be
-    found, a nicer error message is displayed.
-    """
+def highlight(code: str) -> str:
+    return Markup(pygments.highlight(code, lexer, formatter))
+
+
+def markdown(code: str) -> str:
+    return Markup(markdown2.markdown(code, extras=["fenced-code-blocks"]))
+
+
+def split_identifier(identifier: str) -> tuple[str, str]:
     try:
-        t = tpl_lookup.get_template(name)
-    except TopLevelLookupException:
-        locs = [os.path.join(p, name.lstrip("/")) for p in _template_path]
-        raise OSError(2, "No template at any of: %s" % ", ".join(locs))
-    return t
+        ok = importlib.util.find_spec(identifier)
+        if ok is None:
+            raise ModuleNotFoundError()
+    except Exception:
+        parent, name = identifier.rsplit(".", maxsplit=1)
+        module_name, qualname = split_identifier(parent)
+        return module_name, f"{qualname}.{name}".lstrip(".")
+    else:
+        return identifier, ""
 
 
-def html_index(roots: Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
-    """
-    Render an HTML module index.
-    """
-    t = _get_tpl("/html_index.mako")
-    t = t.render(roots=roots, link_prefix=link_prefix)
-    return t.strip()
+def _relative_link(current: list[str], target: list[str]) -> str:
+    if target[: len(current)] == current:
+        return "/".join(target[len(current):]) + ".html"
+    else:
+        return "../" + _relative_link(current[:-1], target)
+
+
+def relative_link(current_module: str, target_module: str) -> str:
+    if current_module == target_module:
+        return ""
+    return _relative_link(
+        current_module.split(".")[:-1],
+        target_module.split("."),
+    )
+
+
+@pytest.mark.parametrize(
+    "current,target,relative",
+    [
+        ("foo", "foo", ""),
+        ("foo", "bar", "bar.html"),
+        ("foo.foo", "bar", "../bar.html"),
+        ("foo.bar", "foo.bar.baz", "bar/baz.html"),
+        ("foo.bar.baz", "foo.qux.quux", "../qux/quux.html"),
+    ],
+)
+def test_relative_link(current, target, relative):
+    assert relative_link(current, target) == relative
+
+
+def linkify(code: str, current: str) -> str:
+    def repl(m: re.Match):
+        refname = m.group(0)
+        if any(refname == root or refname.startswith(f"{root}.") for root in roots):
+            module, qualname = split_identifier(refname)
+            return (
+                f'<a href="{relative_link(current, module)}#{qualname}">{refname}</a>'
+            )
+        return refname
+
+    return Markup(re.sub("[a-zA-Z_][a-zA-Z_0-9]*\.[a-zA-Z_0-9.]+", repl, code))
+
+
+def link(spec, current: str, text=None) -> str:
+    module_name, qualname = spec
+    refname = f"{module_name}.{qualname}".rstrip(".")
+    if any(refname == root or refname.startswith(f"{root}.") for root in roots):
+        return Markup(
+            f'<a href="{relative_link(current, module_name)}#{qualname}">{text or refname}</a>'
+        )
+    return refname
+
+
+def safe_repr(val):
+    """Some values may raise in their __repr__"""
+    try:
+        return repr(val)
+    except Exception:
+        try:
+            return str(val)
+        except Exception:
+            return "<unable to get value representation>"
+
+
+env = Environment(
+    loader=FileSystemLoader([default_templates]),
+    autoescape=True,
+)
+env.filters["markdown"] = markdown
+env.filters["highlight"] = highlight
+env.filters["linkify"] = linkify
+env.filters["link"] = link
+env.filters["repr"] = safe_repr
+
+
+def html_index(module: pdoc.doc.Module) -> str:
+    return env.get_template("html_index.jinja2").render(module=module, pdoc=pdoc)
 
 
 def html_module(
-    mod: pdoc.doc.Module,
-    external_links: bool = False,
-    link_prefix: str = "/",
-    source: bool = True,
+        module: pdoc.doc.Module,
 ) -> str:
-    """
-    Returns the documentation for the module `module_name` in HTML
-    format. The module must be importable.
-
-    `docfilter` is an optional predicate that controls which
-    documentation objects are shown in the output. It is a single
-    argument function that takes a documentation object and returns
-    `True` or `False`. If `False`, that object will not be included in
-    the output.
-
-    If `allsubmodules` is `True`, then every submodule of this module
-    that can be found will be included in the documentation, regardless
-    of whether `__all__` contains it.
-
-    If `external_links` is `True`, then identifiers to external modules
-    are always turned into links.
-
-    If `link_prefix` is `True`, then all links will have that prefix.
-    Otherwise, links are always relative.
-
-    If `source` is `True`, then source code will be retrieved for
-    every Python object whenever possible. This can dramatically
-    decrease performance when documenting large modules.
-    """
-    t = _get_tpl("/html_module.mako")
-    t = t.render(
-        module=mod,
-        external_links=external_links,
-        link_prefix=link_prefix,
-        show_source_code=source,
-    )
-    return t.strip()
-
-
-def text(
-    mod: pdoc.doc.Module,
-    docfilter: Optional[str] = None,
-    allsubmodules: bool = False,
-) -> str:
-    """
-    Returns the documentation for the module `module_name` in plain
-    text format. The module must be importable.
-
-    `docfilter` is an optional predicate that controls which
-    documentation objects are shown in the output. It is a single
-    argument function that takes a documentation object and returns
-    True of False. If False, that object will not be included in the
-    output.
-
-    If `allsubmodules` is `True`, then every submodule of this module
-    that can be found will be included in the documentation, regardless
-    of whether `__all__` contains it.
-    """
-    t = _get_tpl("/text.mako")
-    text, _ = re.subn("\n\n\n+", "\n\n", t.render(module=mod).strip())
-    return text
+    return env.get_template("html_module.jinja2").render(module=module, pdoc=pdoc)

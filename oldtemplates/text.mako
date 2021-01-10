@@ -39,8 +39,8 @@ ${cls.docstring | indent}
   static_methods = cls.functions()
   inst_vars = cls.instance_variables()
   methods = cls.methods()
-  mro = cls.module.mro(cls)
-  descendents = cls.module.descendents(cls)
+  mro = cls.name.mro(cls)
+  descendents = cls.name.descendents(cls)
 %>
 % if len(mro) > 0:
     Ancestors (in MRO)

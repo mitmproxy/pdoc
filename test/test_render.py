@@ -1,5 +1,5 @@
 import pdoc.extract
-import pdoc.render
+import pdoc.render_old
 import pdoc.doc
 
 import tutils
@@ -8,7 +8,7 @@ import tutils
 def test_html_module():
     with tutils.tdir():
         m = pdoc.extract.extract_module("./modules/one")
-        assert pdoc.render.html_module(m)
+        assert pdoc.render_old.html_module(m)
 
 
 def test_html_module_index():
@@ -17,4 +17,4 @@ def test_html_module_index():
             pdoc.extract.extract_module("./modules/one"),
             pdoc.extract.extract_module("./modules/submods"),
         ]
-        assert pdoc.render.html_index(roots)
+        assert pdoc.render_old.html_index(roots)

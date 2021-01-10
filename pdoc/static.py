@@ -2,7 +2,7 @@ from collections import Sequence
 from pathlib import Path
 
 import pdoc.doc
-import pdoc.render
+import pdoc.render_old
 
 
 class StaticError(Exception):
@@ -24,9 +24,7 @@ def module_to_path(m: pdoc.doc.Module) -> Path:
     return p
 
 
-def path_to_module(
-        roots: Sequence[pdoc.doc.Module], path: Path
-) -> pdoc.doc.Module:
+def path_to_module(roots: Sequence[pdoc.doc.Module], path: Path) -> pdoc.doc.Module:
     """
     Retrieves the matching module for a given path from a module tree.
     """
@@ -61,21 +59,21 @@ def would_overwrite(dst: Path, roots: Sequence[pdoc.doc.Module]) -> bool:
 
 
 def html_out(
-        dst: Path,
-        roots: Sequence[pdoc.doc.Module],
-        external_links: bool = True,
-        link_prefix: str = "",
-        source: bool = False,
+    dst: Path,
+    roots: Sequence[pdoc.doc.Module],
+    external_links: bool = True,
+    link_prefix: str = "",
+    source: bool = False,
 ):
     if len(roots) > 1:
         p = dst / "index.html"
-        idx = pdoc.render.html_index(roots, link_prefix=link_prefix)
+        idx = pdoc.render_old.html_index(roots, link_prefix=link_prefix)
         p.write_text(idx, encoding="utf-8")
     for root in roots:
         for m in [root]:  # root.allmodules():
             p = dst.joinpath(module_to_path(m))
             p.parent.mkdir(parents=True, exist_ok=True)
-            out = pdoc.render.html_module(
+            out = pdoc.render_old.html_module(
                 m, external_links=external_links, link_prefix=link_prefix, source=source
             )
             p.write_text(out, encoding="utf-8")

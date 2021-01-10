@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}pdoc {{ pdoc.__version__ }}{% endblock %}</title>
+
+    <style type="text/css">{% include 'bootstrap-reboot.min.css' %}</style>
+    {% filter replace("\n","") | replace("    ","") %}
+        {% block style %}{% endblock %}
+    {% endfilter %}
+</head>
+<body>
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+<footer><a title="built with pdoc {{ pdoc.__version__ }}"
+           href="https://github.com/mitmproxy/pdoc">{% include 'logo.svg' %}</a></footer>
+</body>
+</html>

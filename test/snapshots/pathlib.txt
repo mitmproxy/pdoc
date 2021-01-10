@@ -1,0 +1,265 @@
+<module pathlib
+    <class pathlib.PurePath  # Base class for manip…
+        <method def __init__(): ...>
+        <method def as_posix(self): ...  # Return the string re…>
+        <method def as_uri(self): ...  # Return the path as a…>
+        <var drive  # The drive prefix (le…>
+        <var root  # The root of the path…>
+        <var anchor  # The concatenation of…>
+        <var name  # The final path compo…>
+        <var suffix  # 
+                The final c…>
+        <var suffixes  # 
+                A list of t…>
+        <var stem  # The final path compo…>
+        <method def with_name(self, name): ...  # Return a new path wi…>
+        <method def with_stem(self, stem): ...  # Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # Return a new path wi…>
+        <method def relative_to(self, *other): ...  # Return the relative …>
+        <method def is_relative_to(self, *other): ...  # Return True if the p…>
+        <var parts  # An object providing …>
+        <method def joinpath(self, *args): ...  # Combine this path wi…>
+        <var parent  # The logical parent o…>
+        <var parents  # A sequence of this p…>
+        <method def is_absolute(self): ...  # True if the path is …>
+        <method def is_reserved(self): ...  # Return True if the p…>
+        <method def match(self, path_pattern): ...  # Return True if this …>>
+    <class pathlib.PurePosixPath  # PurePath subclass fo…
+        <method def __init__(): ...>
+        <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
+        <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
+        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
+        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
+        <var name  # inherited from pathlib.PurePath.name, The final path compo…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, 
+                The final c…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
+                A list of t…>
+        <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
+        <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
+        <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # inherited from pathlib.PurePath.with_suffix, Return a new path wi…>
+        <method def relative_to(self, *other): ...  # inherited from pathlib.PurePath.relative_to, Return the relative …>
+        <method def is_relative_to(self, *other): ...  # inherited from pathlib.PurePath.is_relative_to, Return True if the p…>
+        <var parts  # inherited from pathlib.PurePath.parts, An object providing …>
+        <method def joinpath(self, *args): ...  # inherited from pathlib.PurePath.joinpath, Combine this path wi…>
+        <var parent  # inherited from pathlib.PurePath.parent, The logical parent o…>
+        <var parents  # inherited from pathlib.PurePath.parents, A sequence of this p…>
+        <method def is_absolute(self): ...  # inherited from pathlib.PurePath.is_absolute, True if the path is …>
+        <method def is_reserved(self): ...  # inherited from pathlib.PurePath.is_reserved, Return True if the p…>
+        <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
+    <class pathlib.PureWindowsPath  # PurePath subclass fo…
+        <method def __init__(): ...>
+        <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
+        <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
+        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
+        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
+        <var name  # inherited from pathlib.PurePath.name, The final path compo…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, 
+                The final c…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
+                A list of t…>
+        <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
+        <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
+        <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # inherited from pathlib.PurePath.with_suffix, Return a new path wi…>
+        <method def relative_to(self, *other): ...  # inherited from pathlib.PurePath.relative_to, Return the relative …>
+        <method def is_relative_to(self, *other): ...  # inherited from pathlib.PurePath.is_relative_to, Return True if the p…>
+        <var parts  # inherited from pathlib.PurePath.parts, An object providing …>
+        <method def joinpath(self, *args): ...  # inherited from pathlib.PurePath.joinpath, Combine this path wi…>
+        <var parent  # inherited from pathlib.PurePath.parent, The logical parent o…>
+        <var parents  # inherited from pathlib.PurePath.parents, A sequence of this p…>
+        <method def is_absolute(self): ...  # inherited from pathlib.PurePath.is_absolute, True if the path is …>
+        <method def is_reserved(self): ...  # inherited from pathlib.PurePath.is_reserved, Return True if the p…>
+        <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
+    <class pathlib.Path  # PurePath subclass th…
+        <method def __init__(): ...>
+        <classmethod def cwd(cls): ...  # Return a new path po…>
+        <classmethod def home(cls): ...  # Return a new path po…>
+        <method def samefile(self, other_path): ...  # Return whether other…>
+        <method def iterdir(self): ...  # Iterate over the fil…>
+        <method def glob(self, pattern): ...  # Iterate over this su…>
+        <method def rglob(self, pattern): ...  # Recursively yield al…>
+        <method def absolute(self): ...  # Return an absolute v…>
+        <method def resolve(self, strict=False): ...  # Make the path absolu…>
+        <method def stat(self): ...  # Return the result of…>
+        <method def owner(self): ...  # Return the login nam…>
+        <method def group(self): ...  # Return the group nam…>
+        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # Open the file pointe…>
+        <method def read_bytes(self): ...  # Open the file in byt…>
+        <method def read_text(self, encoding=None, errors=None): ...  # Open the file in tex…>
+        <method def write_bytes(self, data): ...  # Open the file in byt…>
+        <method def write_text(self, data, encoding=None, errors=None): ...  # Open the file in tex…>
+        <method def readlink(self): ...  # Return the path to w…>
+        <method def touch(self, mode=438, exist_ok=True): ...  # Create this file wit…>
+        <method def mkdir(self, mode=511, parents=False, exist_ok=False): ...  # Create a new directo…>
+        <method def chmod(self, mode): ...  # Change the permissio…>
+        <method def lchmod(self, mode): ...  # Like chmod(), except…>
+        <method def unlink(self, missing_ok=False): ...  # Remove this file or …>
+        <method def rmdir(self): ...  # Remove this director…>
+        <method def lstat(self): ...  # Like stat(), except …>
+        <method def link_to(self, target): ...  # Create a hard link p…>
+        <method def rename(self, target): ...  # Rename this path to …>
+        <method def replace(self, target): ...  # Rename this path to …>
+        <method def symlink_to(self, target, target_is_directory=False): ...  # Make this path a sym…>
+        <method def exists(self): ...  # Whether this path ex…>
+        <method def is_dir(self): ...  # Whether this path is…>
+        <method def is_file(self): ...  # Whether this path is…>
+        <method def is_mount(self): ...  # Check if this path i…>
+        <method def is_symlink(self): ...  # Whether this path is…>
+        <method def is_block_device(self): ...  # Whether this path is…>
+        <method def is_char_device(self): ...  # Whether this path is…>
+        <method def is_fifo(self): ...  # Whether this path is…>
+        <method def is_socket(self): ...  # Whether this path is…>
+        <method def expanduser(self): ...  # Return a new path wi…>
+        <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
+        <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
+        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
+        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
+        <var name  # inherited from pathlib.PurePath.name, The final path compo…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, 
+                The final c…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
+                A list of t…>
+        <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
+        <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
+        <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # inherited from pathlib.PurePath.with_suffix, Return a new path wi…>
+        <method def relative_to(self, *other): ...  # inherited from pathlib.PurePath.relative_to, Return the relative …>
+        <method def is_relative_to(self, *other): ...  # inherited from pathlib.PurePath.is_relative_to, Return True if the p…>
+        <var parts  # inherited from pathlib.PurePath.parts, An object providing …>
+        <method def joinpath(self, *args): ...  # inherited from pathlib.PurePath.joinpath, Combine this path wi…>
+        <var parent  # inherited from pathlib.PurePath.parent, The logical parent o…>
+        <var parents  # inherited from pathlib.PurePath.parents, A sequence of this p…>
+        <method def is_absolute(self): ...  # inherited from pathlib.PurePath.is_absolute, True if the path is …>
+        <method def is_reserved(self): ...  # inherited from pathlib.PurePath.is_reserved, Return True if the p…>
+        <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
+    <class pathlib.PosixPath  # Path subclass for no…
+        <method def __init__(): ...>
+        <classmethod def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
+        <classmethod def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
+        <method def samefile(self, other_path): ...  # inherited from pathlib.Path.samefile, Return whether other…>
+        <method def iterdir(self): ...  # inherited from pathlib.Path.iterdir, Iterate over the fil…>
+        <method def glob(self, pattern): ...  # inherited from pathlib.Path.glob, Iterate over this su…>
+        <method def rglob(self, pattern): ...  # inherited from pathlib.Path.rglob, Recursively yield al…>
+        <method def absolute(self): ...  # inherited from pathlib.Path.absolute, Return an absolute v…>
+        <method def resolve(self, strict=False): ...  # inherited from pathlib.Path.resolve, Make the path absolu…>
+        <method def stat(self): ...  # inherited from pathlib.Path.stat, Return the result of…>
+        <method def owner(self): ...  # inherited from pathlib.Path.owner, Return the login nam…>
+        <method def group(self): ...  # inherited from pathlib.Path.group, Return the group nam…>
+        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # inherited from pathlib.Path.open, Open the file pointe…>
+        <method def read_bytes(self): ...  # inherited from pathlib.Path.read_bytes, Open the file in byt…>
+        <method def read_text(self, encoding=None, errors=None): ...  # inherited from pathlib.Path.read_text, Open the file in tex…>
+        <method def write_bytes(self, data): ...  # inherited from pathlib.Path.write_bytes, Open the file in byt…>
+        <method def write_text(self, data, encoding=None, errors=None): ...  # inherited from pathlib.Path.write_text, Open the file in tex…>
+        <method def readlink(self): ...  # inherited from pathlib.Path.readlink, Return the path to w…>
+        <method def touch(self, mode=438, exist_ok=True): ...  # inherited from pathlib.Path.touch, Create this file wit…>
+        <method def mkdir(self, mode=511, parents=False, exist_ok=False): ...  # inherited from pathlib.Path.mkdir, Create a new directo…>
+        <method def chmod(self, mode): ...  # inherited from pathlib.Path.chmod, Change the permissio…>
+        <method def lchmod(self, mode): ...  # inherited from pathlib.Path.lchmod, Like chmod(), except…>
+        <method def unlink(self, missing_ok=False): ...  # inherited from pathlib.Path.unlink, Remove this file or …>
+        <method def rmdir(self): ...  # inherited from pathlib.Path.rmdir, Remove this director…>
+        <method def lstat(self): ...  # inherited from pathlib.Path.lstat, Like stat(), except …>
+        <method def link_to(self, target): ...  # inherited from pathlib.Path.link_to, Create a hard link p…>
+        <method def rename(self, target): ...  # inherited from pathlib.Path.rename, Rename this path to …>
+        <method def replace(self, target): ...  # inherited from pathlib.Path.replace, Rename this path to …>
+        <method def symlink_to(self, target, target_is_directory=False): ...  # inherited from pathlib.Path.symlink_to, Make this path a sym…>
+        <method def exists(self): ...  # inherited from pathlib.Path.exists, Whether this path ex…>
+        <method def is_dir(self): ...  # inherited from pathlib.Path.is_dir, Whether this path is…>
+        <method def is_file(self): ...  # inherited from pathlib.Path.is_file, Whether this path is…>
+        <method def is_mount(self): ...  # inherited from pathlib.Path.is_mount, Check if this path i…>
+        <method def is_symlink(self): ...  # inherited from pathlib.Path.is_symlink, Whether this path is…>
+        <method def is_block_device(self): ...  # inherited from pathlib.Path.is_block_device, Whether this path is…>
+        <method def is_char_device(self): ...  # inherited from pathlib.Path.is_char_device, Whether this path is…>
+        <method def is_fifo(self): ...  # inherited from pathlib.Path.is_fifo, Whether this path is…>
+        <method def is_socket(self): ...  # inherited from pathlib.Path.is_socket, Whether this path is…>
+        <method def expanduser(self): ...  # inherited from pathlib.Path.expanduser, Return a new path wi…>
+        <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
+        <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
+        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
+        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
+        <var name  # inherited from pathlib.PurePath.name, The final path compo…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, 
+                The final c…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
+                A list of t…>
+        <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
+        <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
+        <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # inherited from pathlib.PurePath.with_suffix, Return a new path wi…>
+        <method def relative_to(self, *other): ...  # inherited from pathlib.PurePath.relative_to, Return the relative …>
+        <method def is_relative_to(self, *other): ...  # inherited from pathlib.PurePath.is_relative_to, Return True if the p…>
+        <var parts  # inherited from pathlib.PurePath.parts, An object providing …>
+        <method def joinpath(self, *args): ...  # inherited from pathlib.PurePath.joinpath, Combine this path wi…>
+        <var parent  # inherited from pathlib.PurePath.parent, The logical parent o…>
+        <var parents  # inherited from pathlib.PurePath.parents, A sequence of this p…>
+        <method def is_absolute(self): ...  # inherited from pathlib.PurePath.is_absolute, True if the path is …>
+        <method def is_reserved(self): ...  # inherited from pathlib.PurePath.is_reserved, Return True if the p…>
+        <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
+    <class pathlib.WindowsPath  # Path subclass for Wi…
+        <method def __init__(): ...>
+        <method def is_mount(self): ...  # Check if this path i…>
+        <classmethod def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
+        <classmethod def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
+        <method def samefile(self, other_path): ...  # inherited from pathlib.Path.samefile, Return whether other…>
+        <method def iterdir(self): ...  # inherited from pathlib.Path.iterdir, Iterate over the fil…>
+        <method def glob(self, pattern): ...  # inherited from pathlib.Path.glob, Iterate over this su…>
+        <method def rglob(self, pattern): ...  # inherited from pathlib.Path.rglob, Recursively yield al…>
+        <method def absolute(self): ...  # inherited from pathlib.Path.absolute, Return an absolute v…>
+        <method def resolve(self, strict=False): ...  # inherited from pathlib.Path.resolve, Make the path absolu…>
+        <method def stat(self): ...  # inherited from pathlib.Path.stat, Return the result of…>
+        <method def owner(self): ...  # inherited from pathlib.Path.owner, Return the login nam…>
+        <method def group(self): ...  # inherited from pathlib.Path.group, Return the group nam…>
+        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # inherited from pathlib.Path.open, Open the file pointe…>
+        <method def read_bytes(self): ...  # inherited from pathlib.Path.read_bytes, Open the file in byt…>
+        <method def read_text(self, encoding=None, errors=None): ...  # inherited from pathlib.Path.read_text, Open the file in tex…>
+        <method def write_bytes(self, data): ...  # inherited from pathlib.Path.write_bytes, Open the file in byt…>
+        <method def write_text(self, data, encoding=None, errors=None): ...  # inherited from pathlib.Path.write_text, Open the file in tex…>
+        <method def readlink(self): ...  # inherited from pathlib.Path.readlink, Return the path to w…>
+        <method def touch(self, mode=438, exist_ok=True): ...  # inherited from pathlib.Path.touch, Create this file wit…>
+        <method def mkdir(self, mode=511, parents=False, exist_ok=False): ...  # inherited from pathlib.Path.mkdir, Create a new directo…>
+        <method def chmod(self, mode): ...  # inherited from pathlib.Path.chmod, Change the permissio…>
+        <method def lchmod(self, mode): ...  # inherited from pathlib.Path.lchmod, Like chmod(), except…>
+        <method def unlink(self, missing_ok=False): ...  # inherited from pathlib.Path.unlink, Remove this file or …>
+        <method def rmdir(self): ...  # inherited from pathlib.Path.rmdir, Remove this director…>
+        <method def lstat(self): ...  # inherited from pathlib.Path.lstat, Like stat(), except …>
+        <method def link_to(self, target): ...  # inherited from pathlib.Path.link_to, Create a hard link p…>
+        <method def rename(self, target): ...  # inherited from pathlib.Path.rename, Rename this path to …>
+        <method def replace(self, target): ...  # inherited from pathlib.Path.replace, Rename this path to …>
+        <method def symlink_to(self, target, target_is_directory=False): ...  # inherited from pathlib.Path.symlink_to, Make this path a sym…>
+        <method def exists(self): ...  # inherited from pathlib.Path.exists, Whether this path ex…>
+        <method def is_dir(self): ...  # inherited from pathlib.Path.is_dir, Whether this path is…>
+        <method def is_file(self): ...  # inherited from pathlib.Path.is_file, Whether this path is…>
+        <method def is_symlink(self): ...  # inherited from pathlib.Path.is_symlink, Whether this path is…>
+        <method def is_block_device(self): ...  # inherited from pathlib.Path.is_block_device, Whether this path is…>
+        <method def is_char_device(self): ...  # inherited from pathlib.Path.is_char_device, Whether this path is…>
+        <method def is_fifo(self): ...  # inherited from pathlib.Path.is_fifo, Whether this path is…>
+        <method def is_socket(self): ...  # inherited from pathlib.Path.is_socket, Whether this path is…>
+        <method def expanduser(self): ...  # inherited from pathlib.Path.expanduser, Return a new path wi…>
+        <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
+        <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
+        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
+        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
+        <var name  # inherited from pathlib.PurePath.name, The final path compo…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, 
+                The final c…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
+                A list of t…>
+        <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
+        <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
+        <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
+        <method def with_suffix(self, suffix): ...  # inherited from pathlib.PurePath.with_suffix, Return a new path wi…>
+        <method def relative_to(self, *other): ...  # inherited from pathlib.PurePath.relative_to, Return the relative …>
+        <method def is_relative_to(self, *other): ...  # inherited from pathlib.PurePath.is_relative_to, Return True if the p…>
+        <var parts  # inherited from pathlib.PurePath.parts, An object providing …>
+        <method def joinpath(self, *args): ...  # inherited from pathlib.PurePath.joinpath, Combine this path wi…>
+        <var parent  # inherited from pathlib.PurePath.parent, The logical parent o…>
+        <var parents  # inherited from pathlib.PurePath.parents, A sequence of this p…>
+        <method def is_absolute(self): ...  # inherited from pathlib.PurePath.is_absolute, True if the path is …>
+        <method def is_reserved(self): ...  # inherited from pathlib.PurePath.is_reserved, Return True if the p…>
+        <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>>

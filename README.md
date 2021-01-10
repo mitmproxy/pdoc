@@ -1,5 +1,5 @@
 <p align="center">
-<img src="logo.svg" width="200" height="100" />
+<img src="pdoc/templates/logo.svg" width="200" height="100" />
 </p>
 
 [![Build Status](https://travis-ci.org/mitmproxy/pdoc.svg?branch=master)](https://travis-ci.org/mitmproxy/pdoc)
@@ -41,7 +41,7 @@ Features
 
 The above features are explained in more detail in pdoc's documentation.
 
-`pdoc` is compatible with Python 3.5 and newer.
+`pdoc` is compatible with Python 3.9 and newer.
 
 
 Example usage
@@ -53,7 +53,7 @@ For example, to view the documentation for the `csv` module in the console:
 
 Or, you could view it by pointing at the file directly:
 
-    pdoc /usr/lib/python3.7/csv.py
+    pdoc /usr/lib/python3.9/csv.py
 
 Submodules are fine too:
 
@@ -100,3 +100,6 @@ includes `/home/jsmith/pylib`.
 
 If `pdoc` cannot load any modules imported by the input module, it will exit
 with an error message indicating which module could not be loaded.
+
+
+pdoc was originally created by Andrew Gallant.

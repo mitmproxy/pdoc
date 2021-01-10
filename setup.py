@@ -13,8 +13,8 @@ VERSION = re.search(
 
 setup(
     name="pdoc",
-    author="Andrew Gallant",
-    author_email="pdoc@burntsushi.net",
+    author="Maximilian Hils",
+    author_email="pdoc@maximilianhils.com",
     version=VERSION,
     license="UNLICENSE",
     description="A simple program and library to auto generate API documentation for Python modules.",
@@ -41,15 +41,16 @@ setup(
     entry_points={"console_scripts": ["pdoc = pdoc.__main__:cli"]},
     python_requires=">=3.9",
     install_requires=[
-        "mako>=1.1.3,<1.2",
-        "markdown2>=2.3.10,<2.4",
-        "pygments>=2.7.3,<2.8",
+        "Jinja2",
+        "mako",
+        "markdown2",
+        "pygments",
     ],
     extras_require={
         "dev": [
-            "flake8>=3.84, <3.9",
-            "mypy>=0.790, <0.791",
-            "pytest>=6.2.1,<6.3",
+            "flake8",
+            "mypy",
+            "pytest",
         ]
     },
 )

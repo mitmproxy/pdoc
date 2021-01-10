@@ -119,7 +119,7 @@ import pdoc.html_helpers as hh
       smethods = c.functions()
       inst_vars = c.instance_variables()
       methods = c.methods()
-      mro = c.module.mro(c)
+      mro = c.name.mro(c)
       %>
       <div class="item">
       <p id="${c.refname}" class="name">class ${hh.ident(c.name)}</p>
@@ -189,7 +189,7 @@ import pdoc.html_helpers as hh
   classes = module.classes
   functions = module.functions
   submodules = module.submodules
-  parent = module.parent
+  parent = None
   %>
   <div id="sidebar">
     <h1>Index</h1>

@@ -1,28 +1,44 @@
 import argparse
-import pathlib
 import sys
+from pathlib import Path
 
+import pdoc
 import pdoc.doc
 import pdoc.extract
-import pdoc.render
+import pdoc.render_old
 import pdoc.static
-import pdoc.version
 import pdoc.web
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
-parser.add_argument("--version", action="version", version="%(prog)s " + pdoc.__version__)
+parser.add_argument(
+    "--version", action="version", version="%(prog)s " + pdoc.__version__
+)
 parser.add_argument(
     "modules",
     type=str,
     metavar="module",
     nargs="+",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment, or file paths to a Python module or "
-         "package.",
+    "the current environment, or file paths to a Python module or "
+    "package.",
 )
+formats = parser.add_mutually_exclusive_group()
+formats.add_argument("--html", dest="format", action="store_const", const="html")
+formats.add_argument(
+    "--markdown", dest="format", action="store_const", const="markdown"
+)
+parser.add_argument(
+    "-o",
+    "--output-directory",
+    type=Path,
+    default="html",
+    help="Output directory.",
+)
+
+"""
 parser.add_argument(
     "--filter",
     type=str,
@@ -32,13 +48,7 @@ parser.add_argument(
          "Has no effect when --http is set.",
 )
 parser.add_argument("--html", action="store_true", help="When set, the output will be HTML formatted.")
-parser.add_argument(
-    "--html-dir",
-    type=str,
-    default=".",
-    help="The directory to output HTML files to. This option is ignored when "
-         "outputting documentation as plain text.",
-)
+
 parser.add_argument(
     "--html-no-source",
     action="store_true",
@@ -97,11 +107,19 @@ parser.add_argument(
     default=8080,
     help="The port on which to run the HTTP server.",
 )
+"""
 
 
-def cli():
+def cli(args=None):
     """ Command-line entry point """
-    args = parser.parse_args()
+    args = parser.parse_args(args)
+
+    pdoc.pdoc(
+        *args.modules,
+        output_directory=args.output_directory,
+        format=args.format or "html",
+    )
+    return
 
     docfilter = None
     if args.filter and len(args.filter.strip()) > 0:
@@ -144,13 +162,16 @@ def cli():
     elif args.html:
         dst = pathlib.Path(args.html_dir)
         if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
-            print("Rendering would overwrite files, but --overwite is not set", file=sys.stderr)
+            print(
+                "Rendering would overwrite files, but --overwite is not set",
+                file=sys.stderr,
+            )
             sys.exit(1)
         pdoc.static.html_out(dst, roots)
     else:
         # Plain text
         for m in roots:
-            output = pdoc.render.text(m)
+            output = pdoc.render_old.text(m)
             print(output)
 
 

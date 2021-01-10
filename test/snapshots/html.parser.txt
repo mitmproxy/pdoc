@@ -1,0 +1,33 @@
+<module html.parser  # A parser for HTML an…
+    <class html.parser.HTMLParser  # Find tags and other …
+        <method def __init__(self, *, convert_charrefs=True): ...  # Initialize and reset…>
+        <var CDATA_CONTENT_ELEMENTS = ('script', 'style')>
+        <method def reset(self): ...  # Reset this instance.…>
+        <method def feed(self, data): ...  # Feed data to the par…>
+        <method def close(self): ...  # Handle any buffered …>
+        <method def get_starttag_text(self): ...  # Return full source o…>
+        <method def set_cdata_mode(self, elem): ...>
+        <method def clear_cdata_mode(self): ...>
+        <method def goahead(self, end): ...>
+        <method def parse_html_declaration(self, i): ...>
+        <method def parse_bogus_comment(self, i, report=1): ...>
+        <method def parse_pi(self, i): ...>
+        <method def parse_starttag(self, i): ...>
+        <method def check_for_whole_start_tag(self, i): ...>
+        <method def parse_endtag(self, i): ...>
+        <method def handle_startendtag(self, tag, attrs): ...>
+        <method def handle_starttag(self, tag, attrs): ...>
+        <method def handle_endtag(self, tag): ...>
+        <method def handle_charref(self, name): ...>
+        <method def handle_entityref(self, name): ...>
+        <method def handle_data(self, data): ...>
+        <method def handle_comment(self, data): ...>
+        <method def handle_decl(self, decl): ...>
+        <method def handle_pi(self, data): ...>
+        <method def unknown_decl(self, data): ...>
+        <method def error(self, message): ...  # inherited from _markupbase.ParserBase.error>
+        <method def getpos(self): ...  # inherited from _markupbase.ParserBase.getpos, Return current line …>
+        <method def updatepos(self, i, j): ...  # inherited from _markupbase.ParserBase.updatepos>
+        <method def parse_declaration(self, i): ...  # inherited from _markupbase.ParserBase.parse_declaration>
+        <method def parse_marked_section(self, i, report=1): ...  # inherited from _markupbase.ParserBase.parse_marked_section>
+        <method def parse_comment(self, i, report=1): ...  # inherited from _markupbase.ParserBase.parse_comment>>>
