@@ -1,13 +1,16 @@
 import argparse
+import importlib.util
+import pkgutil
 import sys
+import sysconfig
+import webbrowser
 from pathlib import Path
 
 import pdoc
 import pdoc.doc
 import pdoc.extract
-import pdoc.render_old
-import pdoc.static
 import pdoc.web
+from pdoc import extract, render
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -20,10 +23,10 @@ parser.add_argument(
     "modules",
     type=str,
     metavar="module",
-    nargs="+",
+    nargs="*",
     help="Python module names. These may be import paths resolvable in "
-    "the current environment, or file paths to a Python module or "
-    "package.",
+         "the current environment, or file paths to a Python module or "
+         "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -34,66 +37,16 @@ parser.add_argument(
     "-o",
     "--output-directory",
     type=Path,
-    default="html",
+    # default="html",
     help="Output directory.",
 )
-
-"""
 parser.add_argument(
-    "--filter",
+    "--edit-on-github", "--edit-url",
+    action="extend",
+    nargs="+",
     type=str,
-    default=None,
-    help="When specified, only identifiers containing the name given "
-         "will be shown in the output. Search is case sensitive. "
-         "Has no effect when --http is set.",
-)
-parser.add_argument("--html", action="store_true", help="When set, the output will be HTML formatted.")
-
-parser.add_argument(
-    "--html-no-source",
-    action="store_true",
-    help="When set, source code will not be viewable in the generated HTML. "
-         "This can speed up the time required to document large modules.",
-)
-parser.add_argument(
-    "--overwrite",
-    action="store_true",
-    help="Overwrites any existing HTML files instead of producing an error.",
-)
-parser.add_argument(
-    "--all-submodules",
-    action="store_true",
-    help="When set, every submodule will be included, regardless of whether "
-         "__all__ is set and contains the submodule.",
-)
-parser.add_argument(
-    "--external-links",
-    action="store_true",
-    help="When set, identifiers to external modules are turned into links. "
-         "This is automatically set when using --http.",
-)
-parser.add_argument(
-    "--template-dir",
-    type=str,
-    default=None,
-    help="Specify a directory containing Mako templates. "
-         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
-         "pdoc will automatically find them.",
-)
-parser.add_argument(
-    "--link-prefix",
-    type=str,
-    default="",
-    help="A prefix to use for every link in the generated documentation. "
-         "No link prefix results in all links being relative. "
-         "Has no effect when combined with --http.",
-)
-parser.add_argument(
-    "--http",
-    action="store_true",
-    help="When set, pdoc will run as an HTTP server providing documentation "
-         "of all installed modules. Only modules found in PYTHONPATH will be "
-         "listed.",
+    default=[],
+    help="module=url-prefix",
 )
 parser.add_argument(
     "--http-host",
@@ -107,72 +60,103 @@ parser.add_argument(
     default=8080,
     help="The port on which to run the HTTP server.",
 )
+parser.add_argument(
+    "--no-browser", "-n",
+    action="store_true",
+    help="Don't start a browser",
+)
 """
+parser.add_argument(
+    "--filter",
+    type=str,
+    default=None,
+    help="When specified, only identifiers containing the name given "
+         "will be shown in the output. Search is case sensitive. "
+         "Has no effect when --http is set.",
+)
+
+parser.add_argument(
+    "--template-dir",
+    type=str,
+    default=None,
+    help="Specify a directory containing Mako templates. "
+         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
+         "pdoc will automatically find them.",
+)
+"""
+
+
+# https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61
+def open_browser(url: str) -> bool:
+    """
+    Open a URL in a browser window.
+    In contrast to webbrowser.open, we limit the list of suitable browsers.
+    This gracefully degrades to a no-op on headless servers, where webbrowser.open
+    would otherwise open lynx.
+    Returns:
+        True, if a browser has been opened
+        False, if no suitable browser has been found.
+    """
+    browsers = (
+        "windows-default", "macosx",
+        "wslview %s",
+        "x-www-browser %s", "gnome-open %s",
+        "google-chrome", "chrome", "chromium", "chromium-browser",
+        "firefox", "opera", "safari",
+    )
+    for browser in browsers:
+        try:
+            b = webbrowser.get(browser)
+        except webbrowser.Error:
+            pass
+        else:
+            if b.open(url):
+                return True
+    return False
 
 
 def cli(args=None):
     """ Command-line entry point """
+    sys.stdin.close()
     args = parser.parse_args(args)
 
-    pdoc.pdoc(
-        *args.modules,
-        output_directory=args.output_directory,
-        format=args.format or "html",
-    )
-    return
-
-    docfilter = None
-    if args.filter and len(args.filter.strip()) > 0:
-        search = args.filter.strip()
-
-        def docfilter(o):
-            rname = o.refname
-            if rname.find(search) > -1 or search.find(o.name) > -1:
-                return True
-            if isinstance(o, pdoc.doc.Class):
-                return search in o.doc or search in o.doc_init
-            return False
-
-    roots = []
-    for mod in args.modules:
-        try:
-            m = pdoc.extract.extract_module(mod)
-        except pdoc.extract.ExtractError as e:
-            print(str(e), file=sys.stderr)
-            sys.exit(1)
-        roots.append(m)
-
-    if args.template_dir is not None:
-        pdoc.doc.tpl_lookup.directories.insert(0, args.template_dir)
-    if args.http:
-        args.html = True
-        args.external_links = True
-        args.overwrite = True
-        args.link_prefix = "/"
-
-    if args.http:
-        # Run the HTTP server.
-        httpd = pdoc.web.DocServer((args.http_host, args.http_port), args, roots)
-        print(
-            f"pdoc server ready at http://{args.http_host}:{args.http_port}",
-            file=sys.stderr,
+    github_sources = dict(x.split("=", 1) for x in args.edit_on_github)
+    if args.output_directory:
+        pdoc.pdoc(
+            *args.modules,
+            output_directory=args.output_directory,
+            format=args.format or "html",
+            github_sources=github_sources,
         )
-        httpd.serve_forever()
-        httpd.server_close()
-    elif args.html:
-        dst = pathlib.Path(args.html_dir)
-        if not args.overwrite and pdoc.static.would_overwrite(dst, roots):
-            print(
-                "Rendering would overwrite files, but --overwite is not set",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        pdoc.static.html_out(dst, roots)
+        return
     else:
-        # Plain text
-        for m in roots:
-            output = pdoc.render_old.text(m)
-            print(output)
+        if args.modules:
+            render.roots = [
+                extract.parse_spec(mod) for mod in args.modules
+            ]
+        else:
+            stdlib = sysconfig.get_path("stdlib")
+            platstdlib = sysconfig.get_path("platstdlib")
+            for m in pkgutil.iter_modules():
+                if m.name.startswith("_"):
+                    continue
+                if m.module_finder.path.startswith(stdlib) or m.module_finder.path.startswith(platstdlib):
+                    if "site-packages" not in m.module_finder.path:
+                        continue
+                render.roots.append(m.name)
+
+        with pdoc.web.DocServer((args.http_host, args.http_port)) as httpd:
+            url = f"http://{args.http_host}:{args.http_port}"
+            if len(render.roots) == 1:
+                url += f"/{render.roots[0]}"
+            print(f"pdoc server ready at {url}")
+            if not args.no_browser:
+                open_browser(url)
+            try:
+                httpd.serve_forever()
+            except KeyboardInterrupt:
+                httpd.server_close()
+                raise
 
 
 if __name__ == "__main__":

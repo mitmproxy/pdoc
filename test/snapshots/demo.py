@@ -1,5 +1,10 @@
 """
+
+# Test Module
+
 This is a demo module to show what's possible!
+
+## Subheading
 
 - A list
 - with items
@@ -7,10 +12,9 @@ This is a demo module to show what's possible!
 - `demo.Foo.do_foo`
 - `typing.Type`
 
-```python
-print(42)
-```
+wtf lol
 """
+import os
 from dataclasses import dataclass, field
 from typing import TypeVar
 
@@ -63,7 +67,7 @@ class Bar(Foo):
             """bar baz wat?"""
 
 
-def wat(x: Bar.Baz = "a test") -> int:
+def wat(x: Bar.Baz = "a test", t: os.environ = os.environ) -> int:
     return False
 
 

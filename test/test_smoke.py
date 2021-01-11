@@ -20,4 +20,3 @@ def test_smoke(module):
         # noinspection PyTypeChecker
         pdoc.pdoc(module, format="repr")
         pdoc.pdoc(module, format="html")
-        pdoc.pdoc(module, format="markdown")

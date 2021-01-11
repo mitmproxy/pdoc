@@ -3,45 +3,272 @@
 {% block style %}
     <style type="text/css">{{ pdoc.render.formatter.get_style_defs() }}</style>
     <style type="text/css">
+
+        /* General Styles */
+
+        :root {
+            --main-pad: 3rem;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-weight: 300;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3660a5;
+        }
+
+        .button {
+            display: inline-block;
+            border: solid black 1px;
+            border-radius: 2px;
+            font-size: .75rem;
+            padding: calc(0.5em - 1px) 1em;
+            transition: 100ms all;
+        }
+
+        /* Responsive Layout */
         html, body {
             width: 100%;
             height: 100%;
-            position: relative;
         }
 
-        .container {
-            display: flex;
-            padding: 1rem;
+        @media (max-width: 769px) {
+            label[for=navtoggle] {
+                cursor: pointer;
+                float: right;
+                width: 50px;
+                height: 40px;
+                margin-top: 1rem;
+                color: rgba(0, 0, 0, .55);
+                border-color: rgba(0, 0, 0, .1);
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+
+            label[for=navtoggle]:hover {
+                border-color: rgba(0, 0, 0, .5);
+            }
+
+            #navtoggle + div {
+                display: none;
+            }
+
+            #navtoggle:checked + div {
+                display: inherit;
+            }
+
+            .git-button {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 770px) {
+            .container {
+                display: flex;
+            }
+
+            .container, nav, main {
+                height: 100%;
+                overflow: auto;
+            }
+
+            nav {
+                flex: 200px;
+                min-width: 12.5rem;
+                max-width: 22rem;
+            }
+
+            main {
+                flex: 600px;
+                padding-right: calc(max(var(--main-pad), 100% - 22rem - 50rem)) !important;
+            }
+
+            label[for=navtoggle] {
+                display: none;
+            }
+        }
+
+        #navtoggle {
+            display: none;
+        }
+
+        /* Nav */
+        nav {
+            --pad: 1.75rem;
+            --indent: 1.5rem;
+            background-color: #eee;
+            border-right: 1px solid #c1c1c1;
+            box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
+            padding: 0 var(--pad);
+        }
+
+        nav > div {
+            padding: var(--pad) 0;
+        }
+
+        nav::-webkit-scrollbar {
+            width: 10px;
         }
 
         nav {
-            flex: 1;
-            max-width: 300px;
+            scrollbar-width: thin;
         }
 
-        main {
-            flex: 1;
+        nav::-webkit-scrollbar-thumb {
+            background-color: #c1c1c1;
+        }
+
+        .index-button {
+            background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
+            background-position: 1em center;
+            background-repeat: no-repeat;
+            color: #333;
+            border-color: #999;
+            padding-left: calc(1em + 18px);
+            margin-bottom: 1rem;
+        }
+
+        .index-button:hover {
+            border-color: black;
+        }
+
+        nav ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        nav li {
+            display: block;
+            margin: 0;
+            padding: .2rem 0;
+            padding-left: var(--indent);
+            transition: all 100ms;
+        }
+
+        nav > div > ul > li {
+            padding-left: 0;
+        }
+
+        nav li:hover {
+            background-color: rgba(255, 255, 255, 0.5);
         }
 
         nav a {
-            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        nav .class:before, .inherited .class:before {
+            content: "class ";
+            color: gray;
+        }
+
+        nav > h2:first-of-type {
+            margin-top: 1.5rem;
+        }
+
+        nav .function:after, .inherited .function:after {
+            content: "()";
+            color: gray;
+        }
+
+        /* Content */
+
+        main {
+            padding: var(--main-pad);
+        }
+
+
+        .git-button {
+            float: right;
+            border: solid #3273dc 1px;
+        }
+
+        .git-button:hover {
+            background-color: #3273dc;
+            color: white;
+        }
+
+        .module_name {
+            font-weight: bold;
+        }
+
+        .module_name a {
+            color: #3660a5;
+            transition: 100ms all;
+        }
+
+        .module_name a:hover {
+            color: #1659c5;
+        }
+
+        details {
+            --shift: -35px;
+            text-align: right;
+            margin-top: var(--shift);
+            margin-bottom: calc(0px - 2ex - var(--shift));
+            clear: both;
+        }
+
+        summary.button {
+            color: #666;
+            /*border-color: #ccc;*/
+            border-width: 0;
+            padding: 0 .7em;
+            display: inline-block;
+            user-select: none;
+        }
+
+        summary:focus {
+            outline: 0;
+        }
+
+        details > div {
+            margin-top: calc(0px - var(--shift));
+            text-align: left;
+        }
+
+
+        .codehilite {
+            background-color: #f7f7f7;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .codehilite pre {
+            margin: 0;
+            padding: .5rem 0 .5rem .5rem;
         }
 
         .attr {
-            margin: .2rem;
-            background-color: rgba(0, 0, 0, 0.1);
+            color: black;
+            margin: 1rem 0 .5rem;
+            padding: .4rem 1rem;
+            background-color: #eee;
         }
 
         .classattr, .inherited {
-            margin-left: 1rem;
+            margin-left: 2rem;
         }
 
-        .function .def {
-            font-weight: 300;
+        .name {
+            color: #0066BB;
+            font-weight: bold;
+        }
+
+        .def {
+            color: #008800;
+            font-weight: bold;
         }
 
         .function .signature {
-            font-weight: 300;
+        }
+
+        .annotation {
+            color: #007020;
         }
 
         dt, dd {
@@ -60,39 +287,26 @@
             color: #BA2121;
         }
 
-        nav .class:before {
-            content: "class ";
-            color: gray;
-        }
+        /* pdoc logo */
 
-        nav .function:after {
-            content: "()";
-            color: gray;
-        }
-
-        h1, h2, h3, h4, h5 {
-            font-weight: 300;
-        }
-
-        footer {
-            font-size: 20px;
-            text-align: right;
-            padding: 1rem;
-        }
-
-        footer svg {
-            max-width: 70px;
+        .logo {
+            margin-top: 2rem;
+            display: block;
+            opacity: 0.5;
             transition: all 200ms;
             filter: grayscale(100%);
         }
 
-        footer svg:hover {
+        .logo:hover {
+            opacity: 1;
             filter: grayscale(0%);
         }
 
-        section {
-            margin: 1rem;
-            border: solid gray 1px;
+        .logo svg {
+            margin-left: 5px;
+            height: 35px;
+            width: 70px;
+            transition: all 200ms;
         }
     </style>
 {% endblock %}
@@ -100,16 +314,21 @@
     {% if cls.bases -%}
         (
         {%- for base in cls.bases -%}
-            {{ base | link(current=module.module_name) }}{% if loop.nextitem %}, {% endif %}
+            <span class="base">{{ base | link(current=module.module_name) }}</span>
+            {%- if loop.nextitem %}, {% endif %}
         {%- endfor -%}
         )
     {%- endif %}
 {%- endmacro %}
 {% macro default_value(var) -%}
-    {% if var.default_value != pdoc.doc.empty %}
-        <span class="default_value">
-            = <span class="{{ var.default_value.__class__.__name__ }}">{{ var.default_value | repr }}</span>
-        </span>
+    {% if var.default_value %}
+        {% if var.default_value.__class__.__name__ == "module" %}
+            <span class="default_value">= {{ var.default_value.__name__ | linkify(current=module.module_name) }}</span>
+        {% elif var.default_value != pdoc.doc.empty %}
+            <span class="default_value">
+                = <span class="{{ var.default_value.__class__.__name__ }}">{{ var.default_value | repr }}</span>
+            </span>
+        {% endif %}
     {% endif %}
 {%- endmacro %}
 {% macro annotation(var) -%}
@@ -130,7 +349,8 @@
 {% endif %}
 {% endmacro %}
 {% macro variable(var) -%}
-    <div class="attr variable">{{ var.name }}{{ annotation(var) }}{{ default_value(var) }}</div>
+    <div class="attr variable"><span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
+    </div>
 {%- endmacro %}
 {% macro docstring(var) -%}
     {% if var.docstring %}
@@ -139,7 +359,7 @@
 {%- endmacro %}
 {% macro nav_members(members) -%}
     {% if members %}
-        <ul>
+        <ul class="memberlist">
             {% for m in members %}
                 <li>
                     {% if m.type == "class" %}
@@ -157,77 +377,126 @@
 {%- endmacro %}
 {% macro view_source(obj) -%}
     <details>
-        <summary>View Source</summary>
+        <summary class="button">View Source</summary>
         {{ obj.source | highlight }}
     </details>
 {%- endmacro %}
+{% macro github_button() -%}
+    {% set url = github_url(module) %}
+    {% if url %}
+        <a class="button git-button" href="{{ url }}">Edit on GitHub</a>
+    {% endif %}
+{%- endmacro %}
 {% block body %}
-    <nav>
-        <h1>Index</h1>
-        {% if module.submodules %}
-            <h2>Submodules</h2>
-            <ul>
-                {% for submodule in module.submodules %}
-                    <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.refname }}</a></li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    <div class="container">
+        <nav>
+            <label for="navtoggle" class="button"></label>
+            <input id="navtoggle" type="checkbox">
+            <div>
+                {% if show_module_list_link %}
+                    <a class="button index-button" href="./{{ "../" * module.module_name.count(".") }}">Module
+                        Index</a>
+                {% endif %}
 
-        {% if module.members %}
-            <h2>Contents</h2>
-            {{ nav_members(module.members) }}
-        {% endif %}
-    </nav>
-    <main>
-        <h1>
-            {%- set modname = "" -%}
-            {% for part in module.module_name.split(".") %}
-                {%- set modname = (modname + "." + part).removeprefix(".") -%}
-                {{ modname }}
-                {%- if loop.nextitem %}.{% endif -%}
-            {% endfor %} module</h1>
-        {{ docstring(module) }}
-        {{ view_source(module) }}
-        {% for m in module.flattened_members %}
-            <section id="{{ m.qualname }}">
-                {% if m.type == "class" %}
-                    <div class="attr class">class {{ m.qualname }}{{ bases(m) }}:</div>
-                {% elif m.type == "function" %}
-                    {{ function(m) }}
-                {% else %}
-                    {{ variable(m) }}
+                {% if module.docstring %}
+                    <h2>Index</h2>
+                    {{ module.docstring | markdown | attr("toc_html") | safe or '' }}
                 {% endif %}
-                {{ docstring(m) }}
-                {% if m.type != "variable" %}
-                    {{ view_source(m) }}
+
+                {% if module.submodules %}
+                    <h2>Submodules</h2>
+                    <ul>
+                        {% for submodule in module.submodules %}
+                            <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.refname }}</a></li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
-                {% if m.type == "class" %}
-                    {% for m in m.own_members if m.type != "class" %}
-                        <div id="{{ m.qualname }}" class="classattr">
-                            {% if m.type == "function" %}
-                                {{ function(m) }}
-                            {% else %}
-                                {{ variable(m) }}
-                            {% endif %}
-                            {{ m.docstring }}
-                        </div>
-                    {% endfor %}
-                    {% if m.inherited_members %}
-                        <div class="inherited">Inherited Members
-                            <dl>
-                                {% for base, members in m.inherited_members.items() %}
-                                    <div>
-                                        <dt>{{ base | link(current=module.module_name) }}</dt>
-                                        {% for m2 in members -%}
-                                            <dd>{{ m2.declared_at | link(current=module.module_name,text=m2.name) }}</dd>
-                                        {%- endfor %}
-                                    </div>
-                                {% endfor %}
-                            </dl>
-                        </div>
-                    {% endif %}
+
+                {% if module.members %}
+                    <h2>Contents</h2>
+                    {{ nav_members(module.members) }}
                 {% endif %}
+
+                <a class="logo" title="built with pdoc {{ pdoc.__version__ }}"
+                   href="https://github.com/mitmproxy/pdoc">
+                    built with
+                    {% include 'logo.svg' %}</a>
+            </div>
+        </nav>
+        <main>
+            <section>
+                {{ github_button() }}
+                <h1 class="module_name">
+                    {%- set modname = "" -%}
+                    {% for part in module.module_name.split(".") %}
+                        {%- set modname = (modname + "." + part).removeprefix(".") -%}
+                        <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ modname }}</a>
+                        {%- if loop.nextitem %}.{% endif %}
+                    {%- endfor %}</h1>
+                {{ view_source(module) }}
+                {{ docstring(module) }}
             </section>
-        {% endfor %}
-    </main>
+
+            {% for m in module.flattened_members %}
+                <section id="{{ m.qualname }}">
+                    {% if m.type == "class" %}
+                        <div class="attr class">
+                            <span class="def">class</span>
+                            <span class="name">{{ m.qualname }}</span>
+                            {{- bases(m) -}}:
+                        </div>
+                    {% elif m.type == "function" %}
+                        {{ function(m) }}
+                    {% else %}
+                        {{ variable(m) }}
+                    {% endif %}
+                    {% if m.type != "variable" %}
+                        {{ view_source(m) }}
+                    {% endif %}
+                    {{ docstring(m) }}
+                    {% if m.type == "class" %}
+                        {% for m in m.own_members if m.type != "class" %}
+                            <div id="{{ m.qualname }}" class="classattr">
+                                {% if m.type == "function" %}
+                                    {{ function(m) }}
+                                {% else %}
+                                    {{ variable(m) }}
+                                {% endif %}
+                                {{ m.docstring }}
+                            </div>
+                        {% endfor %}
+                        {% if m.inherited_members %}
+                            <div class="inherited">Inherited Members
+                                <dl>
+                                    {% for base, members in m.inherited_members.items() %}
+                                        <div>
+                                            <dt>{{ base | link(current=module.module_name) }}</dt>
+                                            {% for m2 in members -%}
+                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.module_name,text=m2.name) }}</dd>
+                                            {%- endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </dl>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </section>
+            {% endfor %}
+        </main>
+    </div>
+    {% if mtime %}
+        <script>
+            let mtime_generated = {{ mtime | tojson }},
+                url = location.href;
+            url += (url.includes("?") ? "&" : "?") + "mtime=1";
+            window.setInterval(function () {
+                fetch(url)
+                    .then(response => response.text())
+                    .then(mtime => {
+                        if (mtime_generated !== mtime)
+                            location.reload();
+                    });
+            }, 1000);
+        </script>
+    {% endif %}
 {% endblock %}

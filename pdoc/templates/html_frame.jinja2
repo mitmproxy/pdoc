@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}pdoc {{ pdoc.__version__ }}{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "favicon.svg" %}{% endfilter %}" />
+
+    <title>{% block title %}{% endblock %}</title>
 
     <style type="text/css">{% include 'bootstrap-reboot.min.css' %}</style>
     {% filter replace("\n","") | replace("    ","") %}
@@ -11,10 +13,6 @@
     {% endfilter %}
 </head>
 <body>
-<div class="container">
-    {% block body %}{% endblock %}
-</div>
-<footer><a title="built with pdoc {{ pdoc.__version__ }}"
-           href="https://github.com/mitmproxy/pdoc">{% include 'logo.svg' %}</a></footer>
+{% block body %}{% endblock %}
 </body>
 </html>

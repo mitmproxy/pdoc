@@ -1,6 +1,7 @@
 import ast
 import importlib
 import inspect
+import os
 import pkgutil
 import textwrap
 import types
@@ -448,7 +449,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Variable(
                     self.module_name,
                     qualname,
-                    docstring=obj.__doc__,
+                    docstring=obj.__doc__ or "",
                     annotation=annotation,
                     default_value=empty,
                     declared_at=self._declared_at.get(
@@ -460,10 +461,13 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             elif inspect.isclass(obj) and not obj is empty:
                 doc = Class(self.module_name, qualname, obj)
             else:
+                docstring = self._var_docstrings.get(name, "")
+                if not docstring and isinstance(docstring, types.ModuleType):
+                    docstring = getattr(obj, "__doc__", "")
                 doc = Variable(
                     self.module_name,
                     qualname,
-                    docstring=self._var_docstrings.get(name, ""),
+                    docstring=docstring,
                     annotation=self._var_annotations.get(name, empty),
                     default_value=obj,
                     declared_at=self._declared_at.get(
@@ -569,6 +573,8 @@ class Module(Namespace[types.ModuleType]):
             return []
         submodules = []
         for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.refname}."):  # type: ignore
+            if mod.name.split(".")[-1].startswith("_"):
+                continue
             try:
                 module = importlib.import_module(mod.name)
             except BaseException as e:

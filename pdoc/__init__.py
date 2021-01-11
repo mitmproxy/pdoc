@@ -184,10 +184,11 @@ The current version of pdoc. This value is read from `setup.py`.
 
 
 def pdoc(
-    *modules: Union[Path, str],
-    output_directory: Optional[Path] = None,
-    format: Literal["html", "markdown"] = "html",
-    sort: bool = False,
+        *modules: Union[Path, str],
+        output_directory: Optional[Path] = None,
+        format: Literal["html", "markdown"] = "html",
+        sort: bool = False,
+        github_sources: dict[str, str] = None,
 ) -> object:
     retval = io.StringIO()
     if output_directory:
@@ -204,11 +205,12 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    specs = [extract.parse_spec(mod) for mod in modules]
-    mods = [extract.extract_module(mod) for mod in specs]
+    module_names = [extract.parse_spec(mod) for mod in modules]
+    mods = [extract.extract_module(mod) for mod in module_names]
 
-    render.roots = [s.name for s in specs]
+    render.roots = module_names
     render.sort = sort
+    render.github_sources = github_sources or {}
 
     if format == "html":
         r = render.html_module
@@ -223,7 +225,9 @@ def pdoc(
         write(mod)
 
         if not output_directory:
-            break
-    # TODO: Write index
+            return retval.getvalue()
+
+    if format == "html":
+        (output_directory / "index.html").write_text(render.html_index())
 
     return retval.getvalue()
