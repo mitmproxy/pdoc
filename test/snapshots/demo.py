@@ -112,6 +112,12 @@ class Foo:
         """This is what a `@classmethod` looks like."""
         return 24
 
+    @classmethod
+    @property
+    def a_class_property(cls) -> int:
+        """This is what a `@classmethod @property` looks like."""
+        return 24
+
     @staticmethod
     def a_static_method():
         """This is what a `@staticmethod` looks like."""

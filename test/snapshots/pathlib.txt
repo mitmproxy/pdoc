@@ -3,14 +3,12 @@
         <method def __init__(): ...>
         <method def as_posix(self): ...  # Return the string re…>
         <method def as_uri(self): ...  # Return the path as a…>
-        <var drive  # The drive prefix (le…>
-        <var root  # The root of the path…>
+        <var drive  # attrgetter(attr, ...…>
+        <var root  # attrgetter(attr, ...…>
         <var anchor  # The concatenation of…>
         <var name  # The final path compo…>
-        <var suffix  # 
-                The final c…>
-        <var suffixes  # 
-                A list of t…>
+        <var suffix  # The final component'…>
+        <var suffixes  # A list of the final …>
         <var stem  # The final path compo…>
         <method def with_name(self, name): ...  # Return a new path wi…>
         <method def with_stem(self, stem): ...  # Return a new path wi…>
@@ -28,14 +26,12 @@
         <method def __init__(): ...>
         <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
         <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
-        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
-        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var drive  # inherited from pathlib.PurePath.drive, attrgetter(attr, ...…>
+        <var root  # inherited from pathlib.PurePath.root, attrgetter(attr, ...…>
         <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
         <var name  # inherited from pathlib.PurePath.name, The final path compo…>
-        <var suffix  # inherited from pathlib.PurePath.suffix, 
-                The final c…>
-        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
-                A list of t…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, The final component'…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, A list of the final …>
         <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
         <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
         <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
@@ -53,14 +49,12 @@
         <method def __init__(): ...>
         <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
         <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
-        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
-        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var drive  # inherited from pathlib.PurePath.drive, attrgetter(attr, ...…>
+        <var root  # inherited from pathlib.PurePath.root, attrgetter(attr, ...…>
         <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
         <var name  # inherited from pathlib.PurePath.name, The final path compo…>
-        <var suffix  # inherited from pathlib.PurePath.suffix, 
-                The final c…>
-        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
-                A list of t…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, The final component'…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, A list of the final …>
         <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
         <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
         <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
@@ -87,7 +81,14 @@
         <method def stat(self): ...  # Return the result of…>
         <method def owner(self): ...  # Return the login nam…>
         <method def group(self): ...  # Return the group nam…>
-        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # Open the file pointe…>
+        <method def open(
+        	self,
+        	mode='r',
+        	buffering=-1,
+        	encoding=None,
+        	errors=None,
+        	newline=None
+        ): ...  # Open the file pointe…>
         <method def read_bytes(self): ...  # Open the file in byt…>
         <method def read_text(self, encoding=None, errors=None): ...  # Open the file in tex…>
         <method def write_bytes(self, data): ...  # Open the file in byt…>
@@ -116,14 +117,12 @@
         <method def expanduser(self): ...  # Return a new path wi…>
         <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
         <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
-        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
-        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var drive  # inherited from pathlib.PurePath.drive, attrgetter(attr, ...…>
+        <var root  # inherited from pathlib.PurePath.root, attrgetter(attr, ...…>
         <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
         <var name  # inherited from pathlib.PurePath.name, The final path compo…>
-        <var suffix  # inherited from pathlib.PurePath.suffix, 
-                The final c…>
-        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
-                A list of t…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, The final component'…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, A list of the final …>
         <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
         <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
         <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
@@ -150,7 +149,14 @@
         <method def stat(self): ...  # inherited from pathlib.Path.stat, Return the result of…>
         <method def owner(self): ...  # inherited from pathlib.Path.owner, Return the login nam…>
         <method def group(self): ...  # inherited from pathlib.Path.group, Return the group nam…>
-        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # inherited from pathlib.Path.open, Open the file pointe…>
+        <method def open(
+        	self,
+        	mode='r',
+        	buffering=-1,
+        	encoding=None,
+        	errors=None,
+        	newline=None
+        ): ...  # inherited from pathlib.Path.open, Open the file pointe…>
         <method def read_bytes(self): ...  # inherited from pathlib.Path.read_bytes, Open the file in byt…>
         <method def read_text(self, encoding=None, errors=None): ...  # inherited from pathlib.Path.read_text, Open the file in tex…>
         <method def write_bytes(self, data): ...  # inherited from pathlib.Path.write_bytes, Open the file in byt…>
@@ -179,14 +185,12 @@
         <method def expanduser(self): ...  # inherited from pathlib.Path.expanduser, Return a new path wi…>
         <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
         <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
-        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
-        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var drive  # inherited from pathlib.PurePath.drive, attrgetter(attr, ...…>
+        <var root  # inherited from pathlib.PurePath.root, attrgetter(attr, ...…>
         <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
         <var name  # inherited from pathlib.PurePath.name, The final path compo…>
-        <var suffix  # inherited from pathlib.PurePath.suffix, 
-                The final c…>
-        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
-                A list of t…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, The final component'…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, A list of the final …>
         <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
         <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
         <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>
@@ -214,7 +218,14 @@
         <method def stat(self): ...  # inherited from pathlib.Path.stat, Return the result of…>
         <method def owner(self): ...  # inherited from pathlib.Path.owner, Return the login nam…>
         <method def group(self): ...  # inherited from pathlib.Path.group, Return the group nam…>
-        <method def open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None): ...  # inherited from pathlib.Path.open, Open the file pointe…>
+        <method def open(
+        	self,
+        	mode='r',
+        	buffering=-1,
+        	encoding=None,
+        	errors=None,
+        	newline=None
+        ): ...  # inherited from pathlib.Path.open, Open the file pointe…>
         <method def read_bytes(self): ...  # inherited from pathlib.Path.read_bytes, Open the file in byt…>
         <method def read_text(self, encoding=None, errors=None): ...  # inherited from pathlib.Path.read_text, Open the file in tex…>
         <method def write_bytes(self, data): ...  # inherited from pathlib.Path.write_bytes, Open the file in byt…>
@@ -242,14 +253,12 @@
         <method def expanduser(self): ...  # inherited from pathlib.Path.expanduser, Return a new path wi…>
         <method def as_posix(self): ...  # inherited from pathlib.PurePath.as_posix, Return the string re…>
         <method def as_uri(self): ...  # inherited from pathlib.PurePath.as_uri, Return the path as a…>
-        <var drive  # inherited from pathlib.PurePath.drive, The drive prefix (le…>
-        <var root  # inherited from pathlib.PurePath.root, The root of the path…>
+        <var drive  # inherited from pathlib.PurePath.drive, attrgetter(attr, ...…>
+        <var root  # inherited from pathlib.PurePath.root, attrgetter(attr, ...…>
         <var anchor  # inherited from pathlib.PurePath.anchor, The concatenation of…>
         <var name  # inherited from pathlib.PurePath.name, The final path compo…>
-        <var suffix  # inherited from pathlib.PurePath.suffix, 
-                The final c…>
-        <var suffixes  # inherited from pathlib.PurePath.suffixes, 
-                A list of t…>
+        <var suffix  # inherited from pathlib.PurePath.suffix, The final component'…>
+        <var suffixes  # inherited from pathlib.PurePath.suffixes, A list of the final …>
         <var stem  # inherited from pathlib.PurePath.stem, The final path compo…>
         <method def with_name(self, name): ...  # inherited from pathlib.PurePath.with_name, Return a new path wi…>
         <method def with_stem(self, stem): ...  # inherited from pathlib.PurePath.with_stem, Return a new path wi…>

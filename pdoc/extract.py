@@ -1,5 +1,6 @@
 import importlib
 import importlib.util
+import inspect
 import io
 import linecache
 import os
@@ -10,7 +11,7 @@ import types
 from contextlib import contextmanager
 from functools import cache, partial
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union, Optional, Any
 from unittest.mock import patch
 
 
@@ -21,7 +22,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
     """
     # first check required as Path is not iterable.
     if not isinstance(spec, Path) and (
-        os.sep in spec or (os.altsep and os.altsep in spec)
+            os.sep in spec or (os.altsep and os.altsep in spec)
     ):
         spec = Path(spec)
 
@@ -43,12 +44,12 @@ def mock_some_common_side_effects():
         noop = "echo"
 
     with (
-        patch(
-            "subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)
-        ),
-        patch("sys.stdout", new_callable=lambda: io.StringIO()),
-        patch("sys.stderr", new_callable=lambda: io.StringIO()),
-        patch("sys.stdin", new_callable=lambda: io.StringIO()),
+            patch(
+                "subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)
+            ),
+            patch("sys.stdout", new_callable=lambda: io.StringIO()),
+            patch("sys.stderr", new_callable=lambda: io.StringIO()),
+            patch("sys.stdin", new_callable=lambda: io.StringIO()),
     ):
         yield
 

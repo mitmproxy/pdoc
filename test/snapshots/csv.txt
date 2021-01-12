@@ -106,10 +106,28 @@
     <function def unregister_dialect(unknown): ...  # inherited from _csv.unregister_dialect, Delete the name/dial…>
     <var __version__ = 1.0>
     <class csv.DictReader
-        <method def __init__(self, f, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds): ...>
+        <method def __init__(
+        	self,
+        	f,
+        	fieldnames=None,
+        	restkey=None,
+        	restval=None,
+        	dialect='excel',
+        	*args,
+        	**kwds
+        ): ...>
         <var fieldnames>>
     <class csv.DictWriter
-        <method def __init__(self, f, fieldnames, restval='', extrasaction='raise', dialect='excel', *args, **kwds): ...>
+        <method def __init__(
+        	self,
+        	f,
+        	fieldnames,
+        	restval='',
+        	extrasaction='raise',
+        	dialect='excel',
+        	*args,
+        	**kwds
+        ): ...>
         <method def writeheader(self): ...>
         <method def writerow(self, rowdict): ...>
         <method def writerows(self, rowdicts): ...>>

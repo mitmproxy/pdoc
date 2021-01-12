@@ -1,5 +1,4 @@
 import argparse
-import importlib.util
 import pkgutil
 import sys
 import sysconfig
@@ -25,8 +24,8 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-    "the current environment, or file paths to a Python module or "
-    "package.",
+         "the current environment, or file paths to a Python module or "
+         "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -148,7 +147,7 @@ def cli(args=None):
                 if m.name.startswith("_"):
                     continue
                 if m.module_finder.path.startswith(
-                    stdlib
+                        stdlib
                 ) or m.module_finder.path.startswith(platstdlib):
                     if "site-packages" not in m.module_finder.path:
                         continue

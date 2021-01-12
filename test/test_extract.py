@@ -80,7 +80,7 @@ def test_extract_module(path, expected, match):
 
 
 @pytest.mark.parametrize(
-    "path,modname,expected",
+    "path,modulename,expected",
     [
         ("./modules", "one", []),
         ("./modules", "dirmod", []),
@@ -88,7 +88,7 @@ def test_extract_module(path, expected, match):
         ("./modules", "malformed", ["malformed.syntax"]),
     ],
 )
-def test_submodules(path, modname, expected):
+def test_submodules(path, modulename, expected):
     with tutils.tdir():
-        ret = pdoc.extract.submodules(path, modname)
+        ret = pdoc.extract.submodules(path, modulename)
         assert ret == expected

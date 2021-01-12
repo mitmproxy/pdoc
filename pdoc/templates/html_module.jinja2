@@ -217,13 +217,16 @@
             --shift: -40px;
             text-align: right;
             margin-top: var(--shift);
-            margin-bottom: calc(0px - 2ex - var(--shift));
+            margin-bottom: calc(0px - var(--shift));
             clear: both;
+        }
+        details:not([open]) {
+            height: 0;
+            overflow: visible;
         }
 
         summary.button {
             color: #666;
-            /*border-color: #ccc;*/
             border-width: 0;
             padding: 0 .7em;
             display: inline-block;
@@ -254,6 +257,10 @@
         .docstring .codehilite {
             margin-left: 1em;
             margin-right: 1em;
+        }
+
+        .docstring {
+            margin-bottom: 1.5rem;
         }
 
         div:target > .attr, section:target > .attr {
@@ -357,12 +364,11 @@
         {% endif %}
     {% endif %}
 {%- endmacro %}
-{% macro annotation(var) -%}
-    {% if var.annotation != pdoc.doc.empty -%}
-        <span class="annotation">: {{ pdoc.doc.type_repr(var.annotation) | linkify(current=module.modulename) -}}
-    </span>
-    {%- endif %}
-{%- endmacro %}
+{% macro annotation(var) %}
+    {%- if var.annotation_str -%}
+        <span class="annotation">{{ var.annotation_str | linkify(current=module.modulename) }}</span>
+    {%- endif -%}
+{% endmacro %}
 {% macro decorators(doc) %}
     {%- for d in doc.decorators -%}
         <div class="decorator">{{ d }}</div>
@@ -450,7 +456,7 @@
 
                 {% if module.members %}
                     <h2>Contents</h2>
-                    {{ nav_members(module.members) }}
+                    {{ nav_members(module.members.values()) }}
                 {% endif %}
 
                 <a class="logo" title="built with pdoc {{ pdoc.__version__ }}"
@@ -502,7 +508,7 @@
                                 {% if m.type != "variable" %}
                                     {{ view_source(m) }}
                                 {% endif %}
-                                {{ m.docstring | markdown | linkify(current=module.modulename) }}
+                                {{ docstring(m) }}
                             </div>
                         {% endfor %}
                         {% if m.inherited_members %}
