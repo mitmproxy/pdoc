@@ -10,8 +10,13 @@
             --main-pad: 3rem;
         }
 
-        h1, h2, h3, h4, h5 {
+        html, main {
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4 {
             font-weight: 300;
+            margin: .5em 0 .5em;
         }
 
         a {
@@ -181,6 +186,9 @@
             padding: var(--main-pad);
         }
 
+        main > section:first-of-type {
+            margin-bottom: 3rem;
+        }
 
         .git-button {
             float: right;
@@ -206,7 +214,7 @@
         }
 
         details {
-            --shift: -35px;
+            --shift: -40px;
             text-align: right;
             margin-top: var(--shift);
             margin-bottom: calc(0px - 2ex - var(--shift));
@@ -236,11 +244,25 @@
             background-color: #f7f7f7;
             border-top: 1px solid #ccc;
             border-bottom: 1px solid #ccc;
+            margin-bottom: .5em;
         }
 
         .codehilite pre {
             margin: 0;
             padding: .5rem 0 .5rem .5rem;
+        }
+
+        .docstring .codehilite {
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+
+        div:target > .attr, section:target > .attr {
+            background-color: #fff598;
+        }
+
+        .attr:hover {
+            background-color: #dadada;
         }
 
         .attr {
@@ -337,16 +359,24 @@
     </span>
     {%- endif %}
 {%- endmacro %}
-{% macro function(fn) -%}
-{% set sig %}<span
-        class="signature">{{ fn.signature | string | linkify(current=module.module_name) }}</span>{% endset %}
-{% if fn.name == "__init__" %}
-    <div class="attr function">{{ fn.qualname.split(".")[-2] }}{{ sig }}</div>
-{% else %}
-    <div class="attr function"><span class="def">{{ fn.funcdef }} </span><span
-            class="name">{{ fn.name }}</span>{{ sig }}:
-    </div>
-{% endif %}
+{% macro decorators(doc) %}
+    {%- for d in doc.decorators -%}
+        <div class="decorator">{{ d }}</div>
+    {%- endfor -%}
+{% endmacro %}
+{% macro function(fn) %}
+{%- set sig -%}
+<span class="signature">{{ fn.signature | string | linkify(current=module.module_name) }}</span>
+{%- endset -%}
+<div class="attr function">
+    {{- decorators(fn) -}}
+    {% if fn.name == "__init__" %}
+        <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>{{ sig | replace("(self)","()") | replace("(self, ","(") }}
+    {% else %}
+        <span class="def">{{ fn.funcdef }}</span>
+        <span class="name">{{ fn.name }}</span>{{ sig }}:
+    {% endif %}
+</div>
 {% endmacro %}
 {% macro variable(var) -%}
     <div class="attr variable"><span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
@@ -376,10 +406,12 @@
     {% endif %}
 {%- endmacro %}
 {% macro view_source(obj) -%}
-    <details>
-        <summary class="button">View Source</summary>
-        {{ obj.source | highlight }}
-    </details>
+    {% if obj.source %}
+        <details>
+            <summary class="button">View Source</summary>
+            {{ obj.source | highlight }}
+        </details>
+    {% endif %}
 {%- endmacro %}
 {% macro github_button() -%}
     {% set url = github_url(module) %}
@@ -441,6 +473,7 @@
                 <section id="{{ m.qualname }}">
                     {% if m.type == "class" %}
                         <div class="attr class">
+                            {{- decorators(m) -}}
                             <span class="def">class</span>
                             <span class="name">{{ m.qualname }}</span>
                             {{- bases(m) -}}:
@@ -462,17 +495,21 @@
                                 {% else %}
                                     {{ variable(m) }}
                                 {% endif %}
-                                {{ m.docstring }}
+                                {% if m.type != "variable" %}
+                                    {{ view_source(m) }}
+                                {% endif %}
+                                {{ m.docstring | markdown | linkify(current=module.module_name) }}
                             </div>
                         {% endfor %}
                         {% if m.inherited_members %}
-                            <div class="inherited">Inherited Members
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
                                 <dl>
                                     {% for base, members in m.inherited_members.items() %}
                                         <div>
                                             <dt>{{ base | link(current=module.module_name) }}</dt>
                                             {% for m2 in members -%}
-                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.module_name,text=m2.name) }}</dd>
+                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.module_name,text=m2.name.replace("__init__",base[1])) }}</dd>
                                             {%- endfor %}
                                         </div>
                                     {% endfor %}

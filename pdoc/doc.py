@@ -1,7 +1,6 @@
 import ast
 import importlib
 import inspect
-import os
 import pkgutil
 import textwrap
 import types
@@ -38,6 +37,8 @@ else:
 # taken from
 # https://github.com/python/cpython/blob/faf49573963921033c608b4d2f398309d9f0d2b5/Lib/typing.py#L161-L179
 # extended to support empty
+# extended to remove `typing.` prefixes. This is to be consistent with
+# inspect.Signature, which also removes them. May change in the future.
 def type_repr(obj):
     """Return the repr() of an object, special-casing types (internal helper).
     If obj is a type, we return a shorter version than the default
@@ -48,7 +49,7 @@ def type_repr(obj):
     if obj is empty:
         return ""
     if isinstance(obj, types.GenericAlias):
-        return repr(obj)
+        return repr(obj).replace("typing.", "")
     if isinstance(obj, type):
         if obj.__module__ == "builtins":
             return obj.__qualname__
@@ -57,7 +58,7 @@ def type_repr(obj):
         return "..."
     if isinstance(obj, types.FunctionType):
         return obj.__name__
-    return repr(obj)
+    return repr(obj).replace("typing.", "")
 
 
 @cache
@@ -84,15 +85,27 @@ def _parse_module(source: str) -> ast.Module:
 
 
 @cache
-def _parse_class(source: str) -> Union[ast.Module, ast.ClassDef]:
-    """Returns an empty ast.Module if source is not available."""
+def _parse_class(source: str) -> ast.ClassDef:
+    """Returns an empty ast.ClassDef if source is not available."""
     tree = ast.parse(textwrap.dedent(source))
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
-        assert isinstance(t, (ast.Module, ast.ClassDef))
+        assert isinstance(t, ast.ClassDef)
         return t
-    return tree
+    return ast.ClassDef(body=[], decorator_list=[])
+
+
+@cache
+def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]:
+    """Returns an empty ast.FunctionDef if source is not available."""
+    tree = ast.parse(textwrap.dedent(source))
+    assert len(tree.body) <= 1
+    if tree.body:
+        t = tree.body[0]
+        assert isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef))
+        return t
+    return ast.FunctionDef(body=[], decorator_list=[])
 
 
 T = TypeVar("T")
@@ -113,20 +126,20 @@ def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
     """
     for a in tree.body:
         if (
-            isinstance(a, ast.AnnAssign)
-            and isinstance(a.target, ast.Attribute)
-            and isinstance(a.target.value, ast.Name)
-            and a.target.value.id == "self"
+                isinstance(a, ast.AnnAssign)
+                and isinstance(a.target, ast.Attribute)
+                and isinstance(a.target.value, ast.Name)
+                and a.target.value.id == "self"
         ):
             yield ast.AnnAssign(
                 ast.Name(a.target.attr), a.annotation, a.value, simple=1
             )
         elif (
-            isinstance(a, ast.Assign)
-            and len(a.targets) == 1
-            and isinstance(a.targets[0], ast.Attribute)
-            and isinstance(a.targets[0].value, ast.Name)
-            and a.targets[0].value.id == "self"
+                isinstance(a, ast.Assign)
+                and len(a.targets) == 1
+                and isinstance(a.targets[0], ast.Attribute)
+                and isinstance(a.targets[0].value, ast.Name)
+                and a.targets[0].value.id == "self"
         ):
             yield ast.Assign(
                 [ast.Name(a.targets[0].attr)],
@@ -134,9 +147,9 @@ def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
                 type_comment=a.type_comment,
             )
         elif (
-            isinstance(a, ast.Expr)
-            and isinstance(a.value, ast.Constant)
-            and isinstance(a.value.value, str)
+                isinstance(a, ast.Expr)
+                and isinstance(a.value, ast.Constant)
+                and isinstance(a.value.value, str)
         ):
             yield a
         else:
@@ -171,17 +184,17 @@ def _walk_tree(tree: Union[ast.Module, ast.ClassDef]) -> AstInfo:
             name = a.target.id
             annotations[name] = ast.unparse(a.annotation)
         elif (
-            isinstance(a, ast.Assign)
-            and len(a.targets) == 1
-            and isinstance(a.targets[0], ast.Name)
+                isinstance(a, ast.Assign)
+                and len(a.targets) == 1
+                and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
         else:
             continue
         if (
-            isinstance(b, ast.Expr)
-            and isinstance(b.value, ast.Constant)
-            and isinstance(b.value.value, str)
+                isinstance(b, ast.Expr)
+                and isinstance(b.value, ast.Constant)
+                and isinstance(b.value.value, str)
         ):
             docstrings[name] = inspect.cleandoc(b.value.value).strip()
     return AstInfo(docstrings, annotations)
@@ -205,9 +218,14 @@ def _docstr(doc: "Doc") -> str:
     else:
         return ""
 
+def _decorators(doc: Union["Class", "Function"]) -> str:
+    if doc.decorators:
+        return ' '.join(doc.decorators) + " "
+    else:
+        return ""
 
 def _sort(
-    tree: Union[ast.Module, ast.ClassDef], sorted: dict[str, T], unsorted: dict[str, T]
+        tree: Union[ast.Module, ast.ClassDef], sorted: dict[str, T], unsorted: dict[str, T]
 ) -> tuple[dict[str, T], dict[str, T]]:
     """Returns (sorted, not found)"""
 
@@ -216,13 +234,13 @@ def _sort(
 
     for a in _nodes(tree):
         if (
-            isinstance(a, ast.Assign)
-            and len(a.targets) == 1
-            and isinstance(a.targets[0], ast.Name)
+                isinstance(a, ast.Assign)
+                and len(a.targets) == 1
+                and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
         elif (
-            isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
+                isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
         ):
             name = a.target.id
         elif isinstance(a, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -253,10 +271,10 @@ def _is_exported(ident_name: str, default_value: Any = None):
 
 
 def _safe_eval_type(
-    t: Any,
-    globalns,
-    refname: str,
-    last_err: Optional[str] = None,
+        t: Any,
+        globalns,
+        refname: str,
+        last_err: Optional[str] = None,
 ) -> Any:
     try:
         return _eval_type(t, globalns, None)
@@ -288,9 +306,9 @@ def _safe_eval_type(
 
 
 def resolve_type_annotations(
-    annotations: dict[str, Any],
-    module: Optional[types.ModuleType],
-    refname: str,
+        annotations: dict[str, Any],
+        module: Optional[types.ModuleType],
+        refname: str,
 ) -> dict[str, Any]:
     ns = getattr(module, "__dict__", {})
 
@@ -561,7 +579,7 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
-        annotations = _walk_tree(_parse_module(self.source)).annotations
+        annotations = _walk_tree(_parse_module(self.source)).annotations.copy()
         for k, v in getattr(self.obj, "__annotations__", {}).items():
             annotations[k] = v
 
@@ -661,7 +679,7 @@ class Class(Namespace[type]):
     def __repr__(self):
         children = "\n".join(repr(x) for x in self.members)
         return (
-            f"<class {self.module_name}.{self.qualname}{_docstr(self)}\n"
+            f"<{_decorators(self)}class {self.module_name}.{self.qualname}{_docstr(self)}\n"
             f"{textwrap.indent(children, '    ')}>"
         )
 
@@ -670,7 +688,7 @@ class Class(Namespace[type]):
         docstrings: dict[str, str] = {}
         for cls in self.obj.__mro__:
             for name, docstr in _walk_tree(
-                _parse_class(_source(cls))
+                    _parse_class(_source(cls))
             ).docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
@@ -694,13 +712,13 @@ class Class(Namespace[type]):
     def _var_annotations(self) -> dict[str, type]:
         annotations: dict[str, type] = {}
         for cls in self.obj.__mro__:
-            cls_annotations = _walk_tree(_parse_class(_source(cls))).annotations
+            cls_annotations = _walk_tree(_parse_class(_source(cls))).annotations.copy()
             dynamic_annotations = getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
                 for k, v in dynamic_annotations.items():
                     cls_annotations[k] = v
             cls_refname = (
-                getattr(cls, "__module__", "") + "." + cls.__qualname__
+                    getattr(cls, "__module__", "") + "." + cls.__qualname__
             ).removeprefix(".")
             cls_annotations = resolve_type_annotations(
                 cls_annotations, inspect.getmodule(cls), cls_refname
@@ -738,6 +756,13 @@ class Class(Namespace[type]):
             sorted = {"__init__": unsorted.pop("__init__"), **sorted}
         sorted.update(unsorted)
         return sorted
+
+    @cached_property
+    def decorators(self) -> list[str]:
+        decorators = []
+        for t in _parse_class(self.source).decorator_list:
+            decorators.append(f"@{ast.unparse(t)}")
+        return decorators
 
     @cached_property
     def class_variables(self) -> list["Variable"]:
@@ -789,8 +814,8 @@ class Class(Namespace[type]):
             x
             for x in self.members
             if isinstance(x, Function)
-            and not x.is_staticmethod
-            and not x.is_classmethod
+               and not x.is_staticmethod
+               and not x.is_classmethod
         ]
 
     @cached_property
@@ -813,10 +838,10 @@ class Function(Doc[types.FunctionType]):
     wrapped: Union[types.FunctionType, staticmethod, classmethod]
 
     def __init__(
-        self,
-        module_name: str,
-        qualname: str,
-        wrapped: WrappedFunction,
+            self,
+            module_name: str,
+            qualname: str,
+            wrapped: WrappedFunction,
     ):
         func: types.FunctionType
         if isinstance(wrapped, (classmethod, staticmethod)):
@@ -831,14 +856,14 @@ class Function(Doc[types.FunctionType]):
     @include_refname_in_traceback
     def __repr__(self):
         if self.is_classmethod:
-            t = "classmethod"
+            t = "class"
         elif self.is_staticmethod:
-            t = "staticmethod"
+            t = "static"
         elif self.qualname != getattr(self.obj, "__name__", None):
             t = "method"
         else:
             t = "function"
-        return f"<{t} {self.funcdef} {self.name}{self.signature}: ...{_docstr(self)}>"
+        return f"<{_decorators(self)}{t} {self.funcdef} {self.name}{self.signature}: ...{_docstr(self)}>"
 
     @cached_property
     def is_classmethod(self) -> bool:
@@ -855,13 +880,20 @@ class Function(Doc[types.FunctionType]):
         return isinstance(self.wrapped, staticmethod)
 
     @cached_property
+    def decorators(self) -> list[str]:
+        decorators = []
+        for t in _parse_function(self.source).decorator_list:
+            decorators.append(f"@{ast.unparse(t)}")
+        return decorators
+
+    @cached_property
     def funcdef(self) -> str:
         """
         Generates the string of keywords used to define the function, for
         example `def` or `async def`.
         """
         if inspect.iscoroutinefunction(self.obj) or inspect.isasyncgenfunction(
-            self.obj
+                self.obj
         ):
             return "async def"
         else:
@@ -880,9 +912,12 @@ class Function(Doc[types.FunctionType]):
                 [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
             )
         mod = inspect.getmodule(self.obj)
-        sig._return_annotation = resolve_type_annotations(
-            {"t": sig.return_annotation}, mod, self.refname
-        )["t"]
+        if self.name == "__init__":
+            sig._return_annotation = empty
+        else:
+            sig._return_annotation = resolve_type_annotations(
+                {"t": sig.return_annotation}, mod, self.refname
+            )["t"]
         for p in sig.parameters.values():
             p._annotation = resolve_type_annotations(
                 {"t": p.annotation}, mod, self.refname
@@ -914,13 +949,13 @@ class Variable(Doc[None]):
     """(module, qualname) the variable was declared at"""
 
     def __init__(
-        self,
-        module_name: str,
-        qualname: str,
-        docstring: str,
-        declared_at: tuple[str, str],
-        annotation: Union[type, empty] = empty,
-        default_value: Union[Any, empty] = empty,
+            self,
+            module_name: str,
+            qualname: str,
+            docstring: str,
+            declared_at: tuple[str, str],
+            annotation: Union[type, empty] = empty,
+            default_value: Union[Any, empty] = empty,
     ):
         super().__init__(module_name, qualname, None)
         self._docstring = docstring

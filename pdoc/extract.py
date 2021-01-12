@@ -19,7 +19,8 @@ def parse_spec(spec: Union[Path, str]) -> str:
     """
     Splits a module specification into a base path (which may be empty), and a module name.
     """
-    if os.sep in spec or (os.altsep and os.altsep in spec):
+    # first check required as Path is not iterable.
+    if not isinstance(spec, Path) and (os.sep in spec or (os.altsep and os.altsep in spec)):
         spec = Path(spec)
 
     if isinstance(spec, Path):
@@ -36,7 +37,7 @@ def mock_some_common_side_effects():
 
     with (
             patch("subprocess.Popen", new_callable=lambda: partial(_popen, executable="echo.exe")),
-            patch("sys.stdout", new_callable=lambda: io.StringIO()),
+            #patch("sys.stdout", new_callable=lambda: io.StringIO()),
             patch("sys.stderr", new_callable=lambda: io.StringIO()),
             patch("sys.stdin", new_callable=lambda: io.StringIO()),
             patch.object(os._Environ, "__repr__", lambda self: "os.environ")

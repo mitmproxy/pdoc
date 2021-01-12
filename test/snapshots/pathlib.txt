@@ -76,8 +76,8 @@
         <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
     <class pathlib.Path  # PurePath subclass th…
         <method def __init__(): ...>
-        <classmethod def cwd(cls): ...  # Return a new path po…>
-        <classmethod def home(cls): ...  # Return a new path po…>
+        <@classmethod class def cwd(cls): ...  # Return a new path po…>
+        <@classmethod class def home(cls): ...  # Return a new path po…>
         <method def samefile(self, other_path): ...  # Return whether other…>
         <method def iterdir(self): ...  # Iterate over the fil…>
         <method def glob(self, pattern): ...  # Iterate over this su…>
@@ -139,8 +139,8 @@
         <method def match(self, path_pattern): ...  # inherited from pathlib.PurePath.match, Return True if this …>>
     <class pathlib.PosixPath  # Path subclass for no…
         <method def __init__(): ...>
-        <classmethod def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
-        <classmethod def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
+        <@classmethod class def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
+        <@classmethod class def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
         <method def samefile(self, other_path): ...  # inherited from pathlib.Path.samefile, Return whether other…>
         <method def iterdir(self): ...  # inherited from pathlib.Path.iterdir, Iterate over the fil…>
         <method def glob(self, pattern): ...  # inherited from pathlib.Path.glob, Iterate over this su…>
@@ -203,8 +203,8 @@
     <class pathlib.WindowsPath  # Path subclass for Wi…
         <method def __init__(): ...>
         <method def is_mount(self): ...  # Check if this path i…>
-        <classmethod def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
-        <classmethod def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
+        <@classmethod class def cwd(cls): ...  # inherited from pathlib.Path.cwd, Return a new path po…>
+        <@classmethod class def home(cls): ...  # inherited from pathlib.Path.home, Return a new path po…>
         <method def samefile(self, other_path): ...  # inherited from pathlib.Path.samefile, Return whether other…>
         <method def iterdir(self): ...  # inherited from pathlib.Path.iterdir, Iterate over the fil…>
         <method def glob(self, pattern): ...  # inherited from pathlib.Path.glob, Iterate over this su…>

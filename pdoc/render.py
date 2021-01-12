@@ -18,7 +18,7 @@ from pdoc.extract import module_exists
 
 default_templates = Path(__file__).parent / "templates"
 lexer = pygments.lexers.python.PythonLexer()
-formatter = pygments.formatters.html.HtmlFormatter(style="colorful", cssclass="codehilite")
+formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
 formatter.get_style_defs()
 
 roots: list[str] = []
@@ -93,7 +93,7 @@ def linkify(code: str, current: str) -> str:
             )
         return refname
 
-    return Markup(re.sub(r"(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", repl, code))
+    return Markup(re.sub(r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", repl, code))
 
 
 @cache
