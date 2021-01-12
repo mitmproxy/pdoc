@@ -1,5 +1,5 @@
 {% extends "html_frame.jinja2" %}
-{% block title %}{{ module.module_name }}{% endblock %}
+{% block title %}{{ module.modulename }}{% endblock %}
 {% block style %}
     <style type="text/css">{{ pdoc.render.formatter.get_style_defs() }}</style>
     <style type="text/css">
@@ -200,16 +200,16 @@
             color: white;
         }
 
-        .module_name {
+        .modulename {
             font-weight: bold;
         }
 
-        .module_name a {
+        .modulename a {
             color: #3660a5;
             transition: 100ms all;
         }
 
-        .module_name a:hover {
+        .modulename a:hover {
             color: #1659c5;
         }
 
@@ -340,7 +340,7 @@
     {% if cls.bases -%}
         (
         {%- for base in cls.bases -%}
-            <span class="base">{{ base | link(current=module.module_name) }}</span>
+            <span class="base">{{ base | link(current=module.modulename) }}</span>
             {%- if loop.nextitem %}, {% endif %}
         {%- endfor -%}
         )
@@ -349,7 +349,7 @@
 {% macro default_value(var) -%}
     {% if var.default_value %}
         {% if var.default_value.__class__.__name__ == "module" %}
-            <span class="default_value">= {{ var.default_value.__name__ | linkify(current=module.module_name) }}</span>
+            <span class="default_value">= {{ var.default_value.__name__ | linkify(current=module.modulename) }}</span>
         {% elif var.default_value != pdoc.doc.empty %}
             <span class="default_value">
                 = <span class="{{ var.default_value.__class__.__name__ }}">{{ var.default_value | repr }}</span>
@@ -359,7 +359,7 @@
 {%- endmacro %}
 {% macro annotation(var) -%}
     {% if var.annotation != pdoc.doc.empty -%}
-        <span class="annotation">: {{ pdoc.doc.type_repr(var.annotation) | linkify(current=module.module_name) -}}
+        <span class="annotation">: {{ pdoc.doc.type_repr(var.annotation) | linkify(current=module.modulename) -}}
     </span>
     {%- endif %}
 {%- endmacro %}
@@ -370,7 +370,7 @@
 {% endmacro %}
 {% macro function(fn) %}
 {%- set sig -%}
-<span class="signature">{{ fn.signature | string | linkify(current=module.module_name) }}</span>
+<span class="signature">{{ fn.signature | string | linkify(current=module.modulename) }}</span>
 {%- endset -%}
 <div class="attr function">
     {{- decorators(fn) -}}
@@ -388,7 +388,7 @@
 {%- endmacro %}
 {% macro docstring(var) -%}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | markdown | linkify(current=module.module_name) }}</div>
+        <div class="docstring">{{ var.docstring | markdown | linkify(current=module.modulename) }}</div>
     {% endif %}
 {%- endmacro %}
 {% macro nav_members(members) -%}
@@ -430,7 +430,7 @@
             <input id="navtoggle" type="checkbox">
             <div>
                 {% if show_module_list_link %}
-                    <a class="button index-button" href="./{{ "../" * module.module_name.count(".") }}">Module
+                    <a class="button index-button" href="./{{ "../" * module.modulename.count(".") }}">Module
                         Index</a>
                 {% endif %}
 
@@ -443,7 +443,7 @@
                     <h2>Submodules</h2>
                     <ul>
                         {% for submodule in module.submodules %}
-                            <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.refname }}</a></li>
+                            <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.fullname }}</a></li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -462,11 +462,11 @@
         <main>
             <section>
                 {{ github_button() }}
-                <h1 class="module_name">
-                    {%- set modname = "" -%}
-                    {% for part in module.module_name.split(".") %}
-                        {%- set modname = (modname + "." + part).removeprefix(".") -%}
-                        <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ modname }}</a>
+                <h1 class="modulename">
+                    {%- set modulename = "" -%}
+                    {% for part in module.modulename.split(".") %}
+                        {%- set modulename = (modulename + "." + part).removeprefix(".") -%}
+                        <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ modulename }}</a>
                         {%- if loop.nextitem %}.{% endif %}
                     {%- endfor %}</h1>
                 {{ view_source(module) }}
@@ -502,7 +502,7 @@
                                 {% if m.type != "variable" %}
                                     {{ view_source(m) }}
                                 {% endif %}
-                                {{ m.docstring | markdown | linkify(current=module.module_name) }}
+                                {{ m.docstring | markdown | linkify(current=module.modulename) }}
                             </div>
                         {% endfor %}
                         {% if m.inherited_members %}
@@ -511,9 +511,9 @@
                                 <dl>
                                     {% for base, members in m.inherited_members.items() %}
                                         <div>
-                                            <dt>{{ base | link(current=module.module_name) }}</dt>
+                                            <dt>{{ base | link(current=module.modulename) }}</dt>
                                             {% for m2 in members -%}
-                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.module_name,text=m2.name.replace("__init__",base[1])) }}</dd>
+                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.modulename,text=m2.name.replace("__init__",base[1])) }}</dd>
                                             {%- endfor %}
                                         </div>
                                     {% endfor %}

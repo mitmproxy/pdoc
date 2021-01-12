@@ -1,6 +1,7 @@
 import importlib
 import importlib.util
 import io
+import linecache
 import os
 import platform
 import subprocess
@@ -19,7 +20,9 @@ def parse_spec(spec: Union[Path, str]) -> str:
     Splits a module specification into a base path (which may be empty), and a module name.
     """
     # first check required as Path is not iterable.
-    if not isinstance(spec, Path) and (os.sep in spec or (os.altsep and os.altsep in spec)):
+    if not isinstance(spec, Path) and (
+        os.sep in spec or (os.altsep and os.altsep in spec)
+    ):
         spec = Path(spec)
 
     if isinstance(spec, Path):
@@ -40,10 +43,12 @@ def mock_some_common_side_effects():
         noop = "echo"
 
     with (
-            patch("subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)),
-            patch("sys.stdout", new_callable=lambda: io.StringIO()),
-            patch("sys.stderr", new_callable=lambda: io.StringIO()),
-            patch("sys.stdin", new_callable=lambda: io.StringIO()),
+        patch(
+            "subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)
+        ),
+        patch("sys.stdout", new_callable=lambda: io.StringIO()),
+        patch("sys.stderr", new_callable=lambda: io.StringIO()),
+        patch("sys.stdin", new_callable=lambda: io.StringIO()),
     ):
         yield
 
@@ -56,18 +61,18 @@ def load_module(module: str) -> types.ModuleType:
         raise RuntimeError(f"Error importing {module}.") from e
 
 
-def module_exists(module_name: str) -> bool:
+def module_exists(modulename: str) -> bool:
     try:
-        spec = importlib.util.find_spec(module_name)
+        spec = importlib.util.find_spec(modulename)
     except Exception:
         return False
     else:
         return spec is not None
 
 
-def module_mtime(module_name: str) -> Optional[float]:
+def module_mtime(modulename: str) -> Optional[float]:
     try:
-        spec = importlib.util.find_spec(module_name)
+        spec = importlib.util.find_spec(modulename)
         if spec is not None and spec.origin is not None:
             return Path(spec.origin).stat().st_mtime
     except Exception:
@@ -77,6 +82,7 @@ def module_mtime(module_name: str) -> Optional[float]:
 
 def invalidate_caches(roots: list[str]) -> None:
     importlib.invalidate_caches()
+    linecache.clearcache()
     sys.modules = {
         name: mod
         for name, mod in sys.modules.items()

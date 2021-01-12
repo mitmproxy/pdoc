@@ -11,6 +11,7 @@ from pdoc import render, extract
 # the builtin http.server module is a bit unergonomic,
 # but we can deal with that to avoid additional dependencies.
 
+
 class DocHandler(http.server.BaseHTTPRequestHandler):
     def do_HEAD(self):
         return self.handle_request()
@@ -18,7 +19,9 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         self.wfile.write(self.handle_request().encode())
 
-    def log_request(self, code: Union[int, str] = ..., size: Union[int, str] = ...) -> None:
+    def log_request(
+        self, code: Union[int, str] = ..., size: Union[int, str] = ...
+    ) -> None:
         pass
 
     def handle_request(self) -> Optional[str]:
@@ -29,7 +32,9 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             out = render.html_index()
         else:
             module = path.removeprefix("/").removesuffix(".html").replace("/", ".")
-            if not any(module.startswith(r) for r in render.roots) or not extract.module_exists(module):
+            if not any(
+                module.startswith(r) for r in render.roots
+            ) or not extract.module_exists(module):
                 self.send_response(404)
                 self.send_header("content-type", "text/html")
                 self.end_headers()

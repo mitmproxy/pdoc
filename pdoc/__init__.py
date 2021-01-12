@@ -184,17 +184,17 @@ The current version of pdoc. This value is read from `setup.py`.
 
 
 def pdoc(
-        *modules: Union[Path, str],
-        output_directory: Optional[Path] = None,
-        format: Literal["html", "markdown"] = "html",
-        sort: bool = False,
-        github_sources: dict[str, str] = None,
+    *modules: Union[Path, str],
+    output_directory: Optional[Path] = None,
+    format: Literal["html", "markdown"] = "html",
+    sort: bool = False,
+    github_sources: dict[str, str] = None,
 ) -> object:
     retval = io.StringIO()
     if output_directory:
 
         def write(mod: doc.Module):
-            outfile = output_directory / f"{mod.refname.replace('.', '/')}.html"
+            outfile = output_directory / f"{mod.fullname.replace('.', '/')}.html"
             outfile.parent.mkdir(parents=True, exist_ok=True)
             outfile.write_text(r(mod), "utf8")
             for s in mod.submodules:
@@ -205,10 +205,10 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    module_names = [extract.parse_spec(mod) for mod in modules]
-    mods = [doc.Module(extract.load_module(mod)) for mod in module_names]
+    modulenames = [extract.parse_spec(mod) for mod in modules]
+    mods = [doc.Module(extract.load_module(mod)) for mod in modulenames]
 
-    render.roots = module_names
+    render.roots = modulenames
     render.sort = sort
     render.github_sources = github_sources or {}
 

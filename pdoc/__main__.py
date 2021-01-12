@@ -25,8 +25,8 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment, or file paths to a Python module or "
-         "package.",
+    "the current environment, or file paths to a Python module or "
+    "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -41,7 +41,8 @@ parser.add_argument(
     help="Output directory.",
 )
 parser.add_argument(
-    "--edit-on-github", "--edit-url",
+    "--edit-on-github",
+    "--edit-url",
     action="extend",
     nargs="+",
     type=str,
@@ -61,7 +62,8 @@ parser.add_argument(
     help="The port on which to run the HTTP server.",
 )
 parser.add_argument(
-    "--no-browser", "-n",
+    "--no-browser",
+    "-n",
     action="store_true",
     help="Don't start a browser",
 )
@@ -98,11 +100,18 @@ def open_browser(url: str) -> bool:
         False, if no suitable browser has been found.
     """
     browsers = (
-        "windows-default", "macosx",
+        "windows-default",
+        "macosx",
         "wslview %s",
-        "x-www-browser %s", "gnome-open %s",
-        "google-chrome", "chrome", "chromium", "chromium-browser",
-        "firefox", "opera", "safari",
+        "x-www-browser %s",
+        "gnome-open %s",
+        "google-chrome",
+        "chrome",
+        "chromium",
+        "chromium-browser",
+        "firefox",
+        "opera",
+        "safari",
     )
     for browser in browsers:
         try:
@@ -131,16 +140,16 @@ def cli(args=None):
         return
     else:
         if args.modules:
-            render.roots = [
-                extract.parse_spec(mod) for mod in args.modules
-            ]
+            render.roots = [extract.parse_spec(mod) for mod in args.modules]
         else:
             stdlib = sysconfig.get_path("stdlib")
             platstdlib = sysconfig.get_path("platstdlib")
             for m in pkgutil.iter_modules():
                 if m.name.startswith("_"):
                     continue
-                if m.module_finder.path.startswith(stdlib) or m.module_finder.path.startswith(platstdlib):
+                if m.module_finder.path.startswith(
+                    stdlib
+                ) or m.module_finder.path.startswith(platstdlib):
                     if "site-packages" not in m.module_finder.path:
                         continue
                 render.roots.append(m.name)

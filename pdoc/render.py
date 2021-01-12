@@ -36,27 +36,30 @@ def highlight(code: str) -> str:
 
 @cache
 def markdown(code: str) -> str:
-    return markdown2.markdown(code, extras=[
-        "fenced-code-blocks",
-        "header-ids",
-        "toc",
-        "tables",
-    ])
+    return markdown2.markdown(
+        code,
+        extras=[
+            "fenced-code-blocks",
+            "header-ids",
+            "toc",
+            "tables",
+        ],
+    )
 
 
 @cache
-def split_identifier(refname: str) -> tuple[str, str]:
-    if extract.module_exists(refname):
-        return refname, ""
+def split_identifier(fullname: str) -> tuple[str, str]:
+    if extract.module_exists(fullname):
+        return fullname, ""
     else:
-        parent, name = refname.rsplit(".", maxsplit=1)
-        module_name, qualname = split_identifier(parent)
-        return module_name, f"{qualname}.{name}".lstrip(".")
+        parent, name = fullname.rsplit(".", maxsplit=1)
+        modulename, qualname = split_identifier(parent)
+        return modulename, f"{qualname}.{name}".lstrip(".")
 
 
 def _relative_link(current: list[str], target: list[str]) -> str:
     if target[: len(current)] == current:
-        return "/".join(target[len(current):]) + ".html"
+        return "/".join(target[len(current) :]) + ".html"
     else:
         return "../" + _relative_link(current[:-1], target)
 
@@ -88,26 +91,28 @@ def test_relative_link(current, target, relative):
 @cache
 def linkify(code: str, current: str) -> str:
     def repl(m: re.Match):
-        refname = m.group(0)
-        if any(refname == root or refname.startswith(f"{root}.") for root in roots):
-            module, qualname = split_identifier(refname)
+        fullname = m.group(0)
+        if any(fullname == root or fullname.startswith(f"{root}.") for root in roots):
+            module, qualname = split_identifier(fullname)
             return (
-                f'<a href="{relative_link(current, module)}#{qualname}">{refname}</a>'
+                f'<a href="{relative_link(current, module)}#{qualname}">{fullname}</a>'
             )
-        return refname
+        return fullname
 
-    return Markup(re.sub(r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", repl, code))
+    return Markup(
+        re.sub(r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", repl, code)
+    )
 
 
 @cache
 def link(spec, current: str, text=None) -> str:
-    module_name, qualname = spec
-    refname = f"{module_name}.{qualname}".rstrip(".")
-    if any(refname == root or refname.startswith(f"{root}.") for root in roots):
+    modulename, qualname = spec
+    fullname = f"{modulename}.{qualname}".rstrip(".")
+    if any(fullname == root or fullname.startswith(f"{root}.") for root in roots):
         return Markup(
-            f'<a href="{relative_link(current, module_name)}#{qualname}">{text or refname}</a>'
+            f'<a href="{relative_link(current, modulename)}#{qualname}">{text or fullname}</a>'
         )
-    return text or refname
+    return text or fullname
 
 
 def safe_repr(val):
@@ -124,8 +129,8 @@ def safe_repr(val):
 @cache
 def github_url(mod: pdoc.doc.Module) -> Optional[str]:
     for m, prefix in github_sources.items():
-        if mod.module_name.startswith(m):
-            filename = mod.module_name[len(m) + 1:].replace(".", "/")
+        if mod.modulename.startswith(m):
+            filename = mod.modulename[len(m) + 1 :].replace(".", "/")
             if mod.is_package:
                 filename = f"{filename}/__init__.py".removeprefix("/")
             else:
@@ -152,7 +157,9 @@ def html_index() -> str:
 
 
 def html_error(error: str, details: str = "") -> str:
-    return env.get_template("html_error.jinja2").render(error=error, details=details, pdoc=pdoc)
+    return env.get_template("html_error.jinja2").render(
+        error=error, details=details, pdoc=pdoc
+    )
 
 
 def html_module(module: pdoc.doc.Module, mtime: Optional[str] = None) -> str:
@@ -167,7 +174,5 @@ def html_module(module: pdoc.doc.Module, mtime: Optional[str] = None) -> str:
 
 @contextmanager
 def mock_unsafe_reprs():
-    with (
-            patch.object(os._Environ, "__repr__", lambda self: "os.environ")
-    ):
+    with (patch.object(os._Environ, "__repr__", lambda self: "os.environ")):
         yield

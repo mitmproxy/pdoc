@@ -6,11 +6,7 @@ import textwrap
 import types
 import warnings
 from abc import abstractmethod, ABCMeta
-from collections.abc import Iterable, Iterator
-from dataclasses import dataclass
 from functools import cached_property, cache, wraps
-from itertools import tee, zip_longest
-
 from typing import (  # type: ignore
     Any,
     Union,
@@ -24,6 +20,8 @@ from typing import (  # type: ignore
     TYPE_CHECKING,
 )
 
+from pdoc import parse_ast
+
 if TYPE_CHECKING:
 
     class empty:
@@ -34,11 +32,28 @@ else:
     empty = inspect.Signature.empty
 
 
-# taken from
+def _include_fullname_in_traceback(f):
+    """
+    Doc.__repr__ should not raise, but it may raise if we screwed up.
+    Debugging this is a bit tricky, because, well, we can't repr() in the traceback either then.
+    This decorator adds location information to the traceback, which helps tracking bugs down.
+    """
+
+    @wraps(f)
+    def wrapper(self):
+        try:
+            return f(self)
+        except Exception as e:
+            raise RuntimeError(f"Error in {self.fullname}'s repr!") from e
+
+    return wrapper
+
+
+# adapted from
 # https://github.com/python/cpython/blob/faf49573963921033c608b4d2f398309d9f0d2b5/Lib/typing.py#L161-L179
-# extended to support empty
-# extended to remove `typing.` prefixes. This is to be consistent with
-# inspect.Signature, which also removes them. May change in the future.
+#  - extended to support empty
+#  - extended to remove `typing.` prefixes. This is to be consistent with
+#    inspect.Signature, which also removes them. May change in the future.
 def type_repr(obj):
     """Return the repr() of an object, special-casing types (internal helper).
     If obj is a type, we return a shorter version than the default
@@ -61,207 +76,10 @@ def type_repr(obj):
     return repr(obj).replace("typing.", "")
 
 
-@cache
-def _source(obj: Any) -> str:
-    """
-    Returns the source code of the Python object `obj` as a str.
-    This tries to extract the source from the special
-    `__wrapped__` attribute if it exists. Otherwise, it falls back
-    to `inspect.getsource`.
-
-    If neither works, an empty string is returned.
-    """
-    while hasattr(obj, "__wrapped__"):
-        obj = obj.__wrapped__
-    try:
-        return inspect.getsource(obj)
-    except Exception:
-        return ""
-
-
-@cache
-def _parse_module(source: str) -> ast.Module:
-    return ast.parse(source)
-
-
-@cache
-def _parse_class(source: str) -> ast.ClassDef:
-    """Returns an empty ast.ClassDef if source is not available."""
-    tree = ast.parse(textwrap.dedent(source))
-    assert len(tree.body) <= 1
-    if tree.body:
-        t = tree.body[0]
-        assert isinstance(t, ast.ClassDef)
-        return t
-    return ast.ClassDef(body=[], decorator_list=[])
-
-
-@cache
-def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]:
-    """Returns an empty ast.FunctionDef if source is not available."""
-    tree = ast.parse(textwrap.dedent(source))
-    assert len(tree.body) <= 1
-    if tree.body:
-        t = tree.body[0]
-        assert isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef))
-        return t
-    return ast.FunctionDef(body=[], decorator_list=[])
-
-
-T = TypeVar("T")
-
-
-def _pairwise_longest(iterable: Iterable[T]) -> Iterable[tuple[T, T]]:
-    """s -> (s0,s1), (s1,s2), (s2, s3),  ..., (sN, None)"""
-    a, b = tee(iterable)
-    next(b, None)
-    return zip_longest(a, b)
-
-
-def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
-    """
-    Transform attribute assignments like "self.foo = 42" to name assignments like "foo = 42",
-    keep all constant expressions, and no-op everything else.
-    This essentially allows us to inline __init__ when parsing a class definition.
-    """
-    for a in tree.body:
-        if (
-                isinstance(a, ast.AnnAssign)
-                and isinstance(a.target, ast.Attribute)
-                and isinstance(a.target.value, ast.Name)
-                and a.target.value.id == "self"
-        ):
-            yield ast.AnnAssign(
-                ast.Name(a.target.attr), a.annotation, a.value, simple=1
-            )
-        elif (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Attribute)
-                and isinstance(a.targets[0].value, ast.Name)
-                and a.targets[0].value.id == "self"
-        ):
-            yield ast.Assign(
-                [ast.Name(a.targets[0].attr)],
-                value=a.value,
-                type_comment=a.type_comment,
-            )
-        elif (
-                isinstance(a, ast.Expr)
-                and isinstance(a.value, ast.Constant)
-                and isinstance(a.value.value, str)
-        ):
-            yield a
-        else:
-            yield ast.Pass()
-
-
-def __nodes(tree: Union[ast.Module, ast.ClassDef]) -> Iterator[ast.AST]:
-    for a in tree.body:
-        yield a
-        if isinstance(a, ast.FunctionDef) and a.name == "__init__":
-            yield from _init_nodes(a)
-
-
-@cache
-def _nodes(tree: Union[ast.Module, ast.ClassDef]) -> list[ast.AST]:
-    return list(__nodes(tree))
-
-
-@dataclass
-class AstInfo:
-    docstrings: dict[str, str]
-    annotations: dict[str, str]
-
-
-@cache
-def _walk_tree(tree: Union[ast.Module, ast.ClassDef]) -> AstInfo:
-    """Returns (docstrings, annotations) extracted from AST"""
-    docstrings = {}
-    annotations = {}
-    for a, b in _pairwise_longest(_nodes(tree)):
-        if isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple:
-            name = a.target.id
-            annotations[name] = ast.unparse(a.annotation)
-        elif (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Name)
-        ):
-            name = a.targets[0].id
-        else:
-            continue
-        if (
-                isinstance(b, ast.Expr)
-                and isinstance(b.value, ast.Constant)
-                and isinstance(b.value.value, str)
-        ):
-            docstrings[name] = inspect.cleandoc(b.value.value).strip()
-    return AstInfo(docstrings, annotations)
-
-
-def _cut(x: str) -> str:
-    if len(x) < 20:
-        return x
-    else:
-        return x[:20] + "…"
-
-
-def _docstr(doc: "Doc") -> str:
-    docstr = []
-    if doc.is_inherited:
-        docstr.append(f"inherited from {'.'.join(doc.declared_at)}")
-    if doc.docstring:
-        docstr.append(_cut(doc.docstring))
-    if docstr:
-        return f"  # {', '.join(docstr)}"
-    else:
-        return ""
-
-
-def _decorators(doc: Union["Class", "Function"]) -> str:
-    if doc.decorators:
-        return ' '.join(doc.decorators) + " "
-    else:
-        return ""
-
-
-def _sort(
-        tree: Union[ast.Module, ast.ClassDef], sorted: dict[str, T], unsorted: dict[str, T]
-) -> tuple[dict[str, T], dict[str, T]]:
-    """Returns (sorted, not found)"""
-
-    if "__init__" in unsorted:
-        sorted["__init__"] = unsorted.pop("__init__")
-
-    for a in _nodes(tree):
-        if (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Name)
-        ):
-            name = a.targets[0].id
-        elif (
-                isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
-        ):
-            name = a.target.id
-        elif isinstance(a, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            name = a.name
-        else:
-            continue
-
-        if name in unsorted:
-            sorted[name] = unsorted.pop(name)
-    return sorted, unsorted
-
-
-def _is_exported(ident_name: str, default_value: Any = None):
+def _is_exported(ident_name: str, default_value: Any = None) -> bool:
     """
     Returns `True` if `ident_name` matches the export criteria for an
     identifier name.
-
-    This should not be used by clients. Instead, use
-    `pdoc.Module.is_public`.
     """
     if ident_name == "__init__":
         return True
@@ -275,7 +93,7 @@ def _is_exported(ident_name: str, default_value: Any = None):
 def _safe_eval_type(
         t: Any,
         globalns,
-        refname: str,
+        fullname: str,
         last_err: Optional[str] = None,
 ) -> Any:
     try:
@@ -295,22 +113,22 @@ def _safe_eval_type(
     except Exception as e:
         err = last_err = str(e)
     if err == last_err:
-        warnings.warn(f"Error parsing type annotation for {refname}: {err}")
+        warnings.warn(f"Error parsing type annotation for {fullname}: {err}")
         return t
     try:
         val = importlib.import_module(mod)
     except Exception:
         warnings.warn(
-            f"Error parsing type annotation for {refname}. Import of {mod} failed: {err}"
+            f"Error parsing type annotation for {fullname}. Import of {mod} failed: {err}"
         )
         return t
-    return _safe_eval_type(t, {mod: val, **globalns}, refname, err)
+    return _safe_eval_type(t, {mod: val, **globalns}, fullname, err)
 
 
 def resolve_type_annotations(
         annotations: dict[str, Any],
         module: Optional[types.ModuleType],
-        refname: str,
+        fullname: str,
 ) -> dict[str, Any]:
     ns = getattr(module, "__dict__", {})
 
@@ -321,8 +139,11 @@ def resolve_type_annotations(
         if isinstance(value, str):
             value = ForwardRef(value, is_argument=False)
 
-        resolved[name] = _safe_eval_type(value, ns, refname)
+        resolved[name] = _safe_eval_type(value, ns, fullname)
     return resolved
+
+
+T = TypeVar("T")
 
 
 class Doc(Generic[T]):
@@ -332,38 +153,33 @@ class Doc(Generic[T]):
     A documentation object corresponds to *something* in a Python module
     that has a docstring associated with it. Typically, this only includes
     modules, classes, functions and methods. However, `pdoc` adds support
-    for extracting docstrings from the abstract syntax tree, which means
-    that variables (module, class or instance) are supported too.
-
-    A special type of documentation object `pdoc.External` is used to
-    represent identifiers that are not part of the public interface of
-    a module. (The name "External" is a bit of a misnomer, since it can
-    also correspond to unexported members of the module, particularly in
-    a class's ancestor list.)
+    for extracting docstrings and type annotations from the abstract syntax
+    tree, which means that variables (module, class or instance) are supported too.
     """
 
-    module_name: str
+    modulename: str
     """
     The module that this object was defined in.
     """
 
     qualname: str
     """
-    The qualified identifier name for this object, see https://www.python.org/dev/peps/pep-3155/.
+    The qualified identifier name for this object, see https://www.python.org/dev/peps/pep-3155/ for details.
     """
 
     obj: T
     """
-    The object
+    The underlying Python object.
     """
 
-    def __init__(self, module_name: str, qualname: str, obj: T):
+    def __init__(self, modulename: str, qualname: str, obj: T):
         """
-        Initializes a documentation object, where `name` is the public
-        identifier name, `module` is a `pdoc.Module` object, and
-        `docstring` is a string containing the docstring for `name`.
+        Initializes a documentation object, where
+        `modulename` is the name this module is defined in,
+        `qualname` contains a dotted path leading to the object from the module top-level, and
+        `obj` is the object to document.
         """
-        self.module_name = module_name
+        self.modulename = modulename
         self.qualname = qualname
         self.obj = obj
 
@@ -371,7 +187,7 @@ class Doc(Generic[T]):
     def docstring(self) -> str:
         """
         The docstring for this object. It has already been cleaned by `inspect.cleandoc`.
-        If unsuccessful, an empty string is returned.
+        If no docstring can be found, an empty string is returned.
         """
         doc = inspect.getdoc(self.obj)
         if doc is None or doc == object.__init__.__doc__:
@@ -383,45 +199,55 @@ class Doc(Generic[T]):
     def source(self) -> str:
         """
         Returns the source code of the Python object as a str.
-        If unsuccessful, an empty string is returned.
+        If the source cannot be obtained (for example, because we are dealing with a native C object),
+        an empty string is returned.
         """
-        return _source(self.obj)
+        return parse_ast.get_source(self.obj)
+
+    @cached_property
+    def fullname(self) -> str:
+        """The full qualified name of this doc object, i.e. "modname.qualname"."""
+        return f"{self.modulename}.{self.qualname}".removesuffix(
+            "."
+        )  # qualname is emtpy for modules.
+
+    @cached_property
+    def name(self) -> str:
+        """The name of this object. For top-level functions and classes, this is equal to the qualname attribute."""
+        return self.fullname.split(".")[-1]
 
     @cached_property
     def declared_at(self) -> tuple[str, str]:
+        """Returns (modulename, qualname) of where this doc object was declared."""
         mod = getattr(self.obj, "__module__", None)
         qual = getattr(self.obj, "__qualname__", None)
         if mod is None or qual is None or "<locals>" in qual:
-            return self.module_name, self.qualname
+            return self.modulename, self.qualname
         else:
             return mod, qual
 
     @cached_property
     def is_inherited(self) -> bool:
-        return (self.module_name, self.qualname) != self.declared_at
+        """
+        If True, the doc object is inherited from another location.
+        This most commonly refers to methods inherited by a subclass,
+        but can also apply to variables that are assigned a class defined
+        in a different module.
+        """
+        return (self.modulename, self.qualname) != self.declared_at
 
     @classmethod
     @property
     def type(cls) -> str:
+        """
+        The type of the doc object, either "module", "class", or "function".
+        """
         return cls.__name__.lower()
-
-    @cached_property
-    def refname(self) -> str:
-        return f"{self.module_name}.{self.qualname}".removesuffix(".")
-
-    @cached_property
-    def name(self) -> str:
-        return self.refname.split(".")[-1]
-
-    @cached_property
-    def doc(self):
-        warnings.warn("deprecated", DeprecationWarning)
-        return self.members
 
     def __lt__(self, other):
         assert isinstance(other, Doc)
-        return self.refname.replace("__init__", "") < other.refname.replace(
-            "__init__", ""
+        return self.fullname.replace("__init__", "").__lt__(
+            other.fullname.replace("__init__", "")
         )
 
 
@@ -464,34 +290,34 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 annotation = resolve_type_annotations(
                     getattr(func, "__annotations__", {}),
                     inspect.getmodule(func),
-                    f"{self.refname}.{name}",
+                    f"{self.fullname}.{name}",
                 ).get("return", empty)
                 doc = Variable(
-                    self.module_name,
+                    self.modulename,
                     qualname,
                     docstring=obj.__doc__ or "",
                     annotation=annotation,
                     default_value=empty,
                     declared_at=self._declared_at.get(
-                        name, (self.module_name, qualname)
+                        name, (self.modulename, qualname)
                     ),
                 )
             elif inspect.isroutine(obj):
-                doc = Function(self.module_name, qualname, obj)
+                doc = Function(self.modulename, qualname, obj)
             elif inspect.isclass(obj) and not obj is empty:
-                doc = Class(self.module_name, qualname, obj)
+                doc = Class(self.modulename, qualname, obj)
             else:
                 docstring = self._var_docstrings.get(name, "")
                 if not docstring and isinstance(docstring, types.ModuleType):
                     docstring = getattr(obj, "__doc__", "")
                 doc = Variable(
-                    self.module_name,
+                    self.modulename,
                     qualname,
                     docstring=docstring,
                     annotation=self._var_annotations.get(name, empty),
                     default_value=obj,
                     declared_at=self._declared_at.get(
-                        name, (self.module_name, qualname)
+                        name, (self.modulename, qualname)
                     ),
                 )
             members.append(doc)
@@ -510,7 +336,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     @cached_property
     def own_members(self) -> list[Doc]:
         return self._members_by_declared_location.get(
-            (self.module_name, self.qualname), []
+            (self.modulename, self.qualname), []
         )
 
     @cached_property
@@ -518,7 +344,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return {
             k: v
             for k, v in self._members_by_declared_location.items()
-            if k != (self.module_name, self.qualname)
+            if k != (self.modulename, self.qualname)
         }
 
     @cached_property
@@ -536,17 +362,6 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return flattened
 
 
-def include_refname_in_traceback(f):
-    @wraps(f)
-    def wrapper(self):
-        try:
-            return f(self)
-        except Exception as e:
-            raise RuntimeError(f"Error in {self.refname}'s repr!") from e
-
-    return wrapper
-
-
 class Module(Namespace[types.ModuleType]):
     """
     Representation of a module's documentation.
@@ -560,12 +375,12 @@ class Module(Namespace[types.ModuleType]):
         super().__init__(module.__name__, "", module)
 
     @cache
-    @include_refname_in_traceback
+    @_include_fullname_in_traceback
     def __repr__(self):
         children = "\n".join(repr(x) for x in self.members)
         if children:
             children = f"\n{textwrap.indent(children, '    ')}"
-        return f"<module {self.module_name}{_docstr(self)}{children}>"
+        return f"<module {self.modulename}{_docstr(self)}{children}>"
 
     @cached_property
     def is_package(self) -> bool:
@@ -573,7 +388,7 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
-        return _walk_tree(_parse_module(self.source)).docstrings
+        return parse_ast.walk_tree(parse_ast.parse_module(self.source)).docstrings
 
     @cached_property
     def _declared_at(self) -> dict[str, tuple[str, str]]:
@@ -581,18 +396,18 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
-        annotations = _walk_tree(_parse_module(self.source)).annotations.copy()
+        annotations = parse_ast.walk_tree(parse_ast.parse_module(self.source)).annotations.copy()
         for k, v in getattr(self.obj, "__annotations__", {}).items():
             annotations[k] = v
 
-        return resolve_type_annotations(annotations, self.obj, self.refname)
+        return resolve_type_annotations(annotations, self.obj, self.fullname)
 
     @cached_property
     def submodules(self) -> list["Module"]:
         if not self.is_package:
             return []
         submodules = []
-        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.refname}."):  # type: ignore
+        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
             if mod.name.split(".")[-1].startswith("_"):
                 continue
             try:
@@ -645,7 +460,7 @@ class Module(Namespace[types.ModuleType]):
             if _is_exported(name):
                 members.setdefault(name, empty)
 
-        members, notfound = _sort(_parse_module(self.source), {}, members)
+        members, notfound = parse_ast.sort_by_source(parse_ast.parse_module(self.source), {}, members)
         members.update(notfound)
         return members
 
@@ -677,11 +492,11 @@ class Class(Namespace[type]):
     """
 
     @cache
-    @include_refname_in_traceback
+    @_include_fullname_in_traceback
     def __repr__(self):
         children = "\n".join(repr(x) for x in self.members)
         return (
-            f"<{_decorators(self)}class {self.module_name}.{self.qualname}{_docstr(self)}\n"
+            f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}\n"
             f"{textwrap.indent(children, '    ')}>"
         )
 
@@ -689,8 +504,8 @@ class Class(Namespace[type]):
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
         for cls in self.obj.__mro__:
-            for name, docstr in _walk_tree(
-                    _parse_class(_source(cls))
+            for name, docstr in parse_ast.walk_tree(
+                    parse_ast.parse_class(parse_ast.get_source(cls))
             ).docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
@@ -699,7 +514,7 @@ class Class(Namespace[type]):
     def _declared_at(self) -> dict[str, tuple[str, str]]:
         declared_at = {}
         for cls in self.obj.__mro__:
-            treeinfo = _walk_tree(_parse_class(_source(cls)))
+            treeinfo = parse_ast.walk_tree(parse_ast.parse_class(parse_ast.get_source(cls)))
             for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
                 declared_at.setdefault(
                     name, (cls.__module__, f"{cls.__qualname__}.{name}")
@@ -714,16 +529,16 @@ class Class(Namespace[type]):
     def _var_annotations(self) -> dict[str, type]:
         annotations: dict[str, type] = {}
         for cls in self.obj.__mro__:
-            cls_annotations = _walk_tree(_parse_class(_source(cls))).annotations.copy()
+            cls_annotations = parse_ast.walk_tree(parse_ast.parse_class(parse_ast.get_source(cls))).annotations.copy()
             dynamic_annotations = getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
                 for k, v in dynamic_annotations.items():
                     cls_annotations[k] = v
-            cls_refname = (
+            cls_fullname = (
                     getattr(cls, "__module__", "") + "." + cls.__qualname__
             ).removeprefix(".")
             cls_annotations = resolve_type_annotations(
-                cls_annotations, inspect.getmodule(cls), cls_refname
+                cls_annotations, inspect.getmodule(cls), cls_fullname
             )
 
             for k, v in cls_annotations.items():
@@ -751,8 +566,8 @@ class Class(Namespace[type]):
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
-            tree = _parse_class(_source(cls))
-            sorted, unsorted = _sort(tree, sorted, unsorted)
+            tree = parse_ast.parse_class(parse_ast.get_source(cls))
+            sorted, unsorted = parse_ast.sort_by_source(tree, sorted, unsorted)
         if "__init__" in unsorted:
             # move to front
             sorted = {"__init__": unsorted.pop("__init__"), **sorted}
@@ -762,7 +577,7 @@ class Class(Namespace[type]):
     @cached_property
     def decorators(self) -> list[str]:
         decorators = []
-        for t in _parse_class(self.source).decorator_list:
+        for t in parse_ast.parse_class(self.source).decorator_list:
             decorators.append(f"@{ast.unparse(t)}")
         return decorators
 
@@ -841,7 +656,7 @@ class Function(Doc[types.FunctionType]):
 
     def __init__(
             self,
-            module_name: str,
+            modulename: str,
             qualname: str,
             wrapped: WrappedFunction,
     ):
@@ -851,11 +666,11 @@ class Function(Doc[types.FunctionType]):
             # TODO: In Python 3.9 this could also be a property.
         else:
             func = wrapped
-        super(Function, self).__init__(module_name, qualname, func)
+        super(Function, self).__init__(modulename, qualname, func)
         self.wrapped = wrapped
 
     @cache
-    @include_refname_in_traceback
+    @_include_fullname_in_traceback
     def __repr__(self):
         if self.is_classmethod:
             t = "class"
@@ -884,7 +699,7 @@ class Function(Doc[types.FunctionType]):
     @cached_property
     def decorators(self) -> list[str]:
         decorators = []
-        for t in _parse_function(self.source).decorator_list:
+        for t in parse_ast.parse_function(self.source).decorator_list:
             decorators.append(f"@{ast.unparse(t)}")
         return decorators
 
@@ -918,13 +733,85 @@ class Function(Doc[types.FunctionType]):
             sig._return_annotation = empty
         else:
             sig._return_annotation = resolve_type_annotations(
-                {"t": sig.return_annotation}, mod, self.refname
+                {"t": sig.return_annotation}, mod, self.fullname
             )["t"]
         for p in sig.parameters.values():
             p._annotation = resolve_type_annotations(
-                {"t": p.annotation}, mod, self.refname
+                {"t": p.annotation}, mod, self.fullname
             )["t"]
         return sig
+
+
+class Variable(Doc[None]):
+    """
+    Representation of a variable's documentation. This includes module, class and instance variables.
+    """
+
+    default_value: Union[
+        Any, empty
+    ]  # technically Any includes empty, but this conveys intent.
+    """
+    The variable's default value.
+    """
+
+    annotation: Union[type, empty]
+    """
+    The variable's type annotation.
+    """
+
+    _docstring: str
+    _declared_at: tuple[str, str]
+
+    def __init__(
+            self,
+            modulename: str,
+            qualname: str,
+            docstring: str,
+            declared_at: tuple[str, str],
+            annotation: Union[type, empty] = empty,
+            default_value: Union[Any, empty] = empty,
+    ):
+        """
+        Construct a variable doc object.
+
+        While classes and functions can introspect themselves to see their docstring,
+        variables can't do that as we don't have a "variable object" we could query.
+        As such, docstring, declaration location, type annotation, and the default value
+        must be passed manually in the constructor.
+        """
+        super().__init__(modulename, qualname, None)
+        self._docstring = docstring
+        self._declared_at = declared_at
+        self.annotation = annotation
+        self.default_value = default_value
+
+    @cache
+    @_include_fullname_in_traceback
+    def __repr__(self):
+        if self.annotation is not empty:
+            annotation = f": {type_repr(self.annotation)}"
+        else:
+            annotation = ""
+        if self.default_value is not empty:
+            val = f" = {self.default_value}"
+        else:
+            val = ""
+        return f'<var {self.qualname.rsplit(".")[-1]}{annotation}{val}{_docstr(self)}>'
+
+    @cached_property
+    def docstring(self) -> str:
+        return self._docstring
+
+    @cached_property
+    def declared_at(self) -> tuple[str, str]:
+        return self._declared_at
+
+    @cached_property
+    def is_classvar(self):
+        if get_origin(self.annotation) is ClassVar:
+            return True
+        else:
+            return False
 
 
 class _PrettySignature(inspect.Signature):
@@ -956,7 +843,7 @@ class _PrettySignature(inspect.Signature):
             elif render_pos_only_separator:
                 # It's not a positional-only parameter, and the flag
                 # is set to 'True' (there were pos-only params before.)
-                result.append('/')
+                result.append("/")
                 render_pos_only_separator = False
 
             if kind == _VAR_POSITIONAL:
@@ -967,7 +854,7 @@ class _PrettySignature(inspect.Signature):
                 # We have a keyword-only parameter to render and we haven't
                 # rendered an '*args'-like parameter before, so add a '*'
                 # separator to the parameters list ("foo(arg1, *, arg2)" case)
-                result.append('*')
+                result.append("*")
                 # This condition should be only triggered once, so
                 # reset the flag
                 render_kw_only_separator = False
@@ -977,13 +864,13 @@ class _PrettySignature(inspect.Signature):
         if render_pos_only_separator:
             # There were only positional-only parameters, hence the
             # flag was not reset to 'False'
-            result.append('/')
+            result.append("/")
 
-        rendered = '({})'.format(', '.join(result))
+        rendered = "({})".format(", ".join(result))
 
         if self.return_annotation is not _empty:
             anno = formatannotation(self.return_annotation)
-            rendered += ' -> {}'.format(anno)
+            rendered += " -> {}".format(anno)
         # ✂ end ✂
 
         if len(rendered) > 70:
@@ -994,68 +881,30 @@ class _PrettySignature(inspect.Signature):
         return rendered
 
 
-class Variable(Doc[None]):
-    """
-    Representation of a variable's documentation. This includes
-    module, class and instance variables.
-    """
+def _cut(x: str) -> str:
+    """helper function for Doc.__repr__()"""
+    if len(x) < 20:
+        return x
+    else:
+        return x[:20] + "…"
 
-    _docstring: str
 
-    default_value: Union[
-        Any, empty
-    ]  # technically Any includes empty, but this conveys intent.
-    """
-    The variable's default value.
-    """
+def _docstr(doc: "Doc") -> str:
+    """helper function for Doc.__repr__()"""
+    docstr = []
+    if doc.is_inherited:
+        docstr.append(f"inherited from {'.'.join(doc.declared_at)}")
+    if doc.docstring:
+        docstr.append(_cut(doc.docstring))
+    if docstr:
+        return f"  # {', '.join(docstr)}"
+    else:
+        return ""
 
-    annotation: Union[type, empty]
-    """
-    The variable's type annotation.
-    """
 
-    _declared_at: tuple[str, str]
-    """(module, qualname) the variable was declared at"""
-
-    def __init__(
-            self,
-            module_name: str,
-            qualname: str,
-            docstring: str,
-            declared_at: tuple[str, str],
-            annotation: Union[type, empty] = empty,
-            default_value: Union[Any, empty] = empty,
-    ):
-        super().__init__(module_name, qualname, None)
-        self._docstring = docstring
-        self._declared_at = declared_at
-        self.annotation = annotation
-        self.default_value = default_value
-
-    @cache
-    @include_refname_in_traceback
-    def __repr__(self):
-        if self.annotation is not empty:
-            annotation = f": {type_repr(self.annotation)}"
-        else:
-            annotation = ""
-        if self.default_value is not empty:
-            val = f" = {self.default_value}"
-        else:
-            val = ""
-        return f'<var {self.qualname.rsplit(".")[-1]}{annotation}{val}{_docstr(self)}>'
-
-    @cached_property
-    def docstring(self) -> str:
-        return self._docstring
-
-    @cached_property
-    def declared_at(self) -> tuple[str, str]:
-        return self._declared_at
-
-    @cached_property
-    def is_classvar(self):
-        if get_origin(self.annotation) is ClassVar:
-            return True
-        else:
-            return False
+def _decorators(doc: Union["Class", "Function"]) -> str:
+    """helper function for Doc.__repr__()"""
+    if doc.decorators:
+        return " ".join(doc.decorators) + " "
+    else:
+        return ""
