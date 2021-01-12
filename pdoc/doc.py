@@ -218,11 +218,13 @@ def _docstr(doc: "Doc") -> str:
     else:
         return ""
 
+
 def _decorators(doc: Union["Class", "Function"]) -> str:
     if doc.decorators:
         return ' '.join(doc.decorators) + " "
     else:
         return ""
+
 
 def _sort(
         tree: Union[ast.Module, ast.ClassDef], sorted: dict[str, T], unsorted: dict[str, T]
@@ -906,7 +908,7 @@ class Function(Doc[types.FunctionType]):
             # signature for the default __init__ method.
             return inspect.Signature()
         try:
-            sig = inspect.signature(self.obj)
+            sig = _PrettySignature.from_callable(self.obj)
         except Exception:
             return inspect.Signature(
                 [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
@@ -923,6 +925,73 @@ class Function(Doc[types.FunctionType]):
                 {"t": p.annotation}, mod, self.refname
             )["t"]
         return sig
+
+
+class _PrettySignature(inspect.Signature):
+    """
+    A subclass of `inspect.Signature` that pads __str__ over several lines
+    for complex signatures.
+    """
+
+    def __str__(self):
+        # redeclared here to keep code snipped below as-is.
+        _POSITIONAL_ONLY = inspect.Parameter.POSITIONAL_ONLY
+        _VAR_POSITIONAL = inspect.Parameter.VAR_POSITIONAL
+        _KEYWORD_ONLY = inspect.Parameter.KEYWORD_ONLY
+        _empty = empty
+        formatannotation = inspect.formatannotation
+
+        # https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3123
+        # ✂ start ✂
+        result = []
+        render_pos_only_separator = False
+        render_kw_only_separator = True
+        for param in self.parameters.values():
+            formatted = str(param)
+
+            kind = param.kind
+
+            if kind == _POSITIONAL_ONLY:
+                render_pos_only_separator = True
+            elif render_pos_only_separator:
+                # It's not a positional-only parameter, and the flag
+                # is set to 'True' (there were pos-only params before.)
+                result.append('/')
+                render_pos_only_separator = False
+
+            if kind == _VAR_POSITIONAL:
+                # OK, we have an '*args'-like parameter, so we won't need
+                # a '*' to separate keyword-only arguments
+                render_kw_only_separator = False
+            elif kind == _KEYWORD_ONLY and render_kw_only_separator:
+                # We have a keyword-only parameter to render and we haven't
+                # rendered an '*args'-like parameter before, so add a '*'
+                # separator to the parameters list ("foo(arg1, *, arg2)" case)
+                result.append('*')
+                # This condition should be only triggered once, so
+                # reset the flag
+                render_kw_only_separator = False
+
+            result.append(formatted)
+
+        if render_pos_only_separator:
+            # There were only positional-only parameters, hence the
+            # flag was not reset to 'False'
+            result.append('/')
+
+        rendered = '({})'.format(', '.join(result))
+
+        if self.return_annotation is not _empty:
+            anno = formatannotation(self.return_annotation)
+            rendered += ' -> {}'.format(anno)
+        # ✂ end ✂
+
+        if len(rendered) > 70:
+            rendered = "(\n\t" + ",\n\t".join(result) + "\n)"
+            if self.return_annotation is not _empty:
+                rendered += f" -> {formatannotation(self.return_annotation)}"
+
+        return rendered
 
 
 class Variable(Doc[None]):

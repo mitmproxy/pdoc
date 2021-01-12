@@ -24,7 +24,7 @@ which will all show up in the navigation on the left.
 import os
 from dataclasses import dataclass, field
 from functools import cache, cached_property
-from typing import TypeVar, Union, ClassVar
+from typing import TypeVar, Union, ClassVar, Optional
 
 FOO_CONSTANT: int = 42
 """
@@ -60,11 +60,11 @@ def a_simple_function(a: str) -> str:
 T = TypeVar('T')
 
 
-def a_complex_function(a: str, b: Union["Foo", str], *, c: T = None) -> T:
+def a_complex_function(a: str, b: Union["Foo", str], *, c: Optional[T] = None) -> Optional[T]:
     """
     This is a function with a fairly complex signature,
     involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),
-    as well as keyword-only arguments (after the `*`).
+    as well as a keyword-only arguments (*).
     """
     return 42
 
@@ -125,7 +125,8 @@ class Bar(Foo):
     class Baz:
         """
         This class is an attribute of `Bar`.
-        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation.
+        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation
+        (but not in the navigation).
 
         It should be noted that inner classes are a pattern you most often want to avoid in Python.
         Think about moving stuff in a new package instead!

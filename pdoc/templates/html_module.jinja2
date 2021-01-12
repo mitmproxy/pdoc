@@ -239,7 +239,6 @@
             text-align: left;
         }
 
-
         .codehilite {
             background-color: #f7f7f7;
             border-top: 1px solid #ccc;
@@ -268,7 +267,11 @@
         .attr {
             color: black;
             margin: 1rem 0 .5rem;
-            padding: .4rem 1rem;
+            /*
+            lots of padding on the right to accomodate view source button.
+            This is not ideal, but probably good enough for now.
+            */
+            padding: .4rem 5rem .4rem 1rem;
             background-color: #eee;
         }
 
@@ -287,6 +290,7 @@
         }
 
         .function .signature {
+            white-space: pre-wrap;
         }
 
         .annotation {

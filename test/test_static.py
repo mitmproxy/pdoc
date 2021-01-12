@@ -20,7 +20,7 @@ import pdoc.static
 )
 def test_module_path(modspec, ident, path):
     with tutils.tdir():
-        root = pdoc.extract.extract_module(modspec)
+        root = pdoc.extract.load_module(modspec)
         submod = root.find_ident(ident)
 
         mp = pdoc.static.module_to_path(submod)
@@ -35,7 +35,7 @@ def test_module_path(modspec, ident, path):
 
 def test_path_to_module():
     with tutils.tdir():
-        root = pdoc.extract.extract_module("./modules/submods")
+        root = pdoc.extract.load_module("./modules/submods")
         with pytest.raises(pdoc.static.StaticError):
             pdoc.static.path_to_module([root], pathlib.Path("nonexistent"))
 
@@ -43,8 +43,8 @@ def test_path_to_module():
 def test_static(tmpdir):
     dst = pathlib.Path(str(tmpdir))
     with tutils.tdir():
-        one = pdoc.extract.extract_module("./modules/one")
-        two = pdoc.extract.extract_module("./modules/submods")
+        one = pdoc.extract.load_module("./modules/one")
+        two = pdoc.extract.load_module("./modules/submods")
         assert not pdoc.static.would_overwrite(dst, [one])
         assert not pdoc.static.would_overwrite(dst, [one, two])
         pdoc.static.html_out(dst, [one])

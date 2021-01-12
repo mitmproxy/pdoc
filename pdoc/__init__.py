@@ -206,7 +206,7 @@ def pdoc(
             retval.write(r(mod))
 
     module_names = [extract.parse_spec(mod) for mod in modules]
-    mods = [extract.extract_module(mod) for mod in module_names]
+    mods = [doc.Module(extract.load_module(mod)) for mod in module_names]
 
     render.roots = module_names
     render.sort = sort

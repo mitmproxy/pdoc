@@ -2,16 +2,15 @@ import importlib
 import importlib.util
 import io
 import os
+import platform
 import subprocess
 import sys
 import types
 from contextlib import contextmanager
 from functools import cache, partial
 from pathlib import Path
-from typing import Union, Optional, Iterable
+from typing import Union, Optional
 from unittest.mock import patch
-
-import pdoc.doc
 
 
 @cache
@@ -35,21 +34,21 @@ def parse_spec(spec: Union[Path, str]) -> str:
 def mock_some_common_side_effects():
     _popen = subprocess.Popen
 
+    if platform.system() == "Windows":
+        noop = "echo.exe"
+    else:
+        noop = "echo"
+
     with (
-            patch("subprocess.Popen", new_callable=lambda: partial(_popen, executable="echo.exe")),
-            #patch("sys.stdout", new_callable=lambda: io.StringIO()),
+            patch("subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)),
+            patch("sys.stdout", new_callable=lambda: io.StringIO()),
             patch("sys.stderr", new_callable=lambda: io.StringIO()),
             patch("sys.stdin", new_callable=lambda: io.StringIO()),
-            patch.object(os._Environ, "__repr__", lambda self: "os.environ")
     ):
         yield
 
 
-def _import_module(module: str) -> types.ModuleType:
-    """
-    Returns a module object, and whether the module is a package or not.
-    """
-
+def load_module(module: str) -> types.ModuleType:
     try:
         with mock_some_common_side_effects():
             return importlib.import_module(module)
@@ -57,12 +56,6 @@ def _import_module(module: str) -> types.ModuleType:
         raise RuntimeError(f"Error importing {module}.") from e
 
 
-def extract_module(module: str) -> pdoc.doc.Module:
-    module = _import_module(module)
-    return pdoc.doc.Module(module)
-
-
-@cache
 def module_exists(module_name: str) -> bool:
     try:
         spec = importlib.util.find_spec(module_name)
@@ -82,15 +75,10 @@ def module_mtime(module_name: str) -> Optional[float]:
     return None
 
 
-def invalidate_caches(roots) -> None:
-    pass
-    # importlib.invalidate_caches()
-    # sys.modules = {
-    #    name: mod
-    #    for name, mod in sys.modules.items()
-    #    if not any(name.startswith(root) for root in roots)
-    # }
-
-
-def all_submodules(module_name: str) -> Iterable[str]:
-    pass
+def invalidate_caches(roots: list[str]) -> None:
+    importlib.invalidate_caches()
+    sys.modules = {
+        name: mod
+        for name, mod in sys.modules.items()
+        if not any(name.startswith(root) for root in roots)
+    }

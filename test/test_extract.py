@@ -73,9 +73,9 @@ def test_extract_module(path, expected, match):
     with tutils.tdir():
         if match:
             with pytest.raises(pdoc.extract.ExtractError, match=match):
-                pdoc.extract.extract_module(path)
+                pdoc.extract.load_module(path)
         else:
-            ret = pdoc.extract.extract_module(path)
+            ret = pdoc.extract.load_module(path)
             assert sorted([i.name for i in ret.allmodules()]) == expected
 
 

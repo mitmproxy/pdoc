@@ -1,8 +1,11 @@
 import base64
+import os
 import re
+from contextlib import contextmanager
 from functools import cache
 from pathlib import Path
 from typing import Optional
+from unittest.mock import patch
 
 import markdown2
 import pygments.formatters.html
@@ -14,9 +17,9 @@ from markupsafe import Markup
 
 import pdoc.doc
 from pdoc import extract
-from pdoc.extract import module_exists
 
 default_templates = Path(__file__).parent / "templates"
+
 lexer = pygments.lexers.python.PythonLexer()
 formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
 formatter.get_style_defs()
@@ -42,11 +45,11 @@ def markdown(code: str) -> str:
 
 
 @cache
-def split_identifier(identifier: str) -> tuple[str, str]:
-    if module_exists(identifier):
-        return identifier, ""
+def split_identifier(refname: str) -> tuple[str, str]:
+    if extract.module_exists(refname):
+        return refname, ""
     else:
-        parent, name = identifier.rsplit(".", maxsplit=1)
+        parent, name = refname.rsplit(".", maxsplit=1)
         module_name, qualname = split_identifier(parent)
         return module_name, f"{qualname}.{name}".lstrip(".")
 
@@ -153,10 +156,18 @@ def html_error(error: str, details: str = "") -> str:
 
 
 def html_module(module: pdoc.doc.Module, mtime: Optional[str] = None) -> str:
-    with extract.mock_some_common_side_effects():
+    with mock_unsafe_reprs():
         return env.get_template("html_module.jinja2").render(
             module=module,
             pdoc=pdoc,
             mtime=mtime,
             show_module_list_link=len(roots) > 1,
         )
+
+
+@contextmanager
+def mock_unsafe_reprs():
+    with (
+            patch.object(os._Environ, "__repr__", lambda self: "os.environ")
+    ):
+        yield

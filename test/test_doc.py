@@ -6,7 +6,7 @@ import pdoc.extract
 
 def test_simple():
     with tutils.tdir():
-        m = pdoc.extract.extract_module("./modules/one.py")
+        m = pdoc.extract.load_module("./modules/one.py")
         assert m
 
 
