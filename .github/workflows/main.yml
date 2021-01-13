@@ -30,11 +30,11 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.9
+            py: 3.9.1
           - os: macos-latest
-            py: 3.9
+            py: 3.9.1
           - os: ubuntu-latest
-            py: 3.9
+            py: 3.9.1
     runs-on: ${{ matrix.os }}
     steps:
       - run: printenv

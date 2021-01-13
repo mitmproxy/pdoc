@@ -12,7 +12,7 @@ This …
     ) -> Optional[~T]: ...  # This is a function w…>
     <class demo.Foo  # `demo.Foo` is a basi…
         <method def __init__(self): ...  # The constructor is c…>
-        <var an_attribute: Union[str, list]  # A regular attribute …>
+        <var an_attribute: Union[str, list[int]]  # A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # An attribute with a …>
         <var a_constructor_only_attribute: int  # This attribute is de…>
         <method def a_regular_function(self) -> demo.Foo: ...  # This is a regular me…>
@@ -28,7 +28,7 @@ This …
         <class demo.Bar.Baz  # This class is an att…
             <method def __init__(): ...>
             <method def wat(self): ...  # A regular method. Ab…>>
-        <var an_attribute: Union[str, list]  # inherited from demo.Foo.an_attribute, A regular attribute …>
+        <var an_attribute: Union[str, list[int]]  # inherited from demo.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo.Foo.a_constructor_only_attribute, This attribute is de…>
         <method def a_regular_function(self) -> demo.Foo: ...  # inherited from demo.Foo.a_regular_function, This is a regular me…>
@@ -43,7 +43,7 @@ This …
     <function def special_cases(test: os.environ = os.environ): ...  # Default values are g…>
     <class demo.DoubleInherit  # This is an example o…
         <method def __init__(self): ...  # inherited from demo.Foo.__init__, The constructor is c…>
-        <var an_attribute: Union[str, list]  # inherited from demo.Foo.an_attribute, A regular attribute …>
+        <var an_attribute: Union[str, list[int]]  # inherited from demo.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo.Foo.a_constructor_only_attribute, This attribute is de…>
         <method def a_regular_function(self) -> demo.Foo: ...  # inherited from demo.Foo.a_regular_function, This is a regular me…>
