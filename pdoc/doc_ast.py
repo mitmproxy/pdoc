@@ -1,10 +1,11 @@
 """
-This module handles all interpretation of the *Abstract Syntax Tree* (AST) in pdoc.
+This module handles all interpretation of the *Abstract Syntax Tree (AST)* in pdoc.
 
-Parsing the AST is done to extract docstrings, type annotations, and variable declarations from __init__.
+Parsing the AST is done to extract docstrings, type annotations, and variable declarations from `__init__`.
 
 See also:
-    - https://docs.python.org/3/library/ast.html
+
+  - <https://docs.python.org/3/library/ast.html>
 """
 import ast
 import inspect
@@ -39,9 +40,9 @@ def parse(
         obj: Union[type, types.ModuleType, types.FunctionType]
 ) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
     """
-    Parse a module, class or function and return the AST node.
-    If an object's source code cannot be found, this function degrades gracefully
-    and returns an empty ast.AST stub.
+    Parse a module, class or function and return the (unwrapped) AST node.
+    If an object's source code cannot be found, this function returns an empty ast node stub
+    which can still be walked.
     """
     src = get_source(obj)
     if isinstance(obj, types.ModuleType):
@@ -54,20 +55,25 @@ def parse(
 
 @cache
 def unparse(tree: ast.AST):
-    """ast.unparse, but cached."""
+    """`ast.unparse`, but cached."""
     return ast.unparse(tree)
 
 
 @dataclass
 class AstInfo:
+    """The information extracted from walking the syntax tree."""
     docstrings: dict[str, str]
+    """A qualname -> docstring mapping."""
     annotations: dict[str, str]
+    """A qualname -> annotation mapping.
+    
+    Annotations are not evaluated by this module and only returned as strings."""
 
 
 @cache
 def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
     """
-    Walks the abstract syntax tree for obj and returns the extracted (docstrings, annotations).
+    Walks the abstract syntax tree for `obj` and returns the extracted information.
     """
     tree = parse(obj)
     docstrings = {}
@@ -104,9 +110,9 @@ def sort_by_source(
 ) -> tuple[dict[str, T], dict[str, T]]:
     """
     Takes items from `unsorted` and inserts them into `sorted` in order of appearance in the source code of `obj`.
-    The only exception to this rule is `__init__`, which is always inserted first.
+    The only exception to this rule is `__init__`, which (if present) is always inserted first.
 
-    Some items in unsorted may not be found, for example because they've been inherited from a superclass.
+    Some items may not be found, for example because they've been inherited from a superclass. The are returned as-is.
 
     Returns a `(sorted, not found)` tuple.
     """

@@ -199,7 +199,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         """A mapping from some member variable names to their type annotations."""
 
     @cached_property
-    def members(self) -> dict[str,Doc]:
+    def members(self) -> dict[str, Doc]:
         """A mapping from all members to their documentation objects."""
         members: dict[str, Doc] = {}
         for name, obj in self._member_objects.items():
@@ -677,7 +677,7 @@ class Function(Doc[types.FunctionType]):
         if self.name == "__init__":
             sig._return_annotation = empty
         else:
-            sig._return_annotation = safe_eval_type( sig.return_annotation, globalns, self.fullname)
+            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)
         for p in sig.parameters.values():
             p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)
         return sig
@@ -733,11 +733,7 @@ class Variable(Doc[None]):
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
-        if self.default_value is not empty:
-            val = f" = {self.default_value}"
-        else:
-            val = ""
-        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{val}{_docstr(self)}>'
+        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{self.default_value_str}{_docstr(self)}>'
 
     @cached_property
     def is_classvar(self) -> bool:
@@ -746,6 +742,19 @@ class Variable(Doc[None]):
             return True
         else:
             return False
+
+    @cached_property
+    def default_value_str(self) -> str:
+        """The variable's default value as a pretty-printed str."""
+        if self.default_value is empty:
+            return ""
+        elif isinstance(self.default_value, types.ModuleType):
+            return self.default_value.__name__
+        else:
+            try:
+                return f" = {repr(self.default_value)}"
+            except Exception:
+                return " = <unable to get value representation>"
 
     @cached_property
     def annotation_str(self) -> str:

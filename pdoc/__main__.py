@@ -46,7 +46,7 @@ parser.add_argument(
     nargs="+",
     type=str,
     default=[],
-    help="module=url-prefix",
+    help="module=url-prefix FIXME document",
 )
 parser.add_argument(
     "--http-host",
@@ -128,35 +128,22 @@ def cli(args=None):
     sys.stdin.close()
     args = parser.parse_args(args)
 
-    github_sources = dict(x.split("=", 1) for x in args.edit_on_github)
+    edit_url = dict(x.split("=", 1) for x in args.edit_on_github)
     if args.output_directory:
         pdoc.pdoc(
             *args.modules,
             output_directory=args.output_directory,
             format=args.format or "html",
-            github_sources=github_sources,
+            edit_url=edit_url,
         )
         return
     else:
-        if args.modules:
-            render.roots = [extract.parse_spec(mod) for mod in args.modules]
-        else:
-            stdlib = sysconfig.get_path("stdlib")
-            platstdlib = sysconfig.get_path("platstdlib")
-            for m in pkgutil.iter_modules():
-                if m.name.startswith("_"):
-                    continue
-                if m.module_finder.path.startswith(
-                        stdlib
-                ) or m.module_finder.path.startswith(platstdlib):
-                    if "site-packages" not in m.module_finder.path:
-                        continue
-                render.roots.append(m.name)
+        all_modules = extract.parse_specs(args.modules)
 
         with pdoc.web.DocServer((args.http_host, args.http_port)) as httpd:
             url = f"http://{args.http_host}:{args.http_port}"
-            if len(render.roots) == 1:
-                url += f"/{render.roots[0]}"
+            if len(args.modules) == 1:
+                url += f"/{next(iter(all_modules))}"
             print(f"pdoc server ready at {url}")
             if not args.no_browser:
                 open_browser(url)

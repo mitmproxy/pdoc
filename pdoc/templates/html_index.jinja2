@@ -1,5 +1,5 @@
 {% extends "html_frame.jinja2" %}
-{% block title %}module list &ndash; pdoc {{ pdoc.__version__ }}{% endblock %}
+{% block title %}module list &ndash; pdoc {{ __version__ }}{% endblock %}
 {% block style %}
     <style type="text/css">
         html, body {
@@ -64,22 +64,20 @@
     </style>
 {% endblock %}
 {% block body %}
-    <a id="logo" title="pdoc {{ pdoc.__version__ }}" href="https://github.com/mitmproxy/pdoc"></a>
+    <a id="logo" title="pdoc {{ __version__ }}" href="https://github.com/mitmproxy/pdoc"></a>
     <input id="search" type="text" placeholder="search"/>
     <h5>Available Modules</h5>
     <div id="modules">
 
     </div>
     <script>
-        const roots = {{ pdoc.render.roots | tojson }};
-        const modules = document.getElementById("modules");
+        const modules = {{ all_modules | tojson }};
+        const module_list = document.getElementById("modules");
         const searchbox = document.getElementById("search")
 
-        let filtered = roots;
-
         function render(filt) {
-            filtered = roots.filter(x => !filt || x.includes(filt));
-            modules.innerHTML = filtered.map(
+            let filtered = filt ? modules.filter(x.includes(filt)) : modules;
+            module_list.innerHTML = filtered.map(
                 root => `
                     <a
                     class="${filtered.length === 1 || root === filt ? 'active' : ''}"
@@ -94,7 +92,7 @@
             render(e.target.value);
         });
         searchbox.addEventListener("keyup", (e) => {
-            let active = modules.querySelector("a.active")
+            let active = module_list.querySelector("a.active")
             if (e.key === "Enter" && active) {
                 active.click();
             }

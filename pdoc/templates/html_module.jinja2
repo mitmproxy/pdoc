@@ -1,7 +1,7 @@
 {% extends "html_frame.jinja2" %}
 {% block title %}{{ module.modulename }}{% endblock %}
 {% block style %}
-    <style type="text/css">{{ pdoc.render.formatter.get_style_defs() }}</style>
+    <style type="text/css">{{ pygments_css }}</style>
     <style type="text/css">
 
         /* General Styles */
@@ -126,7 +126,7 @@
             background-color: #c1c1c1;
         }
 
-        .index-button {
+        .module-list-button {
             background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
             background-position: 1em center;
             background-repeat: no-repeat;
@@ -136,7 +136,7 @@
             margin-bottom: 1rem;
         }
 
-        .index-button:hover {
+        .module-list-button:hover {
             border-color: black;
         }
 
@@ -220,6 +220,7 @@
             margin-bottom: calc(0px - var(--shift));
             clear: both;
         }
+
         details:not([open]) {
             height: 0;
             overflow: visible;
@@ -347,26 +348,20 @@
     {% if cls.bases -%}
         (
         {%- for base in cls.bases -%}
-            <span class="base">{{ base | link(current=module.modulename) }}</span>
+            <span class="base">{{ base | link }}</span>
             {%- if loop.nextitem %}, {% endif %}
         {%- endfor -%}
         )
     {%- endif %}
 {%- endmacro %}
-{% macro default_value(var) -%}
-    {% if var.default_value %}
-        {% if var.default_value.__class__.__name__ == "module" %}
-            <span class="default_value">= {{ var.default_value.__name__ | linkify(current=module.modulename) }}</span>
-        {% elif var.default_value != pdoc.doc.empty %}
-            <span class="default_value">
-                = <span class="{{ var.default_value.__class__.__name__ }}">{{ var.default_value | repr }}</span>
-            </span>
-        {% endif %}
-    {% endif %}
-{%- endmacro %}
+{% macro default_value(var) %}
+    {%- if var.default_value_str -%}
+        <span class="default_value"> = {{ var.default_value_str | linkify }}</span>
+    {%- endif -%}
+{% endmacro %}
 {% macro annotation(var) %}
     {%- if var.annotation_str -%}
-        <span class="annotation">{{ var.annotation_str | linkify(current=module.modulename) }}</span>
+        <span class="annotation">{{ var.annotation_str | linkify }}</span>
     {%- endif -%}
 {% endmacro %}
 {% macro decorators(doc) %}
@@ -376,12 +371,13 @@
 {% endmacro %}
 {% macro function(fn) %}
 {%- set sig -%}
-<span class="signature">{{ fn.signature | string | linkify(current=module.modulename) }}</span>
+<span class="signature">{{ fn.signature | string | linkify }}</span>
 {%- endset -%}
 <div class="attr function">
     {{- decorators(fn) -}}
     {% if fn.name == "__init__" %}
-        <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>{{ sig | replace("(self)","()") | replace("(self, ","(") }}
+        <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
+        {{ sig | replace("(self)","()") | replace("(self, ","(") }}
     {% else %}
         <span class="def">{{ fn.funcdef }}</span>
         <span class="name">{{ fn.name }}</span>{{ sig }}:
@@ -394,7 +390,7 @@
 {%- endmacro %}
 {% macro docstring(var) -%}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | markdown | linkify(current=module.modulename) }}</div>
+        <div class="docstring">{{ var.docstring | markdown | linkify }}</div>
     {% endif %}
 {%- endmacro %}
 {% macro nav_members(members) -%}
@@ -423,12 +419,6 @@
         </details>
     {% endif %}
 {%- endmacro %}
-{% macro github_button() -%}
-    {% set url = github_url(module) %}
-    {% if url %}
-        <a class="button git-button" href="{{ url }}">Edit on GitHub</a>
-    {% endif %}
-{%- endmacro %}
 {% block body %}
     <div class="container">
         <nav>
@@ -436,13 +426,14 @@
             <input id="navtoggle" type="checkbox">
             <div>
                 {% if show_module_list_link %}
-                    <a class="button index-button" href="./{{ "../" * module.modulename.count(".") }}">Module
+                    <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">Module
                         Index</a>
                 {% endif %}
 
-                {% if module.docstring %}
+                {% set index = module.docstring | markdown | attr("toc_html") %}
+                {% if index %}
                     <h2>Index</h2>
-                    {{ module.docstring | markdown | attr("toc_html") | safe or '' }}
+                    {{ index | safe }}
                 {% endif %}
 
                 {% if module.submodules %}
@@ -459,7 +450,7 @@
                     {{ nav_members(module.members.values()) }}
                 {% endif %}
 
-                <a class="logo" title="built with pdoc {{ pdoc.__version__ }}"
+                <a class="logo" title="built with pdoc {{ __version__ }}"
                    href="https://github.com/mitmproxy/pdoc">
                     built with
                     {% include 'logo.svg' %}</a>
@@ -467,7 +458,9 @@
         </nav>
         <main>
             <section>
-                {{ github_button() }}
+                {% if edit_url -%}
+                    <a class="button git-button" href="{{ edit_url }}">Edit on GitHub</a>
+                {%- endif %}
                 <h1 class="modulename">
                     {%- set modulename = "" -%}
                     {% for part in module.modulename.split(".") %}
@@ -517,9 +510,9 @@
                                 <dl>
                                     {% for base, members in m.inherited_members.items() %}
                                         <div>
-                                            <dt>{{ base | link(current=module.modulename) }}</dt>
+                                            <dt>{{ base | link }}</dt>
                                             {% for m2 in members -%}
-                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(current=module.modulename,text=m2.name.replace("__init__",base[1])) }}</dd>
+                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(text=m2.name.replace("__init__",base[1])) }}</dd>
                                             {%- endfor %}
                                         </div>
                                     {% endfor %}

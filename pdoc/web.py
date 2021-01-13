@@ -1,6 +1,6 @@
 import http.server
 import traceback
-from typing import Optional, Union
+from typing import Optional, Union, Collection
 
 import pdoc.doc
 import pdoc.extract
@@ -13,6 +13,8 @@ from pdoc import render, extract
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
+    server: "DocServer"
+
     def do_HEAD(self):
         return self.handle_request()
 
@@ -25,16 +27,14 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         pass
 
     def handle_request(self) -> Optional[str]:
-        extract.invalidate_caches(render.roots)
+        extract.invalidate_caches(self.server.all_modules)
         path = self.path.split("?", 1)[0]
 
         if path == "/":
-            out = render.html_index()
+            out = render.html_index(self.server.all_modules)
         else:
             module = path.removeprefix("/").removesuffix(".html").replace("/", ".")
-            if not any(
-                module.startswith(r) for r in render.roots
-            ) or not extract.module_exists(module):
+            if module not in self.server.all_modules:
                 self.send_response(404)
                 self.send_header("content-type", "text/html")
                 self.end_headers()
@@ -65,5 +65,8 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
 
 class DocServer(http.server.HTTPServer):
-    def __init__(self, addr: tuple[str, int]):
+    all_modules: Collection[str]
+
+    def __init__(self, addr: tuple[str, int], all_modules: Collection[str]):
         super().__init__(addr, DocHandler)
+        self.all_modules = all_modules

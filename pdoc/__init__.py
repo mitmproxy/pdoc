@@ -187,9 +187,8 @@ def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
     format: Literal["html", "markdown"] = "html",
-    sort: bool = False,
-    github_sources: dict[str, str] = None,
-) -> object:
+    edit_url: dict[str, str] = None,
+) -> str:
     retval = io.StringIO()
     if output_directory:
 
@@ -197,23 +196,22 @@ def pdoc(
             outfile = output_directory / f"{mod.fullname.replace('.', '/')}.html"
             outfile.parent.mkdir(parents=True, exist_ok=True)
             outfile.write_text(r(mod), "utf8")
-            for s in mod.submodules:
-                write(s)
 
     else:
 
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    modulenames = [extract.parse_spec(mod) for mod in modules]
-    mods = [doc.Module(extract.load_module(mod)) for mod in modulenames]
-
-    render.roots = modulenames
-    render.sort = sort
-    render.github_sources = github_sources or {}
+    all_modules = extract.parse_specs(modules)
+    mods = [doc.Module(extract.load_module(mod)) for mod in all_modules]
 
     if format == "html":
-        r = render.html_module
+        def r(mod: doc.Module) -> str:
+            return render.html_module(
+                module=mod,
+                all_modules=all_modules,
+                edit_url_map=edit_url or {}
+            )
     elif format == "markdown":
         raise NotImplementedError
     elif format == "repr":
@@ -228,6 +226,6 @@ def pdoc(
             return retval.getvalue()
 
     if format == "html":
-        (output_directory / "index.html").write_text(render.html_index())
+        (output_directory / "index.html").write_text(render.html_index(all_modules))
 
     return retval.getvalue()

@@ -51,7 +51,9 @@ def resolve_annotations(
 ) -> dict[str, Any]:
     """
     Given an `annotations` dictionary with type annotations (for example, `cls.__annotations__`),
-    try to resolve all annotations using `pdoc.doc_types.safe_eval_type`.
+    this function tries to resolve all types using `pdoc.doc_types.safe_eval_type`.
+
+    Returns: A dictionary with the evaluated types.
     """
     ns = getattr(module, "__dict__", {})
 
@@ -108,17 +110,17 @@ def safe_eval_type(
 
 
 def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
-    # Adapted from https://github.com/python/cpython/blob/4db8988420e0a122d617df741381b0c385af032c/Lib/typing.py#L298-L314
-    # Added type coercion originally found in get_type_hints.
-    # Added a special check for typing.Literal.
+    # Adapted from typing._eval_type.
+    # Added type coercion originally found in get_type_hints, but removed NoneType check because that was distracting.
+    # Added a special check for typing.Literal, whose literal strings would otherwise be evaluated.
 
-    if t is None:
-        t = type(None)
     if isinstance(t, str):
         t = ForwardRef(t, is_argument=False)
     if get_origin(t) is Literal:
         return t
 
+    # https://github.com/python/cpython/blob/4db8988420e0a122d617df741381b0c385af032c/Lib/typing.py#L299-L314
+    # ✂ start ✂
     """Evaluate all forward references in the given type t.
     For use of globalns and localns see the docstring for get_type_hints().
     recursive_guard is used to prevent prevent infinite recursion
@@ -135,3 +137,4 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
         else:
             return t.copy_with(ev_args)
     return t
+    # ✂ end ✂

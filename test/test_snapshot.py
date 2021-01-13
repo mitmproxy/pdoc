@@ -7,10 +7,8 @@ import pdoc
 snapshot_dir = (Path(__file__).parent / "snapshots").absolute()
 
 snapshots = [
-    "csv",
-    "html.parser",
-    "pathlib",
     (snapshot_dir / "demo.py"),
+    (snapshot_dir / "demopackage"),
 ]
 
 
