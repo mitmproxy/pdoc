@@ -11,7 +11,7 @@ modules = [
     if not m.name.startswith("_") and m.name not in ("test", "idlelib")
 ]
 
-
+@pytest.mark.slow
 @pytest.mark.filterwarnings("ignore")
 @pytest.mark.parametrize("module", modules)
 def test_smoke(module):

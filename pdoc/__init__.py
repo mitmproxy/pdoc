@@ -213,7 +213,7 @@ def pdoc(
                 module=mod, all_modules=all_modules, edit_url_map=edit_url or {}
             )
 
-    elif format == "markdown":
+    elif format == "markdown":  # pragma: no cover
         raise NotImplementedError
     elif format == "repr":
         r = render.repr_module

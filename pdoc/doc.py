@@ -501,9 +501,6 @@ class Class(Namespace[type]):
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
-        if "__init__" in unsorted:
-            # move to front
-            sorted = {"__init__": unsorted.pop("__init__"), **sorted}
         sorted.update(unsorted)
         return sorted
 
