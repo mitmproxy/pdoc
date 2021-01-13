@@ -11,6 +11,7 @@ VERSION = re.search(
     r'__version__ = "(.+?)"', (here / "pdoc" / "__init__.py").read_text()
 ).group(1)
 
+
 setup(
     name="pdoc",
     author="Maximilian Hils",
@@ -25,7 +26,7 @@ setup(
         "Topic :: Software Development :: Documentation",
         "Topic :: Utilities",
         "License :: Public Domain",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
@@ -42,7 +43,6 @@ setup(
     python_requires=">=3.9",
     install_requires=[
         "Jinja2",
-        "mako",
         "markdown2",
         "pygments",
     ],

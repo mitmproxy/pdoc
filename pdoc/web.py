@@ -1,6 +1,6 @@
 import http.server
 import traceback
-from typing import Optional, Union, Collection
+from typing import Optional, Union, Collection, Mapping
 
 import pdoc.doc
 import pdoc.extract
@@ -56,7 +56,12 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                     error=f"Error importing {module!r}",
                     details=traceback.format_exc(),
                 )
-            out = pdoc.render.html_module(mod, mtime=mtime)
+            out = pdoc.render.html_module(
+                module=mod,
+                all_modules=self.server.all_modules,
+                edit_url_map=self.server.edit_url_map,
+                mtime=mtime,
+            )
 
         self.send_response(200)
         self.send_header("content-type", "text/html")
@@ -66,7 +71,14 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
 class DocServer(http.server.HTTPServer):
     all_modules: Collection[str]
+    edit_url_map: Mapping[str, str]
 
-    def __init__(self, addr: tuple[str, int], all_modules: Collection[str]):
+    def __init__(
+        self,
+        addr: tuple[str, int],
+        all_modules: Collection[str],
+        edit_url_map: Mapping[str, str],
+    ):
         super().__init__(addr, DocHandler)
         self.all_modules = all_modules
+        self.edit_url_map = edit_url_map

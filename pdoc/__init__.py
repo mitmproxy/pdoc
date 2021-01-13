@@ -172,6 +172,7 @@ If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
 """
 import io
+import warnings
 from pathlib import Path
 from typing import Literal, Optional, Union
 
@@ -193,6 +194,7 @@ def pdoc(
     if output_directory:
 
         def write(mod: doc.Module):
+            assert output_directory
             outfile = output_directory / f"{mod.fullname.replace('.', '/')}.html"
             outfile.parent.mkdir(parents=True, exist_ok=True)
             outfile.write_text(r(mod), "utf8")
@@ -203,27 +205,33 @@ def pdoc(
             retval.write(r(mod))
 
     all_modules = extract.parse_specs(modules)
-    mods = [doc.Module(extract.load_module(mod)) for mod in all_modules]
 
     if format == "html":
+
         def r(mod: doc.Module) -> str:
             return render.html_module(
-                module=mod,
-                all_modules=all_modules,
-                edit_url_map=edit_url or {}
+                module=mod, all_modules=all_modules, edit_url_map=edit_url or {}
             )
+
     elif format == "markdown":
         raise NotImplementedError
     elif format == "repr":
-        r = repr
+        r = render.repr_module
     else:
         raise ValueError(f"Invalid rendering format {format!r}.")
 
-    for mod in mods:
-        write(mod)
+    for mod in all_modules:
+        try:
+            m = extract.load_module(mod)
+        except RuntimeError as e:
+            warnings.warn(f"Error importing {mod}: {e!r}")
+        else:
+            write(doc.Module(m))
 
-        if not output_directory:
-            return retval.getvalue()
+            if not output_directory:
+                return retval.getvalue()
+
+    assert output_directory
 
     if format == "html":
         (output_directory / "index.html").write_text(render.html_index(all_modules))

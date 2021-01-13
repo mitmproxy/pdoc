@@ -1,7 +1,5 @@
 import argparse
-import pkgutil
 import sys
-import sysconfig
 import webbrowser
 from pathlib import Path
 
@@ -9,14 +7,14 @@ import pdoc
 import pdoc.doc
 import pdoc.extract
 import pdoc.web
-from pdoc import extract, render
+from pdoc import extract
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 parser.add_argument(
-    "--version", action="version", version="%(prog)s " + pdoc.__version__
+    "--version", action="version", version=f"%(prog)s {pdoc.__version__}"
 )
 parser.add_argument(
     "modules",
@@ -24,8 +22,8 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment, or file paths to a Python module or "
-         "package.",
+    "the current environment, or file paths to a Python module or "
+    "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -140,12 +138,14 @@ def cli(args=None):
     else:
         all_modules = extract.parse_specs(args.modules)
 
-        with pdoc.web.DocServer((args.http_host, args.http_port)) as httpd:
+        with pdoc.web.DocServer(
+            (args.http_host, args.http_port), all_modules, args.edit_url
+        ) as httpd:
             url = f"http://{args.http_host}:{args.http_port}"
-            if len(args.modules) == 1:
-                url += f"/{next(iter(all_modules))}"
             print(f"pdoc server ready at {url}")
             if not args.no_browser:
+                if len(args.modules) == 1:
+                    url += f"/{next(iter(all_modules))}"
                 open_browser(url)
             try:
                 httpd.serve_forever()

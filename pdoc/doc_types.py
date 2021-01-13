@@ -12,8 +12,13 @@ from types import GenericAlias, ModuleType
 from typing import (  # type: ignore
     Any,
     ForwardRef,
-    Optional, TYPE_CHECKING, get_args,
-    _GenericAlias, get_origin, Literal, )
+    Optional,
+    TYPE_CHECKING,
+    get_args,
+    _GenericAlias,
+    get_origin,
+    Literal,
+)
 
 if TYPE_CHECKING:
 
@@ -21,16 +26,13 @@ if TYPE_CHECKING:
         pass
 
 
-else:
-    empty = inspect.Signature.empty
-
-
-empty: inspect.Signature.empty
+empty = inspect.Signature.empty  # type: ignore  # noqa
 """
 A "special" object signaling the absence of a type annotation. 
 This is useful to distinguish it from an actual annotation with `None`.
 This value is an alias of `inspect.Signature.empty`.
 """
+
 
 def formatannotation(annotation: Any) -> str:
     """
@@ -41,7 +43,6 @@ def formatannotation(annotation: Any) -> str:
     if isinstance(annotation, type) and get_args(annotation):
         return repr(annotation)
     return inspect.formatannotation(annotation)
-
 
 
 def resolve_annotations(
@@ -95,7 +96,7 @@ def safe_eval_type(
         mod = x[1]
     except Exception as e:
         err = last_err = str(e)
-        mod = None  # make type checker happy
+        mod = ""  # make type checker happy
     if err == last_err:
         warnings.warn(f"Error parsing type annotation for {fullname}: {err}")
         return t
@@ -129,7 +130,9 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     if isinstance(t, ForwardRef):
         return t._evaluate(globalns, localns, recursive_guard)
     if isinstance(t, (_GenericAlias, GenericAlias)):
-        ev_args = tuple(_eval_type(a, globalns, localns, recursive_guard) for a in t.__args__)
+        ev_args = tuple(
+            _eval_type(a, globalns, localns, recursive_guard) for a in t.__args__
+        )
         if ev_args == t.__args__:
             return t
         if isinstance(t, GenericAlias):

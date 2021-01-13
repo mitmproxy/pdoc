@@ -9,12 +9,11 @@ See also:
 """
 import ast
 import inspect
-import textwrap
 import types
 from dataclasses import dataclass
 from functools import cache
 from itertools import zip_longest, tee
-from typing import Union, Iterable, TypeVar, Iterator, Any
+from typing import Union, Iterable, TypeVar, Iterator, Any, overload, TYPE_CHECKING
 
 
 @cache
@@ -35,9 +34,23 @@ def get_source(obj: Any) -> str:
         return ""
 
 
-@cache
+@overload
+def parse(obj: types.ModuleType) -> ast.Module:
+    ...
+
+
+@overload
+def parse(obj: types.FunctionType) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]:
+    ...
+
+
+@overload
+def parse(obj: type) -> ast.ClassDef:
+    ...
+
+
 def parse(
-        obj: Union[type, types.ModuleType, types.FunctionType]
+    obj: Union[type, types.ModuleType, types.FunctionType]
 ) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
     """
     Parse a module, class or function and return the (unwrapped) AST node.
@@ -53,6 +66,11 @@ def parse(
         return _parse_function(src)
 
 
+if not TYPE_CHECKING:
+    # we're running into a weird mypy bug here, @overload and @cache don't like each other
+    parse = cache(parse)
+
+
 @cache
 def unparse(tree: ast.AST):
     """`ast.unparse`, but cached."""
@@ -62,6 +80,7 @@ def unparse(tree: ast.AST):
 @dataclass
 class AstInfo:
     """The information extracted from walking the syntax tree."""
+
     docstrings: dict[str, str]
     """A qualname -> docstring mapping."""
     annotations: dict[str, str]
@@ -83,17 +102,17 @@ def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
             name = a.target.id
             annotations[name] = ast.unparse(a.annotation)
         elif (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Name)
+            isinstance(a, ast.Assign)
+            and len(a.targets) == 1
+            and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
         else:
             continue
         if (
-                isinstance(b, ast.Expr)
-                and isinstance(b.value, ast.Constant)
-                and isinstance(b.value.value, str)
+            isinstance(b, ast.Expr)
+            and isinstance(b.value, ast.Constant)
+            and isinstance(b.value.value, str)
         ):
             docstrings[name] = inspect.cleandoc(b.value.value).strip()
     return AstInfo(
@@ -106,7 +125,7 @@ T = TypeVar("T")
 
 
 def sort_by_source(
-        obj: Union[types.ModuleType, type], sorted: dict[str, T], unsorted: dict[str, T]
+    obj: Union[types.ModuleType, type], sorted: dict[str, T], unsorted: dict[str, T]
 ) -> tuple[dict[str, T], dict[str, T]]:
     """
     Takes items from `unsorted` and inserts them into `sorted` in order of appearance in the source code of `obj`.
@@ -123,13 +142,13 @@ def sort_by_source(
 
     for a in _nodes(tree):
         if (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Name)
+            isinstance(a, ast.Assign)
+            and len(a.targets) == 1
+            and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
         elif (
-                isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
+            isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
         ):
             name = a.target.id
         elif isinstance(a, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -159,7 +178,7 @@ def _parse_class(source: str) -> ast.ClassDef:
 
     Returns an empty ast.ClassDef if source is empty.
     """
-    tree = ast.parse(textwrap.dedent(source))
+    tree = ast.parse(_dedent(source))
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
@@ -175,13 +194,36 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
     Returns an empty ast.FunctionDef if source is empty.
     """
-    tree = ast.parse(textwrap.dedent(source))
+    tree = ast.parse(_dedent(source))
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
         assert isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef))
         return t
     return ast.FunctionDef(body=[], decorator_list=[])
+
+
+@cache
+def _dedent(source: str) -> str:
+    """
+    Dedent the head of a function or class definition so that it can be parsed by `ast.parse`.
+    This is an alternative to `textwrap.dedent`, which does not dedent if there are docstrings
+    without indentation. For example, this is valid Python code but would not be dedented with `textwrap.dedent`:
+
+    class Foo:
+        def bar(self):
+           '''
+    this is a docstring
+           '''
+    """
+    if not source or source[0] not in (" ", "\t"):
+        return source
+    source = source.lstrip()
+    if source.startswith("@"):
+        first_line, rest = source.split("\n", 1)
+        return first_line + "\n" + _dedent(rest)
+    else:
+        return source
 
 
 @cache
@@ -209,20 +251,20 @@ def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
     """
     for a in tree.body:
         if (
-                isinstance(a, ast.AnnAssign)
-                and isinstance(a.target, ast.Attribute)
-                and isinstance(a.target.value, ast.Name)
-                and a.target.value.id == "self"
+            isinstance(a, ast.AnnAssign)
+            and isinstance(a.target, ast.Attribute)
+            and isinstance(a.target.value, ast.Name)
+            and a.target.value.id == "self"
         ):
             yield ast.AnnAssign(
                 ast.Name(a.target.attr), a.annotation, a.value, simple=1
             )
         elif (
-                isinstance(a, ast.Assign)
-                and len(a.targets) == 1
-                and isinstance(a.targets[0], ast.Attribute)
-                and isinstance(a.targets[0].value, ast.Name)
-                and a.targets[0].value.id == "self"
+            isinstance(a, ast.Assign)
+            and len(a.targets) == 1
+            and isinstance(a.targets[0], ast.Attribute)
+            and isinstance(a.targets[0].value, ast.Name)
+            and a.targets[0].value.id == "self"
         ):
             yield ast.Assign(
                 [ast.Name(a.targets[0].attr)],
@@ -230,9 +272,9 @@ def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
                 type_comment=a.type_comment,
             )
         elif (
-                isinstance(a, ast.Expr)
-                and isinstance(a.value, ast.Constant)
-                and isinstance(a.value.value, str)
+            isinstance(a, ast.Expr)
+            and isinstance(a.value, ast.Constant)
+            and isinstance(a.value.value, str)
         ):
             yield a
         else:

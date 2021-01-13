@@ -18,7 +18,7 @@ import warnings
 from contextlib import contextmanager
 from functools import partial
 from pathlib import Path
-from typing import Union, Optional, Iterable, Literal, Collection
+from typing import Union, Optional, Collection, Sequence
 from unittest.mock import patch
 
 
@@ -32,40 +32,43 @@ def mock_some_common_side_effects():
     _popen = subprocess.Popen
 
     if platform.system() == "Windows":
-        noop = "echo.exe"
+        noop_exe = "echo.exe"
     else:
-        noop = "echo"
+        noop_exe = "echo"
+
+    def noop(*args, **kwargs):
+        pass
 
     with (
-        patch(
-            "subprocess.Popen", new_callable=lambda: partial(_popen, executable=noop)
-        ),
-        patch("sys.stdout", new_callable=lambda: io.StringIO()),
-        patch("sys.stderr", new_callable=lambda: io.StringIO()),
-        patch("sys.stdin", new_callable=lambda: io.StringIO()),
+        patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)),
+        patch("os.startfile", new=noop, create=True),
+        patch("sys.stdout", new=io.StringIO()),
+        patch("sys.stderr", new=io.StringIO()),
+        patch("sys.stdin", new=io.StringIO()),
     ):
         yield
 
 
 @mock_some_common_side_effects()
-def parse_specs(modules: Iterable[Union[Path, str]]) -> dict[str, Literal[None]]:
+def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     """
-    This function processes a list of module specifications and returns a list of module names
-    that should be included in the module index.
+    This function processes a list of module specifications and returns the list of module names
+    that should be processed by pdoc.
 
-    FIXME: more doc
+    There are two main scenarios: First, if the list of modules is empty, pdo
     """
-    module_index = {}
+    module_index: dict[str, None] = {}
     if modules:
         for spec in modules:
             modname = parse_spec(spec)
-            module_index[modname] = True
+            module_index[modname] = None
 
             # try to get all submodules
             try:
-                path = importlib.util.find_spec(modname).submodule_search_locations
-                if path is None:  # not a package
+                modspec = importlib.util.find_spec(modname)
+                if modspec is None or modspec.submodule_search_locations is None:
                     continue
+                path = modspec.submodule_search_locations
             except Exception:
                 warnings.warn(f"Cannot find spec for {modname} (from {spec})")
             else:
@@ -83,7 +86,7 @@ def parse_specs(modules: Iterable[Union[Path, str]]) -> dict[str, Literal[None]]
         for m in pkgutil.iter_modules():
             if m.name.startswith("_"):
                 continue
-            if m.module_finder.path in (stdlib, platstdlib):
+            if getattr(m.module_finder, "path", None) in (stdlib, platstdlib):
                 continue
             module_index[m.name] = None
 
@@ -163,7 +166,5 @@ def invalidate_caches(modules: Collection[str]) -> None:
     importlib.invalidate_caches()
     linecache.clearcache()
     sys.modules = {
-        name: mod
-        for name, mod in sys.modules.items()
-        if not name in modules
+        name: mod for name, mod in sys.modules.items() if name not in modules
     }

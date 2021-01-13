@@ -9,6 +9,8 @@ dist
 venv
 .pytest_cache
 .coverage
-.tox
+.tox/
 .mypy_cache
 tmp
+.tox-linux/
+coverage.xml

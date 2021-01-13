@@ -5,7 +5,11 @@ import pytest
 
 import pdoc
 
-modules = [m.name for m in pkgutil.iter_modules() if not m.name.startswith("_")]
+modules = [
+    m.name
+    for m in pkgutil.iter_modules()
+    if not m.name.startswith("_") and m.name not in ("test", "idlelib")
+]
 
 
 @pytest.mark.filterwarnings("ignore")
@@ -13,7 +17,8 @@ modules = [m.name for m in pkgutil.iter_modules() if not m.name.startswith("_")]
 def test_smoke(module):
     print(f"{module=}")
     try:
-        importlib.import_module(module)
+        with pdoc.extract.mock_some_common_side_effects():
+            importlib.import_module(module)
     except BaseException:
         pass
     else:

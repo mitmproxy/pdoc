@@ -1,4 +1,4 @@
-include MANIFEST.in
+graft pdoc/templates
+include CHANGELOG.md
 include LICENSE
-include CHANGELOG
 include README.md

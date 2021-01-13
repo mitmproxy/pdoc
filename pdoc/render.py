@@ -5,7 +5,15 @@ from jinja2 import FileSystemLoader, Environment
 
 import pdoc
 import pdoc.doc
-from pdoc.render_helpers import markdown, highlight, linkify, link, defuse_unsafe_reprs, edit_url, formatter
+from pdoc.render_helpers import (
+    markdown,
+    highlight,
+    linkify,
+    link,
+    defuse_unsafe_reprs,
+    edit_url,
+    formatter,
+)
 
 env = Environment(
     loader=FileSystemLoader(Path(__file__).parent / "templates"),
@@ -48,3 +56,8 @@ def html_module(
         pygments_css=formatter.get_style_defs(),
         __version__=pdoc.__version__,
     )
+
+
+@defuse_unsafe_reprs()
+def repr_module(module: pdoc.doc.Module) -> str:
+    return repr(module)

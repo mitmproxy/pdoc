@@ -17,7 +17,6 @@ import pdoc
 
 lexer = pygments.lexers.python.PythonLexer()
 formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
-formatter.get_style_defs()
 
 
 @cache
@@ -96,7 +95,9 @@ def linkify(context: Context, code: str) -> str:
             return f'<a href="{relative_link(context["module"].modulename, module)}#{qualname}">{fullname}</a>'
 
     return Markup(
-        re.sub(r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", linkify_repl, code)
+        re.sub(
+            r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", linkify_repl, code
+        )
     )
 
 

@@ -1,3 +1,21 @@
+"""
+This module defines pdoc's documentation objects. A documentation object corresponds to *something*
+in your Python code that has a docstring or type annotation. Typically, this only includes
+modules, classes, functions and methods. However, `pdoc` adds support for extracting documentation
+from the abstract syntax tree, which means that variables (module, class or instance) are supported too.
+
+There are four main types of documentation objects:
+
+- pdoc.doc.Module
+- pdoc.doc.Class
+- pdoc.doc.Function
+- pdoc.doc.Variable
+"""
+
+# All types documentation types make heavy use of `@functools.cached_property` decorators.
+# This means they have a large set of attributes that are lazily computed on first access.
+# By convention, all attributes are read-only, although this this not enforced at runtime.
+
 import importlib
 import inspect
 import pkgutil
@@ -23,7 +41,7 @@ def _include_fullname_in_traceback(f):
     """
     Doc.__repr__ should not raise, but it may raise if we screwed up.
     Debugging this is a bit tricky, because, well, we can't repr() in the traceback either then.
-    This decorator adds location information to the traceback, which helps tracking bugs down.
+    This decorator adds location information to the traceback, which helps tracking down bugs.
     """
 
     @wraps(f)
@@ -56,12 +74,6 @@ T = TypeVar("T")
 class Doc(Generic[T]):
     """
     A base class for all documentation objects.
-
-    A documentation object corresponds to *something* in a Python module
-    that has a docstring associated with it. Typically, this only includes
-    modules, classes, functions and methods. However, `pdoc` adds support
-    for extracting docstrings and type annotations from the abstract syntax
-    tree, which means that variables (module, class or instance) are supported too.
     """
 
     modulename: str
@@ -102,8 +114,7 @@ class Doc(Generic[T]):
 
     @cached_property
     def fullname(self) -> str:
-        """The full qualified name of this doc object, for example `pdoc.doc.Doc`.
-        """
+        """The full qualified name of this doc object, for example `pdoc.doc.Doc`."""
         return f"{self.modulename}.{self.qualname}".removesuffix(
             "."
         )  # qualname is emtpy for modules.
@@ -237,7 +248,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 )
             elif inspect.isroutine(obj):
                 doc = Function(self.modulename, qualname, obj)
-            elif inspect.isclass(obj) and not obj is empty:
+            elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj)
             else:
                 docstring = self._var_docstrings.get(name, "")
@@ -259,7 +270,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     @cached_property
     def _members_by_declared_location(self) -> dict[tuple[str, str], list[Doc]]:
         """A mapping from (modulename, qualname) locations to the attributes declared in that path"""
-        locations = {}
+        locations: dict[tuple[str, str], list[Doc]] = {}
         for member in self.members.values():
             mod, qualname = member.declared_at
             qualname = ".".join(qualname.split(".")[:-1])
@@ -435,7 +446,7 @@ class Class(Namespace[type]):
 
     @cached_property
     def _declared_at(self) -> dict[str, tuple[str, str]]:
-        declared_at = {}
+        declared_at: dict[str, tuple[str, str]] = {}
         for cls in self.obj.__mro__:
             treeinfo = doc_ast.walk_tree(cls)
             for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
@@ -547,7 +558,11 @@ class Class(Namespace[type]):
         """
         A list of all documented `@classmethod`s.
         """
-        return [x for x in self.members.values() if isinstance(x, Function) and x.is_classmethod]
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Function) and x.is_classmethod
+        ]
 
     @cached_property
     def staticmethods(self) -> list["Function"]:
@@ -555,7 +570,9 @@ class Class(Namespace[type]):
         A list of all documented `@staticmethod`s.
         """
         return [
-            x for x in self.members.values() if isinstance(x, Function) and x.is_staticmethod
+            x
+            for x in self.members.values()
+            if isinstance(x, Function) and x.is_staticmethod
         ]
 
     @cached_property
@@ -567,8 +584,8 @@ class Class(Namespace[type]):
             x
             for x in self.members.values()
             if isinstance(x, Function)
-               and not x.is_staticmethod
-               and not x.is_classmethod
+            and not x.is_staticmethod
+            and not x.is_classmethod
         ]
 
 
@@ -635,7 +652,8 @@ class Function(Doc[types.FunctionType]):
     def decorators(self) -> list[str]:
         """A list of all decorators the function is decorated with."""
         decorators = []
-        for t in doc_ast.parse(self.obj).decorator_list:
+        obj: types.FunctionType = self.obj  # type: ignore
+        for t in doc_ast.parse(obj).decorator_list:
             decorators.append(f"@{doc_ast.unparse(t)}")
         return decorators
 
@@ -675,11 +693,11 @@ class Function(Doc[types.FunctionType]):
         mod = inspect.getmodule(self.obj)
         globalns = getattr(mod, "__dict__", {})
         if self.name == "__init__":
-            sig._return_annotation = empty
+            sig._return_annotation = empty  # type: ignore
         else:
-            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)
+            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)  # type: ignore
         for p in sig.parameters.values():
-            p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)
+            p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
         return sig
 
 
@@ -692,7 +710,7 @@ class Variable(Doc[None]):
         Any, empty
     ]  # technically Any includes empty, but this conveys intent.
     """
-    The variable's default value. 
+    The variable's default value.
     
     In some cases, no default value is known. This may either be because a variable is only defined in the constructor,
     or it is only declared with a type annotation without assignment (`foo: int`).
@@ -701,7 +719,7 @@ class Variable(Doc[None]):
 
     annotation: Union[type, empty]
     """
-    The variable's type annotation. 
+    The variable's type annotation.
     
     If there is no type annotation, `pdoc.doc_types.empty` is used as a placeholder.
     """

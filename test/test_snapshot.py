@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Union
 
 import pytest
 
@@ -7,18 +8,19 @@ import pdoc
 snapshot_dir = (Path(__file__).parent / "snapshots").absolute()
 
 snapshots = [
-    (snapshot_dir / "demo.py"),
-    (snapshot_dir / "demopackage"),
+    str(snapshot_dir / "demo.py"),
+    str(snapshot_dir / "demopackage"),
+    str(snapshot_dir / "indent.py"),
 ]
 
 
-def make_html_snapshot(module: str) -> str:
+def make_html_snapshot(module: Union[str, Path]) -> str:
     return pdoc.pdoc(module, format="html")
 
 
-def make_repr_snapshot(module: str) -> str:
+def make_repr_snapshot(module: Union[str, Path]) -> str:
     # noinspection PyTypeChecker
-    return pdoc.pdoc(module, format="repr")
+    return pdoc.pdoc(module, format="repr")  # type: ignore
 
 
 @pytest.mark.parametrize("module", snapshots)

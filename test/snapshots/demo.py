@@ -66,7 +66,7 @@ def a_complex_function(a: str, b: Union["Foo", str], *, c: Optional[T] = None) -
     involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),
     as well as a keyword-only arguments (*).
     """
-    return 42
+    return None
 
 
 class Foo:
@@ -165,7 +165,7 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-def special_cases(test: os.environ = os.environ):
+def special_cases(test: os.environ = os.environ):  # type: ignore
     """Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid
     leaking sensitive data."""
     return False
