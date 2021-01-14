@@ -58,7 +58,7 @@ Under the hood...
 If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
 
 
-# pdoc vs. pdoc3
+## pdoc vs. pdoc3
 
 This project is not associated with "pdoc3", which often falsely assumes our name.
 Quoting [@BurntSushi](https://github.com/BurntSushi), the original author of pdoc:
