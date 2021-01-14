@@ -1,14 +1,16 @@
+from __future__ import annotations
+
 import http.server
 import traceback
 import webbrowser
 from typing import Optional, Union, Collection, Mapping
-
 
 from pdoc import render, extract, doc
 
 
 # the builtin http.server module is a bit unergonomic,
 # but we can deal with that to avoid additional dependencies.
+from pdoc._compat import removesuffix
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
@@ -32,7 +34,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         if path == "/":
             out = render.html_index(self.server.all_modules)
         else:
-            module = path.removeprefix("/").removesuffix(".html").replace("/", ".")
+            module = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
             if module not in self.server.all_modules:
                 self.send_response(404)
                 self.send_header("content-type", "text/html")

@@ -7,13 +7,26 @@ See also:
 
   - <https://docs.python.org/3/library/ast.html>
 """
+from __future__ import annotations
+
 import ast
 import inspect
 import types
 from dataclasses import dataclass
-from functools import cache
 from itertools import zip_longest, tee
 from typing import Union, Iterable, TypeVar, Iterator, Any, overload, TYPE_CHECKING
+
+try:
+    from functools import cache
+except ImportError:  # pragma: no cover
+    from functools import lru_cache
+
+    cache = lru_cache(maxsize=None)
+
+try:
+    from ast import unparse as _unparse
+except ImportError:  # pragma: no cover
+    from astunparse import unparse as _unparse  # type: ignore
 
 
 @cache
@@ -74,7 +87,7 @@ if not TYPE_CHECKING:
 @cache
 def unparse(tree: ast.AST):
     """`ast.unparse`, but cached."""
-    return ast.unparse(tree)
+    return _unparse(tree)
 
 
 @dataclass
@@ -100,7 +113,7 @@ def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
     for a, b in _pairwise_longest(_nodes(tree)):
         if isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple:
             name = a.target.id
-            annotations[name] = ast.unparse(a.annotation)
+            annotations[name] = unparse(a.annotation)
         elif (
             isinstance(a, ast.Assign)
             and len(a.targets) == 1

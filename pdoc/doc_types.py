@@ -5,10 +5,13 @@ In particular, it provides functionality to resolve
 [typing.ForwardRef](https://docs.python.org/3/library/typing.html#typing.ForwardRef) objects without raising an
 exception.
 """
+from __future__ import annotations
+
 import importlib
 import inspect
+import sys
 import warnings
-from types import GenericAlias, ModuleType
+from types import ModuleType
 from typing import (  # type: ignore
     Any,
     ForwardRef,
@@ -19,6 +22,11 @@ from typing import (  # type: ignore
     get_origin,
     Literal,
 )
+
+try:
+    from types import GenericAlias
+except ImportError:  # pragma: no cover
+    from typing import _GenericAlias as GenericAlias  # type: ignore
 
 if TYPE_CHECKING:
 
@@ -124,7 +132,10 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     with recursive ForwardRef.
     """
     if isinstance(t, ForwardRef):
-        return t._evaluate(globalns, localns, recursive_guard)
+        if sys.version_info < (3, 9):
+            return t._evaluate(globalns, localns)
+        else:
+            return t._evaluate(globalns, localns, recursive_guard)
     if isinstance(t, (_GenericAlias, GenericAlias)):
         ev_args = tuple(
             _eval_type(a, globalns, localns, recursive_guard) for a in t.__args__

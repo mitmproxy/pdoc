@@ -1,3 +1,0 @@
-<module submodules_in_all
-    <var doc = pdoc.doc  # This module defines …>
-    <var web = pdoc.web>>

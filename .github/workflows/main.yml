@@ -35,6 +35,8 @@ jobs:
             py: 3.9.1
           - os: ubuntu-latest
             py: 3.9.1
+          - os: ubuntu-latest
+            py: 3.8.7
     runs-on: ${{ matrix.os }}
     steps:
       - run: printenv
@@ -43,7 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - run: pip install tox
-      - run: tox -e py
+      - run: tox -e py -- --runxfail
       - uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml

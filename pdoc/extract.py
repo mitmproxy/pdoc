@@ -3,6 +3,7 @@ This module handles the interaction with Python's module system,
 that is it loads the correct module based on whatever the user specified,
 and provides the rest of pdoc with some additional module metadata.
 """
+from __future__ import annotations
 import importlib
 import importlib.util
 import io
@@ -20,6 +21,8 @@ from functools import partial
 from pathlib import Path
 from typing import Union, Optional, Collection, Sequence
 from unittest.mock import patch
+
+from pdoc._compat import removesuffix
 
 
 @contextmanager
@@ -39,12 +42,12 @@ def mock_some_common_side_effects():
     def noop(*args, **kwargs):
         pass
 
-    with (
-        patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)),
-        patch("os.startfile", new=noop, create=True),
-        patch("sys.stdout", new=io.StringIO()),
-        patch("sys.stderr", new=io.StringIO()),
-        patch("sys.stdin", new=io.StringIO()),
+    with patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)), patch(
+        "os.startfile", new=noop, create=True
+    ), patch("sys.stdout", new=io.StringIO()), patch(
+        "sys.stderr", new=io.StringIO()
+    ), patch(
+        "sys.stdin", new=io.StringIO()
     ):
         yield
 
@@ -125,7 +128,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
     if isinstance(spec, Path):
         if str(spec.parent) not in sys.path:
             sys.path.insert(0, str(spec.parent))
-        return spec.name.removesuffix(".py")
+        return removesuffix(spec.name, ".py")
     else:
         return spec
 
@@ -138,7 +141,7 @@ def load_module(module: str) -> types.ModuleType:
     try:
         return importlib.import_module(module)
     except BaseException as e:
-        raise RuntimeError(f"Error importing {module}.") from e
+        raise RuntimeError(f"Error importing {module}: {e!r}") from e
 
 
 def module_mtime(modulename: str) -> Optional[float]:

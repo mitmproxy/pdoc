@@ -30,6 +30,7 @@ setup(
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
     packages=find_packages(
@@ -40,11 +41,12 @@ setup(
     ),
     include_package_data=True,
     entry_points={"console_scripts": ["pdoc = pdoc.__main__:cli"]},
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     install_requires=[
         "Jinja2",
         "markdown2",
         "pygments",
+        "astunparse; python_version<'3.9'",
     ],
     extras_require={
         "dev": [

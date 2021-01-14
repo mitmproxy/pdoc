@@ -464,7 +464,7 @@
                 <h1 class="modulename">
                     {%- set modulename = "" -%}
                     {% for part in module.modulename.split(".") %}
-                        {%- set modulename = (modulename + "." + part).removeprefix(".") -%}
+                        {%- set modulename = (modulename + "." + part).lstrip(".") -%}
                         <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ modulename }}</a>
                         {%- if loop.nextitem %}.{% endif %}
                     {%- endfor %}</h1>

@@ -10,11 +10,12 @@ There are four main types of documentation objects:
 - pdoc.doc.Class
 - pdoc.doc.Function
 - pdoc.doc.Variable
-"""
 
-# All types documentation types make heavy use of `@functools.cached_property` decorators.
-# This means they have a large set of attributes that are lazily computed on first access.
-# By convention, all attributes are read-only, although this this not enforced at runtime.
+All documentation types types make heavy use of `@functools.cached_property` decorators.
+This means they have a large set of attributes that are lazily computed on first access.
+By convention, all attributes are read-only, although this this not enforced at runtime.
+"""
+from __future__ import annotations
 
 import importlib
 import inspect
@@ -23,7 +24,7 @@ import textwrap
 import types
 import warnings
 from abc import abstractmethod, ABCMeta
-from functools import cached_property, cache, wraps
+from functools import cached_property, wraps
 from typing import (  # type: ignore
     Any,
     Union,
@@ -32,6 +33,14 @@ from typing import (  # type: ignore
     ClassVar,
     Generic,
 )
+
+try:
+    from functools import cache
+except ImportError:  # pragma: no cover
+    from functools import lru_cache
+
+    cache = lru_cache(maxsize=None)
+
 
 from pdoc import doc_ast
 from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
@@ -115,9 +124,8 @@ class Doc(Generic[T]):
     @cached_property
     def fullname(self) -> str:
         """The full qualified name of this doc object, for example `pdoc.doc.Doc`."""
-        return f"{self.modulename}.{self.qualname}".removesuffix(
-            "."
-        )  # qualname is emtpy for modules.
+        # qualname is empty for modules
+        return f"{self.modulename}.{self.qualname}".rstrip(".")
 
     @cached_property
     def name(self) -> str:
@@ -214,7 +222,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         """A mapping from all members to their documentation objects."""
         members: dict[str, Doc] = {}
         for name, obj in self._member_objects.items():
-            qualname = f"{self.qualname}.{name}".removeprefix(".")
+            qualname = f"{self.qualname}.{name}".lstrip(".")
             doc: Doc[Any]
 
             is_property = (
@@ -472,7 +480,7 @@ class Class(Namespace[type]):
                     cls_annotations[k] = v
             cls_fullname = (
                 getattr(cls, "__module__", "") + "." + cls.__qualname__
-            ).removeprefix(".")
+            ).lstrip(".")
             cls_annotations = resolve_annotations(
                 cls_annotations, inspect.getmodule(cls), cls_fullname
             )

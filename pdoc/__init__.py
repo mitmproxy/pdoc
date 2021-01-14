@@ -30,7 +30,7 @@ included with this module.
 
 Compatibility
 -------------
-`pdoc` requires Python 3.9 or later.
+`pdoc` requires Python 3.8 or later.
 
 
 Contributing
@@ -171,6 +171,8 @@ of a module or in the definition of a class.
 If `__pdoc__[key] = None`, then `key` will not be included in the
 public interface of the module.
 """
+from __future__ import annotations
+
 import io
 import warnings
 from pathlib import Path
@@ -228,8 +230,8 @@ def pdoc(
         else:
             write(doc.Module(m))
 
-            if not output_directory:
-                return retval.getvalue()
+        if not output_directory:
+            return retval.getvalue()
 
     assert output_directory
 

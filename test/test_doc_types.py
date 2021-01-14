@@ -1,10 +1,12 @@
 import inspect
+import sys
 
 import pytest
 
 from pdoc.doc_types import formatannotation, safe_eval_type
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="3.9+ only")
 def test_formatannotation_still_unfixed():
     """when this tests starts to fail, we can remove the workaround in our formatannotation wrapper"""
     assert formatannotation(list[str]) == "list[str]"

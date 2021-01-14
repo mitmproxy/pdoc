@@ -21,11 +21,20 @@ This is a test module demonstrating pdoc's parsing capabilities!
 You can have multiple section in your module docstring,
 which will all show up in the navigation on the left.
 """
+from __future__ import annotations
+
 import abc
 import os
 from dataclasses import dataclass, field
-from functools import cache, cached_property
+from functools import cached_property
 from typing import TypeVar, Union, ClassVar, Optional, Literal
+
+try:
+    from functools import cache
+except ImportError:  # pragma: no cover
+    from functools import lru_cache
+
+    cache = lru_cache(maxsize=None)
 
 FOO_CONSTANT: int = 42
 """
@@ -172,7 +181,7 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-def special_cases(test: os.environ = os.environ, /):  # type: ignore
+def special_cases(test=os.environ, /):  # type: ignore
     """Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid
     leaking sensitive data."""
     return False

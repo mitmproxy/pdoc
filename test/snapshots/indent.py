@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 
 # fmt: off
 
@@ -42,21 +42,21 @@ indents"""
         indents
         """
 
-    @cache
+    @lru_cache
     def foo_decorated(self):
         """no indents"""
 
-    @cache
+    @lru_cache
     def bar_decorated(self):
         """no
 indents"""
 
-    @cache
+    @lru_cache
     def baz_decorated(self):
         """one
         indent"""
 
-    @cache
+    @lru_cache
     def qux_decorated(self):
         """
         two

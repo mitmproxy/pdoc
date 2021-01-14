@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import os
 import re
 from contextlib import contextmanager
-from functools import cache
 from typing import Optional, Mapping, Container
 from unittest.mock import patch
 
@@ -11,6 +12,13 @@ import pygments.lexers.python
 from jinja2 import contextfilter
 from jinja2.runtime import Context
 from markupsafe import Markup
+
+try:
+    from functools import cache
+except ImportError:  # pragma: no cover
+    from functools import lru_cache
+
+    cache = lru_cache(maxsize=None)
 
 lexer = pygments.lexers.python.PythonLexer()
 formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
@@ -102,7 +110,7 @@ def edit_url(
         if m == modulename or modulename.startswith(f"{m}."):
             filename = modulename[len(m) + 1 :].replace(".", "/")
             if is_package:
-                filename = f"{filename}/__init__.py".removeprefix("/")
+                filename = f"{filename}/__init__.py".lstrip("/")
             else:
                 filename += ".py"
             return f"{prefix}{filename}"
