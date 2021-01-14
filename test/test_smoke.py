@@ -5,11 +5,15 @@ import pytest
 
 import pdoc
 
+# idlelib: starts IDLE, hard to avoid...
+# test: runs too slow
+# py: https://bugs.python.org/issue35791
 modules = [
     m.name
     for m in pkgutil.iter_modules()
-    if not m.name.startswith("_") and m.name not in ("test", "idlelib")
+    if not m.name.startswith("_") and m.name not in ("test", "idlelib", "py")
 ]
+
 
 @pytest.mark.slow
 @pytest.mark.filterwarnings("ignore")

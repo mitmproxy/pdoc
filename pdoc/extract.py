@@ -72,7 +72,9 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
                     continue
                 path = modspec.submodule_search_locations
             except Exception:
-                warnings.warn(f"Cannot find spec for {modname} (from {spec})", RuntimeWarning)
+                warnings.warn(
+                    f"Cannot find spec for {modname} (from {spec})", RuntimeWarning
+                )
             else:
                 submodules = pkgutil.walk_packages(path, f"{modname}.")
                 while True:
@@ -81,7 +83,9 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
                     except StopIteration:
                         break
                     except Exception as e:
-                        warnings.warn(f"Error importing subpackage: {e!r}", RuntimeWarning)
+                        warnings.warn(
+                            f"Error importing subpackage: {e!r}", RuntimeWarning
+                        )
     else:
         stdlib = sysconfig.get_path("stdlib")
         platstdlib = sysconfig.get_path("platstdlib")
@@ -93,7 +97,7 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
             module_index[m.name] = None
 
     if not module_index:
-        raise ValueError("No valid module specifications found.")
+        raise ValueError(f"No valid module specifications found in {modules!r}.")
 
     return module_index
 
@@ -135,8 +139,6 @@ def load_module(module: str) -> types.ModuleType:
         return importlib.import_module(module)
     except BaseException as e:
         raise RuntimeError(f"Error importing {module}.") from e
-
-
 
 
 def module_mtime(modulename: str) -> Optional[float]:

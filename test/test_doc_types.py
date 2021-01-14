@@ -11,7 +11,9 @@ def test_formatannotation_still_unfixed():
     assert inspect.formatannotation(list[str]) == "list"
 
 
-@pytest.mark.parametrize("typestr", ["html", "totally_unknown_module", "!!!!", "html.unknown_attr"])
+@pytest.mark.parametrize(
+    "typestr", ["html", "totally_unknown_module", "!!!!", "html.unknown_attr"]
+)
 def test_eval_fail(typestr):
     with pytest.warns(UserWarning, match="Error parsing type annotation"):
         assert safe_eval_type(typestr, {}, "test_eval_fail") == typestr

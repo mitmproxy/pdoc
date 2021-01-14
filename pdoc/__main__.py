@@ -1,4 +1,5 @@
 import argparse
+import platform
 from pathlib import Path
 
 import pdoc
@@ -12,7 +13,11 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 parser.add_argument(
-    "--version", action="version", version=f"%(prog)s {pdoc.__version__}"
+    "--version",
+    action="version",
+    version=f"pdoc {pdoc.__version__} "
+    f"using Python {platform.python_version()} "
+    f"on {platform.platform()}",
 )
 parser.add_argument(
     "modules",
@@ -20,8 +25,8 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment, or file paths to a Python module or "
-         "package.",
+    "the current environment, or file paths to a Python module or "
+    "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -63,6 +68,7 @@ parser.add_argument(
     help="Don't start a browser",
 )
 """
+# these two may be added again in the future, let's see :)
 parser.add_argument(
     "--filter",
     type=str,

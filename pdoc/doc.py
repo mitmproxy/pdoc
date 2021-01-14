@@ -368,7 +368,9 @@ class Module(Namespace[types.ModuleType]):
             try:
                 module = importlib.import_module(mod.name)
             except BaseException as e:
-                warnings.warn(f"Couldn't import {mod.name}: {e!r}", RuntimeWarning, stacklevel=2)
+                warnings.warn(
+                    f"Couldn't import {mod.name}: {e!r}", RuntimeWarning, stacklevel=2
+                )
                 continue
             submodules.append(Module(module))
         return submodules

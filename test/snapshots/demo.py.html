@@ -327,10 +327,12 @@
     <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
 
-<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a function with a fairly complex signature,</span>
 <span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
@@ -350,7 +352,7 @@
     <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
 
     <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
-    <span class="sd">&#39;&#39;&#39;An attribute with a ClassVar annotation.&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -462,6 +464,7 @@
 <span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
 <span class="sd">    but you can override it by providing your own (like here!).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
     <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
@@ -588,7 +591,9 @@ automatically.</p>
                         
         <details>
             <summary class="button">View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a function with a fairly complex signature,</span>
 <span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
@@ -630,7 +635,7 @@ as well as a keyword-only arguments (*).</p>
     <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
 
     <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
-    <span class="sd">&#39;&#39;&#39;An attribute with a ClassVar annotation.&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1245,6 +1250,7 @@ leaking sensitive data.</p>
 <span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
 <span class="sd">    but you can override it by providing your own (like here!).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
     <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>

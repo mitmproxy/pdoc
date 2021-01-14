@@ -16,7 +16,10 @@ def test_parse_specs():
         assert list(parse_specs(["dataclasses", "unknown"])) == ["dataclasses"]
 
     with pytest.warns(RuntimeWarning, match="Error importing subpackage"):
-        assert list(parse_specs([here / "import_err"])) == ['import_err', 'import_err.err']
+        assert list(parse_specs([here / "import_err"])) == [
+            "import_err",
+            "import_err.err",
+        ]
 
     assert parse_specs([])
 

@@ -27,7 +27,7 @@ def handle_request(data: bytes) -> bytes:
     t = ReadResponse(b)
     t.start()
     # noinspection PyTypeChecker
-    DocHandler(a, ("127.0.0.1", 54321), server)
+    DocHandler(a, ("127.0.0.1", 54321), server)  # type: ignore
     a.close()
     t.join()
     return t.data.getvalue()
@@ -42,7 +42,9 @@ def test_get_index():
 
 
 def test_get_module():
-    assert b"make_dataclass" in handle_request(b"GET /dataclasses.html HTTP/1.1\r\n\r\n")
+    assert b"make_dataclass" in handle_request(
+        b"GET /dataclasses.html HTTP/1.1\r\n\r\n"
+    )
 
 
 def test_get_module_err():
@@ -50,7 +52,11 @@ def test_get_module_err():
 
 
 def test_get_module_mtime():
-    assert float(handle_request(b"GET /dataclasses.html?mtime=1 HTTP/1.1\r\n\r\n").splitlines()[-1].decode())
+    assert float(
+        handle_request(b"GET /dataclasses.html?mtime=1 HTTP/1.1\r\n\r\n")
+        .splitlines()[-1]
+        .decode()
+    )
 
 
 def test_get_unknown():

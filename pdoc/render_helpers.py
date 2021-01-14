@@ -51,7 +51,7 @@ def split_identifier(all_modules: Container[str], fullname: str) -> tuple[str, s
 
 def _relative_link(current: list[str], target: list[str]) -> str:
     if target[: len(current)] == current:
-        return "/".join(target[len(current):]) + ".html"
+        return "/".join(target[len(current) :]) + ".html"
     else:
         return "../" + _relative_link(current[:-1], target)
 
@@ -95,10 +95,12 @@ def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) ->
     return text or fullname
 
 
-def edit_url(modulename: str, is_package: bool, mapping: Mapping[str, str]) -> Optional[str]:
+def edit_url(
+    modulename: str, is_package: bool, mapping: Mapping[str, str]
+) -> Optional[str]:
     for m, prefix in mapping.items():
         if m == modulename or modulename.startswith(f"{m}."):
-            filename = modulename[len(m) + 1:].replace(".", "/")
+            filename = modulename[len(m) + 1 :].replace(".", "/")
             if is_package:
                 filename = f"{filename}/__init__.py".removeprefix("/")
             else:

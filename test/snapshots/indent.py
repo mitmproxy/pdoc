@@ -1,5 +1,7 @@
 from functools import cache
 
+# fmt: off
+
 
 def foo():
     """no indents"""

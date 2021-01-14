@@ -58,10 +58,12 @@ def a_simple_function(a: str) -> str:
     return a.upper()
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
-def a_complex_function(a: str, b: Union["Foo", str], *, c: Optional[T] = None) -> Optional[T]:
+def a_complex_function(
+    a: str, b: Union["Foo", str], *, c: Optional[T] = None
+) -> Optional[T]:
     """
     This is a function with a fairly complex signature,
     involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),
@@ -81,7 +83,7 @@ class Foo:
     """A regular attribute with type annotations"""
 
     a_class_attribute: ClassVar[str] = "lots of foo!"
-    '''An attribute with a ClassVar annotation.'''
+    """An attribute with a ClassVar annotation."""
 
     def __init__(self):
         """
@@ -193,6 +195,7 @@ class DataDemo:
     Dataclasses generate a relatively pointless docstring by default,
     but you can override it by providing your own (like here!).
     """
+
     a: int
     """Again, we can document indivial properties with docstrings."""
     b: Literal["w", "r"]
