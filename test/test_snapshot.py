@@ -1,4 +1,4 @@
-import platform
+import sys
 from pathlib import Path
 from typing import Union
 
@@ -9,10 +9,11 @@ import pdoc
 snapshot_dir = (Path(__file__).parent / "snapshots").absolute()
 
 snapshots = [
-    str(snapshot_dir / "demo.py"),
-    str(snapshot_dir / "demopackage"),
-    str(snapshot_dir / "indent.py"),
-    str(snapshot_dir / "submodules_in_all.py"),
+    snapshot_dir / "demo.py",
+    snapshot_dir / "demo_eager.py",
+    snapshot_dir / "demopackage",
+    snapshot_dir / "indent.py",
+    snapshot_dir / "submodules_in_all.py",
 ]
 
 
@@ -26,40 +27,30 @@ def make_repr_snapshot(module: Union[str, Path]) -> str:
 
 
 @pytest.mark.parametrize("module", snapshots)
-def test_html_snapshots(module):
-    try:
-        expected = (snapshot_dir / f"{module}-{platform.python_version()}.html").read_text(
-            "utf8"
-        )
-    except FileNotFoundError:
-        pytest.xfail("no snapshot found. generate by running python test_snapshot.py.")
-        assert False
+def test_html_snapshots(module: Path):
+    if module.name == "demo.py" and sys.version_info < (3, 9):
+        pytest.skip("minor rendering differences on Python 3.8")
+    expected = module.with_suffix(".html").read_text("utf8")
     actual = make_html_snapshot(module)
     assert actual == expected
 
 
 @pytest.mark.parametrize("module", snapshots)
-def test_repr_snapshots(module):
-    try:
-        expected = (snapshot_dir / f"{module}-{platform.python_version()}.txt").read_text(
-            "utf8"
-        )
-    except FileNotFoundError:
-        pytest.xfail("no snapshot found. generate by running python test_snapshot.py.")
-        assert False
+def test_repr_snapshots(module: Path):
+    if module.name == "demo.py" and sys.version_info < (3, 9):
+        pytest.skip("minor rendering differences on Python 3.8")
+    expected = module.with_suffix(".txt").read_text("utf8")
     actual = make_repr_snapshot(module)
     assert actual == expected
 
 
 if __name__ == "__main__":
+    if sys.version_info < (3, 9):  # pragma: no cover
+        raise RuntimeError("Snapshots need to be generated on Python 3.9+")
     for module in snapshots:
         print(f"Rendering {module}...")
         rendered = make_html_snapshot(module)
-        (snapshot_dir / f"{module}-{platform.python_version()}.html").write_text(
-            rendered, "utf8"
-        )
+        module.with_suffix(".html").write_text(rendered, "utf8")
         rendered = make_repr_snapshot(module)
-        (snapshot_dir / f"{module}-{platform.python_version()}.txt").write_text(
-            rendered, "utf8"
-        )
+        module.with_suffix(".txt").write_text(rendered, "utf8")
     print("All snapshots rendered!")

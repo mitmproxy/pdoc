@@ -16,17 +16,7 @@ from dataclasses import dataclass
 from itertools import zip_longest, tee
 from typing import Union, Iterable, TypeVar, Iterator, Any, overload, TYPE_CHECKING
 
-try:
-    from functools import cache
-except ImportError:  # pragma: no cover
-    from functools import lru_cache
-
-    cache = lru_cache(maxsize=None)
-
-try:
-    from ast import unparse as _unparse
-except ImportError:  # pragma: no cover
-    from astunparse import unparse as _unparse  # type: ignore
+from ._compat import cache, ast_unparse
 
 
 @cache
@@ -87,7 +77,7 @@ if not TYPE_CHECKING:
 @cache
 def unparse(tree: ast.AST):
     """`ast.unparse`, but cached."""
-    return _unparse(tree)
+    return ast_unparse(tree)
 
 
 @dataclass

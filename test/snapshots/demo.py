@@ -27,7 +27,7 @@ import abc
 import os
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import TypeVar, Union, ClassVar, Optional, Literal
+from typing import TypeVar, Union, ClassVar, Optional, Literal, List
 
 try:
     from functools import cache
@@ -88,7 +88,7 @@ class Foo:
     You will see in the definition of `demo.Bar` that docstrings are inherited by default.
     """
 
-    an_attribute: Union[str, list["int"]]
+    an_attribute: Union[str, List["int"]]
     """A regular attribute with type annotations"""
 
     a_class_attribute: ClassVar[str] = "lots of foo!"

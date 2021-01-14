@@ -20,6 +20,7 @@ from __future__ import annotations
 import importlib
 import inspect
 import pkgutil
+import sys
 import textwrap
 import types
 import warnings
@@ -34,16 +35,9 @@ from typing import (  # type: ignore
     Generic,
 )
 
-try:
-    from functools import cache
-except ImportError:  # pragma: no cover
-    from functools import lru_cache
-
-    cache = lru_cache(maxsize=None)
-
-
 from pdoc import doc_ast
 from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
+from ._compat import cache
 
 
 def _include_fullname_in_traceback(f):
@@ -182,6 +176,12 @@ class Doc(Generic[T]):
         The type of the doc object, either `"module"`, `"class"`, or `"function"`.
         """
         return cls.__name__.lower()
+
+    if sys.version_info < (3, 9):  # pragma: no cover
+        # no @classmethod @property in 3.8
+        @property
+        def type(self) -> str:  # noqa
+            return self.__class__.__name__.lower()
 
     def __lt__(self, other):
         assert isinstance(other, Doc)

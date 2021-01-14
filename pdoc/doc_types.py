@@ -10,11 +10,11 @@ from __future__ import annotations
 import importlib
 import inspect
 import sys
+import typing
 import warnings
 from types import ModuleType
 from typing import (  # type: ignore
     Any,
-    ForwardRef,
     Optional,
     TYPE_CHECKING,
     get_args,
@@ -23,10 +23,7 @@ from typing import (  # type: ignore
     Literal,
 )
 
-try:
-    from types import GenericAlias
-except ImportError:  # pragma: no cover
-    from typing import _GenericAlias as GenericAlias  # type: ignore
+from ._compat import GenericAlias, ForwardRef
 
 if TYPE_CHECKING:
 
@@ -120,11 +117,28 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     # Added a special check for typing.Literal, whose literal strings would otherwise be evaluated.
 
     if isinstance(t, str):
+        if sys.version_info < (3, 9):  # pragma: no cover
+            t = t.strip("\"'")
         t = ForwardRef(t, is_argument=False)
+
     if get_origin(t) is Literal:
         return t
 
+    if sys.version_info < (3, 9) and isinstance(t, (typing.ForwardRef, ForwardRef)):  # pragma: no cover
+        # we do a very happy dance here for Python 3.8, where things are a bit crazy.
+        # In a nutshell, we convert Python 3.8's ForwardRef to our vendored ForwardRef,
+        # and then eval on the whole thing recursively.
+        if isinstance(t, typing.ForwardRef):
+            t = ForwardRef(t.__forward_arg__, is_argument=False)
+        return _eval_type(
+            t._evaluate(globalns, localns, recursive_guard),
+            globalns,
+            localns,
+            recursive_guard,
+        )
+
     # https://github.com/python/cpython/blob/4db8988420e0a122d617df741381b0c385af032c/Lib/typing.py#L299-L314
+    # fmt: off
     # ✂ start ✂
     """Evaluate all forward references in the given type t.
     For use of globalns and localns see the docstring for get_type_hints().
@@ -132,14 +146,9 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     with recursive ForwardRef.
     """
     if isinstance(t, ForwardRef):
-        if sys.version_info < (3, 9):
-            return t._evaluate(globalns, localns)
-        else:
-            return t._evaluate(globalns, localns, recursive_guard)
+        return t._evaluate(globalns, localns, recursive_guard)
     if isinstance(t, (_GenericAlias, GenericAlias)):
-        ev_args = tuple(
-            _eval_type(a, globalns, localns, recursive_guard) for a in t.__args__
-        )
+        ev_args = tuple(_eval_type(a, globalns, localns, recursive_guard) for a in t.__args__)
         if ev_args == t.__args__:
             return t
         if isinstance(t, GenericAlias):

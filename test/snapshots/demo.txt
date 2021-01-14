@@ -1,0 +1,62 @@
+<module demo  # # Test Module
+
+This …
+    <var FOO_CONSTANT: int = 42  # A happy constant. ✨ …>
+    <var FOO_SINGLETON: demo.Foo  # This variable is ann…>
+    <function def a_simple_function(a: str) -> str: ...  # This is a basic modu…>
+    <function def a_complex_function(
+    	a: str,
+    	b: Union[demo.Foo, str],
+    	*,
+    	c: Optional[~T] = None
+    ) -> Optional[~T]: ...  # This is a function w…>
+    <class demo.Foo  # `demo.Foo` is a basi…
+        <method def __init__(self): ...  # The constructor is c…>
+        <var an_attribute: Union[str, List[int]]  # A regular attribute …>
+        <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # An attribute with a …>
+        <var a_constructor_only_attribute: int  # This attribute is de…>
+        <method def a_regular_function(self) -> demo.Foo: ...  # This is a regular me…>
+        <var a_property: str  # This is a `@property…>
+        <var a_cached_property: str  # This is a `@functool…>
+        <@cache method def a_cached_function(self) -> str: ...  # This is method with …>
+        <@classmethod class def a_class_method(cls) -> int: ...  # This is what a `@cla…>
+        <var a_class_property: int  # This is what a `@cla…>
+        <@staticmethod static def a_static_method(): ...  # This is what a `@sta…>>
+    <class demo.Bar  # `demo.Foo` is a basi…
+        <method def __init__(self): ...  # inherited from demo.Foo.__init__, The constructor is c…>
+        <var bar: str  # A new attribute defi…>
+        <class demo.Bar.Baz  # This class is an att…
+            <method def __init__(): ...>
+            <method def wat(self): ...  # A regular method. Ab…>>
+        <var an_attribute: Union[str, List[int]]  # inherited from demo.Foo.an_attribute, A regular attribute …>
+        <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo.Foo.a_class_attribute, An attribute with a …>
+        <var a_constructor_only_attribute: int  # inherited from demo.Foo.a_constructor_only_attribute, This attribute is de…>
+        <method def a_regular_function(self) -> demo.Foo: ...  # inherited from demo.Foo.a_regular_function, This is a regular me…>
+        <var a_property: str  # inherited from demo.Foo.a_property, This is a `@property…>
+        <var a_cached_property: str  # inherited from demo.Foo.a_cached_property, This is a `@functool…>
+        <@cache method def a_cached_function(self) -> str: ...  # inherited from demo.Foo.a_cached_function, This is method with …>
+        <@classmethod class def a_class_method(cls) -> int: ...  # inherited from demo.Foo.a_class_method, This is what a `@cla…>
+        <var a_class_property: int  # inherited from demo.Foo.a_class_property, This is what a `@cla…>
+        <@staticmethod static def a_static_method(): ...  # inherited from demo.Foo.a_static_method, This is what a `@sta…>>
+    <function async def i_am_async(self) -> int: ...  # This is an example o…>
+    <@cache function def fib(n): ...  # This is an example o…>
+    <function def special_cases(test=os.environ, /): ...  # Default values are g…>
+    <class demo.DoubleInherit  # This is an example o…
+        <method def __init__(self): ...  # inherited from demo.Foo.__init__, The constructor is c…>
+        <var an_attribute: Union[str, List[int]]  # inherited from demo.Foo.an_attribute, A regular attribute …>
+        <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo.Foo.a_class_attribute, An attribute with a …>
+        <var a_constructor_only_attribute: int  # inherited from demo.Foo.a_constructor_only_attribute, This attribute is de…>
+        <method def a_regular_function(self) -> demo.Foo: ...  # inherited from demo.Foo.a_regular_function, This is a regular me…>
+        <var a_property: str  # inherited from demo.Foo.a_property, This is a `@property…>
+        <var a_cached_property: str  # inherited from demo.Foo.a_cached_property, This is a `@functool…>
+        <@cache method def a_cached_function(self) -> str: ...  # inherited from demo.Foo.a_cached_function, This is method with …>
+        <@classmethod class def a_class_method(cls) -> int: ...  # inherited from demo.Foo.a_class_method, This is what a `@cla…>
+        <var a_class_property: int  # inherited from demo.Foo.a_class_property, This is what a `@cla…>
+        <@staticmethod static def a_static_method(): ...  # inherited from demo.Foo.a_static_method, This is what a `@sta…>
+        <method def wat(self): ...  # inherited from demo.Bar.Baz.wat, A regular method. Ab…>>
+    <var CONST_B = 'yes'  # A constant without t…>
+    <@dataclass class demo.DataDemo  # This is an example f…
+        <method def __init__(self, a: int, b: Literal['w', 'r'], c: bool = True): ...>
+        <var a: int  # Again, we can docume…>
+        <var b: Literal['w', 'r']>
+        <var c: bool = True  # This property is ass…>>>

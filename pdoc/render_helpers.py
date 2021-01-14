@@ -13,12 +13,7 @@ from jinja2 import contextfilter
 from jinja2.runtime import Context
 from markupsafe import Markup
 
-try:
-    from functools import cache
-except ImportError:  # pragma: no cover
-    from functools import lru_cache
-
-    cache = lru_cache(maxsize=None)
+from ._compat import cache
 
 lexer = pygments.lexers.python.PythonLexer()
 formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
