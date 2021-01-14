@@ -40,18 +40,18 @@ setup(
     provides=["pdoc"],
     extras_require={
         "dev": [
-            "flake8>=3.5, <3.6",
-            "mypy>=0.620, <0.621",
-            "pytest>=3.3,<4",
+            "flake8>=3.8,<3.9",
+            "mypy>=0.790,<0.791",
+            "pytest>=6.2,<6.3",
             "pytest-cov>=2.5.1,<3",
-            "pytest-faulthandler>=1.3.1,<2",
+            "pytest-faulthandler>=2.0,<2.1",
             "pytest-timeout>=1.2.1,<2",
-            "pytest-xdist>=1.22,<2",
+            "pytest-xdist>=2.2,<2.3",
         ]
     },
     install_requires=[
-        "mako>=1.0.7,<1.1",
+        "mako>=1.1,<1.2",
         "markdown2>=2.3.5,<2.4",
-        "pygments>=2.2.0,<2.3",
+        "pygments>=2.7,<2.8",
     ],
 )
