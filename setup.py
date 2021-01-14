@@ -53,6 +53,9 @@ setup(
             "flake8",
             "mypy",
             "pytest",
+            "pytest-cov",
+            "pytest-timeout",
+            "tox",
         ]
     },
 )

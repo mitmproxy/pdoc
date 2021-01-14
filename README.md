@@ -75,5 +75,5 @@ of Nazi symbols and ideology.
 
 ----
 
-The original pdoc project was originally created by [Andrew Gallant](https://github.com/BurntSushi).  
-It is currently maintained by [Maximilian Hils](https://github.com/mhils).
+The pdoc project was originally created by [Andrew Gallant](https://github.com/BurntSushi) 
+and is currently maintained by [Maximilian Hils](https://github.com/mhils).
