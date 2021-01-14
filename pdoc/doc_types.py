@@ -81,19 +81,15 @@ def safe_eval_type(
     If that still fails, a warning is emitted and `t` is returned as is.
     """
     try:
-        return _eval_type(t, globalns, None)
-    except AttributeError as e:
-        err = str(e)
-        x = err.split("'")
-        if len(x) != 5:
-            raise RuntimeError(x) from e
-        mod = f"{x[1]}.{x[3]}"
-    except NameError as e:
-        err = str(e)
-        x = err.split("'")
-        if len(x) != 3:
-            raise RuntimeError(x) from e
-        mod = x[1]
+        try:
+            return _eval_type(t, globalns, None)
+        except AttributeError as e:
+            err = str(e)
+            _, obj, _, attr, _ = err.split("'")
+            mod = f"{obj}.{attr}"
+        except NameError as e:
+            err = str(e)
+            _, mod, _ = err.split("'")
     except Exception as e:
         err = last_err = str(e)
         mod = ""  # make type checker happy

@@ -11,6 +11,7 @@ snapshots = [
     str(snapshot_dir / "demo.py"),
     str(snapshot_dir / "demopackage"),
     str(snapshot_dir / "indent.py"),
+    str(snapshot_dir / "submodules_in_all.py"),
 ]
 
 

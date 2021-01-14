@@ -21,10 +21,11 @@ This is a test module demonstrating pdoc's parsing capabilities!
 You can have multiple section in your module docstring,
 which will all show up in the navigation on the left.
 """
+import abc
 import os
 from dataclasses import dataclass, field
 from functools import cache, cached_property
-from typing import TypeVar, Union, ClassVar, Optional
+from typing import TypeVar, Union, ClassVar, Optional, Literal
 
 FOO_CONSTANT: int = 42
 """
@@ -76,7 +77,7 @@ class Foo:
     You will see in the definition of `demo.Bar` that docstrings are inherited by default.
     """
 
-    an_attribute: Union[str, list[int]]
+    an_attribute: Union[str, list["int"]]
     """A regular attribute with type annotations"""
 
     a_class_attribute: ClassVar[str] = "lots of foo!"
@@ -87,6 +88,9 @@ class Foo:
         The constructor is currently always listed first as this feels most natural."""
         self.a_constructor_only_attribute: int = 42
         """This attribute is defined in the constructor only, but still picked up by pdoc's AST traversal."""
+
+        self.undocumented_constructor_attribute = 42
+        a_complex_function()
 
     def a_regular_function(self) -> "Foo":
         """This is a regular method, returning the object itself."""
@@ -139,6 +143,7 @@ class Bar(Foo):
 
         Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).
         """
+
         def wat(self):
             """A regular method. Above, you see what happens if a class has no constructor defined and
             no constructor docstring."""
@@ -165,13 +170,13 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-def special_cases(test: os.environ = os.environ):  # type: ignore
+def special_cases(test: os.environ = os.environ, /):  # type: ignore
     """Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid
     leaking sensitive data."""
     return False
 
 
-class DoubleInherit(Foo, Bar.Baz):
+class DoubleInherit(Foo, Bar.Baz, abc.ABC):
     """This is an example of a class that inherits from multiple parent classes."""
 
 
@@ -190,6 +195,6 @@ class DataDemo:
     """
     a: int
     """Again, we can document indivial properties with docstrings."""
-    b: str
+    b: Literal["w", "r"]
     c: bool = field(repr=False, default=True)
-    """This property is assigned to `field()`, which works just as well."""
+    """This property is assigned to `dataclasses.field()`, which works just as well."""

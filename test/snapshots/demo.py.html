@@ -290,10 +290,11 @@
 <span class="sd">You can have multiple section in your module docstring,</span>
 <span class="sd">which will all show up in the navigation on the left.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span><span class="p">,</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="n">FOO_CONSTANT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -345,7 +346,7 @@
 <span class="sd">    You will see in the definition of `demo.Bar` that docstrings are inherited by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
     <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
 
     <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
@@ -356,6 +357,9 @@
 <span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
         <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+        <span class="n">a_complex_function</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
@@ -408,6 +412,7 @@
 
 <span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
 <span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
@@ -434,13 +439,13 @@
     <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
     <span class="sd">&quot;&quot;&quot;Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid</span>
 <span class="sd">    leaking sensitive data.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
 
 
@@ -459,9 +464,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;This property is assigned to `field()`, which works just as well.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </pre></div>
 
         </details>
@@ -497,7 +502,7 @@ which will all show up in the navigation on the left.</p>
             
                 <section id="FOO_CONSTANT">
                     
-                        <div class="attr variable"><span class="name">FOO_CONSTANT</span><span class="annotation">: int</span><span class="default_value"> =  = 42</span>
+                        <div class="attr variable"><span class="name">FOO_CONSTANT</span><span class="annotation">: int</span><span class="default_value"> = 42</span>
     </div>
                     
                     
@@ -621,7 +626,7 @@ as well as a keyword-only arguments (*).</p>
 <span class="sd">    You will see in the definition of `demo.Bar` that docstrings are inherited by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
     <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
 
     <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
@@ -632,6 +637,9 @@ as well as a keyword-only arguments (*).</p>
 <span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
         <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+        <span class="n">a_complex_function</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
@@ -698,6 +706,9 @@ as well as a keyword-only arguments (*).</p>
 <span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
         <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+        <span class="n">a_complex_function</span><span class="p">()</span>
 </pre></div>
 
         </details>
@@ -723,7 +734,7 @@ as well as a keyword-only arguments (*).</p>
                         
                             <div id="Foo.a_class_attribute" class="classattr">
                                 
-                                    <div class="attr variable"><span class="name">a_class_attribute</span><span class="annotation">: ClassVar[str]</span><span class="default_value"> =  = 'lots of foo!'</span>
+                                    <div class="attr variable"><span class="name">a_class_attribute</span><span class="annotation">: ClassVar[str]</span><span class="default_value"> = 'lots of foo!'</span>
     </div>
                                 
                                 
@@ -921,6 +932,7 @@ as well as a keyword-only arguments (*).</p>
 
 <span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
 <span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
@@ -986,6 +998,7 @@ as well as a keyword-only arguments (*).</p>
 
 <span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
 <span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
@@ -1132,7 +1145,7 @@ This is often useful when documenting web APIs, for example.</p>
                     
                         <div class="attr function">
         <span class="def">def</span>
-        <span class="name">special_cases</span><span class="signature">(test: os.environ = os.environ)</span>:
+        <span class="name">special_cases</span><span class="signature">(test: os.environ = os.environ, /)</span>:
     
 </div>
 
@@ -1141,7 +1154,7 @@ This is often useful when documenting web APIs, for example.</p>
                         
         <details>
             <summary class="button">View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
     <span class="sd">&quot;&quot;&quot;Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid</span>
 <span class="sd">    leaking sensitive data.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
@@ -1161,14 +1174,14 @@ leaking sensitive data.</p>
                 <section id="DoubleInherit">
                     
                         <div class="attr class"><span class="def">class</span>
-                            <span class="name">DoubleInherit</span>(<span class="base"><a href="#Foo">demo.Foo</a></span>, <span class="base"><a href="#Bar.Baz">demo.Bar.Baz</a></span>):
+                            <span class="name">DoubleInherit</span>(<span class="base"><a href="#Foo">demo.Foo</a></span>, <span class="base"><a href="#Bar.Baz">demo.Bar.Baz</a></span>, <span class="base">abc.ABC</span>):
                         </div>
                     
                     
                         
         <details>
             <summary class="button">View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">):</span>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
 </pre></div>
 
@@ -1204,7 +1217,7 @@ leaking sensitive data.</p>
             
                 <section id="CONST_B">
                     
-                        <div class="attr variable"><span class="name">CONST_B</span><span class="default_value"> =  = 'yes'</span>
+                        <div class="attr variable"><span class="name">CONST_B</span><span class="default_value"> = 'yes'</span>
     </div>
                     
                     
@@ -1234,9 +1247,9 @@ leaking sensitive data.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;This property is assigned to `field()`, which works just as well.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </pre></div>
 
         </details>
@@ -1254,7 +1267,7 @@ but you can override it by providing your own (like here!).</p>
                                 
                                     <div class="attr function">
         <span class="name">DataDemo</span>
-        <span class="signature">(a: int, b: str, c: bool = True)</span>
+        <span class="signature">(a: int, b: Literal['w', 'r'], c: bool = True)</span>
     
 </div>
 
@@ -1279,7 +1292,7 @@ but you can override it by providing your own (like here!).</p>
                         
                             <div id="DataDemo.b" class="classattr">
                                 
-                                    <div class="attr variable"><span class="name">b</span><span class="annotation">: str</span>
+                                    <div class="attr variable"><span class="name">b</span><span class="annotation">: Literal['w', 'r']</span>
     </div>
                                 
                                 
@@ -1288,12 +1301,12 @@ but you can override it by providing your own (like here!).</p>
                         
                             <div id="DataDemo.c" class="classattr">
                                 
-                                    <div class="attr variable"><span class="name">c</span><span class="annotation">: bool</span><span class="default_value"> =  = True</span>
+                                    <div class="attr variable"><span class="name">c</span><span class="annotation">: bool</span><span class="default_value"> = True</span>
     </div>
                                 
                                 
                                 
-        <div class="docstring"><p>This property is assigned to <code>field()</code>, which works just as well.</p>
+        <div class="docstring"><p>This property is assigned to <code>dataclasses.field()</code>, which works just as well.</p>
 </div>
     
                             </div>

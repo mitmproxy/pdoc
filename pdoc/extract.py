@@ -31,9 +31,9 @@ def mock_some_common_side_effects():
     """
     _popen = subprocess.Popen
 
-    if platform.system() == "Windows":
+    if platform.system() == "Windows":  # pragma: no cover
         noop_exe = "echo.exe"
-    else:
+    else:  # pragma: no cover
         noop_exe = "echo"
 
     def noop(*args, **kwargs):
@@ -61,16 +61,18 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     if modules:
         for spec in modules:
             modname = parse_spec(spec)
-            module_index[modname] = None
 
             # try to get all submodules
             try:
                 modspec = importlib.util.find_spec(modname)
-                if modspec is None or modspec.submodule_search_locations is None:
+                if modspec is None:
+                    raise ModuleNotFoundError(modname)
+                module_index[modname] = None
+                if modspec.submodule_search_locations is None:
                     continue
                 path = modspec.submodule_search_locations
             except Exception:
-                warnings.warn(f"Cannot find spec for {modname} (from {spec})")
+                warnings.warn(f"Cannot find spec for {modname} (from {spec})", RuntimeWarning)
             else:
                 submodules = pkgutil.walk_packages(path, f"{modname}.")
                 while True:
@@ -79,7 +81,7 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
                     except StopIteration:
                         break
                     except Exception as e:
-                        warnings.warn(f"Error importing subpackage: {e!r}")
+                        warnings.warn(f"Error importing subpackage: {e!r}", RuntimeWarning)
     else:
         stdlib = sysconfig.get_path("stdlib")
         platstdlib = sysconfig.get_path("platstdlib")
@@ -135,14 +137,6 @@ def load_module(module: str) -> types.ModuleType:
         raise RuntimeError(f"Error importing {module}.") from e
 
 
-def module_exists(modulename: str) -> bool:
-    """Returns `True` if the specified module exists, `False` otherwise."""
-    try:
-        spec = importlib.util.find_spec(modulename)
-    except Exception:
-        return False
-    else:
-        return spec is not None
 
 
 def module_mtime(modulename: str) -> Optional[float]:

@@ -8,12 +8,9 @@ from unittest.mock import patch
 import markdown2
 import pygments.formatters.html
 import pygments.lexers.python
-import pytest
 from jinja2 import contextfilter
 from jinja2.runtime import Context
 from markupsafe import Markup
-
-import pdoc
 
 lexer = pygments.lexers.python.PythonLexer()
 formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
@@ -54,7 +51,7 @@ def split_identifier(all_modules: Container[str], fullname: str) -> tuple[str, s
 
 def _relative_link(current: list[str], target: list[str]) -> str:
     if target[: len(current)] == current:
-        return "/".join(target[len(current) :]) + ".html"
+        return "/".join(target[len(current):]) + ".html"
     else:
         return "../" + _relative_link(current[:-1], target)
 
@@ -67,20 +64,6 @@ def relative_link(current_module: str, target_module: str) -> str:
         current_module.split(".")[:-1],
         target_module.split("."),
     )
-
-
-@pytest.mark.parametrize(
-    "current,target,relative",
-    [
-        ("foo", "foo", ""),
-        ("foo", "bar", "bar.html"),
-        ("foo.foo", "bar", "../bar.html"),
-        ("foo.bar", "foo.bar.baz", "bar/baz.html"),
-        ("foo.bar.baz", "foo.qux.quux", "../qux/quux.html"),
-    ],
-)
-def test_relative_link(current, target, relative):
-    assert relative_link(current, target) == relative
 
 
 @contextfilter
@@ -112,15 +95,15 @@ def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) ->
     return text or fullname
 
 
-def edit_url(mod: pdoc.doc.Module, mapping: Mapping[str, str]) -> Optional[str]:
+def edit_url(modulename: str, is_package: bool, mapping: Mapping[str, str]) -> Optional[str]:
     for m, prefix in mapping.items():
-        if mod.modulename.startswith(m):
-            filename = mod.modulename[len(m) + 1 :].replace(".", "/")
-            if mod.is_package:
+        if m == modulename or modulename.startswith(f"{m}."):
+            filename = modulename[len(m) + 1:].replace(".", "/")
+            if is_package:
                 filename = f"{filename}/__init__.py".removeprefix("/")
             else:
                 filename += ".py"
-            return f"{prefix}{filename}".replace("//", "/")
+            return f"{prefix}{filename}"
     return None
 
 

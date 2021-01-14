@@ -356,7 +356,7 @@
 {%- endmacro %}
 {% macro default_value(var) %}
     {%- if var.default_value_str -%}
-        <span class="default_value"> = {{ var.default_value_str | linkify }}</span>
+        <span class="default_value">{{ var.default_value_str | linkify }}</span>
     {%- endif -%}
 {% endmacro %}
 {% macro annotation(var) %}

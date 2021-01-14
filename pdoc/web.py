@@ -1,11 +1,10 @@
 import http.server
 import traceback
+import webbrowser
 from typing import Optional, Union, Collection, Mapping
 
-import pdoc.doc
-import pdoc.extract
-import pdoc.render
-from pdoc import render, extract
+
+from pdoc import render, extract, doc
 
 
 # the builtin http.server module is a bit unergonomic,
@@ -38,25 +37,27 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.send_header("content-type", "text/html")
                 self.end_headers()
-                return pdoc.render.html_error(error=f"Module {module!r} not found")
+                return render.html_error(error=f"Module {module!r} not found")
 
-            mtime = f"{extract.module_mtime(module):.1f}"
+            mtime = ""
+            if t := extract.module_mtime(module):
+                mtime = f"{t:.1f}"
             if "mtime=1" in self.path:
                 self.send_response(200)
                 self.send_header("content-type", "text/plain")
                 self.end_headers()
                 return mtime
             try:
-                mod = pdoc.doc.Module(extract.load_module(module))
+                mod = doc.Module(extract.load_module(module))
             except Exception:
                 self.send_response(500)
                 self.send_header("content-type", "text/html")
                 self.end_headers()
-                return pdoc.render.html_error(
+                return render.html_error(
                     error=f"Error importing {module!r}",
                     details=traceback.format_exc(),
                 )
-            out = pdoc.render.html_module(
+            out = render.html_module(
                 module=mod,
                 all_modules=self.server.all_modules,
                 edit_url_map=self.server.edit_url_map,
@@ -82,3 +83,39 @@ class DocServer(http.server.HTTPServer):
         super().__init__(addr, DocHandler)
         self.all_modules = all_modules
         self.edit_url_map = edit_url_map
+
+
+# https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61
+def open_browser(url: str) -> bool:  # pragma: no cover
+    """
+    Open a URL in a browser window.
+    In contrast to webbrowser.open, we limit the list of suitable browsers.
+    This gracefully degrades to a no-op on headless servers, where webbrowser.open
+    would otherwise open lynx.
+    Returns:
+        True, if a browser has been opened
+        False, if no suitable browser has been found.
+    """
+    browsers = (
+        "windows-default",
+        "macosx",
+        "wslview %s",
+        "x-www-browser %s",
+        "gnome-open %s",
+        "google-chrome",
+        "chrome",
+        "chromium",
+        "chromium-browser",
+        "firefox",
+        "opera",
+        "safari",
+    )
+    for browser in browsers:
+        try:
+            b = webbrowser.get(browser)
+        except webbrowser.Error:
+            pass
+        else:
+            if b.open(url):
+                return True
+    return False

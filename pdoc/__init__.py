@@ -224,7 +224,7 @@ def pdoc(
         try:
             m = extract.load_module(mod)
         except RuntimeError as e:
-            warnings.warn(f"Error importing {mod}: {e!r}")
+            warnings.warn(f"Error importing {mod}: {e!r}", RuntimeWarning)
         else:
             write(doc.Module(m))
 

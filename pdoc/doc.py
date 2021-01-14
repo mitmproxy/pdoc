@@ -252,8 +252,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Class(self.modulename, qualname, obj)
             else:
                 docstring = self._var_docstrings.get(name, "")
-                if not docstring and isinstance(docstring, types.ModuleType):
-                    docstring = getattr(obj, "__doc__", "")
+                if not docstring and isinstance(obj, types.ModuleType):
+                    docstring = getattr(obj, "__doc__", None) or ""
                 doc = Variable(
                     self.modulename,
                     qualname,
@@ -368,7 +368,7 @@ class Module(Namespace[types.ModuleType]):
             try:
                 module = importlib.import_module(mod.name)
             except BaseException as e:
-                warnings.warn(f"Couldn't import {mod.name}: {e!r}", stacklevel=2)
+                warnings.warn(f"Couldn't import {mod.name}: {e!r}", RuntimeWarning, stacklevel=2)
                 continue
             submodules.append(Module(module))
         return submodules
@@ -649,6 +649,7 @@ class Function(Doc[types.FunctionType]):
     def decorators(self) -> list[str]:
         """A list of all decorators the function is decorated with."""
         decorators = []
+        # noinspection PyTypeChecker
         obj: types.FunctionType = self.obj  # type: ignore
         for t in doc_ast.parse(obj).decorator_list:
             decorators.append(f"@{doc_ast.unparse(t)}")
@@ -740,7 +741,7 @@ class Variable(Doc[None]):
         must be passed manually in the constructor.
         """
         super().__init__(modulename, qualname, None)
-        self.docstring = docstring
+        self.docstring = inspect.cleandoc(docstring)
         self.declared_at = declared_at
         self.annotation = annotation
         self.default_value = default_value
@@ -764,7 +765,7 @@ class Variable(Doc[None]):
         if self.default_value is empty:
             return ""
         elif isinstance(self.default_value, types.ModuleType):
-            return self.default_value.__name__
+            return f" = {self.default_value.__name__}"
         else:
             try:
                 return f" = {repr(self.default_value)}"

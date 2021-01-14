@@ -52,7 +52,7 @@ def html_module(
         all_modules=all_modules,
         mtime=mtime,
         show_module_list_link=len(all_modules) > 1,
-        edit_url=edit_url(module, edit_url_map),
+        edit_url=edit_url(module.modulename, module.is_package, edit_url_map),
         pygments_css=formatter.get_style_defs(),
         __version__=pdoc.__version__,
     )
