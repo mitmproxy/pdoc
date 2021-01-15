@@ -28,7 +28,7 @@ def make_repr_snapshot(module: Union[str, Path]) -> str:
 
 @pytest.mark.parametrize("module", snapshots)
 def test_html_snapshots(module: Path):
-    if module.name == "demo.py" and sys.version_info < (3, 9):
+    if sys.version_info < (3, 9) and module.name in ("demo.py", "demo_eager.py"):
         pytest.skip("minor rendering differences on Python 3.8")
     expected = module.with_suffix(".html").read_text("utf8")
     actual = make_html_snapshot(module)
@@ -37,7 +37,7 @@ def test_html_snapshots(module: Path):
 
 @pytest.mark.parametrize("module", snapshots)
 def test_repr_snapshots(module: Path):
-    if module.name == "demo.py" and sys.version_info < (3, 9):
+    if sys.version_info < (3, 9) and module.name in ("demo.py", "demo_eager.py"):
         pytest.skip("minor rendering differences on Python 3.8")
     expected = module.with_suffix(".txt").read_text("utf8")
     actual = make_repr_snapshot(module)
