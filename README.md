@@ -20,7 +20,7 @@ Auto-generate API documentation for Python projects.
 pip install pdoc
 ```
 
-`pdoc` is compatible with Python 3.9 and newer.
+`pdoc` is compatible with Python 3.8 and newer.
 
 
 # Usage
@@ -45,7 +45,7 @@ pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do i
 * First-class support for type annotations and all other modern Python 3 features.
 * Builtin web server with live reloading.
 * Customizable HTML templates.
-* Standalone HTML output without additional dependencies.
+* Standalone JS-free HTML output without additional dependencies.
   
 Under the hood...
 

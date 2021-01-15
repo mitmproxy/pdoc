@@ -25,7 +25,7 @@ def test_order():
 
 
 def test_attrs():
-    mod = extract.load_module(extract.parse_spec(here / "snapshots" / "demo.py"))
+    mod = extract.load_module(extract.parse_spec(here / "snapshots" / "demo_long.py"))
 
     m = Module(mod)
     assert m.variables

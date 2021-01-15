@@ -113,7 +113,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
 
      - typing
      - collections.abc
-     - ./test/snapshots/demo.py
+     - ./test/snapshots/demo_long.py
      - ./test/snapshots/demopackage
 
     *This function has side-effects:* `sys.path` will be amended if the specification is a path.

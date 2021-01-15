@@ -10,6 +10,7 @@ snapshot_dir = (Path(__file__).parent / "snapshots").absolute()
 
 snapshots = [
     snapshot_dir / "demo.py",
+    snapshot_dir / "demo_long.py",
     snapshot_dir / "demo_eager.py",
     snapshot_dir / "demopackage",
     snapshot_dir / "indent.py",
@@ -28,7 +29,7 @@ def make_repr_snapshot(module: Union[str, Path]) -> str:
 
 @pytest.mark.parametrize("module", snapshots)
 def test_html_snapshots(module: Path):
-    if sys.version_info < (3, 9) and module.name in ("demo.py", "demo_eager.py"):
+    if sys.version_info < (3, 9) and module.name in ("demo_long.py", "demo_eager.py"):
         pytest.skip("minor rendering differences on Python 3.8")
     expected = module.with_suffix(".html").read_text("utf8")
     actual = make_html_snapshot(module)
@@ -37,7 +38,7 @@ def test_html_snapshots(module: Path):
 
 @pytest.mark.parametrize("module", snapshots)
 def test_repr_snapshots(module: Path):
-    if sys.version_info < (3, 9) and module.name in ("demo.py", "demo_eager.py"):
+    if sys.version_info < (3, 9) and module.name in ("demo_long.py", "demo_eager.py"):
         pytest.skip("minor rendering differences on Python 3.8")
     expected = module.with_suffix(".txt").read_text("utf8")
     actual = make_repr_snapshot(module)

@@ -82,7 +82,12 @@ def linkify(context: Context, code: str) -> str:
 
     return Markup(
         re.sub(
-            r"(?<![/a-zA-Z_0-9])(?!\d)[a-zA-Z_0-9]+\.[a-zA-Z_0-9.]+", linkify_repl, code
+            r"""
+            (?<!/)(?!\d)[a-zA-Z_0-9]+(?:\.(?!\d)[a-zA-Z_0-9]+)+  # foo.bar
+            |
+            (?<=<code>)(?!\d)[a-zA-Z_0-9]+(?=</code>)  # `foo`
+            """,
+            linkify_repl, code, flags=re.VERBOSE
         )
     )
 

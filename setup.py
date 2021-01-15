@@ -5,10 +5,10 @@ from setuptools import setup, find_packages
 
 here = Path(__file__).parent
 
-long_description = (here / "README.md").read_text()
+long_description = (here / "README.md").read_text("utf8")
 
 VERSION = re.search(
-    r'__version__ = "(.+?)"', (here / "pdoc" / "__init__.py").read_text()
+    r'__version__ = "(.+?)"', (here / "pdoc" / "__init__.py").read_text("utf8")
 ).group(1)
 
 
