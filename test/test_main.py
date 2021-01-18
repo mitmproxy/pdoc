@@ -10,13 +10,13 @@ here = Path(__file__).parent
 
 
 def test_cli(tmp_path):
-    cli(args=[str(here / "snapshots" / "demo_long.py"), "-o", str(tmp_path)])
+    cli([str(here / "snapshots" / "demo_long.py"), "-o", str(tmp_path)])
     assert (tmp_path / "demo_long.html").read_text().startswith("<!doctype html>")
     assert (tmp_path / "index.html").read_text().startswith("<!doctype html>")
 
 
 def test_cli_version(capsys):
-    cli(args=["--version"])
+    cli(["--version"])
     assert "pdoc:" in capsys.readouterr().out
 
 
@@ -26,7 +26,7 @@ def test_cli_web(monkeypatch):
             "pdoc.web.DocServer.serve_forever", side_effect=KeyboardInterrupt
         ) as serve_forever:
             with pytest.raises(KeyboardInterrupt):
-                cli(args=[str(here / "snapshots" / "demopackage" / "_child.py")])
+                cli([str(here / "snapshots" / "demopackage" / "_child.py")])
             assert open_browser.call_args == call("http://localhost:8080/demopackage/_child.html")
             assert serve_forever.call_args == call()
 

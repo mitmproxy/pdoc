@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import platform
 import subprocess
@@ -73,11 +75,11 @@ parser.add_argument(
     help="Don't start a browser, even if no output directory is set.",
 )
 parser.add_argument(
-    '--help', action='help', default=argparse.SUPPRESS,
+    '--help', action='help',
     help="Show this help message and exit.")
 parser.add_argument(
     "--version",
-    action="store_true", default=argparse.SUPPRESS,
+    action="store_true",
     help="Show version information and exit.",
 )
 
@@ -118,11 +120,10 @@ def get_dev_version() -> str:
     return pdoc_version
 
 
-def cli(args=None):
+def cli(args: list[str] = None) -> None:
     """ Command-line entry point """
-    args = parser.parse_args(args)
-
-    if args.version:
+    opts = parser.parse_args(args)
+    if opts.version:
         print(
             f"pdoc: {get_dev_version()}\n"
             f"Python: {platform.python_version()}\n"
@@ -131,27 +132,27 @@ def cli(args=None):
         return
 
     render.configure(
-        edit_url_map=dict(x.split("=", 1) for x in args.edit_url),
-        template_directory=args.template_directory,
+        edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
+        template_directory=opts.template_directory,
     )
 
-    if args.output_directory:
+    if opts.output_directory:
         pdoc.pdoc(
-            *args.modules,
-            output_directory=args.output_directory,
-            format=args.format or "html",
+            *opts.modules,
+            output_directory=opts.output_directory,
+            format="html",  # opts.format or
         )
         return
     else:
-        all_modules = extract.parse_specs(args.modules)
+        all_modules = extract.parse_specs(opts.modules)
 
         with pdoc.web.DocServer(
-            (args.host, args.port), all_modules,
+            (opts.host, opts.port), all_modules,
         ) as httpd:
-            url = f"http://{args.host}:{args.port}"
+            url = f"http://{opts.host}:{opts.port}"
             print(f"pdoc server ready at {url}")
-            if not args.no_browser:
-                if len(args.modules) == 1:
+            if not opts.no_browser:
+                if len(opts.modules) == 1:
                     mod = next(iter(all_modules))
                     url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)
