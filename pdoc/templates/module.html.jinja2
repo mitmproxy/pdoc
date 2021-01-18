@@ -1,4 +1,4 @@
-{% extends "html_frame.jinja2" %}
+{% extends "frame.html.jinja2" %}
 {% block title %}{{ module.modulename }}{% endblock %}
 {% block style %}
     <style type="text/css">{{ pygments_css }}</style>
@@ -327,7 +327,6 @@
         }
 
         /* pdoc logo */
-
         .logo {
             margin-top: 2rem;
             display: block;
@@ -349,7 +348,7 @@
         }
     </style>
 {% endblock %}
-{% macro bases(cls) -%}
+{% if not bases %}{% macro bases(cls) -%}
     {% if cls.bases -%}
         (
         {%- for base in cls.bases -%}
@@ -358,26 +357,24 @@
         {%- endfor -%}
         )
     {%- endif %}
-{%- endmacro %}
-{% macro default_value(var) %}
+{%- endmacro %}{% endif %}
+{% if not default_value %}{% macro default_value(var) %}
     {%- if var.default_value_str -%}
         <span class="default_value">{{ var.default_value_str | linkify }}</span>
     {%- endif -%}
-{% endmacro %}
-{% macro annotation(var) %}
+{% endmacro %}{% endif %}
+{% if not annotation %}{% macro annotation(var) %}
     {%- if var.annotation_str -%}
         <span class="annotation">{{ var.annotation_str | linkify }}</span>
     {%- endif -%}
-{% endmacro %}
-{% macro decorators(doc) %}
+{% endmacro %}{% endif %}
+{% if not decorators %}{% macro decorators(doc) %}
     {%- for d in doc.decorators -%}
         <div class="decorator">{{ d }}</div>
     {%- endfor -%}
-{% endmacro %}
-{% macro function(fn) %}
-{%- set sig -%}
-<span class="signature">{{ fn.signature | string | linkify }}</span>
-{%- endset -%}
+{% endmacro %}{% endif %}
+{% if not function %}{% macro function(fn) %}
+{%- set sig -%}<span class="signature">{{ fn.signature | string | linkify }}</span>{%- endset -%}
 <div class="attr function">
     {{- decorators(fn) -}}
     {% if fn.name == "__init__" %}
@@ -388,79 +385,81 @@
         <span class="name">{{ fn.name }}</span>{{ sig }}:
     {% endif %}
 </div>
-{% endmacro %}
-{% macro variable(var) -%}
+{% endmacro %}{% endif %}
+{% if not variable %}{% macro variable(var) -%}
     <div class="attr variable"><span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
     </div>
-{%- endmacro %}
-{% macro docstring(var) -%}
-    {% if var.docstring %}
+{%- endmacro %}{% endif %}
+{% if not docstring %}{% macro docstring(var) %}
+    {%- if var.docstring -%}
         <div class="docstring">{{ var.docstring | markdown | linkify }}</div>
-    {% endif %}
-{%- endmacro %}
-{% macro nav_members(members) -%}
-    {% if members %}
-        <ul class="memberlist">
-            {% for m in members %}
-                <li>
-                    {% if m.type == "class" %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+    {%- endif -%}
+{% endmacro %}{% endif %}
+{% if not nav_members %}{% macro nav_members(members) -%}
+    <ul class="memberlist">
+        {% for m in members %}
+            <li>
+                {% if m.type == "class" %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+                    {%- if m.own_members -%}
                         {{ nav_members(m.own_members) }}
-                    {% elif m.name != "__init__" %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
-                    {% else %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{%- endmacro %}
-{% macro view_source(obj) -%}
-    {% if obj.source %}
+                {% elif m.name != "__init__" %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+                {% else %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}{% endif %}
+{% if not view_source %}{% macro view_source(obj) %}
+    {%- if obj.source -%}
         <details>
             <summary class="button">View Source</summary>
             {{ obj.source | highlight }}
         </details>
-    {% endif %}
-{%- endmacro %}
+    {%- endif -%}
+{% endmacro %}{% endif %}
 {% block body %}
     <div class="container">
-        <nav>
-            <label for="navtoggle" class="button"></label>
-            <input id="navtoggle" type="checkbox">
-            <div>
-                {% if show_module_list_link %}
-                    <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">Module
-                        Index</a>
-                {% endif %}
+        {% block nav %}
+            <nav>
+                <label for="navtoggle" class="button"></label>
+                <input id="navtoggle" type="checkbox">
+                <div>
+                    {% if show_module_list_link %}
+                        <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">Module
+                            Index</a>
+                    {% endif %}
 
-                {% set index = module.docstring | markdown | attr("toc_html") %}
-                {% if index %}
-                    <h2>Index</h2>
-                    {{ index | safe }}
-                {% endif %}
+                    {% set index = module.docstring | markdown | attr("toc_html") %}
+                    {% if index %}
+                        <h2>Index</h2>
+                        {{ index | safe }}
+                    {% endif %}
 
-                {% if module.submodules %}
-                    <h2>Submodules</h2>
-                    <ul>
-                        {% for submodule in module.submodules %}
-                            <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.fullname }}</a></li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                    {% if module.submodules %}
+                        <h2>Submodules</h2>
+                        <ul>
+                            {% for submodule in module.submodules %}
+                                <li><a href="{{ module.name }}/{{ submodule.name }}.html">{{ submodule.fullname }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
 
-                {% if module.members %}
-                    <h2>Contents</h2>
-                    {{ nav_members(module.members.values()) }}
-                {% endif %}
+                    {% if module.members %}
+                        <h2>Contents</h2>
+                        {{ nav_members(module.members.values()) }}
+                    {% endif %}
 
-                <a class="logo" title="built with pdoc {{ __version__ }}"
-                   href="https://github.com/mitmproxy/pdoc">
-                    built with
-                    {% include 'logo.svg' %}</a>
-            </div>
-        </nav>
+                    <a class="logo" title="built with pdoc {{ __version__ }}" href="https://github.com/mitmproxy/pdoc">
+                        built with {% include 'logo.svg' %}
+                    </a>
+                </div>
+            </nav>
+        {% endblock %}
         <main>
             <section>
                 {% if edit_url -%}
@@ -510,19 +509,21 @@
                             </div>
                         {% endfor %}
                         {% if m.inherited_members %}
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    {% for base, members in m.inherited_members.items() %}
-                                        <div>
-                                            <dt>{{ base | link }}</dt>
-                                            {% for m2 in members -%}
-                                                <dd class="{{ m2.type }}">{{ m2.declared_at | link(text=m2.name.replace("__init__",base[1])) }}</dd>
-                                            {%- endfor %}
-                                        </div>
-                                    {% endfor %}
-                                </dl>
-                            </div>
+                            {% block inherited_members scoped %}
+                                <div class="inherited">
+                                    <h5>Inherited Members</h5>
+                                    <dl>
+                                        {% for base, members in m.inherited_members.items() %}
+                                            <div>
+                                                <dt>{{ base | link }}</dt>
+                                                {% for m2 in members -%}
+                                                    <dd class="{{ m2.type }}">{{ m2.declared_at | link(text=m2.name.replace("__init__",base[1])) }}</dd>
+                                                {%- endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    </dl>
+                                </div>
+                            {% endblock %}
                         {% endif %}
                     {% endif %}
                 </section>

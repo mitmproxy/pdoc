@@ -3,12 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,{% filter urlencode %}{% include "favicon.svg" %}{% endfilter %}"/>
+    {% block favicon -%}
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "favicon.svg" %}{% endfilter %}"/>
+    {%- endblock %}
 
     <title>{% block title %}{% endblock %}</title>
 
+    {% block basestyle %}
     <style type="text/css">{% include 'bootstrap-reboot.min.css' %}</style>
+    {% endblock %}
     {% filter replace("\n","") | replace("    ","") %}
         {% block style %}{% endblock %}
     {% endfilter %}
