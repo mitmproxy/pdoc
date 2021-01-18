@@ -3,11 +3,9 @@ from __future__ import annotations
 import http.server
 import traceback
 import webbrowser
-from typing import Optional, Union, Collection, Mapping
+from typing import Optional, Union, Collection
 
 from pdoc import render, extract, doc
-
-
 # the builtin http.server module is a bit unergonomic,
 # but we can deal with that to avoid additional dependencies.
 from pdoc._compat import removesuffix
@@ -62,7 +60,6 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             out = render.html_module(
                 module=mod,
                 all_modules=self.server.all_modules,
-                edit_url_map=self.server.edit_url_map,
                 mtime=mtime,
             )
 
@@ -74,17 +71,14 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
 class DocServer(http.server.HTTPServer):
     all_modules: Collection[str]
-    edit_url_map: Mapping[str, str]
 
     def __init__(
         self,
         addr: tuple[str, int],
         all_modules: Collection[str],
-        edit_url_map: Mapping[str, str],
     ):
         super().__init__(addr, DocHandler)
         self.all_modules = all_modules
-        self.edit_url_map = edit_url_map
 
 
 # https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61

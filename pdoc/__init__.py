@@ -173,6 +173,8 @@ public interface of the module.
 """
 from __future__ import annotations
 
+__version__ = "1.0.dev1"  # this is read from setup.py
+
 import io
 import warnings
 from pathlib import Path
@@ -180,17 +182,11 @@ from typing import Literal, Optional, Union
 
 from pdoc import extract, render, doc
 
-__version__ = "1.0"
-"""
-The current version of pdoc. This value is read from `setup.py`.
-"""
-
 
 def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
-    format: Literal["html", "markdown"] = "html",
-    edit_url: dict[str, str] = None,
+    format: Literal["html"] = "html",
 ) -> str:
     retval = io.StringIO()
     if output_directory:
@@ -212,11 +208,11 @@ def pdoc(
 
         def r(mod: doc.Module) -> str:
             return render.html_module(
-                module=mod, all_modules=all_modules, edit_url_map=edit_url or {}
+                module=mod, all_modules=all_modules
             )
 
     elif format == "markdown":  # pragma: no cover
-        raise NotImplementedError
+        raise NotImplementedError("Markdown support is currently unimplemented, but PRs are welcome!")
     elif format == "repr":
         r = render.repr_module
     else:

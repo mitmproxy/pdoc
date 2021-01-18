@@ -58,7 +58,9 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     This function processes a list of module specifications and returns the list of module names
     that should be processed by pdoc.
 
-    There are two main scenarios: First, if the list of modules is empty, pdo
+    There are two main scenarios: First, if the list of modules is empty, pdoc will enumerate all
+    available modules that are not part of the stdlib. Second, if some modules are given,
+    pdoc will return the list of all available submodules.
     """
     module_index: dict[str, None] = {}
     if modules:
@@ -126,9 +128,11 @@ def parse_spec(spec: Union[Path, str]) -> str:
         spec = Path(spec)
 
     if isinstance(spec, Path):
+        if (spec.parent / "__init__.py").exists():
+            return parse_spec(spec.parent) + f".{spec.stem}"
         if str(spec.parent) not in sys.path:
             sys.path.insert(0, str(spec.parent))
-        return removesuffix(spec.name, ".py")
+        return spec.stem
     else:
         return spec
 

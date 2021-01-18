@@ -7,7 +7,7 @@ import pdoc
 import pdoc.doc
 import pdoc.extract
 import pdoc.web
-from pdoc import extract
+from pdoc import extract, render
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -132,14 +132,13 @@ def cli(args=None):
             *args.modules,
             output_directory=args.output_directory,
             format=args.format or "html",
-            edit_url=edit_url,
         )
         return
     else:
         all_modules = extract.parse_specs(args.modules)
 
         with pdoc.web.DocServer(
-            (args.http_host, args.http_port), all_modules, edit_url
+            (args.http_host, args.http_port), all_modules,
         ) as httpd:
             url = f"http://{args.http_host}:{args.http_port}"
             print(f"pdoc server ready at {url}")

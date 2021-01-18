@@ -1,9 +1,9 @@
+import os
 from pathlib import Path
 from typing import Optional, Collection, Mapping
 
 from jinja2 import FileSystemLoader, Environment
 
-import pdoc
 import pdoc.doc
 from pdoc.render_helpers import (
     markdown,
@@ -15,28 +15,46 @@ from pdoc.render_helpers import (
     formatter,
 )
 
+_default_searchpath = [
+    Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
+    Path(__file__).parent / "templates"
+]
+
 env = Environment(
-    loader=FileSystemLoader(Path(__file__).parent / "templates"),
+    loader=FileSystemLoader(_default_searchpath),
     autoescape=True,
 )
 env.filters["markdown"] = markdown
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link
+env.globals["__version__"] = pdoc.__version__
+env.globals["edit_url_map"] = {}
+
+
+def configure(
+    *,
+    template_directory: Optional[Path] = None,
+    edit_url_map: Optional[Mapping[str, str]] = None,
+):
+    searchpath = _default_searchpath
+    if template_directory:
+        searchpath = [template_directory] + searchpath
+    env.loader = FileSystemLoader(searchpath)
+
+    env.globals["edit_url_map"] = edit_url_map or {}
 
 
 def html_index(all_modules: Collection[str]) -> str:
-    return env.get_template("html_index.jinja2").render(
+    return env.select_template(["custom-index.html.jinja2", "index.html.jinja2"]).render(
         all_modules=[m for m in all_modules if "._" not in m],
-        __version__=pdoc.__version__,
     )
 
 
 def html_error(error: str, details: str = "") -> str:
-    return env.get_template("html_error.jinja2").render(
+    return env.select_template(["custom-error.html.jinja2", "error.html.jinja2"]).render(
         error=error,
         details=details,
-        __version__=pdoc.__version__,
     )
 
 
@@ -44,17 +62,15 @@ def html_error(error: str, details: str = "") -> str:
 def html_module(
     module: pdoc.doc.Module,
     all_modules: Collection[str],
-    edit_url_map: Mapping[str, str],
     mtime: Optional[str] = None,
 ) -> str:
-    return env.get_template("html_module.jinja2").render(
+    return env.select_template(["custom-module.html.jinja2", "module.html.jinja2"]).render(
         module=module,
         all_modules=all_modules,
         mtime=mtime,
         show_module_list_link=len(all_modules) > 1,
-        edit_url=edit_url(module.modulename, module.is_package, edit_url_map),
+        edit_url=edit_url(module.modulename, module.is_package, env.globals["edit_url_map"]),
         pygments_css=formatter.get_style_defs(),
-        __version__=pdoc.__version__,
     )
 
 
