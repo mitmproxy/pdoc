@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="pdoc logo" src="pdoc/templates/logo.svg" width="200" height="100" />
+<img alt="pdoc logo" src="https://pdoc.dev/logo.svg" width="200" height="100" />
 <br><br>
 <a href="https://pdoc.dev/docs/pdoc.html"><img height="20" alt="documentation" src="https://shields.mitmproxy.org/badge/docs-pdoc.dev-brightgreen.svg"></a>
 <a href="https://github.com/mitmproxy/pdoc/actions?query=branch%3Amain"><img height="20" alt="CI Status" src="https://github.com/mitmproxy/pdoc/workflows/CI/badge.svg?branch=main"></a>
@@ -8,7 +8,7 @@
 <a href="https://pypi.python.org/pypi/pdoc"><img height="20" alt="Supported Python Versions" src="https://shields.mitmproxy.org/pypi/pyversions/pdoc.svg"></a>
 </p>
 
-Auto-generate API documentation for Python projects.
+API Documentation for Python Projects.
 
 
 # Example
@@ -20,7 +20,7 @@ Auto-generate API documentation for Python projects.
 pip install pdoc
 ```
 
-`pdoc` is compatible with Python 3.8 and newer.
+pdoc is compatible with Python 3.8 and newer.
 
 
 # Usage
@@ -56,6 +56,17 @@ Under the hood...
 * `pdoc` will use inheritance to resolve type annotations and docstrings for class members. 
   
 If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
+
+
+## Contributing
+
+As an open source project, pdoc welcomes contributions of all forms.
+
+[![Dev Guide](https://shields.mitmproxy.org/badge/dev_docs-CONTRIBUTING.md-blue)](./CONTRIBUTING.md)
+
+Also, please feel free to join our developer Slack!
+
+[![Slack Developer Chat](https://shields.mitmproxy.org/badge/slack-mitmproxy-E01563.svg)](http://slack.mitmproxy.org/)
 
 
 ## pdoc vs. pdoc3
