@@ -21,7 +21,7 @@ class ReadResponse(threading.Thread):
 
 
 def handle_request(data: bytes) -> bytes:
-    server = DocServer(("", 8080), all_modules=["dataclasses", "err"], edit_url_map={})
+    server = DocServer(("", 8080), all_modules=["dataclasses", "err"])
     a, b = socket.socketpair()
     b.send(data)
     t = ReadResponse(b)

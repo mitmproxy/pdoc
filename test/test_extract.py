@@ -1,8 +1,9 @@
+import sys
 from pathlib import Path
 
 import pytest
 
-from pdoc.extract import parse_specs, module_mtime
+from pdoc.extract import parse_specs, module_mtime, parse_spec
 
 here = Path(__file__).parent
 
@@ -22,6 +23,21 @@ def test_parse_specs():
         ]
 
     assert parse_specs([])
+
+
+def test_parse_spec():
+    p = sys.path
+
+    assert parse_spec("dataclasses") == "dataclasses"
+    assert sys.path == p
+
+    assert parse_spec(here / "snapshots" / "demo.py") == "demo"
+    assert str(here / "snapshots") in sys.path
+    sys.path = p
+
+    assert parse_spec(here / "snapshots" / "demopackage" / "_child.py") == "demopackage._child"
+    assert str(here / "snapshots") in sys.path
+    sys.path = p
 
 
 def test_module_mtime():

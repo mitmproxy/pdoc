@@ -1,1 +1,4 @@
-<module demopackage  # test 123>
+<module demopackage  # A test package
+    <class demopackage.Test  # inherited from demopackage._child.Test
+        <method def __init__(): ...>
+        <method def foo(self, a: int): ...  # inherited from demopackage._child.Test.foo>>>
