@@ -20,7 +20,13 @@ setup(
     license="UNLICENSE",
     description="A simple program and library to auto generate API documentation for Python modules.",
     long_description=long_description,
-    url="https://github.com/mitmproxy/pdoc",
+    long_description_content_type="text/markdown",
+    url="https://pdoc.dev/",
+    project_urls={
+        "Source": "https://github.com/mitmproxy/pdoc/",
+        "Documentation": "https://pdoc.dev/docs/pdoc.html",
+        "Issues": "https://github.com/mitmproxy/pdoc/issues",
+    },
     classifiers=[
         "Topic :: Documentation",
         "Topic :: Software Development :: Documentation",
@@ -56,6 +62,8 @@ setup(
             "pytest-cov",
             "pytest-timeout",
             "tox",
+            "twine",
+            "wheel",
         ]
     },
 )
