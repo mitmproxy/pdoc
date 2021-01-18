@@ -12,65 +12,73 @@ from pdoc import extract, render
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-parser.add_argument(
-    "--version",
-    action="store_true",
-    help="Show program's version number and exit.",
+    add_help=False,
 )
 parser.add_argument(
     "modules",
     type=str,
+    default=[],
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment, or file paths to a Python module or "
-         "package.",
-)
-formats = parser.add_mutually_exclusive_group()
-formats.add_argument("--html", dest="format", action="store_const", const="html")
-formats.add_argument(
-    "--markdown", dest="format", action="store_const", const="markdown"
+         "the current environment or file paths.",
 )
 parser.add_argument(
     "-o",
     "--output-directory",
+    metavar="DIR",
     type=Path,
-    help="Output directory.",
+    help="Output directory for the rendered documentation. If no directory is provided, pdoc will start an interactive "
+         "web server.",
 )
+# may be added again in the future:
+# formats = parser.add_mutually_exclusive_group()
+# formats.add_argument("--html", dest="format", action="store_const", const="html")
+# formats.add_argument(
+#     "--markdown", dest="format", action="store_const", const="markdown"
+# )
 parser.add_argument(
-    "--edit-on-github",
-    "--edit-url",
-    action="extend",
-    nargs="+",
+    "-e", "--edit-url",
+    action="append",
     type=str,
     default=[],
-    help="module=url-prefix FIXME document",
+    metavar="module=url",
+    help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
+         "May be passed multiple times. "
+         "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 parser.add_argument(
-    "--http-host",
+    "-t", "--template-directory",
+    metavar="DIR",
+    type=Path,
+    default=None,
+    help="A directory containing Jinja2 templates to customize output. "
+         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
+)
+parser.add_argument(
+    "-h", "--host",
     type=str,
     default="localhost",
     help="The host on which to run the HTTP server.",
 )
 parser.add_argument(
-    "--http-port",
+    "-p", "--port",
     type=int,
     default=8080,
     help="The port on which to run the HTTP server.",
 )
 parser.add_argument(
-    "--no-browser",
-    "-n",
+    "-n", "--no-browser",
     action="store_true",
-    help="Don't start a browser",
+    help="Don't start a browser, even if no output directory is set.",
 )
 parser.add_argument(
-    "-t", "--template-directory",
-    type=Path,
-    default=None,
-    help="Specify a directory containing Jinja2 templates. "
-         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
+    '--help', action='help', default=argparse.SUPPRESS,
+    help="Show this help message and exit.")
+parser.add_argument(
+    "--version",
+    action="store_true", default=argparse.SUPPRESS,
+    help="Show version information and exit.",
 )
 
 
@@ -123,7 +131,7 @@ def cli(args=None):
         return
 
     render.configure(
-        edit_url_map=dict(x.split("=", 1) for x in args.edit_on_github),
+        edit_url_map=dict(x.split("=", 1) for x in args.edit_url),
         template_directory=args.template_directory,
     )
 
@@ -138,14 +146,14 @@ def cli(args=None):
         all_modules = extract.parse_specs(args.modules)
 
         with pdoc.web.DocServer(
-            (args.http_host, args.http_port), all_modules,
+            (args.host, args.port), all_modules,
         ) as httpd:
-            url = f"http://{args.http_host}:{args.http_port}"
+            url = f"http://{args.host}:{args.port}"
             print(f"pdoc server ready at {url}")
             if not args.no_browser:
                 if len(args.modules) == 1:
                     mod = next(iter(all_modules))
-                    url += f"/{mod.replace('.','/')}.html"
+                    url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)
             try:
                 httpd.serve_forever()
