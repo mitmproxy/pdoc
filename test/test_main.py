@@ -27,7 +27,7 @@ def test_cli_web(monkeypatch):
         ) as serve_forever:
             with pytest.raises(KeyboardInterrupt):
                 cli(args=[str(here / "snapshots" / "demopackage" / "_child.py")])
-            assert open_browser.call_args == call("http://localhost:8080/demopackage._child.html")
+            assert open_browser.call_args == call("http://localhost:8080/demopackage/_child.html")
             assert serve_forever.call_args == call()
 
 
@@ -42,9 +42,9 @@ def test_api(tmp_path):
             )
 
     # temporarily insert syntax error - we don't leave it permanently to not confuse mypy, flake8 and black.
-    (here / "syntax_err" / "syntax_err.py").write_text("class")
+    (here / "syntax_err" / "syntax_err.py").write_bytes(b"class")
     with pytest.warns(RuntimeWarning, match="Error importing syntax_err.syntax_err"):
         pdoc(here / "syntax_err", output_directory=tmp_path)
-    (here / "syntax_err" / "syntax_err.py").write_text(
-        "# syntax error will be inserted by test here\n"
+    (here / "syntax_err" / "syntax_err.py").write_bytes(
+        b"# syntax error will be inserted by test here\n"
     )

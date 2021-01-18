@@ -289,9 +289,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     @cached_property
     def own_members(self) -> list[Doc]:
         """A list of all own (i.e. non-inherited) members"""
-        return self._members_by_declared_location.get(
-            (self.modulename, self.qualname), []
-        )
+        members = self._members_by_declared_location.get((self.modulename, self.qualname), [])
+        if self.declared_at != (self.modulename, self.qualname):
+            # .declared_at may be != (self.modulename, self.qualname), for example when
+            # a module re-exports a class from a private submodule.
+            members += self._members_by_declared_location.get(self.declared_at, [])
+        return members
 
     @cached_property
     def inherited_members(self) -> dict[tuple[str, str], list[Doc]]:
@@ -299,7 +302,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return {
             k: v
             for k, v in self._members_by_declared_location.items()
-            if k != (self.modulename, self.qualname)
+            if k not in (self.declared_at, (self.modulename, self.qualname))
         }
 
     @cached_property

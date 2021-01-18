@@ -20,12 +20,12 @@ if __name__ == "__main__":
     pygments_css = formatter.get_style_defs()
     example_html = Markup(pygments.highlight(demo.read_text("utf8"), lexer, formatter))
 
-    (here / "index.html").write_text(
+    (here / "index.html").write_bytes(
         env.get_template("index.html.jinja2").render(
             example_html=example_html,
             pygments_css=pygments_css,
             __version__=pdoc.__version__
-        ), "utf8"
+        ).encode()
     )
 
     if (here / "docs").is_dir():

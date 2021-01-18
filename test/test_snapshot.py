@@ -51,7 +51,7 @@ if __name__ == "__main__":
     for module in snapshots:
         print(f"Rendering {module}...")
         rendered = make_html_snapshot(module)
-        module.with_suffix(".html").write_text(rendered, "utf8")
+        module.with_suffix(".html").write_bytes(rendered.encode())
         rendered = make_repr_snapshot(module)
-        module.with_suffix(".txt").write_text(rendered, "utf8")
+        module.with_suffix(".txt").write_bytes(rendered.encode())
     print("All snapshots rendered!")

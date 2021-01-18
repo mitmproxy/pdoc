@@ -195,7 +195,7 @@ def pdoc(
             assert output_directory
             outfile = output_directory / f"{mod.fullname.replace('.', '/')}.html"
             outfile.parent.mkdir(parents=True, exist_ok=True)
-            outfile.write_text(r(mod), "utf8")
+            outfile.write_bytes(r(mod).encode())
 
     else:
 
@@ -232,6 +232,6 @@ def pdoc(
     assert output_directory
 
     if format == "html":
-        (output_directory / "index.html").write_text(render.html_index(all_modules))
+        (output_directory / "index.html").write_bytes(render.html_index(all_modules).encode())
 
     return retval.getvalue()

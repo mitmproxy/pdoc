@@ -4,6 +4,7 @@ that is it loads the correct module based on whatever the user specified,
 and provides the rest of pdoc with some additional module metadata.
 """
 from __future__ import annotations
+
 import importlib
 import importlib.util
 import io
@@ -21,8 +22,6 @@ from functools import partial
 from pathlib import Path
 from typing import Union, Optional, Collection, Sequence
 from unittest.mock import patch
-
-from pdoc._compat import removesuffix
 
 
 @contextmanager
