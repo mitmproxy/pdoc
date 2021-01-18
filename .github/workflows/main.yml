@@ -59,7 +59,7 @@ jobs:
     env:
       TWINE_USERNAME: __token__
       TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-      TWINE_REPOSITORY: testpypi
+      TWINE_REPOSITORY: ${{ secrets.TWINE_REPOSITORY }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v2
