@@ -1,5 +1,6 @@
 import argparse
 import platform
+import subprocess
 from pathlib import Path
 
 import pdoc
@@ -14,10 +15,8 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "--version",
-    action="version",
-    version=f"pdoc {pdoc.__version__} "
-    f"using Python {platform.python_version()} "
-    f"on {platform.platform()}",
+    action="store_true",
+    help="Show program's version number and exit.",
 )
 parser.add_argument(
     "modules",
@@ -25,8 +24,8 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-    "the current environment, or file paths to a Python module or "
-    "package.",
+         "the current environment, or file paths to a Python module or "
+         "package.",
 )
 formats = parser.add_mutually_exclusive_group()
 formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -37,7 +36,6 @@ parser.add_argument(
     "-o",
     "--output-directory",
     type=Path,
-    # default="html",
     help="Output directory.",
 )
 parser.add_argument(
@@ -67,33 +65,68 @@ parser.add_argument(
     action="store_true",
     help="Don't start a browser",
 )
-"""
-# these two may be added again in the future, let's see :)
 parser.add_argument(
-    "--filter",
-    type=str,
+    "-t", "--template-directory",
+    type=Path,
     default=None,
-    help="When specified, only identifiers containing the name given "
-         "will be shown in the output. Search is case sensitive. "
-         "Has no effect when --http is set.",
+    help="Specify a directory containing Jinja2 templates. "
+         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 
-parser.add_argument(
-    "--template-dir",
-    type=str,
-    default=None,
-    help="Specify a directory containing Mako templates. "
-         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and "
-         "pdoc will automatically find them.",
-)
-"""
+
+def get_dev_version() -> str:
+    """
+    Return a detailed version string, sourced either from VERSION or obtained dynamically using git.
+    """
+
+    pdoc_version = pdoc.__version__
+
+    here = Path(__file__).parent
+
+    try:
+        # Check that we're in the pdoc repository:
+        # 60665024af9af2cda4229e91b4d15f2359a4a3dd is the first pdoc commit.
+        subprocess.run(
+            ['git', 'cat-file', '-e', '60665024af9af2cda4229e91b4d15f2359a4a3dd'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            cwd=here,
+            check=True)
+        git_describe = subprocess.check_output(
+            ['git', 'describe', '--tags', '--long'],
+            stderr=subprocess.STDOUT,
+            cwd=here,
+        )
+        last_tag, tag_dist_str, commit = git_describe.decode().strip().rsplit("-", 2)
+        commit = commit.lstrip("g")[:7]
+        tag_dist = int(tag_dist_str)
+    except Exception:  # pragma: no cover
+        pass
+    else:
+        # Add commit info for non-tagged releases
+        if tag_dist > 0:  # pragma: no cover
+            pdoc_version += f" (+{tag_dist}, commit {commit})"
+
+    return pdoc_version
 
 
 def cli(args=None):
     """ Command-line entry point """
     args = parser.parse_args(args)
 
-    edit_url = dict(x.split("=", 1) for x in args.edit_on_github)
+    if args.version:
+        print(
+            f"pdoc: {get_dev_version()}\n"
+            f"Python: {platform.python_version()}\n"
+            f"Platform: {platform.platform()}"
+        )
+        return
+
+    render.configure(
+        edit_url_map=dict(x.split("=", 1) for x in args.edit_on_github),
+        template_directory=args.template_directory,
+    )
+
     if args.output_directory:
         pdoc.pdoc(
             *args.modules,
@@ -112,7 +145,8 @@ def cli(args=None):
             print(f"pdoc server ready at {url}")
             if not args.no_browser:
                 if len(args.modules) == 1:
-                    url += f"/{next(iter(all_modules))}"
+                    mod = next(iter(all_modules))
+                    url += f"/{mod.replace('.','/')}.html"
                 pdoc.web.open_browser(url)
             try:
                 httpd.serve_forever()
