@@ -153,8 +153,8 @@ class Doc(Generic[T]):
     @cached_property
     def declared_at(self) -> tuple[str, str]:
         """Returns `(modulename, qualname)` of where this doc object was declared."""
-        mod = getattr(self.obj, "__module__", None)
-        qual = getattr(self.obj, "__qualname__", None)
+        mod = _safe_getattr(self.obj, "__module__", None)
+        qual = _safe_getattr(self.obj, "__qualname__", None)
         if mod is None or qual is None or "<locals>" in qual:
             return self.modulename, self.qualname
         else:
@@ -230,18 +230,18 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 isinstance(obj, (property, cached_property))
                 or
                 # Python 3.9: @classmethod @property is allowed.
-                isinstance(getattr(obj, "__func__", None), (property, cached_property))
+                isinstance(_safe_getattr(obj, "__func__", None), (property, cached_property))
             )
             if is_property:
                 func = obj
-                if hasattr(obj, "__func__"):
+                if _safe_getattr(obj, "__func__", None):
                     func = obj.__func__
                 if isinstance(func, property):
                     func = func.fget
                 else:
                     func = func.func
                 annotation = resolve_annotations(
-                    getattr(func, "__annotations__", {}),
+                    _safe_getattr(func, "__annotations__", {}),
                     inspect.getmodule(func),
                     f"{self.fullname}.{name}",
                 ).get("return", empty)
@@ -262,7 +262,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             else:
                 docstring = self._var_docstrings.get(name, "")
                 if not docstring and isinstance(obj, types.ModuleType):
-                    docstring = getattr(obj, "__doc__", None) or ""
+                    docstring = _safe_getattr(obj, "__doc__", None) or ""
                 doc = Variable(
                     self.modulename,
                     qualname,
@@ -350,7 +350,7 @@ class Module(Namespace[types.ModuleType]):
         Typically, this means that this file is in a directory named like the
         module with the name `__init__.py`.
         """
-        return hasattr(self.obj, "__path__")  # type: ignore
+        return _safe_getattr(self.obj, "__path__", None) is not None
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
@@ -363,7 +363,7 @@ class Module(Namespace[types.ModuleType]):
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
         annotations = doc_ast.walk_tree(self.obj).annotations.copy()
-        for k, v in getattr(self.obj, "__annotations__", {}).items():
+        for k, v in _safe_getattr(self.obj, "__annotations__", {}).items():
             annotations[k] = v
 
         return resolve_annotations(annotations, self.obj, self.fullname)
@@ -393,7 +393,7 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _member_objects(self) -> dict[str, Any]:
-        if all := getattr(self.obj, "__all__", False):
+        if all := _safe_getattr(self.obj, "__all__", False):
             return {name: self.obj.__dict__.get(name, empty) for name in all}
 
         members = {}
@@ -401,7 +401,7 @@ class Module(Namespace[types.ModuleType]):
             if not _is_exported(name, obj):
                 continue
             obj_module = inspect.getmodule(obj)
-            declared_in_this_module = self.obj.__name__ == getattr(
+            declared_in_this_module = self.obj.__name__ == _safe_getattr(
                 obj_module, "__name__", None
             )
             if declared_in_this_module or name in self._documented_members:
@@ -478,12 +478,12 @@ class Class(Namespace[type]):
         annotations: dict[str, type] = {}
         for cls in self.obj.__mro__:
             cls_annotations = doc_ast.walk_tree(cls).annotations.copy()
-            dynamic_annotations = getattr(cls, "__annotations__", None)
+            dynamic_annotations = _safe_getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
                 for k, v in dynamic_annotations.items():
                     cls_annotations[k] = v
             cls_fullname = (
-                getattr(cls, "__module__", "") + "." + cls.__qualname__
+                _safe_getattr(cls, "__module__", "") + "." + cls.__qualname__
             ).lstrip(".")
             cls_annotations = resolve_annotations(
                 cls_annotations, inspect.getmodule(cls), cls_fullname
@@ -639,7 +639,7 @@ class Function(Doc[types.FunctionType]):
             t = "class"
         elif self.is_staticmethod:
             t = "static"
-        elif self.qualname != getattr(self.obj, "__name__", None):
+        elif self.qualname != _safe_getattr(self.obj, "__name__", None):
             t = "method"
         else:
             t = "function"
@@ -703,7 +703,7 @@ class Function(Doc[types.FunctionType]):
                 [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
             )
         mod = inspect.getmodule(self.obj)
-        globalns = getattr(mod, "__dict__", {})
+        globalns = _safe_getattr(mod, "__dict__", {})
         if self.name == "__init__":
             sig._return_annotation = empty  # type: ignore
         else:
@@ -888,3 +888,11 @@ def _decorators(doc: Union["Class", "Function"]) -> str:
         return " ".join(doc.decorators) + " "
     else:
         return ""
+
+
+def _safe_getattr(obj, attr, default):
+    """Like `getattr()`, but never raises."""
+    try:
+        return getattr(obj, attr, default)
+    except Exception:
+        return default

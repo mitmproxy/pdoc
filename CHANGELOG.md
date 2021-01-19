@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Bugfix: Don't crash on lambdas as class attributes.
+ - Bugfix: Don't crash on comments between decorators.
+ - Bugfix: Don't crash pdoc if a user's custom __getattr__ implementation is crashing.
  - Bugfix: use `inspect.unwrap` instead of unwrapping manually.
 
 # pdoc 1.0
