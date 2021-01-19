@@ -19,15 +19,12 @@ from ._compat import cache, ast_unparse
 def get_source(obj: Any) -> str:
     """
     Returns the source code of the Python object `obj` as a str.
-    This tries to extract the source from the special
-    `__wrapped__` attribute if it exists. Otherwise, it falls back
-    to `inspect.getsource`.
+    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.
 
-    If neither works, an empty string is returned.
+    If this fails, an empty string is returned.
     """
-    while hasattr(obj, "__wrapped__"):
-        obj = obj.__wrapped__
     try:
+        obj = inspect.unwrap(obj)
         return inspect.getsource(obj)
     except Exception:
         return ""

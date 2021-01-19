@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Bugfix: use `inspect.unwrap` instead of unwrapping manually.
+
 # pdoc 1.0
 
 This release features a major rewrite of pdoc, dropping compatibility
