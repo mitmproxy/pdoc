@@ -62,7 +62,7 @@ If you have substantially more complex documentation needs, we recommend using [
 
 As an open source project, pdoc welcomes contributions of all forms.
 
-[![Dev Guide](https://shields.mitmproxy.org/badge/dev_docs-CONTRIBUTING.md-blue)](./CONTRIBUTING.md)
+[![Dev Guide](https://shields.mitmproxy.org/badge/dev_docs-CONTRIBUTING.md-blue)](https://github.com/mitmproxy/pdoc/blob/main/CONTRIBUTING.md)
 
 Also, please feel free to join our developer Slack!
 
