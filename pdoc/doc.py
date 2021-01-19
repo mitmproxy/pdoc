@@ -1,813 +1,890 @@
-import ast
+"""
+This module defines pdoc's documentation objects. A documentation object corresponds to *something*
+in your Python code that has a docstring or type annotation. Typically, this only includes
+modules, classes, functions and methods. However, `pdoc` adds support for extracting documentation
+from the abstract syntax tree, which means that variables (module, class or instance) are supported too.
+
+There are four main types of documentation objects:
+
+- pdoc.doc.Module
+- pdoc.doc.Class
+- pdoc.doc.Function
+- pdoc.doc.Variable
+
+All documentation types types make heavy use of `@functools.cached_property` decorators.
+This means they have a large set of attributes that are lazily computed on first access.
+By convention, all attributes are read-only, although this this not enforced at runtime.
+"""
+from __future__ import annotations
+
+import importlib
 import inspect
-import typing
+import pkgutil
+import re
+import sys
+import textwrap
+import types
+import warnings
+from abc import abstractmethod, ABCMeta
+from functools import cached_property, wraps
+from typing import (  # type: ignore
+    Any,
+    Union,
+    TypeVar,
+    get_origin,
+    ClassVar,
+    Generic,
+)
+
+from pdoc import doc_ast
+from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
+from ._compat import cache
 
 
-__pdoc__ = {}
-
-
-def _source(obj):
+def _include_fullname_in_traceback(f):
     """
-    Returns the source code of the Python object `obj` as a list of
-    lines. This tries to extract the source from the special
-    `__wrapped__` attribute if it exists. Otherwise, it falls back
-    to `inspect.getsourcelines`.
-
-    If neither works, then the empty list is returned.
+    Doc.__repr__ should not raise, but it may raise if we screwed up.
+    Debugging this is a bit tricky, because, well, we can't repr() in the traceback either then.
+    This decorator adds location information to the traceback, which helps tracking down bugs.
     """
-    try:
-        return inspect.getsourcelines(obj.__wrapped__)[0]
-    except:
-        pass
-    try:
-        return inspect.getsourcelines(obj)[0]
-    except:
-        return []
+
+    @wraps(f)
+    def wrapper(self):
+        try:
+            return f(self)
+        except Exception as e:
+            raise RuntimeError(f"Error in {self.fullname}'s repr!") from e
+
+    return wrapper
 
 
-def _var_docstrings(tree, module, cls=None, init=False):
-    """
-    Extracts variable docstrings given `tree` as the abstract syntax,
-    `module` as a `pdoc.Module` containing `tree` and an option `cls`
-    as a `pdoc.Class` corresponding to the tree. In particular, `cls`
-    should be specified when extracting docstrings from a class or an
-    `__init__` method. Finally, `init` should be `True` when searching
-    the AST of an `__init__` method so that `_var_docstrings` will only
-    accept variables starting with `self.` as instance variables.
-
-    A dictionary mapping variable name to a `pdoc.Variable` object is
-    returned.
-    """
-    vs = {}
-    children = list(ast.iter_child_nodes(tree))
-    for i, child in enumerate(children):
-        if isinstance(child, ast.Assign) and len(child.targets) == 1:
-            if not init and isinstance(child.targets[0], ast.Name):
-                name = child.targets[0].id
-            elif (
-                isinstance(child.targets[0], ast.Attribute)
-                and isinstance(child.targets[0].value, ast.Name)
-                and child.targets[0].value.id == "self"
-            ):
-                name = child.targets[0].attr
-            else:
-                continue
-            if not _is_exported(name) and name not in getattr(module, "__all__", []):
-                continue
-
-            docstring = ""
-            if (
-                i + 1 < len(children)
-                and isinstance(children[i + 1], ast.Expr)
-                and isinstance(children[i + 1].value, ast.Str)
-            ):
-                docstring = children[i + 1].value.s
-
-            vs[name] = Variable(name, module, docstring, cls=cls)
-    return vs
-
-
-def _is_exported(ident_name):
+def _is_exported(ident_name: str, default_value: Any = None) -> bool:
     """
     Returns `True` if `ident_name` matches the export criteria for an
     identifier name.
-
-    This should not be used by clients. Instead, use
-    `pdoc.Module.is_public`.
     """
-    return not ident_name.startswith("_")
-
-
-def _is_method(cls: typing.Type, method_name: str) -> bool:
-    """
-    Returns `True` if the given method is a regular method,
-    i.e. it's neither annotated with @classmethod nor @staticmethod.
-    """
-    func = getattr(cls, method_name, None)
-    if inspect.ismethod(func):
-        # If the function is already bound, it's a classmethod.
-        # Regular methods are not bound before initialization.
+    if ident_name == "__init__":
+        return True
+    if isinstance(default_value, TypeVar):
         return False
-    for c in inspect.getmro(cls):
-        if method_name in c.__dict__:
-            return not isinstance(c.__dict__[method_name], staticmethod)
-    else:
-        raise ValueError("{method_name} not found in {cls}.".format(method_name=method_name, cls=cls))
+    if ident_name.startswith("_"):
+        return False
+    return True
 
 
-class Doc(object):
+T = TypeVar("T")
+
+
+class Doc(Generic[T]):
     """
     A base class for all documentation objects.
-
-    A documentation object corresponds to *something* in a Python module
-    that has a docstring associated with it. Typically, this only includes
-    modules, classes, functions and methods. However, `pdoc` adds support
-    for extracting docstrings from the abstract syntax tree, which means
-    that variables (module, class or instance) are supported too.
-
-    A special type of documentation object `pdoc.External` is used to
-    represent identifiers that are not part of the public interface of
-    a module. (The name "External" is a bit of a misnomer, since it can
-    also correspond to unexported members of the module, particularly in
-    a class's ancestor list.)
     """
 
-    def __init__(self, name, module, docstring):
-        """
-        Initializes a documentation object, where `name` is the public
-        identifier name, `module` is a `pdoc.Module` object, and
-        `docstring` is a string containing the docstring for `name`.
-        """
-        self.module = module
-        """
-        The module documentation object that this object was defined
-        in.
-        """
+    modulename: str
+    """
+    The module that this object was defined in, for example `pdoc.doc`.
+    """
 
-        self.name = name
-        """
-        The identifier name for this object.
-        """
+    qualname: str
+    """
+    The qualified identifier name for this object. For example, if we have the following code:
+    
+    ```python
+    class Foo:
+        def bar(self):
+            pass
+    ```
+    
+    The qualname of `Foo`'s `bar` method is `Foo.bar`. The qualname of the `Foo` class is just `Foo`.
+    
+    See <https://www.python.org/dev/peps/pep-3155/> for details.
+    """
 
-        self.docstring = inspect.cleandoc(docstring or "")
-        """
-        The docstring for this object. It has already been cleaned
-        by `inspect.cleandoc`.
-        """
+    obj: T
+    """
+    The underlying Python object.
+    """
 
+    def __init__(self, modulename: str, qualname: str, obj: T):
+        """
+        Initializes a documentation object, where
+        `modulename` is the name this module is defined in,
+        `qualname` contains a dotted path leading to the object from the module top-level, and
+        `obj` is the object to document.
+        """
+        self.modulename = modulename
+        self.qualname = qualname
+        self.obj = obj
+
+    @cached_property
+    def fullname(self) -> str:
+        """The full qualified name of this doc object, for example `pdoc.doc.Doc`."""
+        # qualname is empty for modules
+        return f"{self.modulename}.{self.qualname}".rstrip(".")
+
+    @cached_property
+    def name(self) -> str:
+        """The name of this object. For top-level functions and classes, this is equal to the qualname attribute."""
+        return self.fullname.split(".")[-1]
+
+    @cached_property
+    def docstring(self) -> str:
+        """
+        The docstring for this object. It has already been cleaned by `inspect.cleandoc`.
+
+        If no docstring can be found, an empty string is returned.
+        """
+        doc = inspect.getdoc(self.obj)
+        if doc is None or doc == object.__init__.__doc__:
+            # inspect.getdoc(Foo.__init__) returns the docstring, for object.__init__ if left undefined...
+            doc = ""
+        return doc.strip()
+
+    @cached_property
+    def source(self) -> str:
+        """
+        The source code of the Python object as a `str`.
+
+        If the source cannot be obtained (for example, because we are dealing with a native C object),
+        an empty string is returned.
+        """
+        return doc_ast.get_source(self.obj)
+
+    @cached_property
+    def declared_at(self) -> tuple[str, str]:
+        """Returns `(modulename, qualname)` of where this doc object was declared."""
+        mod = getattr(self.obj, "__module__", None)
+        qual = getattr(self.obj, "__qualname__", None)
+        if mod is None or qual is None or "<locals>" in qual:
+            return self.modulename, self.qualname
+        else:
+            return mod, qual
+
+    @cached_property
+    def is_inherited(self) -> bool:
+        """
+        If True, the doc object is inherited from another location.
+        This most commonly refers to methods inherited by a subclass,
+        but can also apply to variables that are assigned a class defined
+        in a different module.
+        """
+        return (self.modulename, self.qualname) != self.declared_at
+
+    @classmethod
     @property
-    def source(self):
+    def type(cls) -> str:
         """
-        Returns the source code of the Python object `obj` as a list of
-        lines. This tries to extract the source from the special
-        `__wrapped__` attribute if it exists. Otherwise, it falls back
-        to `inspect.getsourcelines`.
+        The type of the doc object, either `"module"`, `"class"`, or `"function"`.
+        """
+        return cls.__name__.lower()
 
-        If neither works, then the empty list is returned.
-        """
-        assert False, "subclass responsibility"
-
-    @property
-    def refname(self):
-        """
-        Returns an appropriate reference name for this documentation
-        object. Usually this is its fully qualified path. Every
-        documentation object must provide this property.
-
-        e.g., The refname for this property is
-        <code>pdoc.Doc.refname</code>.
-        """
-        assert False, "subclass responsibility"
+    if sys.version_info < (3, 9):  # pragma: no cover
+        # no @classmethod @property in 3.8
+        @property
+        def type(self) -> str:  # noqa
+            return self.__class__.__name__.lower()
 
     def __lt__(self, other):
-        return self.name < other.name
+        assert isinstance(other, Doc)
+        return self.fullname.replace("__init__", "").__lt__(
+            other.fullname.replace("__init__", "")
+        )
 
-    def is_empty(self):
+
+class Namespace(Doc[T], metaclass=ABCMeta):
+    """
+    A documentation object that can have children. In other words, either a module or a class.
+    """
+
+    @cached_property
+    @abstractmethod
+    def _member_objects(self) -> dict[str, Any]:
         """
-        Returns true if the docstring for this object is empty.
+        A mapping from *all* public member names to their Python objects.
         """
-        return len(self.docstring.strip()) == 0
+
+    @cached_property
+    @abstractmethod
+    def _var_docstrings(self) -> dict[str, str]:
+        """A mapping from some member variable names to their docstrings."""
+
+    @cached_property
+    @abstractmethod
+    def _declared_at(self) -> dict[str, tuple[str, str]]:
+        """A mapping from some members to their (modulename, qualname) declaration location."""
+
+    @cached_property
+    @abstractmethod
+    def _var_annotations(self) -> dict[str, Any]:
+        """A mapping from some member variable names to their type annotations."""
+
+    @cached_property
+    def members(self) -> dict[str, Doc]:
+        """A mapping from all members to their documentation objects."""
+        members: dict[str, Doc] = {}
+        for name, obj in self._member_objects.items():
+            qualname = f"{self.qualname}.{name}".lstrip(".")
+            doc: Doc[Any]
+
+            is_property = (
+                isinstance(obj, (property, cached_property))
+                or
+                # Python 3.9: @classmethod @property is allowed.
+                isinstance(getattr(obj, "__func__", None), (property, cached_property))
+            )
+            if is_property:
+                func = obj
+                if hasattr(obj, "__func__"):
+                    func = obj.__func__
+                if isinstance(func, property):
+                    func = func.fget
+                else:
+                    func = func.func
+                annotation = resolve_annotations(
+                    getattr(func, "__annotations__", {}),
+                    inspect.getmodule(func),
+                    f"{self.fullname}.{name}",
+                ).get("return", empty)
+                doc = Variable(
+                    self.modulename,
+                    qualname,
+                    docstring=func.__doc__ or "",
+                    annotation=annotation,
+                    default_value=empty,
+                    declared_at=self._declared_at.get(
+                        name, (self.modulename, qualname)
+                    ),
+                )
+            elif inspect.isroutine(obj):
+                doc = Function(self.modulename, qualname, obj)
+            elif inspect.isclass(obj) and obj is not empty:
+                doc = Class(self.modulename, qualname, obj)
+            else:
+                docstring = self._var_docstrings.get(name, "")
+                if not docstring and isinstance(obj, types.ModuleType):
+                    docstring = getattr(obj, "__doc__", None) or ""
+                doc = Variable(
+                    self.modulename,
+                    qualname,
+                    docstring=docstring,
+                    annotation=self._var_annotations.get(name, empty),
+                    default_value=obj,
+                    declared_at=self._declared_at.get(
+                        name, (self.modulename, qualname)
+                    ),
+                )
+            members[doc.name] = doc
+        return members
+
+    @cached_property
+    def _members_by_declared_location(self) -> dict[tuple[str, str], list[Doc]]:
+        """A mapping from (modulename, qualname) locations to the attributes declared in that path"""
+        locations: dict[tuple[str, str], list[Doc]] = {}
+        for member in self.members.values():
+            mod, qualname = member.declared_at
+            qualname = ".".join(qualname.split(".")[:-1])
+            locations.setdefault((mod, qualname), [])
+            locations[(mod, qualname)].append(member)
+        return locations
+
+    @cached_property
+    def own_members(self) -> list[Doc]:
+        """A list of all own (i.e. non-inherited) members"""
+        members = self._members_by_declared_location.get((self.modulename, self.qualname), [])
+        if self.declared_at != (self.modulename, self.qualname):
+            # .declared_at may be != (self.modulename, self.qualname), for example when
+            # a module re-exports a class from a private submodule.
+            members += self._members_by_declared_location.get(self.declared_at, [])
+        return members
+
+    @cached_property
+    def inherited_members(self) -> dict[tuple[str, str], list[Doc]]:
+        """A mapping from (modulename, qualname) locations to the attributes inherited from that path"""
+        return {
+            k: v
+            for k, v in self._members_by_declared_location.items()
+            if k not in (self.declared_at, (self.modulename, self.qualname))
+        }
+
+    @cached_property
+    def flattened_members(self) -> list[Doc]:
+        """
+        A list of all documented members and their child classes, recursively.
+        """
+        flattened = []
+        for x in self.own_members:
+            flattened.append(x)
+            if isinstance(x, Class):
+                flattened.extend(
+                    [cls for cls in x.flattened_members if isinstance(cls, Class)]
+                )
+        return flattened
 
 
-class Module(Doc):
+class Module(Namespace[types.ModuleType]):
     """
     Representation of a module's documentation.
     """
 
-    __pdoc__["Module.module"] = "The Python module object."
-    __pdoc__[
-        "Module.name"
-    ] = """
-        The name of this module with respect to the context in which
-        it was imported. It is always an absolute import path.
+    def __init__(self, module: types.ModuleType):
         """
-
-    def __init__(self, name, module, parent):
+        Creates a documentation object given the actual
+        Python module object.
         """
-        Creates a `Module` documentation object given the actual
-        module Python object.
+        super().__init__(module.__name__, "", module)
+
+    @cache
+    @_include_fullname_in_traceback
+    def __repr__(self):
+        children = "\n".join(repr(x) for x in self.members.values())
+        if children:
+            children = f"\n{textwrap.indent(children, '    ')}"
+        return f"<module {self.modulename}{_docstr(self)}{children}>"
+
+    @cached_property
+    def is_package(self) -> bool:
         """
-        super().__init__(name, module, inspect.getdoc(module))
-        self.parent = parent
+        `True` if the module is a package, `False` otherwise.
 
-        self.doc = {}
-        """A mapping from identifier name to a documentation object."""
-
-        self.refdoc = {}
+        Packages are special kind of module that may have submodules.
+        Typically, this means that this file is in a directory named like the
+        module with the name `__init__.py`.
         """
-        The same as `pdoc.Module.doc`, but maps fully qualified
-        identifier names to documentation objects.
-        """
+        return hasattr(self.obj, "__path__")  # type: ignore
 
-        self.submodules = []
+    @cached_property
+    def _var_docstrings(self) -> dict[str, str]:
+        return doc_ast.walk_tree(self.obj).docstrings
 
-        vardocs = {}
-        try:
-            tree = ast.parse(inspect.getsource(self.module))
-            vardocs = _var_docstrings(tree, self, cls=None)
-        except:
-            pass
-        self._declared_variables = vardocs.keys()
+    @cached_property
+    def _declared_at(self) -> dict[str, tuple[str, str]]:
+        return {}
 
-        public = self.__public_objs()
-        for name, obj in public.items():
-            # Skip any identifiers that already have doco.
-            if name in self.doc and not self.doc[name].is_empty():
-                continue
+    @cached_property
+    def _var_annotations(self) -> dict[str, Any]:
+        annotations = doc_ast.walk_tree(self.obj).annotations.copy()
+        for k, v in getattr(self.obj, "__annotations__", {}).items():
+            annotations[k] = v
 
-            # Functions and some weird builtins?, plus methods, classes,
-            # modules and module level variables.
-            if inspect.isfunction(obj) or inspect.isbuiltin(obj):
-                self.doc[name] = Function(name, self, obj)
-            elif inspect.ismethod(obj):
-                self.doc[name] = Function(name, self, obj)
-            elif inspect.isclass(obj):
-                self.doc[name] = Class(name, self, obj)
-            elif name in vardocs:
-                self.doc[name] = vardocs[name]
-            else:
-                # Catch all for variables.
-                self.doc[name] = Variable(name, self, "", cls=None)
+        return resolve_annotations(annotations, self.obj, self.fullname)
 
-        # Now see if we can grab inheritance relationships between classes.
-        for docobj in self.doc.values():
-            if isinstance(docobj, Class):
-                docobj._fill_inheritance()
-
-        # Build the reference name dictionary.
-        for basename, docobj in self.doc.items():
-            self.refdoc[docobj.refname] = docobj
-            if isinstance(docobj, Class):
-                for v in docobj.class_variables():
-                    self.refdoc[v.refname] = v
-                for v in docobj.instance_variables():
-                    self.refdoc[v.refname] = v
-                for f in docobj.methods():
-                    self.refdoc[f.refname] = f
-                for f in docobj.functions():
-                    self.refdoc[f.refname] = f
-
-        # Finally look for more docstrings in the __pdoc__ override.
-        for name, docstring in getattr(self.module, "__pdoc__", {}).items():
-            refname = "%s.%s" % (self.refname, name)
-            if docstring is None:
-                self.doc.pop(name, None)
-                self.refdoc.pop(refname, None)
-                continue
-
-            dobj = self.find_ident(refname)
-            if isinstance(dobj, External):
-                continue
-            dobj.docstring = inspect.cleandoc(docstring)
-
-    @property
-    def source(self):
-        return _source(self.module)
-
-    @property
-    def refname(self):
-        return self.name
-
-    def mro(self, cls):
-        """
-        Returns a method resolution list of ancestor documentation objects
-        for `cls`, which must be a documentation object.
-
-        The list will contain objects belonging to `pdoc.Class` or
-        `pdoc.External`. Objects belonging to the former are exported
-        classes either in this module or in one of its sub-modules.
-        """
-        return [
-            self.find_class(c)
-            for c in inspect.getmro(cls.cls)
-            if c not in (cls.cls, object)
-        ]
-
-    def descendents(self, cls):
-        """
-        Returns a descendent list of documentation objects for `cls`,
-        which must be a documentation object.
-
-        The list will contain objects belonging to `pdoc.Class` or
-        `pdoc.External`. Objects belonging to the former are exported
-        classes either in this module or in one of its sub-modules.
-        """
-        if cls.cls == type or not hasattr(cls.cls, "__subclasses__"):
-            # Is this right?
+    @cached_property
+    def submodules(self) -> list["Module"]:
+        """A list of all (direct) submodules."""
+        if not self.is_package:
             return []
+        submodules = []
+        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
+            if mod.name.split(".")[-1].startswith("_"):
+                continue
+            try:
+                module = importlib.import_module(mod.name)
+            except BaseException as e:
+                warnings.warn(
+                    f"Couldn't import {mod.name}: {e!r}", RuntimeWarning, stacklevel=2
+                )
+                continue
+            submodules.append(Module(module))
+        return submodules
 
-        downs = cls.cls.__subclasses__()
-        return list(map(lambda c: self.find_class(c), downs))
+    @cached_property
+    def _documented_members(self) -> set[str]:
+        return self._var_docstrings.keys() | self._var_annotations.keys()
 
-    def is_public(self, name):
+    @cached_property
+    def _member_objects(self) -> dict[str, Any]:
+        if all := getattr(self.obj, "__all__", False):
+            return {name: self.obj.__dict__.get(name, empty) for name in all}
+
+        members = {}
+        for name, obj in self.obj.__dict__.items():
+            if not _is_exported(name, obj):
+                continue
+            obj_module = inspect.getmodule(obj)
+            declared_in_this_module = self.obj.__name__ == getattr(
+                obj_module, "__name__", None
+            )
+            if declared_in_this_module or name in self._documented_members:
+                members[name] = obj
+        for name in self._var_annotations:
+            if _is_exported(name):
+                members.setdefault(name, empty)
+
+        members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
+        members.update(notfound)
+        return members
+
+    @cached_property
+    def variables(self) -> list["Variable"]:
         """
-        Returns `True` if and only if an identifier with name `name` is
-        part of the public interface of this module. While the names
-        of sub-modules are included, identifiers only exported by
-        sub-modules are not checked.
-
-        `name` should be a fully qualified name, e.g.,
-        <code>pdoc.Module.is_public</code>.
+        A list of all documented module level variables.
         """
-        return name in self.refdoc
+        return [x for x in self.members.values() if isinstance(x, Variable)]
 
-    def find_class(self, cls):
+    @cached_property
+    def classes(self) -> list["Class"]:
         """
-        Given a Python `cls` object, try to find it in this module
-        or in any of the exported identifiers of the submodules.
+        A list of all documented module level classes.
         """
-        for doc_cls in self.classes():
-            if cls is doc_cls.cls:
-                return doc_cls
-        for module in self.submodules:
-            doc_cls = module.find_class(cls)
-            if not isinstance(doc_cls, External):
-                return doc_cls
-        return External("%s.%s" % (cls.__module__, cls.__name__))
+        return [x for x in self.members.values() if isinstance(x, Class)]
 
-    def find_ident(self, name, _seen=None):
+    @cached_property
+    def functions(self) -> list["Function"]:
         """
-        Searches this module and **all** of its sub/super-modules for an
-        identifier with name `name` in its list of exported
-        identifiers according to `pdoc`. Note that unexported
-        sub-modules are searched.
-
-        A bare identifier (without `.` separators) will only be checked
-        for in this module.
-
-        The documentation object corresponding to the identifier is
-        returned. If one cannot be found, then an instance of
-        `External` is returned populated with the given identifier.
+        A list of all documented module level functions.
         """
-        _seen = _seen or set()
-        if self in _seen:
-            return None
-        _seen.add(self)
-
-        if name == self.refname:
-            return self
-        if name in self.refdoc:
-            return self.refdoc[name]
-        for module in self.submodules:
-            o = module.find_ident(name, _seen=_seen)
-            if not isinstance(o, (External, type(None))):
-                return o
-        # Traverse also up-level super-modules
-        module = self.parent
-        while module is not None:
-            o = module.find_ident(name, _seen=_seen)
-            if not isinstance(o, (External, type(None))):
-                return o
-            module = module.parent
-        return External(name)
-
-    def variables(self):
-        """
-        Returns all documented module level variables in the module
-        sorted alphabetically as a list of `pdoc.Variable`.
-        """
-        p = lambda o: isinstance(o, Variable)
-        return sorted(filter(p, self.doc.values()))
-
-    def classes(self):
-        """
-        Returns all documented module level classes in the module
-        sorted alphabetically as a list of `pdoc.Class`.
-        """
-        p = lambda o: isinstance(o, Class)
-        return sorted(filter(p, self.doc.values()))
-
-    def functions(self):
-        """
-        Returns all documented module level functions in the module
-        sorted alphabetically as a list of `pdoc.Function`.
-        """
-        p = lambda o: isinstance(o, Function)
-        return sorted(filter(p, self.doc.values()))
-
-    def __is_exported(self, name, module):
-        """
-        Returns `True` if and only if `pdoc` considers `name` to be
-        a public identifier for this module where `name` was defined
-        in the Python module `module`.
-
-        If this module has an `__all__` attribute, then `name` is
-        considered to be exported if and only if it is a member of
-        this module's `__all__` list.
-
-        If `__all__` is not set, then whether `name` is exported or
-        not is heuristically determined. Firstly, if `name` starts
-        with an underscore, it will not be considered exported.
-        Secondly, if `name` was defined in a module other than this
-        one, it will not be considered exported. In all other cases,
-        `name` will be considered exported.
-        """
-        if hasattr(self.module, "__all__"):
-            return name in self.module.__all__
-        if not _is_exported(name):
-            return False
-        if module is not None and self.module.__name__ != module.__name__:
-            return name in self._declared_variables
-        return True
-
-    def __public_objs(self):
-        """
-        Returns a dictionary mapping a public identifier name to a
-        Python object.
-        """
-        members = dict(inspect.getmembers(self.module))
-        return dict(
-            [
-                (name, obj)
-                for name, obj in members.items()
-                if self.__is_exported(name, inspect.getmodule(obj))
-            ]
-        )
-
-    def allmodules(self):
-        yield self
-        for i in self.submodules:
-            yield from i.allmodules()
-
-    def toroot(self):
-        n = self
-        while n:
-            yield n
-            n = n.parent
+        return [x for x in self.members.values() if isinstance(x, Function)]
 
 
-class Class(Doc):
+class Class(Namespace[type]):
     """
     Representation of a class's documentation.
     """
 
-    def __init__(self, name, module, class_obj):
-        """
-        Same as `pdoc.Doc.__init__`, except `class_obj` must be a
-        Python class object. The docstring is gathered automatically.
-        """
-        super().__init__(name, module, inspect.getdoc(class_obj))
+    @cache
+    @_include_fullname_in_traceback
+    def __repr__(self):
+        children = "\n".join(repr(x) for x in self.members.values())
+        return (
+            f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}\n"
+            f"{textwrap.indent(children, '    ')}>"
+        )
 
-        self.cls = class_obj
-        """The class Python object."""
+    @cached_property
+    def _var_docstrings(self) -> dict[str, str]:
+        docstrings: dict[str, str] = {}
+        for cls in self.obj.__mro__:
+            for name, docstr in doc_ast.walk_tree(cls).docstrings.items():
+                docstrings.setdefault(name, docstr)
+        return docstrings
 
-        self.doc = {}
-        """A mapping from identifier name to a `pdoc.Doc` objects."""
-
-        self.doc_init = {}
-        """
-        A special version of `pdoc.Class.doc` that contains
-        documentation for instance variables found in the `__init__`
-        method.
-        """
-
-        public = self.__public_objs()
-        try:
-            # First try and find docstrings for class variables.
-            # Then move on to finding docstrings for instance variables.
-            # This must be optional, since not all modules have source
-            # code available.
-            cls_ast = ast.parse(inspect.getsource(self.cls)).body[0]
-            self.doc = _var_docstrings(cls_ast, self.module, cls=self)
-
-            for n in cls_ast.body if "__init__" in public else []:
-                if isinstance(n, ast.FunctionDef) and n.name == "__init__":
-                    self.doc_init = _var_docstrings(n, self.module, cls=self, init=True)
-                    break
-        except:
-            pass
-
-        # Convert the public Python objects to documentation objects.
-        for name, obj in public.items():
-            # Skip any identifiers that already have doco.
-            if name in self.doc and not self.doc[name].is_empty():
-                continue
-            if name in self.doc_init:
-                # Let instance members override class members.
-                continue
-
-            if inspect.isfunction(obj) or inspect.ismethod(obj):
-                self.doc[name] = Function(
-                    name, self.module, obj, cls=self, method=_is_method(self.cls, name)
+    @cached_property
+    def _declared_at(self) -> dict[str, tuple[str, str]]:
+        declared_at: dict[str, tuple[str, str]] = {}
+        for cls in self.obj.__mro__:
+            treeinfo = doc_ast.walk_tree(cls)
+            for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
+                declared_at.setdefault(
+                    name, (cls.__module__, f"{cls.__qualname__}.{name}")
                 )
-            elif isinstance(obj, property):
-                docstring = getattr(obj, "__doc__", "")
-                self.doc_init[name] = Variable(name, self.module, docstring, cls=self)
-            elif not inspect.isbuiltin(obj) and not inspect.isroutine(obj):
-                if name in getattr(self.cls, "__slots__", []):
-                    self.doc_init[name] = Variable(name, self.module, "", cls=self)
-                else:
-                    self.doc[name] = Variable(name, self.module, "", cls=self)
+            for name in cls.__dict__:
+                declared_at.setdefault(
+                    name, (cls.__module__, f"{cls.__qualname__}.{name}")
+                )
+        return declared_at
 
-    @property
-    def source(self):
-        return _source(self.cls)
+    @cached_property
+    def _var_annotations(self) -> dict[str, type]:
+        annotations: dict[str, type] = {}
+        for cls in self.obj.__mro__:
+            cls_annotations = doc_ast.walk_tree(cls).annotations.copy()
+            dynamic_annotations = getattr(cls, "__annotations__", None)
+            if isinstance(dynamic_annotations, dict):
+                for k, v in dynamic_annotations.items():
+                    cls_annotations[k] = v
+            cls_fullname = (
+                getattr(cls, "__module__", "") + "." + cls.__qualname__
+            ).lstrip(".")
+            cls_annotations = resolve_annotations(
+                cls_annotations, inspect.getmodule(cls), cls_fullname
+            )
 
-    @property
-    def refname(self):
-        return "%s.%s" % (self.module.refname, self.cls.__name__)
+            for k, v in cls_annotations.items():
+                annotations.setdefault(k, v)
+        return annotations
 
-    def class_variables(self):
-        """
-        Returns all documented class variables in the class, sorted
-        alphabetically as a list of `pdoc.Variable`.
-        """
-        p = lambda o: isinstance(o, Variable)
-        return sorted(filter(p, self.doc.values()))
-
-    def instance_variables(self):
-        """
-        Returns all instance variables in the class, sorted
-        alphabetically as a list of `pdoc.Variable`. Instance variables
-        are attributes of `self` defined in a class's `__init__`
-        method.
-        """
-        p = lambda o: isinstance(o, Variable)
-        return sorted(filter(p, self.doc_init.values()))
-
-    def methods(self):
-        """
-        Returns all documented methods as `pdoc.Function` objects in
-        the class, sorted alphabetically with `__init__` always coming
-        first.
-
-        Unfortunately, this also includes class methods.
-        """
-        p = lambda o: (isinstance(o, Function) and o.method)
-        return sorted(filter(p, self.doc.values()))
-
-    def functions(self):
-        """
-        Returns all documented static functions as `pdoc.Function`
-        objects in the class, sorted alphabetically.
-        """
-        p = lambda o: (isinstance(o, Function) and not o.method)
-        return sorted(filter(p, self.doc.values()))
-
-    def _fill_inheritance(self):
-        """
-        Traverses this class's ancestor list and attempts to fill in
-        missing documentation from its ancestor's documentation.
-
-        The first pass connects variables, methods and functions with
-        their inherited couterparts. (The templates will decide how to
-        display docstrings.) The second pass attempts to add instance
-        variables to this class that were only explicitly declared in
-        a parent class. This second pass is necessary since instance
-        variables are only discoverable by traversing the abstract
-        syntax tree.
-        """
-        mro = [c for c in self.module.mro(self) if c != self and isinstance(c, Class)]
-
-        def search(d, fdoc):
-            for c in mro:
-                doc = fdoc(c)
-                if d.name in doc and isinstance(d, type(doc[d.name])):
-                    return doc[d.name]
-            return None
-
-        for fdoc in (lambda c: c.doc_init, lambda c: c.doc):
-            for d in fdoc(self).values():
-                dinherit = search(d, fdoc)
-                if dinherit is not None:
-                    d.inherits = dinherit
-
-        # Since instance variables aren't part of a class's members,
-        # we need to manually deduce inheritance. Oh lawdy.
-        for c in mro:
-            for name in filter(lambda n: n not in self.doc_init, c.doc_init):
-                d = c.doc_init[name]
-                self.doc_init[name] = Variable(d.name, d.module, "", cls=self)
-                self.doc_init[name].inherits = d
-
-    def __public_objs(self):
+    @cached_property
+    def _member_objects(self) -> dict[str, Any]:
         """
         Returns a dictionary mapping a public identifier name to a
         Python object. This counts the `__init__` method as being
         public.
         """
-        _pdoc = getattr(self.module.module, "__pdoc__", {})
+        unsorted: dict[str, Any] = {}
+        for cls in self.obj.__mro__:
+            for name, obj in cls.__dict__.items():
+                if _is_exported(name, obj):
+                    unsorted.setdefault(name, obj)
+        for name in self._var_annotations:
+            if _is_exported(name):
+                unsorted.setdefault(name, empty)
+        for name in self._var_docstrings:
+            if _is_exported(name):
+                unsorted.setdefault(name, empty)
 
-        def forced_out(name):
-            return _pdoc.get("%s.%s" % (self.name, name), False) is None
+        sorted: dict[str, Any] = {}
+        for cls in self.obj.__mro__:
+            sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
+        sorted.update(unsorted)
+        return sorted
 
-        def exported(name):
-            exported = name == "__init__" or _is_exported(name)
-            return not forced_out(name) and exported
+    @cached_property
+    def bases(self) -> list[tuple[str, str]]:
+        """
+        A list of all base classes, i.e. all immediate parent classes.
 
-        idents = dict(inspect.getmembers(self.cls))
-        return dict([(n, o) for n, o in idents.items() if exported(n)])
+        Each parent class is represented as a `(modulename, qualname)` tuple.
+        """
+        return [
+            (x.__module__, x.__qualname__)
+            for x in self.obj.__bases__
+            if x is not object
+        ]
+
+    @cached_property
+    def decorators(self) -> list[str]:
+        """A list of all decorators the class is decorated with."""
+        decorators = []
+        for t in doc_ast.parse(self.obj).decorator_list:
+            decorators.append(f"@{doc_ast.unparse(t)}")
+        return decorators
+
+    @cached_property
+    def class_variables(self) -> list["Variable"]:
+        """
+        A list of all documented class variables in the class.
+
+        Class variables are variables that are explicitly annotated with `typing.ClassVar`.
+        All other variables are treated as instance variables.
+        """
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Variable) and x.is_classvar
+        ]
+
+    @cached_property
+    def instance_variables(self) -> list["Variable"]:
+        """
+        A list of all instance variables in the class.
+        """
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Variable) and not x.is_classvar
+        ]
+
+    @cached_property
+    def classmethods(self) -> list["Function"]:
+        """
+        A list of all documented `@classmethod`s.
+        """
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Function) and x.is_classmethod
+        ]
+
+    @cached_property
+    def staticmethods(self) -> list["Function"]:
+        """
+        A list of all documented `@staticmethod`s.
+        """
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Function) and x.is_staticmethod
+        ]
+
+    @cached_property
+    def methods(self) -> list["Function"]:
+        """
+        A list of all documented methods in the class that are neither static- nor classmethods.
+        """
+        return [
+            x
+            for x in self.members.values()
+            if isinstance(x, Function)
+            and not x.is_staticmethod
+            and not x.is_classmethod
+        ]
 
 
-class Function(Doc):
+WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
+
+
+class Function(Doc[types.FunctionType]):
     """
-    Representation of documentation for a Python function or method.
+    Representation of a function's documentation.
+
+    This class covers all "flavors" of functions, for example it also
+    supports `@classmethod`s or `@staticmethod`s.
     """
 
-    def __init__(self, name, module, func_obj, cls=None, method=False):
-        """
-        Same as `pdoc.Doc.__init__`, except `func_obj` must be a
-        Python function object. The docstring is gathered automatically.
+    wrapped: Union[types.FunctionType, staticmethod, classmethod]
+    """The original wrapped function (e.g., `staticmethod(func)`)"""
 
-        `cls` should be set when this is a method or a static function
-        belonging to a class. `cls` should be a `pdoc.Class` object.
+    obj: types.FunctionType
+    """The unwrapped "real" function."""
 
-        `method` should be `True` when the function is a method. In
-        all other cases, it should be `False`.
-        """
-        super().__init__(name, module, inspect.getdoc(func_obj))
-
-        self.func = func_obj
-        """The Python function object."""
-
-        self.cls = cls
-        """
-        The `pdoc.Class` documentation object if this is a method. If
-        not, this is None.
-        """
-
-        self.method = method
-        """
-        Whether this function is a method or not.
-
-        In particular, static class methods have this set to False.
-        """
-
-    @property
-    def source(self):
-        return _source(self.func)
-
-    @property
-    def refname(self):
-        if self.cls is None:
-            return "%s.%s" % (self.module.refname, self.name)
+    def __init__(
+        self,
+        modulename: str,
+        qualname: str,
+        func: WrappedFunction,
+    ):
+        """Initialize a function's documentation object."""
+        unwrapped: types.FunctionType
+        if isinstance(func, (classmethod, staticmethod)):
+            unwrapped = func.__func__  # type: ignore
         else:
-            return "%s.%s" % (self.cls.refname, self.name)
+            unwrapped = func
+        super(Function, self).__init__(modulename, qualname, unwrapped)
+        self.wrapped = func
 
-    def funcdef(self):
+    @cache
+    @_include_fullname_in_traceback
+    def __repr__(self):
+        if self.is_classmethod:
+            t = "class"
+        elif self.is_staticmethod:
+            t = "static"
+        elif self.qualname != getattr(self.obj, "__name__", None):
+            t = "method"
+        else:
+            t = "function"
+        return f"<{_decorators(self)}{t} {self.funcdef} {self.name}{self.signature}: ...{_docstr(self)}>"
+
+    @cached_property
+    def is_classmethod(self) -> bool:
         """
-        Generates the string of keywords used to define the function, for
-        example `def` or `async def`.
+        `True` if this function is a `@classmethod`, `False` otherwise.
         """
-        keywords = []
+        return isinstance(self.wrapped, classmethod)
 
-        if self._is_async():
-            keywords.append("async")
-
-        keywords.append("def")
-
-        return " ".join(keywords)
-
-    def _is_async(self):
+    @cached_property
+    def is_staticmethod(self) -> bool:
         """
-        Returns whether is function is asynchronous, either as a coroutine or an
-        async generator.
+        `True` if this function is a `@staticmethod`, `False` otherwise.
         """
+        return isinstance(self.wrapped, staticmethod)
+
+    @cached_property
+    def decorators(self) -> list[str]:
+        """A list of all decorators the function is decorated with."""
+        decorators = []
+        # noinspection PyTypeChecker
+        obj: types.FunctionType = self.obj  # type: ignore
+        for t in doc_ast.parse(obj).decorator_list:
+            decorators.append(f"@{doc_ast.unparse(t)}")
+        return decorators
+
+    @cached_property
+    def funcdef(self) -> str:
+        """
+        The string of keywords used to define the function, i.e. `"def"` or `"async def"`.
+        """
+        if inspect.iscoroutinefunction(self.obj) or inspect.isasyncgenfunction(
+            self.obj
+        ):
+            return "async def"
+        else:
+            return "def"
+
+    @cached_property
+    def signature(self) -> inspect.Signature:
+        """
+        The function's signature.
+
+        This usually returns an instance of `_PrettySignature`, a subclass of `inspect.Signature`
+        that contains pdoc-specific optimizations. For example, long argument lists are split over multiple lines
+        in repr(). Additionally, all types are already resolved.
+
+        If the signature cannot be determined, a placeholder Signature object is returned.
+        """
+        if self.obj is object.__init__:
+            # there is a weird edge case were inspect.signature returns a confusing (self, /, *args, **kwargs)
+            # signature for the default __init__ method.
+            return inspect.Signature()
         try:
-            # Both of these are required because coroutines aren't classified as
-            # async generators and vice versa.
-            return inspect.iscoroutinefunction(self.func) or inspect.isasyncgenfunction(
-                self.func
+            sig = _PrettySignature.from_callable(self.obj)
+        except Exception:
+            return inspect.Signature(
+                [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
             )
-        except AttributeError:
+        mod = inspect.getmodule(self.obj)
+        globalns = getattr(mod, "__dict__", {})
+        if self.name == "__init__":
+            sig._return_annotation = empty  # type: ignore
+        else:
+            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)  # type: ignore
+        for p in sig.parameters.values():
+            p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
+        return sig
+
+
+class Variable(Doc[None]):
+    """
+    Representation of a variable's documentation. This includes module, class and instance variables.
+    """
+
+    default_value: Union[
+        Any, empty
+    ]  # technically Any includes empty, but this conveys intent.
+    """
+    The variable's default value.
+    
+    In some cases, no default value is known. This may either be because a variable is only defined in the constructor,
+    or it is only declared with a type annotation without assignment (`foo: int`).
+    To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.
+    """
+
+    annotation: Union[type, empty]
+    """
+    The variable's type annotation.
+    
+    If there is no type annotation, `pdoc.doc_types.empty` is used as a placeholder.
+    """
+
+    # noinspection PyPropertyAccess
+    def __init__(
+        self,
+        modulename: str,
+        qualname: str,
+        docstring: str,
+        declared_at: tuple[str, str],
+        annotation: Union[type, empty] = empty,
+        default_value: Union[Any, empty] = empty,
+    ):
+        """
+        Construct a variable doc object.
+
+        While classes and functions can introspect themselves to see their docstring,
+        variables can't do that as we don't have a "variable object" we could query.
+        As such, docstring, declaration location, type annotation, and the default value
+        must be passed manually in the constructor.
+        """
+        super().__init__(modulename, qualname, None)
+        self.docstring = inspect.cleandoc(docstring)
+        self.declared_at = declared_at
+        self.annotation = annotation
+        self.default_value = default_value
+
+    @cache
+    @_include_fullname_in_traceback
+    def __repr__(self):
+        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{self.default_value_str}{_docstr(self)}>'
+
+    @cached_property
+    def is_classvar(self) -> bool:
+        """`True` if the variable is a class variable, `False` otherwise."""
+        if get_origin(self.annotation) is ClassVar:
+            return True
+        else:
             return False
 
-    def spec(self):
-        """
-        Returns a nicely formatted spec of the function's parameter
-        list as a string. This includes argument lists, keyword
-        arguments and default values.
-        """
-        return ", ".join(self.params())
-
-    def params(self):
-        """
-        Returns a list where each element is a nicely formatted
-        parameter of this function. This includes argument lists,
-        keyword arguments and default values.
-        """
-
-        def fmt_param(el):
-            if isinstance(el, str):
-                return el
-            else:
-                return "(%s)" % (", ".join(map(fmt_param, el)))
-
-        try:
-            getspec = getattr(inspect, "getfullargspec", inspect.getargspec)
-            s = getspec(self.func)
-        except TypeError:
-            # I guess this is for C builtin functions?
-            return ["..."]
-
-        params = []
-        for i, param in enumerate(s.args):
-            if s.defaults is not None and len(s.args) - i <= len(s.defaults):
-                defind = len(s.defaults) - (len(s.args) - i)
-                params.append("%s=%s" % (param, repr(s.defaults[defind])))
-            else:
-                params.append(fmt_param(param))
-        if s.varargs is not None:
-            params.append("*%s" % s.varargs)
-
-        kwonlyargs = getattr(s, "kwonlyargs", None)
-        if kwonlyargs:
-            if s.varargs is None:
-                params.append("*")
-            for param in kwonlyargs:
-                try:
-                    params.append("%s=%s" % (param, repr(s.kwonlydefaults[param])))
-                except KeyError:
-                    params.append(param)
-
-        keywords = getattr(s, "varkw", getattr(s, "keywords", None))
-        if keywords is not None:
-            params.append("**%s" % keywords)
-        # TODO: The only thing now missing for Python 3 are type annotations
-        return params
-
-    def __lt__(self, other):
-        # Push __init__ to the top.
-        if "__init__" in (self.name, other.name):
-            return self.name != other.name and self.name == "__init__"
+    @cached_property
+    def default_value_str(self) -> str:
+        """The variable's default value as a pretty-printed str."""
+        if self.default_value is empty:
+            return ""
+        elif isinstance(self.default_value, types.ModuleType):
+            return f" = {self.default_value.__name__}"
         else:
-            return self.name < other.name
+            try:
+                return re.sub(r"(?<=object) at 0x[0-9a-fA-F]+(?=>$)", "", f" = {repr(self.default_value)}")
+            except Exception:
+                return " = <unable to get value representation>"
 
-
-class Variable(Doc):
-    """
-    Representation of a variable's documentation. This includes
-    module, class and instance variables.
-    """
-
-    def __init__(self, name, module, docstring, cls=None):
-        """
-        Same as `pdoc.Doc.__init__`, except `cls` should be provided
-        as a `pdoc.Class` object when this is a class or instance
-        variable.
-        """
-        super().__init__(name, module, docstring)
-
-        self.cls = cls
-        """
-        The `podc.Class` object if this is a class or instance
-        variable. If not, this is None.
-        """
-
-    @property
-    def source(self):
-        return []
-
-    @property
-    def refname(self):
-        if self.cls is None:
-            return "%s.%s" % (self.module.refname, self.name)
+    @cached_property
+    def annotation_str(self) -> str:
+        """The variable's type annotation as a pretty-printed str."""
+        if self.annotation is not empty:
+            return f": {formatannotation(self.annotation)}"
         else:
-            return "%s.%s" % (self.cls.refname, self.name)
+            return ""
 
 
-class External(Doc):
+class _PrettySignature(inspect.Signature):
     """
-    A representation of an external identifier. The textual
-    representation is the same as an internal identifier, but without
-    any context. (Usually this makes linking more difficult.)
-
-    External identifiers are also used to represent something that is
-    not exported but appears somewhere in the public interface (like
-    the ancestor list of a class).
+    A subclass of `inspect.Signature` that pads __str__ over several lines
+    for complex signatures.
     """
 
-    __pdoc__[
-        "External.docstring"
-    ] = """
-        An empty string. External identifiers do not have
-        docstrings.
-        """
-    __pdoc__[
-        "External.module"
-    ] = """
-        Always `None`. External identifiers have no associated
-        `pdoc.Module`.
-        """
-    __pdoc__[
-        "External.name"
-    ] = """
-        Always equivalent to `pdoc.External.refname` since external
-        identifiers are always expressed in their fully qualified
-        form.
-        """
+    def __str__(self):
+        # redeclared here to keep code snipped below as-is.
+        _POSITIONAL_ONLY = inspect.Parameter.POSITIONAL_ONLY
+        _VAR_POSITIONAL = inspect.Parameter.VAR_POSITIONAL
+        _KEYWORD_ONLY = inspect.Parameter.KEYWORD_ONLY
+        _empty = empty
 
-    def __init__(self, name):
-        """
-        Initializes an external identifier with `name`, where `name`
-        should be a fully qualified name.
-        """
-        super().__init__(name, None, "")
+        # https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3123
+        # ✂ start ✂
+        result = []
+        render_pos_only_separator = False
+        render_kw_only_separator = True
+        for param in self.parameters.values():
+            formatted = str(param)
 
-    @property
-    def source(self):
-        return []
+            kind = param.kind
 
-    @property
-    def refname(self):
-        return self.name
+            if kind == _POSITIONAL_ONLY:
+                render_pos_only_separator = True
+            elif render_pos_only_separator:
+                # It's not a positional-only parameter, and the flag
+                # is set to 'True' (there were pos-only params before.)
+                result.append("/")
+                render_pos_only_separator = False
+
+            if kind == _VAR_POSITIONAL:
+                # OK, we have an '*args'-like parameter, so we won't need
+                # a '*' to separate keyword-only arguments
+                render_kw_only_separator = False
+            elif kind == _KEYWORD_ONLY and render_kw_only_separator:
+                # We have a keyword-only parameter to render and we haven't
+                # rendered an '*args'-like parameter before, so add a '*'
+                # separator to the parameters list ("foo(arg1, *, arg2)" case)
+                result.append("*")
+                # This condition should be only triggered once, so
+                # reset the flag
+                render_kw_only_separator = False
+
+            result.append(formatted)
+
+        if render_pos_only_separator:
+            # There were only positional-only parameters, hence the
+            # flag was not reset to 'False'
+            result.append("/")
+
+        rendered = "({})".format(", ".join(result))
+
+        if self.return_annotation is not _empty:
+            anno = formatannotation(self.return_annotation)
+            rendered += " -> {}".format(anno)
+        # ✂ end ✂
+
+        if len(rendered) > 70:
+            rendered = "(\n\t" + ",\n\t".join(result) + "\n)"
+            if self.return_annotation is not _empty:
+                rendered += f" -> {formatannotation(self.return_annotation)}"
+
+        return rendered
+
+
+def _cut(x: str) -> str:
+    """helper function for Doc.__repr__()"""
+    if len(x) < 20:
+        return x
+    else:
+        return x[:20] + "…"
+
+
+def _docstr(doc: "Doc") -> str:
+    """helper function for Doc.__repr__()"""
+    docstr = []
+    if doc.is_inherited:
+        docstr.append(f"inherited from {'.'.join(doc.declared_at)}")
+    if doc.docstring:
+        docstr.append(_cut(doc.docstring))
+    if docstr:
+        return f"  # {', '.join(docstr)}"
+    else:
+        return ""
+
+
+def _decorators(doc: Union["Class", "Function"]) -> str:
+    """helper function for Doc.__repr__()"""
+    if doc.decorators:
+        return " ".join(doc.decorators) + " "
+    else:
+        return ""

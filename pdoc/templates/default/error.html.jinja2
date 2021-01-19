@@ -1,0 +1,34 @@
+{% extends "frame.html.jinja2" %}
+{% block title %}{{ error }}{% endblock %}
+{% block style %}
+    <style type="text/css">
+        body {
+            padding: 2rem;
+        }
+
+        footer {
+            text-align: right;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+        }
+
+        footer svg {
+            max-width: 70px;
+            transition: all 200ms;
+            filter: grayscale(100%);
+        }
+
+        footer svg:hover {
+            filter: grayscale(0%);
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>{{ error }}</h1>
+    <pre>{{ details }}</pre>
+    <hr>
+    <footer><a title="built with pdoc {{ __version__ }}"
+               href="https://pdoc.dev">{% include 'logo.svg' %}</a></footer>
+{% endblock %}

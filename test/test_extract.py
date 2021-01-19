@@ -1,96 +1,46 @@
+import sys
+from pathlib import Path
+
 import pytest
 
-import pdoc.extract
+from pdoc.extract import parse_specs, module_mtime, parse_spec
 
-import tutils
-
-
-@pytest.mark.parametrize(
-    "input,expected",
-    [
-        ("foo", ("", "foo")),
-        ("foo.bar", ("", "foo.bar")),
-        ("foo/bar.py", ("foo", "bar")),
-        ("./bar.py", (".", "bar")),
-        ("./bar.foo", None),
-        ("", None),
-    ]
-)
-def test_split_module_spec(input, expected):
-    if expected is None:
-        with pytest.raises(pdoc.extract.ExtractError):
-            pdoc.extract.split_module_spec(input)
-    else:
-        assert pdoc.extract.split_module_spec(input) == expected
+here = Path(__file__).parent
 
 
-@pytest.mark.parametrize(
-    "path,mod,expected,match",
-    [
-        ("./modules", "one", False, None),
-        ("./modules", "dirmod", True, None),
-        ("", "email", True, None),
-        ("", "csv", False, None),
-        ("", "html.parser", False, None),
-        ("", "onpath.simple", False, None),
+def test_parse_specs():
+    assert list(parse_specs(["dataclasses"])) == ["dataclasses"]
+    with pytest.raises(ValueError, match="No valid module specifications found."):
+        with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
+            assert parse_specs(["unknown"])
+    with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
+        assert list(parse_specs(["dataclasses", "unknown"])) == ["dataclasses"]
 
-        ("./modules", "nonexistent", False, "not found"),
-        ("./modules/nonexistent", "foo", False, "not found"),
-        ("", "nonexistent.module", False, "not found"),
-        ("./modules/malformed", "syntax", False, "Error importing"),
-        ("", "onpath.malformed_syntax", False, "Error importing"),
-    ]
-)
-def test_load_module(path, mod, expected, match):
-    with tutils.tdir():
-        if match:
-            with pytest.raises(pdoc.extract.ExtractError, match=match):
-                pdoc.extract.load_module(path, mod)
-        else:
-            _, ispkg = pdoc.extract.load_module(path, mod)
-            assert ispkg == expected
+    with pytest.warns(RuntimeWarning, match="Error importing subpackage"):
+        assert list(parse_specs([here / "import_err"])) == [
+            "import_err",
+            "import_err.err",
+        ]
+
+    assert parse_specs([])
 
 
-@pytest.mark.parametrize(
-    "path,expected,match",
-    [
-        ("./modules/nonexistent.py", None, "not found"),
-        ("./modules/nonexistent/foo", None, "not found"),
-        ("nonexistent", None, "not found"),
-        ("nonexistent.module", None, "not found"),
-        ("./modules/one.two", None, "Invalid module name"),
-        ("./modules/malformed/syntax.py", None, "Error importing"),
-        ("onpath.malformed_syntax", None, "Error importing"),
+def test_parse_spec():
+    p = sys.path
 
-        ("./modules/one.py", ["one"], None),
-        ("./modules/one", ["one"], None),
-        ("./modules/dirmod", ["dirmod"], None),
-        ("./modules/submods", ["submods", "submods.three", "submods.two"], None),
-        ("csv", ["csv"], None),
-        ("html.parser", ["html.parser"], None),
-        ("onpath.simple", ["onpath.simple"], None),
-    ],
-)
-def test_extract_module(path, expected, match):
-    with tutils.tdir():
-        if match:
-            with pytest.raises(pdoc.extract.ExtractError, match=match):
-                pdoc.extract.extract_module(path)
-        else:
-            ret = pdoc.extract.extract_module(path)
-            assert sorted([i.name for i in ret.allmodules()]) == expected
+    assert parse_spec("dataclasses") == "dataclasses"
+    assert sys.path == p
+
+    assert parse_spec(here / "snapshots" / "demo.py") == "demo"
+    assert str(here / "snapshots") in sys.path
+    sys.path = p
+
+    assert parse_spec(here / "snapshots" / "demopackage" / "_child.py") == "demopackage._child"
+    assert str(here / "snapshots") in sys.path
+    sys.path = p
 
 
-@pytest.mark.parametrize(
-    "path,modname,expected",
-    [
-        ("./modules", "one", []),
-        ("./modules", "dirmod", []),
-        ("./modules", "submods", ["submods.three", "submods.two"]),
-        ("./modules", "malformed", ["malformed.syntax"]),
-    ]
-)
-def test_submodules(path, modname, expected):
-    with tutils.tdir():
-        ret = pdoc.extract.submodules(path, modname)
-        assert ret == expected
+def test_module_mtime():
+    assert module_mtime("dataclasses")
+    assert module_mtime("unknown") is None
+    assert module_mtime("dataclasses.abc") is None

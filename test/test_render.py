@@ -1,20 +1,18 @@
-import pdoc.extract
-import pdoc.render
-import pdoc.doc
+from pathlib import Path
 
-import tutils
+from pdoc import render, doc
 
-
-def test_html_module():
-    with tutils.tdir():
-        m = pdoc.extract.extract_module("./modules/one")
-        assert pdoc.render.html_module(m)
+here = Path(__file__).parent
 
 
-def test_html_module_index():
-    with tutils.tdir():
-        roots = [
-            pdoc.extract.extract_module("./modules/one"),
-            pdoc.extract.extract_module("./modules/submods")
-        ]
-        assert pdoc.render.html_index(roots)
+def test_render_custom_template():
+    mod = doc.Module(doc)
+    assert "View Source" in render.html_module(mod, ["pdoc.doc"])
+    render.configure(template_directory=here / "customtemplate")
+
+    try:
+        html = render.html_module(mod, ["pdoc.doc"])
+        assert "View Source" not in html
+        assert "wat" in html
+    finally:
+        render.configure()

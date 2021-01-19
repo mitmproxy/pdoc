@@ -1,99 +1,90 @@
+<p align="center">
+<img alt="pdoc logo" src="https://pdoc.dev/logo.svg" width="200" height="100" />
+<br><br>
+<a href="https://pdoc.dev/docs/pdoc.html"><img height="20" alt="documentation" src="https://shields.mitmproxy.org/badge/docs-pdoc.dev-brightgreen.svg"></a>
+<a href="https://github.com/mitmproxy/pdoc/actions?query=branch%3Amain"><img height="20" alt="CI Status" src="https://github.com/mitmproxy/pdoc/workflows/CI/badge.svg?branch=main"></a>
+<a href="https://codecov.io/gh/mitmproxy/pdoc"><img height="20" alt="Code Coverage" src="https://shields.mitmproxy.org/codecov/c/github/mitmproxy/pdoc/main.svg?label=codecov"></a>
+<a href="https://pypi.python.org/pypi/pdoc"><img height="20" alt="PyPI Version" src="https://shields.mitmproxy.org/pypi/v/pdoc.svg"></a>
+<a href="https://pypi.python.org/pypi/pdoc"><img height="20" alt="Supported Python Versions" src="https://shields.mitmproxy.org/pypi/pyversions/pdoc.svg"></a>
+</p>
 
-[![Build Status](https://travis-ci.org/mitmproxy/pdoc.svg?branch=master)](https://travis-ci.org/mitmproxy/pdoc)
-[![PyPI Version](https://shields.mitmproxy.org/pypi/v/pdoc.svg)](https://pypi.org/project/pdoc/)
-
-`pdoc` is a library and a command line program to discover the public
-interface of a Python module or package. The `pdoc` script can be used to
-generate plain text or HTML of a module's public interface, or it can be used
-to run an HTTP server that serves generated HTML for installed modules.
-
-
-Installation
-------------
-
-    pip install pdoc
+API Documentation for Python Projects.
 
 
-Features
---------
+# Example
 
-* Support for documenting data representation by traversing the abstract syntax
-  to find docstrings for module, class and instance variables.
-* For cases where docstrings aren't appropriate (like a
-  [namedtuple](http://docs.python.org/2.7/library/collections.html#namedtuple-factory-function-for-tuples-with-named-fields)),
-  the special variable `__pdoc__` can be used in your module to
-  document any identifier in your public interface.
-* Usage is simple. Just write your documentation as Markdown. There are no
-  added special syntax rules.
+`pdoc -o ./html pdoc` generates this website: [pdoc.dev/docs](https://pdoc.dev/docs/pdoc.html).
+
+# Installation
+```shell
+pip install pdoc
+```
+
+pdoc is compatible with Python 3.8 and newer.
+
+
+# Usage
+
+```shell
+pdoc your_python_module
+# or
+pdoc ./my_project.py
+```
+
+Run `pdoc pdoc` to see pdoc's own documentation, 
+run `pdoc --help` to view the command line flags, 
+or check our [hosted copy of the documentation](https://pdoc.dev/docs/pdoc.html).
+
+
+# Features
+
+pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do it well.  
+
+
+* Documentation is plain Markdown. There are no added special syntax rules.
+* First-class support for type annotations and all other modern Python 3 features.
+* Builtin web server with live reloading.
+* Customizable HTML templates.
+* Standalone JS-free HTML output without additional dependencies.
+  
+Under the hood...
+
+* `pdoc` will automatically link identifiers in your docstrings to their corresponding documentation.
 * `pdoc` respects your `__all__` variable when present.
-* `pdoc` will automatically link identifiers in your docstrings to its
-  corresponding documentation.
-* When `pdoc` is run as an HTTP server, external linking is supported between
-  packages.
-* The `pdoc` HTTP server will cache generated documentation and automatically
-  regenerate it if the source code has been updated.
-* When available, source code for modules, functions and classes can be viewed
-  in the HTML documentation.
-* Inheritance is used when possible to infer docstrings for class members.
-
-The above features are explained in more detail in pdoc's documentation.
-
-`pdoc` is compatible with Python 3.5 and newer.
+* `pdoc` will traverse the abstract syntax tree to extract type annotations and docstrings from constructors as well.
+* `pdoc` will automatically try to resolve type annotation string literals as forward references.
+* `pdoc` will use inheritance to resolve type annotations and docstrings for class members. 
+  
+If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
 
 
-Example usage
--------------
-`pdoc` will accept a Python module file, package directory or an import path.
-For example, to view the documentation for the `csv` module in the console:
+## Contributing
 
-    pdoc csv
+As an open source project, pdoc welcomes contributions of all forms.
 
-Or, you could view it by pointing at the file directly:
+[![Dev Guide](https://shields.mitmproxy.org/badge/dev_docs-CONTRIBUTING.md-blue)](./CONTRIBUTING.md)
 
-    pdoc /usr/lib/python3.7/csv.py
+Also, please feel free to join our developer Slack!
 
-Submodules are fine too:
-
-    pdoc multiprocessing.pool
-
-You can also filter the documentation with a keyword:
-
-    pdoc csv reader
-
-Generate HTML with the `--html` switch:
-
-    pdoc --html csv
-
-A file called `csv.m.html` will be written to the current directory.
-
-Or start an HTTP server that shows documentation for any installed module:
-
-    pdoc --http
-
-Then open your web browser to `http://localhost:8080`.
-
-There are many other options to explore. You can see them all by running:
-
-    pdoc --help
+[![Slack Developer Chat](https://shields.mitmproxy.org/badge/slack-mitmproxy-E01563.svg)](http://slack.mitmproxy.org/)
 
 
-Submodule loading
------------------
+## pdoc vs. pdoc3
 
-`pdoc` uses idiomatic Python when loading your modules. Therefore, for `pdoc` to
-find any submodules of the input module you specify on the command line, those
-modules must be available through Python's ordinary module loading process.
+This project is not associated with "pdoc3", which often falsely assumes our name.
+Quoting [@BurntSushi](https://github.com/BurntSushi), the original author of pdoc:
 
-This is not a problem for globally installed modules like `sys`, but can be a
-problem for your own sub-modules depending on how you have installed them.
+> I'm pretty disgusted that someone has taken a project I built, relicensed it, 
+> [attempted to erase its entry on the Python Wiki](https://wiki.python.org/moin/DocumentationTools?action=diff&rev1=36&rev2=37), 
+> released it under effectively the same name and, worst of all, associated it with Nazi symbols.
+> 
+> *Source: https://github.com/pdoc3/pdoc/issues/64*
 
-To ensure that `pdoc` can load any submodules imported by the modules you are
-generating documentation for, you should add the appropriate directories to your
-`PYTHONPATH` environment variable.
+In contrast, the pdoc project strives to uphold a healthy community where everyone is treated with respect.
+Everyone is welcome to contribute as long as they adhere to basic civility. We expressly distance ourselves from the use
+of Nazi symbols and ideology.
 
-For example, if a local module `a.py` imports `b.py` that is installed as
-`/home/jsmith/pylib/b.py`, then you should make sure that your `PYTHONPATH`
-includes `/home/jsmith/pylib`.
+----
 
-If `pdoc` cannot load any modules imported by the input module, it will exit
-with an error message indicating which module could not be loaded.
+The pdoc project was originally created by [Andrew Gallant](https://github.com/BurntSushi) 
+and is currently maintained by [Maximilian Hils](https://github.com/mhils).

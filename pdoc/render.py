@@ -1,123 +1,110 @@
-import os.path
-import re
-import typing
+import os
+from pathlib import Path
+from typing import Optional, Collection, Mapping
 
-from mako.lookup import TemplateLookup
-from mako.exceptions import TopLevelLookupException
+from jinja2 import FileSystemLoader, Environment
 
 import pdoc.doc
+from pdoc.render_helpers import (
+    markdown,
+    highlight,
+    linkify,
+    link,
+    defuse_unsafe_reprs,
+    edit_url,
+    formatter,
+)
 
+_default_searchpath = [
+    Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
+    Path(__file__).parent / "templates"
+]
 
-html_module_suffix = ".m.html"
-"""
-The suffix to use for module HTML files. By default, this is set to
-`.m.html`, where the extra `.m` is used to differentiate a package's
-`index.html` from a submodule called `index`.
-"""
-
-html_package_name = "index.html"
-"""
-The file name to use for a package's `__init__.py` module.
-"""
-
-_template_path = [os.path.join(os.path.dirname(__file__), "templates")]
-"""
-A list of paths to search for Mako templates used to produce the
-plain text and HTML output. Each path is tried until a template is
-found.
-"""
-
-tpl_lookup = TemplateLookup(
-    directories=_template_path, cache_args={"cached": True, "cache_type": "memory"}
+env = Environment(
+    loader=FileSystemLoader(_default_searchpath),
+    autoescape=True,
 )
 """
-A `mako.lookup.TemplateLookup` object that knows how to load templates
-from the file system. You may add additional paths by modifying the
-object's `directories` attribute.
+The Jinja2 environment used to render all templates.
+You can modify this object to add custom filters and globals.
+Examples can be found in this module's source code.
 """
+env.filters["markdown"] = markdown
+env.filters["highlight"] = highlight
+env.filters["linkify"] = linkify
+env.filters["link"] = link
+env.globals["__version__"] = pdoc.__version__
+env.globals["edit_url_map"] = {}
 
 
-def _get_tpl(name):
+def configure(
+    *,
+    template_directory: Optional[Path] = None,
+    edit_url_map: Optional[Mapping[str, str]] = None,
+):
     """
-    Returns the Mako template with the given name. If the template cannot be
-    found, a nicer error message is displayed.
+    Configure the rendering output.
+
+    - `template_directory` can be used to set an additional (preferred) directory
+      for templates. You can find an example in the main documentation of `pdoc`
+      or in `test/customtemplate`.
+    - `edit_url_map` is a mapping from module names to URL prefixes. For example,
+
+        ```json
+        {
+            "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"
+        }
+        ```
+
+        renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
     """
-    try:
-        t = tpl_lookup.get_template(name)
-    except TopLevelLookupException:
-        locs = [os.path.join(p, name.lstrip("/")) for p in _template_path]
-        raise IOError(2, "No template at any of: %s" % ", ".join(locs))
-    return t
+    searchpath = _default_searchpath
+    if template_directory:
+        searchpath = [template_directory] + searchpath
+    env.loader = FileSystemLoader(searchpath)
+
+    env.globals["edit_url_map"] = edit_url_map or {}
 
 
-def html_index(roots: typing.Sequence[pdoc.doc.Module], link_prefix: str = "/") -> str:
-    """
-        Render an HTML module index.
-    """
-    t = _get_tpl("/html_index.mako")
-    t = t.render(roots=roots, link_prefix=link_prefix)
-    return t.strip()
-
-
+@defuse_unsafe_reprs()
 def html_module(
-    mod: pdoc.doc.Module,
-    external_links: bool = False,
-    link_prefix: str = "/",
-    source: bool = True,
+    module: pdoc.doc.Module,
+    all_modules: Collection[str],
+    mtime: Optional[str] = None,
 ) -> str:
     """
-    Returns the documentation for the module `module_name` in HTML
-    format. The module must be importable.
+    Renders the documentation for a `pdoc.doc.Module`.
 
-    `docfilter` is an optional predicate that controls which
-    documentation objects are shown in the output. It is a single
-    argument function that takes a documentation object and returns
-    `True` or `False`. If `False`, that object will not be included in
-    the output.
-
-    If `allsubmodules` is `True`, then every submodule of this module
-    that can be found will be included in the documentation, regardless
-    of whether `__all__` contains it.
-
-    If `external_links` is `True`, then identifiers to external modules
-    are always turned into links.
-
-    If `link_prefix` is `True`, then all links will have that prefix.
-    Otherwise, links are always relative.
-
-    If `source` is `True`, then source code will be retrieved for
-    every Python object whenever possible. This can dramatically
-    decrease performance when documenting large modules.
+    - `all_modules` is a list of all modules that are rendered in this invocation.
+      This is used to determine which identifiers should be linked and which should not.
+    - If `mtime` is given, include additional JavaScript on the page for live-reloading.
+      This is only passed by `pdoc.web`.
     """
-    t = _get_tpl("/html_module.mako")
-    t = t.render(
-        module=mod,
-        external_links=external_links,
-        link_prefix=link_prefix,
-        show_source_code=source,
+    return env.select_template(["module.html.jinja2", "default/module.html.jinja2"]).render(
+        module=module,
+        all_modules=all_modules,
+        mtime=mtime,
+        edit_url=edit_url(module.modulename, module.is_package, env.globals["edit_url_map"]),
+        pygments_css=formatter.get_style_defs(),
     )
-    return t.strip()
 
 
-def text(
-    mod: pdoc.doc.Module,
-    docfilter: typing.Optional[str] = None,
-    allsubmodules: bool = False,
-) -> str:
-    """
-    Returns the documentation for the module `module_name` in plain
-    text format. The module must be importable.
+def html_index(all_modules: Collection[str]) -> str:
+    """Renders the module index."""
+    return env.select_template(["index.html.jinja2", "default/index.html.jinja2"]).render(
+        all_modules=[m for m in all_modules if "._" not in m],
+    )
 
-    `docfilter` is an optional predicate that controls which
-    documentation objects are shown in the output. It is a single
-    argument function that takes a documentation object and returns
-    True of False. If False, that object will not be included in the
-    output.
 
-    If `allsubmodules` is `True`, then every submodule of this module
-    that can be found will be included in the documentation, regardless
-    of whether `__all__` contains it.
-    """
-    t = _get_tpl("/text.mako")
-    text, _ = re.subn("\n\n\n+", "\n\n", t.render(module=mod).strip())
-    return text
+def html_error(error: str, details: str = "") -> str:
+    """Renders an error message."""
+    return env.select_template(["index.html.jinja2", "default/error.html.jinja2"]).render(
+        error=error,
+        details=details,
+    )
+
+
+@defuse_unsafe_reprs()
+def repr_module(module: pdoc.doc.Module) -> str:
+    """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
+    return repr(module)

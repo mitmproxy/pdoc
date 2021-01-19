@@ -1,57 +1,69 @@
-import os
 import re
-from setuptools import setup
+from pathlib import Path
 
-here = os.path.abspath(os.path.dirname(__file__))
+from setuptools import setup, find_packages
 
-with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
-    long_description = f.read()
+here = Path(__file__).parent
 
-with open(os.path.join(here, "pdoc", "__init__.py")) as f:
-    VERSION = re.search(r'__version__ = "(.+?)"', f.read()).group(1)
+long_description = (here / "README.md").read_text("utf8")
+
+VERSION = re.search(
+    r'__version__ = "(.+?)"', (here / "pdoc" / "__init__.py").read_text("utf8")
+).group(1)
+
 
 setup(
     name="pdoc",
-    author="Andrew Gallant",
-    author_email="pdoc@burntsushi.net",
+    author="Maximilian Hils",
+    author_email="pdoc@maximilianhils.com",
     version=VERSION,
     license="UNLICENSE",
-    description="A simple program and library to auto generate API "
-    "documentation for Python modules.",
+    description="A simple program and library to auto generate API documentation for Python modules.",
     long_description=long_description,
-    url="https://github.com/BurntSushi/pdoc",
+    long_description_content_type="text/markdown",
+    url="https://pdoc.dev/",
+    project_urls={
+        "Source": "https://github.com/mitmproxy/pdoc/",
+        "Documentation": "https://pdoc.dev/docs/pdoc.html",
+        "Issues": "https://github.com/mitmproxy/pdoc/issues",
+    },
     classifiers=[
         "Topic :: Documentation",
         "Topic :: Software Development :: Documentation",
         "Topic :: Utilities",
         "License :: Public Domain",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
-    platforms="ANY",
-    packages=["pdoc"],
-    package_data={"pdoc": ["templates/*"]},
-    entry_points={"console_scripts": ["pdoc = pdoc.cli:main"]},
-    provides=["pdoc"],
+    packages=find_packages(
+        include=[
+            "pdoc",
+            "pdoc.*",
+        ]
+    ),
+    include_package_data=True,
+    entry_points={"console_scripts": ["pdoc = pdoc.__main__:cli"]},
+    python_requires=">=3.8",
+    install_requires=[
+        "Jinja2",
+        "markdown2",
+        "pygments",
+        "astunparse; python_version<'3.9'",
+    ],
     extras_require={
         "dev": [
-            "flake8>=3.5, <3.6",
-            "mypy>=0.620, <0.621",
-            "pytest>=3.3,<4",
-            "pytest-cov>=2.5.1,<3",
-            "pytest-faulthandler>=1.3.1,<2",
-            "pytest-timeout>=1.2.1,<2",
-            "pytest-xdist>=1.22,<2",
+            "flake8",
+            "mypy",
+            "pytest",
+            "pytest-cov",
+            "pytest-timeout",
+            "tox",
+            "twine",
+            "wheel",
         ]
     },
-    install_requires=[
-        "mako>=1.0.7,<1.1",
-        "markdown2>=2.3.5,<2.4",
-        "pygments>=2.2.0,<2.3",
-    ],
 )

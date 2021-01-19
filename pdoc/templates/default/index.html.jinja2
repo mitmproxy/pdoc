@@ -1,0 +1,103 @@
+{% extends "frame.html.jinja2" %}
+{% block title %}module list &ndash; pdoc {{ __version__ }}{% endblock %}
+{% block style %}
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        #logo {
+            background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}");
+            background-position: center;
+            background-size: contain;
+            display: block;
+            height: 6rem;
+            width: 12rem;
+            margin: 2rem auto;
+            transition: all 100ms;
+        }
+
+        #logo:hover {
+            filter: saturate(150%);
+            transform: scale(1.02);
+        }
+
+        #search {
+            display: block;
+            margin: 0 auto;
+            border: solid gray 1px;
+            border-radius: 4px;
+            text-align: center;
+            padding: .4rem;
+            width: 20rem;
+        }
+
+        h5 {
+            margin-top: 2rem;
+
+        }
+
+        #modules {
+            max-width: 75rem;
+            margin: 0 auto;
+        }
+
+        #modules a {
+            display: inline-block;
+            margin: .1rem;
+            padding: .1rem .5rem;
+            color: #333;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        #modules a:hover {
+            background-color: white;
+            transform: scale(1.05);
+        }
+
+        #modules .active {
+            background-color: #ffc;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <a id="logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
+    <input id="search" type="text" placeholder="search"/>
+    <h5>Available Modules</h5>
+    <div id="modules">
+
+    </div>
+    <script>
+        const modules = {{ all_modules | tojson }};
+        const module_list = document.getElementById("modules");
+        const searchbox = document.getElementById("search")
+
+        function render(filt) {
+            let filtered = filt ? modules.filter(x.includes(filt)) : modules;
+            module_list.innerHTML = filtered.map(
+                root => `
+                    <a
+                    class="${filtered.length === 1 || root === filt ? 'active' : ''}"
+                    href="${root.replace(".", "/")}.html"
+                    >${root}</a>`
+            ).join("");
+        }
+
+        render();
+
+        searchbox.addEventListener("input", (e) => {
+            render(e.target.value);
+        });
+        searchbox.addEventListener("keyup", (e) => {
+            let active = module_list.querySelector("a.active")
+            if (e.key === "Enter" && active) {
+                active.click();
+            }
+        })
+        searchbox.focus()
+    </script>
+{% endblock %}
