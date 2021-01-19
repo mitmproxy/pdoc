@@ -1,13 +1,14 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-01-19: pdoc 1.0.1
 
+ - Test CI processes by shipping a quick patch release.
  - Bugfix: Don't crash on lambdas as class attributes.
  - Bugfix: Don't crash on comments between decorators.
  - Bugfix: Don't crash pdoc if a user's custom __getattr__ implementation is crashing.
  - Bugfix: use `inspect.unwrap` instead of unwrapping manually.
 
-# pdoc 1.0
+# 2021-01-19: pdoc 1.0.0
 
 This release features a major rewrite of pdoc, dropping compatibility
 with Python 2 and focusing on modern Python 3 only.
@@ -27,7 +28,7 @@ with Python 2 and focusing on modern Python 3 only.
 pdoc is now maintained by [@mhils](https://github.com/mhils) and the rest of the mitmproxy team.
 
 
-# pdoc 0.3.1
+# pdoc 0.3.2
 
   - Bugfix release.
 

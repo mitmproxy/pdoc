@@ -106,15 +106,12 @@
 <span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the source code of the Python object `obj` as a str.</span>
-<span class="sd">    This tries to extract the source from the special</span>
-<span class="sd">    `__wrapped__` attribute if it exists. Otherwise, it falls back</span>
-<span class="sd">    to `inspect.getsource`.</span>
+<span class="sd">    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.</span>
 
-<span class="sd">    If neither works, an empty string is returned.</span>
+<span class="sd">    If this fails, an empty string is returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__wrapped__</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
@@ -284,8 +281,12 @@
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">t</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">t</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we have a lambda function,</span>
+            <span class="c1"># to simplify the API return the ast.FunctionDef stub.</span>
+            <span class="k">pass</span>
     <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="p">[],</span> <span class="n">decorator_list</span><span class="o">=</span><span class="p">[])</span>
 
 
@@ -305,7 +306,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span> <span class="ow">or</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">source</span>
     <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;#&quot;</span><span class="p">):</span>
         <span class="n">first_line</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">first_line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">_dedent</span><span class="p">(</span><span class="n">rest</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -394,15 +395,12 @@
 <span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the source code of the Python object `obj` as a str.</span>
-<span class="sd">    This tries to extract the source from the special</span>
-<span class="sd">    `__wrapped__` attribute if it exists. Otherwise, it falls back</span>
-<span class="sd">    to `inspect.getsource`.</span>
+<span class="sd">    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.</span>
 
-<span class="sd">    If neither works, an empty string is returned.</span>
+<span class="sd">    If this fails, an empty string is returned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__wrapped__</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
@@ -411,11 +409,9 @@
             </details>
                         
                         <div class="docstring"><p>Returns the source code of the Python object <code>obj</code> as a str.
-This tries to extract the source from the special
-<code>__wrapped__</code> attribute if it exists. Otherwise, it falls back
-to <code>inspect.getsource</code>.</p>
+This tries to first unwrap the method if it is wrapped and then calls <code>inspect.getsource</code>.</p>
 
-<p>If neither works, an empty string is returned.</p>
+<p>If this fails, an empty string is returned.</p>
 </div>
                         
                     </section>
