@@ -57,9 +57,10 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     This function processes a list of module specifications and returns the list of module names
     that should be processed by pdoc.
 
-    There are two main scenarios: First, if the list of modules is empty, pdoc will enumerate all
-    available modules that are not part of the stdlib. Second, if some modules are given,
-    pdoc will return the list of all available submodules.
+    There are two main scenarios:
+
+     2. If `modules` is not empty, pdoc will return the names of all available submodules (and their submodules, recursively).
+     1. If the list of modules is empty, pdoc will enumerate all installed modules that are not part of the stdlib.
     """
     module_index: dict[str, None] = {}
     if modules:
@@ -138,9 +139,9 @@ def parse_spec(spec: Union[Path, str]) -> str:
 
 @mock_some_common_side_effects()
 def load_module(module: str) -> types.ModuleType:
-    """Try to import a module without side-effects. If import fails, a RuntimeError is raised.
+    """Try to import a module. If import fails, a RuntimeError is raised.
 
-    Returns: The module."""
+    Returns the imported module."""
     try:
         return importlib.import_module(module)
     except BaseException as e:

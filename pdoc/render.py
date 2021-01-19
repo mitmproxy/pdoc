@@ -24,6 +24,11 @@ env = Environment(
     loader=FileSystemLoader(_default_searchpath),
     autoescape=True,
 )
+"""
+The Jinja2 environment used to render all templates.
+You can modify this object to add custom filters and globals.
+Examples can be found in this module's source code.
+"""
 env.filters["markdown"] = markdown
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
@@ -37,6 +42,22 @@ def configure(
     template_directory: Optional[Path] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
 ):
+    """
+    Configure the rendering output.
+
+    - `template_directory` can be used to set an additional (preferred) directory
+      for templates. You can find an example in the main documentation of `pdoc`
+      or in `test/customtemplate`.
+    - `edit_url_map` is a mapping from module names to URL prefixes. For example,
+
+        ```json
+        {
+            "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"
+        }
+        ```
+
+        renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
+    """
     searchpath = _default_searchpath
     if template_directory:
         searchpath = [template_directory] + searchpath
@@ -45,35 +66,45 @@ def configure(
     env.globals["edit_url_map"] = edit_url_map or {}
 
 
-def html_index(all_modules: Collection[str]) -> str:
-    return env.select_template(["custom-index.html.jinja2", "index.html.jinja2"]).render(
-        all_modules=[m for m in all_modules if "._" not in m],
-    )
-
-
-def html_error(error: str, details: str = "") -> str:
-    return env.select_template(["custom-error.html.jinja2", "error.html.jinja2"]).render(
-        error=error,
-        details=details,
-    )
-
-
 @defuse_unsafe_reprs()
 def html_module(
     module: pdoc.doc.Module,
     all_modules: Collection[str],
     mtime: Optional[str] = None,
 ) -> str:
-    return env.select_template(["custom-module.html.jinja2", "module.html.jinja2"]).render(
+    """
+    Renders the documentation for a `pdoc.doc.Module`.
+
+    - `all_modules` is a list of all modules that are rendered in this invocation.
+      This is used to determine which identifiers should be linked and which should not.
+    - If `mtime` is given, include additional JavaScript on the page for live-reloading.
+      This is only passed by `pdoc.web`.
+    """
+    return env.select_template(["module.html.jinja2", "default/module.html.jinja2"]).render(
         module=module,
         all_modules=all_modules,
         mtime=mtime,
-        show_module_list_link=len(all_modules) > 1,
         edit_url=edit_url(module.modulename, module.is_package, env.globals["edit_url_map"]),
         pygments_css=formatter.get_style_defs(),
     )
 
 
+def html_index(all_modules: Collection[str]) -> str:
+    """Renders the module index."""
+    return env.select_template(["index.html.jinja2", "default/index.html.jinja2"]).render(
+        all_modules=[m for m in all_modules if "._" not in m],
+    )
+
+
+def html_error(error: str, details: str = "") -> str:
+    """Renders an error message."""
+    return env.select_template(["index.html.jinja2", "default/error.html.jinja2"]).render(
+        error=error,
+        details=details,
+    )
+
+
 @defuse_unsafe_reprs()
 def repr_module(module: pdoc.doc.Module) -> str:
+    """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
     return repr(module)

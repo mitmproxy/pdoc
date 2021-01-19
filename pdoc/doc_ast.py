@@ -2,10 +2,6 @@
 This module handles all interpretation of the *Abstract Syntax Tree (AST)* in pdoc.
 
 Parsing the AST is done to extract docstrings, type annotations, and variable declarations from `__init__`.
-
-See also:
-
-  - <https://docs.python.org/3/library/ast.html>
 """
 from __future__ import annotations
 

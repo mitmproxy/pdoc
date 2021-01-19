@@ -1,82 +1,146 @@
-r"""
-Module pdoc provides types and functions for accessing the public
-documentation of a Python module. This includes modules (and
-sub-modules), functions, classes and module, class and instance
-variables.  Docstrings are taken from modules, functions and classes
-using the special `__doc__` attribute. Docstrings for variables are
-extracted by examining the module's abstract syntax tree.
+r'''
 
-The public interface of a module is determined through one of two
-ways. If `__all__` is defined in the module, then all identifiers in
-that list will be considered public. No other identifiers will be
-considered as public. Conversely, if `__all__` is not defined, then
-`pdoc` will heuristically determine the public interface. There are
-three rules that are applied to each identifier in the module:
+# What is pdoc?
 
-1. If the name starts with an underscore, it is **not** public.
+pdoc auto-generates API documentation that follows your project's Python module hierarchy.
+It can be used as a command-line application as well as a library.
 
-2. If the name is defined in a different module, it is **not** public.
+*pdoc the command-line application* can be used to render a project's
+documentation as static HTML files. It also includes a live-reloading
+web server to preview changes.
 
-3. If the name refers to an immediate sub-module, then it is public.
+*pdoc the library* provides types and functions for accessing the public
+documentation of a Python module. This includes modules, functions,
+classes and variables.
 
-Once documentation for a module is created with `pdoc.Module`, it
-can be output as either HTML or plain text using the covenience
-functions `pdoc.html` and `pdoc.text`, or the corresponding methods
-`pdoc.Module.html` and `pdoc.Module.text`.
+# How does pdoc work?
 
-Alternatively, you may run an HTTP server with the `pdoc` script
-included with this module.
+In a nutshell, pdoc takes a Python module name as input, imports it, creates `pdoc.doc.Module` object
+that extracts all docstrings, and passes it to the HTML template for rendering.
+
+This implies a few things:
+
+ - Your documentation lives right by your code, not in extra files.
+ - The structure of the generated documentation matches that of your Python package:
+   There is a direct mapping from say `mypackage/helpers.py` to `mypackage/helpers.html`.
+   As such, pdoc works best with small projects and projects that have a well-defined hierarchy.
+ - You can customize the output by changing the template.
+
+# Example: `shelter.py`
+
+For this example, we have some code to keep track of the dogs in our local animal shelter.
+Here's our current code:
+
+```python
+class Dog:
+    def __init__(self, name):
+        self.name = name
+        self.friends = []
+
+    def bark(self, loud: bool = True):
+        ...
+```
+
+First, we add docstrings and type annotations to explain what we are doing.
+
+```python
+"""
+This module deals with all animals. So far, only dogs are implemented.
+
+# TODO
+
+ - Add the rest of the animals.
+
+"""
+
+class Dog:
+    name: str
+    """The name of this dog. May contain non-ASCII characters."""
+    friends: list["Dog"]
+    """Friends this dog has made."""
+
+    def __init__(self, name: str):
+        """Make a Dog without any friends (yet)."""
+        self.name = name
+        self.friends = []
+
+    def bark(self, loud: bool = True):
+        """*woof*"""
+
+```
+
+The docstrings we've added aren't pdoc-specific, we just use modern Python 3 conventions.
+pdoc will later take your module, class, function and variable docstrings and render them
+into a standalone documentation document.
+
+Additionally, all docstrings are interpreted as Markdown by pdoc.
+For example, the todo list in the example will be rendered with bullet points in your documentation.
 
 
-Compatibility
--------------
-`pdoc` requires Python 3.8 or later.
+### Invoking pdoc
+
+Let's run pdoc on this module to see what we get:
+
+```shell
+pdoc ./shelter.py
+```
+
+This opens a browser with our module documentation. If we edit `shelter.py` now,
+the page will reload automatically. Once we are happy with our changes, we can export our documentation
+to HTML files:
+
+```shell
+pdoc -o ./docs ./shelter.py
+```
+
+This will create an HTML file at `docs/shelter.html` which contains our module documentation.
+
+### Editing pdoc's HTML template
+
+Next up, we want to insert the logo of our shelter in the navigation bar.
+To do this, we need to edit pdoc's
+[default HTML template](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2),
+which uses the
+[Jinja2](https://jinja.palletsprojects.com/) templating language.
+Inspecting the default template, we see that it defines an empty `nav_title` block right at the place where we want to insert our logo.
+We can extend the default template by creating a file titled `module.html.jinja2` in the current directory
+ with the following contents:
+
+```html
+{% extends "module.html.jinja2" %}
+{% block nav_title %}
+<img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
+{% endblock %}
+```
+
+We then specify a custom template directory when invoking pdoc...
+
+```shell
+pdoc -t . ./shelter.py
+```
+
+...and the updated documentation – with logo – renders! 🎉
 
 
-Contributing
-------------
-`pdoc` [is on GitHub](https://github.com/mitmproxy/pdoc). Pull
-requests and bug reports are welcome.
+# How can I ... ?
 
+## ...add documentation?
 
-Linking to other identifiers
-----------------------------
-In your documentation, you may link to other identifiers in
-your module or submodules. Linking is automatically done for
-you whenever you surround an identifier with a back quote
-(grave). The identifier name must be fully qualified. For
-example, <code>\`pdoc.Doc.docstring\`</code> is correct while
-<code>\`Doc.docstring\`</code> is incorrect.
-
-If the `pdoc` script is used to run an HTTP server, then external
-linking to other packages installed is possible. No extra work is
-necessary; simply use the fully qualified path. For example,
-<code>\`nflvid.slice\`</code> will create a link to the `nflvid.slice`
-function, which is **not** a part of `pdoc` at all.
-
-
-Where does pdoc get documentation from?
----------------------------------------
-Broadly speaking, `pdoc` gets everything you see from introspecting the
-module. This includes words describing a particular module, class,
-function or variable. While `pdoc` does some analysis on the source
-code of a module, importing the module itself is necessary to use
-Python's introspection features.
-
-In Python, objects like modules, functions, classes and methods have
+In Python, objects like modules, functions and classes have
 a special attribute named `__doc__` which contains that object's
 *docstring*.  The docstring comes from a special placement of a string
 in your source code.  For example, the following code shows how to
 define a function with a docstring and access the contents of that
 docstring:
 
-    #!python
-    >>> def test():
-    ...     '''This is a docstring.'''
-    ...     pass
-    ...
-    >>> test.__doc__
-    'This is a docstring.'
+```python
+>>> def test():
+...     """This is a docstring."""
+...     pass
+...
+>>> test.__doc__
+'This is a docstring.'
+```
 
 Something similar can be done for classes and modules too. For classes,
 the docstring should come on the line immediately following `class
@@ -84,96 +148,134 @@ the docstring should come on the line immediately following `class
 the file. These docstrings are what you see for each module, class,
 function and method listed in the documentation produced by `pdoc`.
 
-The above just about covers *standard* uses of docstrings in Python.
-`pdoc` extends the above in a few important ways.
+## ...document variables?
 
-
-### Special docstring conventions used by `pdoc`
-
-**Firstly**, docstrings can be inherited. Consider the following code
-sample:
-
-    #!python
-    >>> class A (object):
-    ...     def test():
-    ...         '''Docstring for A.'''
-    ...
-    >>> class B (A):
-    ...     def test():
-    ...         pass
-    ...
-    >>> print(A.test.__doc__)
-    Docstring for A.
-    >>> print(B.test.__doc__)
-    None
-
-In Python, the docstring for `B.test` is empty, even though one was
-defined in `A.test`. If `pdoc` generates documentation for the above
-code, then it will automatically attach the docstring for `A.test` to
-`B.test` only if `B.test` does not have a docstring. In the default
-HTML output, an inherited docstring is grey.
-
-**Secondly**, docstrings can be attached to variables, which includes
-module (or global) variables, class variables and instance variables.
-Python by itself [does not allow docstrings to be attached to
+Python itself [does not attach docstrings to
 variables](http://www.python.org/dev/peps/pep-0224). For example:
 
-    #!python
-    variable = "SomeValue"
-    '''Docstring for variable.'''
+```python
+variable = "SomeValue"
+"""Docstring for variable."""
+```
 
-The resulting `variable` will have no `__doc__` attribute. To
-compensate, `pdoc` will read the source code when it's available to
-infer a connection between a variable and a docstring. The connection
-is only made when an assignment statement is followed by a docstring.
+The resulting `variable` will have no `__doc__` attribute.
+To compensate, `pdoc` will read the abstract syntax tree (an abstract representation of the source code)
+and include all assignment statements immediately followed by a docstring.
 
-Something similar is done for instance variables as well. By
-convention, instance variables are initialized in a class's `__init__`
-method.  Therefore, `pdoc` adheres to that convention and looks for
-docstrings of variables like so:
+Something similar is done for instance variables as well, which are either type-annotated in the class
+or defined in a class's `__init__`. Here is an example showing both conventions detected by pdoc:
 
-    #!python
+```python
+class GoldenRetriever(Dog):
+    name: str
+    """Full Name"""
+
     def __init__(self):
-        self.variable = "SomeValue"
-        '''Docstring for instance variable.'''
+        self.weight: int = 10
+        """Weight in kilograms"""
+```
 
-Note that `pdoc` only considers attributes defined on `self` as
-instance variables.
 
-Class and instance variables can also have inherited docstrings.
+If you would like to distinguish an instance variable from a class variable,
+you should use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html#typing.ClassVar):
 
-**Thirdly and finally**, docstrings can be overridden with a special
-`__pdoc__` dictionary that `pdoc` inspects if it exists. The keys of
-`__pdoc__` should be identifiers within the scope of the module. (In
-the case of an instance variable `self.variable` for class `A`, its
-module identifier would be `A.variable`.) The values of `__pdoc__`
-should be docstrings.
+```python
+class GoldenRetriever(Dog):
+    breed_coode: ClassVar[str] = "GOLD"
+    """International breed code (same for all instances)"""
+    name: str
+    """Full Name (different for each instance)"""
+```
 
-This particular feature is useful when there's no feasible way of
-attaching a docstring to something. A good example of this is a
-[namedtuple](http://goo.gl/akfXJ9):
+## ...control what is documented?
 
-    #!python
-    __pdoc__ = {}
+The public interface of a module is determined through one of two
+ways. If `__all__` is defined in the module, then all identifiers in
+that list will be considered public. No other identifiers will be
+considered as public. Conversely, if `__all__` is not defined, then
+`pdoc` will heuristically determine the public interface. There are
+two rules that are applied to each identifier in the module:
 
-    Table = namedtuple('Table', ['types', 'names', 'rows'])
-    __pdoc__['Table.types'] = 'Types for each column in the table.'
-    __pdoc__['Table.names'] = 'The names of each column in the table.'
-    __pdoc__['Table.rows'] = 'Lists corresponding to each row in the table.'
+1. If the name starts with an underscore, it is **not** public.
 
-`pdoc` will then show `Table` as a class with documentation for the
-`types`, `names` and `rows` members.
+2. If the name is defined in a different module, it is **not** public.
 
-Note that assignments to `__pdoc__` need to placed where they'll be
-executed when the module is imported. For example, at the top level
-of a module or in the definition of a class.
 
-If `__pdoc__[key] = None`, then `key` will not be included in the
-public interface of the module.
-"""
+## ...link to other identifiers?
+
+In your documentation, you can link to other identifiers in
+your module or submodules. The identifier name must be fully qualified. For
+example, `pdoc.doc.Doc.docstring` will be automatically linked while
+`Doc.docstring` will not be linked. Type annotations will be linked automatically.
+
+`pdoc` will link all identifiers that are rendered in the current run.
+This means that you need to run `pdoc module_a module_b`
+to have interlinking between module_a and module_b.
+If you run `pdoc module_a` followed by `pdoc module_b`, there will be no cross-linking between the two modules.
+
+If you need to link to a top-level module (for example the main pdoc module), you
+need to put it between backticks: <code>\`pdoc\`</code> will link to `pdoc`.
+This makes sure that common modules names are not accidentally linked.
+
+## ...change the item order?
+## ...group items by type?
+
+
+By default, documentation items are sorted in order of (first) appearance in the source code.
+This means that if you want to move a particular function to the beginning of your documentation,
+you need to move it there in your source code. This is not only useful to the consumers of your documentation
+but also useful to the readers of your source code.
+
+An alphabetical order can be achieved by modifying the output template.
+We'd be happy to accept a pull request that adds grouped/alphabetic ordering as an option.
+
+# Docstring Inheritance
+
+pdoc extends the standard use of docstrings in two important ways:
+by introducing variable docstrings (see [*How can I document variables?*](#document-variables)),
+and by allowing functions and classes to inherit docstrings and type annotations.
+
+This is useful to not unnecessairly repeat information. Consider this example:
+
+```python
+class Dog:
+    def bark(self, loud: bool = True) -> None:
+        """
+        Make the dog bark. If `loud` is True,
+        use full volume. Not supported by all breeds.
+        """
+
+class GoldenRetriever(Dog):
+    def bark(self, loud):
+        print("Woof Woof")
+```
+
+In Python, the docstring for `GoldenRetriever.bark` is empty, even though one was
+defined in `Dog.bark`. If `pdoc` generates documentation for the above
+code, then it will automatically attach the docstring for `Dog.bark` to
+`GoldenRetriever.bark` if it does not have a docstring.
+
+# Limitations
+
+**Markdown and PDF Output**
+
+pdoc currently only supports HTML as an output format.
+We would be happy to accept contributions for Markdown and PDF.
+
+**Alternative docstring formats (Sphinx rST, Numpy, Google-style)**
+
+pdoc currently renders docstrings as Markdown only.
+We believe that the value of for example Numpy docstrings
+is diminishing in view of modern Python 3 type annotations.
+
+However, we would be happy to accept contributions that make for example
+Google-style docstrings render more nicely.
+
+# Using pdoc as a library
+'''
 from __future__ import annotations
 
-__version__ = "1.0.dev1"  # this is read from setup.py
+__version__ = "1.0.dev2"  # this is read from setup.py
 
 import io
 import warnings
@@ -188,6 +290,16 @@ def pdoc(
     output_directory: Optional[Path] = None,
     format: Literal["html"] = "html",
 ) -> str:
+    """
+    Render the documentation for a list of modules.
+
+     - If `output_directory` is `None`, returns the rendered documentation
+       for the first module in the list.
+     - If `output_directory` is set, recursively writes the rendered output
+       for all specified modules and their submodules to the target destination.
+
+    Rendering options can be configured by calling `pdoc.render.configure` in advance.
+    """
     retval = io.StringIO()
     if output_directory:
 

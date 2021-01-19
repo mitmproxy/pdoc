@@ -83,7 +83,7 @@ def safe_eval_type(
     which needs to be resolved.
 
     If _eval_type fails, we try some heuristics to import a missing module.
-    If that still fails, a warning is emitted and `t` is returned as is.
+    If that still fails, a warning is emitted and `t` is returned as-is.
     """
     try:
         try:

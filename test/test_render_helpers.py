@@ -13,6 +13,7 @@ from pdoc.render_helpers import relative_link, edit_url, split_identifier
     [
         ("foo", "foo", ""),
         ("foo", "bar", "bar.html"),
+        ("foo.foo", "foo", "../foo.html"),
         ("foo.foo", "bar", "../bar.html"),
         ("foo.bar", "foo.bar.baz", "bar/baz.html"),
         ("foo.bar.baz", "foo.qux.quux", "../qux/quux.html"),

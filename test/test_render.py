@@ -11,6 +11,8 @@ def test_render_custom_template():
     render.configure(template_directory=here / "customtemplate")
 
     try:
-        assert "View Source" not in render.html_module(mod, ["pdoc.doc"])
+        html = render.html_module(mod, ["pdoc.doc"])
+        assert "View Source" not in html
+        assert "wat" in html
     finally:
         render.configure()

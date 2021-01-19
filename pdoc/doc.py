@@ -20,6 +20,7 @@ from __future__ import annotations
 import importlib
 import inspect
 import pkgutil
+import re
 import sys
 import textwrap
 import types
@@ -311,7 +312,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         A list of all documented members and their child classes, recursively.
         """
         flattened = []
-        for x in self.members.values():
+        for x in self.own_members:
             flattened.append(x)
             if isinstance(x, Class):
                 flattened.extend(
@@ -781,7 +782,7 @@ class Variable(Doc[None]):
             return f" = {self.default_value.__name__}"
         else:
             try:
-                return f" = {repr(self.default_value)}"
+                return re.sub(r"(?<=object) at 0x[0-9a-fA-F]+(?=>$)", "", f" = {repr(self.default_value)}")
             except Exception:
                 return " = <unable to get value representation>"
 

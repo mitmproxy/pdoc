@@ -1,3 +1,11 @@
+"""
+This module implements pdoc's live-reloading webserver.
+
+We want to keep the number of dependencies as small as possible,
+so we are content with the builtin `http.server` module.
+It is a bit unergonomic compared to let's say flask, but good enough for our purposes.
+"""
+
 from __future__ import annotations
 
 import http.server
@@ -6,13 +14,13 @@ import webbrowser
 from typing import Optional, Union, Collection
 
 from pdoc import render, extract, doc
-# the builtin http.server module is a bit unergonomic,
-# but we can deal with that to avoid additional dependencies.
 from pdoc._compat import removesuffix
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
+    """A handler for individual requests."""
     server: "DocServer"
+    """A reference to the main web server."""
 
     def do_HEAD(self):
         return self.handle_request()
@@ -20,12 +28,8 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         self.wfile.write(self.handle_request().encode())
 
-    def log_request(
-        self, code: Union[int, str] = ..., size: Union[int, str] = ...
-    ) -> None:
-        pass
-
     def handle_request(self) -> Optional[str]:
+        """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
         extract.invalidate_caches(self.server.all_modules)
         path = self.path.split("?", 1)[0]
 
@@ -68,8 +72,15 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         return out
 
+    def log_request(
+        self, code: Union[int, str] = ..., size: Union[int, str] = ...
+    ) -> None:
+        """Override logging to disable it."""
+        pass
+
 
 class DocServer(http.server.HTTPServer):
+    """pdoc's live-reloading web server"""
     all_modules: Collection[str]
 
     def __init__(
@@ -85,12 +96,14 @@ class DocServer(http.server.HTTPServer):
 def open_browser(url: str) -> bool:  # pragma: no cover
     """
     Open a URL in a browser window.
-    In contrast to webbrowser.open, we limit the list of suitable browsers.
-    This gracefully degrades to a no-op on headless servers, where webbrowser.open
+    In contrast to `webbrowser.open`, we limit the list of suitable browsers.
+    This gracefully degrades to a no-op on headless servers, where `webbrowser.open`
     would otherwise open lynx.
+
     Returns:
-        True, if a browser has been opened
-        False, if no suitable browser has been found.
+
+    - `True`, if a browser has been opened
+    - `False`, if no suitable browser has been found.
     """
     browsers = (
         "windows-default",
