@@ -11,7 +11,7 @@ distlib==0.3.1
 docutils==0.16
 filelock==3.0.12
 flake8==3.8.4
-idna==2.10
+idna==3.1
 iniconfig==1.1.1
 jeepney==0.6.0
 Jinja2==2.11.2
@@ -39,15 +39,15 @@ requests==2.25.1
 requests-toolbelt==0.9.1
 rfc3986==1.4.0
 SecretStorage==3.3.0
-setuptools==49.2.1
+setuptools==51.3.3
 six==1.15.0
 toml==0.10.2
-tox==3.21.1
+tox==3.21.2
 tqdm==4.56.0
 twine==3.3.0
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
 urllib3==1.26.2
-virtualenv==20.3.1
+virtualenv==20.4.0
 webencodings==0.5.1
 wheel==0.36.2
