@@ -9,14 +9,15 @@ with Python 2 and focusing on modern Python 3 only.
  - Added: Simpler directory structure
  - Added: New responsive documentation theme
  - Added: New website and documentation
- - Added: 100% test coverage
+ - Added: 100% test coverage and CI
+ - Use Jinja2 instead of mako.
  - Removed: Support for `__pdoc__`, which is rarely required
    when following modern Python standards. This feature may return
    depending on user feedback.
  - Removed: Markdown output. The project now focuses on HTML documentation.
    PRs to re-add markdown support will be gladly accepted.
 
-pdoc is now maintained by [@mhils](https://github.com/mhils) and the rest of the mitmproxy project.
+pdoc is now maintained by [@mhils](https://github.com/mhils) and the rest of the mitmproxy team.
 
 
 # pdoc 0.3.1
