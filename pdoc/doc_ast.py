@@ -219,7 +219,7 @@ def _dedent(source: str) -> str:
     if not source or source[0] not in (" ", "\t"):
         return source
     source = source.lstrip()
-    if source.startswith("@"):
+    if source[0] in ("@", "#"):
         first_line, rest = source.split("\n", 1)
         return first_line + "\n" + _dedent(rest)
     else:
