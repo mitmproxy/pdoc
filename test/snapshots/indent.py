@@ -47,6 +47,11 @@ indents"""
         """no indents"""
 
     @lru_cache
+    # comment
+    def foo_commented(self):
+        """no indents"""
+
+    @lru_cache
     def bar_decorated(self):
         """no
 indents"""

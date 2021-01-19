@@ -61,6 +61,8 @@
             
                 <li><a class="function" href="#Indented.foo_decorated">foo_decorated</a></li>
             
+                <li><a class="function" href="#Indented.foo_commented">foo_commented</a></li>
+            
                 <li><a class="function" href="#Indented.bar_decorated">bar_decorated</a></li>
             
                 <li><a class="function" href="#Indented.baz_decorated">baz_decorated</a></li>
@@ -135,6 +137,11 @@
 
     <span class="nd">@lru_cache</span>
     <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="c1"># comment</span>
+    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 
     <span class="nd">@lru_cache</span>
@@ -288,6 +295,11 @@ indents</p>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 
     <span class="nd">@lru_cache</span>
+    <span class="c1"># comment</span>
+    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
     <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no</span>
 <span class="sd">indents&quot;&quot;&quot;</span>
@@ -427,6 +439,29 @@ indents</p>
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span>
     <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+                                    
+                                    <div class="docstring"><p>no indents</p>
+</div>
+                                </div>
+                            
+                                <div id="Indented.foo_commented" class="classattr">
+                                    
+                                        <div class="attr function"><div class="decorator">@lru_cache</div>
+                <span class="def">def</span>
+                <span class="name">foo_commented</span><span class="signature">(self)</span>:
+            
+        </div>
+                                    
+                                    
+                                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span>
+    <span class="c1"># comment</span>
+    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </pre></div>
 

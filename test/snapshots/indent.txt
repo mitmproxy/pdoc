@@ -16,6 +16,7 @@
         <method def qux(self): ...  # two
         indents>
         <@lru_cache method def foo_decorated(self): ...  # no indents>
+        <@lru_cache method def foo_commented(self): ...  # no indents>
         <@lru_cache method def bar_decorated(self): ...  # no
         indents>
         <@lru_cache method def baz_decorated(self): ...  # one

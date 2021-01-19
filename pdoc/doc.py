@@ -894,5 +894,6 @@ def _safe_getattr(obj, attr, default):
     """Like `getattr()`, but never raises."""
     try:
         return getattr(obj, attr, default)
-    except Exception:
+    except Exception as e:
+        warnings.warn(f"getattr({obj!r}, {attr!r}, {default!r}) raised an exception: {e}", RuntimeWarning)
         return default
