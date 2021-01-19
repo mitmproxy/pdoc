@@ -35,7 +35,10 @@ def test_parse_spec():
     assert str(here / "snapshots") in sys.path
     sys.path = p
 
-    assert parse_spec(here / "snapshots" / "demopackage" / "_child.py") == "demopackage._child"
+    assert (
+        parse_spec(here / "snapshots" / "demopackage" / "_child.py")
+        == "demopackage._child"
+    )
     assert str(here / "snapshots") in sys.path
     sys.path = p
 

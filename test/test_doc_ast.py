@@ -6,19 +6,34 @@ def test_dedent():
     assert _dedent("def foo(): pass") == "def foo(): pass"
 
     # indented
-    assert _dedent("""\
+    assert (
+        _dedent(
+            """\
     def foo():
-        pass""") == "def foo():\n        pass"
+        pass"""
+        )
+        == "def foo():\n        pass"
+    )
 
     # with decorator
-    assert _dedent("""\
+    assert (
+        _dedent(
+            """\
     @foo
     def foo():
-        pass""") == "@foo\ndef foo():\n        pass"
+        pass"""
+        )
+        == "@foo\ndef foo():\n        pass"
+    )
 
     # with decorator and comment
-    assert _dedent("""\
+    assert (
+        _dedent(
+            """\
     @foo
     # hello world
     def foo():
-        pass""") == "@foo\n# hello world\ndef foo():\n        pass"
+        pass"""
+        )
+        == "@foo\n# hello world\ndef foo():\n        pass"
+    )
