@@ -23,6 +23,8 @@ _default_searchpath = [
 env = Environment(
     loader=FileSystemLoader(_default_searchpath),
     autoescape=True,
+    trim_blocks=True,
+    lstrip_blocks=True,
 )
 """
 The Jinja2 environment used to render all templates.

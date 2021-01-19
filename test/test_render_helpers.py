@@ -5,7 +5,7 @@ from typing import Optional
 
 import pytest
 
-from pdoc.render_helpers import relative_link, edit_url, split_identifier
+from pdoc.render_helpers import relative_link, edit_url, split_identifier, markdown
 
 
 @pytest.mark.parametrize(
@@ -56,3 +56,12 @@ def test_edit_url(
 )
 def test_split_identifier(all_modules, fullname, result):
     assert split_identifier(all_modules, fullname) == result
+
+
+def test_markdown2():
+    """
+    markdown2 has this weird property that it return a str-like object with a hidden `toc_html` attr.
+
+    It's easy to introduce a `.strip()` in there and this gets washed away, so let's test that it works properly.
+    """
+    assert markdown("#foo\n#bar").toc_html  # type: ignore

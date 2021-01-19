@@ -49,4 +49,5 @@ The following steps need to be performed to ship a release:
 3. Update [`CHANGELOG.md`](./CHANGELOG.md).
 4. Re-render the website: `docs/make.py`
 5. Commit the changes and tag them.
-6. Manually confirm the CI deploy step.
+   - Convention: Tag name is `v` + version number, e.g. `v1.0.1`.
+6. Manually confirm the CI deploy step on GitHub.

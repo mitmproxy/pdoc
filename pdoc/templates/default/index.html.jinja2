@@ -1,6 +1,7 @@
 {% extends "frame.html.jinja2" %}
 {% block title %}module list &ndash; pdoc {{ __version__ }}{% endblock %}
 {% block style %}
+    {{ super() | safe }}
     <style type="text/css">
         html, body {
             width: 100%;

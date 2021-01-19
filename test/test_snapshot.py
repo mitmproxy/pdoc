@@ -13,7 +13,7 @@ snapshots = [
     snapshot_dir / "demo_long.py",
     snapshot_dir / "demo_eager.py",
     snapshot_dir / "demopackage",
-    snapshot_dir / "indent.py",
+    snapshot_dir / "misc.py",
     snapshot_dir / "submodules_in_all.py",
 ]
 

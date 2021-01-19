@@ -1,5 +1,14 @@
 from functools import lru_cache
 
+
+##### Testing a class attribute that is a lambda (which generates quirky sources)
+
+class LambdaAttr:
+    # not really supported, but also shouldn't crash.
+    attr = lambda x: 42  # noqa
+
+
+##### Testing different docstring annotations
 # fmt: off
 
 

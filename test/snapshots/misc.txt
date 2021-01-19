@@ -1,4 +1,7 @@
-<module indent
+<module misc
+    <class misc.LambdaAttr
+        <method def __init__(): ...>
+        <method def attr(x): ...  # inherited from misc.LambdaAttr.<lambda>>>
     <function def foo(): ...  # no indents>
     <function def bar(): ...  # no
     indents>
@@ -6,7 +9,7 @@
     indent>
     <function def qux(): ...  # two
     indents>
-    <class indent.Indented
+    <class misc.Indented
         <method def __init__(): ...>
         <method def foo(self): ...  # no indents>
         <method def bar(self): ...  # no
