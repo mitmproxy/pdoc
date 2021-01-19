@@ -194,8 +194,12 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
-        assert isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef))
-        return t
+        if isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            return t
+        else:
+            # we have a lambda function,
+            # to simplify the API return the ast.FunctionDef stub.
+            pass
     return ast.FunctionDef(body=[], decorator_list=[])
 
 

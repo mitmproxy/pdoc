@@ -210,3 +210,8 @@ class DataDemo:
     b: Literal["w", "r"]
     c: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""
+
+
+class LambdaAttr:
+    # not really supported, but also shouldn't crash.
+    attr = lambda x: 42  # noqa

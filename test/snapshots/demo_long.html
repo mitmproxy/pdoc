@@ -120,6 +120,15 @@
         </ul>
                         </li>
             
+                <li><a class="class" href="#LambdaAttr">LambdaAttr</a><ul class="memberlist">
+            
+                <li><a class="function" href="#LambdaAttr.__init__">LambdaAttr</a></li>
+            
+                <li><a class="function" href="#LambdaAttr.attr">attr</a></li>
+            
+        </ul>
+                        </li>
+            
         </ul>
                     
 
@@ -374,6 +383,11 @@ which will also show up in the navigation.</p>
     <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">LambdaAttr</span><span class="p">:</span>
+    <span class="c1"># not really supported, but also shouldn&#39;t crash.</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
 </pre></div>
 
             </details>
@@ -1090,6 +1104,60 @@ but you can override it by providing your own (like here!).</p>
                                     
                                     <div class="docstring"><p>This property is assigned to <code>dataclasses.field()</code>, which works just as well.</p>
 </div>
+                                </div>
+                            
+                            
+                        
+                    </section>
+                
+                    <section id="LambdaAttr">
+                        
+                            <div class="attr class"><span class="def">class</span>
+            <span class="name">LambdaAttr</span>:
+        </div>
+                        
+                        
+                            <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LambdaAttr</span><span class="p">:</span>
+    <span class="c1"># not really supported, but also shouldn&#39;t crash.</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
+</pre></div>
+
+            </details>
+                        
+                        
+                        
+                            
+                                <div id="LambdaAttr.__init__" class="classattr">
+                                    
+                                        <div class="attr function">
+                <span class="name">LambdaAttr</span><span class="signature">()</span>
+        </div>
+                                    
+                                    
+                                        
+                                    
+                                    
+                                </div>
+                            
+                                <div id="LambdaAttr.attr" class="classattr">
+                                    
+                                        <div class="attr function">
+                <span class="def">def</span>
+                <span class="name">attr</span><span class="signature">(x)</span>:
+            
+        </div>
+                                    
+                                    
+                                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
+</pre></div>
+
+            </details>
+                                    
+                                    
                                 </div>
                             
                             

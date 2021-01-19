@@ -59,4 +59,7 @@ This …
         <method def __init__(self, a: int, b: Literal['w', 'r'], c: bool = True): ...>
         <var a: int  # Again, we can docume…>
         <var b: Literal['w', 'r']>
-        <var c: bool = True  # This property is ass…>>>
+        <var c: bool = True  # This property is ass…>>
+    <class demo_long.LambdaAttr
+        <method def __init__(): ...>
+        <method def attr(x): ...  # inherited from demo_long.LambdaAttr.<lambda>>>>
