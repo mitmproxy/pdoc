@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - pdoc now respects `__all__` when listing submodules.
+
 # 2021-01-19: pdoc 1.0.1
 
  - Test CI processes by shipping a quick patch release.

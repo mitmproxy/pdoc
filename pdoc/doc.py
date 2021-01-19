@@ -17,7 +17,6 @@ By convention, all attributes are read-only, although this this not enforced at 
 """
 from __future__ import annotations
 
-import importlib
 import inspect
 import pkgutil
 import re
@@ -36,7 +35,7 @@ from typing import (  # type: ignore
     Generic,
 )
 
-from pdoc import doc_ast
+from pdoc import doc_ast, extract
 from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
 from ._compat import cache
 
@@ -219,6 +218,11 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         """A mapping from some member variable names to their type annotations."""
 
     @cached_property
+    @abstractmethod
+    def own_members(self) -> list[Doc]:
+        """A list of all own (i.e. non-inherited) members"""
+
+    @cached_property
     def members(self) -> dict[str, Doc]:
         """A mapping from all members to their documentation objects."""
         members: dict[str, Doc] = {}
@@ -230,7 +234,9 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 isinstance(obj, (property, cached_property))
                 or
                 # Python 3.9: @classmethod @property is allowed.
-                isinstance(_safe_getattr(obj, "__func__", None), (property, cached_property))
+                isinstance(
+                    _safe_getattr(obj, "__func__", None), (property, cached_property)
+                )
             )
             if is_property:
                 func = obj
@@ -259,10 +265,10 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Function(self.modulename, qualname, obj)
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj)
+            elif inspect.ismodule(obj):
+                doc = Module(obj)
             else:
                 docstring = self._var_docstrings.get(name, "")
-                if not docstring and isinstance(obj, types.ModuleType):
-                    docstring = _safe_getattr(obj, "__doc__", None) or ""
                 doc = Variable(
                     self.modulename,
                     qualname,
@@ -288,16 +294,6 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return locations
 
     @cached_property
-    def own_members(self) -> list[Doc]:
-        """A list of all own (i.e. non-inherited) members"""
-        members = self._members_by_declared_location.get((self.modulename, self.qualname), [])
-        if self.declared_at != (self.modulename, self.qualname):
-            # .declared_at may be != (self.modulename, self.qualname), for example when
-            # a module re-exports a class from a private submodule.
-            members += self._members_by_declared_location.get(self.declared_at, [])
-        return members
-
-    @cached_property
     def inherited_members(self) -> dict[tuple[str, str], list[Doc]]:
         """A mapping from (modulename, qualname) locations to the attributes inherited from that path"""
         return {
@@ -307,7 +303,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         }
 
     @cached_property
-    def flattened_members(self) -> list[Doc]:
+    def flattened_own_members(self) -> list[Doc]:
         """
         A list of all documented members and their child classes, recursively.
         """
@@ -316,7 +312,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             flattened.append(x)
             if isinstance(x, Class):
                 flattened.extend(
-                    [cls for cls in x.flattened_members if isinstance(cls, Class)]
+                    [cls for cls in x.flattened_own_members if isinstance(cls, Class)]
                 )
         return flattened
 
@@ -369,23 +365,36 @@ class Module(Namespace[types.ModuleType]):
         return resolve_annotations(annotations, self.obj, self.fullname)
 
     @cached_property
+    def own_members(self) -> list[Doc]:
+        return list(self.members.values())
+
+    @cached_property
     def submodules(self) -> list["Module"]:
         """A list of all (direct) submodules."""
         if not self.is_package:
             return []
-        submodules = []
-        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
-            if mod.name.split(".")[-1].startswith("_"):
-                continue
-            try:
-                module = importlib.import_module(mod.name)
-            except BaseException as e:
-                warnings.warn(
-                    f"Couldn't import {mod.name}: {e!r}", RuntimeWarning, stacklevel=2
-                )
-                continue
-            submodules.append(Module(module))
-        return submodules
+
+        if _safe_getattr(self.obj, "__all__", False):
+            # If __all__ is set, only show submodules specified there.
+            return [
+                mod
+                for mod in self.members.values()
+                if isinstance(mod, Module)
+                and mod.modulename.startswith(self.modulename)
+            ]
+
+        else:
+            submodules = []
+            for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
+                if mod.name.split(".")[-1].startswith("_"):
+                    continue
+                try:
+                    module = extract.load_module(mod.name)
+                except RuntimeError as e:
+                    warnings.warn(f"Couldn't import {mod.name}: {e!r}", RuntimeWarning)
+                    continue
+                submodules.append(Module(module))
+            return submodules
 
     @cached_property
     def _documented_members(self) -> set[str]:
@@ -393,25 +402,42 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _member_objects(self) -> dict[str, Any]:
-        if all := _safe_getattr(self.obj, "__all__", False):
-            return {name: self.obj.__dict__.get(name, empty) for name in all}
-
         members = {}
-        for name, obj in self.obj.__dict__.items():
-            if not _is_exported(name, obj):
-                continue
-            obj_module = inspect.getmodule(obj)
-            declared_in_this_module = self.obj.__name__ == _safe_getattr(
-                obj_module, "__name__", None
-            )
-            if declared_in_this_module or name in self._documented_members:
-                members[name] = obj
-        for name in self._var_annotations:
-            if _is_exported(name):
-                members.setdefault(name, empty)
 
-        members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
-        members.update(notfound)
+        if all := _safe_getattr(self.obj, "__all__", False):
+            for name in all:
+                if name in self.obj.__dict__:
+                    val = self.obj.__dict__[name]
+                else:
+                    # this may be an unimported submodule, try importing.
+                    # (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)
+                    try:
+                        val = extract.load_module(f"{self.modulename}.{name}")
+                    except RuntimeError as e:
+                        warnings.warn(
+                            f"Found {name!r} in {self.modulename}.__all__, but it does not resolve: {e}",
+                            RuntimeWarning,
+                        )
+                        val = empty
+                members[name] = val
+
+        else:
+            for name, obj in self.obj.__dict__.items():
+                if not _is_exported(name, obj):
+                    continue
+                obj_module = inspect.getmodule(obj)
+                declared_in_this_module = self.obj.__name__ == _safe_getattr(
+                    obj_module, "__name__", None
+                )
+                if declared_in_this_module or name in self._documented_members:
+                    members[name] = obj
+            for name in self._var_annotations:
+                if _is_exported(name):
+                    members.setdefault(name, empty)
+
+            members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
+            members.update(notfound)
+
         return members
 
     @cached_property
@@ -494,23 +520,28 @@ class Class(Namespace[type]):
         return annotations
 
     @cached_property
+    def own_members(self) -> list[Doc]:
+        members = self._members_by_declared_location.get(
+            (self.modulename, self.qualname), []
+        )
+        if self.declared_at != (self.modulename, self.qualname):
+            # .declared_at may be != (self.modulename, self.qualname), for example when
+            # a module re-exports a class from a private submodule.
+            members += self._members_by_declared_location.get(self.declared_at, [])
+        return members
+
+    @cached_property
     def _member_objects(self) -> dict[str, Any]:
-        """
-        Returns a dictionary mapping a public identifier name to a
-        Python object. This counts the `__init__` method as being
-        public.
-        """
         unsorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
             for name, obj in cls.__dict__.items():
-                if _is_exported(name, obj):
-                    unsorted.setdefault(name, obj)
+                unsorted.setdefault(name, obj)
         for name in self._var_annotations:
-            if _is_exported(name):
-                unsorted.setdefault(name, empty)
+            unsorted.setdefault(name, empty)
         for name in self._var_docstrings:
-            if _is_exported(name):
-                unsorted.setdefault(name, empty)
+            unsorted.setdefault(name, empty)
+
+        unsorted = {k: v for k, v in unsorted.items() if _is_exported(k, v)}
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
@@ -778,11 +809,13 @@ class Variable(Doc[None]):
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
             return ""
-        elif isinstance(self.default_value, types.ModuleType):
-            return f" = {self.default_value.__name__}"
         else:
             try:
-                return re.sub(r"(?<=object) at 0x[0-9a-fA-F]+(?=>$)", "", f" = {repr(self.default_value)}")
+                return re.sub(
+                    r"(?<=object) at 0x[0-9a-fA-F]+(?=>$)",
+                    "",
+                    f" = {repr(self.default_value)}",
+                )
             except Exception:
                 return " = <unable to get value representation>"
 
@@ -895,5 +928,8 @@ def _safe_getattr(obj, attr, default):
     try:
         return getattr(obj, attr, default)
     except Exception as e:
-        warnings.warn(f"getattr({obj!r}, {attr!r}, {default!r}) raised an exception: {e}", RuntimeWarning)
+        warnings.warn(
+            f"getattr({obj!r}, {attr!r}, {default!r}) raised an exception: {e}",
+            RuntimeWarning,
+        )
         return default

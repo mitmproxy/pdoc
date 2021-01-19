@@ -1,5 +1,13 @@
 """A test package"""
 
-from ._child import Test
+from . import child_b
+from ._child_d import Test
 
-__all__ = ["Test"]
+import misc
+
+__all__ = [
+    "Test",
+    "child_b",
+    "child_c",
+    "misc",
+]

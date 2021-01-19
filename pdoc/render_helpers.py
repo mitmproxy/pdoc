@@ -73,15 +73,14 @@ def _relative_link(current: list[str], target: list[str]) -> str:
     if target == current:
         return f"../{target[-1]}.html"
     elif target[: len(current)] == current:
-        return "/".join(target[len(current):]) + ".html"
+        return "/".join(target[len(current) :]) + ".html"
     else:
         return "../" + _relative_link(current[:-1], target)
 
 
 @cache
 def relative_link(current_module: str, target_module: str) -> str:
-    """Compute the relative link to another module's HTML file.
-    """
+    """Compute the relative link to another module's HTML file."""
     if current_module == target_module:
         return ""
     return _relative_link(
@@ -116,7 +115,9 @@ def linkify(context: Context, code: str) -> str:
             |
             (?<=<code>)(?!\d)[a-zA-Z_0-9]+(?=</code>)  # `foo`
             """,
-            linkify_repl, code, flags=re.VERBOSE
+            linkify_repl,
+            code,
+            flags=re.VERBOSE,
         )
     )
 
@@ -141,7 +142,7 @@ def edit_url(
     """Create a link to edit a particular file in the used version control system."""
     for m, prefix in mapping.items():
         if m == modulename or modulename.startswith(f"{m}."):
-            filename = modulename[len(m) + 1:].replace(".", "/")
+            filename = modulename[len(m) + 1 :].replace(".", "/")
             if is_package:
                 filename = f"{filename}/__init__.py".lstrip("/")
             else:

@@ -17,7 +17,7 @@ from pdoc.render_helpers import (
 
 _default_searchpath = [
     Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
-    Path(__file__).parent / "templates"
+    Path(__file__).parent / "templates",
 ]
 
 env = Environment(
@@ -82,25 +82,33 @@ def html_module(
     - If `mtime` is given, include additional JavaScript on the page for live-reloading.
       This is only passed by `pdoc.web`.
     """
-    return env.select_template(["module.html.jinja2", "default/module.html.jinja2"]).render(
+    return env.select_template(
+        ["module.html.jinja2", "default/module.html.jinja2"]
+    ).render(
         module=module,
         all_modules=all_modules,
         mtime=mtime,
-        edit_url=edit_url(module.modulename, module.is_package, env.globals["edit_url_map"]),
+        edit_url=edit_url(
+            module.modulename, module.is_package, env.globals["edit_url_map"]
+        ),
         pygments_css=formatter.get_style_defs(),
     )
 
 
 def html_index(all_modules: Collection[str]) -> str:
     """Renders the module index."""
-    return env.select_template(["index.html.jinja2", "default/index.html.jinja2"]).render(
+    return env.select_template(
+        ["index.html.jinja2", "default/index.html.jinja2"]
+    ).render(
         all_modules=[m for m in all_modules if "._" not in m],
     )
 
 
 def html_error(error: str, details: str = "") -> str:
     """Renders an error message."""
-    return env.select_template(["index.html.jinja2", "default/error.html.jinja2"]).render(
+    return env.select_template(
+        ["index.html.jinja2", "default/error.html.jinja2"]
+    ).render(
         error=error,
         details=details,
     )

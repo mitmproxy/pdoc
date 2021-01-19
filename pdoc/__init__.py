@@ -319,12 +319,12 @@ def pdoc(
     if format == "html":
 
         def r(mod: doc.Module) -> str:
-            return render.html_module(
-                module=mod, all_modules=all_modules
-            )
+            return render.html_module(module=mod, all_modules=all_modules)
 
     elif format == "markdown":  # pragma: no cover
-        raise NotImplementedError("Markdown support is currently unimplemented, but PRs are welcome!")
+        raise NotImplementedError(
+            "Markdown support is currently unimplemented, but PRs are welcome!"
+        )
     elif format == "repr":
         r = render.repr_module
     else:
@@ -344,6 +344,8 @@ def pdoc(
     assert output_directory
 
     if format == "html":
-        (output_directory / "index.html").write_bytes(render.html_index(all_modules).encode())
+        (output_directory / "index.html").write_bytes(
+            render.html_index(all_modules).encode()
+        )
 
     return retval.getvalue()

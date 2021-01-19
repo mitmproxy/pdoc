@@ -124,7 +124,9 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     if get_origin(t) is Literal:
         return t
 
-    if sys.version_info < (3, 9) and isinstance(t, (typing.ForwardRef, ForwardRef)):  # pragma: no cover
+    if sys.version_info < (3, 9) and isinstance(
+        t, (typing.ForwardRef, ForwardRef)
+    ):  # pragma: no cover
         # we do a very happy dance here for Python 3.8, where things are a bit crazy.
         # In a nutshell, we convert Python 3.8's ForwardRef to our vendored ForwardRef,
         # and then eval on the whole thing recursively.

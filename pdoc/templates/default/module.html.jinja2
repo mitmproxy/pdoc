@@ -420,6 +420,11 @@
         </div>
     {% endmacro %}
 {% endif %}
+{% if not submodule %}
+    {% macro submodule(mod) %}
+        <div class="attr module"><span class="name">{{ (mod.modulename, "") | link }}</span></div>
+    {% endmacro %}
+{% endif %}
 {% if not class %}
     {% macro class(cls) %}
         <div class="attr class">
@@ -436,6 +441,8 @@
             {{ class(obj) }}
         {% elif obj.type == "function" %}
             {{ function(obj) }}
+        {% elif obj.type == "module" %}
+            {{ submodule(obj) }}
         {% else %}
             {{ variable(obj) }}
         {% endif %}
@@ -462,10 +469,12 @@
                         {% if m.own_members %}
                             {{ nav_members(m.own_members) | indent(12) }}
                         {% endif %}
-                    {% elif m.name != "__init__" %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
-                    {% else %}
+                    {% elif m.type == "module" %}
+                        <a class="{{ m.type }}" href="#{{ m.name }}">{{ m.name }}</a>
+                    {% elif m.name == "__init__" %}
                         <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+                    {% else %}
+                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
                     {% endif %}
                 </li>
             {% endfor %}
@@ -513,8 +522,7 @@
                         <h2>Submodules</h2>
                         <ul>
                             {% for submodule in module.submodules %}
-                                {% set url = module.name + "/" + submodule.name + ".html" %}
-                                <li><a href="{{ url }}">{{ submodule.fullname }}</a></li>
+                                <li>{{ (submodule.modulename, "") | link }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -543,21 +551,22 @@
                     <h1 class="modulename">
                         {% set parts = module.modulename.split(".") %}
                         {% for part in parts %}
-                            {% set fullname = ".".join(parts[:loop.index]) %}
-                            {% if fullname in all_modules and fullname != module.modulename %}
+                            {%- set fullname = ".".join(parts[:loop.index]) -%}
+                            {%- if fullname in all_modules and fullname != module.modulename -%}
                                 <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
-                            {% else %}
+                            {%- else -%}
                                 {{ part }}
-                            {% endif %}
-                            {% if loop.nextitem %}.{% endif %}
-                        {% endfor %}</h1>
+                            {%- endif -%}
+                            {%- if loop.nextitem %}.{% endif -%}
+                        {% endfor %}
+                    </h1>
                     {{ docstring(module) }}
                     {{ view_source(module) }}
                 </section>
             {% endblock %}
             {% block module_contents %}
-                {% for m in module.flattened_members %}
-                    <section id="{{ m.qualname }}">
+                {% for m in module.flattened_own_members %}
+                    <section id="{{ m.qualname or m.name }}">
                         {{ member(m) }}
                         {% if m.type == "class" %}
                             {% for m in m.own_members if m.type != "class" %}

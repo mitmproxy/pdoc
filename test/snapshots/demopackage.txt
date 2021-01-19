@@ -1,4 +1,34 @@
 <module demopackage  # A test package
-    <class demopackage.Test  # inherited from demopackage._child.Test
+    <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
         <method def __init__(): ...>
-        <method def foo(self, a: int): ...  # inherited from demopackage._child.Test.foo>>>
+        <method def foo(self, a: int): ...  # inherited from demopackage._child_d.Test.foo, Do foo.>>
+    <module demopackage.child_b  # child_b docstr>
+    <module demopackage.child_c  # child_c docstr>
+    <module misc
+        <class misc.LambdaAttr
+            <method def __init__(): ...>
+            <method def attr(x): ...  # inherited from misc.LambdaAttr.<lambda>>>
+        <function def foo(): ...  # no indents>
+        <function def bar(): ...  # no
+        indents>
+        <function def baz(): ...  # one
+        indent>
+        <function def qux(): ...  # two
+        indents>
+        <class misc.Indented
+            <method def __init__(): ...>
+            <method def foo(self): ...  # no indents>
+            <method def bar(self): ...  # no
+            indents>
+            <method def baz(self): ...  # one
+            indent>
+            <method def qux(self): ...  # two
+            indents>
+            <@lru_cache method def foo_decorated(self): ...  # no indents>
+            <@lru_cache method def foo_commented(self): ...  # no indents>
+            <@lru_cache method def bar_decorated(self): ...  # no
+            indents>
+            <@lru_cache method def baz_decorated(self): ...  # one
+            indent>
+            <@lru_cache method def qux_decorated(self): ...  # two
+            indents>>>>

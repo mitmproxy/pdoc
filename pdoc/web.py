@@ -19,6 +19,7 @@ from pdoc._compat import removesuffix
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
     """A handler for individual requests."""
+
     server: "DocServer"
     """A reference to the main web server."""
 
@@ -81,6 +82,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
 class DocServer(http.server.HTTPServer):
     """pdoc's live-reloading web server"""
+
     all_modules: Collection[str]
 
     def __init__(

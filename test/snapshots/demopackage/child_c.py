@@ -1,0 +1,1 @@
+"""child_c docstr"""

@@ -41,6 +41,14 @@ def test_attrs():
     assert c.methods
 
 
+def test_all_with_import_err():
+    mod = extract.load_module(extract.parse_spec(here / "import_err"))
+    m = Module(mod)
+    with pytest.warns(RuntimeWarning,
+                      match="Found 'err' in import_err.__all__, but it does not resolve: Error importing import_err"):
+        assert m.members
+
+
 def test_var_with_raising_repr():
     class Raising:
         def __repr__(self):

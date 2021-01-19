@@ -21,6 +21,11 @@
                             </a>
 
 
+                        <h2>Submodules</h2>
+                        <ul>
+                                <li><a href="demopackage/child_b.html">demopackage.child_b</a></li>
+                                <li><a href="demopackage/child_c.html">demopackage.child_c</a></li>
+                        </ul>
 
                         <h2>API Documentation</h2>
                                 <ul class="memberlist">
@@ -36,6 +41,15 @@
                     </ul>
 
                 </li>
+                <li>
+                        <a class="module" href="#child_b">child_b</a>
+                </li>
+                <li>
+                        <a class="module" href="#child_c">child_c</a>
+                </li>
+                <li>
+                        <a class="module" href="#misc">misc</a>
+                </li>
         </ul>
 
 
@@ -46,8 +60,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                demopackage
-</h1>
+demopackage                    </h1>
                                 <div class="docstring"><p>A test package</p>
 </div>
 
@@ -55,14 +68,194 @@
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;A test package&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">._child</span> <span class="kn">import</span> <span class="n">Test</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">child_b</span>
+<span class="kn">from</span> <span class="nn">._child_d</span> <span class="kn">import</span> <span class="n">Test</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Test&quot;</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">misc</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;child_b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;child_c&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;misc&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 </pre></div>
 
             </details>
 
                 </section>
+                    <section id="Test">
+                                            <div class="attr class">
+            
+            <span class="def">class</span>
+            <span class="name">Test</span>:
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The Test class from _child_d.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Do foo.&quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>The Test class from _child_d.</p>
+</div>
+
+
+                                <div id="Test.__init__" class="classattr">
+                                                <div class="attr function">
+            
+                <span class="name">Test</span><span class="signature">()</span>        </div>
+
+            
+        
+
+                                </div>
+                                <div id="Test.foo" class="classattr">
+                                                <div class="attr function">
+            
+                <span class="def">def</span>
+                <span class="name">foo</span><span class="signature">(self, a: int)</span>:
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Do foo.&quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>Do foo.</p>
+</div>
+
+
+                                </div>
+                    </section>
+                    <section id="child_b">
+                                            <div class="attr module"><span class="name"><a href="demopackage/child_b.html">demopackage.child_b</a></span></div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;child_b docstr&quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>child_b docstr</p>
+</div>
+
+
+                    </section>
+                    <section id="child_c">
+                                            <div class="attr module"><span class="name"><a href="demopackage/child_c.html">demopackage.child_c</a></span></div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;child_c docstr&quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>child_c docstr</p>
+</div>
+
+
+                    </section>
+                    <section id="misc">
+                                            <div class="attr module"><span class="name">misc</span></div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+
+<span class="c1"># Testing a class attribute that is a lambda (which generates quirky sources)</span>
+
+<span class="k">class</span> <span class="nc">LambdaAttr</span><span class="p">:</span>
+    <span class="c1"># not really supported, but also shouldn&#39;t crash.</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
+
+
+<span class="c1"># Testing different docstring annotations</span>
+<span class="c1"># fmt: off</span>
+
+
+<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;no</span>
+<span class="sd">indents&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;one</span>
+<span class="sd">    indent&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">qux</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    two</span>
+<span class="sd">    indents</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">Indented</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no</span>
+<span class="sd">indents&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;one</span>
+<span class="sd">        indent&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        two</span>
+<span class="sd">        indents</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="c1"># comment</span>
+    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;no</span>
+<span class="sd">indents&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;one</span>
+<span class="sd">        indent&quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span>
+    <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        two</span>
+<span class="sd">        indents</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+
+            </details>
+
+        
+
+                    </section>
         </main>
     </div>
 </body>

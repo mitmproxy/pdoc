@@ -23,7 +23,7 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-         "the current environment or file paths.",
+    "the current environment or file paths.",
 )
 parser.add_argument(
     "-o",
@@ -31,7 +31,7 @@ parser.add_argument(
     metavar="DIR",
     type=Path,
     help="Output directory for the rendered documentation. If no directory is provided, pdoc will start an interactive "
-         "web server.",
+    "web server.",
 )
 # may be added again in the future:
 # formats = parser.add_mutually_exclusive_group()
@@ -40,43 +40,46 @@ parser.add_argument(
 #     "--markdown", dest="format", action="store_const", const="markdown"
 # )
 parser.add_argument(
-    "-e", "--edit-url",
+    "-e",
+    "--edit-url",
     action="append",
     type=str,
     default=[],
     metavar="module=url",
     help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
-         "May be passed multiple times. "
-         "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
+    "May be passed multiple times. "
+    "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 parser.add_argument(
-    "-t", "--template-directory",
+    "-t",
+    "--template-directory",
     metavar="DIR",
     type=Path,
     default=None,
     help="A directory containing Jinja2 templates to customize output. "
-         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
+    "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 parser.add_argument(
-    "-h", "--host",
+    "-h",
+    "--host",
     type=str,
     default="localhost",
     help="The host on which to run the HTTP server.",
 )
 parser.add_argument(
-    "-p", "--port",
+    "-p",
+    "--port",
     type=int,
     default=8080,
     help="The port on which to run the HTTP server.",
 )
 parser.add_argument(
-    "-n", "--no-browser",
+    "-n",
+    "--no-browser",
     action="store_true",
     help="Don't start a browser, even if no output directory is set.",
 )
-parser.add_argument(
-    '--help', action='help',
-    help="Show this help message and exit.")
+parser.add_argument("--help", action="help", help="Show this help message and exit.")
 parser.add_argument(
     "--version",
     action="store_true",
@@ -97,13 +100,14 @@ def get_dev_version() -> str:
         # Check that we're in the pdoc repository:
         # 60665024af9af2cda4229e91b4d15f2359a4a3dd is the first pdoc commit.
         subprocess.run(
-            ['git', 'cat-file', '-e', '60665024af9af2cda4229e91b4d15f2359a4a3dd'],
+            ["git", "cat-file", "-e", "60665024af9af2cda4229e91b4d15f2359a4a3dd"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             cwd=here,
-            check=True)
+            check=True,
+        )
         git_describe = subprocess.check_output(
-            ['git', 'describe', '--tags', '--long'],
+            ["git", "describe", "--tags", "--long"],
             stderr=subprocess.STDOUT,
             cwd=here,
         )
@@ -147,7 +151,8 @@ def cli(args: list[str] = None) -> None:
         all_modules = extract.parse_specs(opts.modules)
 
         with pdoc.web.DocServer(
-            (opts.host, opts.port), all_modules,
+            (opts.host, opts.port),
+            all_modules,
         ) as httpd:
             url = f"http://{opts.host}:{opts.port}"
             print(f"pdoc server ready at {url}")
