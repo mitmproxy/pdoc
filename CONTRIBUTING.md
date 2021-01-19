@@ -36,3 +36,17 @@ Please ensure that all patches are accompanied by matching changes in the test s
 ## Documentation
 
 Please check [docs/README.md](./docs/README.md) for instructions.
+
+
+## Release Process
+
+The following steps need to be performed to ship a release:
+
+1. Make sure that...
+   - you are on the `main` branch with a clean working tree.
+   - `tox` is passing without errors.
+2. Bump the version in [`pdoc/__init__.py`](pdoc/__init__.py).
+3. Update [`CHANGELOG.md`](./CHANGELOG.md).
+4. Re-render the website: `docs/make.py`
+5. Commit the changes and tag them.
+6. Manually confirm the CI deploy step.
