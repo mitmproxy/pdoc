@@ -44,9 +44,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                <a href="./../pdoc.html">pdoc</a>
-.                                doc_types
-</h1>
+<a href="./../pdoc.html">pdoc</a>.doc_types                    </h1>
                                 <div class="docstring"><p>This module handles all interpretation of type annotations in pdoc.</p>
 
 <p>In particular, it provides functionality to resolve
@@ -182,7 +180,9 @@ exception.</p>
     <span class="k">if</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Literal</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">t</span>
 
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">ForwardRef</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">)):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">ForwardRef</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">)</span>
+    <span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="c1"># we do a very happy dance here for Python 3.8, where things are a bit crazy.</span>
         <span class="c1"># In a nutshell, we convert Python 3.8&#39;s ForwardRef to our vendored ForwardRef,</span>
         <span class="c1"># and then eval on the whole thing recursively.</span>

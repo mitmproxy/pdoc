@@ -70,8 +70,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                pdoc
-</h1>
+pdoc                    </h1>
                                 <div class="docstring"><h1 id="what-is-pdoc">What is pdoc?</h1>
 
 <p>pdoc auto-generates API documentation that follows your project's Python module hierarchy.
@@ -612,7 +611,7 @@ Google-style docstrings render more nicely.</p>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0.1&quot;</span>  <span class="c1"># this is read from setup.py</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.1.0&quot;</span>  <span class="c1"># this is read from setup.py</span>
 
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -656,12 +655,12 @@ Google-style docstrings render more nicely.</p>
     <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
 
         <span class="k">def</span> <span class="nf">r</span><span class="p">(</span><span class="n">mod</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">html_module</span><span class="p">(</span>
-                <span class="n">module</span><span class="o">=</span><span class="n">mod</span><span class="p">,</span> <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span>
-            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">html_module</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">mod</span><span class="p">,</span> <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;markdown&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Markdown support is currently unimplemented, but PRs are welcome!&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;Markdown support is currently unimplemented, but PRs are welcome!&quot;</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;repr&quot;</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">render</span><span class="o">.</span><span class="n">repr_module</span>
     <span class="k">else</span><span class="p">:</span>
@@ -681,7 +680,9 @@ Google-style docstrings render more nicely.</p>
     <span class="k">assert</span> <span class="n">output_directory</span>
 
     <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">output_directory</span> <span class="o">/</span> <span class="s2">&quot;index.html&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">render</span><span class="o">.</span><span class="n">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="p">(</span><span class="n">output_directory</span> <span class="o">/</span> <span class="s2">&quot;index.html&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span>
+            <span class="n">render</span><span class="o">.</span><span class="n">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">retval</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 </pre></div>
@@ -736,12 +737,12 @@ Google-style docstrings render more nicely.</p>
     <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
 
         <span class="k">def</span> <span class="nf">r</span><span class="p">(</span><span class="n">mod</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">html_module</span><span class="p">(</span>
-                <span class="n">module</span><span class="o">=</span><span class="n">mod</span><span class="p">,</span> <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span>
-            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">render</span><span class="o">.</span><span class="n">html_module</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">mod</span><span class="p">,</span> <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;markdown&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Markdown support is currently unimplemented, but PRs are welcome!&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;Markdown support is currently unimplemented, but PRs are welcome!&quot;</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;repr&quot;</span><span class="p">:</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">render</span><span class="o">.</span><span class="n">repr_module</span>
     <span class="k">else</span><span class="p">:</span>
@@ -761,7 +762,9 @@ Google-style docstrings render more nicely.</p>
     <span class="k">assert</span> <span class="n">output_directory</span>
 
     <span class="k">if</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">output_directory</span> <span class="o">/</span> <span class="s2">&quot;index.html&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">render</span><span class="o">.</span><span class="n">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="p">(</span><span class="n">output_directory</span> <span class="o">/</span> <span class="s2">&quot;index.html&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span>
+            <span class="n">render</span><span class="o">.</span><span class="n">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">retval</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 </pre></div>

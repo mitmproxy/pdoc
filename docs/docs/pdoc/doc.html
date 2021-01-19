@@ -65,16 +65,16 @@
                         <a class="class" href="#Namespace">Namespace</a>
                                     <ul class="memberlist">
                             <li>
-                                    <a class="variable" href="#Namespace.members">members</a>
+                                    <a class="variable" href="#Namespace.own_members">own_members</a>
                             </li>
                             <li>
-                                    <a class="variable" href="#Namespace.own_members">own_members</a>
+                                    <a class="variable" href="#Namespace.members">members</a>
                             </li>
                             <li>
                                     <a class="variable" href="#Namespace.inherited_members">inherited_members</a>
                             </li>
                             <li>
-                                    <a class="variable" href="#Namespace.flattened_members">flattened_members</a>
+                                    <a class="variable" href="#Namespace.flattened_own_members">flattened_own_members</a>
                             </li>
                     </ul>
 
@@ -87,6 +87,9 @@
                             </li>
                             <li>
                                     <a class="variable" href="#Module.is_package">is_package</a>
+                            </li>
+                            <li>
+                                    <a class="variable" href="#Module.own_members">own_members</a>
                             </li>
                             <li>
                                     <a class="variable" href="#Module.submodules">submodules</a>
@@ -106,6 +109,9 @@
                 <li>
                         <a class="class" href="#Class">Class</a>
                                     <ul class="memberlist">
+                            <li>
+                                    <a class="variable" href="#Class.own_members">own_members</a>
+                            </li>
                             <li>
                                     <a class="variable" href="#Class.bases">bases</a>
                             </li>
@@ -194,9 +200,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                <a href="./../pdoc.html">pdoc</a>
-.                                doc
-</h1>
+<a href="./../pdoc.html">pdoc</a>.doc                    </h1>
                                 <div class="docstring"><p>This module defines pdoc's documentation objects. A documentation object corresponds to <em>something</em>
 in your Python code that has a docstring or type annotation. Typically, this only includes
 modules, classes, functions and methods. However, <code><a href="../pdoc.html">pdoc</a></code> adds support for extracting documentation
@@ -237,7 +241,6 @@ By convention, all attributes are read-only, although this this not enforced at 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -256,7 +259,7 @@ By convention, all attributes are read-only, although this this not enforced at 
     <span class="n">Generic</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">doc_ast</span>
+<span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">doc_ast</span><span class="p">,</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">pdoc.doc_types</span> <span class="kn">import</span> <span class="n">empty</span><span class="p">,</span> <span class="n">resolve_annotations</span><span class="p">,</span> <span class="n">formatannotation</span><span class="p">,</span> <span class="n">safe_eval_type</span>
 <span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">cache</span>
 
@@ -439,6 +442,11 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="sd">&quot;&quot;&quot;A mapping from some member variable names to their type annotations.&quot;&quot;&quot;</span>
 
     <span class="nd">@cached_property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;A list of all own (i.e. non-inherited) members&quot;&quot;&quot;</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects.&quot;&quot;&quot;</span>
         <span class="n">members</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -450,7 +458,9 @@ By convention, all attributes are read-only, although this this not enforced at 
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">))</span>
                 <span class="ow">or</span>
                 <span class="c1"># Python 3.9: @classmethod @property is allowed.</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__func__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">))</span>
+                <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__func__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">is_property</span><span class="p">:</span>
                 <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span>
@@ -479,10 +489,10 @@ By convention, all attributes are read-only, although this this not enforced at 
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">docstring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">docstring</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
-                    <span class="n">docstring</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__doc__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
                     <span class="n">qualname</span><span class="p">,</span>
@@ -508,16 +518,6 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="k">return</span> <span class="n">locations</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;A list of all own (i.e. non-inherited) members&quot;&quot;&quot;</span>
-        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">),</span> <span class="p">[])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">):</span>
-            <span class="c1"># .declared_at may be != (self.modulename, self.qualname), for example when</span>
-            <span class="c1"># a module re-exports a class from a private submodule.</span>
-            <span class="n">members</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="k">return</span> <span class="n">members</span>
-
-    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">inherited_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;A mapping from (modulename, qualname) locations to the attributes inherited from that path&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -527,7 +527,7 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="p">}</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">flattened_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">flattened_own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented members and their child classes, recursively.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -536,7 +536,7 @@ By convention, all attributes are read-only, although this this not enforced at 
             <span class="n">flattened</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Class</span><span class="p">):</span>
                 <span class="n">flattened</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                    <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">flattened_members</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
+                    <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">flattened_own_members</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">flattened</span>
 
@@ -589,23 +589,36 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="k">return</span> <span class="n">resolve_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Module&quot;</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A list of all (direct) submodules.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_package</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
-        <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-            <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
-                <span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">submodules</span>
+
+        <span class="k">if</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="c1"># If __all__ is set, only show submodules specified there.</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">mod</span>
+                <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">Module</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">mod</span><span class="o">.</span><span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">module</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">submodules</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_documented_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -613,25 +626,42 @@ By convention, all attributes are read-only, although this this not enforced at 
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">}</span>
-
         <span class="n">members</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-            <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
-                <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
-                <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
 
-        <span class="n">members</span><span class="p">,</span> <span class="n">notfound</span> <span class="o">=</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">sort_by_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="p">{},</span> <span class="n">members</span><span class="p">)</span>
-        <span class="n">members</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">notfound</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># this may be an unimported submodule, try importing.</span>
+                    <span class="c1"># (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.__all__, but it does not resolve: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="ne">RuntimeWarning</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">empty</span>
+                <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
+                    <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
+                    <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                    <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+
+            <span class="n">members</span><span class="p">,</span> <span class="n">notfound</span> <span class="o">=</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">sort_by_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="p">{},</span> <span class="n">members</span><span class="p">)</span>
+            <span class="n">members</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">notfound</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">members</span>
 
     <span class="nd">@cached_property</span>
@@ -714,23 +744,28 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="k">return</span> <span class="n">annotations</span>
 
     <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">),</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">):</span>
+            <span class="c1"># .declared_at may be != (self.modulename, self.qualname), for example when</span>
+            <span class="c1"># a module re-exports a class from a private submodule.</span>
+            <span class="n">members</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">members</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a dictionary mapping a public identifier name to a</span>
-<span class="sd">        Python object. This counts the `__init__` method as being</span>
-<span class="sd">        public.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unsorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-                    <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+            <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+            <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+
+        <span class="n">unsorted</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">unsorted</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)}</span>
 
         <span class="nb">sorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
@@ -998,11 +1033,13 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="sd">&quot;&quot;&quot;The variable&#39;s default value as a pretty-printed str.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_value</span> <span class="ow">is</span> <span class="n">empty</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="k">return</span> <span class="s2">&quot; = &lt;unable to get value representation&gt;&quot;</span>
 
@@ -1115,7 +1152,10 @@ By convention, all attributes are read-only, although this this not enforced at 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;getattr(</span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="n">attr</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="n">default</span><span class="si">!r}</span><span class="s2">) raised an exception: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;getattr(</span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="n">attr</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="n">default</span><span class="si">!r}</span><span class="s2">) raised an exception: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="ne">RuntimeWarning</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">default</span>
 </pre></div>
 
@@ -1437,6 +1477,11 @@ in a different module.</p>
         <span class="sd">&quot;&quot;&quot;A mapping from some member variable names to their type annotations.&quot;&quot;&quot;</span>
 
     <span class="nd">@cached_property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;A list of all own (i.e. non-inherited) members&quot;&quot;&quot;</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects.&quot;&quot;&quot;</span>
         <span class="n">members</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1448,7 +1493,9 @@ in a different module.</p>
                 <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">))</span>
                 <span class="ow">or</span>
                 <span class="c1"># Python 3.9: @classmethod @property is allowed.</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__func__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">))</span>
+                <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__func__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="nb">property</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">is_property</span><span class="p">:</span>
                 <span class="n">func</span> <span class="o">=</span> <span class="n">obj</span>
@@ -1477,10 +1524,10 @@ in a different module.</p>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">docstring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">docstring</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
-                    <span class="n">docstring</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__doc__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
                     <span class="n">qualname</span><span class="p">,</span>
@@ -1506,16 +1553,6 @@ in a different module.</p>
         <span class="k">return</span> <span class="n">locations</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;A list of all own (i.e. non-inherited) members&quot;&quot;&quot;</span>
-        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">),</span> <span class="p">[])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">):</span>
-            <span class="c1"># .declared_at may be != (self.modulename, self.qualname), for example when</span>
-            <span class="c1"># a module re-exports a class from a private submodule.</span>
-            <span class="n">members</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="k">return</span> <span class="n">members</span>
-
-    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">inherited_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;A mapping from (modulename, qualname) locations to the attributes inherited from that path&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -1525,7 +1562,7 @@ in a different module.</p>
         <span class="p">}</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">flattened_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">flattened_own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented members and their child classes, recursively.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1534,7 +1571,7 @@ in a different module.</p>
             <span class="n">flattened</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Class</span><span class="p">):</span>
                 <span class="n">flattened</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                    <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">flattened_members</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
+                    <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">flattened_own_members</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">flattened</span>
 </pre></div>
@@ -1545,22 +1582,22 @@ in a different module.</p>
 </div>
 
 
-                                <div id="Namespace.members" class="classattr">
-                                                        <div class="attr variable">
-            <span class="name">members</span><span class="annotation">: dict[str, <a href="#Doc">pdoc.doc.Doc</a>]</span>
-        </div>
-
-                    <div class="docstring"><p>A mapping from all members to their documentation objects.</p>
-</div>
-
-
-                                </div>
                                 <div id="Namespace.own_members" class="classattr">
                                                         <div class="attr variable">
             <span class="name">own_members</span><span class="annotation">: list[<a href="#Doc">pdoc.doc.Doc</a>]</span>
         </div>
 
                     <div class="docstring"><p>A list of all own (i.e. non-inherited) members</p>
+</div>
+
+
+                                </div>
+                                <div id="Namespace.members" class="classattr">
+                                                        <div class="attr variable">
+            <span class="name">members</span><span class="annotation">: dict[str, <a href="#Doc">pdoc.doc.Doc</a>]</span>
+        </div>
+
+                    <div class="docstring"><p>A mapping from all members to their documentation objects.</p>
 </div>
 
 
@@ -1575,9 +1612,9 @@ in a different module.</p>
 
 
                                 </div>
-                                <div id="Namespace.flattened_members" class="classattr">
+                                <div id="Namespace.flattened_own_members" class="classattr">
                                                         <div class="attr variable">
-            <span class="name">flattened_members</span><span class="annotation">: list[<a href="#Doc">pdoc.doc.Doc</a>]</span>
+            <span class="name">flattened_own_members</span><span class="annotation">: list[<a href="#Doc">pdoc.doc.Doc</a>]</span>
         </div>
 
                     <div class="docstring"><p>A list of all documented members and their child classes, recursively.</p>
@@ -1651,23 +1688,36 @@ in a different module.</p>
         <span class="k">return</span> <span class="n">resolve_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Module&quot;</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A list of all (direct) submodules.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_package</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
-        <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-            <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
-                <span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">submodules</span>
+
+        <span class="k">if</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="c1"># If __all__ is set, only show submodules specified there.</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">mod</span>
+                <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">Module</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">mod</span><span class="o">.</span><span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">module</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">submodules</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_documented_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -1675,25 +1725,42 @@ in a different module.</p>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">}</span>
-
         <span class="n">members</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-            <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
-                <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
-                <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
 
-        <span class="n">members</span><span class="p">,</span> <span class="n">notfound</span> <span class="o">=</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">sort_by_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="p">{},</span> <span class="n">members</span><span class="p">)</span>
-        <span class="n">members</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">notfound</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># this may be an unimported submodule, try importing.</span>
+                    <span class="c1"># (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.__all__, but it does not resolve: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="ne">RuntimeWarning</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">empty</span>
+                <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
+                    <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
+                    <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                    <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+
+            <span class="n">members</span><span class="p">,</span> <span class="n">notfound</span> <span class="o">=</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">sort_by_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="p">{},</span> <span class="n">members</span><span class="p">)</span>
+            <span class="n">members</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">notfound</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">members</span>
 
     <span class="nd">@cached_property</span>
@@ -1761,6 +1828,14 @@ module with the name <code>__init__.py</code>.</p>
 
 
                                 </div>
+                                <div id="Module.own_members" class="classattr">
+                                                        <div class="attr variable">
+            <span class="name">own_members</span><span class="annotation">: list[<a href="#Doc">pdoc.doc.Doc</a>]</span>
+        </div>
+
+        
+
+                                </div>
                                 <div id="Module.submodules" class="classattr">
                                                         <div class="attr variable">
             <span class="name">submodules</span><span class="annotation">: list[&#39;Module&#39;]</span>
@@ -1806,7 +1881,7 @@ module with the name <code>__init__.py</code>.</p>
                                         <dl>
                                                 <div>
                                                     <dt><a href="#Namespace">pdoc.doc.Namespace</a></dt>
-<dd class="variable"><a href="#Namespace.members">members</a></dd><dd class="variable"><a href="#Namespace.own_members">own_members</a></dd><dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd><dd class="variable"><a href="#Namespace.flattened_members">flattened_members</a></dd>                                                </div>
+<dd class="variable"><a href="#Namespace.members">members</a></dd><dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd><dd class="variable"><a href="#Namespace.flattened_own_members">flattened_own_members</a></dd>                                                </div>
                                                 <div>
                                                     <dt><a href="#Doc">pdoc.doc.Doc</a></dt>
 <dd class="variable"><a href="#Doc.modulename">modulename</a></dd><dd class="variable"><a href="#Doc.qualname">qualname</a></dd><dd class="variable"><a href="#Doc.obj">obj</a></dd><dd class="variable"><a href="#Doc.fullname">fullname</a></dd><dd class="variable"><a href="#Doc.name">name</a></dd><dd class="variable"><a href="#Doc.docstring">docstring</a></dd><dd class="variable"><a href="#Doc.source">source</a></dd><dd class="variable"><a href="#Doc.declared_at">declared_at</a></dd><dd class="variable"><a href="#Doc.is_inherited">is_inherited</a></dd><dd class="variable"><a href="#Doc.type">type</a></dd>                                                </div>
@@ -1880,23 +1955,28 @@ module with the name <code>__init__.py</code>.</p>
         <span class="k">return</span> <span class="n">annotations</span>
 
     <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">own_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">),</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">):</span>
+            <span class="c1"># .declared_at may be != (self.modulename, self.qualname), for example when</span>
+            <span class="c1"># a module re-exports a class from a private submodule.</span>
+            <span class="n">members</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_members_by_declared_location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">declared_at</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="n">members</span>
+
+    <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a dictionary mapping a public identifier name to a</span>
-<span class="sd">        Python object. This counts the `__init__` method as being</span>
-<span class="sd">        public.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unsorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-                    <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+            <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+            <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+
+        <span class="n">unsorted</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">unsorted</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">_is_exported</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)}</span>
 
         <span class="nb">sorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
@@ -1992,6 +2072,14 @@ module with the name <code>__init__.py</code>.</p>
 </div>
 
 
+                                <div id="Class.own_members" class="classattr">
+                                                        <div class="attr variable">
+            <span class="name">own_members</span><span class="annotation">: list[<a href="#Doc">pdoc.doc.Doc</a>]</span>
+        </div>
+
+        
+
+                                </div>
                                 <div id="Class.bases" class="classattr">
                                                         <div class="attr variable">
             <span class="name">bases</span><span class="annotation">: list[tuple[str, str]]</span>
@@ -2075,7 +2163,7 @@ All other variables are treated as instance variables.</p>
 <dd class="function"><a href="#Doc.__init__">Doc</a></dd><dd class="variable"><a href="#Doc.modulename">modulename</a></dd><dd class="variable"><a href="#Doc.qualname">qualname</a></dd><dd class="variable"><a href="#Doc.obj">obj</a></dd><dd class="variable"><a href="#Doc.fullname">fullname</a></dd><dd class="variable"><a href="#Doc.name">name</a></dd><dd class="variable"><a href="#Doc.docstring">docstring</a></dd><dd class="variable"><a href="#Doc.source">source</a></dd><dd class="variable"><a href="#Doc.declared_at">declared_at</a></dd><dd class="variable"><a href="#Doc.is_inherited">is_inherited</a></dd><dd class="variable"><a href="#Doc.type">type</a></dd>                                                </div>
                                                 <div>
                                                     <dt><a href="#Namespace">pdoc.doc.Namespace</a></dt>
-<dd class="variable"><a href="#Namespace.members">members</a></dd><dd class="variable"><a href="#Namespace.own_members">own_members</a></dd><dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd><dd class="variable"><a href="#Namespace.flattened_members">flattened_members</a></dd>                                                </div>
+<dd class="variable"><a href="#Namespace.members">members</a></dd><dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd><dd class="variable"><a href="#Namespace.flattened_own_members">flattened_own_members</a></dd>                                                </div>
                                         </dl>
                                     </div>
                     </section>
@@ -2401,11 +2489,13 @@ in repr(). Additionally, all types are already resolved.</p>
         <span class="sd">&quot;&quot;&quot;The variable&#39;s default value as a pretty-printed str.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_value</span> <span class="ow">is</span> <span class="n">empty</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="k">return</span> <span class="s2">&quot; = &lt;unable to get value representation&gt;&quot;</span>
 

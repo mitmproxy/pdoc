@@ -68,9 +68,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                <a href="./../pdoc.html">pdoc</a>
-.                                web
-</h1>
+<a href="./../pdoc.html">pdoc</a>.web                    </h1>
                                 <div class="docstring"><p>This module implements pdoc's live-reloading webserver.</p>
 
 <p>We want to keep the number of dependencies as small as possible,
@@ -101,6 +99,7 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 
 <span class="k">class</span> <span class="nc">DocHandler</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A handler for individual requests.&quot;&quot;&quot;</span>
+
     <span class="n">server</span><span class="p">:</span> <span class="s2">&quot;DocServer&quot;</span>
     <span class="sd">&quot;&quot;&quot;A reference to the main web server.&quot;&quot;&quot;</span>
 
@@ -163,6 +162,7 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 
 <span class="k">class</span> <span class="nc">DocServer</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;pdoc&#39;s live-reloading web server&quot;&quot;&quot;</span>
+
     <span class="n">all_modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -226,6 +226,7 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DocHandler</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A handler for individual requests.&quot;&quot;&quot;</span>
+
     <span class="n">server</span><span class="p">:</span> <span class="s2">&quot;DocServer&quot;</span>
     <span class="sd">&quot;&quot;&quot;A reference to the main web server.&quot;&quot;&quot;</span>
 
@@ -455,6 +456,7 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DocServer</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;pdoc&#39;s live-reloading web server&quot;&quot;&quot;</span>
+
     <span class="n">all_modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>

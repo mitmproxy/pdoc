@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - Add your changes here.
+
+# 2021-01-20: pdoc 1.1.0
+
  - pdoc now respects `__all__` when listing submodules.
 
 # 2021-01-19: pdoc 1.0.1

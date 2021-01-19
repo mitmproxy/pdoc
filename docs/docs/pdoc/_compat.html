@@ -59,9 +59,7 @@
         <main>
                 <section>
                     <h1 class="modulename">
-                                <a href="./../pdoc.html">pdoc</a>
-.                                _compat
-</h1>
+<a href="./../pdoc.html">pdoc</a>._compat                    </h1>
                     
                                 <details>
                 <summary class="button">View Source</summary>
@@ -201,6 +199,70 @@
             </details>
 
                 </section>
+                    <section id="cache">
+                                    <div class="attr function">
+            
+                <span class="def">def</span>
+                <span class="name">cache</span><span class="signature">(user_function, /)</span>:
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="n">user_function</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+    <span class="s1">&#39;Simple lightweight unbounded cache.  Sometimes called &quot;memoize&quot;.&#39;</span>
+    <span class="k">return</span> <span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)(</span><span class="n">user_function</span><span class="p">)</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>Simple lightweight unbounded cache.  Sometimes called "memoize".</p>
+</div>
+
+
+                    </section>
+                    <section id="ast_unparse">
+                                    <div class="attr function">
+            
+                <span class="def">def</span>
+                <span class="name">ast_unparse</span><span class="signature">(ast_obj)</span>:
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">unparse</span><span class="p">(</span><span class="n">ast_obj</span><span class="p">):</span>
+    <span class="n">unparser</span> <span class="o">=</span> <span class="n">_Unparser</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">unparser</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">ast_obj</span><span class="p">)</span>
+</pre></div>
+
+            </details>
+
+        
+
+                    </section>
+                    <section id="GenericAlias">
+                                            <div class="attr class">
+            
+            <span class="def">class</span>
+            <span class="name">GenericAlias</span>:
+        </div>
+
+            
+                    <div class="docstring"><p>Represent a PEP 585 generic type</p>
+
+<p>E.g. for t = list[int], t.__origin__ is list and t.__args__ is (int,).</p>
+</div>
+
+
+                                <div id="GenericAlias.__init__" class="classattr">
+                                                <div class="attr function">
+            
+                <span class="name">GenericAlias</span><span class="signature">()</span>        </div>
+
+            
+        
+
+                                </div>
+                    </section>
                     <section id="removesuffix">
                                     <div class="attr function">
             
@@ -223,6 +285,104 @@
 
         
 
+                    </section>
+                    <section id="ForwardRef">
+                                            <div class="attr class">
+            
+            <span class="def">class</span>
+            <span class="name">ForwardRef</span>(<span class="base">typing._Final</span>):
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ForwardRef</span><span class="p">(</span><span class="n">_Final</span><span class="p">,</span> <span class="n">_root</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Internal wrapper to hold a forward reference.&quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__forward_arg__&#39;</span><span class="p">,</span> <span class="s1">&#39;__forward_code__&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;__forward_evaluated__&#39;</span><span class="p">,</span> <span class="s1">&#39;__forward_value__&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;__forward_is_argument__&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">is_argument</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward reference must be a string -- got </span><span class="si">{</span><span class="n">arg</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;eval&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">SyntaxError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward reference must be an expression -- got </span><span class="si">{</span><span class="n">arg</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_code__</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_evaluated__</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_value__</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_is_argument__</span> <span class="o">=</span> <span class="n">is_argument</span>
+
+    <span class="k">def</span> <span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">globalns</span><span class="p">,</span> <span class="n">localns</span><span class="p">,</span> <span class="n">recursive_guard</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="ow">in</span> <span class="n">recursive_guard</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forward_evaluated__</span> <span class="ow">or</span> <span class="n">localns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">globalns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">globalns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">localns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">globalns</span> <span class="o">=</span> <span class="n">localns</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="n">globalns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">globalns</span> <span class="o">=</span> <span class="n">localns</span>
+            <span class="k">elif</span> <span class="n">localns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">localns</span> <span class="o">=</span> <span class="n">globalns</span>
+            <span class="n">type_</span> <span class="o">=</span><span class="n">_type_check</span><span class="p">(</span>
+                <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_code__</span><span class="p">,</span> <span class="n">globalns</span><span class="p">,</span> <span class="n">localns</span><span class="p">),</span>
+                <span class="s2">&quot;Forward references must evaluate to types.&quot;</span><span class="p">,</span>
+                <span class="n">is_argument</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_is_argument__</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__forward_value__</span> <span class="o">=</span> <span class="n">_eval_type</span><span class="p">(</span>
+                <span class="n">type_</span><span class="p">,</span> <span class="n">globalns</span><span class="p">,</span> <span class="n">localns</span><span class="p">,</span> <span class="n">recursive_guard</span> <span class="o">|</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__forward_evaluated__</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forward_value__</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forward_evaluated__</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">__forward_evaluated__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="ow">and</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__forward_value__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__forward_value__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__forward_arg__</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;ForwardRef(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span><span class="si">!r}</span><span class="s1">)&#39;</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>Internal wrapper to hold a forward reference.</p>
+</div>
+
+
+                                <div id="ForwardRef.__init__" class="classattr">
+                                                <div class="attr function">
+            
+                <span class="name">ForwardRef</span><span class="signature">(arg, is_argument=True)</span>        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">is_argument</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward reference must be a string -- got </span><span class="si">{</span><span class="n">arg</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;eval&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">SyntaxError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">SyntaxError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward reference must be an expression -- got </span><span class="si">{</span><span class="n">arg</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_arg__</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_code__</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_evaluated__</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_value__</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__forward_is_argument__</span> <span class="o">=</span> <span class="n">is_argument</span>
+</pre></div>
+
+            </details>
+
+        
+
+                                </div>
                     </section>
         </main>
     </div>
