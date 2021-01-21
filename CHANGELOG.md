@@ -1,8 +1,11 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-01-22: pdoc 2.0.0
 
- - Bugfix: Don't change the page position during live reload.
+ - Make it possible to selectively include private or exclude public members in templates.
+   This comes with a breaking change: `pdoc.doc.Namespace.members` now includes private members.
+ - Enhancement: Keep page position when live-reloading.
+ - Enhancement: Don't show common server connection errors in the console.
 
 # 2021-01-20: pdoc 1.1.0
 

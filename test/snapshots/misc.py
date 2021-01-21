@@ -1,6 +1,16 @@
 from functools import lru_cache
 
 
+# Testing that a private class in __all__ is displayed
+
+class _Private:
+    """private class"""
+    pass
+
+    def _do(self):
+        """private method"""
+
+
 # Testing a class attribute that is a lambda (which generates quirky sources)
 
 class LambdaAttr:
@@ -76,3 +86,14 @@ indents"""
         two
         indents
         """
+
+
+__all__ = [
+    "_Private",
+    "LambdaAttr",
+    "foo",
+    "bar",
+    "baz",
+    "qux",
+    "Indented",
+]

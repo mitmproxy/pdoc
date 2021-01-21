@@ -106,7 +106,7 @@ Inspecting the default template, we see that it defines an empty `nav_title` blo
 We can extend the default template by creating a file titled `module.html.jinja2` in the current directory
  with the following contents:
 
-```html
+```html+jinja
 {% extends "module.html.jinja2" %}
 {% block nav_title %}
 <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
@@ -190,16 +190,25 @@ class GoldenRetriever(Dog):
 ## ...control what is documented?
 
 The public interface of a module is determined through one of two
-ways. If `__all__` is defined in the module, then all identifiers in
-that list will be considered public. No other identifiers will be
-considered as public. Conversely, if `__all__` is not defined, then
-`pdoc` will heuristically determine the public interface. There are
-two rules that are applied to each identifier in the module:
+ways.
 
-1. If the name starts with an underscore, it is **not** public.
+- If `__all__` is defined in the module, then all identifiers in that list will be considered public.
+   No other identifiers will be considered as public.
+- If `__all__` is not defined, then pdoc will consider all members public that
+   1. do not start with an underscore
+   2. and are defined in the current module (i.e. they are not imported).
 
-2. If the name is defined in a different module, it is **not** public.
+In general, we recommend to keep these conventions:
 
+- If you want to document a private member, consider making it public.
+- If you want to hide a public member, consider making it private.
+- If you want to document a special `__dunder__` method, the recommended way to do so is
+  to not document the dunder method specifically, but add some usage examples in the class documentation.
+
+As a last resort, you can override pdoc's behavior with a custom module template (see
+[*Editing pdoc's HTML template*](#editing-pdocs-html-template)).
+You can find an example at
+[`test/customtemplate/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/test/customtemplate/module.html.jinja2).
 
 ## ...link to other identifiers?
 

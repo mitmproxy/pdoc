@@ -57,20 +57,6 @@ def _include_fullname_in_traceback(f):
     return wrapper
 
 
-def _is_exported(ident_name: str, default_value: Any = None) -> bool:
-    """
-    Returns `True` if `ident_name` matches the export criteria for an
-    identifier name.
-    """
-    if ident_name == "__init__":
-        return True
-    if isinstance(default_value, TypeVar):
-        return False
-    if ident_name.startswith("_"):
-        return False
-    return True
-
-
 T = TypeVar("T")
 
 
@@ -199,7 +185,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     @abstractmethod
     def _member_objects(self) -> dict[str, Any]:
         """
-        A mapping from *all* public member names to their Python objects.
+        A mapping from *all* public and private member names to their Python objects.
         """
 
     @cached_property
@@ -332,10 +318,7 @@ class Module(Namespace[types.ModuleType]):
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
-        children = "\n".join(repr(x) for x in self.members.values())
-        if children:
-            children = f"\n{textwrap.indent(children, '    ')}"
-        return f"<module {self.modulename}{_docstr(self)}{children}>"
+        return f"<module {self.modulename}{_docstr(self)}{_children(self)}>"
 
     @cached_property
     def is_package(self) -> bool:
@@ -423,7 +406,7 @@ class Module(Namespace[types.ModuleType]):
 
         else:
             for name, obj in self.obj.__dict__.items():
-                if not _is_exported(name, obj):
+                if isinstance(obj, TypeVar):
                     continue
                 obj_module = inspect.getmodule(obj)
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
@@ -432,8 +415,7 @@ class Module(Namespace[types.ModuleType]):
                 if declared_in_this_module or name in self._documented_members:
                     members[name] = obj
             for name in self._var_annotations:
-                if _is_exported(name):
-                    members.setdefault(name, empty)
+                members.setdefault(name, empty)
 
             members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
             members.update(notfound)
@@ -470,11 +452,7 @@ class Class(Namespace[type]):
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
-        children = "\n".join(repr(x) for x in self.members.values())
-        return (
-            f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}\n"
-            f"{textwrap.indent(children, '    ')}>"
-        )
+        return f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}{_children(self)}>"
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
@@ -540,8 +518,6 @@ class Class(Namespace[type]):
             unsorted.setdefault(name, empty)
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
-
-        unsorted = {k: v for k, v in unsorted.items() if _is_exported(k, v)}
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
@@ -921,6 +897,17 @@ def _decorators(doc: Union["Class", "Function"]) -> str:
         return " ".join(doc.decorators) + " "
     else:
         return ""
+
+
+def _children(doc: Namespace) -> str:
+    children = "\n".join(
+        repr(x)
+        for x in doc.members.values()
+        if not x.name.startswith("_") or x.name == "__init__"
+    )
+    if children:
+        children = f"\n{textwrap.indent(children, '    ')}"
+    return children
 
 
 def _safe_getattr(obj, attr, default):

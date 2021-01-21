@@ -186,7 +186,7 @@
             margin-top: 1.5rem;
         }
 
-        nav .function:after, .inherited .function:after {
+        nav .function:after, .inherited .function a:after {
             content: "()";
             color: gray;
         }
@@ -325,7 +325,7 @@
             display: inline;
         }
 
-        dd + dd:before {
+        dd:not(:last-child):after {
             content: ", ";
         }
 
@@ -434,20 +434,20 @@
     {% endmacro %}
 {% endif %}
 {% if not member %}
-    {% macro member(obj) %}
-        {% if obj.type == "class" %}
-            {{ class(obj) }}
-        {% elif obj.type == "function" %}
-            {{ function(obj) }}
-        {% elif obj.type == "module" %}
-            {{ submodule(obj) }}
+    {% macro member(doc) %}
+        {% if doc.type == "class" %}
+            {{ class(doc) }}
+        {% elif doc.type == "function" %}
+            {{ function(doc) }}
+        {% elif doc.type == "module" %}
+            {{ submodule(doc) }}
         {% else %}
-            {{ variable(obj) }}
+            {{ variable(doc) }}
         {% endif %}
-        {% if obj.type != "variable" %}
-            {{ view_source(obj) }}
+        {% if doc.type != "variable" %}
+            {{ view_source(doc) }}
         {% endif %}
-        {{ docstring(obj) }}
+        {{ docstring(doc) }}
     {% endmacro %}
 {% endif %}
 {% if not docstring %}
@@ -460,7 +460,7 @@
 {% if not nav_members %}
     {% macro nav_members(members) %}
         <ul class="memberlist">
-            {% for m in members %}
+            {% for m in members if is_public(m) | trim %}
                 <li>
                     {% if m.type == "class" %}
                         <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
@@ -479,12 +479,56 @@
         </ul>
     {% endmacro %}
 {% endif %}
+{% macro default_is_public(doc) %}
+    {# the default implementation for is_public, extracted so that it can be called from an is_public override #}
+    {% if not doc.name.startswith("_") %}
+        {# members not starting with an underscore are considered public by default #}
+        true
+    {% elif doc.name == "__init__" %}
+        {# the constructor is our special case which we also treat as public #}
+        true
+    {% elif doc.qualname == doc.name and doc.name is in(module.obj.__all__) %}
+        {# members starting with an underscore are still public if mentioned in __all__ #}
+        true
+    {% endif %}
+{% endmacro %}
+{% if not is_public %}
+    {#
+    This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
+    Returning no text is interpreted as false, returning any other text is iterpreted as true.
+    Implementing this as a macro makes it very easy to override with a custom template..
+    #}
+    {% macro is_public(doc) %}
+        {{ default_is_public(doc) }}
+    {% endmacro %}
+{% endif %}
+{% if not inherited %}
+{# fmt: off #}
+    {% macro inherited(cls) %}
+        {% for base, members in cls.inherited_members.items() %}
+            {% set member_html %}
+                {% for m in members if is_public(m) | trim %}
+                    <dd class="{{ m.type }}">
+                        {{- m.declared_at | link(text=m.name.replace("__init__",base[1])) -}}
+                    </dd>
+                {% endfor %}
+            {% endset %}
+            {# we may not have any public members, in which case we don't want to print anything. #}
+            {% if member_html %}
+                <div><dt>{{ base | link }}</dt>
+                    {{ member_html }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endmacro %}
+{# fmt: on #}
+{% endif %}
 {% if not view_source %}
-    {% macro view_source(obj) %}
-        {% if obj.source %}
+    {% macro view_source(doc) %}
+        {% if doc.source %}
             <details>
                 <summary class="button">View Source</summary>
-                {{ obj.source | highlight }}
+                {{ doc.source | highlight }}
             </details>
         {% endif %}
     {% endmacro %}
@@ -563,31 +607,23 @@
                 </section>
             {% endblock %}
             {% block module_contents %}
-                {% for m in module.flattened_own_members %}
+                {% for m in module.flattened_own_members if is_public(m) | trim %}
                     <section id="{{ m.qualname or m.name }}">
                         {{ member(m) }}
                         {% if m.type == "class" %}
-                            {% for m in m.own_members if m.type != "class" %}
+                            {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
                                 <div id="{{ m.qualname }}" class="classattr">
                                     {{ member(m) }}
                                 </div>
                             {% endfor %}
-                            {% if m.inherited_members %}
-                                {% block inherited_members scoped %}
-                                    <div class="inherited">
-                                        <h5>Inherited Members</h5>
-                                        <dl>
-                                            {% for base, members in m.inherited_members.items() %}
-                                                <div>
-                                                    <dt>{{ base | link }}</dt>
-                                                    {% for m2 in members -%}
-                                                        <dd class="{{ m2.type }}">{{ m2.declared_at | link(text=m2.name.replace("__init__",base[1])) }}</dd>
-                                                    {%- endfor %}
-                                                </div>
-                                            {% endfor %}
-                                        </dl>
-                                    </div>
-                                {% endblock %}
+                            {% set inherited_members = inherited(m) | trim %}
+                            {% if inherited_members %}
+                                <div class="inherited">
+                                    <h5>Inherited Members</h5>
+                                    <dl>
+                                        {{ inherited_members }}
+                                    </dl>
+                                </div>
                             {% endif %}
                         {% endif %}
                     </section>

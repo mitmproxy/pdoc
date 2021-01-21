@@ -1,64 +1,86 @@
 import sys
 from pathlib import Path
-from typing import Union
+from typing import Optional
 
 import pytest
 
 import pdoc
+from pdoc import render
 
-snapshot_dir = (Path(__file__).parent / "snapshots").absolute()
+here = Path(__file__).parent.absolute()
+
+snapshot_dir = here / "snapshots"
+
+
+class Snapshot:
+    id: str
+    path: Path
+    render_options: dict
+
+    def __init__(
+        self,
+        id: str,
+        filename: Optional[str] = None,
+        render_options: Optional[dict] = None,
+    ):
+        self.id = id
+        self.path = snapshot_dir / (filename or f"{id}.py")
+        self.render_options = render_options or {}
+
+    def __str__(self):
+        return f"Snapshot({self.id})"
+
+    def make(self, format: str) -> str:
+        render.configure(**self.render_options)
+        # noinspection PyTypeChecker
+        rendered = pdoc.pdoc(self.path, format=format)  # type: ignore
+        render.configure()
+        return rendered
+
+    def outfile(self, format: str) -> Path:
+        return (snapshot_dir / self.id).with_suffix(
+            {
+                "html": ".html",
+                "repr": ".txt",
+            }[format]
+        )
+
 
 snapshots = [
-    snapshot_dir / "demo.py",
-    snapshot_dir / "demo_long.py",
-    snapshot_dir / "demo_eager.py",
-    snapshot_dir / "demopackage",
-    snapshot_dir / "misc.py",
+    Snapshot("demo"),
+    Snapshot(
+        "demo_customtemplate",
+        "demo.py",
+        {"template_directory": here / "customtemplate"},
+    ),
+    Snapshot("demo_long"),
+    Snapshot("demo_eager"),
+    Snapshot("demopackage"),
+    Snapshot("misc"),
 ]
 
 
-def make_html_snapshot(module: Union[str, Path]) -> str:
-    return pdoc.pdoc(module, format="html")
-
-
-def make_repr_snapshot(module: Union[str, Path]) -> str:
-    # noinspection PyTypeChecker
-    return pdoc.pdoc(module, format="repr")  # type: ignore
-
-
-@pytest.mark.parametrize("module", snapshots)
-def test_html_snapshots(module: Path):
-    if sys.version_info < (3, 9) and module.name in (
-        "demo.py",
-        "demo_long.py",
-        "demo_eager.py",
+@pytest.mark.parametrize("snapshot", snapshots)
+@pytest.mark.parametrize("format", ["html", "repr"])
+def test_snapshots(snapshot: Snapshot, format: str):
+    if sys.version_info < (3, 9) and snapshot.id in (
+        "demo",
+        "demo_customtemplate",
+        "demo_long",
+        "demo_eager",
     ):
         pytest.skip("minor rendering differences on Python 3.8")
-    expected = module.with_suffix(".html").read_text("utf8")
-    actual = make_html_snapshot(module)
-    assert actual == expected
-
-
-@pytest.mark.parametrize("module", snapshots)
-def test_repr_snapshots(module: Path):
-    if sys.version_info < (3, 9) and module.name in (
-        "demo.py",
-        "demo_long.py",
-        "demo_eager.py",
-    ):
-        pytest.skip("minor rendering differences on Python 3.8")
-    expected = module.with_suffix(".txt").read_text("utf8")
-    actual = make_repr_snapshot(module)
+    expected = snapshot.outfile(format).read_text("utf8")
+    actual = snapshot.make(format)
     assert actual == expected
 
 
 if __name__ == "__main__":
     if sys.version_info < (3, 9):  # pragma: no cover
         raise RuntimeError("Snapshots need to be generated on Python 3.9+")
-    for module in snapshots:
-        print(f"Rendering {module}...")
-        rendered = make_html_snapshot(module)
-        module.with_suffix(".html").write_bytes(rendered.encode())
-        rendered = make_repr_snapshot(module)
-        module.with_suffix(".txt").write_bytes(rendered.encode())
+    for snapshot in snapshots:
+        for format in ["html", "repr"]:
+            print(f"Rendering {snapshot}...")
+            rendered = snapshot.make(format)
+            snapshot.outfile(format).write_bytes(rendered.encode())
     print("All snapshots rendered!")

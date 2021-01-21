@@ -1,3 +1,26 @@
+{#
+This is an example of how the default Jinja2 template can be extended.
+Invoke like so: pdoc -t ./customtemplate [module]
+#}
+
+{#
+We want to extend from the default template instead of redefining everything ourselves.
+#}
 {% extends "default/module.html.jinja2" %}
+
+{#
+Don't show "View Source" button
+#}
 {% macro view_source(obj) %}{% endmacro %}
-{% block title %}wat{% endblock %}
+
+{#
+Expose a private function (Dog.__lt__)
+This is not recommended, see the https://pdoc.dev/docs/pdoc.html#control-what-is-documented
+#}
+{% macro is_public(doc) %}
+    {% if doc.qualname == "Dog.__lt__" %}
+        true
+    {% else %}
+        {{ default_is_public(doc) }}
+    {% endif %}
+{% endmacro %}

@@ -1,6 +1,6 @@
 """A test package"""
 
-from . import child_b
+from . import child_b, _child_e
 from ._child_d import Test
 
 import misc
@@ -10,4 +10,5 @@ __all__ = [
     "child_b",
     "child_c",
     "misc",
+    "_child_e",
 ]
