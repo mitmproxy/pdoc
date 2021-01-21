@@ -284,7 +284,7 @@ Google-style docstrings render more nicely.
 '''
 from __future__ import annotations
 
-__version__ = "1.1.0"  # this is read from setup.py
+__version__ = "2.0.0"  # this is read from setup.py
 
 import io
 import warnings

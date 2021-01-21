@@ -2,7 +2,7 @@
 
 # 2021-01-22: pdoc 2.0.0
 
- - Make it possible to selectively include private or exclude public members in templates.
+ - Make it possible to selectively include private or exclude public members in templates.  
    This comes with a breaking change: `pdoc.doc.Namespace.members` now includes private members.
  - Enhancement: Keep page position when live-reloading.
  - Enhancement: Don't show common server connection errors in the console.
