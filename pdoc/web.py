@@ -24,10 +24,16 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
     """A reference to the main web server."""
 
     def do_HEAD(self):
-        return self.handle_request()
+        try:
+            return self.handle_request()
+        except ConnectionError:  # pragma: no cover
+            pass
 
     def do_GET(self):
-        self.wfile.write(self.handle_request().encode())
+        try:
+            self.wfile.write(self.handle_request().encode())
+        except ConnectionError:  # pragma: no cover
+            pass
 
     def handle_request(self) -> Optional[str]:
         """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
