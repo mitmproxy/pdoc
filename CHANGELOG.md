@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- - Add your changes here.
+ - Bugfix: Don't change the page position during live reload.
 
 # 2021-01-20: pdoc 1.1.0
 
