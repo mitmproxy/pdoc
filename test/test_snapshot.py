@@ -9,7 +9,7 @@ from pdoc import render
 
 here = Path(__file__).parent.absolute()
 
-snapshot_dir = here / "snapshots"
+snapshot_dir = here / "testdata"
 
 
 class Snapshot:

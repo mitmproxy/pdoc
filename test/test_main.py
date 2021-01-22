@@ -10,7 +10,7 @@ here = Path(__file__).parent
 
 
 def test_cli(tmp_path):
-    cli([str(here / "snapshots" / "demo_long.py"), "-o", str(tmp_path)])
+    cli([str(here / "testdata" / "demo_long.py"), "-o", str(tmp_path)])
     assert (tmp_path / "demo_long.html").read_text().startswith("<!doctype html>")
     assert (tmp_path / "index.html").read_text().startswith("<!doctype html>")
 
@@ -26,7 +26,7 @@ def test_cli_web(monkeypatch):
             "pdoc.web.DocServer.serve_forever", side_effect=KeyboardInterrupt
         ) as serve_forever:
             with pytest.raises(KeyboardInterrupt):
-                cli([str(here / "snapshots" / "demopackage" / "_child_d.py")])
+                cli([str(here / "testdata" / "demopackage" / "_child_d.py")])
             assert open_browser.call_args == call(
                 "http://localhost:8080/demopackage/_child_d.html"
             )
@@ -34,9 +34,9 @@ def test_cli_web(monkeypatch):
 
 
 def test_api(tmp_path):
-    assert pdoc(here / "snapshots" / "demo_long.py").startswith("<!doctype html>")
+    assert pdoc(here / "testdata" / "demo_long.py").startswith("<!doctype html>")
     with pytest.raises(ValueError, match="Invalid rendering format"):
-        assert pdoc(here / "snapshots" / "demo_long.py", format="invalid")
+        assert pdoc(here / "testdata" / "demo_long.py", format="invalid")
     with pytest.raises(ValueError, match="No valid module specifications"):
         with pytest.warns(RuntimeWarning, match="Cannot find spec"):
             assert pdoc(

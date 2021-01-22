@@ -30,14 +30,14 @@ def test_relative_link(current, target, relative):
         [
             "demo",
             False,
-            {"demo": "https://github.com/mhils/pdoc/blob/master/test/snapshots/demo"},
-            "https://github.com/mhils/pdoc/blob/master/test/snapshots/demo.py",
+            {"demo": "https://github.com/mhils/pdoc/blob/master/test/testdata/demo"},
+            "https://github.com/mhils/pdoc/blob/master/test/testdata/demo.py",
         ],
         [
             "demo",
             True,
-            {"demo": "https://github.com/mhils/pdoc/blob/master/test/snapshots/demo/"},
-            "https://github.com/mhils/pdoc/blob/master/test/snapshots/demo/__init__.py",
+            {"demo": "https://github.com/mhils/pdoc/blob/master/test/testdata/demo/"},
+            "https://github.com/mhils/pdoc/blob/master/test/testdata/demo/__init__.py",
         ],
     ],
 )

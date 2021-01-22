@@ -31,15 +31,15 @@ def test_parse_spec():
     assert parse_spec("dataclasses") == "dataclasses"
     assert sys.path == p
 
-    assert parse_spec(here / "snapshots" / "demo.py") == "demo"
-    assert str(here / "snapshots") in sys.path
+    assert parse_spec(here / "testdata" / "demo.py") == "demo"
+    assert str(here / "testdata") in sys.path
     sys.path = p
 
     assert (
-        parse_spec(here / "snapshots" / "demopackage" / "_child.py")
+        parse_spec(here / "testdata" / "demopackage" / "_child.py")
         == "demopackage._child"
     )
-    assert str(here / "snapshots") in sys.path
+    assert str(here / "testdata") in sys.path
     sys.path = p
 
 

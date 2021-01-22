@@ -12,7 +12,7 @@ import pdoc.render_helpers
 here = Path(__file__).parent
 
 if __name__ == "__main__":
-    demo = here / ".." / "test" / "snapshots" / "demo.py"
+    demo = here / ".." / "test" / "testdata" / "demo.py"
     env = Environment(loader=FileSystemLoader([here, here / ".." / "pdoc" / "templates"]), autoescape=True)
 
     lexer = pygments.lexers.python.PythonLexer()
@@ -33,6 +33,6 @@ if __name__ == "__main__":
     pdoc.pdoc(
         "pdoc",
         demo,
-        here / ".." / "test" / "snapshots" / "demo_long.py",
+        here / ".." / "test" / "testdata" / "demo_long.py",
         output_directory=here / "docs",
     )
