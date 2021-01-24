@@ -123,6 +123,8 @@ def linkify(context: Context, code: str) -> str:
 
     def linkify_repl(m: re.Match):
         fullname = m.group(0)
+        if context["module"].contains(fullname):
+            return f'<a href="#{fullname}">{fullname}</a>'
         try:
             module, qualname = split_identifier(context["all_modules"], fullname)
         except ValueError:

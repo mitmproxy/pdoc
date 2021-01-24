@@ -13,7 +13,7 @@ def links():
 
 
 def refs():
-    """This is similar to :py:obj:`links` and :func:`links`."""
+    """Here we have refs to :py:obj:`links` and :func:`admonitions`."""
 
 
 def admonitions():

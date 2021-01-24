@@ -16,14 +16,17 @@ class Snapshot:
     id: str
     path: Path
     render_options: dict
+    extra: Optional[Path]
 
     def __init__(
         self,
         id: str,
         filename: Optional[str] = None,
         render_options: Optional[dict] = None,
+        extra: Optional[Path] = None,
     ):
         self.id = id
+        self.extra = extra
         self.path = snapshot_dir / (filename or f"{id}.py")
         self.render_options = render_options or {}
 
@@ -32,8 +35,11 @@ class Snapshot:
 
     def make(self, format: str) -> str:
         render.configure(**self.render_options)
+        paths = [self.path]
+        if self.extra:
+            paths.append(self.extra)
         # noinspection PyTypeChecker
-        rendered = pdoc.pdoc(self.path, format=format)  # type: ignore
+        rendered = pdoc.pdoc(*paths, format=format)  # type: ignore
         render.configure()
         return rendered
 
@@ -56,7 +62,7 @@ snapshots = [
         "demo.py",
         {"template_directory": here / "customtemplate"},
     ),
-    Snapshot("demo_long"),
+    Snapshot("demo_long", extra=snapshot_dir / "demo.py"),
     Snapshot("demo_eager"),
     Snapshot("demopackage"),
     Snapshot("misc"),
