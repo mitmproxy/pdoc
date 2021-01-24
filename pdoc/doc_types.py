@@ -7,7 +7,6 @@ exception.
 """
 from __future__ import annotations
 
-import importlib
 import inspect
 import sys
 import typing
@@ -23,6 +22,7 @@ from typing import (  # type: ignore
     Literal,
 )
 
+from . import extract
 from ._compat import GenericAlias, ForwardRef
 
 if TYPE_CHECKING:
@@ -102,7 +102,7 @@ def safe_eval_type(
         warnings.warn(f"Error parsing type annotation for {fullname}: {err}")
         return t
     try:
-        val = importlib.import_module(mod)
+        val = extract.load_module(mod)
     except Exception:
         warnings.warn(
             f"Error parsing type annotation for {fullname}. Import of {mod} failed: {err}"

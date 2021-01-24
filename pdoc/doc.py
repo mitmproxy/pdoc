@@ -403,6 +403,8 @@ class Module(Namespace[types.ModuleType]):
             for name in all:
                 if name in self.obj.__dict__:
                     val = self.obj.__dict__[name]
+                elif name in self._var_annotations:
+                    val = empty
                 else:
                     # this may be an unimported submodule, try importing.
                     # (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)

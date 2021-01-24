@@ -1,4 +1,5 @@
 <module misc
+    <var only_annotated: int>
     <class misc.CustomException  # custom exception typ…
         <method def __init__(self, /, *args, **kwargs): ...>
         <method def with_traceback(unknown): ...  # Exception.with_trace…>

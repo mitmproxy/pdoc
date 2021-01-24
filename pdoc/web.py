@@ -9,12 +9,15 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 from __future__ import annotations
 
 import http.server
+import importlib.util
+import pkgutil
+import sysconfig
 import traceback
 import webbrowser
 from typing import Optional, Union, Collection
 
 from pdoc import render, extract, doc
-from pdoc._compat import removesuffix
+from pdoc._compat import removesuffix, cache
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
@@ -37,7 +40,6 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
     def handle_request(self) -> Optional[str]:
         """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
-        extract.invalidate_caches(self.server.all_modules)
         path = self.path.split("?", 1)[0]
 
         if path == "/":
@@ -58,6 +60,9 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 self.send_header("content-type", "text/plain")
                 self.end_headers()
                 return mtime
+
+            extract.invalidate_caches(module)
+
             try:
                 mod = doc.Module(extract.load_module(module))
             except Exception:
@@ -136,3 +141,46 @@ def open_browser(url: str) -> bool:  # pragma: no cover
             if b.open(url):
                 return True
     return False
+
+
+class AllModules(Collection[str]):
+    """
+    A fake collection that contains all modules installed by the user.
+    This is used when `pdoc` is invoked without any arguments,
+    using `pkgutil.walk_packages` would take multiple seconds.
+
+    When being __iter__ated, it returns the list of all top-level modules,
+    but it __contains__ all submodules as well.
+    """
+
+    def __init__(self):
+        root_modules = []
+        stdlib = sysconfig.get_path("stdlib").lower()
+        platstdlib = sysconfig.get_path("platstdlib").lower()
+        for m in pkgutil.iter_modules():
+            if m.name.startswith("_") or m.name[0].isdigit():
+                continue
+            if getattr(m.module_finder, "path", "").lower() in (stdlib, platstdlib):
+                continue
+            root_modules.append(m.name)
+        self._root_mods: dict[str, None] = dict.fromkeys(sorted(root_modules))
+
+    def __iter__(self):
+        return self._root_mods.__iter__()
+
+    def __len__(self):
+        return self._root_mods.__len__()
+
+    @cache
+    def __contains__(self, modname):
+        if modname.split(".", maxsplit=1)[0] not in self._root_mods:
+            return False
+        try:
+            with extract.mock_some_common_side_effects():
+                modspec = importlib.util.find_spec(modname)
+            if modspec is None:
+                raise ModuleNotFoundError(modname)
+        except BaseException:
+            return False
+        else:
+            return True

@@ -1,7 +1,12 @@
 from functools import lru_cache
 
+# Testing that an attribute that is only annotated does not trigger a "submodule not found" warning.
+
+only_annotated: int
+
 
 # Testing that Exceptions render properly
+
 
 class CustomException(RuntimeError):
     """custom exception type"""
@@ -9,8 +14,10 @@ class CustomException(RuntimeError):
 
 # Testing that a private class in __all__ is displayed
 
+
 class _Private:
     """private class"""
+
     pass
 
     def _do(self):
@@ -18,6 +25,7 @@ class _Private:
 
 
 # Testing a class attribute that is a lambda (which generates quirky sources)
+
 
 class LambdaAttr:
     # not really supported, but also shouldn't crash.
@@ -94,7 +102,8 @@ indents"""
         """
 
 
-__all__ = [
+__all__ = [  # noqa
+    "only_annotated",
     "CustomException",
     "_Private",
     "LambdaAttr",

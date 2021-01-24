@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import platform
 import subprocess
+from collections.abc import Collection
 from pathlib import Path
 
 import pdoc
@@ -23,7 +24,7 @@ parser.add_argument(
     metavar="module",
     nargs="*",
     help="Python module names. These may be import paths resolvable in "
-    "the current environment or file paths.",
+         "the current environment or file paths.",
 )
 parser.add_argument(
     "-o",
@@ -46,8 +47,8 @@ parser.add_argument(
     default=[],
     metavar="module=url",
     help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
-    "May be passed multiple times. "
-    "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
+         "May be passed multiple times. "
+         "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 parser.add_argument(
     "-t",
@@ -56,7 +57,7 @@ parser.add_argument(
     type=Path,
     default=None,
     help="A directory containing Jinja2 templates to customize output. "
-    "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
+         "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 parser.add_argument(
     "-d",
@@ -155,7 +156,11 @@ def cli(args: list[str] = None) -> None:
         )
         return
     else:
-        all_modules = extract.parse_specs(opts.modules)
+        all_modules: Collection[str]
+        if opts.modules:
+            all_modules = extract.parse_specs(opts.modules)
+        else:
+            all_modules = pdoc.web.AllModules()
 
         with pdoc.web.DocServer(
             (opts.host, opts.port),
@@ -172,7 +177,7 @@ def cli(args: list[str] = None) -> None:
                 httpd.serve_forever()
             except KeyboardInterrupt:
                 httpd.server_close()
-                raise
+                return
 
 
 if __name__ == "__main__":  # pragma: no cover
