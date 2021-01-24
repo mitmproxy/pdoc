@@ -2,7 +2,7 @@ import io
 import socket
 import threading
 
-from pdoc.web import DocServer, DocHandler
+from pdoc.web import DocServer, DocHandler, AllModules
 
 
 class ReadResponse(threading.Thread):
@@ -21,7 +21,7 @@ class ReadResponse(threading.Thread):
 
 
 def handle_request(data: bytes) -> bytes:
-    server = DocServer(("", 8080), all_modules=["dataclasses", "err"])
+    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "markupsafe"])
     a, b = socket.socketpair()
     b.send(data)
     t = ReadResponse(b)
@@ -38,13 +38,17 @@ def test_head_index():
 
 
 def test_get_index():
-    assert b'["dataclasses", "err"]' in handle_request(b"GET / HTTP/1.1\r\n\r\n")
+    assert b'["dataclasses",' in handle_request(b"GET / HTTP/1.1\r\n\r\n")
 
 
 def test_get_module():
     assert b"make_dataclass" in handle_request(
         b"GET /dataclasses.html HTTP/1.1\r\n\r\n"
     )
+
+
+def test_get_dependency():
+    assert b"Pallets" in handle_request(b"GET /markupsafe.html HTTP/1.1\r\n\r\n")
 
 
 def test_get_module_err():
@@ -61,3 +65,12 @@ def test_get_module_mtime():
 
 def test_get_unknown():
     assert b"404 Not Found" in handle_request(b"GET /unknown HTTP/1.1\r\n\r\n")
+
+
+def test_all_modules():
+    a = AllModules()
+    assert "markupsafe" in list(a)
+    assert len(a)
+    assert "markupsafe" in a
+    assert "typing" not in a
+    assert "markupsafe.unknown" not in a

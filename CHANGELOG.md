@@ -10,6 +10,7 @@
    The most common rST elements are supported, but we do not intend
    to support the full complexity of the spec.
  - Links within the current module now don't require the full qualified path.
+ - Live-reloading is now more robust.
  - Improvements to the default theme.
 
 # 2021-01-22: pdoc 2.0.0

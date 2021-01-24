@@ -5,6 +5,7 @@
     <module demopackage.child_b  # child_b docstr>
     <module demopackage.child_c  # child_c docstr>
     <module misc
+        <var only_annotated: int>
         <class misc.CustomException  # custom exception typ…
             <method def __init__(self, /, *args, **kwargs): ...>
             <method def with_traceback(unknown): ...  # Exception.with_trace…>

@@ -7,6 +7,7 @@ from pdoc import docstrings
 # The important tests are in test_snapshot.py (and, by extension, testdata/)
 # only some fuzzing here.
 
+
 @given(text())
 def test_google(s):
     ret = docstrings.google(s)

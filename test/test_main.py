@@ -25,12 +25,12 @@ def test_cli_web(monkeypatch):
         with patch(
             "pdoc.web.DocServer.serve_forever", side_effect=KeyboardInterrupt
         ) as serve_forever:
-            with pytest.raises(KeyboardInterrupt):
-                cli([str(here / "testdata" / "demopackage" / "_child_d.py")])
+            cli([str(here / "testdata" / "demopackage" / "_child_d.py")])
             assert open_browser.call_args == call(
                 "http://localhost:8080/demopackage/_child_d.html"
             )
             assert serve_forever.call_args == call()
+            cli([])
 
 
 def test_api(tmp_path):

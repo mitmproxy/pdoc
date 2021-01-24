@@ -6,7 +6,12 @@ from unittest import mock
 
 import pytest
 
-from pdoc.render_helpers import relative_link, edit_url, split_identifier, render_docstring
+from pdoc.render_helpers import (
+    relative_link,
+    edit_url,
+    split_identifier,
+    render_docstring,
+)
 
 
 @pytest.mark.parametrize(

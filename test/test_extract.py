@@ -21,8 +21,8 @@ def test_parse_specs():
             "import_err",
             "import_err.err",
         ]
-
-    assert parse_specs([])
+    with pytest.raises(ValueError, match="No valid module specifications found."):
+        assert parse_specs([])
 
 
 def test_parse_spec():
