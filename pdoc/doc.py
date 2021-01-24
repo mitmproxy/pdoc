@@ -6,10 +6,10 @@ from the abstract syntax tree, which means that variables (module, class or inst
 
 There are four main types of documentation objects:
 
-- pdoc.doc.Module
-- pdoc.doc.Class
-- pdoc.doc.Function
-- pdoc.doc.Variable
+- `Module`
+- `Class`
+- `Function`
+- `Variable`
 
 All documentation types types make heavy use of `@functools.cached_property` decorators.
 This means they have a large set of attributes that are lazily computed on first access.
@@ -301,6 +301,18 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     [cls for cls in x.flattened_own_members if isinstance(cls, Class)]
                 )
         return flattened
+
+    @cache
+    def contains(self, identifier: str) -> bool:
+        """Returns `True` if the current namespace contains a particular identifier, `False` otherwise."""
+        head, _, tail = identifier.partition(".")
+        if tail:
+            h = self.members.get(head, None)
+            if isinstance(h, Namespace):
+                return h.contains(tail)
+            return False
+        else:
+            return identifier in self.members
 
 
 class Module(Namespace[types.ModuleType]):

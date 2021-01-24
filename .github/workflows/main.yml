@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - run: pip install tox
-      - run: tox -e py -- --runxfail
+      - run: tox -e py -- -vvv
       - uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml

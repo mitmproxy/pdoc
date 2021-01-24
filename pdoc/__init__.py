@@ -15,7 +15,7 @@ classes and variables.
 
 # How does pdoc work?
 
-In a nutshell, pdoc takes a Python module name as input, imports it, creates `pdoc.doc.Module` object
+In a nutshell, pdoc takes a Python module name as input, imports it, creates a `pdoc.doc.Module` object
 that extracts all docstrings, and passes it to the HTML template for rendering.
 
 This implies a few things:
@@ -212,26 +212,22 @@ You can find an example at
 
 ## ...link to other identifiers?
 
-In your documentation, you can link to other identifiers in
-your module or submodules. The identifier name must be fully qualified. For
-example, `pdoc.doc.Doc.docstring` will be automatically linked while
-`Doc.docstring` will not be linked. Type annotations will be linked automatically.
+In your documentation, you can link to other identifiers by enclosing them in backticks:
+<code>\`pdoc\`</code> will link to `pdoc`.
+When linking to identifiers in other modules, the identifier name must be fully qualified.
+For example, <code>\`pdoc.doc.Doc\`</code> will be automatically linked to `pdoc.doc.Doc`,
+while <code>\`Doc\`</code> only works within the `pdoc.doc` module.
 
-`pdoc` will link all identifiers that are rendered in the current run.
-This means that you need to run `pdoc module_a module_b`
-to have interlinking between module_a and module_b.
+pdoc will link all identifiers that are rendered in the current run.
+This means that you need to run `pdoc module_a module_b` to have interlinking between module_a and module_b.
 If you run `pdoc module_a` followed by `pdoc module_b`, there will be no cross-linking between the two modules.
-
-If you need to link to a top-level module (for example the main pdoc module), you
-need to put it between backticks: <code>\`pdoc\`</code> will link to `pdoc`.
-This makes sure that common modules names are not accidentally linked.
 
 ## ...change the item order?
 
 By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
-you need to move it there in your source code. This is not only useful to the consumers of your documentation
-but also useful to the readers of your source code.
+you need to move it there in your source code. This is not only useful to the readers of your documentation
+but also useful to the consumers of your source code.
 
 ## ...use numpydoc or Google-style docstrings?
 

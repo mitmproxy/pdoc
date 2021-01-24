@@ -10,9 +10,8 @@ This is a test module demonstrating pdoc's parsing capabilities.
   ```python
   print("hello world")
   ```
-- You can link to classes or modules: demo.do_foo
-  - The only requirement is that you must specify the full qualified path.
-  - If you are linking to a root module, you need to enclose it in backticks: `demo`.
+- You can link to classes or modules by putting them between backticks: `demo.Dog.bark`
+  - The only requirement is that you must specify the full qualified path for external modules.
 - Module members appear in the order they are listed in the source code.
   If you do not like the order in pdoc, you should probably have a different order in your source file as well.
 
@@ -62,7 +61,7 @@ def a_simple_function(a: str) -> str:
     """
     This is a basic module-level function.
 
-    For a more complex example, take a look at `demo.a_complex_function`!
+    For a more complex example, take a look at `a_complex_function`!
     """
     return a.upper()
 
@@ -83,9 +82,9 @@ def a_complex_function(
 
 class Foo:
     """
-    `demo.Foo` is a basic class without any parent classes (except for the implict `object` class).
+    `Foo` is a basic class without any parent classes (except for the implict `object` class).
 
-    You will see in the definition of `demo.Bar` that docstrings are inherited by default.
+    You will see in the definition of `Bar` that docstrings are inherited by default.
     """
 
     an_attribute: Union[str, List["int"]]
@@ -181,9 +180,11 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-def special_cases(test=os.environ, /):  # type: ignore
-    """Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid
-    leaking sensitive data."""
+def security(test=os.environ, /):
+    """
+    Default values are generally rendered using repr(),
+    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.
+    """
     return False
 
 
@@ -203,6 +204,8 @@ class DataDemo:
     This is an example for a dataclass.
     Dataclasses generate a relatively pointless docstring by default,
     but you can override it by providing your own (like here!).
+
+    As usual, you can link to individual properties: `DataDemo.a`.
     """
 
     a: int

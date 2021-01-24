@@ -1,6 +1,6 @@
 <module flavors_rst
     <function def links(): ...  # For type hints, read…>
-    <function def refs(): ...  # This is similar to :…>
+    <function def refs(): ...  # Here we have refs to…>
     <function def admonitions(): ...  # .. note::
 
        This f…>

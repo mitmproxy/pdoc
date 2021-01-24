@@ -23,7 +23,7 @@
         const searchbox = document.getElementById("search")
 
         function render(filt) {
-            let filtered = filt ? modules.filter(x.includes(filt)) : modules;
+            let filtered = filt ? modules.filter(x => x.includes(filt)) : modules;
             module_list.innerHTML = filtered.map(
                 root => `
                     <a

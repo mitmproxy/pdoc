@@ -16,6 +16,9 @@
             <label for="navtoggle" class="button"></label>
             <input id="navtoggle" type="checkbox">
             <div>
+                        <a class="button module-list-button" href="./">
+                            Module Index
+                        </a>
 
                     <h2>Contents</h2>
                     <ul>
@@ -106,7 +109,7 @@
                         <a class="function" href="#fib">fib</a>
                 </li>
                 <li>
-                        <a class="function" href="#special_cases">special_cases</a>
+                        <a class="function" href="#security">security</a>
                 </li>
                 <li>
                         <a class="class" href="#DoubleInherit">DoubleInherit</a>
@@ -156,10 +159,9 @@ demo_long                </h1>
 
 <div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hello world&quot;</span><span class="p">)</span>
 </code></pre></div></li>
-<li>You can link to classes or modules: demo.do_foo
+<li>You can link to classes or modules by putting them between backticks: <code><a href="demo.html#Dog.bark">demo.Dog.bark</a></code>
 <ul>
-<li>The only requirement is that you must specify the full qualified path.</li>
-<li>If you are linking to a root module, you need to enclose it in backticks: <code>demo</code>.</li>
+<li>The only requirement is that you must specify the full qualified path for external modules.</li>
 </ul></li>
 <li>Module members appear in the order they are listed in the source code.
 If you do not like the order in pdoc, you should probably have a different order in your source file as well.</li>
@@ -185,9 +187,8 @@ which will also show up in the navigation.</p>
 <span class="sd">  ```python</span>
 <span class="sd">  print(&quot;hello world&quot;)</span>
 <span class="sd">  ```</span>
-<span class="sd">- You can link to classes or modules: demo.do_foo</span>
-<span class="sd">  - The only requirement is that you must specify the full qualified path.</span>
-<span class="sd">  - If you are linking to a root module, you need to enclose it in backticks: `demo`.</span>
+<span class="sd">- You can link to classes or modules by putting them between backticks: `demo.Dog.bark`</span>
+<span class="sd">  - The only requirement is that you must specify the full qualified path for external modules.</span>
 <span class="sd">- Module members appear in the order they are listed in the source code.</span>
 <span class="sd">  If you do not like the order in pdoc, you should probably have a different order in your source file as well.</span>
 
@@ -237,7 +238,7 @@ which will also show up in the navigation.</p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a basic module-level function.</span>
 
-<span class="sd">    For a more complex example, take a look at `demo.a_complex_function`!</span>
+<span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
@@ -258,9 +259,9 @@ which will also show up in the navigation.</p>
 
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `demo.Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
+<span class="sd">    `Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
 
-<span class="sd">    You will see in the definition of `demo.Bar` that docstrings are inherited by default.</span>
+<span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
@@ -356,9 +357,11 @@ which will also show up in the navigation.</p>
     <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-    <span class="sd">&quot;&quot;&quot;Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid</span>
-<span class="sd">    leaking sensitive data.&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default values are generally rendered using repr(),</span>
+<span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
 
 
@@ -378,6 +381,8 @@ which will also show up in the navigation.</p>
 <span class="sd">    This is an example for a dataclass.</span>
 <span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
 <span class="sd">    but you can override it by providing your own (like here!).</span>
+
+<span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
@@ -407,7 +412,7 @@ pdoc documents constants with their type annotation and default value.</p>
         </div>
 
                     <div class="docstring"><p>This variable is annotated with a type only, but not assigned to a value.
-We also haven't defined the associated type (<code>Foo</code>) yet, 
+We also haven't defined the associated type (<code><a href="#Foo">Foo</a></code>) yet, 
 so the type annotation in the code in the source code is actually a string literal:</p>
 
 <div class="codehilite"><pre><span></span><code><span class="n">FOO_SINGLETON</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span>
@@ -433,7 +438,7 @@ automatically.</p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a basic module-level function.</span>
 
-<span class="sd">    For a more complex example, take a look at `demo.a_complex_function`!</span>
+<span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 </pre></div>
@@ -442,7 +447,7 @@ automatically.</p>
 
                     <div class="docstring"><p>This is a basic module-level function.</p>
 
-<p>For a more complex example, take a look at <code>demo.a_complex_function</code>!</p>
+<p>For a more complex example, take a look at <code><a href="#a_complex_function">a_complex_function</a></code>!</p>
 </div>
 
 
@@ -492,9 +497,9 @@ as well as a keyword-only arguments (*).</p>
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `demo.Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
+<span class="sd">    `Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
 
-<span class="sd">    You will see in the definition of `demo.Bar` that docstrings are inherited by default.</span>
+<span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
@@ -550,9 +555,9 @@ as well as a keyword-only arguments (*).</p>
 
             </details>
 
-                    <div class="docstring"><p><code>demo.Foo</code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
+                    <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
 
-<p>You will see in the definition of <code>demo.Bar</code> that docstrings are inherited by default.</p>
+<p>You will see in the definition of <code><a href="#Bar">Bar</a></code> that docstrings are inherited by default.</p>
 </div>
 
 
@@ -763,9 +768,9 @@ as well as a keyword-only arguments (*).</p>
 
             </details>
 
-                    <div class="docstring"><p><code>demo.Foo</code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
+                    <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
 
-<p>You will see in the definition of <code>demo.Bar</code> that docstrings are inherited by default.</p>
+<p>You will see in the definition of <code><a href="#Bar">Bar</a></code> that docstrings are inherited by default.</p>
 </div>
 
 
@@ -827,7 +832,7 @@ as well as a keyword-only arguments (*).</p>
 
             </details>
 
-                    <div class="docstring"><p>This class is an attribute of <code>Bar</code>.
+                    <div class="docstring"><p>This class is an attribute of <code><a href="#Bar">Bar</a></code>.
 To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation
 (but not in the navigation).</p>
 
@@ -931,25 +936,27 @@ This is often useful when documenting web APIs, for example.</p>
 
 
                 </section>
-                <section id="special_cases">
+                <section id="security">
                                 <div class="attr function">
             
                 <span class="def">def</span>
-                <span class="name">special_cases</span><span class="signature">(test=os.environ, /)</span>:
+                <span class="name">security</span><span class="signature">(test=os.environ, /)</span>:
         </div>
 
                         <details>
                 <summary class="button">View Source</summary>
-                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">special_cases</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-    <span class="sd">&quot;&quot;&quot;Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid</span>
-<span class="sd">    leaking sensitive data.&quot;&quot;&quot;</span>
+                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default values are generally rendered using repr(),</span>
+<span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 
             </details>
 
-                    <div class="docstring"><p>Default values are generally rendered using repr(), but some special cases -- like os.environ -- are overriden to avoid
-leaking sensitive data.</p>
+                    <div class="docstring"><p>Default values are generally rendered using repr(),
+but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</p>
 </div>
 
 
@@ -1023,6 +1030,8 @@ leaking sensitive data.</p>
 <span class="sd">    This is an example for a dataclass.</span>
 <span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
 <span class="sd">    but you can override it by providing your own (like here!).</span>
+
+<span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
@@ -1037,6 +1046,8 @@ leaking sensitive data.</p>
                     <div class="docstring"><p>This is an example for a dataclass.
 Dataclasses generate a relatively pointless docstring by default,
 but you can override it by providing your own (like here!).</p>
+
+<p>As usual, you can link to individual properties: <code><a href="#DataDemo.a">DataDemo.a</a></code>.</p>
 </div>
 
 
