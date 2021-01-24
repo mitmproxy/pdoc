@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Optional
+from unittest import mock
 
 import pytest
 
-from pdoc.render_helpers import relative_link, edit_url, split_identifier, markdown
+from pdoc.render_helpers import relative_link, edit_url, split_identifier, render_docstring
 
 
 @pytest.mark.parametrize(
@@ -58,10 +59,10 @@ def test_split_identifier(all_modules, fullname, result):
     assert split_identifier(all_modules, fullname) == result
 
 
-def test_markdown2():
+def test_markdown_toc():
     """
     markdown2 has this weird property that it return a str-like object with a hidden `toc_html` attr.
 
     It's easy to introduce a `.strip()` in there and this gets washed away, so let's test that it works properly.
     """
-    assert markdown("#foo\n#bar").toc_html  # type: ignore
+    assert render_docstring(mock.MagicMock(), "#foo\n#bar").toc_html  # type: ignore

@@ -227,16 +227,25 @@ need to put it between backticks: <code>\`pdoc\`</code> will link to `pdoc`.
 This makes sure that common modules names are not accidentally linked.
 
 ## ...change the item order?
-## ...group items by type?
-
 
 By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
 you need to move it there in your source code. This is not only useful to the consumers of your documentation
 but also useful to the readers of your source code.
 
-An alphabetical order can be achieved by modifying the output template.
-We'd be happy to accept a pull request that adds grouped/alphabetic ordering as an option.
+## ...use numpydoc or Google-style docstrings?
+
+While pdoc prefers docstrings that are plain Markdown,
+it also understands numpydoc and Google-style docstrings,
+including a limited subset of reStructuredText (as used by Sphinx).
+If your documentation follows one of these styles, you can:
+
+1. Run `pdoc --docformat ...` to enable a particular docstring flavor globally, or
+2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.
+
+pdoc does not implement the full reStructuredText specification and does not plan on doing so.
+If you feel that it doesn't parse a docstring element properly, please amend
+`pdoc.docstrings` and send us a pull request!
 
 # Docstring Inheritance
 
@@ -270,15 +279,6 @@ code, then it will automatically attach the docstring for `Dog.bark` to
 
 pdoc currently only supports HTML as an output format.
 We would be happy to accept contributions for Markdown and PDF.
-
-**Alternative docstring formats (Sphinx rST, Numpy, Google-style)**
-
-pdoc currently renders docstrings as Markdown only.
-We believe that the value of for example Numpy docstrings
-is diminishing in view of modern Python 3 type annotations.
-
-However, we would be happy to accept contributions that make for example
-Google-style docstrings render more nicely.
 
 # Using pdoc as a library
 '''

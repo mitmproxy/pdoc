@@ -48,6 +48,9 @@ class Snapshot:
 
 snapshots = [
     Snapshot("demo"),
+    Snapshot("flavors_google"),
+    Snapshot("flavors_numpy"),
+    Snapshot("flavors_rst"),
     Snapshot(
         "demo_customtemplate",
         "demo.py",

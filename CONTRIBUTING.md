@@ -40,7 +40,8 @@ Please check [docs/README.md](./docs/README.md) for instructions.
 
 ## Release Process
 
-The following steps need to be performed to ship a release:
+If you are the current maintainer of pdoc,
+you can perform the following steps to ship a release:
 
 1. Make sure that...
    - you are on the `main` branch with a clean working tree.

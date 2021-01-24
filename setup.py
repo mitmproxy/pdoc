@@ -57,6 +57,7 @@ setup(
     extras_require={
         "dev": [
             "flake8",
+            "hypothesis",
             "mypy",
             "pytest",
             "pytest-cov",

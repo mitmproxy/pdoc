@@ -13,6 +13,7 @@ from jinja2 import contextfilter
 from jinja2.runtime import Context
 from markupsafe import Markup
 
+from . import docstrings
 from ._compat import cache
 
 lexer = pygments.lexers.python.PythonLexer()
@@ -27,15 +28,21 @@ Overwrite this to configure pygments highlighting.
 """
 
 markdown_extensions = [
-    "fenced-code-blocks",
-    "header-ids",
-    "toc",
-    "tables",
     "code-friendly",
+    "cuddled-lists",
+    "fenced-code-blocks",
     "footnotes",
+    "header-ids",
+    "pyshell",
+    "strike",
+    "tables",
+    "task_list",
+    "toc",
 ]
 """
-The default extensions loaded for markdown2."""
+The default extensions loaded for `markdown2`.
+Overwrite this to configure Markdown rendering.
+"""
 
 
 @cache
@@ -45,9 +52,26 @@ def highlight(code: str) -> str:
 
 
 @cache
-def markdown(code: str) -> str:
-    """Convert markdown to HTML using markdown2."""
-    return markdown2.markdown(code, extras=markdown_extensions)
+def _markdown(docstring: str) -> str:
+    """
+    Convert `docstring` from Markdown to HTML.
+    """
+    # careful: markdown2 returns a subclass of str with an extra
+    # .toc_html attribute. don't further process the result,
+    # otherwise this attribute will be lost.
+    return markdown2.markdown(docstring, extras=markdown_extensions)
+
+
+@contextfilter
+def render_docstring(context: Context, docstring: str) -> str:
+    """
+    Converts `docstring` from a custom docformat to Markdown (if necessary), and then from Markdown to HTML.
+    """
+    docformat = (
+        getattr(context["module"].obj, "__docformat__", context["docformat"]) or ""
+    )
+    docstring = docstrings.convert(docstring, docformat)
+    return _markdown(docstring)
 
 
 def split_identifier(all_modules: Container[str], fullname: str) -> tuple[str, str]:

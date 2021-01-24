@@ -1,5 +1,16 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Add support for alternative docstring flavors.
+   Flavors can be enabled globally using `--docformat` or on a per-module
+   basis using `__docformat__ = "..."`.
+ - Add support for Google docstrings.
+ - Add basic support for Numpydoc and reStructuredText docstrings.
+   The most common rST elements are supported, but we do not intend
+   to support the full complexity of the spec.
+ - Improvements to the default theme.
+
 # 2021-01-22: pdoc 2.0.0
 
  - Make it possible to selectively include private or exclude public members in templates.  

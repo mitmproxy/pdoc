@@ -1,0 +1,30 @@
+<module flavors_google  # Example Google style…
+    <var module_level_variable2 = 98765  # int: Module level va…>
+    <function def function_with_types_in_docstring(param1, param2): ...  # Example function wit…>
+    <function def function_with_pep484_type_annotations(param1: int, param2: str) -> bool: ...  # Example function wit…>
+    <function def module_level_function(param1, param2=None, *args, **kwargs): ...  # This is an example o…>
+    <function def example_generator(n): ...  # Generators have a ``…>
+    <class flavors_google.ExampleError  # Exceptions are docum…
+        <method def __init__(self, msg, code): ...>
+        <method def with_traceback(unknown): ...  # Exception.with_trace…>
+        <var args = <attribute 'args' of 'BaseException' objects>  # inherited from builtins.BaseException.args>>
+    <class flavors_google.ExampleClass  # The summary line for…
+        <method def __init__(self, param1, param2, param3): ...  # Example of docstring…>
+        <var attr5  # str: Docstring *afte…>
+        <var readonly_property  # str: Properties shou…>
+        <var readwrite_property  # :obj:`list` of :obj:…>
+        <method def example_method(self, param1, param2): ...  # Class methods are si…>>
+    <function def fetch_smalltable_rows(
+    	table_handle: Any,
+    	keys: Sequence[str],
+    	require_all_keys: bool = False
+    ) -> Mapping[bytes, Tuple[str]]: ...  # Fetches rows from a …>
+    <function def fetch_smalltable_rows2(
+    	table_handle: Any,
+    	keys: Sequence[str],
+    	require_all_keys: bool = False
+    ) -> Mapping[bytes, Tuple[str]]: ...  # Fetches rows from a …>
+    <class flavors_google.SampleClass  # Summary of class her…
+        <method def __init__(self, likes_spam=False): ...  # Inits SampleClass wi…>
+        <method def public_method(self): ...  # Performs operation b…>>
+    <function def invalid_format(test): ...  # In this example, the…>>
