@@ -1,4 +1,8 @@
 <module misc
+    <class misc.CustomException  # custom exception typ…
+        <method def __init__(self, /, *args, **kwargs): ...>
+        <method def with_traceback(unknown): ...  # Exception.with_trace…>
+        <var args = <attribute 'args' of 'BaseException' objects>  # inherited from builtins.BaseException.args>>
     <class misc.LambdaAttr
         <method def __init__(): ...>
         <method def attr(x): ...  # inherited from misc.LambdaAttr.<lambda>>>

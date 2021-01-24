@@ -1,47 +1,25 @@
 import os
 from pathlib import Path
-from typing import Optional, Collection, Mapping
+from typing import Optional, Collection, Mapping, Literal
 
 from jinja2 import FileSystemLoader, Environment
 
 import pdoc.doc
 from pdoc.render_helpers import (
-    markdown,
     highlight,
     linkify,
     link,
     defuse_unsafe_reprs,
     edit_url,
     formatter,
+    render_docstring,
 )
-
-_default_searchpath = [
-    Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
-    Path(__file__).parent / "templates",
-]
-
-env = Environment(
-    loader=FileSystemLoader(_default_searchpath),
-    autoescape=True,
-    trim_blocks=True,
-    lstrip_blocks=True,
-)
-"""
-The Jinja2 environment used to render all templates.
-You can modify this object to add custom filters and globals.
-Examples can be found in this module's source code.
-"""
-env.filters["markdown"] = markdown
-env.filters["highlight"] = highlight
-env.filters["linkify"] = linkify
-env.filters["link"] = link
-env.globals["__version__"] = pdoc.__version__
-env.globals["edit_url_map"] = {}
 
 
 def configure(
     *,
     template_directory: Optional[Path] = None,
+    docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
 ):
     """
@@ -50,6 +28,8 @@ def configure(
     - `template_directory` can be used to set an additional (preferred) directory
       for templates. You can find an example in the main documentation of `pdoc`
       or in `test/customtemplate`.
+    - `docformat` is the docstring flavor in use.
+      pdoc prefers plain Markdown (the default), but also supports other formats.
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,
 
         ```json
@@ -66,9 +46,9 @@ def configure(
     env.loader = FileSystemLoader(searchpath)
 
     env.globals["edit_url_map"] = edit_url_map or {}
+    env.globals["docformat"] = docformat
 
 
-@defuse_unsafe_reprs()
 def html_module(
     module: pdoc.doc.Module,
     all_modules: Collection[str],
@@ -82,17 +62,18 @@ def html_module(
     - If `mtime` is given, include additional JavaScript on the page for live-reloading.
       This is only passed by `pdoc.web`.
     """
-    return env.select_template(
-        ["module.html.jinja2", "default/module.html.jinja2"]
-    ).render(
-        module=module,
-        all_modules=all_modules,
-        mtime=mtime,
-        edit_url=edit_url(
-            module.modulename, module.is_package, env.globals["edit_url_map"]
-        ),
-        pygments_css=formatter.get_style_defs(),
-    )
+    with defuse_unsafe_reprs():
+        return env.select_template(
+            ["module.html.jinja2", "default/module.html.jinja2"]
+        ).render(
+            module=module,
+            all_modules=all_modules,
+            mtime=mtime,
+            edit_url=edit_url(
+                module.modulename, module.is_package, env.globals["edit_url_map"]
+            ),
+            pygments_css=formatter.get_style_defs(),
+        )
 
 
 def html_index(all_modules: Collection[str]) -> str:
@@ -117,4 +98,30 @@ def html_error(error: str, details: str = "") -> str:
 @defuse_unsafe_reprs()
 def repr_module(module: pdoc.doc.Module) -> str:
     """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
-    return repr(module)
+    with defuse_unsafe_reprs():
+        return repr(module)
+
+
+_default_searchpath = [
+    Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
+    Path(__file__).parent / "templates",
+]
+
+env = Environment(
+    loader=FileSystemLoader(_default_searchpath),
+    autoescape=True,
+    trim_blocks=True,
+    lstrip_blocks=True,
+)
+"""
+The Jinja2 environment used to render all templates.
+You can modify this object to add custom filters and globals.
+Examples can be found in this module's source code.
+"""
+env.filters["render_docstring"] = render_docstring
+env.filters["highlight"] = highlight
+env.filters["linkify"] = linkify
+env.filters["link"] = link
+env.globals["__version__"] = pdoc.__version__
+env.globals["edit_url_map"] = {}
+env.globals["docformat"] = ""

@@ -1,0 +1,11 @@
+<module flavors_rst
+    <function def links(): ...  # For type hints, read…>
+    <function def refs(): ...  # This is similar to :…>
+    <function def admonitions(): ...  # .. note::
+
+       This f…>
+    <function def seealso(): ...  # .. seealso::
+
+       Mod…>
+    <function def seealso_short(): ...  # .. seealso:: modules…>
+    <function def tables(): ...  # | Header 1 | *Header…>>

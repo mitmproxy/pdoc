@@ -30,8 +30,7 @@ parser.add_argument(
     "--output-directory",
     metavar="DIR",
     type=Path,
-    help="Output directory for the rendered documentation. If no directory is provided, pdoc will start an interactive "
-    "web server.",
+    help="Write rendered documentation to the specified directory, don't start a webserver.",
 )
 # may be added again in the future:
 # formats = parser.add_mutually_exclusive_group()
@@ -60,6 +59,14 @@ parser.add_argument(
     "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 parser.add_argument(
+    "-d",
+    "--docformat",
+    type=str,
+    default=None,
+    choices=("google", "numpy", "restructuredtext"),
+    help="The default docstring format.",
+)
+parser.add_argument(
     "-h",
     "--host",
     type=str,
@@ -77,7 +84,7 @@ parser.add_argument(
     "-n",
     "--no-browser",
     action="store_true",
-    help="Don't start a browser, even if no output directory is set.",
+    help="Don't start a browser after the web server has started.",
 )
 parser.add_argument("--help", action="help", help="Show this help message and exit.")
 parser.add_argument(

@@ -45,6 +45,7 @@ pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do i
 * First-class support for type annotations and all other modern Python 3 features.
 * Builtin web server with live reloading.
 * Customizable HTML templates.
+* Understands numpydoc and Google-style docstrings.
 * Standalone JS-free HTML output without additional dependencies.
   
 Under the hood...

@@ -6,17 +6,14 @@
     <style type="text/css">
 
         /* General Styles */
-        :root {
-            --main-pad: calc(min(3rem, 3vw));
-        }
-
         html, main {
             scroll-behavior: smooth;
         }
 
         h1, h2, h3, h4 {
             font-weight: 300;
-            margin: .5em 0 .5em;
+            margin: .3em 0;
+            padding: .2em 0;
         }
 
         a {
@@ -31,6 +28,16 @@
             font-size: 85%;
             background-color: rgba(27, 31, 35, 0.05);
             border-radius: 6px;
+        }
+
+        pre code {
+            display: inline-block;
+            background: none;
+            padding: 0;
+        }
+
+        blockquote {
+            margin-left: 2rem;
         }
 
         .button {
@@ -51,10 +58,11 @@
         @media (max-width: 769px) {
             label[for=navtoggle] {
                 cursor: pointer;
-                float: right;
+                position: absolute;
                 width: 50px;
                 height: 40px;
-                margin-top: 1rem;
+                top: 1rem;
+                right: 1rem;
                 color: rgba(0, 0, 0, .55);
                 border-color: rgba(0, 0, 0, .1);
                 background-repeat: no-repeat;
@@ -63,7 +71,7 @@
             }
 
             main {
-                padding-top: 2rem !important;
+                padding: 2rem 3vw;
             }
 
             label[for=navtoggle]:hover {
@@ -84,23 +92,21 @@
         }
 
         @media (min-width: 770px) {
-            .container {
-                display: flex;
-            }
-
-            .container, nav, main {
-                min-height: 100%;
+            :root {
+                --sidebar-width: clamp(12.5rem, 28vw, 22rem);
             }
 
             nav {
-                flex: 200px;
-                min-width: 12.5rem;
-                max-width: 22rem;
+                position: fixed;
+                overflow: auto;
+                height: 100vh;
+                width: var(--sidebar-width);
             }
 
             main {
-                flex: 600px;
-                padding-right: calc(max(var(--main-pad), 100% - 22rem - 50rem)) !important;
+                padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
+                width: calc(54rem + var(--sidebar-width));
+                max-width: 100%;
             }
 
             label[for=navtoggle] {
@@ -119,7 +125,8 @@
             background-color: #eee;
             border-right: 1px solid #c1c1c1;
             box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
-            padding: 0 var(--pad);
+            padding: 0 0 0 var(--pad);
+            overflow-wrap: anywhere;
         }
 
         nav > div {
@@ -193,7 +200,7 @@
 
         /* Content */
         main {
-            padding: var(--main-pad);
+            overflow-x: hidden;
         }
 
         main > section:first-of-type .docstring {
@@ -254,30 +261,31 @@
             text-align: left;
         }
 
-        .codehilite {
+        pre {
             background-color: #f7f7f7;
             border-top: 1px solid #ccc;
             border-bottom: 1px solid #ccc;
             margin-bottom: .5em;
+            padding: .5rem 0 .5rem .5rem;
         }
 
-        .codehilite code {
+        pre > code {
             padding: 0;
             background: none;
         }
 
-        .codehilite pre {
-            margin: 0;
-            padding: .5rem 0 .5rem .5rem;
-        }
-
-        .docstring .codehilite {
+        .docstring pre {
             margin-left: 1em;
             margin-right: 1em;
         }
 
         .docstring {
             margin-bottom: 1.5rem;
+        }
+
+        h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
+            background-color: #fff7a8;
+            box-shadow: -1rem 0 0 0 #fff7a8;
         }
 
         div:target > .attr, section:target > .attr {
@@ -453,7 +461,7 @@
 {% if not docstring %}
     {% macro docstring(var) %}
         {% if var.docstring %}
-            <div class="docstring">{{ var.docstring | markdown | linkify }}</div>
+            <div class="docstring">{{ var.docstring | render_docstring | linkify }}</div>
         {% endif %}
     {% endmacro %}
 {% endif %}
@@ -534,103 +542,101 @@
     {% endmacro %}
 {% endif %}
 {% block body %}
-    <div class="container">
-        {% block nav %}
-            <nav>
-                <label for="navtoggle" class="button"></label>
-                <input id="navtoggle" type="checkbox">
-                <div>
-                    {% block nav_title %}{% endblock %}
-                    {% block module_list_link scoped %}
-                        {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
-                        {% if parentmodule and parentmodule in all_modules %}
-                            <a class="button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
-                                {{- parentmodule -}}
-                            </a>
-                        {% elif all_modules|length > 1 %}
-                            <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
-                                Module Index
-                            </a>
-                        {% endif %}
-                    {% endblock %}
-
-                    {% set index = module.docstring | markdown | attr("toc_html") %}
-                    {% if index %}
-                        <h2>Contents</h2>
-                        {{ index | safe }}
-                    {% endif %}
-
-                    {% if module.submodules %}
-                        <h2>Submodules</h2>
-                        <ul>
-                            {% for submodule in module.submodules %}
-                                <li>{{ (submodule.modulename, "") | link }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                    {% if module.members %}
-                        <h2>API Documentation</h2>
-                        {{ nav_members(module.members.values()) }}
-                    {% endif %}
-
-                    {% block attribution %}
-                        <a class="logo" title="built with pdoc" href="https://pdoc.dev">
-                            built with {% include 'logo.svg' %}
+    {% block nav %}
+        <nav>
+            <label for="navtoggle" class="button"></label>
+            <input id="navtoggle" type="checkbox">
+            <div>
+                {% block nav_title %}{% endblock %}
+                {% block module_list_link scoped %}
+                    {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
+                    {% if parentmodule and parentmodule in all_modules %}
+                        <a class="button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                            {{- parentmodule -}}
                         </a>
-                    {% endblock %}
-                </div>
-            </nav>
-        {% endblock %}
-        <main>
-            {% block module_info %}
-                <section>
-                    {% block edit_button %}
-                        {% if edit_url %}
-                            <a class="button git-button" href="{{ edit_url }}">Edit on GitHub</a>
-                        {% endif %}
-                    {% endblock %}
-                    <h1 class="modulename">
-                        {% set parts = module.modulename.split(".") %}
-                        {% for part in parts %}
-                            {%- set fullname = ".".join(parts[:loop.index]) -%}
-                            {%- if fullname in all_modules and fullname != module.modulename -%}
-                                <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
-                            {%- else -%}
-                                {{ part }}
-                            {%- endif -%}
-                            {%- if loop.nextitem %}.{% endif -%}
+                    {% elif all_modules|length > 1 %}
+                        <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
+                            Module Index
+                        </a>
+                    {% endif %}
+                {% endblock %}
+
+                {% set index = module.docstring | render_docstring | attr("toc_html") %}
+                {% if index %}
+                    <h2>Contents</h2>
+                    {{ index | safe }}
+                {% endif %}
+
+                {% if module.submodules %}
+                    <h2>Submodules</h2>
+                    <ul>
+                        {% for submodule in module.submodules %}
+                            <li>{{ (submodule.modulename, "") | link }}</li>
                         {% endfor %}
-                    </h1>
-                    {{ docstring(module) }}
-                    {{ view_source(module) }}
-                </section>
-            {% endblock %}
-            {% block module_contents %}
-                {% for m in module.flattened_own_members if is_public(m) | trim %}
-                    <section id="{{ m.qualname or m.name }}">
-                        {{ member(m) }}
-                        {% if m.type == "class" %}
-                            {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
-                                <div id="{{ m.qualname }}" class="classattr">
-                                    {{ member(m) }}
-                                </div>
-                            {% endfor %}
-                            {% set inherited_members = inherited(m) | trim %}
-                            {% if inherited_members %}
-                                <div class="inherited">
-                                    <h5>Inherited Members</h5>
-                                    <dl>
-                                        {{ inherited_members }}
-                                    </dl>
-                                </div>
-                            {% endif %}
+                    </ul>
+                {% endif %}
+
+                {% if module.members %}
+                    <h2>API Documentation</h2>
+                    {{ nav_members(module.members.values()) }}
+                {% endif %}
+
+                {% block attribution %}
+                    <a class="logo" title="built with pdoc" href="https://pdoc.dev">
+                        built with {% include 'logo.svg' %}
+                    </a>
+                {% endblock %}
+            </div>
+        </nav>
+    {% endblock %}
+    <main>
+        {% block module_info %}
+            <section>
+                {% block edit_button %}
+                    {% if edit_url %}
+                        <a class="button git-button" href="{{ edit_url }}">Edit on GitHub</a>
+                    {% endif %}
+                {% endblock %}
+                <h1 class="modulename">
+                    {% set parts = module.modulename.split(".") %}
+                    {% for part in parts %}
+                        {%- set fullname = ".".join(parts[:loop.index]) -%}
+                        {%- if fullname in all_modules and fullname != module.modulename -%}
+                            <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
+                        {%- else -%}
+                            {{ part }}
+                        {%- endif -%}
+                        {%- if loop.nextitem %}.{% endif -%}
+                    {% endfor %}
+                </h1>
+                {{ docstring(module) }}
+                {{ view_source(module) }}
+            </section>
+        {% endblock %}
+        {% block module_contents %}
+            {% for m in module.flattened_own_members if is_public(m) | trim %}
+                <section id="{{ m.qualname or m.name }}">
+                    {{ member(m) }}
+                    {% if m.type == "class" %}
+                        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
+                            <div id="{{ m.qualname }}" class="classattr">
+                                {{ member(m) }}
+                            </div>
+                        {% endfor %}
+                        {% set inherited_members = inherited(m) | trim %}
+                        {% if inherited_members %}
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    {{ inherited_members }}
+                                </dl>
+                            </div>
                         {% endif %}
-                    </section>
-                {% endfor %}
-            {% endblock %}
-        </main>
-    </div>
+                    {% endif %}
+                </section>
+            {% endfor %}
+        {% endblock %}
+    </main>
     {% if mtime %}
         <script>
             /* Periodically check with the pdoc server if there have been any changes. */

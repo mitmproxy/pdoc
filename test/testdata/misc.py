@@ -1,6 +1,12 @@
 from functools import lru_cache
 
 
+# Testing that Exceptions render properly
+
+class CustomException(RuntimeError):
+    """custom exception type"""
+
+
 # Testing that a private class in __all__ is displayed
 
 class _Private:
@@ -89,6 +95,7 @@ indents"""
 
 
 __all__ = [
+    "CustomException",
     "_Private",
     "LambdaAttr",
     "foo",
