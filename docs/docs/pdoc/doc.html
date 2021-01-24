@@ -76,6 +76,9 @@
                             <li>
                                     <a class="variable" href="#Namespace.flattened_own_members">flattened_own_members</a>
                             </li>
+                            <li>
+                                    <a class="function" href="#Namespace.contains">contains</a>
+                            </li>
                     </ul>
 
                 </li>
@@ -209,10 +212,10 @@ from the abstract syntax tree, which means that variables (module, class or inst
 <p>There are four main types of documentation objects:</p>
 
 <ul>
-<li><a href="#Module">pdoc.doc.Module</a></li>
-<li><a href="#Class">pdoc.doc.Class</a></li>
-<li><a href="#Function">pdoc.doc.Function</a></li>
-<li><a href="#Variable">pdoc.doc.Variable</a></li>
+<li><code><a href="#Module">Module</a></code></li>
+<li><code><a href="#Class">Class</a></code></li>
+<li><code><a href="#Function">Function</a></code></li>
+<li><code><a href="#Variable">Variable</a></code></li>
 </ul>
 
 <p>All documentation types types make heavy use of <code>@functools.cached_property</code> decorators.
@@ -230,10 +233,10 @@ By convention, all attributes are read-only, although this this not enforced at 
 
 <span class="sd">There are four main types of documentation objects:</span>
 
-<span class="sd">- pdoc.doc.Module</span>
-<span class="sd">- pdoc.doc.Class</span>
-<span class="sd">- pdoc.doc.Function</span>
-<span class="sd">- pdoc.doc.Variable</span>
+<span class="sd">- `Module`</span>
+<span class="sd">- `Class`</span>
+<span class="sd">- `Function`</span>
+<span class="sd">- `Variable`</span>
 
 <span class="sd">All documentation types types make heavy use of `@functools.cached_property` decorators.</span>
 <span class="sd">This means they have a large set of attributes that are lazily computed on first access.</span>
@@ -526,6 +529,18 @@ By convention, all attributes are read-only, although this this not enforced at 
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">flattened</span>
 
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns `True` if the current namespace contains a particular identifier, `False` otherwise.&quot;&quot;&quot;</span>
+        <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span>
+
 
 <span class="k">class</span> <span class="nc">Module</span><span class="p">(</span><span class="n">Namespace</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -615,6 +630,8 @@ By convention, all attributes are read-only, although this this not enforced at 
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
                     <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">empty</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># this may be an unimported submodule, try importing.</span>
                     <span class="c1"># (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)</span>
@@ -1561,6 +1578,18 @@ in a different module.</p>
                     <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">flattened_own_members</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">flattened</span>
+
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns `True` if the current namespace contains a particular identifier, `False` otherwise.&quot;&quot;&quot;</span>
+        <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span>
 </pre></div>
 
             </details>
@@ -1605,6 +1634,36 @@ in a different module.</p>
         </div>
 
                     <div class="docstring"><p>A list of all documented members and their child classes, recursively.</p>
+</div>
+
+
+                            </div>
+                            <div id="Namespace.contains" class="classattr">
+                                            <div class="attr function">
+                        <div class="decorator">@cache</div>
+
+                <span class="def">def</span>
+                <span class="name">contains</span><span class="signature">(self, identifier: str) -&gt; bool</span>:
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns `True` if the current namespace contains a particular identifier, `False` otherwise.&quot;&quot;&quot;</span>
+        <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>Returns <code>True</code> if the current namespace contains a particular identifier, <code>False</code> otherwise.</p>
 </div>
 
 
@@ -1726,6 +1785,8 @@ in a different module.</p>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
                     <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_annotations</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">empty</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># this may be an unimported submodule, try importing.</span>
                     <span class="c1"># (https://docs.python.org/3/tutorial/modules.html#importing-from-a-package)</span>
@@ -1877,6 +1938,7 @@ module with the name <code>__init__.py</code>.</p>
                                         <dd class="variable"><a href="#Namespace.members">members</a></dd>
                     <dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd>
                     <dd class="variable"><a href="#Namespace.flattened_own_members">flattened_own_members</a></dd>
+                    <dd class="function"><a href="#Namespace.contains">contains</a></dd>
 
                 </div>
                 <div><dt><a href="#Doc">pdoc.doc.Doc</a></dt>
@@ -2177,6 +2239,7 @@ All other variables are treated as instance variables.</p>
                                         <dd class="variable"><a href="#Namespace.members">members</a></dd>
                     <dd class="variable"><a href="#Namespace.inherited_members">inherited_members</a></dd>
                     <dd class="variable"><a href="#Namespace.flattened_own_members">flattened_own_members</a></dd>
+                    <dd class="function"><a href="#Namespace.contains">contains</a></dd>
 
                 </div>
                                 </dl>
@@ -2412,7 +2475,7 @@ supports <code>@classmethod</code>s or <code>@staticmethod</code>s.</p>
 
                     <div class="docstring"><p>The function's signature.</p>
 
-<p>This usually returns an instance of <code>_PrettySignature</code>, a subclass of <code>inspect.Signature</code>
+<p>This usually returns an instance of <code><a href="#_PrettySignature">_PrettySignature</a></code>, a subclass of <code>inspect.Signature</code>
 that contains pdoc-specific optimizations. For example, long argument lists are split over multiple lines
 in repr(). Additionally, all types are already resolved.</p>
 

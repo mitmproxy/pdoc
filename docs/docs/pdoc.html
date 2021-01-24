@@ -87,7 +87,7 @@ classes and variables.</p>
 
 <h1 id="how-does-pdoc-work">How does pdoc work?</h1>
 
-<p>In a nutshell, pdoc takes a Python module name as input, imports it, creates <code><a href="pdoc/doc.html#Module">pdoc.doc.Module</a></code> object
+<p>In a nutshell, pdoc takes a Python module name as input, imports it, creates a <code><a href="pdoc/doc.html#Module">pdoc.doc.Module</a></code> object
 that extracts all docstrings, and passes it to the HTML template for rendering.</p>
 
 <p>This implies a few things:</p>
@@ -210,7 +210,7 @@ docstring:</p>
 the docstring should come on the line immediately following <code>class
 ...</code>. For modules, the docstring should start on the first line of
 the file. These docstrings are what you see for each module, class,
-function and method listed in the documentation produced by <code><a href="">pdoc</a></code>.</p>
+function and method listed in the documentation produced by <code><a href="#pdoc">pdoc</a></code>.</p>
 
 <h2 id="document-variables">...document variables?</h2>
 
@@ -222,7 +222,7 @@ variables</a>. For example:</p>
 </code></pre></div>
 
 <p>The resulting <code>variable</code> will have no <code>__doc__</code> attribute.
-To compensate, <code><a href="">pdoc</a></code> will read the abstract syntax tree (an abstract representation of the source code)
+To compensate, <code><a href="#pdoc">pdoc</a></code> will read the abstract syntax tree (an abstract representation of the source code)
 and include all assignment statements immediately followed by a docstring.</p>
 
 <p>Something similar is done for instance variables as well, which are either type-annotated in the class
@@ -278,26 +278,22 @@ You can find an example at
 
 <h2 id="link-to-other-identifiers">...link to other identifiers?</h2>
 
-<p>In your documentation, you can link to other identifiers in
-your module or submodules. The identifier name must be fully qualified. For
-example, <code><a href="pdoc/doc.html#Doc.docstring">pdoc.doc.Doc.docstring</a></code> will be automatically linked while
-<code>Doc.docstring</code> will not be linked. Type annotations will be linked automatically.</p>
+<p>In your documentation, you can link to other identifiers by enclosing them in backticks:
+<code>`pdoc`</code> will link to <code><a href="#pdoc">pdoc</a></code>.
+When linking to identifiers in other modules, the identifier name must be fully qualified.
+For example, <code>`<a href="pdoc/doc.html#Doc">pdoc.doc.Doc</a>`</code> will be automatically linked to <code><a href="pdoc/doc.html#Doc">pdoc.doc.Doc</a></code>,
+while <code>`Doc`</code> only works within the <code><a href="pdoc/doc.html">pdoc.doc</a></code> module.</p>
 
-<p><code><a href="">pdoc</a></code> will link all identifiers that are rendered in the current run.
-This means that you need to run <code>pdoc module_a module_b</code>
-to have interlinking between module_a and module_b.
+<p>pdoc will link all identifiers that are rendered in the current run.
+This means that you need to run <code>pdoc module_a module_b</code> to have interlinking between module_a and module_b.
 If you run <code>pdoc module_a</code> followed by <code>pdoc module_b</code>, there will be no cross-linking between the two modules.</p>
-
-<p>If you need to link to a top-level module (for example the main pdoc module), you
-need to put it between backticks: <code>`pdoc`</code> will link to <code><a href="">pdoc</a></code>.
-This makes sure that common modules names are not accidentally linked.</p>
 
 <h2 id="change-the-item-order">...change the item order?</h2>
 
 <p>By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
-you need to move it there in your source code. This is not only useful to the consumers of your documentation
-but also useful to the readers of your source code.</p>
+you need to move it there in your source code. This is not only useful to the readers of your documentation
+but also useful to the consumers of your source code.</p>
 
 <h2 id="use-numpydoc-or-google-style-docstrings">...use numpydoc or Google-style docstrings?</h2>
 
@@ -336,7 +332,7 @@ and by allowing functions and classes to inherit docstrings and type annotations
 </code></pre></div>
 
 <p>In Python, the docstring for <code>GoldenRetriever.bark</code> is empty, even though one was
-defined in <code>Dog.bark</code>. If <code><a href="">pdoc</a></code> generates documentation for the above
+defined in <code>Dog.bark</code>. If <code><a href="#pdoc">pdoc</a></code> generates documentation for the above
 code, then it will automatically attach the docstring for <code>Dog.bark</code> to
 <code>GoldenRetriever.bark</code> if it does not have a docstring.</p>
 
@@ -369,7 +365,7 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 
 <span class="sd"># How does pdoc work?</span>
 
-<span class="sd">In a nutshell, pdoc takes a Python module name as input, imports it, creates `pdoc.doc.Module` object</span>
+<span class="sd">In a nutshell, pdoc takes a Python module name as input, imports it, creates a `pdoc.doc.Module` object</span>
 <span class="sd">that extracts all docstrings, and passes it to the HTML template for rendering.</span>
 
 <span class="sd">This implies a few things:</span>
@@ -566,26 +562,22 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 
 <span class="sd">## ...link to other identifiers?</span>
 
-<span class="sd">In your documentation, you can link to other identifiers in</span>
-<span class="sd">your module or submodules. The identifier name must be fully qualified. For</span>
-<span class="sd">example, `pdoc.doc.Doc.docstring` will be automatically linked while</span>
-<span class="sd">`Doc.docstring` will not be linked. Type annotations will be linked automatically.</span>
+<span class="sd">In your documentation, you can link to other identifiers by enclosing them in backticks:</span>
+<span class="sd">&lt;code&gt;\`pdoc\`&lt;/code&gt; will link to `pdoc`.</span>
+<span class="sd">When linking to identifiers in other modules, the identifier name must be fully qualified.</span>
+<span class="sd">For example, &lt;code&gt;\`pdoc.doc.Doc\`&lt;/code&gt; will be automatically linked to `pdoc.doc.Doc`,</span>
+<span class="sd">while &lt;code&gt;\`Doc\`&lt;/code&gt; only works within the `pdoc.doc` module.</span>
 
-<span class="sd">`pdoc` will link all identifiers that are rendered in the current run.</span>
-<span class="sd">This means that you need to run `pdoc module_a module_b`</span>
-<span class="sd">to have interlinking between module_a and module_b.</span>
+<span class="sd">pdoc will link all identifiers that are rendered in the current run.</span>
+<span class="sd">This means that you need to run `pdoc module_a module_b` to have interlinking between module_a and module_b.</span>
 <span class="sd">If you run `pdoc module_a` followed by `pdoc module_b`, there will be no cross-linking between the two modules.</span>
-
-<span class="sd">If you need to link to a top-level module (for example the main pdoc module), you</span>
-<span class="sd">need to put it between backticks: &lt;code&gt;\`pdoc\`&lt;/code&gt; will link to `pdoc`.</span>
-<span class="sd">This makes sure that common modules names are not accidentally linked.</span>
 
 <span class="sd">## ...change the item order?</span>
 
 <span class="sd">By default, documentation items are sorted in order of (first) appearance in the source code.</span>
 <span class="sd">This means that if you want to move a particular function to the beginning of your documentation,</span>
-<span class="sd">you need to move it there in your source code. This is not only useful to the consumers of your documentation</span>
-<span class="sd">but also useful to the readers of your source code.</span>
+<span class="sd">you need to move it there in your source code. This is not only useful to the readers of your documentation</span>
+<span class="sd">but also useful to the consumers of your source code.</span>
 
 <span class="sd">## ...use numpydoc or Google-style docstrings?</span>
 
@@ -638,7 +630,7 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.0.0&quot;</span>  <span class="c1"># this is read from setup.py</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;3.0.0&quot;</span>  <span class="c1"># this is read from setup.py</span>
 
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">warnings</span>

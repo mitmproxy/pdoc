@@ -58,6 +58,15 @@
                 <li>
                         <a class="function" href="#open_browser">open_browser</a>
                 </li>
+                <li>
+                        <a class="class" href="#AllModules">AllModules</a>
+                                    <ul class="memberlist">
+                            <li>
+                                    <a class="function" href="#AllModules.__init__">AllModules</a>
+                            </li>
+                    </ul>
+
+                </li>
         </ul>
 
 
@@ -89,12 +98,15 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">http.server</span>
+<span class="kn">import</span> <span class="nn">importlib.util</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">import</span> <span class="nn">sysconfig</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">webbrowser</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Collection</span>
 
 <span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">extract</span><span class="p">,</span> <span class="n">doc</span>
-<span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">removesuffix</span>
+<span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">removesuffix</span><span class="p">,</span> <span class="n">cache</span>
 
 
 <span class="k">class</span> <span class="nc">DocHandler</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
@@ -117,7 +129,6 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 
     <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Actually handle a request. Called by `do_HEAD` and `do_GET`.&quot;&quot;&quot;</span>
-        <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">all_modules</span><span class="p">)</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
@@ -138,6 +149,9 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">mtime</span>
+
+            <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">mod</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">(</span><span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -216,6 +230,49 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
             <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">class</span> <span class="nc">AllModules</span><span class="p">(</span><span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A fake collection that contains all modules installed by the user.</span>
+<span class="sd">    This is used when `pdoc` is invoked without any arguments,</span>
+<span class="sd">    using `pkgutil.walk_packages` would take multiple seconds.</span>
+
+<span class="sd">    When being __iter__ated, it returns the list of all top-level modules,</span>
+<span class="sd">    but it __contains__ all submodules as well.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">root_modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;stdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">platstdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;platstdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">module_finder</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stdlib</span><span class="p">,</span> <span class="n">platstdlib</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">root_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">root_modules</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
+
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modname</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">modname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">extract</span><span class="o">.</span><span class="n">mock_some_common_side_effects</span><span class="p">():</span>
+                <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
 </pre></div>
 
             </details>
@@ -250,7 +307,6 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 
     <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Actually handle a request. Called by `do_HEAD` and `do_GET`.&quot;&quot;&quot;</span>
-        <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">all_modules</span><span class="p">)</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
@@ -271,6 +327,9 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">mtime</span>
+
+            <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">mod</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">(</span><span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -368,7 +427,6 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <summary class="button">View Source</summary>
                 <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Actually handle a request. Called by `do_HEAD` and `do_GET`.&quot;&quot;&quot;</span>
-        <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">all_modules</span><span class="p">)</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
@@ -389,6 +447,9 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
                 <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">mtime</span>
+
+            <span class="n">extract</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">mod</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">(</span><span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -654,6 +715,95 @@ would otherwise open lynx.</p>
 </div>
 
 
+                </section>
+                <section id="AllModules">
+                                        <div class="attr class">
+            
+            <span class="def">class</span>
+            <span class="name">AllModules</span>(<span class="base">collections.abc.Collection</span>, <span class="base">typing.Generic</span>):
+        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">AllModules</span><span class="p">(</span><span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A fake collection that contains all modules installed by the user.</span>
+<span class="sd">    This is used when `pdoc` is invoked without any arguments,</span>
+<span class="sd">    using `pkgutil.walk_packages` would take multiple seconds.</span>
+
+<span class="sd">    When being __iter__ated, it returns the list of all top-level modules,</span>
+<span class="sd">    but it __contains__ all submodules as well.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">root_modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;stdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">platstdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;platstdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">module_finder</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stdlib</span><span class="p">,</span> <span class="n">platstdlib</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">root_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">root_modules</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
+
+    <span class="nd">@cache</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modname</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">modname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">extract</span><span class="o">.</span><span class="n">mock_some_common_side_effects</span><span class="p">():</span>
+                <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+            </details>
+
+                    <div class="docstring"><p>A fake collection that contains all modules installed by the user.
+This is used when <code><a href="../pdoc.html">pdoc</a></code> is invoked without any arguments,
+using <code>pkgutil.walk_packages</code> would take multiple seconds.</p>
+
+<p>When being __iter__ated, it returns the list of all top-level modules,
+but it __contains__ all submodules as well.</p>
+</div>
+
+
+                            <div id="AllModules.__init__" class="classattr">
+                                            <div class="attr function">
+            
+                <span class="name">AllModules</span><span class="signature">()</span>        </div>
+
+                        <details>
+                <summary class="button">View Source</summary>
+                <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">root_modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;stdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">platstdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;platstdlib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">module_finder</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stdlib</span><span class="p">,</span> <span class="n">platstdlib</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">root_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_mods</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">root_modules</span><span class="p">))</span>
+</pre></div>
+
+            </details>
+
+        
+
+                            </div>
                 </section>
     </main>
 </body>

@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-01-24 pdoc 3.0.0
+
  - Add support for alternative docstring flavors.
    Flavors can be enabled globally using `--docformat` or on a per-module
    basis using `__docformat__ = "..."`.

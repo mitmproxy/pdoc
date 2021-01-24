@@ -74,13 +74,12 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">sysconfig</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
 
 
@@ -114,53 +113,35 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">parse_specs</span><span class="p">(</span><span class="n">modules</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function processes a list of module specifications and returns the list of module names</span>
-<span class="sd">    that should be processed by pdoc.</span>
-
-<span class="sd">    There are two main scenarios:</span>
-
-<span class="sd">     2. If `modules` is not empty, pdoc will return the names of all available submodules (and their submodules, recursively).</span>
-<span class="sd">     1. If the list of modules is empty, pdoc will enumerate all installed modules that are not part of the stdlib.</span>
+<span class="sd">    This function processes a list of module specifications and returns the list of module names, including all</span>
+<span class="sd">    submodules, that should be processed by pdoc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">module_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
-            <span class="n">modname</span> <span class="o">=</span> <span class="n">parse_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+        <span class="n">modname</span> <span class="o">=</span> <span class="n">parse_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
 
-            <span class="c1"># try to get all submodules</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
-                <span class="n">module_index</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">submodules</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">module_index</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">submodules</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Error importing subpackage: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
-                        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">stdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;stdlib&quot;</span><span class="p">)</span>
-        <span class="n">platstdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;platstdlib&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+        <span class="c1"># try to get all submodules</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="n">module_index</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">module_finder</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stdlib</span><span class="p">,</span> <span class="n">platstdlib</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="n">module_index</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
+            <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">module_index</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">submodules</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error importing subpackage: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">module_index</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No valid module specifications found in </span><span class="si">{</span><span class="n">modules</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
@@ -208,29 +189,53 @@ and provides the rest of pdoc with some additional module metadata.</p>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error importing </span><span class="si">{</span><span class="n">module</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
 
 
+<span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">module_mtime</span><span class="p">(</span><span class="n">modulename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns the time the specified module file was last modified, or `None` if this cannot be determined.</span>
 <span class="sd">    The primary use of this is live-reloading modules on modification.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modulename</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">spec</span><span class="o">.</span><span class="n">origin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
     <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">invalidate_caches</span><span class="p">(</span><span class="n">modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">invalidate_caches</span><span class="p">(</span><span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invalidate all module caches to allow live-reloading of modules.</span>
-<span class="sd">    Getting this right is tricky – we remove a bunch of stuff from `sys.modules`, which sometimes causes surprising</span>
-<span class="sd">    side-effects.</span>
+<span class="sd">    Invalidate module cache to allow live-reloading of modules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side-effects.</span>
+    <span class="c1"># Our current best effort is to call `importlib.reload` on all modules that start with module_name.</span>
+    <span class="c1"># We also exclude our own dependencies, which cause fun errors otherwise.</span>
+    <span class="k">if</span> <span class="n">module_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">module_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="n">module_name</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;jinja2&quot;</span><span class="p">,</span> <span class="s2">&quot;markupsafe&quot;</span><span class="p">,</span> <span class="s2">&quot;markdown2&quot;</span><span class="p">,</span> <span class="s2">&quot;pygments&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># a more extreme alternative:</span>
+    <span class="c1"># filename = sys.modules[module_name].__file__</span>
+    <span class="c1"># if (</span>
+    <span class="c1">#    filename.startswith(sysconfig.get_path(&quot;platstdlib&quot;))</span>
+    <span class="c1">#    or filename.startswith(sysconfig.get_path(&quot;stdlib&quot;))</span>
+    <span class="c1"># ):</span>
+    <span class="c1">#     return</span>
+
     <span class="n">importlib</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">()</span>
     <span class="n">linecache</span><span class="o">.</span><span class="n">clearcache</span><span class="p">()</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">mod</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modules</span>
-    <span class="p">}</span>
+
+    <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">mods</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">mod</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">module_name</span> <span class="o">==</span> <span class="n">mod</span> <span class="ow">or</span> <span class="n">mod</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">:</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod</span><span class="p">])</span>
 </pre></div>
 
             </details>
@@ -295,53 +300,35 @@ which we want to suppress. Note that this function must not be used for security
                 <div class="codehilite"><pre><span></span><span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">parse_specs</span><span class="p">(</span><span class="n">modules</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function processes a list of module specifications and returns the list of module names</span>
-<span class="sd">    that should be processed by pdoc.</span>
-
-<span class="sd">    There are two main scenarios:</span>
-
-<span class="sd">     2. If `modules` is not empty, pdoc will return the names of all available submodules (and their submodules, recursively).</span>
-<span class="sd">     1. If the list of modules is empty, pdoc will enumerate all installed modules that are not part of the stdlib.</span>
+<span class="sd">    This function processes a list of module specifications and returns the list of module names, including all</span>
+<span class="sd">    submodules, that should be processed by pdoc.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">module_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="n">modules</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
-            <span class="n">modname</span> <span class="o">=</span> <span class="n">parse_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+        <span class="n">modname</span> <span class="o">=</span> <span class="n">parse_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
 
-            <span class="c1"># try to get all submodules</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
-                <span class="n">module_index</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">submodules</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">module_index</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">submodules</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-                        <span class="k">break</span>
-                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Error importing subpackage: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
-                        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">stdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;stdlib&quot;</span><span class="p">)</span>
-        <span class="n">platstdlib</span> <span class="o">=</span> <span class="n">sysconfig</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;platstdlib&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+        <span class="c1"># try to get all submodules</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">modspec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">modspec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+            <span class="n">module_index</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">module_finder</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stdlib</span><span class="p">,</span> <span class="n">platstdlib</span><span class="p">):</span>
-                <span class="k">continue</span>
-            <span class="n">module_index</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
+            <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">module_index</span><span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">submodules</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error importing subpackage: </span><span class="si">{</span><span class="n">e</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">module_index</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No valid module specifications found in </span><span class="si">{</span><span class="n">modules</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
@@ -350,15 +337,8 @@ which we want to suppress. Note that this function must not be used for security
 
             </details>
 
-                    <div class="docstring"><p>This function processes a list of module specifications and returns the list of module names
-that should be processed by pdoc.</p>
-
-<p>There are two main scenarios:</p>
-
-<ol>
-<li>If <code>modules</code> is not empty, pdoc will return the names of all available submodules (and their submodules, recursively).</li>
-<li>If the list of modules is empty, pdoc will enumerate all installed modules that are not part of the stdlib.</li>
-</ol>
+                    <div class="docstring"><p>This function processes a list of module specifications and returns the list of module names, including all
+submodules, that should be processed by pdoc.</p>
 </div>
 
 
@@ -453,22 +433,25 @@ If this side-effect is undesired, pass a module name instead.</p>
                 </section>
                 <section id="module_mtime">
                                 <div class="attr function">
-            
+                        <div class="decorator">@mock_some_common_side_effects()</div>
+
                 <span class="def">def</span>
                 <span class="name">module_mtime</span><span class="signature">(modulename: str) -&gt; Optional[float]</span>:
         </div>
 
                         <details>
                 <summary class="button">View Source</summary>
-                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">module_mtime</span><span class="p">(</span><span class="n">modulename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+                <div class="codehilite"><pre><span></span><span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">module_mtime</span><span class="p">(</span><span class="n">modulename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns the time the specified module file was last modified, or `None` if this cannot be determined.</span>
 <span class="sd">    The primary use of this is live-reloading modules on modification.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">modulename</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">spec</span><span class="o">.</span><span class="n">origin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">origin</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">pass</span>
     <span class="k">return</span> <span class="kc">None</span>
 </pre></div>
 
@@ -482,31 +465,52 @@ The primary use of this is live-reloading modules on modification.</p>
                 </section>
                 <section id="invalidate_caches">
                                 <div class="attr function">
-            
+                        <div class="decorator">@mock_some_common_side_effects()</div>
+
                 <span class="def">def</span>
-                <span class="name">invalidate_caches</span><span class="signature">(modules: Collection[str]) -&gt; NoneType</span>:
+                <span class="name">invalidate_caches</span><span class="signature">(module_name: str) -&gt; NoneType</span>:
         </div>
 
                         <details>
                 <summary class="button">View Source</summary>
-                <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">invalidate_caches</span><span class="p">(</span><span class="n">modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                <div class="codehilite"><pre><span></span><span class="nd">@mock_some_common_side_effects</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">invalidate_caches</span><span class="p">(</span><span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invalidate all module caches to allow live-reloading of modules.</span>
-<span class="sd">    Getting this right is tricky – we remove a bunch of stuff from `sys.modules`, which sometimes causes surprising</span>
-<span class="sd">    side-effects.</span>
+<span class="sd">    Invalidate module cache to allow live-reloading of modules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side-effects.</span>
+    <span class="c1"># Our current best effort is to call `importlib.reload` on all modules that start with module_name.</span>
+    <span class="c1"># We also exclude our own dependencies, which cause fun errors otherwise.</span>
+    <span class="k">if</span> <span class="n">module_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">module_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="n">module_name</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;jinja2&quot;</span><span class="p">,</span> <span class="s2">&quot;markupsafe&quot;</span><span class="p">,</span> <span class="s2">&quot;markdown2&quot;</span><span class="p">,</span> <span class="s2">&quot;pygments&quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># a more extreme alternative:</span>
+    <span class="c1"># filename = sys.modules[module_name].__file__</span>
+    <span class="c1"># if (</span>
+    <span class="c1">#    filename.startswith(sysconfig.get_path(&quot;platstdlib&quot;))</span>
+    <span class="c1">#    or filename.startswith(sysconfig.get_path(&quot;stdlib&quot;))</span>
+    <span class="c1"># ):</span>
+    <span class="c1">#     return</span>
+
     <span class="n">importlib</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">()</span>
     <span class="n">linecache</span><span class="o">.</span><span class="n">clearcache</span><span class="p">()</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">mod</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modules</span>
-    <span class="p">}</span>
+
+    <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="n">mods</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">mod</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">module_name</span> <span class="o">==</span> <span class="n">mod</span> <span class="ow">or</span> <span class="n">mod</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">:</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod</span><span class="p">])</span>
 </pre></div>
 
             </details>
 
-                    <div class="docstring"><p>Invalidate all module caches to allow live-reloading of modules.
-Getting this right is tricky – we remove a bunch of stuff from <code>sys.modules</code>, which sometimes causes surprising
-side-effects.</p>
+                    <div class="docstring"><p>Invalidate module cache to allow live-reloading of modules.</p>
 </div>
 
 

@@ -63,7 +63,6 @@ exception.</p>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">typing</span>
@@ -79,6 +78,7 @@ exception.</p>
     <span class="n">Literal</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">GenericAlias</span><span class="p">,</span> <span class="n">ForwardRef</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -158,7 +158,7 @@ exception.</p>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">t</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Error parsing type annotation for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">. Import of </span><span class="si">{</span><span class="n">mod</span><span class="si">}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -348,7 +348,7 @@ this function tries to resolve all types using <code><a href="#safe_eval_type">p
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">t</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Error parsing type annotation for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">. Import of </span><span class="si">{</span><span class="n">mod</span><span class="si">}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
