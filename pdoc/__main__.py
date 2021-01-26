@@ -146,6 +146,7 @@ def cli(args: list[str] = None) -> None:
     render.configure(
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
+        docformat=opts.docformat,
     )
 
     if opts.output_directory:
