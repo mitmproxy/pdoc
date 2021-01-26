@@ -4,6 +4,10 @@
 
  - 
 
+# 2021-01-26 pdoc 3.0.1
+
+ - Fix usage of `--docformat`.
+
 # 2021-01-24 pdoc 3.0.0
 
  - Add support for alternative docstring flavors.
