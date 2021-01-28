@@ -1,9 +1,10 @@
 {% extends "frame.html.jinja2" %}
 {% block title %}{{ module.modulename }} API documentation{% endblock %}
 {% block style %}
-    {{ super() | safe }}
-    <style type="text/css">/* Pygments CSS */{{ pygments_css }}</style>
-    <style type="text/css">
+    {% filter minify_css %}
+        {{ super() }}
+        <style type="text/css">/*! pygments */{{ pygments_css }}</style>
+        <style type="text/css">/*! pdoc */
 
         /* General Styles */
         html, main {
@@ -365,7 +366,8 @@
             width: 70px;
             transition: all 200ms;
         }
-    </style>
+        </style>
+    {% endfilter %}
 {% endblock %}
 {% if not bases %}
     {% macro bases(cls) %}
@@ -582,7 +584,7 @@
                 {% endif %}
 
                 {% block attribution %}
-                    <a class="logo" title="built with pdoc" href="https://pdoc.dev">
+                    <a class="logo" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
                         built with {% include 'logo.svg' %}
                     </a>
                 {% endblock %}

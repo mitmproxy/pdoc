@@ -6,12 +6,13 @@ from jinja2 import FileSystemLoader, Environment
 
 import pdoc.doc
 from pdoc.render_helpers import (
-    highlight,
-    linkify,
-    link,
     defuse_unsafe_reprs,
     edit_url,
     formatter,
+    highlight,
+    link,
+    linkify,
+    minify_css,
     render_docstring,
 )
 
@@ -122,6 +123,7 @@ env.filters["render_docstring"] = render_docstring
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link
+env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["edit_url_map"] = {}
 env.globals["docformat"] = ""

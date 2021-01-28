@@ -52,6 +52,7 @@ setup(
         "Jinja2",
         "markdown2",
         "pygments",
+        "MarkupSafe",
         "astunparse; python_version<'3.9'",
     ],
     extras_require={

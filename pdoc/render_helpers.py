@@ -177,6 +177,13 @@ def edit_url(
     return None
 
 
+def minify_css(css: str) -> str:
+    """Do some very basic CSS minification."""
+    css = re.sub(r"[ ]{4}|\n|(?<=[:{}]) | (?=[{}])", "", css)
+    css = re.sub(r"/\*.+?\*/", lambda m: m.group(0) if m.group(0).startswith("/*!") else "", css)
+    return Markup(css.replace("<style", "\n<style"))
+
+
 @contextmanager
 def defuse_unsafe_reprs():
     """This decorator is applied by pdoc before calling an object's repr().

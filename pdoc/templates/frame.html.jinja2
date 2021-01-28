@@ -4,18 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc" />
+    <title>{% block title %}{% endblock %}</title>
     {% block favicon %}
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "favicon.svg" %}{% endfilter %}"/>
     {% endblock %}
-    <title>{% block title %}{% endblock %}</title>
 
     {% block head %}{% endblock %}
-    {# do some very basic CSS minification #}
-    {% autoescape false %}{% filter replace("\n","") | replace("    ","") | replace("<style","\n<style") | indent %}
-        {% block style %}
-            <style type="text/css">{% include 'bootstrap-reboot.min.css' %}</style>
-        {% endblock %}
-    {% endfilter %}{% endautoescape %}
+    {% block style %}
+        <style type="text/css">{% include 'bootstrap-reboot.min.css' %}</style>
+    {% endblock %}
 
 </head>
 <body>{% block body %}{% endblock %}</body>
