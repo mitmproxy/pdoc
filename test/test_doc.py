@@ -68,14 +68,15 @@ def test_var_with_raising_repr():
 
 
 def test_class_with_raising_getattr():
-    class _Raise:
-        def __getattr__(cls, key):
-            raise RuntimeError
+    class _Raise(type):
+        def __getattribute__(cls, key):
+            if key == "__annotations__":
+                raise RuntimeError
+            return super().__getattribute__(key)
 
-    class RaisingGetAttr:
-        x = _Raise()
+    class RaisingGetAttr(metaclass=_Raise):
+        pass
 
     c = Class("test", "Raising", RaisingGetAttr, ("test", "Raising"))
-    assert c.members
-    assert c.taken_from
-    assert repr(c)
+    with pytest.warns(RuntimeWarning, match="getattr.+raised an exception"):
+        assert c.members
