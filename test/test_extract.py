@@ -18,8 +18,8 @@ def test_parse_specs():
 
     with pytest.warns(RuntimeWarning, match="Error importing subpackage"):
         assert list(parse_specs([here / "import_err"])) == [
-            "import_err",
-            "import_err.err",
+            "test.import_err",
+            "test.import_err.err",
         ]
     with pytest.raises(ValueError, match="No valid module specifications found."):
         assert parse_specs([])

@@ -46,7 +46,7 @@ def test_all_with_import_err():
     m = Module(mod)
     with pytest.warns(
         RuntimeWarning,
-        match="Found 'err' in import_err.__all__, but it does not resolve: Error importing import_err",
+        match="Found 'err' in test.import_err.__all__, but it does not resolve: Error importing test.import_err",
     ):
         assert m.members
 
