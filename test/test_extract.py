@@ -10,7 +10,7 @@ here = Path(__file__).parent
 
 def test_parse_specs():
     assert list(parse_specs(["dataclasses"])) == ["dataclasses"]
-    with pytest.raises(ValueError, match="No valid module specifications found."):
+    with pytest.raises(ValueError, match="Module not found"):
         with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
             assert parse_specs(["unknown"])
     with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
@@ -21,7 +21,7 @@ def test_parse_specs():
             "test.import_err",
             "test.import_err.err",
         ]
-    with pytest.raises(ValueError, match="No valid module specifications found."):
+    with pytest.raises(ValueError, match="Module not found"):
         assert parse_specs([])
 
 

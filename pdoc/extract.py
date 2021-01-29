@@ -83,7 +83,7 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
                 except Exception as e:
                     warnings.warn(f"Error importing subpackage: {e!r}", RuntimeWarning)
     if not module_index:
-        raise ValueError(f"No valid module specifications found in {modules!r}.")
+        raise ValueError(f"Module not found: {', '.join(str(x) for x in modules)}.")
 
     return module_index
 
