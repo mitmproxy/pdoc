@@ -56,7 +56,14 @@ def test_var_with_raising_repr():
         def __repr__(self):
             raise RuntimeError
 
-    v = Variable("module", "var", "", ("module", "var"), empty, Raising())
+    v = Variable(
+        "module",
+        "var",
+        taken_from=("module", "var"),
+        docstring="",
+        annotation=empty,
+        default_value=Raising(),
+    )
     assert v.default_value_str == " = <unable to get value representation>"
 
 
@@ -68,7 +75,7 @@ def test_class_with_raising_getattr():
     class RaisingGetAttr:
         x = _Raise()
 
-    c = Class("test", "Raising", RaisingGetAttr)
-
-    with pytest.warns(RuntimeWarning, match="getattr"):
-        assert c.members
+    c = Class("test", "Raising", RaisingGetAttr, ("test", "Raising"))
+    assert c.members
+    assert c.taken_from
+    assert repr(c)

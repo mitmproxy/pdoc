@@ -2,8 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Improve how inherited members are detected.
  - Improve error message when module live-reload fails.
- - Smaller Favicon, improved CSS minification
+ - Smaller favicon, improved CSS minification
 
 # 2021-01-26 pdoc 3.0.1
 

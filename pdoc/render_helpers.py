@@ -180,7 +180,9 @@ def edit_url(
 def minify_css(css: str) -> str:
     """Do some very basic CSS minification."""
     css = re.sub(r"[ ]{4}|\n|(?<=[:{}]) | (?=[{}])", "", css)
-    css = re.sub(r"/\*.+?\*/", lambda m: m.group(0) if m.group(0).startswith("/*!") else "", css)
+    css = re.sub(
+        r"/\*.+?\*/", lambda m: m.group(0) if m.group(0).startswith("/*!") else "", css
+    )
     return Markup(css.replace("<style", "\n<style"))
 
 
