@@ -33,6 +33,7 @@ from typing import (  # type: ignore
     get_origin,
     ClassVar,
     Generic,
+    Optional,
 )
 
 from pdoc import doc_ast, extract
@@ -300,16 +301,16 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return flattened
 
     @cache
-    def contains(self, identifier: str) -> bool:
-        """Returns `True` if the current namespace contains a particular identifier, `False` otherwise."""
+    def get(self, identifier: str) -> Optional[Doc]:
+        """Returns the documentation object for a particular identifier, or `None` if the identifier cannot be found."""
         head, _, tail = identifier.partition(".")
         if tail:
             h = self.members.get(head, None)
             if isinstance(h, Namespace):
-                return h.contains(tail)
-            return False
+                return h.get(tail)
+            return None
         else:
-            return identifier in self.members
+            return self.members.get(identifier, None)
 
 
 class Module(Namespace[types.ModuleType]):
@@ -348,10 +349,18 @@ class Module(Namespace[types.ModuleType]):
         return doc_ast.walk_tree(self.obj).docstrings
 
     def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        if obj is empty:
+            return self.modulename, f"{self.qualname}.{member_name}".lstrip(".")
+        if isinstance(obj, types.ModuleType):
+            return obj.__name__, ""
+
         mod = _safe_getattr(obj, "__module__", None)
         qual = _safe_getattr(obj, "__qualname__", None)
-        if mod and qual and "<locals>" not in qual and obj is not empty:
+        if mod and qual and "<locals>" not in qual:
             return mod, qual
+        elif mod and mod != self.modulename:
+            # This might be wrong, but it's the best guess we have.
+            return mod, f"{self.qualname}.{member_name}".lstrip(".")
         else:
             # We could conceivably also walk the AST here for imports,
             # which would turn up the origin of variables.
@@ -426,10 +435,12 @@ class Module(Namespace[types.ModuleType]):
 
         else:
             for name, obj in self.obj.__dict__.items():
+                # We already exclude everything here that is imported, only a TypeVar,
+                # or a variable without annotation and docstring.
+                # If one needs to document one of these things, __all__ is the correct way.
                 if isinstance(obj, TypeVar):
                     continue
                 obj_module = inspect.getmodule(obj)
-                # TODO: https://github.com/mitmproxy/pdoc/issues/208
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
                     obj_module, "__name__", None
                 )
@@ -892,7 +903,7 @@ class _PrettySignature(inspect.Signature):
         # ✂ end ✂
 
         if len(rendered) > 70:
-            rendered = "(\n\t" + ",\n\t".join(result) + "\n)"
+            rendered = "(\n    " + ",\n    ".join(result) + "\n)"
             if self.return_annotation is not _empty:
                 rendered += f" -> {formatannotation(self.return_annotation)}"
 

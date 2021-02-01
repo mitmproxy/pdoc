@@ -2,7 +2,14 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-02-01 pdoc 4.0.0
+
  - Improve how inherited members are detected.
+   `Doc.declared_at` is superseded by `Doc.taken_from`,
+   which is a relatively minor but breaking change in the Python API.
+ - Bugfix: Don't link private members in the same module.
  - Improve error message when module live-reload fails.
  - Smaller favicon, improved CSS minification
  - Improve error message if module is not found.

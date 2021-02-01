@@ -1,4 +1,5 @@
 <module misc
+    <method def bad_qualname(self, a: int, b: Literal['w', 'r'], c: bool = True) -> None: ...  # inherited from demo_long.bad_qualname>
     <var only_annotated: int>
     <class misc.CustomException  # custom exception typ…
         <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>

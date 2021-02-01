@@ -5,10 +5,10 @@ This …
     <var FOO_SINGLETON: demo_long.Foo  # This variable is ann…>
     <function def a_simple_function(a: str) -> str: ...  # This is a basic modu…>
     <function def a_complex_function(
-    	a: str,
-    	b: Union[demo_long.Foo, str],
-    	*,
-    	c: Optional[~T] = None
+        a: str,
+        b: Union[demo_long.Foo, str],
+        *,
+        c: Optional[~T] = None
     ) -> Optional[~T]: ...  # This is a function w…>
     <class demo_long.Foo  # `Foo` is a basic cla…
         <method def __init__(self): ...  # The constructor is c…>
