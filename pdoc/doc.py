@@ -67,7 +67,7 @@ class Doc(Generic[T]):
 
     modulename: str
     """
-    The module that this object was defined in, for example `pdoc.doc`.
+    The module that this object is in, for example `pdoc.doc`.
     """
 
     qualname: str
@@ -90,7 +90,16 @@ class Doc(Generic[T]):
     The underlying Python object.
     """
 
-    def __init__(self, modulename: str, qualname: str, obj: T):
+    taken_from: tuple[str, str]
+    """
+    `(modulename, qualname)` of this doc object's original location.
+    In the context of a module, this points to the location it was imported from,
+    in the context classes, this points to the class an attribute is inherited from.
+    """
+
+    def __init__(
+        self, modulename: str, qualname: str, obj: T, taken_from: tuple[str, str]
+    ):
         """
         Initializes a documentation object, where
         `modulename` is the name this module is defined in,
@@ -100,6 +109,7 @@ class Doc(Generic[T]):
         self.modulename = modulename
         self.qualname = qualname
         self.obj = obj
+        self.taken_from = taken_from
 
     @cached_property
     def fullname(self) -> str:
@@ -136,16 +146,6 @@ class Doc(Generic[T]):
         return doc_ast.get_source(self.obj)
 
     @cached_property
-    def declared_at(self) -> tuple[str, str]:
-        """Returns `(modulename, qualname)` of where this doc object was declared."""
-        mod = _safe_getattr(self.obj, "__module__", None)
-        qual = _safe_getattr(self.obj, "__qualname__", None)
-        if mod is None or qual is None or "<locals>" in qual:
-            return self.modulename, self.qualname
-        else:
-            return mod, qual
-
-    @cached_property
     def is_inherited(self) -> bool:
         """
         If True, the doc object is inherited from another location.
@@ -153,7 +153,7 @@ class Doc(Generic[T]):
         but can also apply to variables that are assigned a class defined
         in a different module.
         """
-        return (self.modulename, self.qualname) != self.declared_at
+        return (self.modulename, self.qualname) != self.taken_from
 
     @classmethod
     @property
@@ -193,10 +193,9 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     def _var_docstrings(self) -> dict[str, str]:
         """A mapping from some member variable names to their docstrings."""
 
-    @cached_property
     @abstractmethod
-    def _declared_at(self) -> dict[str, tuple[str, str]]:
-        """A mapping from some members to their (modulename, qualname) declaration location."""
+    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        """The location this member was taken from. If unknown, (modulename, qualname) is returned."""
 
     @cached_property
     @abstractmethod
@@ -214,23 +213,25 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         members: dict[str, Doc] = {}
         for name, obj in self._member_objects.items():
             qualname = f"{self.qualname}.{name}".lstrip(".")
+            taken_from = self._taken_from(name, obj)
             doc: Doc[Any]
 
+            is_classmethod = isinstance(obj, classmethod)
             is_property = (
                 isinstance(obj, (property, cached_property))
                 or
-                # Python 3.9: @classmethod @property is allowed.
-                isinstance(
-                    _safe_getattr(obj, "__func__", None), (property, cached_property)
-                )
+                # Python 3.9: @classmethod @property is now allowed.
+                is_classmethod
+                and isinstance(obj.__func__, (property, cached_property))
             )
             if is_property:
                 func = obj
-                if _safe_getattr(obj, "__func__", None):
+                if is_classmethod:
                     func = obj.__func__
                 if isinstance(func, property):
                     func = func.fget
                 else:
+                    assert isinstance(func, cached_property)
                     func = func.func
                 annotation = resolve_annotations(
                     _safe_getattr(func, "__annotations__", {}),
@@ -243,14 +244,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     docstring=func.__doc__ or "",
                     annotation=annotation,
                     default_value=empty,
-                    declared_at=self._declared_at.get(
-                        name, (self.modulename, qualname)
-                    ),
+                    taken_from=taken_from,
                 )
             elif inspect.isroutine(obj):
-                doc = Function(self.modulename, qualname, obj)
+                doc = Function(self.modulename, qualname, obj, taken_from)
             elif inspect.isclass(obj) and obj is not empty:
-                doc = Class(self.modulename, qualname, obj)
+                doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
                 doc = Module(obj)
             else:
@@ -261,22 +260,20 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     docstring=docstring,
                     annotation=self._var_annotations.get(name, empty),
                     default_value=obj,
-                    declared_at=self._declared_at.get(
-                        name, (self.modulename, qualname)
-                    ),
+                    taken_from=taken_from,
                 )
             members[doc.name] = doc
         return members
 
     @cached_property
-    def _members_by_declared_location(self) -> dict[tuple[str, str], list[Doc]]:
-        """A mapping from (modulename, qualname) locations to the attributes declared in that path"""
+    def _members_by_origin(self) -> dict[tuple[str, str], list[Doc]]:
+        """A mapping from (modulename, qualname) locations to the attributes taken from that path"""
         locations: dict[tuple[str, str], list[Doc]] = {}
         for member in self.members.values():
-            mod, qualname = member.declared_at
-            qualname = ".".join(qualname.split(".")[:-1])
-            locations.setdefault((mod, qualname), [])
-            locations[(mod, qualname)].append(member)
+            mod, qualname = member.taken_from
+            parent_qualname = ".".join(qualname.rsplit(".", maxsplit=1)[:-1])
+            locations.setdefault((mod, parent_qualname), [])
+            locations[(mod, parent_qualname)].append(member)
         return locations
 
     @cached_property
@@ -284,8 +281,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         """A mapping from (modulename, qualname) locations to the attributes inherited from that path"""
         return {
             k: v
-            for k, v in self._members_by_declared_location.items()
-            if k not in (self.declared_at, (self.modulename, self.qualname))
+            for k, v in self._members_by_origin.items()
+            if k not in (self.taken_from, (self.modulename, self.qualname))
         }
 
     @cached_property
@@ -320,12 +317,15 @@ class Module(Namespace[types.ModuleType]):
     Representation of a module's documentation.
     """
 
-    def __init__(self, module: types.ModuleType):
+    def __init__(
+        self,
+        module: types.ModuleType,
+    ):
         """
         Creates a documentation object given the actual
         Python module object.
         """
-        super().__init__(module.__name__, "", module)
+        super().__init__(module.__name__, "", module, (module.__name__, ""))
 
     @cache
     @_include_fullname_in_traceback
@@ -347,9 +347,15 @@ class Module(Namespace[types.ModuleType]):
     def _var_docstrings(self) -> dict[str, str]:
         return doc_ast.walk_tree(self.obj).docstrings
 
-    @cached_property
-    def _declared_at(self) -> dict[str, tuple[str, str]]:
-        return {}
+    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        mod = _safe_getattr(obj, "__module__", None)
+        qual = _safe_getattr(obj, "__qualname__", None)
+        if mod and qual and "<locals>" not in qual and obj is not empty:
+            return mod, qual
+        else:
+            # We could conceivably also walk the AST here for imports,
+            # which would turn up the origin of variables.
+            return self.modulename, f"{self.qualname}.{member_name}".lstrip(".")
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
@@ -423,6 +429,7 @@ class Module(Namespace[types.ModuleType]):
                 if isinstance(obj, TypeVar):
                     continue
                 obj_module = inspect.getmodule(obj)
+                # TODO: https://github.com/mitmproxy/pdoc/issues/208
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
                     obj_module, "__name__", None
                 )
@@ -477,19 +484,23 @@ class Class(Namespace[type]):
         return docstrings
 
     @cached_property
-    def _declared_at(self) -> dict[str, tuple[str, str]]:
-        declared_at: dict[str, tuple[str, str]] = {}
+    def _declarations(self) -> dict[str, tuple[str, str]]:
+        decls: dict[str, tuple[str, str]] = {}
         for cls in self.obj.__mro__:
             treeinfo = doc_ast.walk_tree(cls)
             for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
-                declared_at.setdefault(
-                    name, (cls.__module__, f"{cls.__qualname__}.{name}")
-                )
+                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
             for name in cls.__dict__:
-                declared_at.setdefault(
-                    name, (cls.__module__, f"{cls.__qualname__}.{name}")
-                )
-        return declared_at
+                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
+        if decls.get("__init__", None) == ("builtins", "object.__init__"):
+            decls["__init__"] = (
+                self.obj.__module__,
+                f"{self.obj.__qualname__}.__init__",
+            )
+        return decls
+
+    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        return self._declarations[member_name]
 
     @cached_property
     def _var_annotations(self) -> dict[str, type]:
@@ -513,13 +524,11 @@ class Class(Namespace[type]):
 
     @cached_property
     def own_members(self) -> list[Doc]:
-        members = self._members_by_declared_location.get(
-            (self.modulename, self.qualname), []
-        )
-        if self.declared_at != (self.modulename, self.qualname):
-            # .declared_at may be != (self.modulename, self.qualname), for example when
+        members = self._members_by_origin.get((self.modulename, self.qualname), [])
+        if self.taken_from != (self.modulename, self.qualname):
+            # .taken_from may be != (self.modulename, self.qualname), for example when
             # a module re-exports a class from a private submodule.
-            members += self._members_by_declared_location.get(self.declared_at, [])
+            members += self._members_by_origin.get(self.taken_from, [])
         return members
 
     @cached_property
@@ -643,14 +652,16 @@ class Function(Doc[types.FunctionType]):
         modulename: str,
         qualname: str,
         func: WrappedFunction,
+        taken_from: tuple[str, str],
     ):
         """Initialize a function's documentation object."""
         unwrapped: types.FunctionType
         if isinstance(func, (classmethod, staticmethod)):
+            # noinspection PyTypeChecker
             unwrapped = func.__func__  # type: ignore
         else:
             unwrapped = func
-        super(Function, self).__init__(modulename, qualname, unwrapped)
+        super().__init__(modulename, qualname, unwrapped, taken_from)
         self.wrapped = func
 
     @cache
@@ -725,11 +736,15 @@ class Function(Doc[types.FunctionType]):
             )
         mod = inspect.getmodule(self.obj)
         globalns = _safe_getattr(mod, "__dict__", {})
+
         if self.name == "__init__":
+            # noinspection PyTypeHints
             sig._return_annotation = empty  # type: ignore
         else:
+            # noinspection PyTypeHints
             sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)  # type: ignore
         for p in sig.parameters.values():
+            # noinspection PyTypeHints
             p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
         return sig
 
@@ -762,8 +777,9 @@ class Variable(Doc[None]):
         self,
         modulename: str,
         qualname: str,
+        *,
+        taken_from: tuple[str, str],
         docstring: str,
-        declared_at: tuple[str, str],
         annotation: Union[type, empty] = empty,
         default_value: Union[Any, empty] = empty,
     ):
@@ -775,9 +791,8 @@ class Variable(Doc[None]):
         As such, docstring, declaration location, type annotation, and the default value
         must be passed manually in the constructor.
         """
-        super().__init__(modulename, qualname, None)
+        super().__init__(modulename, qualname, None, taken_from)
         self.docstring = inspect.cleandoc(docstring)
-        self.declared_at = declared_at
         self.annotation = annotation
         self.default_value = default_value
 
@@ -896,7 +911,7 @@ def _docstr(doc: "Doc") -> str:
     """helper function for Doc.__repr__()"""
     docstr = []
     if doc.is_inherited:
-        docstr.append(f"inherited from {'.'.join(doc.declared_at)}")
+        docstr.append(f"inherited from {'.'.join(doc.taken_from)}")
     if doc.docstring:
         docstr.append(_cut(doc.docstring))
     if docstr:

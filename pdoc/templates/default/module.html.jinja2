@@ -519,7 +519,7 @@
             {% set member_html %}
                 {% for m in members if is_public(m) | trim %}
                     <dd class="{{ m.type }}">
-                        {{- m.declared_at | link(text=m.name.replace("__init__",base[1])) -}}
+                        {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
                     </dd>
                 {% endfor %}
             {% endset %}

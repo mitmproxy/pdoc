@@ -61,9 +61,8 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 return mtime
 
-            extract.invalidate_caches(module)
-
             try:
+                extract.invalidate_caches(module)
                 mod = doc.Module(extract.load_module(module))
             except Exception:
                 self.send_response(500)

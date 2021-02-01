@@ -1,18 +1,18 @@
 <module demopackage  # A test package
     <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
-        <method def __init__(): ...>
+        <method def __init__(): ...  # inherited from demopackage._child_d.Test.__init__>
         <method def foo(self, a: int): ...  # inherited from demopackage._child_d.Test.foo, Do foo.>>
     <module demopackage.child_b  # child_b docstr>
     <module demopackage.child_c  # child_c docstr>
     <module misc
         <var only_annotated: int>
         <class misc.CustomException  # custom exception typ…
-            <method def __init__(self, /, *args, **kwargs): ...>
-            <method def with_traceback(unknown): ...  # Exception.with_trace…>
+            <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
+            <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
             <var args = <attribute 'args' of 'BaseException' objects>  # inherited from builtins.BaseException.args>>
         <class misc.LambdaAttr
             <method def __init__(): ...>
-            <method def attr(x): ...  # inherited from misc.LambdaAttr.<lambda>>>
+            <method def attr(x): ...>>
         <function def foo(): ...  # no indents>
         <function def bar(): ...  # no
         indents>

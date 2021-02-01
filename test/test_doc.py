@@ -46,7 +46,7 @@ def test_all_with_import_err():
     m = Module(mod)
     with pytest.warns(
         RuntimeWarning,
-        match="Found 'err' in import_err.__all__, but it does not resolve: Error importing import_err",
+        match="Found 'err' in test.import_err.__all__, but it does not resolve: Error importing test.import_err",
     ):
         assert m.members
 
@@ -56,19 +56,27 @@ def test_var_with_raising_repr():
         def __repr__(self):
             raise RuntimeError
 
-    v = Variable("module", "var", "", ("module", "var"), empty, Raising())
+    v = Variable(
+        "module",
+        "var",
+        taken_from=("module", "var"),
+        docstring="",
+        annotation=empty,
+        default_value=Raising(),
+    )
     assert v.default_value_str == " = <unable to get value representation>"
 
 
 def test_class_with_raising_getattr():
-    class _Raise:
-        def __getattr__(cls, key):
-            raise RuntimeError
+    class _Raise(type):
+        def __getattribute__(cls, key):
+            if key == "__annotations__":
+                raise RuntimeError
+            return super().__getattribute__(key)
 
-    class RaisingGetAttr:
-        x = _Raise()
+    class RaisingGetAttr(metaclass=_Raise):
+        pass
 
-    c = Class("test", "Raising", RaisingGetAttr)
-
-    with pytest.warns(RuntimeWarning, match="getattr"):
+    c = Class("test", "Raising", RaisingGetAttr, ("test", "Raising"))
+    with pytest.warns(RuntimeWarning, match="getattr.+raised an exception"):
         assert c.members
