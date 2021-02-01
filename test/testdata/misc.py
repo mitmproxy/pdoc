@@ -1,5 +1,11 @@
 from functools import lru_cache
 
+import demo_long
+
+# Testing a proper __module__, but no useful __qualname__ attribute.
+
+bad_qualname = demo_long.DataDemo.__init__
+
 # Testing that an attribute that is only annotated does not trigger a "submodule not found" warning.
 
 only_annotated: int
@@ -103,6 +109,7 @@ indents"""
 
 
 __all__ = [  # noqa
+    "bad_qualname",
     "only_annotated",
     "CustomException",
     "_Private",
