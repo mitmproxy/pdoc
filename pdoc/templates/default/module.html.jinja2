@@ -360,7 +360,7 @@
             filter: grayscale(0%);
         }
 
-        .logo svg {
+        .logo img {
             margin-left: 5px;
             height: 35px;
             width: 70px;
@@ -585,7 +585,7 @@
 
                 {% block attribution %}
                     <a class="logo" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-                        built with {% include 'logo.svg' %}
+                        built with <img alt="pdoc" src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
                     </a>
                 {% endblock %}
             </div>
