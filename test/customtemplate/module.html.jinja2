@@ -4,18 +4,19 @@ Invoke like so: pdoc -t ./customtemplate [module]
 #}
 
 {#
-We want to extend from the default template instead of redefining everything ourselves.
+We want to extend the default template instead of defining everything ourselves.
 #}
 {% extends "default/module.html.jinja2" %}
 
 {#
-Don't show "View Source" button
+We don't want to show the "View Source" button, so we override the macro with an empty one.
 #}
 {% macro view_source(obj) %}{% endmacro %}
 
 {#
-Expose a private function (Dog.__lt__)
-This is not recommended, see the https://pdoc.dev/docs/pdoc.html#control-what-is-documented
+We can also adjust which members are documented by overriding the is_public macro.
+In this example, the private function `Dog.__lt__` is exposed publicly.
+However, doing this is not recommended, see https://pdoc.dev/docs/pdoc.html#control-what-is-documented.
 #}
 {% macro is_public(doc) %}
     {% if doc.qualname == "Dog.__lt__" %}
