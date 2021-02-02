@@ -1,8 +1,10 @@
 # Release History
 
-# Unreleased: pdoc next
+# Unreleased: pdoc 5.0.0
 
- - 
+ - Make it easier to embed pdoc into other systems:
+   See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
+ - Add header anchors to documentation items.
 
 # 2021-02-01 pdoc 4.0.0
 

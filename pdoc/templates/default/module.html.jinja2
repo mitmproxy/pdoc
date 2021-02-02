@@ -3,370 +3,429 @@
 {% block style %}
     {% filter minify_css %}
         {{ super() }}
-        <style type="text/css">/*! pygments */{{ pygments_css }}</style>
-        <style type="text/css">/*! pdoc */
+        {% block style_pygments %}
+            <style type="text/css">/*! pygments */{{ pygments_css }}</style>
+        {% endblock %}
+        {% block style_pdoc %}
+            <style type="text/css">/*! pdoc */
+            {#
+             pdoc's CSS style is divided into two Jinja2 blocks:
+               - style_layout: The responsive page layout and navigation menu.
+               - style_content: The documentation contents.
 
-        /* General Styles */
-        html, main {
-            scroll-behavior: smooth;
-        }
+             This makes it easier to embed pdoc into other systems,
+             see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
+             #}
 
-        h1, h2, h3, h4 {
-            font-weight: 300;
-            margin: .3em 0;
-            padding: .2em 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: #3660a5;
-        }
-
-        code {
-            color: #24292e;
-            padding: .2em .4em;
-            margin: 0;
-            font-size: 85%;
-            background-color: rgba(27, 31, 35, 0.05);
-            border-radius: 6px;
-        }
-
-        pre code {
-            display: inline-block;
-            background: none;
-            padding: 0;
-        }
-
-        blockquote {
-            margin-left: 2rem;
-        }
-
-        .button {
-            display: inline-block;
-            border: solid black 1px;
-            border-radius: 2px;
-            font-size: .75rem;
-            padding: calc(0.5em - 1px) 1em;
-            transition: 100ms all;
-        }
-
-        /* Responsive Layout */
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        @media (max-width: 769px) {
-            label[for=navtoggle] {
-                cursor: pointer;
-                position: absolute;
-                width: 50px;
-                height: 40px;
-                top: 1rem;
-                right: 1rem;
-                color: rgba(0, 0, 0, .55);
-                border-color: rgba(0, 0, 0, .1);
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            .pdoc {
+                box-sizing: border-box;
             }
 
-            main {
-                padding: 2rem 3vw;
+            .pdoc-button {
+                display: inline-block;
+                border: solid black 1px;
+                border-radius: 2px;
+                font-size: .75rem;
+                padding: calc(0.5em - 1px) 1em;
+                transition: 100ms all;
             }
 
-            label[for=navtoggle]:hover {
-                border-color: rgba(0, 0, 0, .5);
-            }
+            {% block style_layout %}
+                /* Responsive Layout */
+                html, body {
+                    width: 100%;
+                    height: 100%;
+                }
 
-            #navtoggle + div {
-                display: none;
-            }
+                @media (max-width: 769px) {
+                    label[for=navtoggle] {
+                        cursor: pointer;
+                        position: absolute;
+                        width: 50px;
+                        height: 40px;
+                        top: 1rem;
+                        right: 1rem;
+                        color: rgba(0, 0, 0, .55);
+                        border-color: rgba(0, 0, 0, .1);
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+                    }
 
-            #navtoggle:checked + div {
-                display: inherit;
-            }
+                    main {
+                        padding: 2rem 3vw;
+                    }
 
-            .git-button {
-                display: none !important;
-            }
-        }
+                    label[for=navtoggle]:hover {
+                        border-color: rgba(0, 0, 0, .5);
+                    }
 
-        @media (min-width: 770px) {
-            :root {
-                --sidebar-width: clamp(12.5rem, 28vw, 22rem);
-            }
+                    #navtoggle + div {
+                        display: none;
+                    }
 
-            nav {
-                position: fixed;
-                overflow: auto;
-                height: 100vh;
-                width: var(--sidebar-width);
-            }
+                    #navtoggle:checked + div {
+                        display: inherit;
+                    }
 
-            main {
-                padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
-                width: calc(54rem + var(--sidebar-width));
-                max-width: 100%;
-            }
+                    .git-button {
+                        display: none !important;
+                    }
+                }
 
-            label[for=navtoggle] {
-                display: none;
-            }
-        }
+                @media (min-width: 770px) {
+                    :root {
+                        --sidebar-width: clamp(12.5rem, 28vw, 22rem);
+                    }
 
-        #navtoggle {
-            display: none;
-        }
+                    nav {
+                        position: fixed;
+                        overflow: auto;
+                        height: 100vh;
+                        width: var(--sidebar-width);
+                    }
 
-        /* Nav */
-        nav {
-            --pad: 1.75rem;
-            --indent: 1.5rem;
-            background-color: #eee;
-            border-right: 1px solid #c1c1c1;
-            box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
-            padding: 0 0 0 var(--pad);
-            overflow-wrap: anywhere;
-        }
+                    main {
+                        padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
+                        width: calc(54rem + var(--sidebar-width));
+                        max-width: 100%;
+                    }
 
-        nav > div {
-            padding: var(--pad) 0;
-        }
+                    label[for=navtoggle] {
+                        display: none;
+                    }
+                }
 
-        nav::-webkit-scrollbar {
-            width: 10px;
-        }
+                #navtoggle {
+                    display: none;
+                }
 
-        nav {
-            scrollbar-width: thin;
-        }
+                /* Nav */
+                nav.pdoc {
+                    --pad: 1.75rem;
+                    --indent: 1.5rem;
+                    background-color: #eee;
+                    border-right: 1px solid #c1c1c1;
+                    box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
+                    padding: 0 0 0 var(--pad);
+                    overflow-wrap: anywhere;
+                    scrollbar-width: thin;
+                }
 
-        nav::-webkit-scrollbar-thumb {
-            background-color: #c1c1c1;
-        }
+                nav.pdoc::-webkit-scrollbar {
+                    width: 10px;
+                }
 
-        .module-list-button {
-            background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
-            background-position: 1em center;
-            background-repeat: no-repeat;
-            color: #333;
-            border-color: #999;
-            padding-left: calc(1em + 18px);
-            margin-bottom: 1rem;
-        }
+                nav.pdoc::-webkit-scrollbar-thumb {
+                    background-color: #c1c1c1;
+                }
 
-        .module-list-button:hover {
-            border-color: black;
-        }
+                nav.pdoc > div {
+                    padding: var(--pad) 0;
+                }
 
-        nav ul {
-            list-style: none;
-            padding-left: 0;
-        }
+                nav.pdoc .module-list-button {
+                    display: inline-block;
+                    background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
+                    background-position: 1em center;
+                    background-repeat: no-repeat;
+                    color: #333;
+                    border-color: #999;
+                    padding-left: calc(1em + 18px);
+                    margin-bottom: 1rem;
+                }
 
-        nav li {
-            display: block;
-            margin: 0;
-            padding: .2rem 0 .2rem var(--indent);
-            transition: all 100ms;
-        }
+                nav.pdoc .module-list-button:hover {
+                    border-color: black;
+                }
 
-        nav > div > ul > li {
-            padding-left: 0;
-        }
+                nav.pdoc ul {
+                    list-style: none;
+                    padding-left: 0;
+                }
 
-        nav li:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-        }
+                nav.pdoc li {
+                    display: block;
+                    margin: 0;
+                    padding: .2rem 0 .2rem var(--indent);
+                    transition: all 100ms;
+                }
 
-        nav a {
-            color: #333;
-            display: block;
-        }
+                nav.pdoc > div > ul > li {
+                    padding-left: 0;
+                }
 
-        nav .class:before, .inherited .class:before {
-            content: "class ";
-            color: gray;
-        }
+                nav.pdoc li:hover {
+                    background-color: rgba(255, 255, 255, 0.5);
+                }
 
-        nav > h2:first-of-type {
-            margin-top: 1.5rem;
-        }
+                nav.pdoc a {
+                    color: #333;
+                    display: block;
+                }
 
-        nav .function:after, .inherited .function a:after {
-            content: "()";
-            color: gray;
-        }
+                nav.pdoc > h2:first-of-type {
+                    margin-top: 1.5rem;
+                }
 
-        /* Content */
-        main {
-            overflow-x: hidden;
-        }
+                nav.pdoc .class:before {
+                    content: "class ";
+                    color: gray;
+                }
 
-        main > section:first-of-type .docstring {
-            margin-bottom: 3rem;
-        }
+                nav.pdoc .function:after {
+                    content: "()";
+                    color: gray;
+                }
+            {% endblock %}
 
-        .git-button {
-            float: right;
-            border: solid #3273dc 1px;
-        }
+            {% block style_content %}
+                {#
+                In this block, all selectors are scopoed with ".pdoc".
+                This makes sure that the pdoc styling doesn't leak to the rest of the page.
+                 #}
+                /* General styling */
+                html, main {
+                    scroll-behavior: smooth;
+                }
 
-        .git-button:hover {
-            background-color: #3273dc;
-            color: white;
-        }
+                .pdoc h1, .pdoc h2, .pdoc h3, .pdoc h4 {
+                    font-weight: 300;
+                    margin: .3em 0;
+                    padding: .2em 0;
+                }
 
-        .modulename {
-            margin-top: 0;
-            font-weight: bold;
-        }
+                .pdoc a {
+                    text-decoration: none;
+                    color: #3660a5;
+                }
 
-        .modulename a {
-            color: #3660a5;
-            transition: 100ms all;
-        }
+                .pdoc blockquote {
+                    margin-left: 2rem;
+                }
 
-        .modulename a:hover {
-            color: #1659c5;
-        }
+                .pdoc pre {
+                    background-color: #f7f7f7;
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    margin-bottom: 1em;
+                    padding: .5rem 0 .5rem .5rem;
+                }
 
-        details {
-            --shift: -40px;
-            text-align: right;
-            margin-top: var(--shift);
-            margin-bottom: calc(0px - var(--shift));
-            clear: both;
-        }
+                .pdoc code {
+                    color: #24292e;
+                    padding: .2em .4em;
+                    margin: 0;
+                    font-size: 85%;
+                    background-color: rgba(27, 31, 35, 0.05);
+                    border-radius: 6px;
+                }
 
-        details:not([open]) {
-            height: 0;
-            overflow: visible;
-        }
+                .pdoc pre > code {
+                    display: inline-block;
+                    font-size: inherit;
+                    background: none;
+                    padding: 0;
+                }
 
-        summary.button {
-            color: #666;
-            border-width: 0;
-            padding: 0 .7em;
-            display: inline-block;
-            user-select: none;
-        }
+                /* Page Heading */
+                .pdoc .modulename {
+                    margin-top: 0;
+                    font-weight: bold;
+                }
 
-        summary:focus {
-            outline: 0;
-        }
+                .pdoc .modulename a {
+                    color: #3660a5;
+                    transition: 100ms all;
+                }
 
-        details > div {
-            margin-top: calc(0px - var(--shift) / 2);
-            text-align: left;
-        }
+                .pdoc .modulename a:hover {
+                    color: #1659c5;
+                }
 
-        pre {
-            background-color: #f7f7f7;
-            border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: .5em;
-            padding: .5rem 0 .5rem .5rem;
-        }
+                /* GitHub Button */
+                .pdoc .git-button {
+                    float: right;
+                    border: solid #3273dc 1px;
+                }
 
-        pre > code {
-            padding: 0;
-            background: none;
-        }
+                .pdoc .git-button:hover {
+                    background-color: #3273dc;
+                    color: white;
+                }
 
-        .docstring pre {
-            margin-left: 1em;
-            margin-right: 1em;
-        }
+                /* View Source */
+                .pdoc details {
+                    --shift: -40px;
+                    text-align: right;
+                    margin-top: var(--shift);
+                    margin-bottom: calc(0px - var(--shift));
+                    clear: both;
+                }
 
-        .docstring {
-            margin-bottom: 1.5rem;
-        }
+                .pdoc details:not([open]) {
+                    height: 0;
+                    overflow: visible;
+                }
 
-        h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
-            background-color: #fff7a8;
-            box-shadow: -1rem 0 0 0 #fff7a8;
-        }
+                .pdoc details > summary {
+                    font-size: .75rem;
+                    cursor: pointer;
+                    color: #666;
+                    border-width: 0;
+                    padding: 0 .7em;
+                    display: inline-block;
+                    user-select: none;
+                }
 
-        div:target > .attr, section:target > .attr {
-            background-color: #fff598;
-        }
+                .pdoc details > summary:focus {
+                    outline: 0;
+                }
 
-        .attr:hover {
-            background-color: #dadada;
-        }
+                .pdoc details > div {
+                    margin-top: calc(0px - var(--shift) / 2);
+                    text-align: left;
+                }
 
-        .attr {
-            color: black;
-            margin: 1rem 0 .5rem;
-            /*
-            lots of padding on the right to accomodate view source button.
-            This is not ideal, but probably good enough for now.
-            */
-            padding: .4rem 5rem .4rem 1rem;
-            background-color: #eee;
-        }
+                /* Docstrings */
+                .pdoc .docstring {
+                    margin-bottom: 1.5rem;
+                }
 
-        .classattr, .inherited {
-            margin-left: 2rem;
-        }
+                .pdoc > section:first-of-type > .docstring {
+                    margin-bottom: 3rem;
+                }
 
-        .name {
-            color: #0066BB;
-            font-weight: bold;
-        }
+                .pdoc .docstring pre {
+                    margin-left: 1em;
+                    margin-right: 1em;
+                }
 
-        .def {
-            color: #008800;
-            font-weight: bold;
-        }
+                /* Highlight focused element */
+                .pdoc h1:target, .pdoc h2:target, .pdoc h3:target, .pdoc h4:target, .pdoc h5:target, .pdoc h6:target {
+                    background-color: #fff7a8;
+                    box-shadow: -1rem 0 0 0 #fff7a8;
+                }
 
-        .function .signature {
-            white-space: pre-wrap;
-        }
+                .pdoc div:target > .attr, .pdoc section:target > .attr {
+                    background-color: #fff598;
+                }
 
-        .annotation {
-            color: #007020;
-        }
+                .pdoc .attr:hover {
+                    background-color: #eaeaea;
+                }
 
-        dt, dd {
-            display: inline;
-        }
+                /* Header link */
+                .pdoc .headerlink {
+                    position: absolute;
+                    width: 0;
+                    margin-left: -2.5rem;
+                    margin-top: -.5ex;
+                    font-size: 1.5rem;
+                    transition: all 100ms ease-in-out;
+                    opacity: 0;
+                }
 
-        dd:not(:last-child):after {
-            content: ", ";
-        }
+                .pdoc div:hover > .headerlink,
+                .pdoc div:target > .attr > .headerlink,
+                .pdoc section:target > .attr > .headerlink {
+                    opacity: 1;
+                }
 
-        .int, .nonetype {
-            color: #666;
-        }
+                /* Attributes */
+                .pdoc .attr {
+                    color: black;
+                    margin: 1rem 0 .5rem;
+                    /*
+                    lots of padding on the right to accomodate the view source button.
+                    This is not ideal, but probably good enough for now.
+                    */
+                    padding: .4rem 5rem .4rem 1rem;
+                    background-color: #eee;
+                }
 
-        .str {
-            color: #BA2121;
-        }
+                .pdoc .classattr {
+                    margin-left: 2rem;
+                }
 
-        /* pdoc logo */
-        .logo {
-            margin-top: 2rem;
-            display: block;
-            opacity: 0.5;
-            transition: all 200ms;
-            filter: grayscale(100%);
-        }
+                .pdoc .name {
+                    color: #0066BB;
+                    font-weight: bold;
+                }
 
-        .logo:hover {
-            opacity: 1;
-            filter: grayscale(0%);
-        }
+                .pdoc .def {
+                    color: #008800;
+                    font-weight: bold;
+                }
 
-        .logo img {
-            margin-left: 5px;
-            height: 35px;
-            width: 70px;
-            transition: all 200ms;
-        }
-        </style>
+                .pdoc .signature {
+                    white-space: pre-wrap;
+                }
+
+                .pdoc .annotation {
+                    color: #007020;
+                }
+
+                .pdoc .int, .pdoc .nonetype {
+                    color: #666;
+                }
+
+                .pdoc .str {
+                    color: #BA2121;
+                }
+
+                /* Inherited Members */
+                .pdoc .inherited {
+                    margin-left: 2rem;
+                }
+
+                .pdoc .inherited dt {
+                    font-weight: 700;
+                }
+
+                .pdoc .inherited dt, .pdoc .inherited dd {
+                    display: inline;
+                    margin-left: 0;
+                    margin-bottom: .5rem;
+                }
+
+                .pdoc .inherited dd:not(:last-child):after {
+                    content: ", ";
+                }
+
+                .pdoc .inherited .class:before {
+                    content: "class ";
+                    color: gray;
+                }
+
+                .pdoc .inherited .function a:after {
+                    content: "()";
+                    color: gray;
+                }
+
+                /* "built with pdoc" attribution */
+                .pdoc .attribution {
+                    margin-top: 2rem;
+                    display: block;
+                    opacity: 0.5;
+                    transition: all 200ms;
+                    filter: grayscale(100%);
+                }
+
+                .pdoc .attribution:hover {
+                    opacity: 1;
+                    filter: grayscale(0%);
+                }
+
+                .pdoc .attribution img {
+                    margin-left: 5px;
+                    height: 35px;
+                    width: 70px;
+                    transition: all 200ms;
+                }
+            {% endblock %}
+            </style>
+        {% endblock style_pdoc %}
     {% endfilter %}
 {% endblock %}
 {% if not bases %}
@@ -402,13 +461,18 @@
         {% endfor %}
     {% endmacro %}
 {% endif %}
+{% if not headerlink %}
+    {% macro headerlink(doc) -%}
+        <a class="headerlink" href="#{{ doc.qualname }}">#&nbsp;&nbsp</a>
+    {% endmacro %}
+{% endif %}
 {% if not function %}
 {# fmt: off #}
     {% macro function(fn) %}
         {%- set sig -%}
             <span class="signature">{{ fn.signature | escape | linkify }}</span>
         {%- endset -%}
-        <div class="attr function">
+        <div class="attr function">{{ headerlink(fn) }}
             {{ decorators(fn) }}
             {% if fn.name == "__init__" %}
                 <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
@@ -423,19 +487,20 @@
 {% endif %}
 {% if not variable %}
     {% macro variable(var) %}
-        <div class="attr variable">
+        <div class="attr variable">{{ headerlink(var) }}
             <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
         </div>
     {% endmacro %}
 {% endif %}
 {% if not submodule %}
     {% macro submodule(mod) %}
-        <div class="attr module"><span class="name">{{ (mod.modulename, "") | link }}</span></div>
+        <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ (mod.modulename, "") | link }}</span></div>
     {% endmacro %}
 {% endif %}
 {% if not class %}
     {% macro class(cls) %}
         <div class="attr class">
+            {{ headerlink(cls) }}
             {{ decorators(cls) }}
             <span class="def">class</span>
             <span class="name">{{ cls.qualname }}</span>
@@ -537,7 +602,7 @@
     {% macro view_source(doc) %}
         {% if doc.source %}
             <details>
-                <summary class="button">View Source</summary>
+                <summary>View Source</summary>
                 {{ doc.source | highlight }}
             </details>
         {% endif %}
@@ -545,19 +610,19 @@
 {% endif %}
 {% block body %}
     {% block nav %}
-        <nav>
-            <label for="navtoggle" class="button"></label>
+        <nav class="pdoc">
+            <label for="navtoggle" class="pdoc-button"></label>
             <input id="navtoggle" type="checkbox">
             <div>
                 {% block nav_title %}{% endblock %}
                 {% block module_list_link scoped %}
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
-                        <a class="button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                        <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
                             {{- parentmodule -}}
                         </a>
                     {% elif all_modules|length > 1 %}
-                        <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
+                        <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
                             Module Index
                         </a>
                     {% endif %}
@@ -584,19 +649,21 @@
                 {% endif %}
 
                 {% block attribution %}
-                    <a class="logo" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-                        built with <img alt="pdoc" src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
+                    <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
+                        built with <img
+                            alt="pdoc"
+                            src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
                     </a>
                 {% endblock %}
             </div>
         </nav>
     {% endblock %}
-    <main>
+    <main class="pdoc">
         {% block module_info %}
             <section>
                 {% block edit_button %}
                     {% if edit_url %}
-                        <a class="button git-button" href="{{ edit_url }}">Edit on GitHub</a>
+                        <a class="pdoc-button git-button" href="{{ edit_url }}">Edit on GitHub</a>
                     {% endif %}
                 {% endblock %}
                 <h1 class="modulename">

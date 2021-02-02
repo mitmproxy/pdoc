@@ -107,7 +107,7 @@ We can extend the default template by creating a file titled `module.html.jinja2
  with the following contents:
 
 ```html+jinja
-{% extends "module.html.jinja2" %}
+{% extends "default/module.html.jinja2" %}
 {% block nav_title %}
 <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
 {% endblock %}
@@ -229,7 +229,7 @@ This means that if you want to move a particular function to the beginning of yo
 you need to move it there in your source code. This is not only useful to the readers of your documentation
 but also useful to the consumers of your source code.
 
-## ...use numpydoc or Google-style docstrings?
+## ...use numpydoc or Google docstrings?
 
 While pdoc prefers docstrings that are plain Markdown,
 it also understands numpydoc and Google-style docstrings,
@@ -242,6 +242,31 @@ If your documentation follows one of these styles, you can:
 pdoc does not implement the full reStructuredText specification and does not plan on doing so.
 If you feel that it doesn't parse a docstring element properly, please amend
 `pdoc.docstrings` and send us a pull request!
+
+## ...integrate pdoc into other systems?
+
+pdoc's HTML and CSS are written in a way that the default template can be easily adjusted
+to produce standalone HTML fragments that can be embedded in other systems.
+This makes it possible to integrate pdoc with almost every CMS or static site generator.
+The only limitation at the moment is that you need to retain pdoc's directory structure
+so that links between modules remain valid.
+
+First, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) to only emit CSS and HTML body contents:
+```html+jinja
+{% block style %}{% endblock %}
+{% block body %}{% endblock %}
+```
+
+Second, create a custom `module.html.jinja2` to suppress the layout CSS
+and navigation:
+```html+jinja
+{% extends "default/module.html.jinja2" %}
+{% block nav %}{% endblock %}
+{% block style_layout %}{% endblock %}
+```
+
+This should be enough to produce HTML files that can be embedded into other pages.
+All CSS selectors are prefixed with `.pdoc` so that pdoc's page style does not interfere with the rest of your website.
 
 # Docstring Inheritance
 
