@@ -4,7 +4,9 @@
 
  - Make it easier to embed pdoc into other systems:
    See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
+   This change may be a minor breaking change for users using custom templates.
  - Add header anchors to documentation items.
+ - Bugfix: The "View Source" marker is now properly displayed in Firefox.
 
 # 2021-02-01 pdoc 4.0.0
 
