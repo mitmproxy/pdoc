@@ -256,7 +256,7 @@
 
                 /* View Source */
                 .pdoc details {
-                    --shift: -32px;
+                    --shift: -40px;
                     text-align: right;
                     margin-top: var(--shift);
                     margin-bottom: calc(0px - var(--shift));
@@ -274,7 +274,12 @@
                     color: #666;
                     border-width: 0;
                     padding: 0 .7em;
-                    display: list-item;
+                    /* Firefox hides the arrow if we specify inline-block,
+                       see https://bugzilla.mozilla.org/show_bug.cgi?id=1270163.
+                       Chrome on the other hand does not support the two-property syntax yet,
+                       so the last statement is ignored. */
+                    display: inline-block;
+                    display: inline list-item;
                     user-select: none;
                 }
 
