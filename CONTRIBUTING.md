@@ -33,6 +33,16 @@ tox
 Please ensure that all patches are accompanied by matching changes in the test suite. The project strictly maintains
 100% test coverage.
 
+### Fixing Snapshot Tests
+
+pdoc makes heavy use of snapshot tests, which compare the rendered output with a stored copy in the [test/testdata](test/testdata) directory.
+These tests are very useful to catch regressions, but also have a tendency to break quickly. If you encounter failing snapshot tests, run
+
+```shell
+python3 ./test/test_snapshot.py
+```
+to overwrite the stored snapshots with the new rendered output. This will fix the tests.
+
 ## Documentation
 
 Please check [docs/README.md](./docs/README.md) for instructions.
