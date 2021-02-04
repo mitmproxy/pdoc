@@ -511,7 +511,11 @@ class Class(Namespace[type]):
         return decls
 
     def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
-        return self._declarations[member_name]
+        try:
+            return self._declarations[member_name]
+        except KeyError:  # pragma: no cover
+            warnings.warn(f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file.")
+            return self.modulename, f"{self.qualname}.{member_name}"
 
     @cached_property
     def _var_annotations(self) -> dict[str, type]:
