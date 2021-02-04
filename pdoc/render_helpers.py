@@ -9,7 +9,7 @@ from unittest.mock import patch
 import markdown2
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import contextfilter
+from jinja2 import contextfilter, nodes, ext
 from jinja2.runtime import Context
 from markupsafe import Markup
 
@@ -196,3 +196,50 @@ def defuse_unsafe_reprs():
     """
     with (patch.object(os._Environ, "__repr__", lambda self: "os.environ")):
         yield
+
+
+class DefaultMacroExtension(ext.Extension):
+    """
+    This extension provides a new `{% defaultmacro %}` statement, which defines a macro only if it does not exist.
+
+    For example,
+
+    ```html+jinja
+    {% defaultmacro example() %}
+        test 123
+    {% enddefaultmacro %}
+    ```
+
+    is equivalent to
+
+    ```html+jinja
+    {% macro default_example() %}
+    test 123
+    {% endmacro %}
+    {% if not example %}
+        {% macro example() %}
+            test 123
+        {% endmacro %}
+    {% endif %}
+    ```
+
+    Additionally, the default implementation is also available as `default_$macroname`, which makes it possible
+    to reference it in the override.
+    """
+
+    tags = {"defaultmacro"}
+
+    def parse(self, parser):
+        m = nodes.Macro(lineno=next(parser.stream).lineno)
+        name = parser.parse_assign_target(name_only=True).name
+        m.name = f"default_{name}"
+        parser.parse_signature(m)
+        m.body = parser.parse_statements(("name:enddefaultmacro",), drop_needle=True)
+
+        if_stmt = nodes.If(
+            nodes.Not(nodes.Name(name, "load")),
+            [nodes.Macro(name, m.args, m.defaults, m.body)],
+            [],
+            [],
+        )
+        return [m, if_stmt]

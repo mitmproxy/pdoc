@@ -121,6 +121,11 @@ pdoc -t . ./shelter.py
 
 ...and the updated documentation – with logo – renders! 🎉
 
+pdoc's Jinja2 macros are defined using `{% defaultmacro %}`, which makes it possible to override them in a custom
+template using a regular `{% macro %}` statement.
+The default implementation of each macro is also available as `default_$macroname`.
+See [`test/customtemplate/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/test/customtemplate/module.html.jinja2)
+for more examples!
 
 # How can I ... ?
 
@@ -146,7 +151,7 @@ Something similar can be done for classes and modules too. For classes,
 the docstring should come on the line immediately following `class
 ...`. For modules, the docstring should start on the first line of
 the file. These docstrings are what you see for each module, class,
-function and method listed in the documentation produced by `pdoc`.
+function and method listed in the documentation produced by pdoc.
 
 ## ...document variables?
 
@@ -159,7 +164,7 @@ variable = "SomeValue"
 ```
 
 The resulting `variable` will have no `__doc__` attribute.
-To compensate, `pdoc` will read the abstract syntax tree (an abstract representation of the source code)
+To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)
 and include all assignment statements immediately followed by a docstring.
 
 Something similar is done for instance variables as well, which are either type-annotated in the class
@@ -290,7 +295,7 @@ class GoldenRetriever(Dog):
 ```
 
 In Python, the docstring for `GoldenRetriever.bark` is empty, even though one was
-defined in `Dog.bark`. If `pdoc` generates documentation for the above
+defined in `Dog.bark`. If pdoc generates documentation for the above
 code, then it will automatically attach the docstring for `Dog.bark` to
 `GoldenRetriever.bark` if it does not have a docstring.
 

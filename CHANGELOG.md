@@ -6,6 +6,7 @@
    See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
    This change may be a minor breaking change for users using custom templates.
  - Add header anchors to documentation items.
+ - Define all Jinja2 macros as `{% defaultmacro %}`, which makes them easier to override.
  - Parsing is not more robust if source code is unavailable.
  - Bugfix: The "View Source" marker is now properly displayed in Firefox.
 
