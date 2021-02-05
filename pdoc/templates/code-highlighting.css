@@ -1,5 +1,7 @@
 /*
  * Pygments CSS file for source code highlighting
+ *
+ * This file contains both light and dark themes.
  * To generate a CSS file for another theme, run the following command:
  *
  *     pygmentize -S <theme> -f html > code-highlighting.css
