@@ -17,47 +17,60 @@
              see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
              #}
 
+            {% block default_theme %}
+                /* Color palette */
+                .pdoc {
+                    box-sizing: border-box;
+                    --nav-bg-color: #eee;
+                    --nav-text-color: #333;
+                    --nav-li-hover-color: rgba(255, 255, 255, 0.5);
+                    --text-link-color: #3660a5;
+                    --text-link-hover-color: #0a58ca;
+                    --pre-bg-color: #f7f7f7;
+                    --pre-border-color: #ccc;
+                    --code-text-color: #24292e;
+                    --code-bg-color: rgba(27, 31, 35, 0.05);
+                    --name-color: #0066BB;
+                    --def-color: #008800;
+                    --annotation-color: #007020;
+                    --attr-hover-color: #dadada;
+                    --identifier-before-after: gray;
+                    --target-bg-color: #fff598;
+                }
 
-            /* Color palette */
-            .pdoc {
-                box-sizing: border-box;
-                --nav-bg-color: #eee;
-                --nav-text-color: #333;
-                --nav-li-hover-color: rgba(255, 255, 255, 0.5);
-                --text-link-color: #3660a5;
-                --text-link-hover-color: #0a58ca;
-                --pre-bg-color: #f7f7f7;
-                --pre-border-color: #ccc;
-                --code-text-color: #24292e;
-                --code-bg-color: rgba(27, 31, 35, 0.05);
-                --name-color: #0066BB;
-                --def-color: #008800;
-                --annotation-color: #007020;
-                --attr-hover-color: #dadada;
-                --identifier-before-after: gray;
-                --target-bg-color: #fff598;
-            }
+                body {
+                    --main-bg-color: #fff;
+                    --main-text-color: #212529;
+                }
+            {% endblock %}
 
             @media (prefers-color-scheme: dark) {
-                .pdoc {
-                    --main-bg-color: #212529;
-                    --main-text-color: #fff;
-                    --nav-bg-color: #333;
-                    --nav-text-color: #eee;
-                    --nav-li-hover-color: rgba(0, 0, 0, 0.1);
-                    --text-link-color: #58a6ff;
-                    --text-link-hover-color: #3989ff;
-                    --pre-bg-color: #333;
-                    --pre-border-color: #555;
-                    --code-text-color:#e9e9e9;
-                    --code-bg-color: #343434;
-                    --name-color: #77C1FF;
-                    --def-color: #0cdd0c;
-                    --annotation-color: #00c037;
-                    --attr-hover-color: #444;
-                    --identifier-before-after: #9d9d9d;
-                    --target-bg-color: #394e00;
-                }
+                {% block dark_theme %}
+                    .pdoc {
+                        --main-bg-color: #212529;
+                        --main-text-color: #fff;
+                        --nav-bg-color: #333;
+                        --nav-text-color: #eee;
+                        --nav-li-hover-color: rgba(0, 0, 0, 0.1);
+                        --text-link-color: #58a6ff;
+                        --text-link-hover-color: #3989ff;
+                        --pre-bg-color: #333;
+                        --pre-border-color: #555;
+                        --code-text-color:#e9e9e9;
+                        --code-bg-color: #343434;
+                        --name-color: #77C1FF;
+                        --def-color: #0cdd0c;
+                        --annotation-color: #00c037;
+                        --attr-hover-color: #444;
+                        --identifier-before-after: #9d9d9d;
+                        --target-bg-color: #394e00;
+                    }
+
+                    body {
+                        --main-bg-color: #212529;
+                        --main-text-color: #fff;
+                    }
+                {% endblock %}
             }
 
             .pdoc-button {
@@ -72,17 +85,12 @@
             {% block style_layout %}
                 /* Colors of overall document */
                 body {
-                      --main-bg-color: #fff;
-                      --main-text-color: #212529;
                       color: var(--main-text-color);
                       background-color: var(--main-bg-color);
                 }
 
                  @media (prefers-color-scheme: dark) {
-                      body {
-                          --main-bg-color: #212529;
-                          --main-text-color: #fff;
-                      }
+
                  }
 
                 /* Responsive Layout */
