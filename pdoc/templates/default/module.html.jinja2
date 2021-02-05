@@ -180,19 +180,18 @@
                 }
 
                 nav.pdoc .module-list-button {
-                    display: inline-block;
-            background-color: var(--nav-text-color);
-            mask: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}") 1em 1em;
-                    background-position: 1em center;
-                    background-repeat: no-repeat;
+                    display: inline-flex;
                     color: var(--nav-text-color);
-                    border-color: #999;
-                    padding-left: calc(1em + 18px);
+                    border-color: var(--identifier-before-after);
                     margin-bottom: 1rem;
                 }
 
                 nav.pdoc .module-list-button:hover {
-                    border-color: black;
+                    border-color: var(--main-text-color);
+                }
+
+                nav.pdoc .module-list-button svg {
+                    margin-right: .5em;
                 }
 
                 nav.pdoc ul {
@@ -670,10 +669,12 @@
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
                         <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                            {% include "box-arrow-in-left.svg" %}
                             {{- parentmodule -}}
                         </a>
                     {% elif all_modules|length > 1 %}
                         <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
+                            {% include "box-arrow-in-left.svg" %}
                             Module Index
                         </a>
                     {% endif %}
