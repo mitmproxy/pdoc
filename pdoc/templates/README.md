@@ -13,8 +13,9 @@ a `module.html.jinja2` file in your custom template directory that extends the d
 ## Changing the code highlighting themes
 
 The `code-highlighting.css` file contains the CSS styles used to add code
-source highlighting for both light and dark themes. To use another color
-scheme, you can generate your own file by running:
+source highlighting for both light and dark themes. Default color schemes
+are `default` (light theme) and `monokai` (dark theme). To change them,
+you can generate your own file by running:
 
 ```
 pygmentize -S <theme> -f html > code-highlighting.css

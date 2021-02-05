@@ -1,17 +1,6 @@
 /*
  * Pygments CSS file for source code highlighting
- *
- * This file contains both light and dark themes.
- * To generate a CSS file for another theme, run the following command:
- *
- *     pygmentize -S <theme> -f html > code-highlighting.css
- *
- * You can then append to this file an alternate dark theme with the following:
- *
- *     echo "\n@media(prefers-color-scheme: dark){ \
-             \n$(pygmentize -S <theme> -f html)\n}" >> code-highlighting.css
- *
- * You can test different builtin themes at https://pygments.org/demo/
+ * To change the syntax highlighting, see templates/README.md
  */
 pre { line-height: 125%; }
 td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
