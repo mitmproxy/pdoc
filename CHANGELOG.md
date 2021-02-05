@@ -8,6 +8,7 @@
  - Add header anchors to documentation items.
  - Define all Jinja2 macros as `{% defaultmacro %}`, which makes them easier to override.
  - Parsing is not more robust if source code is unavailable.
+ - Bugfix: Functions decorated with `@classmethod` now also inherit their docstring.
  - Bugfix: The "View Source" marker is now properly displayed in Firefox.
 
 # 2021-02-01 pdoc 4.0.0

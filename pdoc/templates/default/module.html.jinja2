@@ -3,7 +3,6 @@
 {% block style %}
     {% filter minify_css %}
         {{ super() }}
-
         {% block style_pygments %}
             <style type="text/css">/*! Pygments code highlighting */ {% include 'code-highlighting.css' %}</style>
         {% endblock %}
@@ -370,12 +369,19 @@
                 }
 
                 /* Highlight focused element */
-                .pdoc h1:target, .pdoc h2:target, .pdoc h3:target, .pdoc h4:target, .pdoc h5:target, .pdoc h6:target {
+                .pdoc h1:target,
+                .pdoc h2:target,
+                .pdoc h3:target,
+                .pdoc h4:target,
+                .pdoc h5:target,
+                .pdoc h6:target {
                     background-color: var(--target-bg-color);
                     box-shadow: -1rem 0 0 0 var(--target-bg-color);
                 }
 
-                .pdoc div:target > .attr, .pdoc section:target > .attr {
+                .pdoc div:target > .attr,
+                .pdoc section:target > .attr,
+                .pdoc dd:target > a {
                     background-color: var(--target-bg-color);
                 }
 
@@ -622,7 +628,7 @@
     {% for base, members in cls.inherited_members.items() %}
         {% set member_html %}
             {% for m in members if is_public(m) | trim %}
-                <dd class="{{ m.type }}">
+                <dd id="{{ m.qualname }}" class="{{ m.type }}">
                     {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
                 </dd>
             {% endfor %}

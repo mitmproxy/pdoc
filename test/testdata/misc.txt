@@ -1,4 +1,12 @@
 <module misc
+    <class misc.Child
+        <method def __init__(self): ...  # init>
+        <method def foo(self): ...  # foo>
+        <@classmethod class def bar(cls): ...  # bar>
+        <@staticmethod static def baz(): ...  # baz>
+        <var qux  # qux>
+        <var quux>
+        <var quuux: int = 42  # quuux>>
     <method def bad_qualname(self, a: int, b: Literal['w', 'r'], c: bool = True) -> None: ...  # inherited from demo_long.bad_qualname>
     <var only_annotated: int>
     <class misc.CustomException  # custom exception typ…

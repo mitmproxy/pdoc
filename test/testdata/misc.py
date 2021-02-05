@@ -1,6 +1,70 @@
+from functools import cached_property
 from functools import lru_cache
 
 import demo_long
+
+
+# Testing docstring inheritance
+
+class Base:
+    def __init__(self):
+        """init"""
+        super().__init__()
+
+    def foo(self):
+        """foo"""
+        pass
+
+    @classmethod
+    def bar(cls):
+        """bar"""
+        pass
+
+    @staticmethod
+    def baz():
+        """baz"""
+        pass
+
+    @property
+    def qux(self):
+        """qux"""
+        return
+
+    # This is not supported by inspect.getdoc yet.
+    @cached_property
+    def quux(self):
+        """quux"""
+        return
+
+    quuux: int = 42
+    """quuux"""
+
+
+class Child(Base):
+    def __init__(self):
+        super().__init__()
+
+    def foo(self):
+        pass
+
+    @classmethod
+    def bar(cls):
+        pass
+
+    @staticmethod
+    def baz():
+        pass
+
+    @property
+    def qux(self):
+        return
+
+    @cached_property
+    def quux(self):
+        return
+
+    quuux: int = 42
+
 
 # Testing a proper __module__, but no useful __qualname__ attribute.
 
@@ -109,6 +173,7 @@ indents"""
 
 
 __all__ = [  # noqa
+    "Child",
     "bad_qualname",
     "only_annotated",
     "CustomException",

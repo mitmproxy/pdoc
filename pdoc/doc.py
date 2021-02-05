@@ -130,10 +130,7 @@ class Doc(Generic[T]):
 
         If no docstring can be found, an empty string is returned.
         """
-        doc = inspect.getdoc(self.obj)
-        if doc is None or doc == object.__init__.__doc__:
-            # inspect.getdoc(Foo.__init__) returns the docstring, for object.__init__ if left undefined...
-            doc = ""
+        doc = inspect.getdoc(self.obj) or ""
         return doc.strip()
 
     @cached_property
@@ -234,16 +231,13 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 else:
                     assert isinstance(func, cached_property)
                     func = func.func
-                annotation = resolve_annotations(
-                    _safe_getattr(func, "__annotations__", {}),
-                    inspect.getmodule(func),
-                    f"{self.fullname}.{name}",
-                ).get("return", empty)
+
+                doc_f = Function(self.modulename, qualname, func, taken_from)
                 doc = Variable(
                     self.modulename,
                     qualname,
-                    docstring=func.__doc__ or "",
-                    annotation=annotation,
+                    docstring=doc_f.docstring,
+                    annotation=doc_f.signature.return_annotation,
                     default_value=empty,
                     taken_from=taken_from,
                 )
@@ -514,7 +508,9 @@ class Class(Namespace[type]):
         try:
             return self._declarations[member_name]
         except KeyError:  # pragma: no cover
-            warnings.warn(f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file.")
+            warnings.warn(
+                f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
+            )
             return self.modulename, f"{self.qualname}.{member_name}"
 
     @cached_property
@@ -691,6 +687,25 @@ class Function(Doc[types.FunctionType]):
         else:
             t = "function"
         return f"<{_decorators(self)}{t} {self.funcdef} {self.name}{self.signature}: ...{_docstr(self)}>"
+
+    @cached_property
+    def docstring(self) -> str:
+        doc = Doc.docstring.__get__(self)
+        if not doc:
+            # inspect.getdoc fails for inherited @classmethods and unbound @property descriptors.
+            # We now do an ugly dance to obtain the bound object instead,
+            # that somewhat resembles what inspect._findclass is doing.
+            cls = sys.modules.get(_safe_getattr(self.obj, "__module__", None), None)
+            for name in _safe_getattr(self.obj, "__qualname__", "").split(".")[:-1]:
+                cls = _safe_getattr(cls, name, None)
+            doc = inspect.getdoc(_safe_getattr(cls, self.name, None)) or ""
+            doc = doc.strip()
+
+        if doc == object.__init__.__doc__:
+            # inspect.getdoc(Foo.__init__) returns the docstring, for object.__init__ if left undefined...
+            return ""
+        else:
+            return doc
 
     @cached_property
     def is_classmethod(self) -> bool:

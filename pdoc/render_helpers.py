@@ -122,25 +122,26 @@ def linkify(context: Context, code: str) -> str:
     """
 
     def linkify_repl(m: re.Match):
-        fullname = m.group(0)
+        text = m.group(0)
+        fullname = text.rstrip("()")
         doc = context["module"].get(fullname)
         if doc and context["is_public"](doc).strip():
-            return f'<a href="#{fullname}">{fullname}</a>'
+            return f'<a href="#{fullname}">{text}</a>'
         try:
             module, qualname = split_identifier(context["all_modules"], fullname)
         except ValueError:
-            return fullname
+            return text
         else:
             if qualname:
                 qualname = f"#{qualname}"
-            return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{fullname}</a>'
+            return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{text}</a>'
 
     return Markup(
         re.sub(
             r"""
-            (?<!/)(?!\d)[a-zA-Z_0-9]+(?:\.(?!\d)[a-zA-Z_0-9]+)+  # foo.bar
+            (?<!/)(?!\d)[a-zA-Z_0-9]+(?:\.(?!\d)[a-zA-Z_0-9]+)+(?:\(\))?  # foo.bar
             |
-            (?<=<code>)(?!\d)[a-zA-Z_0-9]+(?=</code>)  # `foo`
+            (?<=<code>)(?!\d)[a-zA-Z_0-9]+(?:\(\))?(?=</code>)  # `foo` or `foo()`
             """,
             linkify_repl,
             code,
