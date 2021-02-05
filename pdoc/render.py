@@ -74,7 +74,6 @@ def html_module(
             edit_url=edit_url(
                 module.modulename, module.is_package, env.globals["edit_url_map"]
             ),
-            pygments_css=formatter.get_style_defs(),
         )
 
 
