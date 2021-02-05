@@ -5,6 +5,8 @@
  - Make it easier to embed pdoc into other systems:
    See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
    This change may be a minor breaking change for users using custom templates.
+ - Generic class bases are now displayed fully. 
+   This may be a minor breaking change for users who customized class base output.
  - Add header anchors to documentation items.
  - Define all Jinja2 macros as `{% defaultmacro %}`, which makes them easier to override.
  - Parsing is not more robust if source code is unavailable.

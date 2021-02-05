@@ -452,7 +452,7 @@
     {%- if cls.bases -%}
         (
         {%- for base in cls.bases -%}
-            <span class="base">{{ base | link }}</span>
+            <span class="base">{{ base[:2] | link(text=base[2]) }}</span>
             {%- if loop.nextitem %}, {% endif %}
         {%- endfor -%}
         )

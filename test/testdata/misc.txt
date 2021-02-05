@@ -1,4 +1,8 @@
 <module misc
+    <class misc.GenericParent  # Abstract base class …
+        <method def __init__(): ...>>
+    <class misc.NonGenericChild  # Abstract base class …
+        <method def __init__(): ...>>
     <class misc.Child
         <method def __init__(self): ...  # init>
         <method def foo(self): ...  # foo>

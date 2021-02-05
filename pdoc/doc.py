@@ -560,17 +560,28 @@ class Class(Namespace[type]):
         return sorted
 
     @cached_property
-    def bases(self) -> list[tuple[str, str]]:
+    def bases(self) -> list[tuple[str, str, str]]:
         """
         A list of all base classes, i.e. all immediate parent classes.
 
-        Each parent class is represented as a `(modulename, qualname)` tuple.
+        Each parent class is represented as a `(modulename, qualname, display_text)` tuple.
         """
-        return [
-            (x.__module__, x.__qualname__)
-            for x in self.obj.__bases__
-            if x is not object
-        ]
+        bases = []
+        # noinspection PyUnresolvedReferences
+        for x in _safe_getattr(self.obj, "__orig_bases__", self.obj.__bases__):
+            if x is object:
+                continue
+            if o := get_origin(x):
+                bases.append((o.__module__, o.__qualname__, str(x)))
+            elif x.__module__ == self.modulename:
+                bases.append(
+                    (x.__module__, x.__qualname__, x.__qualname__)
+                )
+            else:
+                bases.append(
+                    (x.__module__, x.__qualname__, f"{x.__module__}.{x.__qualname__}")
+                )
+        return bases
 
     @cached_property
     def decorators(self) -> list[str]:
