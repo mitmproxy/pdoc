@@ -5,8 +5,55 @@
         {{ super() }}
         <style type="text/css">/*! pygments */{{ pygments_css }}</style>
         <style type="text/css">/*! pdoc */
+        /* Color palette */
+        :root {
+        	--main-bg-color: #fff;
+        	--main-text-color: #212529;
+			--nav-bg-color: #eee;
+			--nav-text-color: #333;
+			--nav-li-hover-color: rgba(255, 255, 255, 0.5);
+			--text-link-color: #3660a5;
+			--text-link-hover-color: #0a58ca;
+			--pre-bg-color: #f7f7f7;
+			--pre-border-color: #ccc;
+			--code-text-color: #24292e;
+			--code-bg-color: rgba(27, 31, 35, 0.05);
+			--name-color: #0066BB;
+			--def-color: #008800;
+			--annotation-color: #007020;
+			--attr-hover-color: #dadada;
+			--identifier-before-after: gray;
+			--target-bg-color: #fff598;
+        }
+
+        @media (prefers-color-scheme: dark) {
+			:root {
+				--main-bg-color: #212529;
+				--main-text-color: #fff;
+				--nav-bg-color: #333;
+        		--nav-text-color: #eee;
+        		--nav-li-hover-color: rgba(0, 0, 0, 0.1);
+        		--text-link-color: #58a6ff;
+        		--text-link-hover-color: #3989ff;
+        		--pre-bg-color: #333;
+        		--pre-border-color: #555;
+        		--code-text-color:#e9e9e9;
+			    --code-bg-color: #343434;
+				--name-color: #77C1FF;
+				--def-color: #0cdd0c;
+				--annotation-color: #00c037;
+				--attr-hover-color: #444;
+				--identifier-before-after: #9d9d9d;
+				--target-bg-color: #394e00;
+        	}
+        }
 
         /* General Styles */
+        body {
+        	color: var(--main-text-color);
+        	background-color: var(--main-bg-color);
+        }
+
         html, main {
             scroll-behavior: smooth;
         }
@@ -19,15 +66,19 @@
 
         a {
             text-decoration: none;
-            color: #3660a5;
+            color: var(--text-link-color);
+        }
+
+        a:hover {
+        	color: var(--text-link-hover-color);
         }
 
         code {
-            color: #24292e;
+            color: var(--code-text-color);
             padding: .2em .4em;
             margin: 0;
             font-size: 85%;
-            background-color: rgba(27, 31, 35, 0.05);
+            background-color: var(--code-bg-color);
             border-radius: 6px;
         }
 
@@ -123,7 +174,7 @@
         nav {
             --pad: 1.75rem;
             --indent: 1.5rem;
-            background-color: #eee;
+            background-color: var(--nav-bg-color);
             border-right: 1px solid #c1c1c1;
             box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
             padding: 0 0 0 var(--pad);
@@ -147,10 +198,11 @@
         }
 
         .module-list-button {
-            background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
+        	background-color: var(--nav-text-color);
+            mask: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}") 1em 1em;
             background-position: 1em center;
             background-repeat: no-repeat;
-            color: #333;
+            color: var(--nav-text-color);
             border-color: #999;
             padding-left: calc(1em + 18px);
             margin-bottom: 1rem;
@@ -177,17 +229,17 @@
         }
 
         nav li:hover {
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: var(--nav-li-hover-color);
         }
 
         nav a {
-            color: #333;
+            color: var(--nav-text-color);
             display: block;
         }
 
         nav .class:before, .inherited .class:before {
             content: "class ";
-            color: gray;
+            color: var(--identifier-before-after);
         }
 
         nav > h2:first-of-type {
@@ -196,7 +248,7 @@
 
         nav .function:after, .inherited .function a:after {
             content: "()";
-            color: gray;
+            color: var(--identifier-before-after);
         }
 
         /* Content */
@@ -224,7 +276,7 @@
         }
 
         .modulename a {
-            color: #3660a5;
+            color: var(--text-link-color);
             transition: 100ms all;
         }
 
@@ -263,9 +315,9 @@
         }
 
         pre {
-            background-color: #f7f7f7;
-            border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
+            background-color: var(--pre-bg-color);
+            border-top: 1px solid var(--pre-border-color);
+            border-bottom: 1px solid var(--pre-border-color);
             margin-bottom: .5em;
             padding: .5rem 0 .5rem .5rem;
         }
@@ -285,27 +337,27 @@
         }
 
         h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
-            background-color: #fff7a8;
-            box-shadow: -1rem 0 0 0 #fff7a8;
+            background-color: var(--target-bg-color);
+            box-shadow: -1rem 0 0 0 var(--target-bg-color);
         }
 
         div:target > .attr, section:target > .attr {
-            background-color: #fff598;
+            background-color: var(--target-bg-color);
         }
 
         .attr:hover {
-            background-color: #dadada;
+            background-color: var(--attr-hover-color);
         }
 
         .attr {
-            color: black;
+            color: var(--main-text-color);
             margin: 1rem 0 .5rem;
             /*
             lots of padding on the right to accomodate view source button.
             This is not ideal, but probably good enough for now.
             */
             padding: .4rem 5rem .4rem 1rem;
-            background-color: #eee;
+            background-color: var(--nav-bg-color);
         }
 
         .classattr, .inherited {
@@ -313,12 +365,12 @@
         }
 
         .name {
-            color: #0066BB;
+            color: var(--name-color);
             font-weight: bold;
         }
 
         .def {
-            color: #008800;
+            color: var(--def-color);
             font-weight: bold;
         }
 
@@ -327,7 +379,7 @@
         }
 
         .annotation {
-            color: #007020;
+            color: var(--annotation-color);
         }
 
         dt, dd {
