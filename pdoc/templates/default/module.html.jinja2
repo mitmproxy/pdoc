@@ -3,546 +3,599 @@
 {% block style %}
     {% filter minify_css %}
         {{ super() }}
-        <style type="text/css">/*! pygments */{{ pygments_css }}</style>
-        <style type="text/css">/*! pdoc */
-        /* Color palette */
-        :root {
-        	--main-bg-color: #fff;
-        	--main-text-color: #212529;
-			--nav-bg-color: #eee;
-			--nav-text-color: #333;
-			--nav-li-hover-color: rgba(255, 255, 255, 0.5);
-			--text-link-color: #3660a5;
-			--text-link-hover-color: #0a58ca;
-			--pre-bg-color: #f7f7f7;
-			--pre-border-color: #ccc;
-			--code-text-color: #24292e;
-			--code-bg-color: rgba(27, 31, 35, 0.05);
-			--name-color: #0066BB;
-			--def-color: #008800;
-			--annotation-color: #007020;
-			--attr-hover-color: #dadada;
-			--identifier-before-after: gray;
-			--target-bg-color: #fff598;
-        }
 
-        @media (prefers-color-scheme: dark) {
+        {% block style_pygments %}
+            <style type="text/css">/*! pygments */{{ pygments_css }}</style>
+        {% endblock %}
+        {% block style_pdoc %}
+            <style type="text/css">/*! pdoc */
+            {#
+             pdoc's CSS style is divided into two Jinja2 blocks:
+               - style_layout: The responsive page layout and navigation menu.
+               - style_content: The documentation contents.
+
+             This makes it easier to embed pdoc into other systems,
+             see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
+             #}
+        	/* Color palette */
 			:root {
-				--main-bg-color: #212529;
-				--main-text-color: #fff;
-				--nav-bg-color: #333;
-        		--nav-text-color: #eee;
-        		--nav-li-hover-color: rgba(0, 0, 0, 0.1);
-        		--text-link-color: #58a6ff;
-        		--text-link-hover-color: #3989ff;
-        		--pre-bg-color: #333;
-        		--pre-border-color: #555;
-        		--code-text-color:#e9e9e9;
-			    --code-bg-color: #343434;
-				--name-color: #77C1FF;
-				--def-color: #0cdd0c;
-				--annotation-color: #00c037;
-				--attr-hover-color: #444;
-				--identifier-before-after: #9d9d9d;
-				--target-bg-color: #394e00;
-        	}
-        }
+				--main-bg-color: #fff;
+				--main-text-color: #212529;
+				--nav-bg-color: #eee;
+				--nav-text-color: #333;
+				--nav-li-hover-color: rgba(255, 255, 255, 0.5);
+				--text-link-color: #3660a5;
+				--text-link-hover-color: #0a58ca;
+				--pre-bg-color: #f7f7f7;
+				--pre-border-color: #ccc;
+				--code-text-color: #24292e;
+				--code-bg-color: rgba(27, 31, 35, 0.05);
+				--name-color: #0066BB;
+				--def-color: #008800;
+				--annotation-color: #007020;
+				--attr-hover-color: #dadada;
+				--identifier-before-after: gray;
+				--target-bg-color: #fff598;
+			}
 
-        /* General Styles */
-        body {
-        	color: var(--main-text-color);
-        	background-color: var(--main-bg-color);
-        }
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--main-bg-color: #212529;
+					--main-text-color: #fff;
+					--nav-bg-color: #333;
+					--nav-text-color: #eee;
+					--nav-li-hover-color: rgba(0, 0, 0, 0.1);
+					--text-link-color: #58a6ff;
+					--text-link-hover-color: #3989ff;
+					--pre-bg-color: #333;
+					--pre-border-color: #555;
+					--code-text-color:#e9e9e9;
+					--code-bg-color: #343434;
+					--name-color: #77C1FF;
+					--def-color: #0cdd0c;
+					--annotation-color: #00c037;
+					--attr-hover-color: #444;
+					--identifier-before-after: #9d9d9d;
+					--target-bg-color: #394e00;
+				}
+			}*
 
-        html, main {
-            scroll-behavior: smooth;
-        }
+			body {
+				color: var(--main-text-color);
+				background-color: var(--main-bg-color);
+			}
 
-        h1, h2, h3, h4 {
-            font-weight: 300;
-            margin: .3em 0;
-            padding: .2em 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--text-link-color);
-        }
-
-        a:hover {
-        	color: var(--text-link-hover-color);
-        }
-
-        code {
-            color: var(--code-text-color);
-            padding: .2em .4em;
-            margin: 0;
-            font-size: 85%;
-            background-color: var(--code-bg-color);
-            border-radius: 6px;
-        }
-
-        pre code {
-            display: inline-block;
-            background: none;
-            padding: 0;
-        }
-
-        blockquote {
-            margin-left: 2rem;
-        }
-
-        .button {
-            display: inline-block;
-            border: solid black 1px;
-            border-radius: 2px;
-            font-size: .75rem;
-            padding: calc(0.5em - 1px) 1em;
-            transition: 100ms all;
-        }
-
-        /* Responsive Layout */
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        @media (max-width: 769px) {
-            label[for=navtoggle] {
-                cursor: pointer;
-                position: absolute;
-                width: 50px;
-                height: 40px;
-                top: 1rem;
-                right: 1rem;
-                color: rgba(0, 0, 0, .55);
-                border-color: rgba(0, 0, 0, .1);
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            .pdoc {
+                box-sizing: border-box;
             }
 
-            main {
-                padding: 2rem 3vw;
+            .pdoc-button {
+                display: inline-block;
+                border: solid black 1px;
+                border-radius: 2px;
+                font-size: .75rem;
+                padding: calc(0.5em - 1px) 1em;
+                transition: 100ms all;
             }
 
-            label[for=navtoggle]:hover {
-                border-color: rgba(0, 0, 0, .5);
-            }
+            {% block style_layout %}
+                /* Responsive Layout */
+                html, body {
+                    width: 100%;
+                    height: 100%;
+                }
 
-            #navtoggle + div {
-                display: none;
-            }
+                @media (max-width: 769px) {
+                    label[for=navtoggle] {
+                        cursor: pointer;
+                        position: absolute;
+                        width: 50px;
+                        height: 40px;
+                        top: 1rem;
+                        right: 1rem;
+                        color: rgba(0, 0, 0, .55);
+                        border-color: rgba(0, 0, 0, .1);
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+                    }
 
-            #navtoggle:checked + div {
-                display: inherit;
-            }
+                    main {
+                        padding: 2rem 3vw;
+                    }
 
-            .git-button {
-                display: none !important;
-            }
-        }
+                    label[for=navtoggle]:hover {
+                        border-color: rgba(0, 0, 0, .5);
+                    }
 
-        @media (min-width: 770px) {
-            :root {
-                --sidebar-width: clamp(12.5rem, 28vw, 22rem);
-            }
+                    #navtoggle + div {
+                        display: none;
+                    }
 
-            nav {
-                position: fixed;
-                overflow: auto;
-                height: 100vh;
-                width: var(--sidebar-width);
-            }
+                    #navtoggle:checked + div {
+                        display: inherit;
+                    }
 
-            main {
-                padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
-                width: calc(54rem + var(--sidebar-width));
-                max-width: 100%;
-            }
+                    .git-button {
+                        display: none !important;
+                    }
+                }
 
-            label[for=navtoggle] {
-                display: none;
-            }
-        }
+                @media (min-width: 770px) {
+                    :root {
+                        --sidebar-width: clamp(12.5rem, 28vw, 22rem);
+                    }
 
-        #navtoggle {
-            display: none;
-        }
+                    nav {
+                        position: fixed;
+                        overflow: auto;
+                        height: 100vh;
+                        width: var(--sidebar-width);
+                    }
 
-        /* Nav */
-        nav {
-            --pad: 1.75rem;
-            --indent: 1.5rem;
-            background-color: var(--nav-bg-color);
-            border-right: 1px solid #c1c1c1;
-            box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
-            padding: 0 0 0 var(--pad);
-            overflow-wrap: anywhere;
-        }
+                    main {
+                        padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
+                        width: calc(54rem + var(--sidebar-width));
+                        max-width: 100%;
+                    }
 
-        nav > div {
-            padding: var(--pad) 0;
-        }
+                    label[for=navtoggle] {
+                        display: none;
+                    }
+                }
 
-        nav::-webkit-scrollbar {
-            width: 10px;
-        }
+                #navtoggle {
+                    display: none;
+                }
 
-        nav {
-            scrollbar-width: thin;
-        }
+                /* Nav */
+                nav.pdoc {
+                    --pad: 1.75rem;
+                    --indent: 1.5rem;
+                    background-color: var(--nav-bg-color);
+                    border-right: 1px solid #c1c1c1;
+                    box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
+                    padding: 0 0 0 var(--pad);
+                    overflow-wrap: anywhere;
+                    scrollbar-width: thin;
+                }
 
-        nav::-webkit-scrollbar-thumb {
-            background-color: #c1c1c1;
-        }
+                nav.pdoc::-webkit-scrollbar {
+                    width: 10px;
+                }
 
-        .module-list-button {
+                nav.pdoc::-webkit-scrollbar-thumb {
+                    background-color: #c1c1c1;
+                }
+
+                nav.pdoc > div {
+                    padding: var(--pad) 0;
+                }
+
+                nav.pdoc .module-list-button {
+                    display: inline-block;
         	background-color: var(--nav-text-color);
             mask: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}") 1em 1em;
-            background-position: 1em center;
-            background-repeat: no-repeat;
-            color: var(--nav-text-color);
-            border-color: #999;
-            padding-left: calc(1em + 18px);
-            margin-bottom: 1rem;
-        }
+                    background-position: 1em center;
+                    background-repeat: no-repeat;
+                    color: var(--nav-text-color);
+                    border-color: #999;
+                    padding-left: calc(1em + 18px);
+                    margin-bottom: 1rem;
+                }
 
-        .module-list-button:hover {
-            border-color: black;
-        }
+                nav.pdoc .module-list-button:hover {
+                    border-color: black;
+                }
 
-        nav ul {
-            list-style: none;
-            padding-left: 0;
-        }
+                nav.pdoc ul {
+                    list-style: none;
+                    padding-left: 0;
+                }
 
-        nav li {
-            display: block;
-            margin: 0;
-            padding: .2rem 0 .2rem var(--indent);
-            transition: all 100ms;
-        }
+                nav.pdoc li {
+                    display: block;
+                    margin: 0;
+                    padding: .2rem 0 .2rem var(--indent);
+                    transition: all 100ms;
+                }
 
-        nav > div > ul > li {
-            padding-left: 0;
-        }
+                nav.pdoc > div > ul > li {
+                    padding-left: 0;
+                }
 
-        nav li:hover {
-            background-color: var(--nav-li-hover-color);
-        }
+                nav.pdoc li:hover {
+                    background-color: var(--nav-li-hover-color);
+                }
 
-        nav a {
-            color: var(--nav-text-color);
-            display: block;
-        }
+                nav.pdoc a {
+                    color: var(--nav-text-color);
+                    display: block;
+                }
 
-        nav .class:before, .inherited .class:before {
-            content: "class ";
-            color: var(--identifier-before-after);
-        }
+                nav.pdoc > h2:first-of-type {
+                    margin-top: 1.5rem;
+                }
 
-        nav > h2:first-of-type {
-            margin-top: 1.5rem;
-        }
+                nav.pdoc .class:before {
+                    content: "class ";
+                    color: var(--identifier-before-after);
+                }
 
-        nav .function:after, .inherited .function a:after {
-            content: "()";
-            color: var(--identifier-before-after);
-        }
+                nav.pdoc .function:after {
+                    content: "()";
+                    color: var(--identifier-before-after);
+                }
+            {% endblock %}
 
-        /* Content */
-        main {
-            overflow-x: hidden;
-        }
+            {% block style_content %}
+                {#
+                In this block, all selectors are scopoed with ".pdoc".
+                This makes sure that the pdoc styling doesn't leak to the rest of the page.
+                 #}
+                /* General styling */
+                html, main {
+                    scroll-behavior: smooth;
+                }
 
-        main > section:first-of-type .docstring {
-            margin-bottom: 3rem;
-        }
+                .pdoc h1, .pdoc h2, .pdoc h3, .pdoc h4 {
+                    font-weight: 300;
+                    margin: .3em 0;
+                    padding: .2em 0;
+                }
 
-        .git-button {
-            float: right;
-            border: solid #3273dc 1px;
-        }
+                .pdoc a {
+                    text-decoration: none;
+            		color: var(--text-link-color);
+                }
 
-        .git-button:hover {
-            background-color: #3273dc;
-            color: white;
-        }
+                .pdoc blockquote {
+                    margin-left: 2rem;
+                }
 
-        .modulename {
-            margin-top: 0;
-            font-weight: bold;
-        }
+                .pdoc pre {
+                    background-color: var(--pre-bg-color);
+					border-top: 1px solid var(--pre-border-color);
+					border-bottom: 1px solid var(--pre-border-color);
+                    margin-bottom: 1em;
+                    padding: .5rem 0 .5rem .5rem;
+                }
 
-        .modulename a {
-            color: var(--text-link-color);
-            transition: 100ms all;
-        }
+                .pdoc code {
+                    color: var(--code-text-color);
+                    padding: .2em .4em;
+                    margin: 0;
+                    font-size: 85%;
+                    background-color: var(--code-bg-color);
+                    border-radius: 6px;
+                }
 
-        .modulename a:hover {
-            color: #1659c5;
-        }
+                .pdoc a > code {
+                    color: inherit;
+                }
 
-        details {
-            --shift: -40px;
-            text-align: right;
-            margin-top: var(--shift);
-            margin-bottom: calc(0px - var(--shift));
-            clear: both;
-        }
+                .pdoc pre > code {
+                    display: inline-block;
+                    font-size: inherit;
+                    background: none;
+                    padding: 0;
+                }
 
-        details:not([open]) {
-            height: 0;
-            overflow: visible;
-        }
+                /* Page Heading */
+                .pdoc .modulename {
+                    margin-top: 0;
+                    font-weight: bold;
+                }
 
-        summary.button {
-            color: #666;
-            border-width: 0;
-            padding: 0 .7em;
-            display: inline-block;
-            user-select: none;
-        }
+                .pdoc .modulename a {
+                    color: var(--text-link-color);
+                    transition: 100ms all;
+                }
 
-        summary:focus {
-            outline: 0;
-        }
+                .pdoc .modulename a:hover {
+                    color: #1659c5;
+                }
 
-        details > div {
-            margin-top: calc(0px - var(--shift) / 2);
-            text-align: left;
-        }
+                /* GitHub Button */
+                .pdoc .git-button {
+                    float: right;
+                    border: solid #3273dc 1px;
+                }
 
-        pre {
-            background-color: var(--pre-bg-color);
-            border-top: 1px solid var(--pre-border-color);
-            border-bottom: 1px solid var(--pre-border-color);
-            margin-bottom: .5em;
-            padding: .5rem 0 .5rem .5rem;
-        }
+                .pdoc .git-button:hover {
+                    background-color: #3273dc;
+                    color: white;
+                }
 
-        pre > code {
-            padding: 0;
-            background: none;
-        }
+                /* View Source */
+                .pdoc details {
+                    --shift: -40px;
+                    text-align: right;
+                    margin-top: var(--shift);
+                    margin-bottom: calc(0px - var(--shift));
+                    clear: both;
+                }
 
-        .docstring pre {
-            margin-left: 1em;
-            margin-right: 1em;
-        }
+                .pdoc details:not([open]) {
+                    height: 0;
+                    overflow: visible;
+                }
 
-        .docstring {
-            margin-bottom: 1.5rem;
-        }
+                .pdoc details > summary {
+                    font-size: .75rem;
+                    cursor: pointer;
+                    color: #666;
+                    border-width: 0;
+                    padding: 0 .7em;
+                    /* Firefox hides the arrow if we specify inline-block,
+                       see https://bugzilla.mozilla.org/show_bug.cgi?id=1270163.
+                       Chrome on the other hand does not support the two-property syntax yet,
+                       so the last statement is ignored. */
+                    display: inline-block;
+                    display: inline list-item;
+                    user-select: none;
+                }
 
-        h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
-            background-color: var(--target-bg-color);
-            box-shadow: -1rem 0 0 0 var(--target-bg-color);
-        }
+                .pdoc details > summary:focus {
+                    outline: 0;
+                }
 
-        div:target > .attr, section:target > .attr {
-            background-color: var(--target-bg-color);
-        }
+                .pdoc details > div {
+                    margin-top: calc(0px - var(--shift) / 2);
+                    text-align: left;
+                }
 
-        .attr:hover {
-            background-color: var(--attr-hover-color);
-        }
+                /* Docstrings */
+                .pdoc .docstring {
+                    margin-bottom: 1.5rem;
+                }
 
-        .attr {
-            color: var(--main-text-color);
-            margin: 1rem 0 .5rem;
-            /*
-            lots of padding on the right to accomodate view source button.
-            This is not ideal, but probably good enough for now.
-            */
-            padding: .4rem 5rem .4rem 1rem;
-            background-color: var(--nav-bg-color);
-        }
+                .pdoc > section:first-of-type > .docstring {
+                    margin-bottom: 3rem;
+                }
 
-        .classattr, .inherited {
-            margin-left: 2rem;
-        }
+                .pdoc .docstring pre {
+                    margin-left: 1em;
+                    margin-right: 1em;
+                }
 
-        .name {
-            color: var(--name-color);
-            font-weight: bold;
-        }
+                /* Highlight focused element */
+                .pdoc h1:target, .pdoc h2:target, .pdoc h3:target, .pdoc h4:target, .pdoc h5:target, .pdoc h6:target {
+                    background-color: var(--target-bg-color);
+                    box-shadow: -1rem 0 0 0 var(--target-bg-color);
+                }
 
-        .def {
-            color: var(--def-color);
-            font-weight: bold;
-        }
+                .pdoc div:target > .attr, .pdoc section:target > .attr {
+                    background-color: var(--target-bg-color);
+                }
 
-        .function .signature {
-            white-space: pre-wrap;
-        }
+                .pdoc .attr:hover {
+                    background-color: var(--attr-hover-color);
+                }
 
-        .annotation {
-            color: var(--annotation-color);
-        }
+                /* Header link */
+                .pdoc .headerlink {
+                    position: absolute;
+                    width: 0;
+                    margin-left: -1.5rem;
+                    line-height: 1.4rem;
+                    font-size: 1.5rem;
+                    font-weight: normal;
+                    transition: all 100ms ease-in-out;
+                    opacity: 0;
+                }
 
-        dt, dd {
-            display: inline;
-        }
+                .pdoc .attr > .headerlink {
+                    margin-left: -2.5rem;
+                }
 
-        dd:not(:last-child):after {
-            content: ", ";
-        }
+                .pdoc *:hover > .headerlink,
+                .pdoc *:target > .attr > .headerlink {
+                    opacity: 1;
+                }
 
-        .int, .nonetype {
-            color: #666;
-        }
+                /* Attributes */
+                .pdoc .attr {
+                    color: var(--main-text-color);
+                    margin: 1rem 0 .5rem;
+                    /*
+                    lots of padding on the right to accomodate the view source button.
+                    This is not ideal, but probably good enough for now.
+                    */
+                    padding: .4rem 5rem .4rem 1rem;
+                    background-color: var(--nav-bg-color);
+                }
 
-        .str {
-            color: #BA2121;
-        }
+                .pdoc .classattr {
+                    margin-left: 2rem;
+                }
 
-        /* pdoc logo */
-        .logo {
-            margin-top: 2rem;
-            display: block;
-            opacity: 0.5;
-            transition: all 200ms;
-            filter: grayscale(100%);
-        }
+                .pdoc .name {
+                    color: var(--name-color);
+                    font-weight: bold;
+                }
 
-        .logo:hover {
-            opacity: 1;
-            filter: grayscale(0%);
-        }
+                .pdoc .def {
+                    color: var(--def-color);
+                    font-weight: bold;
+                }
 
-        .logo svg {
-            margin-left: 5px;
-            height: 35px;
-            width: 70px;
-            transition: all 200ms;
-        }
-        </style>
+                .pdoc .signature {
+                    white-space: pre-wrap;
+                }
+
+                .pdoc .annotation {
+                    color: var(--annotation-color);
+                }
+
+                .pdoc .int, .pdoc .nonetype {
+                    color: #666;
+                }
+
+                .pdoc .str {
+                    color: #BA2121;
+                }
+
+                /* Inherited Members */
+                .pdoc .inherited {
+                    margin-left: 2rem;
+                }
+
+                .pdoc .inherited dt {
+                    font-weight: 700;
+                }
+
+                .pdoc .inherited dt, .pdoc .inherited dd {
+                    display: inline;
+                    margin-left: 0;
+                    margin-bottom: .5rem;
+                }
+
+                .pdoc .inherited dd:not(:last-child):after {
+                    content: ", ";
+                }
+
+                .pdoc .inherited .class:before {
+                    content: "class ";
+                    color: gray;
+                }
+
+                .pdoc .inherited .function a:after {
+                    content: "()";
+                    color: gray;
+                }
+
+                /* "built with pdoc" attribution */
+                .pdoc .attribution {
+                    margin-top: 2rem;
+                    display: block;
+                    opacity: 0.5;
+                    transition: all 200ms;
+                    filter: grayscale(100%);
+                }
+
+                .pdoc .attribution:hover {
+                    opacity: 1;
+                    filter: grayscale(0%);
+                }
+
+                .pdoc .attribution img {
+                    margin-left: 5px;
+                    height: 35px;
+                    width: 70px;
+                    transition: all 200ms;
+                }
+            {% endblock %}
+            </style>
+        {% endblock style_pdoc %}
     {% endfilter %}
 {% endblock %}
-{% if not bases %}
-    {% macro bases(cls) %}
-        {%- if cls.bases -%}
-            (
-            {%- for base in cls.bases -%}
-                <span class="base">{{ base | link }}</span>
-                {%- if loop.nextitem %}, {% endif %}
-            {%- endfor -%}
-            )
-        {%- endif -%}
-    {% endmacro %}
-{% endif %}
-{% if not default_value %}
-    {% macro default_value(var) -%}
-        {%- if var.default_value_str -%}
-            <span class="default_value">{{ var.default_value_str | escape | linkify }}</span>
-        {%- endif -%}
-    {% endmacro %}
-{% endif %}
-{% if not annotation %}
-    {% macro annotation(var) %}
-        {%- if var.annotation_str -%}
-            <span class="annotation">{{ var.annotation_str | escape | linkify }}</span>
-        {%- endif -%}
-    {% endmacro %}
-{% endif %}
-{% if not decorators %}
-    {% macro decorators(doc) %}
-        {% for d in doc.decorators %}
-            <div class="decorator">{{ d }}</div>
-        {% endfor %}
-    {% endmacro %}
-{% endif %}
-{% if not function %}
-{# fmt: off #}
-    {% macro function(fn) %}
-        {%- set sig -%}
-            <span class="signature">{{ fn.signature | escape | linkify }}</span>
-        {%- endset -%}
-        <div class="attr function">
-            {{ decorators(fn) }}
-            {% if fn.name == "__init__" %}
-                <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
-                {{- sig | replace("(self)","()") | replace("(self, ","(") -}}
-            {% else %}
-                <span class="def">{{ fn.funcdef }}</span>
-                <span class="name">{{ fn.name }}</span>{{ sig }}:
-            {% endif %}
-        </div>
-    {% endmacro %}
-{# fmt: on #}
-{% endif %}
-{% if not variable %}
-    {% macro variable(var) %}
-        <div class="attr variable">
-            <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
-        </div>
-    {% endmacro %}
-{% endif %}
-{% if not submodule %}
-    {% macro submodule(mod) %}
-        <div class="attr module"><span class="name">{{ (mod.modulename, "") | link }}</span></div>
-    {% endmacro %}
-{% endif %}
-{% if not class %}
-    {% macro class(cls) %}
-        <div class="attr class">
-            {{ decorators(cls) }}
-            <span class="def">class</span>
-            <span class="name">{{ cls.qualname }}</span>
-            {{- bases(cls) -}}:
-        </div>
-    {% endmacro %}
-{% endif %}
-{% if not member %}
-    {% macro member(doc) %}
-        {% if doc.type == "class" %}
-            {{ class(doc) }}
-        {% elif doc.type == "function" %}
-            {{ function(doc) }}
-        {% elif doc.type == "module" %}
-            {{ submodule(doc) }}
+{% defaultmacro bases(cls) %}
+    {%- if cls.bases -%}
+        (
+        {%- for base in cls.bases -%}
+            <span class="base">{{ base | link }}</span>
+            {%- if loop.nextitem %}, {% endif %}
+        {%- endfor -%}
+        )
+    {%- endif -%}
+{% enddefaultmacro %}
+{% defaultmacro default_value(var) -%}
+    {%- if var.default_value_str -%}
+        <span class="default_value">{{ var.default_value_str | escape | linkify }}</span>
+    {%- endif -%}
+{% enddefaultmacro %}
+{% defaultmacro annotation(var) %}
+    {%- if var.annotation_str -%}
+        <span class="annotation">{{ var.annotation_str | escape | linkify }}</span>
+    {%- endif -%}
+{% enddefaultmacro %}
+{% defaultmacro decorators(doc) %}
+    {% for d in doc.decorators %}
+        <div class="decorator">{{ d }}</div>
+    {% endfor %}
+{% enddefaultmacro %}
+{% defaultmacro headerlink(doc) -%}
+    <a class="headerlink" href="#{{ doc.qualname }}">#&nbsp;&nbsp</a>
+{% enddefaultmacro %}
+{% defaultmacro function(fn) %}
+    {%- set sig -%}
+    <span class="signature">{{ fn.signature | escape | linkify }}</span>
+    {%- endset -%}
+    <div class="attr function">{{ headerlink(fn) }}
+        {{ decorators(fn) }}
+        {% if fn.name == "__init__" %}
+            <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
+            {{- sig | replace("(self)","()") | replace("(self, ","(") -}}
         {% else %}
-            {{ variable(doc) }}
+            <span class="def">{{ fn.funcdef }}</span>
+            <span class="name">{{ fn.name }}</span>{{ sig }}:
         {% endif %}
-        {% if doc.type != "variable" %}
-            {{ view_source(doc) }}
-        {% endif %}
-        {{ docstring(doc) }}
-    {% endmacro %}
-{% endif %}
-{% if not docstring %}
-    {% macro docstring(var) %}
-        {% if var.docstring %}
-            <div class="docstring">{{ var.docstring | render_docstring | linkify }}</div>
-        {% endif %}
-    {% endmacro %}
-{% endif %}
-{% if not nav_members %}
-    {% macro nav_members(members) %}
-        <ul class="memberlist">
-            {% for m in members if is_public(m) | trim %}
-                <li>
-                    {% if m.type == "class" %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
-                        {% if m.own_members %}
-                            {{ nav_members(m.own_members) | indent(12) }}
-                        {% endif %}
-                    {% elif m.type == "module" %}
-                        <a class="{{ m.type }}" href="#{{ m.name }}">{{ m.name }}</a>
-                    {% elif m.name == "__init__" %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
-                    {% else %}
-                        <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+    </div>
+{% enddefaultmacro %}
+{% defaultmacro variable(var) %}
+    <div class="attr variable">{{ headerlink(var) }}
+        <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
+    </div>
+{% enddefaultmacro %}
+{% defaultmacro submodule(mod) %}
+    <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ (mod.modulename, "") | link }}</span></div>
+{% enddefaultmacro %}
+{% defaultmacro class(cls) %}
+    <div class="attr class">
+        {{ headerlink(cls) }}
+        {{ decorators(cls) }}
+        <span class="def">class</span>
+        <span class="name">{{ cls.qualname }}</span>
+        {{- bases(cls) -}}:
+    </div>
+{% enddefaultmacro %}
+{% defaultmacro member(doc) %}
+    {% if doc.type == "class" %}
+        {{ class(doc) }}
+    {% elif doc.type == "function" %}
+        {{ function(doc) }}
+    {% elif doc.type == "module" %}
+        {{ submodule(doc) }}
+    {% else %}
+        {{ variable(doc) }}
+    {% endif %}
+    {% if doc.type != "variable" %}
+        {{ view_source(doc) }}
+    {% endif %}
+    {{ docstring(doc) }}
+{% enddefaultmacro %}
+{% defaultmacro docstring(var) %}
+    {% if var.docstring %}
+        <div class="docstring">{{ var.docstring | render_docstring | linkify }}</div>
+    {% endif %}
+{% enddefaultmacro %}
+{% defaultmacro nav_members(members) %}
+    <ul class="memberlist">
+        {% for m in members if is_public(m) | trim %}
+            <li>
+                {% if m.type == "class" %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+                    {% if m.own_members %}
+                        {{ nav_members(m.own_members) | indent(12) }}
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endmacro %}
-{% endif %}
-{% macro default_is_public(doc) %}
-    {# the default implementation for is_public, extracted so that it can be called from an is_public override #}
+                {% elif m.type == "module" %}
+                    <a class="{{ m.type }}" href="#{{ m.name }}">{{ m.name }}</a>
+                {% elif m.name == "__init__" %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+                {% else %}
+                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% enddefaultmacro %}
+{% defaultmacro is_public(doc) %}
+    {#
+    This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
+    Returning no text is interpreted as false, returning any other text is iterpreted as true.
+    Implementing this as a macro makes it very easy to override with a custom template..
+    #}
     {% if not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
         true
@@ -553,63 +606,63 @@
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
     {% endif %}
-{% endmacro %}
-{% if not is_public %}
-    {#
-    This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
-    Returning no text is interpreted as false, returning any other text is iterpreted as true.
-    Implementing this as a macro makes it very easy to override with a custom template..
-    #}
-    {% macro is_public(doc) %}
-        {{ default_is_public(doc) }}
-    {% endmacro %}
-{% endif %}
-{% if not inherited %}
+{% enddefaultmacro %}
 {# fmt: off #}
-    {% macro inherited(cls) %}
-        {% for base, members in cls.inherited_members.items() %}
-            {% set member_html %}
-                {% for m in members if is_public(m) | trim %}
-                    <dd class="{{ m.type }}">
-                        {{- m.declared_at | link(text=m.name.replace("__init__",base[1])) -}}
-                    </dd>
-                {% endfor %}
-            {% endset %}
-            {# we may not have any public members, in which case we don't want to print anything. #}
-            {% if member_html %}
-                <div><dt>{{ base | link }}</dt>
-                    {{ member_html }}
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endmacro %}
-{# fmt: on #}
-{% endif %}
-{% if not view_source %}
-    {% macro view_source(doc) %}
-        {% if doc.source %}
-            <details>
-                <summary class="button">View Source</summary>
-                {{ doc.source | highlight }}
-            </details>
+{% defaultmacro inherited(cls) %}
+    {% for base, members in cls.inherited_members.items() %}
+        {% set member_html %}
+            {% for m in members if is_public(m) | trim %}
+                <dd class="{{ m.type }}">
+                    {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
+                </dd>
+            {% endfor %}
+        {% endset %}
+        {# we may not have any public members, in which case we don't want to print anything. #}
+        {% if member_html %}
+            <div><dt>{{ base | link }}</dt>
+                {{ member_html }}
+            </div>
         {% endif %}
-    {% endmacro %}
-{% endif %}
+    {% endfor %}
+{% enddefaultmacro %}
+{# fmt: on #}
+{% defaultmacro view_source(doc) %}
+    {% if doc.source %}
+        <details>
+            <summary>View Source</summary>
+            {{ doc.source | highlight }}
+        </details>
+    {% endif %}
+{% enddefaultmacro %}
+{% defaultmacro module_name() %}
+    <h1 class="modulename">
+        {% set parts = module.modulename.split(".") %}
+        {% for part in parts %}
+            {%- set fullname = ".".join(parts[:loop.index]) -%}
+            {%- if fullname in all_modules and fullname != module.modulename -%}
+                <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
+            {%- else -%}
+                {{ part }}
+            {%- endif -%}
+            {%- if loop.nextitem %}.{% endif -%}
+        {% endfor %}
+    </h1>
+{% enddefaultmacro %}
 {% block body %}
     {% block nav %}
-        <nav>
-            <label for="navtoggle" class="button"></label>
+        <nav class="pdoc">
+            <label for="navtoggle" class="pdoc-button"></label>
             <input id="navtoggle" type="checkbox">
             <div>
                 {% block nav_title %}{% endblock %}
                 {% block module_list_link scoped %}
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
-                        <a class="button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                        <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
                             {{- parentmodule -}}
                         </a>
                     {% elif all_modules|length > 1 %}
-                        <a class="button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
+                        <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
                             Module Index
                         </a>
                     {% endif %}
@@ -625,7 +678,7 @@
                     <h2>Submodules</h2>
                     <ul>
                         {% for submodule in module.submodules %}
-                            <li>{{ (submodule.modulename, "") | link }}</li>
+                            <li>{{ submodule.taken_from | link }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -636,33 +689,24 @@
                 {% endif %}
 
                 {% block attribution %}
-                    <a class="logo" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-                        built with {% include 'logo.svg' %}
+                    <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
+                        built with <img
+                            alt="pdoc"
+                            src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
                     </a>
                 {% endblock %}
             </div>
         </nav>
     {% endblock %}
-    <main>
+    <main class="pdoc">
         {% block module_info %}
             <section>
                 {% block edit_button %}
                     {% if edit_url %}
-                        <a class="button git-button" href="{{ edit_url }}">Edit on GitHub</a>
+                        <a class="pdoc-button git-button" href="{{ edit_url }}">Edit on GitHub</a>
                     {% endif %}
                 {% endblock %}
-                <h1 class="modulename">
-                    {% set parts = module.modulename.split(".") %}
-                    {% for part in parts %}
-                        {%- set fullname = ".".join(parts[:loop.index]) -%}
-                        {%- if fullname in all_modules and fullname != module.modulename -%}
-                            <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
-                        {%- else -%}
-                            {{ part }}
-                        {%- endif -%}
-                        {%- if loop.nextitem %}.{% endif -%}
-                    {% endfor %}
-                </h1>
+                {{ module_name() }}
                 {{ docstring(module) }}
                 {{ view_source(module) }}
             </section>

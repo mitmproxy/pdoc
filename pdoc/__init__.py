@@ -107,7 +107,7 @@ We can extend the default template by creating a file titled `module.html.jinja2
  with the following contents:
 
 ```html+jinja
-{% extends "module.html.jinja2" %}
+{% extends "default/module.html.jinja2" %}
 {% block nav_title %}
 <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
 {% endblock %}
@@ -121,6 +121,11 @@ pdoc -t . ./shelter.py
 
 ...and the updated documentation – with logo – renders! 🎉
 
+pdoc's Jinja2 macros are defined using `{% defaultmacro %}`, which makes it possible to override them in a custom
+template using a regular `{% macro %}` statement.
+The default implementation of each macro is also available as `default_$macroname`.
+See [`test/customtemplate/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/test/customtemplate/module.html.jinja2)
+for more examples!
 
 # How can I ... ?
 
@@ -146,7 +151,7 @@ Something similar can be done for classes and modules too. For classes,
 the docstring should come on the line immediately following `class
 ...`. For modules, the docstring should start on the first line of
 the file. These docstrings are what you see for each module, class,
-function and method listed in the documentation produced by `pdoc`.
+function and method listed in the documentation produced by pdoc.
 
 ## ...document variables?
 
@@ -159,7 +164,7 @@ variable = "SomeValue"
 ```
 
 The resulting `variable` will have no `__doc__` attribute.
-To compensate, `pdoc` will read the abstract syntax tree (an abstract representation of the source code)
+To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)
 and include all assignment statements immediately followed by a docstring.
 
 Something similar is done for instance variables as well, which are either type-annotated in the class
@@ -229,7 +234,7 @@ This means that if you want to move a particular function to the beginning of yo
 you need to move it there in your source code. This is not only useful to the readers of your documentation
 but also useful to the consumers of your source code.
 
-## ...use numpydoc or Google-style docstrings?
+## ...use numpydoc or Google docstrings?
 
 While pdoc prefers docstrings that are plain Markdown,
 it also understands numpydoc and Google-style docstrings,
@@ -242,6 +247,31 @@ If your documentation follows one of these styles, you can:
 pdoc does not implement the full reStructuredText specification and does not plan on doing so.
 If you feel that it doesn't parse a docstring element properly, please amend
 `pdoc.docstrings` and send us a pull request!
+
+## ...integrate pdoc into other systems?
+
+pdoc's HTML and CSS are written in a way that the default template can be easily adjusted
+to produce standalone HTML fragments that can be embedded in other systems.
+This makes it possible to integrate pdoc with almost every CMS or static site generator.
+The only limitation at the moment is that you need to retain pdoc's directory structure
+so that links between modules remain valid.
+
+First, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) to only emit CSS and HTML body contents:
+```html+jinja
+{% block style %}{% endblock %}
+{% block body %}{% endblock %}
+```
+
+Second, create a custom `module.html.jinja2` to suppress the layout CSS
+and navigation:
+```html+jinja
+{% extends "default/module.html.jinja2" %}
+{% block nav %}{% endblock %}
+{% block style_layout %}{% endblock %}
+```
+
+This should be enough to produce HTML files that can be embedded into other pages.
+All CSS selectors are prefixed with `.pdoc` so that pdoc's page style does not interfere with the rest of your website.
 
 # Docstring Inheritance
 
@@ -265,7 +295,7 @@ class GoldenRetriever(Dog):
 ```
 
 In Python, the docstring for `GoldenRetriever.bark` is empty, even though one was
-defined in `Dog.bark`. If `pdoc` generates documentation for the above
+defined in `Dog.bark`. If pdoc generates documentation for the above
 code, then it will automatically attach the docstring for `Dog.bark` to
 `GoldenRetriever.bark` if it does not have a docstring.
 
@@ -280,7 +310,7 @@ We would be happy to accept contributions for Markdown and PDF.
 '''
 from __future__ import annotations
 
-__version__ = "3.0.1"  # this is read from setup.py
+__version__ = "4.0.0"  # this is read from setup.py
 
 import io
 import warnings

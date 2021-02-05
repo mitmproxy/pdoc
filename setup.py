@@ -18,7 +18,7 @@ setup(
     author_email="pdoc@maximilianhils.com",
     version=VERSION,
     license="UNLICENSE",
-    description="A simple program and library to auto generate API documentation for Python modules.",
+    description="API Documentation for Python Projects",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://pdoc.dev/",

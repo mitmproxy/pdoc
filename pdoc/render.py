@@ -14,6 +14,7 @@ from pdoc.render_helpers import (
     linkify,
     minify_css,
     render_docstring,
+    DefaultMacroExtension,
 )
 
 
@@ -110,6 +111,7 @@ _default_searchpath = [
 
 env = Environment(
     loader=FileSystemLoader(_default_searchpath),
+    extensions=[DefaultMacroExtension],
     autoescape=True,
     trim_blocks=True,
     lstrip_blocks=True,

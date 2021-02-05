@@ -1,8 +1,24 @@
 # Release History
 
-# Unreleased: pdoc next
+# Unreleased: pdoc 5.0.0
 
- - 
+ - Make it easier to embed pdoc into other systems:
+   See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
+   This change may be a minor breaking change for users using custom templates.
+ - Add header anchors to documentation items.
+ - Define all Jinja2 macros as `{% defaultmacro %}`, which makes them easier to override.
+ - Parsing is not more robust if source code is unavailable.
+ - Bugfix: The "View Source" marker is now properly displayed in Firefox.
+
+# 2021-02-01 pdoc 4.0.0
+
+ - Improve how inherited members are detected.
+   `Doc.declared_at` is superseded by `Doc.taken_from`,
+   which is a relatively minor but breaking change in the Python API.
+ - Bugfix: Don't link private members in the same module.
+ - Improve error message when module live-reload fails.
+ - Smaller favicon, improved CSS minification
+ - Improve error message if module is not found.
 
 # 2021-01-26 pdoc 3.0.1
 

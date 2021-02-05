@@ -7,7 +7,7 @@ import pygments.lexers.python
 from jinja2 import Environment, FileSystemLoader
 from markupsafe import Markup
 
-import pdoc.render_helpers
+import pdoc.render
 
 here = Path(__file__).parent
 
@@ -30,6 +30,13 @@ if __name__ == "__main__":
 
     if (here / "docs").is_dir():
         shutil.rmtree(here / "docs")
+
+    pdoc.render.configure(
+        edit_url_map={
+            "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
+        }
+    )
+
     pdoc.pdoc(
         "pdoc",
         demo,

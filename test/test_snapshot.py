@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from pathlib import Path
 from typing import Optional
@@ -72,6 +73,9 @@ snapshots = [
 @pytest.mark.parametrize("snapshot", snapshots)
 @pytest.mark.parametrize("format", ["html", "repr"])
 def test_snapshots(snapshot: Snapshot, format: str):
+    """
+    Compare pdoc's rendered output against stored snapshots.
+    """
     if sys.version_info < (3, 9) and snapshot.id in (
         "demo",
         "demo_customtemplate",
@@ -81,7 +85,10 @@ def test_snapshots(snapshot: Snapshot, format: str):
         pytest.skip("minor rendering differences on Python 3.8")
     expected = snapshot.outfile(format).read_text("utf8")
     actual = snapshot.make(format)
-    assert actual == expected
+    assert actual == expected, (
+        "Rendered output does not match snapshot. "
+        "Run `python3 ./test/test_snapshot.py` to update snapshots."
+    )
 
 
 if __name__ == "__main__":
@@ -89,7 +96,7 @@ if __name__ == "__main__":
         raise RuntimeError("Snapshots need to be generated on Python 3.9+")
     for snapshot in snapshots:
         for format in ["html", "repr"]:
-            print(f"Rendering {snapshot}...")
+            print(f"Rendering {snapshot} to {format}...")
             rendered = snapshot.make(format)
             snapshot.outfile(format).write_bytes(rendered.encode())
     print("All snapshots rendered!")

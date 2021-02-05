@@ -9,7 +9,7 @@ from unittest.mock import patch
 import markdown2
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import contextfilter
+from jinja2 import contextfilter, nodes, ext
 from jinja2.runtime import Context
 from markupsafe import Markup
 
@@ -123,7 +123,8 @@ def linkify(context: Context, code: str) -> str:
 
     def linkify_repl(m: re.Match):
         fullname = m.group(0)
-        if context["module"].contains(fullname):
+        doc = context["module"].get(fullname)
+        if doc and context["is_public"](doc).strip():
             return f'<a href="#{fullname}">{fullname}</a>'
         try:
             module, qualname = split_identifier(context["all_modules"], fullname)
@@ -180,7 +181,9 @@ def edit_url(
 def minify_css(css: str) -> str:
     """Do some very basic CSS minification."""
     css = re.sub(r"[ ]{4}|\n|(?<=[:{}]) | (?=[{}])", "", css)
-    css = re.sub(r"/\*.+?\*/", lambda m: m.group(0) if m.group(0).startswith("/*!") else "", css)
+    css = re.sub(
+        r"/\*.+?\*/", lambda m: m.group(0) if m.group(0).startswith("/*!") else "", css
+    )
     return Markup(css.replace("<style", "\n<style"))
 
 
@@ -193,3 +196,50 @@ def defuse_unsafe_reprs():
     """
     with (patch.object(os._Environ, "__repr__", lambda self: "os.environ")):
         yield
+
+
+class DefaultMacroExtension(ext.Extension):
+    """
+    This extension provides a new `{% defaultmacro %}` statement, which defines a macro only if it does not exist.
+
+    For example,
+
+    ```html+jinja
+    {% defaultmacro example() %}
+        test 123
+    {% enddefaultmacro %}
+    ```
+
+    is equivalent to
+
+    ```html+jinja
+    {% macro default_example() %}
+    test 123
+    {% endmacro %}
+    {% if not example %}
+        {% macro example() %}
+            test 123
+        {% endmacro %}
+    {% endif %}
+    ```
+
+    Additionally, the default implementation is also available as `default_$macroname`, which makes it possible
+    to reference it in the override.
+    """
+
+    tags = {"defaultmacro"}
+
+    def parse(self, parser):
+        m = nodes.Macro(lineno=next(parser.stream).lineno)
+        name = parser.parse_assign_target(name_only=True).name
+        m.name = f"default_{name}"
+        parser.parse_signature(m)
+        m.body = parser.parse_statements(("name:enddefaultmacro",), drop_needle=True)
+
+        if_stmt = nodes.If(
+            nodes.Not(nodes.Name(name, "load")),
+            [nodes.Macro(name, m.args, m.defaults, m.body)],
+            [],
+            [],
+        )
+        return [m, if_stmt]
