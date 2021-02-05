@@ -1,6 +1,10 @@
 # Release History
 
-# Unreleased: pdoc 5.0.0
+# Unreleased: pdoc next
+
+ -
+
+# 2021-02-05 pdoc 5.0.0
 
  - Make it easier to embed pdoc into other systems:
    See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
