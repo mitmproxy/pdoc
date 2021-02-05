@@ -328,16 +328,20 @@
                 .pdoc .headerlink {
                     position: absolute;
                     width: 0;
-                    margin-left: -2.5rem;
-                    margin-top: -.5ex;
+                    margin-left: -1.5rem;
+                    line-height: 1.4rem;
                     font-size: 1.5rem;
+                    font-weight: normal;
                     transition: all 100ms ease-in-out;
                     opacity: 0;
                 }
 
-                .pdoc div:hover > .headerlink,
-                .pdoc div:target > .attr > .headerlink,
-                .pdoc section:target > .attr > .headerlink {
+                .pdoc .attr > .headerlink {
+                    margin-left: -2.5rem;
+                }
+
+                .pdoc *:hover > .headerlink,
+                .pdoc *:target > .attr > .headerlink {
                     opacity: 1;
                 }
 
@@ -581,6 +585,20 @@
         </details>
     {% endif %}
 {% enddefaultmacro %}
+{% defaultmacro module_name() %}
+    <h1 class="modulename">
+        {% set parts = module.modulename.split(".") %}
+        {% for part in parts %}
+            {%- set fullname = ".".join(parts[:loop.index]) -%}
+            {%- if fullname in all_modules and fullname != module.modulename -%}
+                <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
+            {%- else -%}
+                {{ part }}
+            {%- endif -%}
+            {%- if loop.nextitem %}.{% endif -%}
+        {% endfor %}
+    </h1>
+{% enddefaultmacro %}
 {% block body %}
     {% block nav %}
         <nav class="pdoc">
@@ -639,18 +657,7 @@
                         <a class="pdoc-button git-button" href="{{ edit_url }}">Edit on GitHub</a>
                     {% endif %}
                 {% endblock %}
-                <h1 class="modulename">
-                    {% set parts = module.modulename.split(".") %}
-                    {% for part in parts %}
-                        {%- set fullname = ".".join(parts[:loop.index]) -%}
-                        {%- if fullname in all_modules and fullname != module.modulename -%}
-                            <a href="./{{ "../" * loop.revindex0 }}{{ part }}.html">{{ part }}</a>
-                        {%- else -%}
-                            {{ part }}
-                        {%- endif -%}
-                        {%- if loop.nextitem %}.{% endif -%}
-                    {% endfor %}
-                </h1>
+                {{ module_name() }}
                 {{ docstring(module) }}
                 {{ view_source(module) }}
             </section>

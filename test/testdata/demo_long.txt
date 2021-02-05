@@ -43,8 +43,8 @@ This …
     <function def security(test=os.environ, /): ...  # Default values are g…>
     <class demo_long.DoubleInherit  # This is an example o…
         <method def __init__(self): ...  # inherited from demo_long.Foo.__init__, The constructor is c…>
-        <var an_attribute: Union[str, List[int]]  # A regular attribute …>
-        <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # An attribute with a …>
+        <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
+        <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
         <method def a_regular_function(self) -> demo_long.Foo: ...  # inherited from demo_long.Foo.a_regular_function, This is a regular me…>
         <var a_property: str  # inherited from demo_long.Foo.a_property, This is a `@property…>
