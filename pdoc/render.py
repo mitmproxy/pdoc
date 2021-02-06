@@ -8,7 +8,6 @@ import pdoc.doc
 from pdoc.render_helpers import (
     defuse_unsafe_reprs,
     edit_url,
-    formatter,
     highlight,
     link,
     linkify,
@@ -74,7 +73,6 @@ def html_module(
             edit_url=edit_url(
                 module.modulename, module.is_package, env.globals["edit_url_map"]
             ),
-            pygments_css=formatter.get_style_defs(),
         )
 
 

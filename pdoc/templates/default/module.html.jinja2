@@ -4,7 +4,7 @@
     {% filter minify_css %}
         {{ super() }}
         {% block style_pygments %}
-            <style type="text/css">/*! pygments */{{ pygments_css }}</style>
+            <style type="text/css">/*! Pygments code highlighting */ {% include 'code-highlighting.css' %}</style>
         {% endblock %}
         {% block style_pdoc %}
             <style type="text/css">/*! pdoc */
@@ -17,8 +17,58 @@
              see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
              #}
 
-            .pdoc {
-                box-sizing: border-box;
+            {% block default_theme %}
+                /* Color palette */
+                .pdoc {
+                    box-sizing: border-box;
+                    --nav-bg-color: #eee;
+                    --nav-text-color: #333;
+                    --nav-li-hover-color: rgba(255, 255, 255, 0.5);
+                    --text-link-color: #3660a5;
+                    --text-link-hover-color: #0a58ca;
+                    --pre-bg-color: #f7f7f7;
+                    --pre-border-color: #ccc;
+                    --code-text-color: #24292e;
+                    --code-bg-color: rgba(27, 31, 35, 0.05);
+                    --name-color: #0066BB;
+                    --def-color: #008800;
+                    --annotation-color: #007020;
+                    --attr-hover-color: #dadada;
+                    --identifier-before-after: gray;
+                    --target-bg-color: #fff598;
+                }
+
+                body {
+                    --main-bg-color: #fff;
+                    --main-text-color: #212529;
+                }
+            {% endblock %}
+
+            @media (prefers-color-scheme: dark) {
+                {% block dark_theme %}
+                    .pdoc {
+                        --nav-bg-color: #333;
+                        --nav-text-color: #eee;
+                        --nav-li-hover-color: rgba(0, 0, 0, 0.1);
+                        --text-link-color: #58a6ff;
+                        --text-link-hover-color: #3989ff;
+                        --pre-bg-color: #333;
+                        --pre-border-color: #555;
+                        --code-text-color:#e9e9e9;
+                        --code-bg-color: #343434;
+                        --name-color: #77C1FF;
+                        --def-color: #0cdd0c;
+                        --annotation-color: #00c037;
+                        --attr-hover-color: #444;
+                        --identifier-before-after: #9d9d9d;
+                        --target-bg-color: #394e00;
+                    }
+
+                    body {
+                        --main-bg-color: #212529;
+                        --main-text-color: #fff;
+                    }
+                {% endblock %}
             }
 
             .pdoc-button {
@@ -31,6 +81,16 @@
             }
 
             {% block style_layout %}
+                /* Colors of overall document */
+                body {
+                      color: var(--main-text-color);
+                      background-color: var(--main-bg-color);
+                }
+
+                 @media (prefers-color-scheme: dark) {
+
+                 }
+
                 /* Responsive Layout */
                 html, body {
                     width: 100%;
@@ -45,11 +105,9 @@
                         height: 40px;
                         top: 1rem;
                         right: 1rem;
-                        color: rgba(0, 0, 0, .55);
-                        border-color: rgba(0, 0, 0, .1);
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+                        border-color: var(--identifier-before-after);
+                        color: var(--identifier-before-after);
+                        display: flex;
                     }
 
                     main {
@@ -57,7 +115,8 @@
                     }
 
                     label[for=navtoggle]:hover {
-                        border-color: rgba(0, 0, 0, .5);
+                        border-color: var(--main-text-color);
+                        color: var(--main-text-color);
                     }
 
                     #navtoggle + div {
@@ -104,20 +163,21 @@
                 nav.pdoc {
                     --pad: 1.75rem;
                     --indent: 1.5rem;
-                    background-color: #eee;
-                    border-right: 1px solid #c1c1c1;
+                    background-color: var(--nav-bg-color);
+                    border-right: 1px solid var(--pre-border-color);
                     box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
                     padding: 0 0 0 var(--pad);
                     overflow-wrap: anywhere;
-                    scrollbar-width: thin;
+                    scrollbar-width: thin; /* Scrollbar width on Firefox */
+                    scrollbar-color: var(--pre-border-color) transparent /* Scrollbar color on Firefox */
                 }
 
                 nav.pdoc::-webkit-scrollbar {
-                    width: 10px;
+                    width: .4rem; /* Scrollbar width on Chromium-based browsers */
                 }
 
                 nav.pdoc::-webkit-scrollbar-thumb {
-                    background-color: #c1c1c1;
+                    background-color: var(--pre-border-color); /* Scrollbar color on Chromium-based browsers */
                 }
 
                 nav.pdoc > div {
@@ -125,18 +185,18 @@
                 }
 
                 nav.pdoc .module-list-button {
-                    display: inline-block;
-                    background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "box-arrow-in-left.svg" %}{% endfilter %}");
-                    background-position: 1em center;
-                    background-repeat: no-repeat;
-                    color: #333;
-                    border-color: #999;
-                    padding-left: calc(1em + 18px);
+                    display: inline-flex;
+                    color: var(--nav-text-color);
+                    border-color: var(--identifier-before-after);
                     margin-bottom: 1rem;
                 }
 
                 nav.pdoc .module-list-button:hover {
-                    border-color: black;
+                    border-color: var(--main-text-color);
+                }
+
+                nav.pdoc .module-list-button svg {
+                    margin-right: .5em;
                 }
 
                 nav.pdoc ul {
@@ -156,11 +216,11 @@
                 }
 
                 nav.pdoc li:hover {
-                    background-color: rgba(255, 255, 255, 0.5);
+                    background-color: var(--nav-li-hover-color);
                 }
 
                 nav.pdoc a {
-                    color: #333;
+                    color: var(--nav-text-color);
                     display: block;
                 }
 
@@ -170,12 +230,12 @@
 
                 nav.pdoc .class:before {
                     content: "class ";
-                    color: gray;
+                    color: var(--identifier-before-after);
                 }
 
                 nav.pdoc .function:after {
                     content: "()";
-                    color: gray;
+                    color: var(--identifier-before-after);
                 }
             {% endblock %}
 
@@ -197,7 +257,11 @@
 
                 .pdoc a {
                     text-decoration: none;
-                    color: #3660a5;
+                    color: var(--text-link-color);
+                }
+
+                .pdoc a:hover {
+                    color: var(--text-link-hover-color);
                 }
 
                 .pdoc blockquote {
@@ -205,20 +269,20 @@
                 }
 
                 .pdoc pre {
-                    background-color: #f7f7f7;
-                    border-top: 1px solid #ccc;
-                    border-bottom: 1px solid #ccc;
+                    background-color: var(--pre-bg-color);
+                    border-top: 1px solid var(--pre-border-color);
+                    border-bottom: 1px solid var(--pre-border-color);
                     margin-bottom: 1em;
                     padding: .5rem 0 .5rem .5rem;
                     overflow-x: auto;
                 }
 
                 .pdoc code {
-                    color: #24292e;
+                    color: var(--code-text-color);
                     padding: .2em .4em;
                     margin: 0;
                     font-size: 85%;
-                    background-color: rgba(27, 31, 35, 0.05);
+                    background-color: var(--code-bg-color);
                     border-radius: 6px;
                 }
 
@@ -241,12 +305,12 @@
                 }
 
                 .pdoc .modulename a {
-                    color: #3660a5;
+                    color: var(--text-link-color);
                     transition: 100ms all;
                 }
 
                 .pdoc .modulename a:hover {
-                    color: #1659c5;
+                    color: var(--text-link-hover-color);
                 }
 
                 /* GitHub Button */
@@ -319,18 +383,18 @@
                 .pdoc h4:target,
                 .pdoc h5:target,
                 .pdoc h6:target {
-                    background-color: #fff7a8;
-                    box-shadow: -1rem 0 0 0 #fff7a8;
+                    background-color: var(--target-bg-color);
+                    box-shadow: -1rem 0 0 0 var(--target-bg-color);
                 }
 
                 .pdoc div:target > .attr,
                 .pdoc section:target > .attr,
                 .pdoc dd:target > a {
-                    background-color: #fff598;
+                    background-color: var(--target-bg-color);
                 }
 
                 .pdoc .attr:hover {
-                    background-color: #eaeaea;
+                    background-color: var(--attr-hover-color);
                 }
 
                 /* Header link */
@@ -356,14 +420,14 @@
 
                 /* Attributes */
                 .pdoc .attr {
-                    color: black;
+                    color: var(--main-text-color);
                     margin: 1rem 0 .5rem;
                     /*
                     lots of padding on the right to accomodate the view source button.
                     This is not ideal, but probably good enough for now.
                     */
                     padding: .4rem 5rem .4rem 1rem;
-                    background-color: #eee;
+                    background-color: var(--nav-bg-color);
                 }
 
                 .pdoc .classattr {
@@ -371,12 +435,12 @@
                 }
 
                 .pdoc .name {
-                    color: #0066BB;
+                    color: var(--name-color);
                     font-weight: bold;
                 }
 
                 .pdoc .def {
-                    color: #008800;
+                    color: var(--def-color);
                     font-weight: bold;
                 }
 
@@ -385,7 +449,7 @@
                 }
 
                 .pdoc .annotation {
-                    color: #007020;
+                    color: var(--annotation-color);
                 }
 
                 .pdoc .int, .pdoc .nonetype {
@@ -611,7 +675,7 @@
 {% block body %}
     {% block nav %}
         <nav class="pdoc">
-            <label for="navtoggle" class="pdoc-button"></label>
+            <label for="navtoggle" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
             <input id="navtoggle" type="checkbox">
             <div>
                 {% block nav_title %}{% endblock %}
@@ -619,10 +683,12 @@
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
                         <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                            {% include "box-arrow-in-left.svg" %}
                             {{- parentmodule -}}
                         </a>
                     {% elif all_modules|length > 1 %}
                         <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
+                            {% include "box-arrow-in-left.svg" %}
                             Module Index
                         </a>
                     {% endif %}

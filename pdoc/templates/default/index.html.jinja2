@@ -3,11 +3,35 @@
 {% block style %}
     {{ super() | safe }}
     <style type="text/css">
+        {% block default_theme %}
+            :root {
+                --bg-color: #f7f7f7;
+                --text-color: black;
+                --search-bg-color: white;
+                --module-text-color: #333;
+                --module-bg-color: rgba(255, 255, 255, 0.4);
+                --target-bg-color: #fff598;
+
+            }
+        {% endblock %}
+        @media (prefers-color-scheme: dark) {
+            {% block dark_theme %}
+                :root {
+                    --bg-color: #333;
+                    --text-color: white;
+                    --search-bg-color: black;
+                    --module-text-color: #f7f7f7;
+                    --module-bg-color: rgba(0, 0, 0, 0.4);
+                    --target-bg-color: #394e00;
+                }
+            {% endblock %}
+        }
+
         html, body {
             width: 100%;
-            height: 100%;
-            background-color: #f5f5f5;
+            background-color: var(--bg-color);
             text-align: center;
+            color: var(--text-color);
         }
 
         #logo {
@@ -27,6 +51,8 @@
         }
 
         #search {
+            color: var(--text-color);
+            background-color: var(--search-bg-color);
             display: block;
             margin: 0 auto;
             border: solid gray 1px;
@@ -38,7 +64,6 @@
 
         h5 {
             margin-top: 2rem;
-
         }
 
         #modules {
@@ -50,18 +75,18 @@
             display: inline-block;
             margin: .1rem;
             padding: .1rem .5rem;
-            color: #333;
+            color: var(--module-text-color);
             text-decoration: none;
-            background-color: rgba(255, 255, 255, 0.4);
+            background-color: var(--module-bg-color);
         }
 
         #modules a:hover {
-            background-color: white;
+            background-color: var(--search-bg-color);
             transform: scale(1.05);
         }
 
         #modules .active {
-            background-color: #ffc;
+            background-color: var(--target-bg-color);
         }
     </style>
 {% endblock %}

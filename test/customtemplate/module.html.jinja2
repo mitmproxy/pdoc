@@ -25,3 +25,12 @@ However, doing this is not recommended, see https://pdoc.dev/docs/pdoc.html#cont
         {{ default_is_public(doc) }}
     {% endif %}
 {% endmacro %}
+
+{#
+By default, both light and dark themes are provided. To force the dark theme by
+default, the themes blocks can be overwritten:
+#}
+{% block default_theme %}
+    {{ self.dark_theme.super() }}
+{% endblock %}
+{% block dark_theme %}{% endblock %}
