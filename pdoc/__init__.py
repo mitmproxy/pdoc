@@ -379,8 +379,8 @@ def pdoc(
     assert output_directory
 
     if format == "html":
-        (output_directory / "index.html").write_bytes(
-            render.html_index(all_modules).encode()
-        )
+        index = render.html_index(all_modules)
+        if index:
+            (output_directory / "index.html").write_bytes(index.encode())
 
     return retval.getvalue()
