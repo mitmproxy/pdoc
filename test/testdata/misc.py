@@ -1,7 +1,21 @@
 from functools import cached_property
 from functools import lru_cache
+from typing import Generic
+from typing import TypeVar
 
 import demo_long
+
+# Testing generic bases
+
+T = TypeVar("T")
+
+
+class GenericParent(Generic[T]):
+    pass
+
+
+class NonGenericChild(GenericParent[str]):
+    pass
 
 
 # Testing docstring inheritance
@@ -173,6 +187,8 @@ indents"""
 
 
 __all__ = [  # noqa
+    "GenericParent",
+    "NonGenericChild",
     "Child",
     "bad_qualname",
     "only_annotated",

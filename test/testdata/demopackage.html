@@ -186,8 +186,22 @@ demopackage    </h1>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">demo_long</span>
+
+<span class="c1"># Testing generic bases</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">GenericParent</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">NonGenericChild</span><span class="p">(</span><span class="n">GenericParent</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+    <span class="k">pass</span>
 
 
 <span class="c1"># Testing docstring inheritance</span>
@@ -359,6 +373,8 @@ demopackage    </h1>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
+    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
     <span class="s2">&quot;bad_qualname&quot;</span><span class="p">,</span>
     <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
