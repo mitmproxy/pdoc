@@ -8,7 +8,6 @@ import pdoc.doc
 from pdoc.render_helpers import (
     defuse_unsafe_reprs,
     edit_url,
-    formatter,
     highlight,
     link,
     linkify,
