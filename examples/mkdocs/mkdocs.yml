@@ -1,0 +1,9 @@
+site_name: mkdocs with pdoc
+use_directory_urls: false
+theme: "readthedocs"
+
+nav:
+    - 'index.md'
+    - 'API Reference':
+        - 'pdoc': 'api/pdoc.md'
+        - 'pdoc.doc': 'api/pdoc/doc.md'
