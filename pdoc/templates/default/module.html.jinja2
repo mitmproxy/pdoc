@@ -105,11 +105,9 @@
                         height: 40px;
                         top: 1rem;
                         right: 1rem;
-                        color: rgba(0, 0, 0, .55);
-                        border-color: rgba(0, 0, 0, .1);
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+                        border-color: var(--identifier-before-after);
+                        color: var(--identifier-before-after);
+                        display: flex;
                     }
 
                     main {
@@ -117,7 +115,8 @@
                     }
 
                     label[for=navtoggle]:hover {
-                        border-color: rgba(0, 0, 0, .5);
+                        border-color: var(--main-text-color);
+                        color: var(--main-text-color);
                     }
 
                     #navtoggle + div {
@@ -674,7 +673,7 @@
 {% block body %}
     {% block nav %}
         <nav class="pdoc">
-            <label for="navtoggle" class="pdoc-button"></label>
+            <label for="navtoggle" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
             <input id="navtoggle" type="checkbox">
             <div>
                 {% block nav_title %}{% endblock %}
