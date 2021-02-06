@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 here = Path(__file__).parent
 
@@ -10,7 +10,6 @@ long_description = (here / "README.md").read_text("utf8")
 VERSION = re.search(
     r'__version__ = "(.+?)"', (here / "pdoc" / "__init__.py").read_text("utf8")
 ).group(1)
-
 
 setup(
     name="pdoc",

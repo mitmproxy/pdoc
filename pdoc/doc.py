@@ -574,9 +574,7 @@ class Class(Namespace[type]):
             if o := get_origin(x):
                 bases.append((o.__module__, o.__qualname__, str(x)))
             elif x.__module__ == self.modulename:
-                bases.append(
-                    (x.__module__, x.__qualname__, x.__qualname__)
-                )
+                bases.append((x.__module__, x.__qualname__, x.__qualname__))
             else:
                 bases.append(
                     (x.__module__, x.__qualname__, f"{x.__module__}.{x.__qualname__}")
