@@ -16,14 +16,11 @@ from typing import (  # type: ignore
     Any,
     Optional,
     TYPE_CHECKING,
-    get_args,
     _GenericAlias,
-    get_origin,
-    Literal,
 )
 
 from . import extract
-from ._compat import GenericAlias, ForwardRef
+from ._compat import GenericAlias, ForwardRef, get_args, get_origin, Literal
 
 if TYPE_CHECKING:
 

@@ -189,7 +189,7 @@ demopackage    </h1>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+            <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
@@ -350,26 +350,26 @@ demopackage    </h1>
 <span class="sd">        indents</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="nd">@lru_cache</span>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 
-    <span class="nd">@lru_cache</span>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="c1"># comment</span>
     <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 
-    <span class="nd">@lru_cache</span>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no</span>
 <span class="sd">indents&quot;&quot;&quot;</span>
 
-    <span class="nd">@lru_cache</span>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;one</span>
 <span class="sd">        indent&quot;&quot;&quot;</span>
 
-    <span class="nd">@lru_cache</span>
+    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        two</span>

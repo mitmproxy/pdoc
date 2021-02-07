@@ -25,12 +25,11 @@ import textwrap
 import types
 import warnings
 from abc import abstractmethod, ABCMeta
-from functools import cached_property, wraps
+from functools import wraps
 from typing import (  # type: ignore
     Any,
     Union,
     TypeVar,
-    get_origin,
     ClassVar,
     Generic,
     Optional,
@@ -38,7 +37,7 @@ from typing import (  # type: ignore
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
-from ._compat import cache
+from ._compat import cache, cached_property, get_origin
 
 
 def _include_fullname_in_traceback(f):
@@ -408,7 +407,8 @@ class Module(Namespace[types.ModuleType]):
     def _member_objects(self) -> dict[str, Any]:
         members = {}
 
-        if all := _safe_getattr(self.obj, "__all__", False):
+        all = _safe_getattr(self.obj, "__all__", False)
+        if all:
             for name in all:
                 if name in self.obj.__dict__:
                     val = self.obj.__dict__[name]
@@ -571,7 +571,8 @@ class Class(Namespace[type]):
         for x in _safe_getattr(self.obj, "__orig_bases__", self.obj.__bases__):
             if x is object:
                 continue
-            if o := get_origin(x):
+            o = get_origin(x)
+            if o:
                 bases.append((o.__module__, o.__qualname__, str(x)))
             elif x.__module__ == self.modulename:
                 bases.append((x.__module__, x.__qualname__, x.__qualname__))

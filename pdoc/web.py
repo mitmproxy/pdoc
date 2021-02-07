@@ -53,7 +53,8 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 return render.html_error(error=f"Module {module!r} not found")
 
             mtime = ""
-            if t := extract.module_mtime(module):
+            t = extract.module_mtime(module)
+            if t:
                 mtime = f"{t:.1f}"
             if "mtime=1" in self.path:
                 self.send_response(200)

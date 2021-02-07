@@ -20,7 +20,7 @@ API Documentation for Python Projects.
 pip install pdoc
 ```
 
-pdoc is compatible with Python 3.8 and newer.
+pdoc is compatible with Python 3.7 and newer.
 
 
 # Usage

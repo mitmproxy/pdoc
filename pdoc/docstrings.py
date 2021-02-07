@@ -144,7 +144,8 @@ def _numpy_parameters(content: str) -> str:
     """Convert a numpy parameter section into Markdown"""
     contents = ""
     for item in _indented_list(content):
-        if m := re.match(r"^(.+):(.+)([\s\S]*)", item):
+        m = re.match(r"^(.+):(.+)([\s\S]*)", item)
+        if m:
             contents += (
                 f" - **{m.group(1).strip()}** ({m.group(2).strip()}):\n"
                 f"{indent(m.group(3).strip(), '   ')}\n"

@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
-from typing import Optional, Collection, Mapping, Literal
+from typing import Collection, Mapping, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
 import pdoc.doc
+from pdoc._compat import Literal
 from pdoc.render_helpers import (
     DefaultMacroExtension,
     defuse_unsafe_reprs,

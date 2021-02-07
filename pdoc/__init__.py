@@ -314,9 +314,10 @@ __version__ = "6.0.0"  # this is read from setup.py
 import io
 import warnings
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 
-from pdoc import extract, render, doc
+from pdoc import doc, extract, render
+from pdoc._compat import Literal
 
 
 def pdoc(

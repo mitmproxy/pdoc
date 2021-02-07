@@ -1,4 +1,4 @@
-from functools import cached_property
+from pdoc._compat import cached_property
 from functools import lru_cache
 from typing import Generic
 from typing import TypeVar
@@ -159,26 +159,26 @@ indents"""
         indents
         """
 
-    @lru_cache
+    @lru_cache()
     def foo_decorated(self):
         """no indents"""
 
-    @lru_cache
+    @lru_cache()
     # comment
     def foo_commented(self):
         """no indents"""
 
-    @lru_cache
+    @lru_cache()
     def bar_decorated(self):
         """no
 indents"""
 
-    @lru_cache
+    @lru_cache()
     def baz_decorated(self):
         """one
         indent"""
 
-    @lru_cache
+    @lru_cache()
     def qux_decorated(self):
         """
         two

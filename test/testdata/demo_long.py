@@ -25,15 +25,8 @@ from __future__ import annotations
 import abc
 import os
 from dataclasses import dataclass, field
-from functools import cached_property
-from typing import TypeVar, Union, ClassVar, Optional, Literal, List
-
-try:
-    from functools import cache
-except ImportError:  # pragma: no cover
-    from functools import lru_cache
-
-    cache = lru_cache(maxsize=None)
+from pdoc._compat import cached_property, cache
+from typing import Sequence, TypeVar, Union, ClassVar, Optional, List
 
 FOO_CONSTANT: int = 42
 """
@@ -180,7 +173,7 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-def security(test=os.environ, /):
+def security(test=os.environ):
     """
     Default values are generally rendered using repr(),
     but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.
@@ -210,6 +203,6 @@ class DataDemo:
 
     a: int
     """Again, we can document indivial properties with docstrings."""
-    b: Literal["w", "r"]
+    b: Sequence[str]
     c: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""

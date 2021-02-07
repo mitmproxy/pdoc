@@ -1,8 +1,8 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-02-07 pdoc 6.1.0
 
- -
+ - Add compatibility for Python 3.7
 
 # 2021-02-07 pdoc 6.0.0
 

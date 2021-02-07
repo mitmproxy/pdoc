@@ -82,7 +82,7 @@ def test_snapshots(snapshot: Snapshot, format: str):
         "demo_long",
         "demo_eager",
     ):
-        pytest.skip("minor rendering differences on Python 3.8")
+        pytest.skip("minor rendering differences on Python <=3.8")
     expected = snapshot.outfile(format).read_text("utf8")
     actual = snapshot.make(format)
     assert actual == expected, (

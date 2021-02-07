@@ -11,7 +11,7 @@
         <var qux  # qux>
         <var quux>
         <var quuux: int = 42  # quuux>>
-    <method def bad_qualname(self, a: int, b: Literal['w', 'r'], c: bool = True) -> None: ...  # inherited from demo_long.bad_qualname>
+    <method def bad_qualname(self, a: int, b: Sequence[str], c: bool = True) -> None: ...  # inherited from demo_long.bad_qualname>
     <var only_annotated: int>
     <class misc.CustomException  # custom exception typ…
         <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
@@ -36,11 +36,11 @@
         indent>
         <method def qux(self): ...  # two
         indents>
-        <@lru_cache method def foo_decorated(self): ...  # no indents>
-        <@lru_cache method def foo_commented(self): ...  # no indents>
-        <@lru_cache method def bar_decorated(self): ...  # no
+        <@lru_cache() method def foo_decorated(self): ...  # no indents>
+        <@lru_cache() method def foo_commented(self): ...  # no indents>
+        <@lru_cache() method def bar_decorated(self): ...  # no
         indents>
-        <@lru_cache method def baz_decorated(self): ...  # one
+        <@lru_cache() method def baz_decorated(self): ...  # one
         indent>
-        <@lru_cache method def qux_decorated(self): ...  # two
+        <@lru_cache() method def qux_decorated(self): ...  # two
         indents>>>

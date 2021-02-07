@@ -6,5 +6,5 @@ def foo(x: Literal["r", "w"]) -> Union[str, int]:
     pass
 
 
-def bar(x: list["int"]) -> List["int"]:
+def bar(x: list["int"], /) -> List["int"]:
     pass

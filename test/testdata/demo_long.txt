@@ -40,7 +40,7 @@ This …
         <@staticmethod static def a_static_method(): ...  # inherited from demo_long.Foo.a_static_method, This is what a `@sta…>>
     <function async def i_am_async(self) -> int: ...  # This is an example o…>
     <@cache function def fib(n): ...  # This is an example o…>
-    <function def security(test=os.environ, /): ...  # Default values are g…>
+    <function def security(test=os.environ): ...  # Default values are g…>
     <class demo_long.DoubleInherit  # This is an example o…
         <method def __init__(self): ...  # inherited from demo_long.Foo.__init__, The constructor is c…>
         <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
@@ -56,7 +56,7 @@ This …
         <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>>
     <var CONST_B = 'yes'  # A constant without t…>
     <@dataclass class demo_long.DataDemo  # This is an example f…
-        <method def __init__(self, a: int, b: Literal['w', 'r'], c: bool = True): ...>
+        <method def __init__(self, a: int, b: Sequence[str], c: bool = True): ...>
         <var a: int  # Again, we can docume…>
-        <var b: Literal['w', 'r']>
+        <var b: Sequence[str]>
         <var c: bool = True  # This property is ass…>>>
