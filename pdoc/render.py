@@ -28,7 +28,7 @@ def configure(
 
     - `template_directory` can be used to set an additional (preferred) directory
       for templates. You can find an example in the main documentation of `pdoc`
-      or in `test/customtemplate`.
+      or in `examples/custom-template`.
     - `docformat` is the docstring flavor in use.
       pdoc prefers plain Markdown (the default), but also supports other formats.
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,

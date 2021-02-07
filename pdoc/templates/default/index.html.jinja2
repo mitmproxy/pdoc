@@ -3,7 +3,7 @@
 {% block style %}
     {{ super() | safe }}
     <style type="text/css">
-        {% block default_theme %}
+        {% block style_theme %}
             :root {
                 --pdoc-background: #f8f9fa;
             }
@@ -13,24 +13,11 @@
                 --active: #fff598;
             }
         {% endblock %}
-        @media (prefers-color-scheme: dark) {
-            {% block dark_theme %}
-                :root {
-                    --pdoc-background: #212529;
-                }
-                .pdoc {
-                    --text: #dddddd;
-                    --accent: #333;
-                    --active: #9e7700;
-                }
-            {% endblock %}
-        }
 
         html, body {
             width: 100%;
             background-color: var(--pdoc-background);
             text-align: center;
-
         }
 
         .pdoc {

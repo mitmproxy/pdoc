@@ -12,20 +12,12 @@ a `module.html.jinja2` file in your custom template directory that extends the d
 
 ## Syntax Highlighting
 
-The `syntax-highlighting.css` file contains the CSS styles used to add
-source code syntax highlighting.
-They are generated as follows:
+The `syntax-highlighting.css` file contains the CSS styles used for syntax highlighting.
+It is generated as follows:
 
 ```
 pygmentize -f html -a .pdoc -S <theme> > syntax-highlighting.css
 ```
 
-Optionally, add a dark color scheme:
-
-```
-echo -e "\n@media(prefers-color-scheme: dark){ \
-      \n$(pygmentize -f html -a .pdoc -S <theme>)\n}" >> syntax-highlighting.css
-```
-
-The default color schemes are `default` (light theme) and `monokai` (dark theme). 
-You can test different builtin themes on [the Pygments website](https://pygments.org/demo/).
+The default theme is `default`. Alternative color schemes can be tested on 
+[the Pygments website](https://pygments.org/demo/).

@@ -3,13 +3,12 @@
 {% block style %}
     {% filter minify_css %}
         {{ super() }}
-        {% block style_pygments %}
-            <style type="text/css">{% include 'syntax-highlighting.css' %}</style>
-        {% endblock %}
+        <style type="text/css">{% include 'syntax-highlighting.css' %}</style>
         {% block style_pdoc %}
             <style type="text/css">/*! pdoc */
             {#
-             pdoc's CSS style is divided into two Jinja2 blocks:
+             pdoc's CSS style is divided into three Jinja2 blocks:
+               - style_theme: The color scheme.
                - style_layout: The responsive page layout and navigation menu.
                - style_content: The documentation contents.
 
@@ -17,9 +16,7 @@
              see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
              #}
 
-
-            {% block default_theme %}
-                /* Color palette */
+            {% block style_theme %}
                 :root {
                     --pdoc-background: #fff;
                 }
@@ -41,31 +38,6 @@
                     --annotation: #007020;
                 }
             {% endblock %}
-
-            @media (prefers-color-scheme: dark) {
-            {% block dark_theme %}
-                :root {
-                    --pdoc-background: #212529;
-                }
-
-                .pdoc {
-                    --text: #f7f7f7;
-                    --muted: #9d9d9d;
-                    --link: #58a6ff;
-                    --link-hover: #3989ff;
-                    --code: #333;
-                    --active: #555;
-
-                    --accent: #343434;
-                    --accent2: #555;
-
-                    --nav-hover: rgba(0, 0, 0, 0.1);
-                    --name: #77C1FF;
-                    --def: #0cdd0c;
-                    --annotation: #00c037;
-                }
-            {% endblock %}
-            }
 
             {% block style_layout %}
                 /* Colors of overall document */
@@ -668,7 +640,6 @@
             <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
             <input id="togglestate" type="checkbox">
             <div>
-                {% block nav_title %}{% endblock %}
                 {% block module_list_link %}
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
@@ -685,6 +656,8 @@
                         </a>
                     {% endif %}
                 {% endblock %}
+
+                {% block nav_title %}{% endblock %}
 
                 {% set index = module.docstring | render_docstring | attr("toc_html") %}
                 {% if index %}

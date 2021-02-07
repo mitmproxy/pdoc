@@ -31,6 +31,7 @@ if __name__ == "__main__":
     if (here / "docs").is_dir():
         shutil.rmtree(here / "docs")
 
+    # Render main docs
     pdoc.render.configure(
         edit_url_map={
             "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
@@ -43,3 +44,7 @@ if __name__ == "__main__":
         here / ".." / "test" / "testdata" / "demo_long.py",
         output_directory=here / "docs",
     )
+
+    # Render dark mode example
+    pdoc.render.configure(template_directory=here / ".." / "examples" / "dark-mode")
+    pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
