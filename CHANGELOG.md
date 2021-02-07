@@ -2,8 +2,14 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-02-07 pdoc 6.0.0
+
  - Add dark mode theme (@Arkelis)
- - Add an example how to integrate pdoc with mkdocs.
+   pdoc's color scheme can now be customized with CSS variables.
+   This may be a minor breaking change for users who have heavily customized their templates.
+ - Docs: Add an example how to integrate pdoc with mkdocs.
  - Bugfix: pdoc now retains custom rendering configuration when it renders itself with live-reload.
 
 # 2021-02-05 pdoc 5.0.0
