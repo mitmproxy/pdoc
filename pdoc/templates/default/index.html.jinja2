@@ -5,33 +5,36 @@
     <style type="text/css">
         {% block default_theme %}
             :root {
-                --bg-color: #f7f7f7;
-                --text-color: black;
-                --search-bg-color: white;
-                --module-text-color: #333;
-                --module-bg-color: rgba(255, 255, 255, 0.4);
-                --target-bg-color: #fff598;
-
+                --pdoc-background: #f8f9fa;
+            }
+            .pdoc {
+                --text: #212529;
+                --accent: #fff;
+                --active: #fff598;
             }
         {% endblock %}
         @media (prefers-color-scheme: dark) {
             {% block dark_theme %}
                 :root {
-                    --bg-color: #333;
-                    --text-color: white;
-                    --search-bg-color: black;
-                    --module-text-color: #f7f7f7;
-                    --module-bg-color: rgba(0, 0, 0, 0.4);
-                    --target-bg-color: #394e00;
+                    --pdoc-background: #212529;
+                }
+                .pdoc {
+                    --text: #dddddd;
+                    --accent: #333;
+                    --active: #9e7700;
                 }
             {% endblock %}
         }
 
         html, body {
             width: 100%;
-            background-color: var(--bg-color);
+            background-color: var(--pdoc-background);
             text-align: center;
-            color: var(--text-color);
+
+        }
+
+        .pdoc {
+            color: var(--text);
         }
 
         #logo {
@@ -51,8 +54,8 @@
         }
 
         #search {
-            color: var(--text-color);
-            background-color: var(--search-bg-color);
+            color: var(--text);
+            background-color: var(--accent);
             display: block;
             margin: 0 auto;
             border: solid gray 1px;
@@ -75,27 +78,30 @@
             display: inline-block;
             margin: .1rem;
             padding: .1rem .5rem;
-            color: var(--module-text-color);
+            color: var(--text);
             text-decoration: none;
-            background-color: var(--module-bg-color);
+            background-color: var(--accent);
         }
 
         #modules a:hover {
-            background-color: var(--search-bg-color);
+            background-color: var(--accent);
             transform: scale(1.05);
         }
 
         #modules .active {
-            background-color: var(--target-bg-color);
+            background-color: var(--active);
         }
     </style>
 {% endblock %}
 {% block body %}
+<div class="pdoc">
     <a id="logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
-    <input id="search" type="text" placeholder="search"/>
+    <input id="search" type="text" placeholder="search" aria-label="search for a module"/>
     <h5>Available Modules</h5>
     <div id="modules">
-
+    {% for module in all_modules %}
+        <a href="{{ module.replace(".","/") }}.html">{{ module }}</a>
+    {% endfor %}
     </div>
     <script>
         const modules = {{ all_modules | tojson }};
@@ -126,4 +132,5 @@
         })
         searchbox.focus()
     </script>
+</div>
 {% endblock %}

@@ -4,7 +4,7 @@
     {% filter minify_css %}
         {{ super() }}
         {% block style_pygments %}
-            <style type="text/css">/*! Pygments code highlighting */ {% include 'code-highlighting.css' %}</style>
+            <style type="text/css">{% include 'syntax-highlighting.css' %}</style>
         {% endblock %}
         {% block style_pdoc %}
             <style type="text/css">/*! pdoc */
@@ -17,79 +17,61 @@
              see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
              #}
 
+
             {% block default_theme %}
                 /* Color palette */
-                .pdoc {
-                    box-sizing: border-box;
-                    --nav-bg-color: #eee;
-                    --nav-text-color: #333;
-                    --nav-li-hover-color: rgba(255, 255, 255, 0.5);
-                    --text-link-color: #3660a5;
-                    --text-link-hover-color: #0a58ca;
-                    --pre-bg-color: #f7f7f7;
-                    --pre-border-color: #ccc;
-                    --code-text-color: #24292e;
-                    --code-bg-color: rgba(27, 31, 35, 0.05);
-                    --name-color: #0066BB;
-                    --def-color: #008800;
-                    --annotation-color: #007020;
-                    --attr-hover-color: #dadada;
-                    --identifier-before-after: gray;
-                    --target-bg-color: #fff598;
+                :root {
+                    --pdoc-background: #fff;
                 }
 
-                body {
-                    --main-bg-color: #fff;
-                    --main-text-color: #212529;
+                .pdoc {
+                    --text: #212529;
+                    --muted: #6c757d;
+                    --link: #3660a5;
+                    --link-hover: #1659c5;
+                    --code: #f7f7f7;
+                    --active: #fff598;
+
+                    --accent: #eee;
+                    --accent2: #c1c1c1;
+
+                    --nav-hover: rgba(255, 255, 255, 0.5);
+                    --name: #0066BB;
+                    --def: #008800;
+                    --annotation: #007020;
                 }
             {% endblock %}
 
             @media (prefers-color-scheme: dark) {
-                {% block dark_theme %}
-                    .pdoc {
-                        --nav-bg-color: #333;
-                        --nav-text-color: #eee;
-                        --nav-li-hover-color: rgba(0, 0, 0, 0.1);
-                        --text-link-color: #58a6ff;
-                        --text-link-hover-color: #3989ff;
-                        --pre-bg-color: #333;
-                        --pre-border-color: #555;
-                        --code-text-color:#e9e9e9;
-                        --code-bg-color: #343434;
-                        --name-color: #77C1FF;
-                        --def-color: #0cdd0c;
-                        --annotation-color: #00c037;
-                        --attr-hover-color: #444;
-                        --identifier-before-after: #9d9d9d;
-                        --target-bg-color: #394e00;
-                    }
+            {% block dark_theme %}
+                :root {
+                    --pdoc-background: #212529;
+                }
 
-                    body {
-                        --main-bg-color: #212529;
-                        --main-text-color: #fff;
-                    }
-                {% endblock %}
-            }
+                .pdoc {
+                    --text: #f7f7f7;
+                    --muted: #9d9d9d;
+                    --link: #58a6ff;
+                    --link-hover: #3989ff;
+                    --code: #333;
+                    --active: #555;
 
-            .pdoc-button {
-                display: inline-block;
-                border: solid black 1px;
-                border-radius: 2px;
-                font-size: .75rem;
-                padding: calc(0.5em - 1px) 1em;
-                transition: 100ms all;
+                    --accent: #343434;
+                    --accent2: #555;
+
+                    --nav-hover: rgba(0, 0, 0, 0.1);
+                    --name: #77C1FF;
+                    --def: #0cdd0c;
+                    --annotation: #00c037;
+                }
+            {% endblock %}
             }
 
             {% block style_layout %}
                 /* Colors of overall document */
                 body {
-                      color: var(--main-text-color);
-                      background-color: var(--main-bg-color);
+                    background-color: var(--pdoc-background);
                 }
-
-                 @media (prefers-color-scheme: dark) {
-
-                 }
 
                 /* Responsive Layout */
                 html, body {
@@ -98,33 +80,33 @@
                 }
 
                 @media (max-width: 769px) {
-                    label[for=navtoggle] {
+                    #navtoggle {
                         cursor: pointer;
                         position: absolute;
                         width: 50px;
                         height: 40px;
                         top: 1rem;
                         right: 1rem;
-                        border-color: var(--identifier-before-after);
-                        color: var(--identifier-before-after);
+                        border-color: var(--text);
+                        color: var(--text);
                         display: flex;
+                        opacity: 0.8;
+                    }
+
+                    #navtoggle:hover {
+                        opacity: 1;
+                    }
+
+                    #togglestate + div {
+                        display: none;
+                    }
+
+                    #togglestate:checked + div {
+                        display: inherit;
                     }
 
                     main {
                         padding: 2rem 3vw;
-                    }
-
-                    label[for=navtoggle]:hover {
-                        border-color: var(--main-text-color);
-                        color: var(--main-text-color);
-                    }
-
-                    #navtoggle + div {
-                        display: none;
-                    }
-
-                    #navtoggle:checked + div {
-                        display: inherit;
                     }
 
                     .git-button {
@@ -150,12 +132,12 @@
                         max-width: 100%;
                     }
 
-                    label[for=navtoggle] {
+                    #navtoggle {
                         display: none;
                     }
                 }
 
-                #navtoggle {
+                #togglestate {
                     display: none;
                 }
 
@@ -163,13 +145,13 @@
                 nav.pdoc {
                     --pad: 1.75rem;
                     --indent: 1.5rem;
-                    background-color: var(--nav-bg-color);
-                    border-right: 1px solid var(--pre-border-color);
+                    background-color: var(--accent);
+                    border-right: 1px solid var(--accent2);
                     box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
                     padding: 0 0 0 var(--pad);
                     overflow-wrap: anywhere;
                     scrollbar-width: thin; /* Scrollbar width on Firefox */
-                    scrollbar-color: var(--pre-border-color) transparent /* Scrollbar color on Firefox */
+                    scrollbar-color: var(--accent2) transparent /* Scrollbar color on Firefox */
                 }
 
                 nav.pdoc::-webkit-scrollbar {
@@ -177,7 +159,7 @@
                 }
 
                 nav.pdoc::-webkit-scrollbar-thumb {
-                    background-color: var(--pre-border-color); /* Scrollbar color on Chromium-based browsers */
+                    background-color: var(--accent2); /* Scrollbar color on Chromium-based browsers */
                 }
 
                 nav.pdoc > div {
@@ -186,17 +168,14 @@
 
                 nav.pdoc .module-list-button {
                     display: inline-flex;
-                    color: var(--nav-text-color);
-                    border-color: var(--identifier-before-after);
+                    align-items: center;
+                    color: var(--text);
+                    border-color: var(--muted);
                     margin-bottom: 1rem;
                 }
 
                 nav.pdoc .module-list-button:hover {
-                    border-color: var(--main-text-color);
-                }
-
-                nav.pdoc .module-list-button svg {
-                    margin-right: .5em;
+                    border-color: var(--text);
                 }
 
                 nav.pdoc ul {
@@ -216,11 +195,14 @@
                 }
 
                 nav.pdoc li:hover {
-                    background-color: var(--nav-li-hover-color);
+                    background-color: var(--nav-hover);
+                }
+
+                nav.pdoc a, nav.pdoc a:hover {
+                    color: var(--text);
                 }
 
                 nav.pdoc a {
-                    color: var(--nav-text-color);
                     display: block;
                 }
 
@@ -230,12 +212,12 @@
 
                 nav.pdoc .class:before {
                     content: "class ";
-                    color: var(--identifier-before-after);
+                    color: var(--muted);
                 }
 
                 nav.pdoc .function:after {
                     content: "()";
-                    color: var(--identifier-before-after);
+                    color: var(--muted);
                 }
             {% endblock %}
 
@@ -249,6 +231,23 @@
                     scroll-behavior: smooth;
                 }
 
+                .pdoc {
+                    color: var(--text);
+                    /* enforce box-sizing if bootstrap reboot is not included */
+                    box-sizing: border-box;
+                    /* override background from pygments */
+                    background: none;
+                }
+
+                .pdoc .pdoc-button {
+                    display: inline-block;
+                    border: solid black 1px;
+                    border-radius: 2px;
+                    font-size: .75rem;
+                    padding: calc(0.5em - 1px) 1em;
+                    transition: 100ms all;
+                }
+
                 .pdoc h1, .pdoc h2, .pdoc h3, .pdoc h4 {
                     font-weight: 300;
                     margin: .3em 0;
@@ -257,11 +256,11 @@
 
                 .pdoc a {
                     text-decoration: none;
-                    color: var(--text-link-color);
+                    color: var(--link);
                 }
 
                 .pdoc a:hover {
-                    color: var(--text-link-hover-color);
+                    color: var(--link-hover);
                 }
 
                 .pdoc blockquote {
@@ -269,20 +268,20 @@
                 }
 
                 .pdoc pre {
-                    background-color: var(--pre-bg-color);
-                    border-top: 1px solid var(--pre-border-color);
-                    border-bottom: 1px solid var(--pre-border-color);
+                    background-color: var(--code);
+                    border-top: 1px solid var(--accent2);
+                    border-bottom: 1px solid var(--accent2);
                     margin-bottom: 1em;
                     padding: .5rem 0 .5rem .5rem;
                     overflow-x: auto;
                 }
 
                 .pdoc code {
-                    color: var(--code-text-color);
+                    color: var(--text);
                     padding: .2em .4em;
                     margin: 0;
                     font-size: 85%;
-                    background-color: var(--code-bg-color);
+                    background-color: var(--code);
                     border-radius: 6px;
                 }
 
@@ -305,23 +304,19 @@
                 }
 
                 .pdoc .modulename a {
-                    color: var(--text-link-color);
+                    color: var(--link);
                     transition: 100ms all;
-                }
-
-                .pdoc .modulename a:hover {
-                    color: var(--text-link-hover-color);
                 }
 
                 /* GitHub Button */
                 .pdoc .git-button {
                     float: right;
-                    border: solid #3273dc 1px;
+                    border: solid var(--link) 1px;
                 }
 
                 .pdoc .git-button:hover {
-                    background-color: #3273dc;
-                    color: white;
+                    background-color: var(--link);
+                    color: var(--pdoc-background);
                 }
 
                 /* View Source */
@@ -331,6 +326,11 @@
                     margin-top: var(--shift);
                     margin-bottom: calc(0px - var(--shift));
                     clear: both;
+                    /*
+                     stay on top of .attr even if it is filtered, see
+                     https://stackoverflow.com/questions/25764404/why-does-stacking-order-change-on-webkit-filter-hover
+                     */
+                    filter: opacity(1);
                 }
 
                 .pdoc details:not([open]) {
@@ -341,7 +341,7 @@
                 .pdoc details > summary {
                     font-size: .75rem;
                     cursor: pointer;
-                    color: #666;
+                    color: var(--muted);
                     border-width: 0;
                     padding: 0 .7em;
                     /* Firefox hides the arrow if we specify inline-block,
@@ -383,18 +383,18 @@
                 .pdoc h4:target,
                 .pdoc h5:target,
                 .pdoc h6:target {
-                    background-color: var(--target-bg-color);
-                    box-shadow: -1rem 0 0 0 var(--target-bg-color);
+                    background-color: var(--active);
+                    box-shadow: -1rem 0 0 0 var(--active);
                 }
 
                 .pdoc div:target > .attr,
                 .pdoc section:target > .attr,
                 .pdoc dd:target > a {
-                    background-color: var(--target-bg-color);
+                    background-color: var(--active);
                 }
 
                 .pdoc .attr:hover {
-                    background-color: var(--attr-hover-color);
+                    filter: contrast(0.95);
                 }
 
                 /* Header link */
@@ -420,14 +420,14 @@
 
                 /* Attributes */
                 .pdoc .attr {
-                    color: var(--main-text-color);
+                    color: var(--text);
                     margin: 1rem 0 .5rem;
                     /*
                     lots of padding on the right to accomodate the view source button.
                     This is not ideal, but probably good enough for now.
                     */
                     padding: .4rem 5rem .4rem 1rem;
-                    background-color: var(--nav-bg-color);
+                    background-color: var(--accent);
                 }
 
                 .pdoc .classattr {
@@ -435,12 +435,12 @@
                 }
 
                 .pdoc .name {
-                    color: var(--name-color);
+                    color: var(--name);
                     font-weight: bold;
                 }
 
                 .pdoc .def {
-                    color: var(--def-color);
+                    color: var(--def);
                     font-weight: bold;
                 }
 
@@ -449,15 +449,7 @@
                 }
 
                 .pdoc .annotation {
-                    color: var(--annotation-color);
-                }
-
-                .pdoc .int, .pdoc .nonetype {
-                    color: #666;
-                }
-
-                .pdoc .str {
-                    color: #BA2121;
+                    color: var(--annotation);
                 }
 
                 /* Inherited Members */
@@ -481,12 +473,10 @@
 
                 .pdoc .inherited .class:before {
                     content: "class ";
-                    color: gray;
                 }
 
                 .pdoc .inherited .function a:after {
                     content: "()";
-                    color: gray;
                 }
 
                 /* "built with pdoc" attribution */
@@ -599,14 +589,14 @@
         {% for m in members if is_public(m) | trim %}
             <li>
                 {% if m.type == "class" %}
-                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+                    <a class="class" href="#{{ m.qualname }}">{{ m.qualname }}</a>
                     {% if m.own_members %}
                         {{ nav_members(m.own_members) | indent(12) }}
                     {% endif %}
                 {% elif m.type == "module" %}
-                    <a class="{{ m.type }}" href="#{{ m.name }}">{{ m.name }}</a>
+                    <a class="module" href="#{{ m.name }}">{{ m.name }}</a>
                 {% elif m.name == "__init__" %}
-                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+                    <a class="function" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
                 {% else %}
                     <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
                 {% endif %}
@@ -675,20 +665,22 @@
 {% block body %}
     {% block nav %}
         <nav class="pdoc">
-            <label for="navtoggle" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
-            <input id="navtoggle" type="checkbox">
+            <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
+            <input id="togglestate" type="checkbox">
             <div>
                 {% block nav_title %}{% endblock %}
-                {% block module_list_link scoped %}
+                {% block module_list_link %}
                     {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
                     {% if parentmodule and parentmodule in all_modules %}
                         <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
                             {% include "box-arrow-in-left.svg" %}
+                            &nbsp;
                             {{- parentmodule -}}
                         </a>
                     {% elif all_modules|length > 1 %}
                         <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
                             {% include "box-arrow-in-left.svg" %}
+                            &nbsp;
                             Module Index
                         </a>
                     {% endif %}
