@@ -14,17 +14,21 @@
             }
         {% endblock %}
 
+        {% block style_layout %}
         html, body {
             width: 100%;
             background-color: var(--pdoc-background);
+
+        }
+        {% endblock %}
+
+        {% block style_content %}
+        .pdoc {
+            color: var(--text);
             text-align: center;
         }
 
-        .pdoc {
-            color: var(--text);
-        }
-
-        #logo {
+        #pdoc-logo {
             background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}");
             background-position: center;
             background-size: contain;
@@ -35,12 +39,12 @@
             transition: all 100ms;
         }
 
-        #logo:hover {
+        #pdoc-logo:hover {
             filter: saturate(150%);
             transform: scale(1.02);
         }
 
-        #search {
+        #pdoc-search {
             color: var(--text);
             background-color: var(--accent);
             display: block;
@@ -52,16 +56,16 @@
             width: 20rem;
         }
 
-        h5 {
+        .pdoc h5 {
             margin-top: 2rem;
         }
 
-        #modules {
+        #pdoc-modules {
             max-width: 75rem;
             margin: 0 auto;
         }
 
-        #modules a {
+        #pdoc-modules a {
             display: inline-block;
             margin: .1rem;
             padding: .1rem .5rem;
@@ -70,33 +74,35 @@
             background-color: var(--accent);
         }
 
-        #modules a:hover {
+        #pdoc-modules a:hover {
             background-color: var(--accent);
             transform: scale(1.05);
         }
 
-        #modules .active {
+        #pdoc-modules .active {
             background-color: var(--active);
         }
+        {% endblock %}
     </style>
 {% endblock %}
 {% block body %}
 <div class="pdoc">
-    <a id="logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
-    <input id="search" type="text" placeholder="search" aria-label="search for a module"/>
+    <a id="pdoc-logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
+    <input id="pdoc-search" type="text" placeholder="search" aria-label="search for a module"/>
     <h5>Available Modules</h5>
-    <div id="modules">
+    <div id="pdoc-modules">
     {% for module in all_modules %}
         <a href="{{ module.replace(".","/") }}.html">{{ module }}</a>
     {% endfor %}
     </div>
     <script>
         const modules = {{ all_modules | tojson }};
-        const module_list = document.getElementById("modules");
-        const searchbox = document.getElementById("search")
+        const module_list = document.getElementById("pdoc-modules");
+        const searchbox = document.getElementById("pdoc-search")
 
         function render(filt) {
-            let filtered = filt ? modules.filter(x => x.includes(filt)) : modules;
+            filt = filt.toLowerCase();
+            let filtered = filt ? modules.filter(x => x.toLowerCase().includes(filt)) : modules;
             module_list.innerHTML = filtered.map(
                 root => `
                     <a
@@ -106,7 +112,7 @@
             ).join("");
         }
 
-        render();
+        render("");
 
         searchbox.addEventListener("input", (e) => {
             render(e.target.value);
