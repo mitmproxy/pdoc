@@ -1,35 +1,33 @@
 # fmt: off
 import sys
 
-try:
+if sys.version_info >= (3, 9):
     from functools import cache
-except ImportError:  # pragma: no cover
+else:  # pragma: no cover
     from functools import lru_cache
 
     cache = lru_cache(maxsize=None)
 
-try:
+if sys.version_info >= (3, 9):
     from ast import unparse as ast_unparse
-except ImportError:  # pragma: no cover
+else:  # pragma: no cover
     from astunparse import unparse as _unparse
 
     def ast_unparse(t):  # type: ignore
         return _unparse(t).strip("\t\n \"'")
 
-try:
+if sys.version_info >= (3, 9):
     from types import GenericAlias
-except ImportError:  # pragma: no cover
+else:  # pragma: no cover
     from typing import _GenericAlias as GenericAlias  # type: ignore
 
-
-def removesuffix(x: str, suffix: str):
-    try:
-        return x.removesuffix(suffix)
-    except AttributeError:  # pragma: no cover
+if sys.version_info >= (3, 9):
+    removesuffix = str.removesuffix
+else:  # pragma: no cover
+    def removesuffix(x: str, suffix: str):
         if x.endswith(suffix):
             x = x[: -len(suffix)]
         return x
-
 
 if sys.version_info >= (3, 9):
     from typing import ForwardRef
@@ -123,10 +121,13 @@ else:  # pragma: no cover
     # ✂ end ✂
 
 
-try:
+if sys.version_info >= (3, 8):
     from functools import cached_property
-except ImportError:  # pragma: no cover
+else:  # pragma: no cover
     from threading import RLock
+
+    # https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/functools.py#L930-L980
+    # ✂ start ✂
     _NOT_FOUND = object()
 
     class cached_property:  # type: ignore
@@ -177,16 +178,20 @@ except ImportError:  # pragma: no cover
             return val
 
         __class_getitem__ = classmethod(GenericAlias)
+    # ✂ end ✂
 
-try:
+if sys.version_info >= (3, 8):
     from typing import get_origin, get_args, Literal
-except ImportError:  # pragma: no cover
+else:  # pragma: no cover
     from typing import Generic
     import collections.abc
     from unittest import mock
-
+    # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
     Literal = mock.MagicMock()
 
+    # get_origin and get_args are adapted from
+    # https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/typing.py#L1474-L1515
+    # with Annotations removed (not present in 3.7)
     def get_origin(tp):  # type: ignore
         if isinstance(tp, GenericAlias):
             return tp.__origin__
@@ -213,4 +218,6 @@ __all__ = [
     "ForwardRef",
     "cached_property",
     "get_origin",
+    "get_args",
+    "Literal",
 ]
