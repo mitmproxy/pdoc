@@ -69,9 +69,9 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
             if modspec.submodule_search_locations is None:
                 continue
             path = modspec.submodule_search_locations
-        except BaseException:
+        except BaseException as e:
             warnings.warn(
-                f"Cannot find spec for {modname} (from {spec})",
+                f"Cannot find spec for {modname} (from {spec}): {e}",
                 RuntimeWarning,
                 stacklevel=2,
             )

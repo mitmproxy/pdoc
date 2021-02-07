@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 
 from pdoc import extract
-from pdoc.doc import Module, Class, Variable
+from pdoc.doc import Class, Module, Variable
 from pdoc.doc_types import empty
 
 here = Path(__file__).parent

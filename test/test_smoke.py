@@ -19,7 +19,6 @@ modules = [
 @pytest.mark.filterwarnings("ignore")
 @pytest.mark.parametrize("module", modules)
 def test_smoke(module):
-    print(f"{module=}")
     try:
         with pdoc.extract.mock_some_common_side_effects():
             importlib.import_module(module)

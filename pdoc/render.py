@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 from typing import Optional, Collection, Mapping, Literal
 
-from jinja2 import FileSystemLoader, Environment
+from jinja2 import Environment, FileSystemLoader
 
 import pdoc.doc
 from pdoc.render_helpers import (
+    DefaultMacroExtension,
     defuse_unsafe_reprs,
     edit_url,
     highlight,
@@ -13,7 +14,6 @@ from pdoc.render_helpers import (
     linkify,
     minify_css,
     render_docstring,
-    DefaultMacroExtension,
 )
 
 

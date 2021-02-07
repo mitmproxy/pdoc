@@ -86,7 +86,7 @@ def test_snapshots(snapshot: Snapshot, format: str):
     expected = snapshot.outfile(format).read_text("utf8")
     actual = snapshot.make(format)
     assert actual == expected, (
-        "Rendered output does not match snapshot. "
+        f"Rendered output does not match for snapshot {snapshot.id}. "
         "Run `python3 ./test/test_snapshot.py` to update snapshots."
     )
 
