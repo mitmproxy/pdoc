@@ -1,0 +1,34 @@
+{#
+We want to extend the default template instead of defining everything ourselves.
+#}
+{% extends "default/module.html.jinja2" %}
+
+{#
+We want to add our logo in the navbar.
+The default template defines an empty `nav_title` block we can fill here:
+#}
+{% block nav_title %}
+    <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
+{% endblock %}
+
+{#
+We don't want to show any "View Source" buttons, so we override the macro with an empty one.
+
+pdoc's Jinja2 macros are defined using `{% defaultmacro %}`, which makes it possible to override them in a custom
+template using a regular `{% macro %}` statement.
+The default implementation of each macro is also available as `default_$macroname`.
+#}
+{% macro view_source(obj) %}{% endmacro %}
+
+{#
+We can also adjust which members are documented by overriding the is_public macro.
+In this example, the private function `Dog.__lt__` is exposed publicly.
+However, doing this is not recommended, see https://pdoc.dev/docs/pdoc.html#control-what-is-documented.
+#}
+{% macro is_public(doc) %}
+    {% if doc.qualname == "Dog.__lt__" %}
+        true
+    {% else %}
+        {{ default_is_public(doc) }}
+    {% endif %}
+{% endmacro %}

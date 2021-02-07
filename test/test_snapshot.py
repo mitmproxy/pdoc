@@ -61,7 +61,7 @@ snapshots = [
     Snapshot(
         "demo_customtemplate",
         "demo.py",
-        {"template_directory": here / "customtemplate"},
+        {"template_directory": here / ".." / "examples" / "custom-template"},
     ),
     Snapshot("demo_long", extra=snapshot_dir / "demo.py"),
     Snapshot("demo_eager"),
