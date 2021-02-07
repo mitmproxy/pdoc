@@ -265,12 +265,11 @@ By convention, all attributes are read-only, although this this not enforced at 
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore</span>
     <span class="n">Any</span><span class="p">,</span>
     <span class="n">Union</span><span class="p">,</span>
     <span class="n">TypeVar</span><span class="p">,</span>
-    <span class="n">get_origin</span><span class="p">,</span>
     <span class="n">ClassVar</span><span class="p">,</span>
     <span class="n">Generic</span><span class="p">,</span>
     <span class="n">Optional</span><span class="p">,</span>
@@ -278,7 +277,7 @@ By convention, all attributes are read-only, although this this not enforced at 
 
 <span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">doc_ast</span><span class="p">,</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">pdoc.doc_types</span> <span class="kn">import</span> <span class="n">empty</span><span class="p">,</span> <span class="n">resolve_annotations</span><span class="p">,</span> <span class="n">formatannotation</span><span class="p">,</span> <span class="n">safe_eval_type</span>
-<span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">cache</span>
+<span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">cache</span><span class="p">,</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">get_origin</span>
 
 
 <span class="k">def</span> <span class="nf">_include_fullname_in_traceback</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -648,7 +647,8 @@ By convention, all attributes are read-only, although this this not enforced at 
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">members</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">all</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
                     <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -811,7 +811,8 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__orig_bases__&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="nb">object</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">o</span> <span class="o">:=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">o</span><span class="p">:</span>
                 <span class="n">bases</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">o</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
             <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">:</span>
                 <span class="n">bases</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">))</span>
@@ -1883,7 +1884,8 @@ in a different module.</p>
     <span class="k">def</span> <span class="nf">_member_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">members</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="nb">all</span> <span class="o">:=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">all</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">all</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
                     <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -2184,7 +2186,8 @@ module with the name <code>__init__.py</code>.</p>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__orig_bases__&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="nb">object</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">o</span> <span class="o">:=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">o</span><span class="p">:</span>
                 <span class="n">bases</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">o</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
             <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">:</span>
                 <span class="n">bases</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">))</span>

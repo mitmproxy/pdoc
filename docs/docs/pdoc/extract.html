@@ -139,9 +139,9 @@ and provides the rest of pdoc with some additional module metadata.</p>
             <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
-        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="ne">RuntimeWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
@@ -339,9 +339,9 @@ which we want to suppress. Note that this function must not be used for security
             <span class="k">if</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">modspec</span><span class="o">.</span><span class="n">submodule_search_locations</span>
-        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot find spec for </span><span class="si">{</span><span class="n">modname</span><span class="si">}</span><span class="s2"> (from </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="ne">RuntimeWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>

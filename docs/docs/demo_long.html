@@ -211,15 +211,8 @@ which will also show up in the navigation.</p>
 <span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">List</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
-
-    <span class="n">cache</span> <span class="o">=</span> <span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">cache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="n">FOO_CONSTANT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -366,7 +359,7 @@ which will also show up in the navigation.</p>
     <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default values are generally rendered using repr(),</span>
 <span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
@@ -396,7 +389,7 @@ which will also show up in the navigation.</p>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </pre></div>
@@ -976,12 +969,12 @@ This is often useful when documenting web APIs, for example.</p>
 
         
             <span class="def">def</span>
-            <span class="name">security</span><span class="signature">(test=os.environ, /)</span>:
+            <span class="name">security</span><span class="signature">(test=os.environ)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default values are generally rendered using repr(),</span>
 <span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
@@ -1077,7 +1070,7 @@ but some special cases -- like os.environ -- are overriden to avoid leaking sens
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">]</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </pre></div>
@@ -1096,7 +1089,7 @@ but you can override it by providing your own (like here!).</p>
                                         <div class="attr function"><a class="headerlink" href="#DataDemo.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">DataDemo</span><span class="signature">(a: int, b: Literal[&#39;w&#39;, &#39;r&#39;], c: bool = True)</span>    </div>
+            <span class="name">DataDemo</span><span class="signature">(a: int, b: Sequence[str], c: bool = True)</span>    </div>
 
         
     
@@ -1116,7 +1109,7 @@ but you can override it by providing your own (like here!).</p>
                             <div id="DataDemo.b" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#DataDemo.b">#&nbsp;&nbsp</a>
 
-        <span class="name">b</span><span class="annotation">: Literal[&#39;w&#39;, &#39;r&#39;]</span>
+        <span class="name">b</span><span class="annotation">: Sequence[str]</span>
     </div>
 
     
