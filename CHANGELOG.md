@@ -2,7 +2,9 @@
 
 # Unreleased: pdoc next
 
- -
+ - Add dark mode theme (@Arkelis)
+ - Add an example how to integrate pdoc with mkdocs.
+ - Bugfix: pdoc now retains custom rendering configuration when it renders itself with live-reload.
 
 # 2021-02-05 pdoc 5.0.0
 

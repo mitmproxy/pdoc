@@ -121,10 +121,7 @@ pdoc -t . ./shelter.py
 
 ...and the updated documentation – with logo – renders! 🎉
 
-pdoc's Jinja2 macros are defined using `{% defaultmacro %}`, which makes it possible to override them in a custom
-template using a regular `{% macro %}` statement.
-The default implementation of each macro is also available as `default_$macroname`.
-See [`test/customtemplate/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/test/customtemplate/module.html.jinja2)
+See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
 for more examples!
 
 # How can I ... ?
@@ -213,7 +210,7 @@ In general, we recommend to keep these conventions:
 As a last resort, you can override pdoc's behavior with a custom module template (see
 [*Editing pdoc's HTML template*](#editing-pdocs-html-template)).
 You can find an example at
-[`test/customtemplate/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/test/customtemplate/module.html.jinja2).
+[`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2).
 
 ## ...link to other identifiers?
 
@@ -254,16 +251,16 @@ pdoc's HTML and CSS are written in a way that the default template can be easily
 to produce standalone HTML fragments that can be embedded in other systems.
 This makes it possible to integrate pdoc with almost every CMS or static site generator.
 The only limitation at the moment is that you need to retain pdoc's directory structure
-so that links between modules remain valid.
+if you would like to link between modules.
 
-First, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) to only emit CSS and HTML body contents:
+First, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) to only emit CSS and HTML body
+contents instead of a standalone HTML document:
 ```html+jinja
 {% block style %}{% endblock %}
 {% block body %}{% endblock %}
 ```
 
-Second, create a custom `module.html.jinja2` to suppress the layout CSS
-and navigation:
+Second, create a custom `module.html.jinja2` to suppress the navigation bar and layout CSS:
 ```html+jinja
 {% extends "default/module.html.jinja2" %}
 {% block nav %}{% endblock %}
@@ -273,13 +270,15 @@ and navigation:
 This should be enough to produce HTML files that can be embedded into other pages.
 All CSS selectors are prefixed with `.pdoc` so that pdoc's page style does not interfere with the rest of your website.
 
+You can find a full example for mkdocs in [`examples/mkdocs`](https://github.com/mitmproxy/pdoc/tree/main/examples/mkdocs/).
+
 # Docstring Inheritance
 
 pdoc extends the standard use of docstrings in two important ways:
 by introducing variable docstrings (see [*How can I document variables?*](#document-variables)),
 and by allowing functions and classes to inherit docstrings and type annotations.
 
-This is useful to not unnecessairly repeat information. Consider this example:
+This is useful to not unnecessarily repeat information. Consider this example:
 
 ```python
 class Dog:
