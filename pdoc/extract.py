@@ -19,7 +19,7 @@ import warnings
 from contextlib import contextmanager
 from functools import partial
 from pathlib import Path
-from typing import Union, Optional, Sequence
+from typing import Optional, Sequence, Union
 from unittest.mock import patch
 
 
@@ -50,7 +50,6 @@ def mock_some_common_side_effects():
         yield
 
 
-@mock_some_common_side_effects()
 def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     """
     This function processes a list of module specifications and returns the list of module names, including all
@@ -62,26 +61,29 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
 
         # try to get all submodules
         try:
-            modspec = importlib.util.find_spec(modname)
+            with mock_some_common_side_effects():
+                modspec = importlib.util.find_spec(modname)
             if modspec is None:
                 raise ModuleNotFoundError(modname)
             module_index[modname] = None
             if modspec.submodule_search_locations is None:
                 continue
             path = modspec.submodule_search_locations
-        except Exception:
+        except BaseException:
             warnings.warn(
-                f"Cannot find spec for {modname} (from {spec})", RuntimeWarning
+                f"Cannot find spec for {modname} (from {spec})",
+                RuntimeWarning,
+                stacklevel=2,
             )
         else:
-            submodules = pkgutil.walk_packages(path, f"{modname}.")
-            while True:
-                try:
-                    module_index[next(submodules).name] = None
-                except StopIteration:
-                    break
-                except Exception as e:
-                    warnings.warn(f"Error importing subpackage: {e!r}", RuntimeWarning)
+            try:
+                with mock_some_common_side_effects():
+                    for submodule in pkgutil.walk_packages(path, f"{modname}."):
+                        module_index[submodule.name] = None
+            except BaseException as e:
+                warnings.warn(
+                    f"Error importing subpackage: {e!r}", RuntimeWarning, stacklevel=2
+                )
     if not module_index:
         raise ValueError(f"Module not found: {', '.join(str(x) for x in modules)}.")
 
@@ -143,7 +145,6 @@ def module_mtime(modulename: str) -> Optional[float]:
     return None
 
 
-@mock_some_common_side_effects()
 def invalidate_caches(module_name: str) -> None:
     """
     Invalidate module cache to allow live-reloading of modules.
@@ -174,5 +175,16 @@ def invalidate_caches(module_name: str) -> None:
     mods = sorted(
         mod for mod in sys.modules if module_name == mod or mod.startswith(prefix)
     )
-    for mod in mods:
-        importlib.reload(sys.modules[mod])
+    for modname in mods:
+        if modname == "pdoc.render":
+            # pdoc.render is stateful after configure(), so we don't want to reload it.
+            continue
+        try:
+            if not isinstance(sys.modules[modname], types.ModuleType):
+                continue  # some funky stuff going on - one example is typing.io, which is a class.
+            with mock_some_common_side_effects():
+                importlib.reload(sys.modules[modname])
+        except BaseException as e:
+            warnings.warn(
+                f"Error reloading {modname}: {e}", RuntimeWarning, stacklevel=2
+            )

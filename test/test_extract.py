@@ -1,9 +1,10 @@
+import importlib
 import sys
 from pathlib import Path
 
 import pytest
 
-from pdoc.extract import parse_specs, module_mtime, parse_spec
+from pdoc.extract import invalidate_caches, module_mtime, parse_spec, parse_specs
 
 here = Path(__file__).parent
 
@@ -47,3 +48,12 @@ def test_module_mtime():
     assert module_mtime("dataclasses")
     assert module_mtime("unknown") is None
     assert module_mtime("dataclasses.abc") is None
+
+
+def test_invalidate_caches(monkeypatch):
+    def raise_(*_):
+        raise RuntimeError
+
+    monkeypatch.setattr(importlib, "reload", raise_)
+    with pytest.warns(RuntimeWarning, match="Error reloading"):
+        invalidate_caches("pdoc.render_helpers")
