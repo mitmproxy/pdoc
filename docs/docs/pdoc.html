@@ -255,7 +255,7 @@ or defined in a class's <code>__init__</code>. Here is an example showing both c
 you should use <a href="https://docs.python.org/3/library/typing.html#typing.ClassVar"><code>typing.ClassVar</code></a>:</p>
 
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GoldenRetriever</span><span class="p">(</span><span class="n">Dog</span><span class="p">):</span>
-    <span class="n">breed_coode</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GOLD&quot;</span>
+    <span class="n">breed_code</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GOLD&quot;</span>
     <span class="sd">&quot;&quot;&quot;International breed code (same for all instances)&quot;&quot;&quot;</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="sd">&quot;&quot;&quot;Full Name (different for each instance)&quot;&quot;&quot;</span>
@@ -574,7 +574,7 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 
 <span class="sd">```python</span>
 <span class="sd">class GoldenRetriever(Dog):</span>
-<span class="sd">    breed_coode: ClassVar[str] = &quot;GOLD&quot;</span>
+<span class="sd">    breed_code: ClassVar[str] = &quot;GOLD&quot;</span>
 <span class="sd">    &quot;&quot;&quot;International breed code (same for all instances)&quot;&quot;&quot;</span>
 <span class="sd">    name: str</span>
 <span class="sd">    &quot;&quot;&quot;Full Name (different for each instance)&quot;&quot;&quot;</span>

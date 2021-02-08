@@ -66,6 +66,12 @@
             <li>
                     <a class="function" href="#get_origin">get_origin</a>
             </li>
+            <li>
+                    <a class="function" href="#get_args">get_args</a>
+            </li>
+            <li>
+                    <a class="variable" href="#Literal">Literal</a>
+            </li>
     </ul>
 
 
@@ -88,35 +94,33 @@
             <div class="codehilite"><pre><span></span><span class="c1"># fmt: off</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 
     <span class="n">cache</span> <span class="o">=</span> <span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">unparse</span> <span class="k">as</span> <span class="n">ast_unparse</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span> <span class="nn">astunparse</span> <span class="kn">import</span> <span class="n">unparse</span> <span class="k">as</span> <span class="n">_unparse</span>
 
     <span class="k">def</span> <span class="nf">ast_unparse</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">_unparse</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t\n</span><span class="s2"> </span><span class="se">\&quot;</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">GenericAlias</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">_GenericAlias</span> <span class="k">as</span> <span class="n">GenericAlias</span>  <span class="c1"># type: ignore</span>
 
-
-<span class="k">def</span> <span class="nf">removesuffix</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="n">removesuffix</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">removesuffix</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">removesuffix</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">x</span>
-
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ForwardRef</span>
@@ -210,10 +214,13 @@
     <span class="c1"># ✂ end ✂</span>
 
 
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">RLock</span>
+
+    <span class="c1"># https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/functools.py#L930-L980</span>
+    <span class="c1"># ✂ start ✂</span>
     <span class="n">_NOT_FOUND</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
 
     <span class="k">class</span> <span class="nc">cached_property</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
@@ -264,16 +271,20 @@
             <span class="k">return</span> <span class="n">val</span>
 
         <span class="n">__class_getitem__</span> <span class="o">=</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">GenericAlias</span><span class="p">)</span>
+    <span class="c1"># ✂ end ✂</span>
 
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">Literal</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
     <span class="kn">import</span> <span class="nn">collections.abc</span>
     <span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
-
+    <span class="c1"># There is no Literal on 3.7, so we just make one up. It should not be used anyways!</span>
     <span class="n">Literal</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">()</span>
 
+    <span class="c1"># get_origin and get_args are adapted from</span>
+    <span class="c1"># https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/typing.py#L1474-L1515</span>
+    <span class="c1"># with Annotations removed (not present in 3.7)</span>
     <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span><span class="n">tp</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">tp</span><span class="o">.</span><span class="n">__origin__</span>
@@ -300,6 +311,8 @@
     <span class="s2">&quot;ForwardRef&quot;</span><span class="p">,</span>
     <span class="s2">&quot;cached_property&quot;</span><span class="p">,</span>
     <span class="s2">&quot;get_origin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_args&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Literal&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -380,23 +393,17 @@
 
         
             <span class="def">def</span>
-            <span class="name">removesuffix</span><span class="signature">(x: str, suffix: str)</span>:
+            <span class="name">removesuffix</span><span class="signature">(self, suffix, /)</span>:
     </div>
 
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">removesuffix</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">x</span>
-</pre></div>
+        
+            <div class="docstring"><p>Return a str with the given suffix string removed if present.</p>
 
-        </details>
+<p>If the string ends with the suffix string and that suffix is not empty,
+return string[:-len(suffix)]. Otherwise, return a copy of the original
+string.</p>
+</div>
 
-    
 
                 </section>
                 <section id="ForwardRef">
@@ -636,6 +643,63 @@ get_origin(List[Tuple[T, T]][int]) == list
 </code></pre>
 </div>
 
+
+                </section>
+                <section id="get_args">
+                            <div class="attr function"><a class="headerlink" href="#get_args">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">get_args</span><span class="signature">(tp)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_args</span><span class="p">(</span><span class="n">tp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get type arguments with all substitutions performed.</span>
+
+<span class="sd">    For unions, basic simplifications used by Union constructor are performed.</span>
+<span class="sd">    Examples::</span>
+<span class="sd">        get_args(Dict[str, int]) == (str, int)</span>
+<span class="sd">        get_args(int) == ()</span>
+<span class="sd">        get_args(Union[int, Union[T, int], str][int]) == (int, str)</span>
+<span class="sd">        get_args(Union[int, Tuple[T, int]][str]) == (int, Tuple[str, int])</span>
+<span class="sd">        get_args(Callable[[], T][int]) == ([], int)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">_AnnotatedAlias</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">tp</span><span class="o">.</span><span class="n">__origin__</span><span class="p">,)</span> <span class="o">+</span> <span class="n">tp</span><span class="o">.</span><span class="n">__metadata__</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">_GenericAlias</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">__args__</span>
+        <span class="k">if</span> <span class="n">tp</span><span class="o">.</span><span class="n">__origin__</span> <span class="ow">is</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span> <span class="ow">and</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">Ellipsis</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">res</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tp</span><span class="o">.</span><span class="n">__args__</span>
+    <span class="k">return</span> <span class="p">()</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Get type arguments with all substitutions performed.</p>
+
+<p>For unions, basic simplifications used by Union constructor are performed.
+Examples::
+    get_args(Dict[str, int]) == (str, int)
+    get_args(int) == ()
+    get_args(Union[int, Union[T, int], str][int]) == (int, str)
+    get_args(Union[int, Tuple[T, int]][str]) == (int, Tuple[str, int])
+    get_args(Callable[[], T][int]) == ([], int)</p>
+</div>
+
+
+                </section>
+                <section id="Literal">
+                                <div class="attr variable"><a class="headerlink" href="#Literal">#&nbsp;&nbsp</a>
+
+        <span class="name">Literal</span><span class="default_value"> = typing.Literal</span>
+    </div>
+
+    
 
                 </section>
     </main>

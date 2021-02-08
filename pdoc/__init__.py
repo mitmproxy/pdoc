@@ -183,7 +183,7 @@ you should use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html
 
 ```python
 class GoldenRetriever(Dog):
-    breed_coode: ClassVar[str] = "GOLD"
+    breed_code: ClassVar[str] = "GOLD"
     """International breed code (same for all instances)"""
     name: str
     """Full Name (different for each instance)"""
