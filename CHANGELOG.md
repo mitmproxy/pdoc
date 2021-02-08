@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- -
+ - Improve rendering of typing.NamedTuple
 
 # 2021-02-07 pdoc 6.1.0
 

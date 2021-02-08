@@ -1,9 +1,21 @@
-from pdoc._compat import cached_property
 from functools import lru_cache
 from typing import Generic
+from typing import NamedTuple
 from typing import TypeVar
 
 import demo_long
+from pdoc._compat import cached_property
+
+
+# Testing a typing.NamedTuple
+# we do not care very much about collections.namedtuple,
+# the typing version is superior for documentation and a drop-in replacement.
+
+
+class NamedTupleExample(NamedTuple):
+    name: str
+    id: int = 3
+
 
 # Testing generic bases
 
@@ -187,6 +199,7 @@ indents"""
 
 
 __all__ = [  # noqa
+    "NamedTupleExample",
     "GenericParent",
     "NonGenericChild",
     "Child",

@@ -24,19 +24,13 @@ import sys
 import textwrap
 import types
 import warnings
-from abc import abstractmethod, ABCMeta
+from abc import ABCMeta, abstractmethod
+from collections import _tuplegetter  # type: ignore
 from functools import wraps
-from typing import (  # type: ignore
-    Any,
-    Union,
-    TypeVar,
-    ClassVar,
-    Generic,
-    Optional,
-)
+from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
 
 from pdoc import doc_ast, extract
-from pdoc.doc_types import empty, resolve_annotations, formatannotation, safe_eval_type
+from pdoc.doc_types import empty, formatannotation, resolve_annotations, safe_eval_type
 from ._compat import cache, cached_property, get_origin
 
 
@@ -553,6 +547,16 @@ class Class(Namespace[type]):
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 
+        is_namedtuple = (
+            "_fields" in unsorted
+            and issubclass(self.obj, tuple)
+            and unsorted.get("__init__", None) == object.__init__
+        )
+        if is_namedtuple:
+            # namedtuple have object.__init__ as their default constructor,
+            # which renders wrong. We just remove it.
+            del unsorted["__init__"]
+
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
@@ -853,6 +857,8 @@ class Variable(Doc[None]):
     def default_value_str(self) -> str:
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
+            return ""
+        elif isinstance(self.default_value, _tuplegetter):
             return ""
         else:
             try:

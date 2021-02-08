@@ -1,4 +1,9 @@
 <module misc
+    <class misc.NamedTupleExample  # NamedTupleExample(na…
+        <var name: str>
+        <var id: int>
+        <method def index(self, value, start=0, stop=9223372036854775807, /): ...  # inherited from builtins.tuple.index, Return first index o…>
+        <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>>
     <class misc.GenericParent  # Abstract base class …
         <method def __init__(): ...>>
     <class misc.NonGenericChild  # Abstract base class …
