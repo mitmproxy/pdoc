@@ -67,6 +67,7 @@ snapshots = [
     Snapshot("demo_eager"),
     Snapshot("demopackage"),
     Snapshot("misc"),
+    Snapshot("misc_py39"),
 ]
 
 
@@ -81,6 +82,7 @@ def test_snapshots(snapshot: Snapshot, format: str):
         "demo_customtemplate",
         "demo_long",
         "demo_eager",
+        "misc_py39",
     ):
         pytest.skip("minor rendering differences on Python <=3.8")
     expected = snapshot.outfile(format).read_text("utf8")

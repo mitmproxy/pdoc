@@ -23,18 +23,6 @@
                     <h2>API Documentation</h2>
                         <ul class="memberlist">
             <li>
-                    <a class="class" href="#NamedTupleExample">NamedTupleExample</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="variable" href="#NamedTupleExample.name">name</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#NamedTupleExample.id">id</a>
-                        </li>
-                </ul>
-
-            </li>
-            <li>
                     <a class="class" href="#GenericParent">GenericParent</a>
                             <ul class="memberlist">
                         <li>
@@ -180,22 +168,10 @@ misc    </h1>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
 
 <span class="kn">import</span> <span class="nn">demo_long</span>
 <span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
-
-
-<span class="c1"># Testing a typing.NamedTuple</span>
-<span class="c1"># we do not care very much about collections.namedtuple,</span>
-<span class="c1"># the typing version is superior for documentation and a drop-in replacement.</span>
-
-
-<span class="k">class</span> <span class="nc">NamedTupleExample</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
-
 
 <span class="c1"># Testing generic bases</span>
 
@@ -379,7 +355,6 @@ misc    </h1>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
-    <span class="s2">&quot;NamedTupleExample&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
     <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
@@ -399,57 +374,6 @@ misc    </h1>
         </details>
 
             </section>
-                <section id="NamedTupleExample">
-                                <div class="attr class">
-        <a class="headerlink" href="#NamedTupleExample">#&nbsp;&nbsp</a>
-
-        
-        <span class="def">class</span>
-        <span class="name">NamedTupleExample</span>(<span class="base">typing.NamedTuple</span>):
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NamedTupleExample</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>NamedTupleExample(name, id)</p>
-</div>
-
-
-                            <div id="NamedTupleExample.name" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#NamedTupleExample.name">#&nbsp;&nbsp</a>
-
-        <span class="name">name</span><span class="annotation">: str</span>
-    </div>
-
-    
-
-                            </div>
-                            <div id="NamedTupleExample.id" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#NamedTupleExample.id">#&nbsp;&nbsp</a>
-
-        <span class="name">id</span><span class="annotation">: int</span>
-    </div>
-
-    
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>builtins.tuple</dt>
-                                <dd id="NamedTupleExample.index" class="function">index</dd>
-                <dd id="NamedTupleExample.count" class="function">count</dd>
-
-            </div>
-                                </dl>
-                            </div>
-                </section>
                 <section id="GenericParent">
                                 <div class="attr class">
         <a class="headerlink" href="#GenericParent">#&nbsp;&nbsp</a>

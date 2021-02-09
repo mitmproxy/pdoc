@@ -210,6 +210,11 @@ else:  # pragma: no cover
         return ()
 
 
+if sys.version_info >= (3, 8):
+    from collections import _tuplegetter  # type: ignore
+else:
+    from operator import itemgetter as _tuplegetter
+
 __all__ = [
     "cache",
     "ast_unparse",
@@ -220,4 +225,5 @@ __all__ = [
     "get_origin",
     "get_args",
     "Literal",
+    "_tuplegetter",
 ]
