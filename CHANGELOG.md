@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-02-12 pdoc 6.1.1
 
  - Bugfix: Don't eat underscores in numpy/Google-style docstrings.
  - Bugfix: Fix rendering of typing.NamedTuple.
