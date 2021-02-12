@@ -91,13 +91,12 @@
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">zip_longest</span><span class="p">,</span> <span class="n">tee</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overload</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">tee</span><span class="p">,</span> <span class="n">zip_longest</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">overload</span>
 
-<span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">cache</span><span class="p">,</span> <span class="n">ast_unparse</span>
+<span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">ast_unparse</span><span class="p">,</span> <span class="n">cache</span>
 
 
-<span class="nd">@cache</span>
 <span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the source code of the Python object `obj` as a str.</span>
@@ -127,9 +126,7 @@
     <span class="o">...</span>
 
 
-<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
-    <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ClassDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a module, class or function and return the (unwrapped) AST node.</span>
 <span class="sd">    If an object&#39;s source code cannot be found, this function returns an empty ast node stub</span>
@@ -142,11 +139,6 @@
         <span class="k">return</span> <span class="n">_parse_class</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_parse_function</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="ow">not</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="c1"># we&#39;re running into a weird mypy bug here, @overload and @cache don&#39;t like each other</span>
-    <span class="n">parse</span> <span class="o">=</span> <span class="n">cache</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
 
 
 <span class="nd">@cache</span>
@@ -167,12 +159,17 @@
 <span class="sd">    Annotations are not evaluated by this module and only returned as strings.&quot;&quot;&quot;</span>
 
 
-<span class="nd">@cache</span>
 <span class="k">def</span> <span class="nf">walk_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AstInfo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Walks the abstract syntax tree for `obj` and returns the extracted information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tree</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_walk_tree</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+
+<span class="nd">@cache</span>
+<span class="k">def</span> <span class="nf">_walk_tree</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ClassDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AstInfo</span><span class="p">:</span>
     <span class="n">docstrings</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">annotations</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_pairwise_longest</span><span class="p">(</span><span class="n">_nodes</span><span class="p">(</span><span class="n">tree</span><span class="p">)):</span>
@@ -387,16 +384,14 @@
                 <section id="get_source">
                             <div class="attr function"><a class="headerlink" href="#get_source">#&nbsp;&nbsp</a>
 
-                <div class="decorator">@cache</div>
-
+        
             <span class="def">def</span>
             <span class="name">get_source</span><span class="signature">(obj: Any) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="nd">@cache</span>
-<span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the source code of the Python object `obj` as a str.</span>
 <span class="sd">    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.</span>
@@ -425,16 +420,12 @@ This tries to first unwrap the method if it is wrapped and then calls <code>insp
 
         
             <span class="def">def</span>
-            <span class="name">parse</span><span class="signature">(
-    obj: Union[type, module, function]
-) -&gt; Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]</span>:
+            <span class="name">parse</span><span class="signature">(obj)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
-    <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ClassDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">]:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a module, class or function and return the (unwrapped) AST node.</span>
 <span class="sd">    If an object&#39;s source code cannot be found, this function returns an empty ast node stub</span>
@@ -550,49 +541,18 @@ which can still be walked.</p>
                 <section id="walk_tree">
                             <div class="attr function"><a class="headerlink" href="#walk_tree">#&nbsp;&nbsp</a>
 
-                <div class="decorator">@cache</div>
-
+        
             <span class="def">def</span>
             <span class="name">walk_tree</span><span class="signature">(obj: Union[module, type]) -&gt; <a href="#AstInfo">pdoc.doc_ast.AstInfo</a></span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="nd">@cache</span>
-<span class="k">def</span> <span class="nf">walk_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AstInfo</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">walk_tree</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">,</span> <span class="nb">type</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AstInfo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Walks the abstract syntax tree for `obj` and returns the extracted information.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tree</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="n">docstrings</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">annotations</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_pairwise_longest</span><span class="p">(</span><span class="n">_nodes</span><span class="p">(</span><span class="n">tree</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">a</span><span class="o">.</span><span class="n">simple</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">id</span>
-            <span class="n">annotations</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">unparse</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Expr</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-        <span class="p">):</span>
-            <span class="n">docstrings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">cleandoc</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Expr</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span>
-        <span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-            <span class="c1"># Python &lt;= 3.7</span>
-            <span class="n">docstrings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">cleandoc</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">AstInfo</span><span class="p">(</span>
-        <span class="n">docstrings</span><span class="p">,</span>
-        <span class="n">annotations</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_walk_tree</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
 </pre></div>
 
         </details>

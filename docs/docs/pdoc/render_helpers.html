@@ -102,16 +102,16 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Container</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Container</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
 
-<span class="kn">import</span> <span class="nn">markdown2</span>
 <span class="kn">import</span> <span class="nn">pygments.formatters.html</span>
 <span class="kn">import</span> <span class="nn">pygments.lexers.python</span>
-<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">contextfilter</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">ext</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">contextfilter</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">nodes</span>
 <span class="kn">from</span> <span class="nn">jinja2.runtime</span> <span class="kn">import</span> <span class="n">Context</span>
 <span class="kn">from</span> <span class="nn">markupsafe</span> <span class="kn">import</span> <span class="n">Markup</span>
 
+<span class="kn">import</span> <span class="nn">pdoc.markdown2</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">docstrings</span>
 <span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">cache</span>
 
@@ -158,7 +158,7 @@
     <span class="c1"># careful: markdown2 returns a subclass of str with an extra</span>
     <span class="c1"># .toc_html attribute. don&#39;t further process the result,</span>
     <span class="c1"># otherwise this attribute will be lost.</span>
-    <span class="k">return</span> <span class="n">markdown2</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">docstring</span><span class="p">,</span> <span class="n">extras</span><span class="o">=</span><span class="n">markdown_extensions</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">markdown2</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">docstring</span><span class="p">,</span> <span class="n">extras</span><span class="o">=</span><span class="n">markdown_extensions</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 
 <span class="nd">@contextfilter</span>

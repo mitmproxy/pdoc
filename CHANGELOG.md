@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ -
+
 # 2021-02-12: pdoc 6.2.0
 
  - Improvement: Add syntax highlighting in ">>>" code block examples.
