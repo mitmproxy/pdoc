@@ -125,7 +125,7 @@ with a section header and a colon followed by a block of indented text.</p>
 </blockquote>
 
 <blockquote>
-<pre><code>$ python examplegoogle.py
+<pre><code>$ python example_google.py
 </code></pre>
 </blockquote>
 
@@ -135,7 +135,7 @@ are also implicitly created anytime a new section starts.</p>
 <h6 id="attributes">Attributes</h6>
 
 <ul>
-<li><p><strong>modulelevelvariable1 (int):</strong>  Module level variables may be documented in
+<li><p><strong>module_level_variable1 (int):</strong>  Module level variables may be documented in
 either the <code>Attributes</code> section of the module docstring, or in an
 inline docstring immediately following the variable.</p>
 
@@ -877,7 +877,7 @@ that are relevant to the interface.</li>
   <blockquote>
     <blockquote>
       <blockquote>
-        <p>print([i for i in examplegenerator(4)])
+        <p>print([i for i in example_generator(4)])
         [0, 1, 2, 3]</p>
       </blockquote>
     </blockquote>
@@ -929,11 +929,11 @@ that are relevant to the interface.</li>
 
             <div class="docstring"><p>Exceptions are documented in the same way as classes.</p>
 
-<p>The _init_ method may be documented in either the class level
-docstring, or as a docstring on the _init_ method itself.</p>
+<p>The __init__ method may be documented in either the class level
+docstring, or as a docstring on the __init__ method itself.</p>
 
 <p>Either form is acceptable, but the two should not be mixed. Choose one
-convention to document the _init_ method and be consistent with it.</p>
+convention to document the __init__ method and be consistent with it.</p>
 
 <h6 id="note">Note</h6>
 
@@ -1123,7 +1123,7 @@ convention to document the _init_ method and be consistent with it.</p>
 <p>If the class has public attributes, they may be documented here
 in an <code>Attributes</code> section and follow the same formatting as a
 function's <code>Args</code> section. Alternatively, attributes may be documented
-inline with the attribute's declaration (see _init_ method below).</p>
+inline with the attribute's declaration (see __init__ method below).</p>
 
 <p>Properties created with the <code>@property</code> decorator should be documented
 in the property's getter method.</p>
@@ -1177,13 +1177,13 @@ in the property's getter method.</p>
 
         </details>
 
-            <div class="docstring"><p>Example of docstring on the _init_ method.</p>
+            <div class="docstring"><p>Example of docstring on the __init__ method.</p>
 
-<p>The _init_ method may be documented in either the class level
-docstring, or as a docstring on the _init_ method itself.</p>
+<p>The __init__ method may be documented in either the class level
+docstring, or as a docstring on the __init__ method itself.</p>
 
 <p>Either form is acceptable, but the two should not be mixed. Choose one
-convention to document the _init_ method and be consistent with it.</p>
+convention to document the __init__ method and be consistent with it.</p>
 
 <h6 id="note">Note</h6>
 
@@ -1347,15 +1347,15 @@ mentioned here.</p>
             <div class="docstring"><p>Fetches rows from a Smalltable.</p>
 
 <p>Retrieves rows pertaining to the given keys from the Table instance
-represented by tablehandle.  String keys will be UTF-8 encoded.</p>
+represented by table_handle.  String keys will be UTF-8 encoded.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>tablehandle:</strong>  An open smalltable.Table instance.</li>
+<li><strong>table_handle:</strong>  An open smalltable.Table instance.</li>
 <li><strong>keys:</strong>  A sequence of strings representing the key of each table
 row to fetch.  String keys will be UTF-8 encoded.</li>
-<li><strong>requireallkeys:</strong>  Optional; If requireallkeys is True only
+<li><strong>require_all_keys:</strong>  Optional; If require_all_keys is True only
 rows with values set for all keys will be returned.</li>
 </ul>
 
@@ -1376,7 +1376,7 @@ rows with values set for all keys will be returned.</li>
 <blockquote>
   <p>Returned keys are always bytes.  If a key from the keys argument is
   missing from the dictionary, then that row was not found in the
-  table (and requireallkeys must have been False).</p>
+  table (and require_all_keys must have been False).</p>
 </blockquote>
 
 <h6 id="raises">Raises</h6>
@@ -1444,15 +1444,15 @@ rows with values set for all keys will be returned.</li>
             <div class="docstring"><p>Fetches rows from a Smalltable.</p>
 
 <p>Retrieves rows pertaining to the given keys from the Table instance
-represented by tablehandle.  String keys will be UTF-8 encoded.</p>
+represented by table_handle.  String keys will be UTF-8 encoded.</p>
 
 <h6 id="args">Args</h6>
 
 <ul>
-<li><strong>tablehandle:</strong>  An open smalltable.Table instance.</li>
+<li><strong>table_handle:</strong>  An open smalltable.Table instance.</li>
 <li><strong>keys:</strong>  A sequence of strings representing the key of each table row to
 fetch.  String keys will be UTF-8 encoded.</li>
-<li><strong>requireallkeys:</strong>  Optional; If requireallkeys is True only rows with values set
+<li><strong>require_all_keys:</strong>  Optional; If require_all_keys is True only rows with values set
 for all keys will be returned.</li>
 </ul>
 
@@ -1473,7 +1473,7 @@ for all keys will be returned.</li>
 <blockquote>
   <p>Returned keys are always bytes.  If a key from the keys argument is
   missing from the dictionary, then that row was not found in the
-  table (and requireallkeys must have been False).</p>
+  table (and require_all_keys must have been False).</p>
 </blockquote>
 
 <h6 id="raises">Raises</h6>
@@ -1526,7 +1526,7 @@ Longer class information....</p>
 <h6 id="attributes">Attributes</h6>
 
 <ul>
-<li><strong>likesspam:</strong>  A boolean indicating if we like SPAM or not.</li>
+<li><strong>likes_spam:</strong>  A boolean indicating if we like SPAM or not.</li>
 <li><strong>eggs:</strong>  An integer count of the eggs we have laid.</li>
 </ul>
 </div>

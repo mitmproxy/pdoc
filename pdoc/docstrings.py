@@ -191,7 +191,7 @@ def _rst_links(contents: str) -> str:
         try:
             return f"[{text.strip('`')}]({links[refid]})"
         except KeyError:
-            return text
+            return m.group(0)
 
     # Embedded URIs
     contents = re.sub(

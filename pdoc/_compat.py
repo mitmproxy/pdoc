@@ -212,7 +212,7 @@ else:  # pragma: no cover
 
 if sys.version_info >= (3, 8):
     from collections import _tuplegetter  # type: ignore
-else:
+else:  # pragma: no cover
     from operator import itemgetter as _tuplegetter
 
 __all__ = [

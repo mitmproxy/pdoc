@@ -104,7 +104,7 @@ are created with a section header followed by an underline of equal length.</p>
 sections. Sections support any reStructuredText formatting, including
 literal blocks::</p>
 
-<pre><code>$ python examplenumpy.py
+<pre><code>$ python example_numpy.py
 </code></pre>
 
 <p>Section breaks are created with two blank lines. Section breaks are also
@@ -121,7 +121,7 @@ resuming unindented text.</p>
 <h6 id="attributes">Attributes</h6>
 
 <ul>
-<li><p><strong>modulelevelvariable1</strong> (int):
+<li><p><strong>module_level_variable1</strong> (int):
 Module level variables may be documented in either the <code>Attributes</code>
 section of the module docstring, or in an inline docstring immediately
 following the variable.</p>
@@ -839,7 +839,7 @@ The upper limit of the range to generate, from 0 to <code>n</code> - 1.</li>
 <p>Examples should be written in doctest format, and should illustrate how
 to use the function.</p>
 
-<pre><code>&gt;&gt;&gt; print([i for i in examplegenerator(4)])
+<pre><code>&gt;&gt;&gt; print([i for i in example_generator(4)])
 [0, 1, 2, 3]
 </code></pre>
 </div>
@@ -895,11 +895,11 @@ to use the function.</p>
 
             <div class="docstring"><p>Exceptions are documented in the same way as classes.</p>
 
-<p>The _init_ method may be documented in either the class level
-docstring, or as a docstring on the _init_ method itself.</p>
+<p>The __init__ method may be documented in either the class level
+docstring, or as a docstring on the __init__ method itself.</p>
 
 <p>Either form is acceptable, but the two should not be mixed. Choose one
-convention to document the _init_ method and be consistent with it.</p>
+convention to document the __init__ method and be consistent with it.</p>
 
 <h6 id="note">Note</h6>
 
@@ -1105,7 +1105,7 @@ Numeric error code.</li>
 <p>If the class has public attributes, they may be documented here
 in an <code>Attributes</code> section and follow the same formatting as a
 function's <code>Args</code> section. Alternatively, attributes may be documented
-inline with the attribute's declaration (see _init_ method below).</p>
+inline with the attribute's declaration (see __init__ method below).</p>
 
 <p>Properties created with the <code>@property</code> decorator should be documented
 in the property's getter method.</p>
@@ -1166,13 +1166,13 @@ Description of <code>attr2</code>.</li>
 
         </details>
 
-            <div class="docstring"><p>Example of docstring on the _init_ method.</p>
+            <div class="docstring"><p>Example of docstring on the __init__ method.</p>
 
-<p>The _init_ method may be documented in either the class level
-docstring, or as a docstring on the _init_ method itself.</p>
+<p>The __init__ method may be documented in either the class level
+docstring, or as a docstring on the __init__ method itself.</p>
 
 <p>Either form is acceptable, but the two should not be mixed. Choose one
-convention to document the _init_ method and be consistent with it.</p>
+convention to document the __init__ method and be consistent with it.</p>
 
 <h6 id="note">Note</h6>
 
