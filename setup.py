@@ -50,7 +50,6 @@ setup(
     python_requires=">=3.7",
     install_requires=[
         "Jinja2",
-        "markdown2",
         "pygments",
         "MarkupSafe",
         "astunparse; python_version<'3.9'",

@@ -6,13 +6,13 @@ from contextlib import contextmanager
 from typing import Optional, Mapping, Container
 from unittest.mock import patch
 
-import markdown2
 import pygments.formatters.html
 import pygments.lexers.python
 from jinja2 import contextfilter, nodes, ext
 from jinja2.runtime import Context
 from markupsafe import Markup
 
+import pdoc.markdown2
 from . import docstrings
 from ._compat import cache
 
@@ -59,7 +59,7 @@ def _markdown(docstring: str) -> str:
     # careful: markdown2 returns a subclass of str with an extra
     # .toc_html attribute. don't further process the result,
     # otherwise this attribute will be lost.
-    return markdown2.markdown(docstring, extras=markdown_extensions)
+    return pdoc.markdown2.markdown(docstring, extras=markdown_extensions)  # type: ignore
 
 
 @contextfilter
