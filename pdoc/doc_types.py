@@ -20,7 +20,7 @@ from typing import (  # type: ignore
 )
 
 from . import extract
-from ._compat import GenericAlias, ForwardRef, get_args, get_origin, Literal
+from ._compat import ForwardRef, GenericAlias, Literal, get_args, get_origin
 
 if TYPE_CHECKING:
 

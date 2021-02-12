@@ -1,4 +1,9 @@
 <module misc
+    <class misc.ClassmethodLink  # You can either do
+
+    >…
+        <method def __init__(): ...>
+        <@classmethod class def bar(cls): ...>>
     <class misc.GenericParent  # Abstract base class …
         <method def __init__(): ...>>
     <class misc.NonGenericChild  # Abstract base class …

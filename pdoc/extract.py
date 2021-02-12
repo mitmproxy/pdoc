@@ -22,6 +22,8 @@ from pathlib import Path
 from typing import Optional, Sequence, Union
 from unittest.mock import patch
 
+from . import doc_ast
+
 
 @contextmanager
 def mock_some_common_side_effects():
@@ -170,6 +172,7 @@ def invalidate_caches(module_name: str) -> None:
 
     importlib.invalidate_caches()
     linecache.clearcache()
+    doc_ast.get_source.cache_clear()
 
     prefix = f"{module_name}."
     mods = sorted(

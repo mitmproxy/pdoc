@@ -3,12 +3,12 @@ from __future__ import annotations
 import os
 import re
 from contextlib import contextmanager
-from typing import Optional, Mapping, Container
+from typing import Container, Mapping, Optional
 from unittest.mock import patch
 
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import contextfilter, nodes, ext
+from jinja2 import contextfilter, ext, nodes
 from jinja2.runtime import Context
 from markupsafe import Markup
 

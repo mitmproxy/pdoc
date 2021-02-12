@@ -3,12 +3,12 @@
 from . import child_b, _child_e
 from ._child_d import Test
 
-import misc
+import demopackage2
 
 __all__ = [
     "Test",
     "child_b",
     "child_c",
-    "misc",
+    "demopackage2",
     "_child_e",
 ]

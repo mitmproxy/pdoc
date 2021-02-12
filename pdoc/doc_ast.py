@@ -9,10 +9,10 @@ import ast
 import inspect
 import types
 from dataclasses import dataclass
-from itertools import zip_longest, tee
-from typing import Union, Iterable, TypeVar, Iterator, Any, overload, TYPE_CHECKING
+from itertools import tee, zip_longest
+from typing import Any, Iterable, Iterator, TypeVar, Union, overload
 
-from ._compat import cache, ast_unparse
+from ._compat import ast_unparse, cache
 
 
 @cache
@@ -45,9 +45,7 @@ def parse(obj: type) -> ast.ClassDef:
     ...
 
 
-def parse(
-    obj: Union[type, types.ModuleType, types.FunctionType]
-) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
+def parse(obj):
     """
     Parse a module, class or function and return the (unwrapped) AST node.
     If an object's source code cannot be found, this function returns an empty ast node stub
@@ -60,11 +58,6 @@ def parse(
         return _parse_class(src)
     else:
         return _parse_function(src)
-
-
-if not TYPE_CHECKING:
-    # we're running into a weird mypy bug here, @overload and @cache don't like each other
-    parse = cache(parse)
 
 
 @cache
@@ -85,12 +78,17 @@ class AstInfo:
     Annotations are not evaluated by this module and only returned as strings."""
 
 
-@cache
 def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
     """
     Walks the abstract syntax tree for `obj` and returns the extracted information.
     """
-    tree = parse(obj)
+    return _walk_tree(parse(obj))
+
+
+@cache
+def _walk_tree(
+    tree: Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]
+) -> AstInfo:
     docstrings = {}
     annotations = {}
     for a, b in _pairwise_longest(_nodes(tree)):

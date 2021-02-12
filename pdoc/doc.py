@@ -30,7 +30,7 @@ from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import empty, formatannotation, resolve_annotations, safe_eval_type
-from ._compat import cache, cached_property, get_origin, _tuplegetter
+from ._compat import _tuplegetter, cache, cached_property, get_origin
 
 
 def _include_fullname_in_traceback(f):

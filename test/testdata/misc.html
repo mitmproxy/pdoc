@@ -23,6 +23,18 @@
                     <h2>API Documentation</h2>
                         <ul class="memberlist">
             <li>
+                    <a class="class" href="#ClassmethodLink">ClassmethodLink</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ClassmethodLink.__init__">ClassmethodLink</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ClassmethodLink.bar">bar</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#GenericParent">GenericParent</a>
                             <ul class="memberlist">
                         <li>
@@ -172,6 +184,29 @@ misc    </h1>
 
 <span class="kn">import</span> <span class="nn">demo_long</span>
 <span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
+
+
+<span class="c1"># Testing classmethod links in code</span>
+<span class="k">class</span> <span class="nc">ClassmethodLink</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    You can either do</span>
+
+<span class="sd">    &gt;&gt;&gt; ClassmethodLink.bar()</span>
+<span class="sd">    42</span>
+
+<span class="sd">    or</span>
+
+<span class="sd">    ```python</span>
+<span class="sd">    ClassmethodLink.bar()</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    neither will be linked.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">42</span>
+
 
 <span class="c1"># Testing generic bases</span>
 
@@ -355,6 +390,7 @@ misc    </h1>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
+    <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
     <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
@@ -374,6 +410,87 @@ misc    </h1>
         </details>
 
             </section>
+                <section id="ClassmethodLink">
+                                <div class="attr class">
+        <a class="headerlink" href="#ClassmethodLink">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">ClassmethodLink</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ClassmethodLink</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    You can either do</span>
+
+<span class="sd">    &gt;&gt;&gt; ClassmethodLink.bar()</span>
+<span class="sd">    42</span>
+
+<span class="sd">    or</span>
+
+<span class="sd">    ```python</span>
+<span class="sd">    ClassmethodLink.bar()</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    neither will be linked.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">42</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>You can either do</p>
+
+<div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">ClassmethodLink</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
+<span class="go">42</span>
+</code></pre></div>
+
+<p>or</p>
+
+<div class="codehilite"><pre><span></span><code><span class="n">ClassmethodLink</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
+</code></pre></div>
+
+<p>neither will be linked.</p>
+</div>
+
+
+                            <div id="ClassmethodLink.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ClassmethodLink.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">ClassmethodLink</span><span class="signature">()</span>    </div>
+
+        
+    
+
+                            </div>
+                            <div id="ClassmethodLink.bar" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ClassmethodLink.bar">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@classmethod</div>
+
+            <span class="def">def</span>
+            <span class="name">bar</span><span class="signature">(cls)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">42</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                </section>
                 <section id="GenericParent">
                                 <div class="attr class">
         <a class="headerlink" href="#GenericParent">#&nbsp;&nbsp</a>

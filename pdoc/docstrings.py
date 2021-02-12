@@ -13,7 +13,7 @@ accompanied by matching snapshot tests in test/testdata/.
 from __future__ import annotations
 
 import re
-from textwrap import indent, dedent
+from textwrap import dedent, indent
 
 from ._compat import cache
 

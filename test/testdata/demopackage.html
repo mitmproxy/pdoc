@@ -30,6 +30,7 @@
                     <ul>
                             <li><a href="demopackage/child_b.html">demopackage.child_b</a></li>
                             <li><a href="demopackage/child_c.html">demopackage.child_c</a></li>
+                            <li>demopackage2</li>
                             <li><a href="demopackage/_child_e.html">demopackage._child_e</a></li>
                     </ul>
 
@@ -54,7 +55,7 @@
                     <a class="module" href="#child_c">child_c</a>
             </li>
             <li>
-                    <a class="module" href="#misc">misc</a>
+                    <a class="module" href="#demopackage2">demopackage2</a>
             </li>
     </ul>
 
@@ -81,13 +82,13 @@ demopackage    </h1>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">child_b</span><span class="p">,</span> <span class="n">_child_e</span>
 <span class="kn">from</span> <span class="nn">._child_d</span> <span class="kn">import</span> <span class="n">Test</span>
 
-<span class="kn">import</span> <span class="nn">misc</span>
+<span class="kn">import</span> <span class="nn">demopackage2</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;Test&quot;</span><span class="p">,</span>
     <span class="s2">&quot;child_b&quot;</span><span class="p">,</span>
     <span class="s2">&quot;child_c&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;misc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;demopackage2&quot;</span><span class="p">,</span>
     <span class="s2">&quot;_child_e&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
@@ -183,220 +184,21 @@ demopackage    </h1>
 
 
                 </section>
-                <section id="misc">
+                <section id="demopackage2">
                                 <div class="attr module"><a class="headerlink" href="#">#&nbsp;&nbsp</a>
-<span class="name">misc</span></div>
+<span class="name">demopackage2</span></div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
-
-<span class="kn">import</span> <span class="nn">demo_long</span>
-<span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
-
-<span class="c1"># Testing generic bases</span>
-
-<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">GenericParent</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
-    <span class="k">pass</span>
-
-
-<span class="k">class</span> <span class="nc">NonGenericChild</span><span class="p">(</span><span class="n">GenericParent</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-    <span class="k">pass</span>
-
-
-<span class="c1"># Testing docstring inheritance</span>
-
-<span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;init&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;foo&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;bar&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;baz&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;qux&quot;&quot;&quot;</span>
-        <span class="k">return</span>
-
-    <span class="c1"># This is not supported by inspect.getdoc yet.</span>
-    <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">quux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;quux&quot;&quot;&quot;</span>
-        <span class="k">return</span>
-
-    <span class="n">quuux</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-    <span class="sd">&quot;&quot;&quot;quuux&quot;&quot;&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span>
-
-    <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">quux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span>
-
-    <span class="n">quuux</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-
-
-<span class="c1"># Testing a proper __module__, but no useful __qualname__ attribute.</span>
-
-<span class="n">bad_qualname</span> <span class="o">=</span> <span class="n">demo_long</span><span class="o">.</span><span class="n">DataDemo</span><span class="o">.</span><span class="fm">__init__</span>
-
-<span class="c1"># Testing that an attribute that is only annotated does not trigger a &quot;submodule not found&quot; warning.</span>
-
-<span class="n">only_annotated</span><span class="p">:</span> <span class="nb">int</span>
-
-
-<span class="c1"># Testing that Exceptions render properly</span>
-
-
-<span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
-
-
-<span class="c1"># Testing that a private class in __all__ is displayed</span>
-
-
-<span class="k">class</span> <span class="nc">_Private</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
-
-    <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">_do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;private method&quot;&quot;&quot;</span>
-
-
-<span class="c1"># Testing a class attribute that is a lambda (which generates quirky sources)</span>
-
-
-<span class="k">class</span> <span class="nc">LambdaAttr</span><span class="p">:</span>
-    <span class="c1"># not really supported, but also shouldn&#39;t crash.</span>
-    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
-
-
-<span class="c1"># Testing different docstring annotations</span>
-<span class="c1"># fmt: off</span>
-
-
-<span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
-
-
-<span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;no</span>
-<span class="sd">indents&quot;&quot;&quot;</span>
-
-
-<span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;one</span>
-<span class="sd">    indent&quot;&quot;&quot;</span>
-
-
-<span class="k">def</span> <span class="nf">qux</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    two</span>
-<span class="sd">    indents</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">Indented</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no</span>
-<span class="sd">indents&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;one</span>
-<span class="sd">        indent&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        two</span>
-<span class="sd">        indents</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
-
-    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="c1"># comment</span>
-    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
-
-    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no</span>
-<span class="sd">indents&quot;&quot;&quot;</span>
-
-    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;one</span>
-<span class="sd">        indent&quot;&quot;&quot;</span>
-
-    <span class="nd">@lru_cache</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        two</span>
-<span class="sd">        indents</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
-    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bad_qualname&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CustomException&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;_Private&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;LambdaAttr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+            <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;I&#39;m a different package, but I&#39;m in demopackage.__all__!&quot;&quot;&quot;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">42</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>I'm a different package, but I'm in <a href="#__all__">demopackage.__all__</a>!</p>
+</div>
+
 
                 </section>
     </main>

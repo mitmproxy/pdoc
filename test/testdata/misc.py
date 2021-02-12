@@ -5,6 +5,29 @@ from typing import TypeVar
 import demo_long
 from pdoc._compat import cached_property
 
+
+# Testing classmethod links in code
+class ClassmethodLink:
+    """
+    You can either do
+
+    >>> ClassmethodLink.bar()
+    42
+
+    or
+
+    ```python
+    ClassmethodLink.bar()
+    ```
+
+    neither will be linked.
+    """
+
+    @classmethod
+    def bar(cls):
+        return 42
+
+
 # Testing generic bases
 
 T = TypeVar("T")
@@ -187,6 +210,7 @@ indents"""
 
 
 __all__ = [  # noqa
+    "ClassmethodLink",
     "GenericParent",
     "NonGenericChild",
     "Child",

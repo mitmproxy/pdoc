@@ -1,5 +1,10 @@
 # Release History
 
+# 2021-02-12: pdoc 6.2.0
+
+ - Improvement: Add syntax highlighting in ">>>" code block examples.
+ - Bugfix: Module-level comments are not properly live-reloaded.
+
 # 2021-02-12 pdoc 6.1.1
 
  - Bugfix: Don't eat underscores in numpy/Google-style docstrings.

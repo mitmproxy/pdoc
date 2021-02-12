@@ -14,10 +14,10 @@ import pkgutil
 import sysconfig
 import traceback
 import webbrowser
-from typing import Optional, Union, Collection
+from typing import Collection, Optional, Union
 
-from pdoc import render, extract, doc
-from pdoc._compat import removesuffix, cache
+from pdoc import doc, extract, render
+from pdoc._compat import cache, removesuffix
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
