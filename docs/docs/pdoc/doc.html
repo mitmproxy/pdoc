@@ -1106,7 +1106,7 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot; at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
@@ -1136,12 +1136,13 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="n">_empty</span> <span class="o">=</span> <span class="n">empty</span>
 
         <span class="c1"># https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3123</span>
+        <span class="c1"># Change: added re.sub() to formatted = ....</span>
         <span class="c1"># ✂ start ✂</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">render_pos_only_separator</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">render_kw_only_separator</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">formatted</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+            <span class="n">formatted</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
 
             <span class="n">kind</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span>
 
@@ -2796,7 +2797,7 @@ in repr(). Additionally, all types are already resolved.</p>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;(?&lt;=object) at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot; at 0x[0-9a-fA-F]+(?=&gt;$)&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot; = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>

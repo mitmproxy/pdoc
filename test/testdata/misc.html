@@ -23,6 +23,15 @@
                     <h2>API Documentation</h2>
                         <ul class="memberlist">
             <li>
+                    <a class="variable" href="#var_with_default_obj">var_with_default_obj</a>
+            </li>
+            <li>
+                    <a class="function" href="#var_with_default_func">var_with_default_func</a>
+            </li>
+            <li>
+                    <a class="function" href="#func_with_defaults">func_with_defaults</a>
+            </li>
+            <li>
                     <a class="class" href="#ClassmethodLink">ClassmethodLink</a>
                             <ul class="memberlist">
                         <li>
@@ -184,6 +193,28 @@ misc    </h1>
 
 <span class="kn">import</span> <span class="nn">demo_long</span>
 <span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
+
+
+<span class="c1"># Testing function and object default values</span>
+
+<span class="k">def</span> <span class="nf">default_func</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+
+<span class="n">default_obj</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+<span class="n">var_with_default_obj</span> <span class="o">=</span> <span class="n">default_obj</span>
+<span class="sd">&quot;&quot;&quot;this shouldn&#39;t render the object address&quot;&quot;&quot;</span>
+<span class="n">var_with_default_func</span> <span class="o">=</span> <span class="n">default_func</span>
+<span class="sd">&quot;&quot;&quot;this just render like a normal function&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">default_obj</span><span class="p">,</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">default_func</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
 
 
 <span class="c1"># Testing classmethod links in code</span>
@@ -390,6 +421,9 @@ misc    </h1>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
+    <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;var_with_default_func&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;func_with_defaults&quot;</span><span class="p">,</span>
     <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
     <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
@@ -410,6 +444,61 @@ misc    </h1>
         </details>
 
             </section>
+                <section id="var_with_default_obj">
+                                <div class="attr variable"><a class="headerlink" href="#var_with_default_obj">#&nbsp;&nbsp</a>
+
+        <span class="name">var_with_default_obj</span><span class="default_value"> = &lt;object object&gt;</span>
+    </div>
+
+            <div class="docstring"><p>this shouldn't render the object address</p>
+</div>
+
+
+                </section>
+                <section id="var_with_default_func">
+                            <div class="attr function"><a class="headerlink" href="#var_with_default_func">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">var_with_default_func</span><span class="signature">()</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">default_func</span><span class="p">():</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+    
+
+                </section>
+                <section id="func_with_defaults">
+                            <div class="attr function"><a class="headerlink" href="#func_with_defaults">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">func_with_defaults</span><span class="signature">(a=&lt;object object&gt;, b=&lt;function default_func&gt;)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">default_obj</span><span class="p">,</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">default_func</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>this shouldn't render object or function addresses</p>
+</div>
+
+
+                </section>
                 <section id="ClassmethodLink">
                                 <div class="attr class">
         <a class="headerlink" href="#ClassmethodLink">#&nbsp;&nbsp</a>

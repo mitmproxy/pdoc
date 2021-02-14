@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- -
+ - Cosmetic improvements in default value rendering:
+   object and function memory addresses are now stripped.
 
 # 2021-02-14: pdoc 6.3.0
 

@@ -866,7 +866,7 @@ class Variable(Doc[None]):
         else:
             try:
                 return re.sub(
-                    r"(?<=object) at 0x[0-9a-fA-F]+(?=>$)",
+                    r" at 0x[0-9a-fA-F]+(?=>$)",
                     "",
                     f" = {repr(self.default_value)}",
                 )
@@ -896,12 +896,13 @@ class _PrettySignature(inspect.Signature):
         _empty = empty
 
         # https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3123
+        # Change: added re.sub() to formatted = ....
         # ✂ start ✂
         result = []
         render_pos_only_separator = False
         render_kw_only_separator = True
         for param in self.parameters.values():
-            formatted = str(param)
+            formatted = re.sub(r" at 0x[0-9a-fA-F]+(?=>$)", "", str(param))
 
             kind = param.kind
 

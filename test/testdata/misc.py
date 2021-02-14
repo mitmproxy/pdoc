@@ -6,6 +6,28 @@ import demo_long
 from pdoc._compat import cached_property
 
 
+# Testing function and object default values
+
+def default_func():
+    pass
+
+
+default_obj = object()
+
+var_with_default_obj = default_obj
+"""this shouldn't render the object address"""
+var_with_default_func = default_func
+"""this just render like a normal function"""
+
+
+def func_with_defaults(
+    a=default_obj,
+    b=default_func
+):
+    """this shouldn't render object or function addresses"""
+    pass
+
+
 # Testing classmethod links in code
 class ClassmethodLink:
     """
@@ -210,6 +232,9 @@ indents"""
 
 
 __all__ = [  # noqa
+    "var_with_default_obj",
+    "var_with_default_func",
+    "func_with_defaults",
     "ClassmethodLink",
     "GenericParent",
     "NonGenericChild",
