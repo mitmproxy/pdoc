@@ -107,7 +107,7 @@
                 root => `
                     <a
                     class="${filtered.length === 1 || root === filt ? 'active' : ''}"
-                    href="${root.replace(".", "/")}.html"
+                    href="${root.replaceAll(".", "/")}.html"
                     >${root}</a>`
             ).join("");
         }
