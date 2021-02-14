@@ -312,6 +312,7 @@ from __future__ import annotations
 __version__ = "6.2.0"  # this is read from setup.py
 
 import io
+import traceback
 import warnings
 from pathlib import Path
 from typing import Optional, Union
@@ -368,8 +369,10 @@ def pdoc(
     for mod in all_modules:
         try:
             m = extract.load_module(mod)
-        except RuntimeError as e:
-            warnings.warn(f"Error importing {mod}: {e!r}", RuntimeWarning)
+        except RuntimeError:
+            warnings.warn(
+                f"Error importing {mod}:\n{traceback.format_exc()}", RuntimeWarning
+            )
         else:
             write(doc.Module(m))
 
