@@ -14,15 +14,23 @@ import pkgutil
 import platform
 import subprocess
 import sys
+import traceback
 import types
 import warnings
 from contextlib import contextmanager
 from functools import partial
 from pathlib import Path
-from typing import Optional, Sequence, Union
+from typing import Callable, Iterable, Iterator, Optional, Sequence, Union
 from unittest.mock import patch
 
 from . import doc_ast
+
+AnyException = (SystemExit, GeneratorExit, Exception)
+"""BaseException, but excluding KeyboardInterrupt.
+
+Modules may raise SystemExit on import (which we want to catch),
+but we don't want to catch a user's KeyboardInterrupt.
+"""
 
 
 @contextmanager
@@ -61,35 +69,80 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
     for spec in modules:
         modname = parse_spec(spec)
 
-        # try to get all submodules
         try:
             with mock_some_common_side_effects():
                 modspec = importlib.util.find_spec(modname)
-            if modspec is None:
-                raise ModuleNotFoundError(modname)
-            module_index[modname] = None
-            if modspec.submodule_search_locations is None:
-                continue
-            path = modspec.submodule_search_locations
-        except BaseException as e:
+                if modspec is None:
+                    raise ModuleNotFoundError(modname)
+        except AnyException:
             warnings.warn(
-                f"Cannot find spec for {modname} (from {spec}): {e}",
+                f"Cannot find spec for {modname} (from {spec}):\n{traceback.format_exc()}",
                 RuntimeWarning,
                 stacklevel=2,
             )
         else:
-            try:
-                with mock_some_common_side_effects():
-                    for submodule in pkgutil.walk_packages(path, f"{modname}."):
-                        module_index[submodule.name] = None
-            except BaseException as e:
-                warnings.warn(
-                    f"Error importing subpackage: {e!r}", RuntimeWarning, stacklevel=2
-                )
+            mod_info = pkgutil.ModuleInfo(
+                None,  # type: ignore
+                name=modname,
+                ispkg=bool(modspec.submodule_search_locations),
+            )
+            for m in walk_packages2([mod_info]):
+                module_index[m.name] = None
+
     if not module_index:
         raise ValueError(f"Module not found: {', '.join(str(x) for x in modules)}.")
 
     return module_index
+
+
+def _all_submodules(modulename: str) -> bool:
+    return True
+
+
+def walk_packages2(
+    modules: Iterable[pkgutil.ModuleInfo],
+    module_filter: Callable[[str], bool] = _all_submodules,
+) -> Iterator[pkgutil.ModuleInfo]:
+    """
+    For a given list of modules, recursively yield their names and all their submodules' names.
+
+    This function is similar to pkgutil.walk_packages, but respects a package's __all__ attribute if specified.
+    If __all__ is defined, submodules not listed in __all__ are excluded.
+    """
+
+    # noinspection PyDefaultArgument
+    def seen(p, m={}):  # pragma: no cover
+        if p in m:
+            return True
+        m[p] = True
+
+    for mod in modules:
+        # is __all__ defined and the module not in __all__?
+        if not module_filter(mod.name.rpartition(".")[2]):
+            continue
+
+        yield mod
+
+        if mod.ispkg:
+            try:
+                module = load_module(mod.name)
+            except RuntimeError:
+                warnings.warn(
+                    f"Error loading {mod.name}:\n{traceback.format_exc()}",
+                    RuntimeWarning,
+                )
+                continue
+
+            mod_all: list[str] = getattr(module, "__all__", None)
+            if mod_all is not None:
+                filt = mod_all.__contains__
+            else:
+                filt = _all_submodules
+
+            # don't traverse path items we've seen before
+            path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
+
+            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
 
 
 def parse_spec(spec: Union[Path, str]) -> str:
@@ -129,8 +182,8 @@ def load_module(module: str) -> types.ModuleType:
     Returns the imported module."""
     try:
         return importlib.import_module(module)
-    except BaseException as e:
-        raise RuntimeError(f"Error importing {module}: {e!r}") from e
+    except AnyException as e:
+        raise RuntimeError(f"Error importing {module}") from e
 
 
 @mock_some_common_side_effects()
@@ -139,7 +192,7 @@ def module_mtime(modulename: str) -> Optional[float]:
     The primary use of this is live-reloading modules on modification."""
     try:
         spec = importlib.util.find_spec(modulename)
-    except BaseException:
+    except AnyException:
         pass
     else:
         if spec is not None and spec.origin is not None:
@@ -187,7 +240,9 @@ def invalidate_caches(module_name: str) -> None:
                 continue  # some funky stuff going on - one example is typing.io, which is a class.
             with mock_some_common_side_effects():
                 importlib.reload(sys.modules[modname])
-        except BaseException as e:
+        except AnyException:
             warnings.warn(
-                f"Error reloading {modname}: {e}", RuntimeWarning, stacklevel=2
+                f"Error reloading {modname}:\n{traceback.format_exc()}",
+                RuntimeWarning,
+                stacklevel=2,
             )

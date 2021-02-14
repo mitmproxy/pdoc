@@ -22,7 +22,7 @@ def test_smoke(module):
     try:
         with pdoc.extract.mock_some_common_side_effects():
             importlib.import_module(module)
-    except BaseException:
+    except pdoc.extract.AnyException:
         pass
     else:
         # noinspection PyTypeChecker

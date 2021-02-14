@@ -17,7 +17,7 @@ def test_parse_specs():
     with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
         assert list(parse_specs(["dataclasses", "unknown"])) == ["dataclasses"]
 
-    with pytest.warns(RuntimeWarning, match="Error importing subpackage"):
+    with pytest.warns(RuntimeWarning, match="Error loading test.import_err.err"):
         assert list(parse_specs([here / "import_err"])) == [
             "test.import_err",
             "test.import_err.err",

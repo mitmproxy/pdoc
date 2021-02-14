@@ -1,0 +1,27 @@
+<style type="text/css">iframe {width: 100%; min-height: 50vh}</style>
+<h3>demopackage.html</h3>
+<iframe srcdoc="
+<module demopackage  # A test package
+    <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
+        <method def __init__(): ...  # inherited from demopackage._child_d.Test.__init__>
+        <method def foo(self, a: int): ...  # inherited from demopackage._child_d.Test.foo, Do foo.>>
+    <module demopackage.child_b  # child_b docstr>
+    <module demopackage.child_c  # child_c docstr>
+    <module demopackage2  # I'm a different pack…>>
+"></iframe>
+
+<h3>demopackage/child_c.html</h3>
+<iframe srcdoc="
+<module demopackage.child_c  # child_c docstr>
+"></iframe>
+
+<h3>demopackage/child_b.html</h3>
+<iframe srcdoc="
+<module demopackage.child_b  # child_b docstr>
+"></iframe>
+
+<h3>demopackage/_child_e.html</h3>
+<iframe srcdoc="
+<module demopackage._child_e  # _child_e docstr>
+"></iframe>
+

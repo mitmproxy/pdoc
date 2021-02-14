@@ -180,7 +180,7 @@ class AllModules(Collection[str]):
                 modspec = importlib.util.find_spec(modname)
             if modspec is None:
                 raise ModuleNotFoundError(modname)
-        except BaseException:
+        except extract.AnyException:
             return False
         else:
             return True
