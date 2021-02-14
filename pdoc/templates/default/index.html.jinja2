@@ -23,7 +23,7 @@
         {% endblock %}
 
         {% block style_content %}
-        .pdoc {
+        .pdoc-index {
             color: var(--text);
             text-align: center;
         }
@@ -86,7 +86,7 @@
     </style>
 {% endblock %}
 {% block body %}
-<div class="pdoc">
+<div class="pdoc pdoc-index">
     <a id="pdoc-logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
     <input id="pdoc-search" type="text" placeholder="search" aria-label="search for a module"/>
     <h5>Available Modules</h5>

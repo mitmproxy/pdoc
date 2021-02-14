@@ -590,7 +590,7 @@
     {% elif doc.name == "__init__" %}
         {# the constructor is our special case which we also treat as public #}
         true
-    {% elif doc.qualname == doc.name and doc.name is in(module.obj.__all__) %}
+    {% elif doc.name is in(module.obj.__all__) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
     {% endif %}
