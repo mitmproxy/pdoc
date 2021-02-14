@@ -221,6 +221,18 @@
                     transition: 100ms all;
                 }
 
+                .pdoc .visually-hidden {
+                    position: absolute !important;
+                    width: 1px !important;
+                    height: 1px !important;
+                    padding: 0 !important;
+                    margin: -1px !important;
+                    overflow: hidden !important;
+                    clip: rect(0, 0, 0, 0) !important;
+                    white-space: nowrap !important;
+                    border: 0 !important;
+                }
+
                 .pdoc h1, .pdoc h2, .pdoc h3, .pdoc h4 {
                     font-weight: 300;
                     margin: .3em 0;
@@ -683,8 +695,8 @@
 
                 {% block attribution %}
                     <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-                        built with <img
-                            alt="pdoc"
+                        built with <span class="visually-hidden">pdoc</span><img
+                            alt="pdoc logo"
                             src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
                     </a>
                 {% endblock %}
