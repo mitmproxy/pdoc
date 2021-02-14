@@ -22,6 +22,7 @@ import pkgutil
 import re
 import sys
 import textwrap
+import traceback
 import types
 import warnings
 from abc import ABCMeta, abstractmethod
@@ -386,8 +387,11 @@ class Module(Namespace[types.ModuleType]):
                     continue
                 try:
                     module = extract.load_module(mod.name)
-                except RuntimeError as e:
-                    warnings.warn(f"Couldn't import {mod.name}: {e!r}", RuntimeWarning)
+                except RuntimeError:
+                    warnings.warn(
+                        f"Couldn't import {mod.name}:\n{traceback.format_exc()}",
+                        RuntimeWarning,
+                    )
                     continue
                 submodules.append(Module(module))
             return submodules
