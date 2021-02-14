@@ -7,7 +7,7 @@ from typing import Optional
 import pytest
 
 import pdoc
-from pdoc import render
+import pdoc.render
 
 here = Path(__file__).parent.absolute()
 
@@ -36,7 +36,8 @@ class Snapshot:
         return f"Snapshot({self.id})"
 
     def make(self, format: str) -> str:
-        render.configure(**self.render_options)
+        pdoc.render.configure(**self.render_options)
+        pdoc.render.env.globals["__version__"] = "$VERSION"
         if self.with_output_directory:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 tmpdir = Path(tmpdirname)
@@ -57,7 +58,8 @@ class Snapshot:
         else:
             # noinspection PyTypeChecker
             rendered = pdoc.pdoc(self.path, format=format)  # type: ignore
-        render.configure()
+        pdoc.render.configure()
+        pdoc.render.env.globals["__version__"] = pdoc.__version__
         return rendered
 
     def outfile(self, format: str) -> Path:
