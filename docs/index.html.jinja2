@@ -63,6 +63,10 @@
                 max-width: 200px;
             }
 
+            h1 {
+                font-size: 1.75rem;
+            }
+
             {% set boxwidth = 450 %}
             {% set boxpad = 20 %}
             {% set minw = boxwidth * 2 + boxpad * 4 %}
@@ -169,7 +173,7 @@
 <div class="container-fluid">
     <div class="row py-4 my-4 align-items-center">
         <div class="col-md-6 text-center text-md-end">{% include "logo.svg" %}</div>
-        <div class="col-md-6 pt-md-0 pt-4 text-center text-md-start"><h3>API Documentation<br>for Python Projects</h3>
+        <div class="col-md-6 pt-md-0 pt-4 text-center text-md-start"><h1><span class="visually-hidden">pdoc: </span>API Documentation<br>for Python Projects</h1>
         </div>
     </div>
 </div>
