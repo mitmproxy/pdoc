@@ -4,6 +4,12 @@
 
  -
 
+# 2021-02-14: pdoc 6.3.0
+
+ - Respect `__all__` when collecting submodules.
+ - Correct wrong links in module index (@fweisser)
+ - Emit more detailed error messages on import failure.
+
 # 2021-02-12: pdoc 6.2.0
 
  - Improvement: Add syntax highlighting in ">>>" code block examples.
