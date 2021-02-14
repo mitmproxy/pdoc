@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import shutil
+import textwrap
 from pathlib import Path
 
 import pygments.formatters.html
@@ -48,3 +49,18 @@ if __name__ == "__main__":
     # Render dark mode example
     pdoc.render.configure(template_directory=here / ".." / "examples" / "dark-mode")
     pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
+
+    # Add sitemap.xml
+    with (here / "sitemap.xml").open("w") as f:
+        f.write(textwrap.dedent("""
+        <?xml version="1.0" encoding="utf-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        """).strip())
+        for file in here.glob("**/*.html"):
+            if file.name.startswith("_"):
+                continue
+            filename = str(file.relative_to(here)).replace("index.html", "")
+            f.write(f"""\n<url><loc>https://pdoc.dev/{filename}</loc></url>""")
+        f.write("""\n</urlset>""")

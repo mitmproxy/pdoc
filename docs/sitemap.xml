@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url><loc>https://pdoc.dev/</loc></url>
+<url><loc>https://pdoc.dev/docs/demo.html</loc></url>
+<url><loc>https://pdoc.dev/docs/demo_long.html</loc></url>
+<url><loc>https://pdoc.dev/docs/</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc.html</loc></url>
+<url><loc>https://pdoc.dev/docs/dark-mode/demo.html</loc></url>
+<url><loc>https://pdoc.dev/docs/dark-mode/</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/doc.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/docstrings.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/doc_ast.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/doc_types.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/extract.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/markdown2.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/render.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/render_helpers.html</loc></url>
+<url><loc>https://pdoc.dev/docs/pdoc/web.html</loc></url>
+</urlset>
