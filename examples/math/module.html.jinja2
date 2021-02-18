@@ -1,17 +1,17 @@
 {% extends "default/module.html.jinja2" %}
 
 {% block head %}
-	<script>
-	/*
-	MathJax by default does not define $ as a math delimiter because it's commonly used in non-mathematical settings.
-	We add it here for demonstration purposes. If you stick to $$, you can safely remove the next block!
-	*/
-	window.MathJax = {
-	  tex: {
-	    inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  }
-	};
-	</script>
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    /*
+    MathJax by default does not define $ as a math delimiter because it's commonly used in non-mathematical settings.
+    We add it here for demonstration purposes. If you stick to $$, you can remove this block.
+    */
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 {% endblock %}
