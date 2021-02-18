@@ -50,6 +50,10 @@ if __name__ == "__main__":
     pdoc.render.configure(template_directory=here / ".." / "examples" / "dark-mode")
     pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
 
+    # Render math example
+    pdoc.render.configure(template_directory=here / ".." / "examples" / "math")
+    pdoc.pdoc(here / ".." / "examples" / "math" / "math_demo.py", output_directory=here / "docs" / "math")
+
     # Add sitemap.xml
     with (here / "sitemap.xml").open("w") as f:
         f.write(textwrap.dedent("""

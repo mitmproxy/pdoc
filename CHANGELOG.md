@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- -
+ - Add an example for math formula rendering.
 
 # 2021-02-15: pdoc 6.3.1
 

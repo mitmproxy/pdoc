@@ -245,6 +245,11 @@ pdoc does not implement the full reStructuredText specification and does not pla
 If you feel that it doesn't parse a docstring element properly, please amend
 `pdoc.docstrings` and send us a pull request!
 
+## ...render math formulas?
+
+You can render math in your docstrings with a custom template and MathJax (or any other renderer)!
+There is an example at [`examples/math`](https://github.com/mitmproxy/pdoc/tree/main/examples/math/).
+
 ## ...integrate pdoc into other systems?
 
 pdoc's HTML and CSS are written in a way that the default template can be easily adjusted
