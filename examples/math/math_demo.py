@@ -10,7 +10,8 @@ def foo():
     """docstring with $\\frac{x}{y}$."""
 ```
 
-or prefix your docstring with an "r" so that you have a [raw string](https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals)
+or prefix your docstring with an "r" so that you have a
+[raw string](https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals)
 where backslashes are not processed:
 
 ```python
@@ -23,6 +24,7 @@ Example: $\frac{x}{y}$
 
 '''
 import math
+
 
 def binom_coef(n: int, k: int) -> int:
     """
