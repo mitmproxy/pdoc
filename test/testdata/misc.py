@@ -6,6 +6,26 @@ import demo_long
 from pdoc._compat import cached_property
 
 
+# https://github.com/mitmproxy/pdoc/issues/226
+
+
+class Descriptor:
+    def __init__(self, func):
+        self.__doc__ = func.__doc__
+
+    def __get__(self, instance, owner):
+        return self if instance is None else getattr(instance, "_x", 0)
+
+    def __set__(self, instance, value):
+        instance._x = value
+
+
+class Issue226:
+    @Descriptor
+    def size(self):
+        """This is the size"""
+
+
 # Testing function and object default values
 
 def default_func():
@@ -232,6 +252,7 @@ indents"""
 
 
 __all__ = [  # noqa
+    "Issue226",
     "var_with_default_obj",
     "var_with_default_func",
     "func_with_defaults",

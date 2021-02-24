@@ -11,4 +11,5 @@ from typing import NamedTuple
 
 class NamedTupleExample(NamedTuple):
     name: str
+    """Name of or example tuple."""
     id: int = 3

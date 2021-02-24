@@ -1,4 +1,7 @@
 <module misc
+    <class misc.Issue226
+        <method def __init__(): ...>
+        <var size = <misc.Descriptor object>  # This is the size>>
     <var var_with_default_obj = <object object>  # this shouldn't rende…>
     <method def var_with_default_func(): ...  # inherited from misc.default_func>
     <function def func_with_defaults(a=<object object>, b=<function default_func>): ...  # this shouldn't rende…>

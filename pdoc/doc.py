@@ -242,6 +242,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Module(obj)
             else:
                 docstring = self._var_docstrings.get(name, "")
+                if not docstring and inspect.isdatadescriptor(obj):
+                    docstring = getattr(obj, "__doc__", None) or ""
                 doc = Variable(
                     self.modulename,
                     qualname,

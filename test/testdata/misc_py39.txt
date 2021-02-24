@@ -1,6 +1,6 @@
 <module misc_py39  # Testing features tha…
     <class misc_py39.NamedTupleExample  # NamedTupleExample(na…
-        <var name: str>
-        <var id: int>
+        <var name: str  # Name of or example t…>
+        <var id: int  # Alias for field numb…>
         <method def index(self, value, start=0, stop=9223372036854775807, /): ...  # inherited from builtins.tuple.index, Return first index o…>
         <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>>>
