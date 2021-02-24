@@ -2,6 +2,11 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-02-24: pdoc 6.3.2
+
+ - Bugfix: Docstrings for data descriptors are now captured properly.
  - Add an example for math formula rendering.
 
 # 2021-02-15: pdoc 6.3.1
