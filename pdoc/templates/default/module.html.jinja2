@@ -567,7 +567,7 @@
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | render_docstring | linkify }}</div>
+        <div class="docstring">{{ var.docstring | render_docstring | linkify(namespace=var.qualname) }}</div>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}

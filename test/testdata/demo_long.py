@@ -78,6 +78,8 @@ class Foo:
     `Foo` is a basic class without any parent classes (except for the implict `object` class).
 
     You will see in the definition of `Bar` that docstrings are inherited by default.
+
+    Functions in the current scope can be referenced without prefix: `a_regular_function()`.
     """
 
     an_attribute: Union[str, List["int"]]

@@ -14,7 +14,7 @@ from markupsafe import Markup
 
 import pdoc.markdown2
 from . import docstrings
-from ._compat import cache
+from ._compat import cache, removesuffix
 
 lexer = pygments.lexers.python.PythonLexer()
 """
@@ -113,8 +113,18 @@ def relative_link(current_module: str, target_module: str) -> str:
     )
 
 
+def qualname_candidates(identifier: str, context_qualname: str) -> list[str]:
+    end = len(context_qualname)
+    ret = []
+    while end > 0:
+        ret.append(f"{context_qualname[:end]}.{identifier}")
+        end = context_qualname.rfind(".", 0, end)
+    ret.append(identifier)
+    return ret
+
+
 @contextfilter
-def linkify(context: Context, code: str) -> str:
+def linkify(context: Context, code: str, namespace: str = "") -> str:
     """
     Link all identifiers in a block of text. Identifiers referencing unknown modules or modules that
     are not rendered at the moment will be ignored.
@@ -123,12 +133,18 @@ def linkify(context: Context, code: str) -> str:
 
     def linkify_repl(m: re.Match):
         text = m.group(0)
-        fullname = text.rstrip("()")
-        doc = context["module"].get(fullname)
-        if doc and context["is_public"](doc).strip():
-            return f'<a href="#{fullname}">{text}</a>'
+        identifier = removesuffix(text, "()")
+
+        # Check if this is a local reference within this module?
+        mod: pdoc.doc.Module = context["module"]
+        for qualname in qualname_candidates(identifier, namespace):
+            doc = mod.get(qualname)
+            if doc and context["is_public"](doc).strip():
+                return f'<a href="#{qualname}">{text}</a>'
+
+        # Find the parent module.
         try:
-            module, qualname = split_identifier(context["all_modules"], fullname)
+            module, qualname = split_identifier(context["all_modules"], identifier)
         except ValueError:
             return text
         else:

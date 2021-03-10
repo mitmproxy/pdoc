@@ -6,12 +6,7 @@ from unittest import mock
 
 import pytest
 
-from pdoc.render_helpers import (
-    relative_link,
-    edit_url,
-    split_identifier,
-    render_docstring,
-)
+from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, render_docstring, split_identifier)
 
 
 @pytest.mark.parametrize(
@@ -27,6 +22,15 @@ from pdoc.render_helpers import (
 )
 def test_relative_link(current, target, relative):
     assert relative_link(current, target) == relative
+
+
+@pytest.mark.parametrize("context,candidates", [
+    ("", ["qux"]),
+    ("foo", ["foo.qux", "qux"]),
+    ("foo.bar", ["foo.bar.qux", "foo.qux", "qux"])
+])
+def test_qualname_candidates(context, candidates):
+    assert qualname_candidates("qux", context) == candidates
 
 
 @pytest.mark.parametrize(

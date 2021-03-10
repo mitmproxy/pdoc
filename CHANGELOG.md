@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Functions in the current scope can now be referenced without specifying
+   the full qualified name. For example, one can use `bar()` instead of 
+   `Foo.bar()` in the docstring of `Foo`.
  - Improve reStructuredText rendering: Add support for footnotes.
  - Improve reStructuredText rendering: Minor bugfixes.
 
