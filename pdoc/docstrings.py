@@ -146,9 +146,27 @@ def numpy(docstring: str) -> str:
             "Attributes",
         ):
             contents += f"###### {heading}\n" f"{_numpy_parameters(content)}"
+        elif heading == "See Also":
+            contents += f"###### {heading}\n" f"{_numpy_seealso(content)}"
         else:
             contents += f"###### {heading}\n" f"{dedent(content)}"
         contents += tail
+    return contents
+
+
+def _numpy_seealso(content: str) -> str:
+    """Convert a numpy "See Also" section into Markdown"""
+    contents = ""
+    for item in _indented_list(content):
+        if ":" in item:
+            funcstr, desc = item.split(":", maxsplit=1)
+            desc = f": {desc}"
+        else:
+            funcstr, desc = item, ""
+
+        funclist = [f.strip() for f in funcstr.split(" ")]
+        funcs = ", ".join(f"`{f}`" for f in funclist if f)
+        contents += f"{funcs}{desc}  \n"
     return contents
 
 
