@@ -8,7 +8,7 @@ but that introduces more complexity than we are comfortable with.
 
 If you miss a particular feature for your favorite flavor, contributions are welcome.
 That being said, please keep the complexity low and make sure that changes are
-accompanied by matching snapshot tests in test/testdata/.
+accompanied by matching snapshot tests in `test/testdata/`.
 """
 from __future__ import annotations
 
@@ -114,9 +114,9 @@ def _indented_list(contents: str) -> list[str]:
 
 
 def numpy(docstring: str) -> str:
-    """Convert Numpy-style docstring sections into Markdown.
+    """Convert NumPy-style docstring sections into Markdown.
 
-    See https://numpydoc.readthedocs.io/en/latest/format.html for details.
+    See <https://numpydoc.readthedocs.io/en/latest/format.html> for details.
     """
     sections = re.split(
         r"""
@@ -155,7 +155,7 @@ def numpy(docstring: str) -> str:
 
 
 def _numpy_seealso(content: str) -> str:
-    """Convert a numpy "See Also" section into Markdown"""
+    """Convert a NumPy-style "See Also" section into Markdown"""
     contents = ""
     for item in _indented_list(content):
         if ":" in item:
@@ -171,7 +171,7 @@ def _numpy_seealso(content: str) -> str:
 
 
 def _numpy_parameters(content: str) -> str:
-    """Convert a numpy parameter section into Markdown"""
+    """Convert a NumPy-style parameter section into Markdown"""
     contents = ""
     for item in _indented_list(content):
         m = re.match(r"^(.+):(.+)([\s\S]*)", item)
@@ -301,7 +301,7 @@ def _rst_links(contents: str) -> str:
 def _rst_admonitions(contents: str) -> str:
     """
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
-    https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
+    <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>
     """
     admonition = "note|warning|versionadded|versionchanged|deprecated|seealso|math"
     return re.sub(
