@@ -30,6 +30,14 @@ else:  # pragma: no cover
         return x
 
 if sys.version_info >= (3, 9):
+    removeprefix = str.removeprefix
+else:  # pragma: no cover
+    def removeprefix(x: str, prefix: str):
+        if x.startswith(prefix):
+            x = x[len(prefix):]
+        return x
+
+if sys.version_info >= (3, 9):
     from typing import ForwardRef
 else:  # pragma: no cover
     from typing import _Final, _type_check, _GenericAlias

@@ -8,4 +8,8 @@
 
        Mod…>
     <function def seealso_short(): ...  # .. seealso:: modules…>
-    <function def tables(): ...  # | Header 1 | *Header…>>
+    <function def tables(): ...  # | Header 1 | *Header…>
+    <function def footnote1(): ...  # Cite the relevant li…>
+    <function def footnote2(): ...  # Autonumbered footnot…>
+    <function def footnote3(): ...  # Auto-symbol footnote…>
+    <function def footnote4(): ...  # There is not footnot…>>

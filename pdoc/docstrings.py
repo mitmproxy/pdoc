@@ -12,6 +12,7 @@ accompanied by matching snapshot tests in test/testdata/.
 """
 from __future__ import annotations
 
+import inspect
 import re
 from textwrap import dedent, indent
 
@@ -68,6 +69,7 @@ def _google_section(m: re.Match[str]) -> str:
                 contents += " - " + indent(item, "   ")[3:]
             else:
                 contents += f" - **{attr}** " + indent(desc, "   ")[3:]
+            contents += "\n"
     else:
         contents = indent(contents, "> ")
 
@@ -82,33 +84,43 @@ def _indented_list(contents: str) -> list[str]:
         desc
     bar: int
         more desc
+    baz:
+        desc
+            indented
 
     returns [
         "foo:\ndesc",
         "bar: int\nmore desc",
+        "baz:\ndesc\n    indented",
     ]
     """
     # we expect this to be through cleandoc() already.
     assert not contents.startswith(" ")
+    assert not contents.startswith("\n")
     assert "\t" not in contents
 
     ret: list[str] = []
     for line in contents.splitlines(keepends=True):
-        if not line.strip():
-            ret[-1] += line
-        elif not line.startswith(" "):
+        empty = not line.strip()
+        indented = line.startswith(" ")
+        if not (empty or indented):
             # new section
             ret.append(line)
         else:
-            ret[-1] += line.lstrip()
-    return ret
+            # append to current section
+            ret[-1] += line
+
+    return [inspect.cleandoc(x) for x in ret]
 
 
 def numpy(docstring: str) -> str:
-    """Convert Numpy-style docstring sections into Markdown. """
+    """Convert Numpy-style docstring sections into Markdown.
+
+    See https://numpydoc.readthedocs.io/en/latest/format.html for details.
+    """
     sections = re.split(
         r"""
-        ^([A-Z][A-Za-z]+)\n  # a heading
+        ^([A-Z][A-Za-z ]+)\n  # a heading
         ---+\n+              # followed by a dashed line
         """,
         docstring,
@@ -130,7 +142,7 @@ def numpy(docstring: str) -> str:
             "Receives",
             "Other Parameters",
             "Raises",
-            "Warnings",
+            "Warns",
             "Attributes",
         ):
             contents += f"###### {heading}\n" f"{_numpy_parameters(content)}"
@@ -151,11 +163,17 @@ def _numpy_parameters(content: str) -> str:
                 f"{indent(m.group(3).strip(), '   ')}\n"
             )
         else:
-            x = item.split("\n", maxsplit=1)
-            if len(x) == 1:
-                contents += f" - **{x[0].strip()}**\n"
+            if "\n" in item:
+                name, desc = item.split("\n", maxsplit=1)
+                name = name.strip()
+                desc = desc.strip()
             else:
-                contents += f" - **{x[0].strip()}**: {x[1].strip()}\n"
+                name, desc = item.strip(), ""
+
+            if desc:
+                contents += f" - **{name}**: {desc}\n"
+            else:
+                contents += f" - **{name}**\n"
     return f"{contents}\n"
 
 
@@ -171,8 +189,62 @@ def rst(contents: str) -> str:
         r"(:py)?:(mod|func|data|const|class|meth|attr|exc|obj):", "", contents
     )
 
-    contents = _rst_admonitions(contents)
+    # Math: :math:`foo` -> \\( foo \\)
+    # We don't use $ as that's not enabled by MathJax by default.
+    contents = re.sub(r":math:`(.+?)`", r"\\\\( \1 \\\\)", contents)
 
+    contents = _rst_admonitions(contents)
+    contents = _rst_footnotes(contents)
+
+    return contents
+
+
+def _rst_footnotes(contents: str) -> str:
+    """Convert reStructuredText footnotes"""
+    footnotes: set[str] = set()
+    autonum: int
+
+    def register_footnote(m: re.Match[str]) -> str:
+        nonlocal autonum
+        fn_id = m.group("id")
+        if fn_id in "*#":
+            fn_id = f"fn-{autonum}"
+            autonum += 1
+        fn_id = fn_id.lstrip("#*")
+        footnotes.add(fn_id)
+        content = indent(m.group("content"), "   ").lstrip()
+        return f"{m.group('indent')}[^{fn_id}]: {content}"
+
+    # Register footnotes
+    autonum = 1
+    contents = re.sub(
+        r"""
+            ^(?P<indent>[ ]*)\.\.[ ]+\[(?P<id>\d+|[#*]\w*)](?P<content>.*
+            (
+                \n                 # empty lines
+                |                  # or
+                (?P=indent)[ ]+.+  # lines with indentation
+            )*)$
+            """,
+        register_footnote,
+        contents,
+        flags=re.MULTILINE | re.VERBOSE,
+    )
+
+    def replace_references(m: re.Match[str]) -> str:
+        nonlocal autonum
+        fn_id = m.group("id")
+        if fn_id in "*#":
+            fn_id = f"fn-{autonum}"
+            autonum += 1
+        fn_id = fn_id.lstrip("#*")
+        if fn_id in footnotes:
+            return f"[^{fn_id}]"
+        else:
+            return m.group(0)
+
+    autonum = 1
+    contents = re.sub(r"\[(?P<id>\d+|[#*]\w*)]_", replace_references, contents)
     return contents
 
 
@@ -213,10 +285,10 @@ def _rst_admonitions(contents: str) -> str:
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
     https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
     """
-    admonition = "note|warning|versionadded|versionchanged|deprecated|seealso"
+    admonition = "note|warning|versionadded|versionchanged|deprecated|seealso|math"
     return re.sub(
         rf"""
-            ^(?P<indent>[ ]*)..[ ]+(?P<type>{admonition})::(?P<val>.*)
+            ^(?P<indent>[ ]*)\.\.[ ]+(?P<type>{admonition})::(?P<val>.*)
             (?P<contents>(
                 \n                 # empty lines
                 |                  # or
@@ -235,6 +307,8 @@ def _rst_admonition(m: re.Match[str]) -> str:
     val = m.group("val").strip()
     contents = dedent(m.group("contents")).strip()
 
+    if type == "math":
+        return f"{ind}$${val}{contents}$$\n"
     if type == "note":
         text = val or "Note"
     elif type == "warning":

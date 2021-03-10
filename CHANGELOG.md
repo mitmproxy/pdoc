@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- -
+ - Improve reStructuredText rendering: Add support for footnotes.
+ - Improve reStructuredText rendering: Minor bugfixes.
 
 # 2021-02-24: pdoc 6.3.2
 

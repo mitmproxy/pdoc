@@ -75,6 +75,9 @@
 
             </li>
             <li>
+                    <a class="function" href="#foo">foo</a>
+            </li>
+            <li>
                     <a class="function" href="#invalid_format">invalid_format</a>
             </li>
     </ul>
@@ -138,6 +141,8 @@ with it.</p></li>
 <span class="c1">#</span>
 <span class="c1"># - The Napoleon documentation at https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html</span>
 <span class="c1">#   License: BSD-3</span>
+<span class="c1"># - https://github.com/numpy/numpydoc/blob/main/doc/example.py</span>
+<span class="c1">#   License: BSD-2</span>
 <span class="c1">#</span>
 <span class="c1"># flake8: noqa</span>
 <span class="c1"># fmt: off</span>
@@ -500,6 +505,100 @@ with it.</p></li>
         <span class="k">pass</span>
 
 
+<span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Summarize the function in one line.</span>
+
+<span class="sd">    Several sentences providing an extended description. Refer to</span>
+<span class="sd">    variables using back-ticks, e.g. `var`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var1 : array_like</span>
+<span class="sd">        Array_like means all those objects -- lists, nested lists, etc. --</span>
+<span class="sd">        that can be converted to an array.  We can also refer to</span>
+<span class="sd">        variables like `var1`.</span>
+<span class="sd">    var2 : int</span>
+<span class="sd">        The type above can either refer to an actual Python type</span>
+<span class="sd">        (e.g. ``int``), or describe the type of the variable in more</span>
+<span class="sd">        detail, e.g. ``(N,) ndarray`` or ``array_like``.</span>
+<span class="sd">    *args : iterable</span>
+<span class="sd">        Other arguments.</span>
+<span class="sd">    long_var_name : {&#39;hi&#39;, &#39;ho&#39;}, optional</span>
+<span class="sd">        Choices in brackets, default first when optional.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Keyword arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    type</span>
+<span class="sd">        Explanation of anonymous return value of type ``type``.</span>
+<span class="sd">    describe : type</span>
+<span class="sd">        Explanation of return value named `describe`.</span>
+<span class="sd">    out : type</span>
+<span class="sd">        Explanation of `out`.</span>
+<span class="sd">    type_without_description</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    only_seldom_used_keywords : type</span>
+<span class="sd">        Explanation.</span>
+<span class="sd">    common_parameters_listed_above : type</span>
+<span class="sd">        Explanation.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    BadException</span>
+<span class="sd">        Because you shouldn&#39;t have done that.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    numpy.array : Relationship (optional).</span>
+<span class="sd">    numpy.ndarray : Relationship (optional), which could be fairly long, in</span>
+<span class="sd">                    which case the line wraps here.</span>
+<span class="sd">    numpy.dot, numpy.linalg.norm, numpy.eye</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Notes about the implementation algorithm (if needed).</span>
+
+<span class="sd">    This can have multiple paragraphs.</span>
+
+<span class="sd">    You may include some math:</span>
+
+<span class="sd">    .. math:: X(e^{j\omega } ) = x(n)e^{ - j\omega n}</span>
+
+<span class="sd">    And even use a Greek symbol like :math:`\omega` inline.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Cite the relevant literature, e.g. [1]_.  You may also cite these</span>
+<span class="sd">    references in the notes section above.</span>
+
+<span class="sd">    .. [1] O. McNoleg, &quot;The integration of GIS, remote sensing,</span>
+<span class="sd">       expert systems and adaptive co-kriging for environmental habitat</span>
+<span class="sd">       modelling of the Highland Haggis using object-oriented, fuzzy-logic</span>
+<span class="sd">       and neural-network techniques,&quot; Computers &amp; Geosciences, vol. 22,</span>
+<span class="sd">       pp. 585-588, 1996.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    These are written in doctest format, and should illustrate how to</span>
+<span class="sd">    use the function.</span>
+
+<span class="sd">    &gt;&gt;&gt; a = [1, 2, 3]</span>
+<span class="sd">    &gt;&gt;&gt; print([x + 3 for x in a])</span>
+<span class="sd">    [4, 5, 6]</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;a\nb&quot;)</span>
+<span class="sd">    a</span>
+<span class="sd">    b</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># After closing class docstring, there should be one blank line to</span>
+    <span class="c1"># separate following codes (according to PEP257).</span>
+    <span class="c1"># But for function, method and module, there should be no blank lines</span>
+    <span class="c1"># after closing the docstring.</span>
+    <span class="k">pass</span>
+
+
 <span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    In this example, there is no description for the test argument</span>
@@ -765,10 +864,11 @@ match the first line of the description.</p>
 <p>The <code>Returns</code> section supports any reStructuredText formatting,
 including literal blocks::</p>
 
-<p>{
-'param1': param1,
-'param2': param2
-}</p>
+<pre><code>{
+    'param1': param1,
+    'param2': param2
+}
+</code></pre>
 
 <h6 id="raises">Raises</h6>
 
@@ -1287,6 +1387,215 @@ mentioned here.</p>
 
 
                             </div>
+                </section>
+                <section id="foo">
+                            <div class="attr function"><a class="headerlink" href="#foo">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">foo</span><span class="signature">(var1, var2, *args, long_var_name=&#39;hi&#39;, **kwargs)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Summarize the function in one line.</span>
+
+<span class="sd">    Several sentences providing an extended description. Refer to</span>
+<span class="sd">    variables using back-ticks, e.g. `var`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var1 : array_like</span>
+<span class="sd">        Array_like means all those objects -- lists, nested lists, etc. --</span>
+<span class="sd">        that can be converted to an array.  We can also refer to</span>
+<span class="sd">        variables like `var1`.</span>
+<span class="sd">    var2 : int</span>
+<span class="sd">        The type above can either refer to an actual Python type</span>
+<span class="sd">        (e.g. ``int``), or describe the type of the variable in more</span>
+<span class="sd">        detail, e.g. ``(N,) ndarray`` or ``array_like``.</span>
+<span class="sd">    *args : iterable</span>
+<span class="sd">        Other arguments.</span>
+<span class="sd">    long_var_name : {&#39;hi&#39;, &#39;ho&#39;}, optional</span>
+<span class="sd">        Choices in brackets, default first when optional.</span>
+<span class="sd">    **kwargs : dict</span>
+<span class="sd">        Keyword arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    type</span>
+<span class="sd">        Explanation of anonymous return value of type ``type``.</span>
+<span class="sd">    describe : type</span>
+<span class="sd">        Explanation of return value named `describe`.</span>
+<span class="sd">    out : type</span>
+<span class="sd">        Explanation of `out`.</span>
+<span class="sd">    type_without_description</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    only_seldom_used_keywords : type</span>
+<span class="sd">        Explanation.</span>
+<span class="sd">    common_parameters_listed_above : type</span>
+<span class="sd">        Explanation.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    BadException</span>
+<span class="sd">        Because you shouldn&#39;t have done that.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    numpy.array : Relationship (optional).</span>
+<span class="sd">    numpy.ndarray : Relationship (optional), which could be fairly long, in</span>
+<span class="sd">                    which case the line wraps here.</span>
+<span class="sd">    numpy.dot, numpy.linalg.norm, numpy.eye</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Notes about the implementation algorithm (if needed).</span>
+
+<span class="sd">    This can have multiple paragraphs.</span>
+
+<span class="sd">    You may include some math:</span>
+
+<span class="sd">    .. math:: X(e^{j\omega } ) = x(n)e^{ - j\omega n}</span>
+
+<span class="sd">    And even use a Greek symbol like :math:`\omega` inline.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Cite the relevant literature, e.g. [1]_.  You may also cite these</span>
+<span class="sd">    references in the notes section above.</span>
+
+<span class="sd">    .. [1] O. McNoleg, &quot;The integration of GIS, remote sensing,</span>
+<span class="sd">       expert systems and adaptive co-kriging for environmental habitat</span>
+<span class="sd">       modelling of the Highland Haggis using object-oriented, fuzzy-logic</span>
+<span class="sd">       and neural-network techniques,&quot; Computers &amp; Geosciences, vol. 22,</span>
+<span class="sd">       pp. 585-588, 1996.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    These are written in doctest format, and should illustrate how to</span>
+<span class="sd">    use the function.</span>
+
+<span class="sd">    &gt;&gt;&gt; a = [1, 2, 3]</span>
+<span class="sd">    &gt;&gt;&gt; print([x + 3 for x in a])</span>
+<span class="sd">    [4, 5, 6]</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;a\nb&quot;)</span>
+<span class="sd">    a</span>
+<span class="sd">    b</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># After closing class docstring, there should be one blank line to</span>
+    <span class="c1"># separate following codes (according to PEP257).</span>
+    <span class="c1"># But for function, method and module, there should be no blank lines</span>
+    <span class="c1"># after closing the docstring.</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Summarize the function in one line.</p>
+
+<p>Several sentences providing an extended description. Refer to
+variables using back-ticks, e.g. <code>var</code>.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>var1</strong> (array_like):
+Array_like means all those objects -- lists, nested lists, etc. --
+that can be converted to an array.  We can also refer to
+variables like <code>var1</code>.</li>
+<li><strong>var2</strong> (int):
+The type above can either refer to an actual Python type
+(e.g. <code>int</code>), or describe the type of the variable in more
+detail, e.g. <code>(N,) ndarray</code> or <code>array_like</code>.</li>
+<li><strong>*args</strong> (iterable):
+Other arguments.</li>
+<li><strong>long_var_name</strong> ({'hi', 'ho'}, optional):
+Choices in brackets, default first when optional.</li>
+<li><strong>**kwargs</strong> (dict):
+Keyword arguments.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<ul>
+<li><strong>type</strong>: Explanation of anonymous return value of type <code>type</code>.</li>
+<li><strong>describe</strong> (type):
+Explanation of return value named <code>describe</code>.</li>
+<li><strong>out</strong> (type):
+Explanation of <code>out</code>.</li>
+<li><strong>type_without_description</strong></li>
+</ul>
+
+<h6 id="other-parameters">Other Parameters</h6>
+
+<ul>
+<li><strong>only_seldom_used_keywords</strong> (type):
+Explanation.</li>
+<li><strong>common_parameters_listed_above</strong> (type):
+Explanation.</li>
+</ul>
+
+<h6 id="raises">Raises</h6>
+
+<ul>
+<li><strong>BadException</strong>: Because you shouldn't have done that.</li>
+</ul>
+
+<h6 id="see-also">See Also</h6>
+
+<p>numpy.array : Relationship (optional).
+numpy.ndarray : Relationship (optional), which could be fairly long, in
+                which case the line wraps here.
+numpy.dot, numpy.linalg.norm, numpy.eye</p>
+
+<h6 id="notes">Notes</h6>
+
+<p>Notes about the implementation algorithm (if needed).</p>
+
+<p>This can have multiple paragraphs.</p>
+
+<p>You may include some math:</p>
+
+<p>$$X(e^{j\omega } ) = x(n)e^{ - j\omega n}$$</p>
+
+<p>And even use a Greek symbol like \( \omega \) inline.</p>
+
+<h6 id="references">References</h6>
+
+<p>Cite the relevant literature, e.g. <sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>.  You may also cite these
+references in the notes section above.</p>
+
+<h6 id="examples">Examples</h6>
+
+<p>These are written in doctest format, and should illustrate how to
+use the function.</p>
+
+<div class="codehilite"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">])</span>
+<span class="go">[4, 5, 6]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a</span><span class="se">\n</span><span class="s2">b&quot;</span><span class="p">)</span>
+<span class="go">a</span>
+<span class="go">b</span>
+</code></pre></div>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>O. McNoleg, "The integration of GIS, remote sensing,
+expert systems and adaptive co-kriging for environmental habitat
+modelling of the Highland Haggis using object-oriented, fuzzy-logic
+and neural-network techniques," Computers &amp; Geosciences, vol. 22,
+pp. 585-588, 1996.&#160;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</div>
+
+
                 </section>
                 <section id="invalid_format">
                             <div class="attr function"><a class="headerlink" href="#invalid_format">#&nbsp;&nbsp</a>
