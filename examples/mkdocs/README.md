@@ -5,9 +5,10 @@ Run `./make.py` to generate the API documentation and then `mkdocs serve` to vie
 
 ## Implementation
 
-The main trick is that we define a custom `frame.html.jinja2` and `module.html.jinja2` to
-remove the usual HTML frame and layout. We then invoke pdoc normally and rename the output files to `.md` so 
-that they are picked up by mkdocs.
+The main trick is that we define custom `frame.html.jinja2` and `module.html.jinja2` templates to
+remove pdoc's usual HTML code around the main documentation contents. 
+We then invoke pdoc normally and rename the output files to `.md` so that they are picked up by mkdocs.
+mkdocs' Markdown parser accepts the interspersed HTML just fine!
 
 ## Limitations
 
