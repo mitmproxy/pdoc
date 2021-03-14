@@ -181,6 +181,15 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#WithProtectedDecorator">WithProtectedDecorator</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#WithProtectedDecorator.__init__">WithProtectedDecorator</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -452,6 +461,15 @@ misc    </h1>
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
+<span class="k">def</span> <span class="nf">_protected_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">f</span>
+
+
+<span class="nd">@_protected_decorator</span>
+<span class="k">class</span> <span class="nc">WithProtectedDecorator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This class has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -471,6 +489,7 @@ misc    </h1>
     <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
     <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WithProtectedDecorator&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1432,6 +1451,39 @@ indent</p>
 indents</p>
 </div>
 
+
+                            </div>
+                </section>
+                <section id="WithProtectedDecorator">
+                                <div class="attr class">
+        <a class="headerlink" href="#WithProtectedDecorator">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">WithProtectedDecorator</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="nd">@_protected_decorator</span>
+<span class="k">class</span> <span class="nc">WithProtectedDecorator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This class has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This class has a protected decorator (name starting with a single <code>_</code>).</p>
+</div>
+
+
+                            <div id="WithProtectedDecorator.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#WithProtectedDecorator.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">WithProtectedDecorator</span><span class="signature">()</span>    </div>
+
+        
+    
 
                             </div>
                 </section>
