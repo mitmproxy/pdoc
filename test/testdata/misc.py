@@ -251,6 +251,15 @@ indents"""
         """
 
 
+def _protected_decorator(f):
+    return f
+
+
+@_protected_decorator
+class WithProtectedDecorator:
+    """This class has a protected decorator (name starting with a single `_`)."""
+
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -270,4 +279,5 @@ __all__ = [  # noqa
     "baz",
     "qux",
     "Indented",
+    "WithProtectedDecorator",
 ]
