@@ -256,8 +256,8 @@ def _protected_decorator(f):
 
 
 @_protected_decorator
-class WithProtectedDecorator:
-    """This class has a protected decorator (name starting with a single `_`)."""
+def fun_with_protected_decorator():
+    """This function has a protected decorator (name starting with a single `_`)."""
 
 
 __all__ = [  # noqa
@@ -279,5 +279,5 @@ __all__ = [  # noqa
     "baz",
     "qux",
     "Indented",
-    "WithProtectedDecorator",
+    "fun_with_protected_decorator",
 ]

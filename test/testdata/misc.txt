@@ -55,5 +55,4 @@
         indent>
         <@lru_cache() method def qux_decorated(self): ...  # two
         indents>>
-    <@_protected_decorator class misc.WithProtectedDecorator  # This class has a pro…
-        <method def __init__(): ...>>>
+    <@_protected_decorator function def fun_with_protected_decorator(): ...  # This function has a …>>
