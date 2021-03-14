@@ -511,7 +511,7 @@
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro decorators(doc) %}
-    {% for d in doc.decorators %}
+    {% for d in doc.decorators if not d.startswith("@_") %}
         <div class="decorator">{{ d }}</div>
     {% endfor %}
 {% enddefaultmacro %}
