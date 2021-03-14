@@ -181,6 +181,9 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="function" href="#fun_with_protected_decorator">fun_with_protected_decorator</a>
+            </li>
     </ul>
 
 
@@ -452,6 +455,15 @@ misc    </h1>
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
+<span class="k">def</span> <span class="nf">_protected_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">f</span>
+
+
+<span class="nd">@_protected_decorator</span>
+<span class="k">def</span> <span class="nf">fun_with_protected_decorator</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -471,6 +483,7 @@ misc    </h1>
     <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
     <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1434,6 +1447,28 @@ indents</p>
 
 
                             </div>
+                </section>
+                <section id="fun_with_protected_decorator">
+                            <div class="attr function"><a class="headerlink" href="#fun_with_protected_decorator">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fun_with_protected_decorator</span><span class="signature">()</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="nd">@_protected_decorator</span>
+<span class="k">def</span> <span class="nf">fun_with_protected_decorator</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This function has a protected decorator (name starting with a single <code>_</code>).</p>
+</div>
+
+
                 </section>
     </main>
 </body>

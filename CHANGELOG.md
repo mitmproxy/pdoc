@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Private function decorators (those starting with "\_")
+   are now hidden by default. (@zmoon)
 
 # 2021-03-10: pdoc 6.4.0
 
