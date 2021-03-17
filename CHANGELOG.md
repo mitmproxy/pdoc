@@ -4,6 +4,8 @@
 
  - Private function decorators (those starting with "\_")
    are now hidden by default. (@zmoon)
+ - If pdoc is invoked with a name that is both an installed Python module 
+   and a local directory, notify the user that the installed module will be documented.
 
 # 2021-03-10: pdoc 6.4.0
 

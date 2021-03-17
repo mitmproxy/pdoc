@@ -159,11 +159,36 @@ def parse_spec(spec: Union[Path, str]) -> str:
     *This function has side-effects:* `sys.path` will be amended if the specification is a path.
     If this side-effect is undesired, pass a module name instead.
     """
-    # isinstance check is required as Path is not iterable.
-    if not isinstance(spec, Path) and (
+    pspec = Path(spec)
+    if isinstance(spec, str) and (
         os.sep in spec or (os.altsep and os.altsep in spec)
     ):
-        spec = Path(spec)
+        # We have a path separator, so it's definitely a filepath.
+        spec = pspec
+
+    if isinstance(spec, str) and (pspec.is_file() or (pspec / "__init__.py").is_file()):
+        # We have a local file with this name, but is there also a module with the same name?
+        try:
+            with mock_some_common_side_effects():
+                modspec = importlib.util.find_spec(spec)
+                if modspec is None:
+                    raise ModuleNotFoundError
+        except AnyException:
+            # Module does not exist, use local file.
+            spec = pspec
+        else:
+            # Module does exist. We now check if the local file/directory is the same (e.g. after pip install -e),
+            # and emit a warning if that's not the case.
+            origin = Path(modspec.origin).absolute() if modspec.origin else Path("unknown")
+            local_dir = Path(spec).absolute()
+            if local_dir not in (origin, origin.parent):
+                print(
+                    f"Warning: {spec!r} may refer to either the installed Python module or the local file/directory "
+                    f"with the same name. pdoc will document the installed module, prepend './' to force "
+                    f"documentation of the local file/directory.\n"
+                    f" - Module location: {origin}\n"
+                    f" - Local file/directory: {local_dir}"
+                )
 
     if isinstance(spec, Path):
         if (spec.parent / "__init__.py").exists():
@@ -191,7 +216,8 @@ def module_mtime(modulename: str) -> Optional[float]:
     """Returns the time the specified module file was last modified, or `None` if this cannot be determined.
     The primary use of this is live-reloading modules on modification."""
     try:
-        spec = importlib.util.find_spec(modulename)
+        with mock_some_common_side_effects():
+            spec = importlib.util.find_spec(modulename)
     except AnyException:
         pass
     else:
