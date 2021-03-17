@@ -44,6 +44,24 @@ def test_parse_spec():
     sys.path = p
 
 
+def test_parse_spec_mod_and_dir(capsys, tmp_path, monkeypatch):
+    """Test that we display a warning when both a module and a local directory exist with the provided name."""
+    (tmp_path / "dataclasses").mkdir()
+    (tmp_path / "dataclasses" / "__init__.py").touch()
+    monkeypatch.chdir(tmp_path)
+
+    assert parse_spec("dataclasses") == "dataclasses"
+    captured = capsys.readouterr()
+    assert captured.out.startswith(
+        "Warning: 'dataclasses' may refer to either the installed Python module or the local file/directory"
+    )
+
+    monkeypatch.chdir(here / "testdata")
+    assert parse_spec("demo.py") == "demo"
+    captured = capsys.readouterr()
+    assert not captured.out
+
+
 def test_module_mtime():
     assert module_mtime("dataclasses")
     assert module_mtime("unknown") is None
