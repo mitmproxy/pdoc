@@ -2,6 +2,6 @@
     <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
         <method def __init__(): ...  # inherited from demopackage._child_d.Test.__init__>
         <method def foo(self, a: int): ...  # inherited from demopackage._child_d.Test.foo, Do foo.>>
-    <module demopackage.child_b  # child_b docstr>
-    <module demopackage.child_c  # child_c docstr>
-    <module demopackage2  # I'm a different pack…>>
+    <module demopackage.child_b  # inherited from demopackage.child_b, child_b docstr>
+    <module demopackage.child_c  # inherited from demopackage.child_c, child_c docstr>
+    <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>>

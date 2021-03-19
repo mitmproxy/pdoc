@@ -539,7 +539,7 @@
     </div>
 {% enddefaultmacro %}
 {% defaultmacro submodule(mod) %}
-    <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ (mod.modulename, "") | link }}</span></div>
+    <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ mod.taken_from | link }}</span></div>
 {% enddefaultmacro %}
 {% defaultmacro class(cls) %}
     <div class="attr class">
@@ -602,7 +602,10 @@
     {% elif doc.name == "__init__" %}
         {# the constructor is our special case which we also treat as public #}
         true
-    {% elif doc.name is in(module.obj.__all__) %}
+    {% elif doc.name == "__doc__" %}
+        {# Sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
+        {# https://github.com/mitmproxy/pdoc/issues/235 #}
+    {% elif doc.qualname is in(module.obj.__all__) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
     {% endif %}

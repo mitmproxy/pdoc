@@ -240,6 +240,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
                 doc = Module(obj)
+                doc.modulename = self.modulename
+                doc.qualname = qualname
             else:
                 docstring = self._var_docstrings.get(name, "")
                 if not docstring and inspect.isdatadescriptor(obj):
@@ -320,7 +322,7 @@ class Module(Namespace[types.ModuleType]):
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
-        return f"<module {self.modulename}{_docstr(self)}{_children(self)}>"
+        return f"<module {self.fullname}{_docstr(self)}{_children(self)}>"
 
     @cached_property
     def is_package(self) -> bool:
@@ -963,7 +965,7 @@ def _docstr(doc: "Doc") -> str:
     """helper function for Doc.__repr__()"""
     docstr = []
     if doc.is_inherited:
-        docstr.append(f"inherited from {'.'.join(doc.taken_from)}")
+        docstr.append(f"inherited from {'.'.join(doc.taken_from).rstrip('.')}")
     if doc.docstring:
         docstr.append(_cut(doc.docstring))
     if docstr:

@@ -2,10 +2,16 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-03-19: pdoc 6.4.1
+
  - Private function decorators (those starting with "\_")
    are now hidden by default. (@zmoon)
  - If pdoc is invoked with a name that is both an installed Python module 
    and a local directory, notify the user that the installed module will be documented.
+ - `__doc__` is not rendered as a variable, even if included in `__all__`.
+ - Submodules are now assigned a qualname, which fixes broken anchor links.
 
 # 2021-03-10: pdoc 6.4.0
 
