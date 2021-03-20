@@ -122,7 +122,7 @@ pdoc -t . ./shelter.py
 ...and the updated documentation – with logo – renders! 🎉
 
 See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
-for more examples!
+for more examples.
 
 # How can I ... ?
 
@@ -249,6 +249,10 @@ If you feel that it doesn't parse a docstring element properly, please amend
 
 You can render math in your docstrings with a custom template and MathJax (or any other renderer)!
 There is an example at [`examples/math`](https://github.com/mitmproxy/pdoc/tree/main/examples/math/).
+
+## ...add my project's logo?
+
+See [*Editing pdoc's HTML template*](#editing-pdocs-html-template).
 
 ## ...integrate pdoc into other systems?
 
