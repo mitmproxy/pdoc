@@ -48,12 +48,20 @@ def test_parse_spec_mod_and_dir(capsys, tmp_path, monkeypatch):
     """Test that we display a warning when both a module and a local directory exist with the provided name."""
     (tmp_path / "dataclasses").mkdir()
     (tmp_path / "dataclasses" / "__init__.py").touch()
+    (tmp_path / "pdoc").mkdir()
+    (tmp_path / "pdoc" / "__init__.py").touch()
     monkeypatch.chdir(tmp_path)
 
     assert parse_spec("dataclasses") == "dataclasses"
     captured = capsys.readouterr()
-    assert captured.out.startswith(
+    assert captured.err.startswith(
         "Warning: 'dataclasses' may refer to either the installed Python module or the local file/directory"
+    )
+
+    assert parse_spec("./pdoc") == "pdoc"
+    captured = capsys.readouterr()
+    assert captured.err.startswith(
+        "Warning: pdoc cannot load 'pdoc' because a module with the same name is already imported"
     )
 
     monkeypatch.chdir(here / "testdata")
