@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- - 
+ - pdoc now emits a warning when directory names conflict with modules
+   already loaded by pdoc.
 
 # 2021-03-19: pdoc 6.4.1
 

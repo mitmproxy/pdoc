@@ -187,7 +187,8 @@ def parse_spec(spec: Union[Path, str]) -> str:
                     f"with the same name. pdoc will document the installed module, prepend './' to force "
                     f"documentation of the local file/directory.\n"
                     f" - Module location: {origin}\n"
-                    f" - Local file/directory: {local_dir}"
+                    f" - Local file/directory: {local_dir}",
+                    file=sys.stderr
                 )
 
     if isinstance(spec, Path):
@@ -195,6 +196,13 @@ def parse_spec(spec: Union[Path, str]) -> str:
             return parse_spec(spec.parent) + f".{spec.stem}"
         if str(spec.parent) not in sys.path:
             sys.path.insert(0, str(spec.parent))
+        if spec.stem in sys.modules:
+            local_dir = spec.absolute()
+            origin = Path(sys.modules[spec.stem].__file__).absolute()
+            if local_dir not in (origin, origin.parent):
+                print(f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
+                      f"imported in pdoc's Python process. pdoc will document the loaded module from {origin} instead.",
+                      file=sys.stderr)
         return spec.stem
     else:
         return spec

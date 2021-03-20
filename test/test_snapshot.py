@@ -83,7 +83,7 @@ snapshots = [
     ),
     Snapshot("demo_long"),
     Snapshot("demo_eager"),
-    Snapshot("demopackage"),
+    Snapshot("demopackage", "demopackage"),
     Snapshot("demopackage_dir", "demopackage", with_output_directory=True),
     Snapshot("misc"),
     Snapshot("misc_py39"),
