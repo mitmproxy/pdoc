@@ -1,0 +1,13 @@
+{% defaultmacro docstring(var) %}
+    {%- if var.docstring -%}
+        {{ var.docstring | render_docstring }}
+    {%- endif -%}
+{% enddefaultmacro %}
+# {{ module.modulename }}
+
+{{ docstring(module) }}
+
+{% for m in module.flattened_own_members %}
+{# TODO: Expand here. #}
+{{ m | safe | indent}}
+{% endfor %}

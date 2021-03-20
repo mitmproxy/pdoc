@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import platform
 import subprocess
 from collections.abc import Collection
@@ -33,12 +34,11 @@ parser.add_argument(
     type=Path,
     help="Write rendered documentation to the specified directory, don't start a webserver.",
 )
-# may be added again in the future:
-# formats = parser.add_mutually_exclusive_group()
-# formats.add_argument("--html", dest="format", action="store_const", const="html")
-# formats.add_argument(
-#     "--markdown", dest="format", action="store_const", const="markdown"
-# )
+parser.add_argument(
+    "-f", "--format", dest="format", choices=("html", "markdown"),
+    help="The output format.",
+    default="$PDOC_FORMAT or html",
+)
 parser.add_argument(
     "-e",
     "--edit-url",
@@ -142,6 +142,8 @@ def cli(args: list[str] = None) -> None:
             f"Platform: {platform.platform()}"
         )
         return
+    if opts.format == "$PDOC_FORMAT or html":
+        opts.format = os.environ.get("PDOC_FORMAT", "html")
 
     render.configure(
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
@@ -153,9 +155,10 @@ def cli(args: list[str] = None) -> None:
         pdoc.pdoc(
             *opts.modules,
             output_directory=opts.output_directory,
-            format="html",  # opts.format or
+            format=opts.format,
         )
-        return
+    elif opts.format == "markdown":
+        print(pdoc.pdoc(*opts.modules, format=opts.format))
     else:
         all_modules: Collection[str]
         if opts.modules:
@@ -178,7 +181,6 @@ def cli(args: list[str] = None) -> None:
                 httpd.serve_forever()
             except KeyboardInterrupt:
                 httpd.server_close()
-                return
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -98,7 +98,23 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-@defuse_unsafe_reprs()
+def markdown_module(
+    module: pdoc.doc.Module,
+    all_modules: Collection[str],
+) -> str:
+    """Renders the documentation for a `pdoc.doc.Module` as Markdown."""
+    with defuse_unsafe_reprs():
+        return env.select_template(
+            ["module.md.jinja2", "default/module.md.jinja2"]
+        ).render(
+            module=module,
+            all_modules=all_modules,
+            edit_url=edit_url(
+                module.modulename, module.is_package, env.globals["edit_url_map"]
+            ),
+        )
+
+
 def repr_module(module: pdoc.doc.Module) -> str:
     """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
     with defuse_unsafe_reprs():
@@ -123,6 +139,7 @@ You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
 env.filters["render_docstring"] = render_docstring
+env.filters["render_markdown"] = render_docstring
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link

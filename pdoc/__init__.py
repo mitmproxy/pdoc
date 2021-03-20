@@ -333,7 +333,7 @@ from pdoc._compat import Literal
 def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
-    format: Literal["html"] = "html",
+    format: Literal["html", "markdown"] = "html",
 ) -> str:
     """
     Render the documentation for a list of modules.
@@ -366,10 +366,11 @@ def pdoc(
         def r(mod: doc.Module) -> str:
             return render.html_module(module=mod, all_modules=all_modules)
 
-    elif format == "markdown":  # pragma: no cover
-        raise NotImplementedError(
-            "Markdown support is currently unimplemented, but PRs are welcome!"
-        )
+    elif format == "markdown":
+
+        def r(mod: doc.Module) -> str:
+            return render.markdown_module(module=mod, all_modules=all_modules)
+
     elif format == "repr":
         r = render.repr_module
     else:
