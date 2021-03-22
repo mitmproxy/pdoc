@@ -30,15 +30,15 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.9.1
+            py: 3.9.2
           - os: macos-latest
-            py: 3.9.1
+            py: 3.9.2
           - os: ubuntu-latest
-            py: 3.9.1
+            py: 3.9.2
           - os: ubuntu-latest
-            py: 3.8.7
+            py: 3.8.8
           - os: ubuntu-latest
-            py: 3.7.9
+            py: 3.7.10
     runs-on: ${{ matrix.os }}
     steps:
       - run: printenv
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9.1
+          python-version: 3.9.2
       - run: pip install -r requirements-dev.txt
       - run: python setup.py bdist_wheel
       - run: twine check dist/*
