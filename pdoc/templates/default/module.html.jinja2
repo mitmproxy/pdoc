@@ -282,6 +282,10 @@
                     padding: 0;
                 }
 
+                .pdoc input[type=search] {
+                    outline-offset: 0;
+                }
+
                 /* Page Heading */
                 .pdoc .modulename {
                     margin-top: 0;
@@ -567,7 +571,7 @@
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | render_docstring | linkify(namespace=var.qualname) }}</div>
+        <div class="docstring">{{ var.docstring | render_docstring | render_markdown | linkify(namespace=var.qualname) }}</div>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}
@@ -676,9 +680,13 @@
                     {% endif %}
                 {% endblock %}
 
+                {% block search %}
+                    <input type="search" placeholder="Search...">
+                {% endblock %}
+
                 {% block nav_title %}{% endblock %}
 
-                {% set index = module.docstring | render_docstring | attr("toc_html") %}
+                {% set index = module.docstring | render_docstring | render_markdown | attr("toc_html") %}
                 {% if index %}
                     <h2>Contents</h2>
                     {{ index | safe }}
@@ -762,4 +770,72 @@
             }, 1000);
         </script>
     {% endif %}
+    {% block search_js %}
+        <script>{% include "fuse.basic.min.js" %}</script>
+        <script>
+            const search = document.querySelector(".pdoc input[type=search]");
+            const main = document.querySelector("main.pdoc");
+            const content = main.innerHTML;
+            const options = {
+                includeScore: true,
+                includeMatches: true,
+                ignoreLocation: true,
+                ignoreFieldNorm: true,
+                threshold: 0.2,
+                minMatchCharLength: 2,
+                keys: [
+                    {weight: 4, name: "qualname"},
+                    {weight: 3, name: "fullname"},
+                    {weight: 2, name: "doc"},
+                    "default_value",
+                    "annotation",
+                    "signature",
+                ]
+            }
+            let fuse;
+
+            function onInput() {
+                if (!fuse) {
+                    return
+                }
+                if (!search.value.trim()) {
+                    main.innerHTML = content
+                    return
+                }
+                const results = fuse.search(search.value);
+                let html = `
+                    <h1 class="modulename">Search results for ${search.value}</h1>
+                `;
+                for (let result of results.slice(0, 5)) {
+                    let desc;
+                    switch (result.item.type) {
+                        case "module":
+                            desc = `Module ${result.item.modulename}`;
+                            break;
+                        case "function":
+                            break;
+                    }
+                    let url = `{{ "../" * module.modulename.count(".") }}${result.item.modulename.replaceAll(".","/")}.html#${ result.item.qualname }`
+                    html += `<a href="${url}">${desc}</a>`;
+                }
+                main.innerHTML = html;
+                console.log("search", search.value, fuse.search(search.value));
+            }
+
+            search.addEventListener("focus", () => {
+                fetch("{{ "../" * module.modulename.count(".") }}search.json")
+                    .then(response => response.json())
+                    .then(data => {
+                        for (let x of data) {
+                            data["fullname"] = `${x.modulename}.${x.qualname}`
+                        }
+                        fuse = new Fuse(data, options);
+                        if (search.value) {
+                            onInput();
+                        }
+                    });
+            }, {once: true});
+            search.addEventListener("input", onInput);
+        </script>
+    {% endblock %}
 {% endblock %}

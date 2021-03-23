@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from typing import Collection, Mapping, Optional
@@ -16,7 +17,7 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
-    render_docstring,
+    render_docstring, render_markdown,
 )
 
 
@@ -98,7 +99,48 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-@defuse_unsafe_reprs()
+def search_index(all_modules: dict[str, Optional[pdoc.doc.Module]]) -> str:
+    """Renders the search index."""
+    items = []
+    with defuse_unsafe_reprs():
+        for modname, mod in all_modules.items():
+
+            def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
+                # noinspection PyTypeChecker
+                return {
+                    "modulename": doc.modulename,
+                    "qualname": doc.qualname,
+                    "type": doc.type,
+                    "doc": render_docstring(
+                        {"module": mod, "docformat": env.globals["docformat"]},  # type: ignore
+                        doc.docstring
+                    ),
+                    **kwargs
+                }
+
+            def make_index(mod: pdoc.doc.Namespace):
+                yield make_item(mod)
+                for m in mod.own_members:
+                    if isinstance(m, pdoc.doc.Variable):
+                        yield make_item(
+                            m,
+                            default_value=m.default_value_str,
+                            annotation=m.annotation_str,
+                        )
+                    elif isinstance(m, pdoc.doc.Function):
+                        yield make_item(
+                            m,
+                            signature=str(m.signature),
+                        )
+                    elif isinstance(m, pdoc.doc.Class):
+                        yield from make_index(m)
+                    else:
+                        pass
+
+            items.extend(make_index(mod))
+    return json.dumps(items)
+
+
 def repr_module(module: pdoc.doc.Module) -> str:
     """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
     with defuse_unsafe_reprs():
@@ -123,6 +165,7 @@ You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
 env.filters["render_docstring"] = render_docstring
+env.filters["render_markdown"] = render_markdown
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link
