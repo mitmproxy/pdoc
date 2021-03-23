@@ -32,7 +32,7 @@ class Snapshot:
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
 
-    def __str__(self):
+    def __repr__(self):
         return f"Snapshot({self.id})"
 
     def make(self, format: str) -> str:

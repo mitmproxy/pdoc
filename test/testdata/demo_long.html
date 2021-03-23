@@ -140,9 +140,6 @@
                     <a class="class" href="#EnumDemo">EnumDemo</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#EnumDemo.__init__">EnumDemo</a>
-                        </li>
-                        <li>
                                 <a class="variable" href="#EnumDemo.RED">RED</a>
                         </li>
                         <li>
@@ -417,7 +414,7 @@ which will also show up in the navigation.</p>
 
     <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </pre></div>
 
         </details>
@@ -1182,7 +1179,7 @@ but you can override it by providing your own (like here!).</p>
 
     <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </pre></div>
 
         </details>
@@ -1193,63 +1190,6 @@ but you can override it by providing your own (like here!).</p>
 </div>
 
 
-                            <div id="EnumDemo.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#EnumDemo.__init__">#&nbsp;&nbsp</a>
-
-        
-            <span class="name">EnumDemo</span><span class="signature">(value)</span>
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># all enum instances are actually created during class construction</span>
-        <span class="c1"># without calling this method; this method is called by the metaclass&#39;</span>
-        <span class="c1"># __call__ (i.e. Color(3) ), and by pickle</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">cls</span><span class="p">:</span>
-            <span class="c1"># For lookups like Color(Color.RED)</span>
-            <span class="k">return</span> <span class="n">value</span>
-        <span class="c1"># by-value search for a matching enum member</span>
-        <span class="c1"># see if it&#39;s in the reverse mapping (for hashable values)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_value2member_map_</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="c1"># Not found, no need to do long O(n) search</span>
-            <span class="k">pass</span>
-        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="c1"># not there, now do long search -- O(n) behavior</span>
-            <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_member_map_</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">member</span><span class="o">.</span><span class="n">_value_</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">member</span>
-        <span class="c1"># still not found -- try _missing_ hook</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_missing_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">exc</span> <span class="o">=</span> <span class="n">e</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ve_exc</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> is not a valid </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">exc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">ve_exc</span>
-            <span class="k">elif</span> <span class="n">exc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">exc</span> <span class="o">=</span> <span class="ne">TypeError</span><span class="p">(</span>
-                        <span class="s1">&#39;error in </span><span class="si">%s</span><span class="s1">._missing_: returned </span><span class="si">%r</span><span class="s1"> instead of None or a valid member&#39;</span>
-                        <span class="o">%</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
-                        <span class="p">)</span>
-            <span class="n">exc</span><span class="o">.</span><span class="n">__context__</span> <span class="o">=</span> <span class="n">ve_exc</span>
-            <span class="k">raise</span> <span class="n">exc</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Create and return a new object.  See help(type) for accurate signature.</p>
-</div>
-
-
-                            </div>
                             <div id="EnumDemo.RED" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#EnumDemo.RED">#&nbsp;&nbsp</a>
 

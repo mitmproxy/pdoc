@@ -17,6 +17,7 @@ By convention, all attributes are read-only, although this this not enforced at 
 """
 from __future__ import annotations
 
+import enum
 import inspect
 import pkgutil
 import re
@@ -30,7 +31,13 @@ from functools import wraps
 from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
 
 from pdoc import doc_ast, extract
-from pdoc.doc_types import empty, formatannotation, resolve_annotations, safe_eval_type
+from pdoc.doc_types import (
+    NonUserDefinedCallables,
+    empty,
+    formatannotation,
+    resolve_annotations,
+    safe_eval_type,
+)
 from ._compat import _tuplegetter, cache, cached_property, get_origin
 
 
@@ -554,12 +561,24 @@ class Class(Namespace[type]):
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 
-        # inspect.signature does check type(obj).__call__, but this is simpler and works for enums and NamedTuples.
-        # https://github.com/python/cpython/blob/994a519915bff4901abaa7476e2b91682dea619a/Lib/inspect.py#L2346-L2375
-        # In contrast, inspect.signature produces a monster docstring for enums.
-        # We may need to do what inspect.signature does and specialize here in the future.
-        if unsorted.get("__new__", object.__new__).__doc__ != object.__new__.__doc__:
-            unsorted["__init__"] = unsorted.pop("__new__")
+        # Do a dance similar to
+        # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
+        call = _safe_getattr(type(self.obj), "__call__", object.__call__)
+        if not isinstance(call, NonUserDefinedCallables):
+            # Does the metaclass define a custom __call__ method?
+            unsorted["__init__"] = call
+            if issubclass(self.obj, enum.Enum):
+                # Special case: do not show a constructor for enums. They are typically not constructed by users.
+                # The alternative would be showing __new__, as __call__ is too verbose.
+                del unsorted["__init__"]
+        else:
+            # Does our class define a custom __new__ method?
+            new = _safe_getattr(self.obj, "__new__", object.__new__)
+            if not isinstance(new, NonUserDefinedCallables):
+                # we only want to pick up __new__ if it has a non-default docstring.
+                prefer_init_over_new = new.__doc__ in (None, object.__new__.__doc__)
+                if not prefer_init_over_new:
+                    unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
