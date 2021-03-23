@@ -136,6 +136,21 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#EnumDemo">EnumDemo</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#EnumDemo.RED">RED</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#EnumDemo.GREEN">GREEN</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#EnumDemo.BLUE">BLUE</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -202,6 +217,7 @@ which will also show up in the navigation.</p>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">enum</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">cache</span>
@@ -387,6 +403,18 @@ which will also show up in the navigation.</p>
     <span class="n">b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is an example for an Enum.</span>
+
+<span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </pre></div>
 
         </details>
@@ -572,7 +600,8 @@ as well as a keyword-only arguments (*).</p>
                                         <div class="attr function"><a class="headerlink" href="#Foo.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Foo</span><span class="signature">()</span>    </div>
+            <span class="name">Foo</span><span class="signature">()</span>
+    </div>
 
                 <details>
             <summary>View Source</summary>
@@ -872,7 +901,8 @@ Think about moving stuff in a new package instead!</p>
                                         <div class="attr function"><a class="headerlink" href="#Bar.Baz.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Bar.Baz</span><span class="signature">()</span>    </div>
+            <span class="name">Bar.Baz</span><span class="signature">()</span>
+    </div>
 
         
     
@@ -1090,7 +1120,8 @@ but you can override it by providing your own (like here!).</p>
                                         <div class="attr function"><a class="headerlink" href="#DataDemo.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">DataDemo</span><span class="signature">(a: int, b: Sequence[str], c: bool = True)</span>    </div>
+            <span class="name">DataDemo</span><span class="signature">(a: int, b: Sequence[str], c: bool = True)</span>
+    </div>
 
         
     
@@ -1126,6 +1157,75 @@ but you can override it by providing your own (like here!).</p>
 </div>
 
 
+                            </div>
+                </section>
+                <section id="EnumDemo">
+                                <div class="attr class">
+        <a class="headerlink" href="#EnumDemo">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">EnumDemo</span>(<span class="base">enum.Enum</span>):
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is an example for an Enum.</span>
+
+<span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This is an example for an Enum.</p>
+
+<p>As usual, you can link to individual properties: <code><a href="#EnumDemo.GREEN">GREEN</a></code>.</p>
+</div>
+
+
+                            <div id="EnumDemo.RED" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#EnumDemo.RED">#&nbsp;&nbsp</a>
+
+        <span class="name">RED</span><span class="default_value"> = &lt;<a href="#EnumDemo.RED">EnumDemo.RED</a>: 1&gt;</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="EnumDemo.GREEN" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#EnumDemo.GREEN">#&nbsp;&nbsp</a>
+
+        <span class="name">GREEN</span><span class="default_value"> = &lt;<a href="#EnumDemo.GREEN">EnumDemo.GREEN</a>: 2&gt;</span>
+    </div>
+
+    
+
+                            </div>
+                            <div id="EnumDemo.BLUE" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#EnumDemo.BLUE">#&nbsp;&nbsp</a>
+
+        <span class="name">BLUE</span><span class="default_value"> = &lt;<a href="#EnumDemo.BLUE">EnumDemo.BLUE</a>: 3&gt;</span>
+    </div>
+
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>enum.Enum</dt>
+                                <dd id="EnumDemo.name" class="variable">name</dd>
+                <dd id="EnumDemo.value" class="variable">value</dd>
+
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>

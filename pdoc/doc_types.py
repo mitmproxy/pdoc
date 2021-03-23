@@ -11,7 +11,7 @@ import inspect
 import sys
 import typing
 import warnings
-from types import ModuleType
+from types import BuiltinFunctionType, ModuleType
 from typing import (  # type: ignore
     Any,
     Optional,
@@ -34,6 +34,22 @@ A "special" object signaling the absence of a type annotation.
 This is useful to distinguish it from an actual annotation with `None`.
 This value is an alias of `inspect.Signature.empty`.
 """
+
+
+# adapted from
+# https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L1740-L1747
+# ✂ start ✂
+_WrapperDescriptor = type(type.__call__)
+_MethodWrapper = type(all.__call__)  # type: ignore
+_ClassMethodWrapper = type(int.__dict__["from_bytes"])
+
+NonUserDefinedCallables = (
+    _WrapperDescriptor,
+    _MethodWrapper,
+    _ClassMethodWrapper,
+    BuiltinFunctionType,
+)
+# ✂ end ✂
 
 
 def formatannotation(annotation: Any) -> str:

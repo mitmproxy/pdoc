@@ -17,6 +17,7 @@ By convention, all attributes are read-only, although this this not enforced at 
 """
 from __future__ import annotations
 
+import enum
 import inspect
 import pkgutil
 import re
@@ -30,7 +31,13 @@ from functools import wraps
 from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
 
 from pdoc import doc_ast, extract
-from pdoc.doc_types import empty, formatannotation, resolve_annotations, safe_eval_type
+from pdoc.doc_types import (
+    NonUserDefinedCallables,
+    empty,
+    formatannotation,
+    resolve_annotations,
+    safe_eval_type,
+)
 from ._compat import _tuplegetter, cache, cached_property, get_origin
 
 
@@ -554,15 +561,24 @@ class Class(Namespace[type]):
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 
-        is_namedtuple = (
-            "_fields" in unsorted
-            and issubclass(self.obj, tuple)
-            and unsorted.get("__init__", None) == object.__init__
-        )
-        if is_namedtuple:
-            # namedtuple have object.__init__ as their default constructor,
-            # which renders wrong. We just remove it.
-            del unsorted["__init__"]
+        # Do a dance similar to
+        # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
+        call = _safe_getattr(type(self.obj), "__call__", object.__call__)
+        if not isinstance(call, NonUserDefinedCallables):
+            # Does the metaclass define a custom __call__ method?
+            unsorted["__init__"] = call
+            if issubclass(self.obj, enum.Enum):
+                # Special case: do not show a constructor for enums. They are typically not constructed by users.
+                # The alternative would be showing __new__, as __call__ is too verbose.
+                del unsorted["__init__"]
+        else:
+            # Does our class define a custom __new__ method?
+            new = _safe_getattr(self.obj, "__new__", object.__new__)
+            if not isinstance(new, NonUserDefinedCallables):
+                # we only want to pick up __new__ if it has a non-default docstring.
+                prefer_init_over_new = new.__doc__ in (None, object.__new__.__doc__)
+                if not prefer_init_over_new:
+                    unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
@@ -789,15 +805,27 @@ class Function(Doc[types.FunctionType]):
         globalns = _safe_getattr(mod, "__dict__", {})
 
         if self.name == "__init__":
-            # noinspection PyTypeHints
-            sig._return_annotation = empty  # type: ignore
+            sig = sig.replace(return_annotation=empty)
         else:
-            # noinspection PyTypeHints
-            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)  # type: ignore
+            sig = sig.replace(
+                return_annotation=safe_eval_type(
+                    sig.return_annotation, globalns, self.fullname
+                )
+            )
         for p in sig.parameters.values():
             # noinspection PyTypeHints
             p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
         return sig
+
+    @cached_property
+    def signature_without_self(self) -> inspect.Signature:
+        """Like `signature`, but without the first argument.
+
+        This is useful to display constructors.
+        """
+        return self.signature.replace(
+            parameters=list(self.signature.parameters.values())[1:]
+        )
 
 
 class Variable(Doc[None]):
