@@ -23,6 +23,7 @@ which will also show up in the navigation.
 from __future__ import annotations
 
 import abc
+import enum
 import os
 from dataclasses import dataclass, field
 from pdoc._compat import cached_property, cache
@@ -208,3 +209,15 @@ class DataDemo:
     b: Sequence[str]
     c: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""
+
+
+class EnumDemo(enum.Enum):
+    """
+    This is an example for an Enum.
+
+    As usual, you can link to individual properties: `GREEN`.
+    """
+
+    RED = 1
+    GREEN = 2
+    BLUE = 3

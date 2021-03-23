@@ -59,4 +59,11 @@ This …
         <method def __init__(self, a: int, b: Sequence[str], c: bool = True): ...>
         <var a: int  # Again, we can docume…>
         <var b: Sequence[str]>
-        <var c: bool = True  # This property is ass…>>>
+        <var c: bool = True  # This property is ass…>>
+    <class demo_long.EnumDemo  # This is an example f…
+        <method def __init__(): ...>
+        <var RED = <EnumDemo.RED: 1>>
+        <var GREEN = <EnumDemo.GREEN: 2>>
+        <var BLUE = <EnumDemo.BLUE: 3>>
+        <var name = <types.DynamicClassAttribute object>  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value = <types.DynamicClassAttribute object>  # inherited from enum.Enum.value, The value of the Enu…>>>
