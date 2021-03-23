@@ -554,15 +554,12 @@ class Class(Namespace[type]):
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 
-        is_namedtuple = (
-            "_fields" in unsorted
-            and issubclass(self.obj, tuple)
-            and unsorted.get("__init__", None) == object.__init__
-        )
-        if is_namedtuple:
-            # namedtuple have object.__init__ as their default constructor,
-            # which renders wrong. We just remove it.
-            del unsorted["__init__"]
+        # inspect.signature does check type(obj).__call__, but this is simpler and works for enums and NamedTuples.
+        # https://github.com/python/cpython/blob/994a519915bff4901abaa7476e2b91682dea619a/Lib/inspect.py#L2346-L2375
+        # In contrast, inspect.signature produces a monster docstring for enums.
+        # We may need to do what inspect.signature does and specialize here in the future.
+        if unsorted.get("__new__", object.__new__).__doc__ != object.__new__.__doc__:
+            unsorted["__init__"] = unsorted.pop("__new__")
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
@@ -789,15 +786,27 @@ class Function(Doc[types.FunctionType]):
         globalns = _safe_getattr(mod, "__dict__", {})
 
         if self.name == "__init__":
-            # noinspection PyTypeHints
-            sig._return_annotation = empty  # type: ignore
+            sig = sig.replace(return_annotation=empty)
         else:
-            # noinspection PyTypeHints
-            sig._return_annotation = safe_eval_type(sig.return_annotation, globalns, self.fullname)  # type: ignore
+            sig = sig.replace(
+                return_annotation=safe_eval_type(
+                    sig.return_annotation, globalns, self.fullname
+                )
+            )
         for p in sig.parameters.values():
             # noinspection PyTypeHints
             p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
         return sig
+
+    @cached_property
+    def signature_without_self(self) -> inspect.Signature:
+        """Like `signature`, but without the first argument.
+
+        This is useful to display constructors.
+        """
+        return self.signature.replace(
+            parameters=list(self.signature.parameters.values())[1:]
+        )
 
 
 class Variable(Doc[None]):

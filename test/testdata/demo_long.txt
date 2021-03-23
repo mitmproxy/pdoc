@@ -61,7 +61,7 @@ This …
         <var b: Sequence[str]>
         <var c: bool = True  # This property is ass…>>
     <class demo_long.EnumDemo  # This is an example f…
-        <method def __init__(): ...>
+        <method def __init__(cls, value): ...  # Create and return a …>
         <var RED = <EnumDemo.RED: 1>>
         <var GREEN = <EnumDemo.GREEN: 2>>
         <var BLUE = <EnumDemo.BLUE: 3>>

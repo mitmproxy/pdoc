@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Minor rendering improvements for enums and typing.NamedTuples.
  - pdoc now emits a warning when directory names conflict with modules
    already loaded by pdoc.
 

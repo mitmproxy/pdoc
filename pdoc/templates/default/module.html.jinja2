@@ -518,18 +518,18 @@
 {% defaultmacro headerlink(doc) -%}
     <a class="headerlink" href="#{{ doc.qualname }}">#&nbsp;&nbsp</a>
 {% enddefaultmacro %}
-{% defaultmacro function(fn) %}
-    {%- set sig -%}
-    <span class="signature">{{ fn.signature | escape | linkify }}</span>
-    {%- endset -%}
+{% defaultmacro function(fn) -%}
     <div class="attr function">{{ headerlink(fn) }}
         {{ decorators(fn) }}
         {% if fn.name == "__init__" %}
             <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
-            {{- sig | replace("(self)","()") | replace("(self, ","(") -}}
+            {#- no space -#}
+            <span class="signature">{{ fn.signature_without_self | escape | linkify }}</span>
         {% else %}
             <span class="def">{{ fn.funcdef }}</span>
-            <span class="name">{{ fn.name }}</span>{{ sig }}:
+            <span class="name">{{ fn.name }}</span>
+            {#- no space -#}
+            <span class="signature">{{ fn.signature | escape | linkify }}</span>:
         {% endif %}
     </div>
 {% enddefaultmacro %}
