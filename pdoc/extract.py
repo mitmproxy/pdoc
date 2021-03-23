@@ -160,9 +160,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
     If this side-effect is undesired, pass a module name instead.
     """
     pspec = Path(spec)
-    if isinstance(spec, str) and (
-        os.sep in spec or (os.altsep and os.altsep in spec)
-    ):
+    if isinstance(spec, str) and (os.sep in spec or (os.altsep and os.altsep in spec)):
         # We have a path separator, so it's definitely a filepath.
         spec = pspec
 
@@ -179,7 +177,9 @@ def parse_spec(spec: Union[Path, str]) -> str:
         else:
             # Module does exist. We now check if the local file/directory is the same (e.g. after pip install -e),
             # and emit a warning if that's not the case.
-            origin = Path(modspec.origin).absolute() if modspec.origin else Path("unknown")
+            origin = (
+                Path(modspec.origin).absolute() if modspec.origin else Path("unknown")
+            )
             local_dir = Path(spec).absolute()
             if local_dir not in (origin, origin.parent):
                 print(
@@ -188,7 +188,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
                     f"documentation of the local file/directory.\n"
                     f" - Module location: {origin}\n"
                     f" - Local file/directory: {local_dir}",
-                    file=sys.stderr
+                    file=sys.stderr,
                 )
 
     if isinstance(spec, Path):
@@ -200,9 +200,11 @@ def parse_spec(spec: Union[Path, str]) -> str:
             local_dir = spec.absolute()
             origin = Path(sys.modules[spec.stem].__file__).absolute()
             if local_dir not in (origin, origin.parent):
-                print(f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
-                      f"imported in pdoc's Python process. pdoc will document the loaded module from {origin} instead.",
-                      file=sys.stderr)
+                print(
+                    f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
+                    f"imported in pdoc's Python process. pdoc will document the loaded module from {origin} instead.",
+                    file=sys.stderr,
+                )
         return spec.stem
     else:
         return spec
