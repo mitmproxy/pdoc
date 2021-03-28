@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-03-28: pdoc 6.4.2
+
  - Minor rendering improvements for enums and typing.NamedTuples.
  - pdoc now emits a warning when directory names conflict with modules
    already loaded by pdoc.
