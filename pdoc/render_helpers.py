@@ -169,8 +169,21 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 @contextfilter
 def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) -> str:
     """Create a link for a specific `(modulename, qualname)` tuple."""
+    mod: pdoc.doc.Module = context["module"]
     modulename, qualname = spec
-    fullname = f"{modulename}.{qualname}".rstrip(".")
+
+    # Check if the object we are interested is also imported and re-exposed in the current namespace.
+    doc = mod.get(qualname)
+    if doc and doc.taken_from == spec and context["is_public"](doc).strip():
+        if text:
+            text = text.replace(f"{modulename}.", f"{mod.modulename}.")
+        modulename = mod.modulename
+
+    if mod.modulename == modulename:
+        fullname = qualname
+    else:
+        fullname = removesuffix(f"{modulename}.{qualname}", ".")
+
     if qualname:
         qualname = f"#{qualname}"
     if modulename in context["all_modules"]:
