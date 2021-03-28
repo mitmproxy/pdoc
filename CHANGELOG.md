@@ -5,6 +5,8 @@
  - Minor rendering improvements for enums and typing.NamedTuples.
  - pdoc now emits a warning when directory names conflict with modules
    already loaded by pdoc.
+ - If a class is publicly reimported in the current module, pdoc now links to
+   the reimported instance instead of the source location.
 
 # 2021-03-19: pdoc 6.4.1
 
