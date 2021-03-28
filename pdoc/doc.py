@@ -304,7 +304,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         head, _, tail = identifier.partition(".")
         if tail:
             h = self.members.get(head, None)
-            if isinstance(h, Namespace):
+            if isinstance(h, Class):
                 return h.get(tail)
             return None
         else:
