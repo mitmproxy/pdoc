@@ -250,6 +250,12 @@ indents"""
         indents
         """
 
+    @lru_cache(
+        maxsize=42
+    )
+    def quux_decorated(self):
+        """multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246"""
+
 
 def _protected_decorator(f):
     return f
