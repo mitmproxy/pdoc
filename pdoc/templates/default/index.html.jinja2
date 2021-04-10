@@ -28,7 +28,7 @@
             text-align: center;
         }
 
-        #pdoc-logo {
+        #logo {
             background-image: url("data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}");
             background-position: center;
             background-size: contain;
@@ -39,7 +39,7 @@
             transition: all 100ms;
         }
 
-        #pdoc-logo:hover {
+        #logo:hover {
             filter: saturate(150%);
             transform: scale(1.02);
         }
@@ -118,7 +118,9 @@
 {% endblock %}
 {% block body %}
 <div class="pdoc pdoc-index">
-    <a id="pdoc-logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
+    {% block logo %}
+        <a id="logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev"></a>
+    {% endblock %}
     <input id="pdoc-search" type="text" placeholder="search" aria-label="search for a module"/>
     <h5>Available Modules</h5>
     <div id="pdoc-modules">
