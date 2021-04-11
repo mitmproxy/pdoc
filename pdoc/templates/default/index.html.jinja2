@@ -60,15 +60,6 @@
             margin-top: 2rem;
         }
 
-        .pdoc a {
-            text-decoration: none;
-            color: var(--link);
-        }
-
-        .pdoc a:hover {
-            color: var(--link-hover);
-        }
-
         #pdoc-modules {
             max-width: 75rem;
             margin: 0 auto;
@@ -90,28 +81,6 @@
 
         #pdoc-modules .active {
             background-color: var(--active);
-        }
-
-        /* "built with pdoc" attribution */
-        .pdoc .attribution {
-            margin-top: 2rem;
-            display: block;
-            opacity: 0.5;
-            transition: all 200ms;
-            filter: grayscale(100%);
-        }
-
-        .pdoc .attribution:hover {
-            opacity: 1;
-            filter: grayscale(0%);
-        }
-
-        .pdoc .attribution img {
-            margin-left: 5px;
-            height: 35px;
-            vertical-align: middle;
-            width: 70px;
-            transition: all 200ms;
         }
         {% endblock %}
     </style>
@@ -158,13 +127,5 @@
         })
         searchbox.focus()
     </script>
-
-    {% block attribution %}
-        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-            built with <span class="visually-hidden">pdoc</span><img
-                alt="pdoc logo"
-                src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}"/>
-        </a>
-    {% endblock %}
 </div>
 {% endblock %}
