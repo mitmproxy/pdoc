@@ -29,13 +29,16 @@
         }
 
         #pdoc-logo {
-            background-position: center;
-            background-size: contain;
             display: block;
             height: 6rem;
             width: 12rem;
             margin: 2rem auto;
             transition: all 100ms;
+        }
+
+        #pdoc-logo img {
+            max-width: 100%;
+            max-height: 100%;
         }
 
         #pdoc-logo:hover {
@@ -87,7 +90,7 @@
 {% block body %}
 <div class="pdoc pdoc-index">
     {% block logo %}
-        <a id="pdoc-logo" title="pdoc {{ __version__ }}" href="https://pdoc.dev">
+        <a id="pdoc-logo" href="https://pdoc.dev">
             <img src="data:image/svg+xml,{% filter urlencode %}{% include "logo.svg" %}{% endfilter %}" alt="pdoc logo"/>
         </a>
     {% endblock %}

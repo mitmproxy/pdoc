@@ -3,6 +3,7 @@
 # Unreleased: pdoc next
 
  - Fix a bug when dedenting multi-line decorators.
+ - Make it easier to change the logo on the module index page.
 
 # 2021-03-28: pdoc 6.4.2
 
