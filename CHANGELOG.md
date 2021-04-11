@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Fix a bug when dedenting multi-line decorators.
 
 # 2021-03-28: pdoc 6.4.2
 

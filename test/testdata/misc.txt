@@ -54,5 +54,6 @@
         <@lru_cache() method def baz_decorated(self): ...  # one
         indent>
         <@lru_cache() method def qux_decorated(self): ...  # two
-        indents>>
+        indents>
+        <@lru_cache(maxsize=42) method def quux_decorated(self): ...  # multi-line decorator…>>
     <@_protected_decorator function def fun_with_protected_decorator(): ...  # This function has a …>>

@@ -178,6 +178,9 @@
                         <li>
                                 <a class="function" href="#Indented.qux_decorated">qux_decorated</a>
                         </li>
+                        <li>
+                                <a class="function" href="#Indented.quux_decorated">quux_decorated</a>
+                        </li>
                 </ul>
 
             </li>
@@ -453,6 +456,12 @@ misc    </h1>
 <span class="sd">        two</span>
 <span class="sd">        indents</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span><span class="p">(</span>
+        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_protected_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -1222,6 +1231,12 @@ indents</p>
 <span class="sd">        two</span>
 <span class="sd">        indents</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@lru_cache</span><span class="p">(</span>
+        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
 </pre></div>
 
         </details>
@@ -1451,6 +1466,31 @@ indent</p>
 
             <div class="docstring"><p>two
 indents</p>
+</div>
+
+
+                            </div>
+                            <div id="Indented.quux_decorated" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Indented.quux_decorated">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@lru_cache(maxsize=42)</div>
+
+            <span class="def">def</span>
+            <span class="name">quux_decorated</span><span class="signature">(self)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">(</span>
+        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246</p>
 </div>
 
 
