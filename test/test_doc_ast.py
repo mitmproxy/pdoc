@@ -1,4 +1,6 @@
-from pdoc.doc_ast import _dedent
+import pytest
+
+from pdoc.doc_ast import _dedent, _parse
 
 
 def test_dedent():
@@ -37,3 +39,8 @@ def test_dedent():
         )
         == "@foo\n# hello world\ndef foo():\n        pass"
     )
+
+
+def test_parse_error():
+    with pytest.warns(RuntimeWarning, match="Error parsing source code"):
+        assert _parse("!!!")

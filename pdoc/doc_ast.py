@@ -8,6 +8,7 @@ from __future__ import annotations
 import ast
 import inspect
 import types
+import warnings
 from dataclasses import dataclass
 from itertools import tee, zip_longest
 from typing import Any, Iterable, Iterator, TypeVar, Union, overload
@@ -167,7 +168,9 @@ def _parse_module(source: str) -> ast.Module:
 
     Returns an empty ast.Module if source is empty.
     """
-    return ast.parse(source)
+    tree = _parse(source)
+    assert isinstance(tree, ast.Module)
+    return tree
 
 
 @cache
@@ -177,7 +180,7 @@ def _parse_class(source: str) -> ast.ClassDef:
 
     Returns an empty ast.ClassDef if source is empty.
     """
-    tree = ast.parse(_dedent(source))
+    tree = _parse(source)
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
@@ -193,7 +196,7 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
     Returns an empty ast.FunctionDef if source is empty.
     """
-    tree = ast.parse(_dedent(source))
+    tree = _parse(source)
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
@@ -204,6 +207,20 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
             # to simplify the API return the ast.FunctionDef stub.
             pass
     return ast.FunctionDef(body=[], decorator_list=[])
+
+
+def _parse(source: str) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
+    try:
+        return ast.parse(_dedent(source))
+    except Exception as e:
+        warnings.warn(
+            f"Error parsing source code: {e}\n"
+            f"===\n"
+            f"{source}\n"
+            f"===",
+            RuntimeWarning,
+        )
+        return ast.parse("")
 
 
 @cache
