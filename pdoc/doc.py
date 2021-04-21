@@ -764,14 +764,8 @@ class Function(Doc[types.FunctionType]):
         decorators = []
         # noinspection PyTypeChecker
         obj: types.FunctionType = self.obj  # type: ignore
-        try:
-            for t in doc_ast.parse(obj).decorator_list:
-                decorators.append(f"@{doc_ast.unparse(t)}")
-        except Exception as e:
-            warnings.warn(
-                f"Cannot parse {self.fullname}: {e}",
-                RuntimeWarning,
-            )
+        for t in doc_ast.parse(obj).decorator_list:
+            decorators.append(f"@{doc_ast.unparse(t)}")
         return decorators
 
     @cached_property
