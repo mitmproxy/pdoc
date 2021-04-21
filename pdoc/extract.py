@@ -261,7 +261,7 @@ def invalidate_caches(module_name: str) -> None:
 
     importlib.invalidate_caches()
     linecache.clearcache()
-    doc_ast.get_source.cache_clear()
+    doc_ast._get_source.cache_clear()
 
     prefix = f"{module_name}."
     mods = sorted(

@@ -269,7 +269,8 @@ def fun_with_protected_decorator():
 class UnhashableDataDescriptor:
     def __get__(self):
         pass
-    __hash__ = None
+    __hash__ = None  # type: ignore
+
 
 unhashable = UnhashableDataDescriptor()
 
