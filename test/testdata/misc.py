@@ -266,6 +266,13 @@ def fun_with_protected_decorator():
     """This function has a protected decorator (name starting with a single `_`)."""
 
 
+class UnhashableDataDescriptor:
+    def __get__(self):
+        pass
+    __hash__ = None
+
+unhashable = UnhashableDataDescriptor()
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -286,4 +293,5 @@ __all__ = [  # noqa
     "qux",
     "Indented",
     "fun_with_protected_decorator",
+    "unhashable",
 ]

@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Fix a crash when `inspect.signature` returns incomplete source code.
+ - Fix a crash when inspecting unhashable functions.
 
 # 2021-04-11: pdoc 6.4.3
 

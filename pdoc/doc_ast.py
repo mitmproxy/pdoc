@@ -16,7 +16,6 @@ from typing import Any, Iterable, Iterator, TypeVar, Union, overload
 from ._compat import ast_unparse, cache
 
 
-@cache
 def get_source(obj: Any) -> str:
     """
     Returns the source code of the Python object `obj` as a str.
@@ -24,6 +23,15 @@ def get_source(obj: Any) -> str:
 
     If this fails, an empty string is returned.
     """
+    # Some objects may not be hashable, so we fall back to the non-cached version if that is the case.
+    try:
+        return _get_source(obj)
+    except TypeError:
+        return _get_source.__wrapped__(obj)
+
+
+@cache
+def _get_source(obj: Any) -> str:
     try:
         obj = inspect.unwrap(obj)
         return inspect.getsource(obj)
