@@ -14,20 +14,23 @@ from __future__ import annotations
 
 import inspect
 import re
+import warnings
+from pathlib import Path
 from textwrap import dedent, indent
+from typing import Optional
 
 from ._compat import cache
 
 
 @cache
-def convert(docstring: str, docformat: str) -> str:
+def convert(docstring: str, docformat: str, source_file: Optional[Path]) -> str:
     """
     Convert `docstring` from `docformat` to Markdown.
     """
     docformat = docformat.lower()
 
     if any(x in docformat for x in ["google", "numpy", "restructuredtext"]):
-        docstring = rst(docstring)
+        docstring = rst(docstring, source_file)
 
     if "google" in docformat:
         docstring = google(docstring)
@@ -195,11 +198,12 @@ def _numpy_parameters(content: str) -> str:
     return f"{contents}\n"
 
 
-def rst(contents: str) -> str:
+def rst(contents: str, source_file: Optional[Path]) -> str:
     """
     Convert reStructuredText elements to Markdown.
     We support the most common elements, but we do not aim to mirror the full complexity of the spec here.
     """
+    contents = _rst_admonitions(contents, source_file)
     contents = _rst_links(contents)
 
     # Code References: :obj:`foo` -> `foo`
@@ -211,7 +215,6 @@ def rst(contents: str) -> str:
     # We don't use $ as that's not enabled by MathJax by default.
     contents = re.sub(r":math:`(.+?)`", r"\\\\( \1 \\\\)", contents)
 
-    contents = _rst_admonitions(contents)
     contents = _rst_footnotes(contents)
 
     return contents
@@ -298,12 +301,52 @@ def _rst_links(contents: str) -> str:
     return contents
 
 
-def _rst_admonitions(contents: str) -> str:
+def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
     """
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
     <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>
     """
-    admonition = "note|warning|versionadded|versionchanged|deprecated|seealso|math"
+
+    def _rst_admonition(m: re.Match[str]) -> str:
+        ind = m.group("indent")
+        type = m.group("type")
+        val = m.group("val").strip()
+        contents = dedent(m.group("contents")).strip()
+
+        if type == "include":
+            loc = source_file or Path(".")
+            try:
+                included = (loc.parent / val).read_text("utf8", "replace")
+            except IOError as e:
+                warnings.warn(f"Cannot include {val!r}: {e}", RuntimeWarning)
+                included = "\n"
+            included = _rst_admonitions(included, loc.parent / val)
+            return indent(included, ind)
+        if type == "math":
+            return f"{ind}$${val}{contents}$$\n"
+        if type == "note":
+            text = val or "Note"
+        elif type == "warning":
+            text = val or "Warning"
+        elif type == "versionadded":
+            text = f"New in version {val}"
+        elif type == "versionchanged":
+            text = f"Changed in version {val}"
+        elif type == "deprecated":
+            text = f"Deprecated since version {val}"
+        else:
+            text = f"{type} {val}".strip()
+
+        if contents:
+            text = f"{ind}*{text}:*\n{indent(contents, ind)}\n\n"
+        else:
+            text = f"{ind}*{text}.*\n"
+
+        return text
+
+    admonition = (
+        "note|warning|versionadded|versionchanged|deprecated|seealso|math|include"
+    )
     return re.sub(
         rf"""
             ^(?P<indent>[ ]*)\.\.[ ]+(?P<type>{admonition})::(?P<val>.*)
@@ -317,32 +360,3 @@ def _rst_admonitions(contents: str) -> str:
         contents,
         flags=re.MULTILINE | re.VERBOSE,
     )
-
-
-def _rst_admonition(m: re.Match[str]) -> str:
-    ind = m.group("indent")
-    type = m.group("type")
-    val = m.group("val").strip()
-    contents = dedent(m.group("contents")).strip()
-
-    if type == "math":
-        return f"{ind}$${val}{contents}$$\n"
-    if type == "note":
-        text = val or "Note"
-    elif type == "warning":
-        text = val or "Warning"
-    elif type == "versionadded":
-        text = f"New in version {val}"
-    elif type == "versionchanged":
-        text = f"Changed in version {val}"
-    elif type == "deprecated":
-        text = f"Deprecated since version {val}"
-    else:
-        text = f"{type} {val}".strip()
-
-    if contents:
-        text = f"{ind}*{text}:*\n{indent(contents, ind)}\n\n"
-    else:
-        text = f"{ind}*{text}.*\n"
-
-    return text

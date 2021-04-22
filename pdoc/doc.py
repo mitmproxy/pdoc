@@ -28,6 +28,7 @@ import types
 import warnings
 from abc import ABCMeta, abstractmethod
 from functools import wraps
+from pathlib import Path
 from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
 
 from pdoc import doc_ast, extract
@@ -142,6 +143,14 @@ class Doc(Generic[T]):
         an empty string is returned.
         """
         return doc_ast.get_source(self.obj)
+
+    @cached_property
+    def source_file(self) -> Optional[Path]:
+        """The name of the Python source file in which this object was defined. `None` for built-in objects."""
+        try:
+            return Path(inspect.getsourcefile(self.obj) or inspect.getfile(self.obj))  # type: ignore
+        except TypeError:
+            return None
 
     @cached_property
     def is_inherited(self) -> bool:

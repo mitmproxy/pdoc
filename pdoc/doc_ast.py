@@ -217,15 +217,14 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
     return ast.FunctionDef(body=[], decorator_list=[])
 
 
-def _parse(source: str) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
+def _parse(
+    source: str,
+) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
     try:
         return ast.parse(_dedent(source))
     except Exception as e:
         warnings.warn(
-            f"Error parsing source code: {e}\n"
-            f"===\n"
-            f"{source}\n"
-            f"===",
+            f"Error parsing source code: {e}\n" f"===\n" f"{source}\n" f"===",
             RuntimeWarning,
         )
         return ast.parse("")

@@ -115,3 +115,11 @@ def footnote4():
     """
     There is not footnote for this reference [#]_.
     """
+
+
+def include():
+    """
+    Included from another file:
+
+    .. include:: flavors_rst_include/include.rst
+    """

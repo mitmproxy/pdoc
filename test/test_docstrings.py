@@ -1,3 +1,4 @@
+import pytest
 from hypothesis import given
 from hypothesis.strategies import text
 
@@ -22,5 +23,10 @@ def test_numpy(s):
 
 @given(text())
 def test_rst(s):
-    ret = docstrings.rst(s)
+    ret = docstrings.rst(s, None)
     assert not s or ret
+
+
+def test_rst_include_nonexistent():
+    with pytest.warns(RuntimeWarning, match="Cannot include 'nonexistent.txt'"):
+        docstrings.rst(".. include:: nonexistent.txt", None)

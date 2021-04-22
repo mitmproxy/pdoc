@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Add support for `.. include::` directives to include external Markdown files.
  - 
 
 # 2021-04-21: pdoc 6.4.4

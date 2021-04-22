@@ -1,3 +1,4 @@
+import builtins
 import dataclasses
 from pathlib import Path
 from unittest.mock import patch
@@ -80,3 +81,8 @@ def test_class_with_raising_getattr():
     c = Class("test", "Raising", RaisingGetAttr, ("test", "Raising"))
     with pytest.warns(RuntimeWarning, match="getattr.+raised an exception"):
         assert c.members
+
+
+def test_builtin_source_file():
+    m = Module(builtins)
+    assert m.source_file is None

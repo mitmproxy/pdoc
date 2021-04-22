@@ -52,6 +52,9 @@
             <li>
                     <a class="function" href="#footnote4">footnote4</a>
             </li>
+            <li>
+                    <a class="function" href="#include">include</a>
+            </li>
     </ul>
 
 
@@ -186,6 +189,14 @@ flavors_rst    </h1>
 <span class="k">def</span> <span class="nf">footnote4</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    There is not footnote for this reference [#]_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">include</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Included from another file:</span>
+
+<span class="sd">    .. include:: flavors_rst_include/include.rst</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -568,6 +579,37 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
         </details>
 
             <div class="docstring"><p>There is not footnote for this reference [#]_.</p>
+</div>
+
+
+                </section>
+                <section id="include">
+                            <div class="attr function"><a class="headerlink" href="#include">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">include</span><span class="signature">()</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">include</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Included from another file:</span>
+
+<span class="sd">    .. include:: flavors_rst_include/include.rst</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Included from another file:</p>
+
+<p>Hello</p>
+
+<p>World!</p>
+
+<p>\( 42 \)</p>
 </div>
 
 

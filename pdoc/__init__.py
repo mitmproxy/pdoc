@@ -239,7 +239,8 @@ including a limited subset of reStructuredText (as used by Sphinx).
 If your documentation follows one of these styles, you can:
 
 1. Run `pdoc --docformat ...` to enable a particular docstring flavor globally, or
-2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.
+2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.  
+   The following values are supported: `google`, `numpy`, and `restructuredtext`.
 
 pdoc does not implement the full reStructuredText specification and does not plan on doing so.
 If you feel that it doesn't parse a docstring element properly, please amend
@@ -253,6 +254,19 @@ There is an example at [`examples/math`](https://github.com/mitmproxy/pdoc/tree/
 ## ...add my project's logo?
 
 See [*Editing pdoc's HTML template*](#editing-pdocs-html-template).
+
+## ...include Markdown files?
+
+You can include external Markdown files in your documentation by using reStructuredText's
+`.. include::` directive. For example, you can include your README in `__init__.py` like this:
+
+```python
+"""
+.. include:: README.md
+"""
+__docformat__ = "restructuredtext"
+```
+
 
 ## ...integrate pdoc into other systems?
 
