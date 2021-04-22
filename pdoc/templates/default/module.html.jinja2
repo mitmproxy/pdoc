@@ -492,7 +492,7 @@
 {% endblock %}
 {% defaultmacro bases(cls) %}
     {%- if cls.bases -%}
-        (
+        <wbr>(
         {%- for base in cls.bases -%}
             <span class="base">{{ base[:2] | link(text=base[2]) }}</span>
             {%- if loop.nextitem %}, {% endif %}
@@ -546,7 +546,7 @@
         {{ headerlink(cls) }}
         {{ decorators(cls) }}
         <span class="def">class</span>
-        <span class="name">{{ cls.qualname }}</span><wbr>
+        <span class="name">{{ cls.qualname }}</span>
         {{- bases(cls) -}}:
     </div>
 {% enddefaultmacro %}
