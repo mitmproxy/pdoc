@@ -150,6 +150,20 @@
                     border-color: var(--text);
                 }
 
+                nav.pdoc .index-button {
+                    display: inline-flex;
+                    align-items: center;
+                    color: var(--text);
+                    border-color: var(--muted);
+                    margin-bottom: 1rem;
+                    margin-right: var(--pad);
+                    float: right;
+                }
+
+                nav.pdoc .index-button:hover {
+                    border-color: var(--text);
+                }
+
                 nav.pdoc ul {
                     list-style: none;
                     padding-left: 0;
@@ -664,6 +678,10 @@
                             {% include "box-arrow-in-left.svg" %}
                             &nbsp;
                             {{- parentmodule -}}
+                        </a>
+
+                        <a class="pdoc-button index-button" href="./{{ "../" * module.modulename.count(".") }}">
+                            Module Index
                         </a>
                     {% elif all_modules|length > 1 %}
                         <a class="pdoc-button module-list-button" href="./{{ "../" * module.modulename.count(".") }}">
