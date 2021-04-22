@@ -548,6 +548,7 @@
         {{ decorators(cls) }}
         <span class="def">class</span>
         <span class="name">{{ cls.qualname }}</span>
+        <wbr>
         {{- bases(cls) -}}:
     </div>
 {% enddefaultmacro %}
@@ -648,7 +649,7 @@
             {%- else -%}
                 {{ part }}
             {%- endif -%}
-            {%- if loop.nextitem %}.{% endif -%}
+            {%- if loop.nextitem %}<wbr>.{% endif -%}
         {% endfor %}
     </h1>
 {% enddefaultmacro %}
