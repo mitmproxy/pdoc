@@ -49,7 +49,7 @@ setup(
     entry_points={"console_scripts": ["pdoc = pdoc.__main__:cli"]},
     python_requires=">=3.7",
     install_requires=[
-        "Jinja2",
+        "Jinja2 >= 2.11.0",
         "pygments",
         "MarkupSafe",
         "astunparse; python_version<'3.9'",
