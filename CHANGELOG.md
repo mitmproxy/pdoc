@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-04-29: pdoc 6.5.0
+
  - Add support for `.. include::` directives to include external Markdown files.
  - Add word break points for long module and class names. (@jstriebel)
 
