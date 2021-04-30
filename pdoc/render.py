@@ -130,3 +130,4 @@ env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["edit_url_map"] = {}
 env.globals["docformat"] = ""
+env.globals["env"] = os.environ

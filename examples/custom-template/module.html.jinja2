@@ -11,6 +11,16 @@ The default template defines an empty `nav_title` block we can fill here:
     <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
 {% endblock %}
 
+
+{#
+We can access system environment variables in the template, for example to pass version information.
+#}
+{% block attribution %}
+    {{ super()  }}
+    <p>Custom Template v{{ env["VERSION"] | default("1.0") }}</p>
+{% endblock %}
+
+
 {#
 We don't want to show any "View Source" buttons, so we override the macro with an empty one.
 
@@ -19,6 +29,7 @@ template using a regular `{% macro %}` statement.
 The default implementation of each macro is also available as `default_$macroname`.
 #}
 {% macro view_source(obj) %}{% endmacro %}
+
 
 {#
 We can also adjust which members are documented by overriding the is_public macro.

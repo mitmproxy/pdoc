@@ -255,6 +255,14 @@ There is an example at [`examples/math`](https://github.com/mitmproxy/pdoc/tree/
 
 See [*Editing pdoc's HTML template*](#editing-pdocs-html-template).
 
+## ...pass arguments to the Jinja2 template?
+
+If you need to pass additional data to pdoc's Jinja2 templates,
+you can use system environment variables.
+For example,
+[`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2)
+shows how to include a version number in the rendered HTML.
+
 ## ...include Markdown files?
 
 You can include external Markdown files in your documentation by using reStructuredText's
