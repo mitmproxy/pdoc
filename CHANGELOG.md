@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-04-30: pdoc 6.6.0
+
  - Jinja2 templates can now access system environment variables,
    for example to pass version information.
 
