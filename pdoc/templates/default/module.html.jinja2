@@ -771,71 +771,147 @@
         </script>
     {% endif %}
     {% block search_js %}
-        <script>{% include "fuse.basic.min.js" %}</script>
+        <script>{% include "elasticlunr.min.js" %}</script>
         <script>
-            const search = document.querySelector(".pdoc input[type=search]");
-            const main = document.querySelector("main.pdoc");
-            const content = main.innerHTML;
-            const options = {
-                includeScore: true,
-                includeMatches: true,
-                ignoreLocation: true,
-                ignoreFieldNorm: true,
-                threshold: 0.2,
-                minMatchCharLength: 2,
-                keys: [
-                    {weight: 4, name: "qualname"},
-                    {weight: 3, name: "fullname"},
-                    {weight: 2, name: "doc"},
-                    "default_value",
-                    "annotation",
-                    "signature",
-                ]
+            function getSearchTerm() {
+                if (location.hash.startsWith("#search:")) {
+                    return decodeURIComponent(location.hash.substr(8))
+                }
             }
-            let fuse;
+
+            async function getDocuments() {
+                let resp = await fetch("{{ "../" * module.modulename.count(".") }}search.json");
+                let data = await resp.json();
+
+                let docs = []
+                for (const [modulename, items] of Object.entries(data)) {
+                    for (let doc of items) {
+                        doc.modulename = modulename;
+                        if (doc.qualname) {
+                            doc.fullname = `${doc.modulename}.${doc.qualname}`
+                        } else {
+                            doc.fullname = modulename;
+                        }
+                    }
+                    docs.push(...items)
+                }
+                return docs;
+            }
+
+            async function initialize() {
+                console.time("downloading search index");
+                let docs = await getDocuments();
+                console.timeEnd("downloading search index");
+
+                console.time("building search index");
+                // Also split on html tags. this is a cheap heuristic, but good enough.
+                elasticlunr.tokenizer.setSeperator(/[\s\-.]+|<[^>]*>/);
+                searchIndex = elasticlunr(function () {
+                    this.addField('qualname');
+                    this.addField('fullname');
+                    this.addField('doc');
+                    this.setRef('fullname');
+                });
+
+                for (let doc of docs) {
+                    searchIndex.addDoc(doc);
+                }
+                console.timeEnd("building search index");
+
+                onInput();
+            }
+
+            const searchBox = document.querySelector(".pdoc input[type=search]");
+            searchBox.addEventListener("input", function () {
+                if (searchBox.value.trim()) {
+                    location.hash = `search:${searchBox.value}`;
+                } else {
+                    location.hash = "";
+                }
+            });
+            window.addEventListener("hashchange", onInput);
+
+            const originalContent = document.querySelector("main.pdoc");
+            let currentContent = originalContent;
+
+            function setContent(innerHTML) {
+                let elem;
+                if (innerHTML) {
+                    elem = document.createElement("main");
+                    elem.classList.add("pdoc");
+                    elem.innerHTML = innerHTML;
+                } else {
+                    elem = originalContent;
+                }
+                if (currentContent !== elem) {
+                    currentContent.replaceWith(elem);
+                    currentContent = elem;
+                }
+            }
+
+            let searchIndex;
+
+            if (getSearchTerm()) {
+                initialize();
+                searchBox.value = getSearchTerm();
+                onInput();
+            } else {
+                searchBox.addEventListener("focus", initialize, {once: true});
+            }
 
             function onInput() {
-                if (!fuse) {
+                console.log("onInput", !searchIndex, getSearchTerm());
+                const search = getSearchTerm();
+                if (!search) {
+                    setContent();
                     return
                 }
-                if (!search.value.trim()) {
-                    main.innerHTML = content
-                    return
+                if (!searchIndex) {
+                    setContent("<h3>Searching...</h3>");
                 }
-                const results = fuse.search(search.value);
+
+                const results = searchIndex.search(search, {
+                    fields: {
+                        qualname: {boost: 4},
+                        fullname: {boost: 2},
+                        doc: {boost: 1},
+                    },
+                    expand: true
+                });
+
                 let html = `
-                    <h1 class="modulename">Search results for ${search.value}</h1>
+                    <h1 class="modulename">Search results for ${search}</h1>
                 `;
-                for (let result of results.slice(0, 5)) {
-                    let desc;
-                    switch (result.item.type) {
-                        case "module":
-                            desc = `Module ${result.item.modulename}`;
-                            break;
+                for (let result of results.slice(0, 10)) {
+                    let doc = result.doc;
+                    let url = `{{ "../" * module.modulename.count(".") }}${doc.modulename.replaceAll(".", "/")}.html`;
+                    if (doc.qualname) {
+                        url += `#${doc.qualname}`;
+                    }
+
+                    let head;
+                    switch (result.doc.type) {
                         case "function":
+                            head = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">(${doc.parameters.join(", ")})</span>`;
+                            break;
+                        case "class":
+                            head = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                            break;
+                        default:
+                            head = `<span class="name">${doc.fullname}</span>`;
                             break;
                     }
-                    let url = `{{ "../" * module.modulename.count(".") }}${result.item.modulename.replaceAll(".","/")}.html#${ result.item.qualname }`
-                    html += `<a href="${url}">${desc}</a>`;
-                }
-                main.innerHTML = html;
-                console.log("search", search.value, fuse.search(search.value));
-            }
+                    {# call setBody() here to restore the original page for links on the same site. #}
+                    html += `
+                        <section>
+                        <a onclick="setContent()" href="${url}" style="display:block" class="attr ${doc.type}">${head}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
 
-            search.addEventListener("focus", () => {
-                fetch("{{ "../" * module.modulename.count(".") }}search.json")
-                    .then(response => response.json())
-                    .then(data => {
-                        for (let x of data) {
-                            data["fullname"] = `${x.modulename}.${x.qualname}`
-                        }
-                        fuse = new Fuse(data, options);
-                        if (search.value) {
-                            onInput();
-                        }
-                    });
-            }, {once: true});
-            search.addEventListener("input", onInput);
+                }
+                setContent(html);
+            }
         </script>
     {% endblock %}
 {% endblock %}

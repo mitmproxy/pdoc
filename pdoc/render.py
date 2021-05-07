@@ -102,17 +102,19 @@ def html_error(error: str, details: str = "") -> str:
 
 def search_index(all_modules: dict[str, Optional[pdoc.doc.Module]]) -> str:
     """Renders the search index."""
-    items = []
+    search_index = {}
     with defuse_unsafe_reprs():
         for modname, mod in all_modules.items():
+            docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
 
             def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
-                docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
+                docstr = pdoc.docstrings.convert(doc.docstring, docformat, mod.source_file)
+                if docstr:
+                    docstr = _markdown(docstr)
                 return {
-                    "modulename": doc.modulename,
                     "qualname": doc.qualname,
                     "type": doc.type,
-                    "doc": pdoc.docstrings.convert(doc.docstring, docformat, mod.source_file),
+                    "doc": docstr,
                     **kwargs
                 }
 
@@ -120,23 +122,20 @@ def search_index(all_modules: dict[str, Optional[pdoc.doc.Module]]) -> str:
                 yield make_item(mod)
                 for m in mod.own_members:
                     if isinstance(m, pdoc.doc.Variable):
-                        yield make_item(
-                            m,
-                            default_value=m.default_value_str,
-                            annotation=m.annotation_str,
-                        )
+                        yield make_item(m)
                     elif isinstance(m, pdoc.doc.Function):
                         yield make_item(
                             m,
-                            signature=str(m.signature),
+                            parameters=list(m.signature.parameters),
+                            funcdef=m.funcdef,
                         )
                     elif isinstance(m, pdoc.doc.Class):
                         yield from make_index(m)
                     else:
                         pass
 
-            items.extend(make_index(mod))
-    return json.dumps(items)
+            search_index[modname] = list(make_index(mod))
+    return json.dumps(search_index)
 
 
 def repr_module(module: pdoc.doc.Module) -> str:
