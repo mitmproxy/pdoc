@@ -166,7 +166,7 @@ class Doc(Generic[T]):
     @property
     def type(cls) -> str:
         """
-        The type of the doc object, either `"module"`, `"class"`, or `"function"`.
+        The type of the doc object, either `"module"`, `"class"`, `"function"`, or `"variable"`.
         """
         return cls.__name__.lower()
 
