@@ -6,7 +6,7 @@ from unittest import mock
 
 import pytest
 
-from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, render_docstring, render_markdown,
+from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, render_docstring,
                                  split_identifier)
 
 
@@ -75,4 +75,4 @@ def test_markdown_toc():
 
     It's easy to introduce a `.strip()` in there and this gets washed away, so let's test that it works properly.
     """
-    assert render_markdown(mock.MagicMock(), "#foo\n#bar").toc_html  # type: ignore
+    assert render_docstring(mock.MagicMock(), "#foo\n#bar").toc_html  # type: ignore

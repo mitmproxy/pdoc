@@ -7,6 +7,7 @@ from typing import Collection, Mapping, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
+import pdoc.docstrings
 import pdoc.doc
 from pdoc._compat import Literal
 from pdoc.render_helpers import (
@@ -17,7 +18,7 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
-    render_docstring, render_markdown,
+    render_docstring,
 )
 
 
@@ -106,15 +107,12 @@ def search_index(all_modules: dict[str, Optional[pdoc.doc.Module]]) -> str:
         for modname, mod in all_modules.items():
 
             def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
-                # noinspection PyTypeChecker
+                docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
                 return {
                     "modulename": doc.modulename,
                     "qualname": doc.qualname,
                     "type": doc.type,
-                    "doc": render_docstring(
-                        {"module": mod, "docformat": env.globals["docformat"]},  # type: ignore
-                        doc.docstring
-                    ),
+                    "doc": pdoc.docstrings.convert(doc.docstring, docformat, mod.source_file),
                     **kwargs
                 }
 
@@ -165,7 +163,6 @@ You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
 env.filters["render_docstring"] = render_docstring
-env.filters["render_markdown"] = render_markdown
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link
