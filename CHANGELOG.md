@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- -
+ - Update Bootstrap to v5.0.0.
 
 # 2021-04-30: pdoc 6.6.0
 
