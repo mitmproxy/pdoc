@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import tempfile
+import warnings
 from pathlib import Path
 from typing import Collection, Mapping, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
-import pdoc.docstrings
 import pdoc.doc
+import pdoc.docstrings
 from pdoc._compat import Literal
 from pdoc.render_helpers import (
     DefaultMacroExtension,
@@ -19,6 +22,7 @@ from pdoc.render_helpers import (
     linkify,
     minify_css,
     render_docstring,
+    render_docstring_with_context,
 )
 
 
@@ -100,42 +104,54 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-def search_index(all_modules: dict[str, Optional[pdoc.doc.Module]]) -> str:
+def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
     """Renders the search index."""
-    search_index = {}
-    with defuse_unsafe_reprs():
-        for modname, mod in all_modules.items():
-            docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
+    documents = []
+    for modname, mod in all_modules.items():
+        docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
 
-            def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
-                docstr = pdoc.docstrings.convert(doc.docstring, docformat, mod.source_file)
-                if docstr:
-                    docstr = _markdown(docstr)
-                return {
-                    "qualname": doc.qualname,
-                    "type": doc.type,
-                    "doc": docstr,
-                    **kwargs
-                }
+        def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
+            return {
+                "fullname": doc.fullname,
+                "modulename": doc.modulename,
+                "qualname": doc.qualname,
+                "type": doc.type,
+                "doc": render_docstring(doc.docstring, mod, docformat),
+                **kwargs,
+            }
 
-            def make_index(mod: pdoc.doc.Namespace):
-                yield make_item(mod)
-                for m in mod.own_members:
-                    if isinstance(m, pdoc.doc.Variable):
-                        yield make_item(m)
-                    elif isinstance(m, pdoc.doc.Function):
-                        yield make_item(
-                            m,
-                            parameters=list(m.signature.parameters),
-                            funcdef=m.funcdef,
-                        )
-                    elif isinstance(m, pdoc.doc.Class):
-                        yield from make_index(m)
-                    else:
-                        pass
+        def make_index(mod: pdoc.doc.Namespace):
+            yield make_item(mod)
+            for m in mod.own_members:
+                if isinstance(m, pdoc.doc.Variable):
+                    yield make_item(m)
+                elif isinstance(m, pdoc.doc.Function):
+                    yield make_item(
+                        m,
+                        parameters=list(m.signature.parameters),
+                        funcdef=m.funcdef,
+                    )
+                elif isinstance(m, pdoc.doc.Class):
+                    yield from make_index(m)
+                else:
+                    pass
 
-            search_index[modname] = list(make_index(mod))
-    return json.dumps(search_index)
+        documents.extend(make_index(mod))
+
+    raw = json.dumps(documents)
+    try:
+        out = subprocess.check_output(
+            ["node", env.get_template("build-search-index.js").filename],
+            input=raw.encode(),
+            cwd=Path(__file__).parent / "templates",
+        )
+        index = json.loads(out)
+        index["_isPrebuiltIndex"] = True
+    except Exception as e:
+        warnings.warn(f"Error precompiling search index: {e}", UserWarning)
+        return raw
+    else:
+        return json.dumps(index)
 
 
 def repr_module(module: pdoc.doc.Module) -> str:
@@ -161,7 +177,7 @@ The Jinja2 environment used to render all templates.
 You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
-env.filters["render_docstring"] = render_docstring
+env.filters["render_docstring"] = render_docstring_with_context
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link

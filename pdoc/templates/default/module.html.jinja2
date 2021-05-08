@@ -283,6 +283,7 @@
                 }
 
                 .pdoc input[type=search] {
+                    display: block;
                     outline-offset: 0;
                 }
 
@@ -409,6 +410,7 @@
 
                 /* Attributes */
                 .pdoc .attr {
+                    display: block;
                     color: var(--text);
                     margin: 1rem 0 .5rem;
                     /*
@@ -466,6 +468,12 @@
 
                 .pdoc .inherited .function a:after {
                     content: "()";
+                }
+
+                /* Search results */
+                .pdoc .search-result .docstring {
+                    overflow: auto;
+                    max-height: 25vh;
                 }
 
                 /* "built with pdoc" attribution */
@@ -758,10 +766,10 @@
         <script>
             /* Periodically check with the pdoc server if there have been any changes. */
             let mtime_generated = {{ mtime | tojson }},
-                url = location.href.split("#")[0];
-            url += (url.includes("?") ? "&" : "?") + "mtime=1";
+                url = new URL(window.location);
+            url.searchParams.set("mtime", 1);
             window.setInterval(function () {
-                fetch(url)
+                fetch(url.toString())
                     .then(response => response.text())
                     .then(mtime => {
                         if (mtime_generated !== mtime)
@@ -773,68 +781,15 @@
     {% block search_js %}
         <script>{% include "elasticlunr.min.js" %}</script>
         <script>
-            function getSearchTerm() {
-                if (location.hash.startsWith("#search:")) {
-                    return decodeURIComponent(location.hash.substr(8))
-                }
+            function escapeHTML(html) {
+                return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
             }
-
-            async function getDocuments() {
-                let resp = await fetch("{{ "../" * module.modulename.count(".") }}search.json");
-                let data = await resp.json();
-
-                let docs = []
-                for (const [modulename, items] of Object.entries(data)) {
-                    for (let doc of items) {
-                        doc.modulename = modulename;
-                        if (doc.qualname) {
-                            doc.fullname = `${doc.modulename}.${doc.qualname}`
-                        } else {
-                            doc.fullname = modulename;
-                        }
-                    }
-                    docs.push(...items)
-                }
-                return docs;
-            }
-
-            async function initialize() {
-                console.time("downloading search index");
-                let docs = await getDocuments();
-                console.timeEnd("downloading search index");
-
-                console.time("building search index");
-                // Also split on html tags. this is a cheap heuristic, but good enough.
-                elasticlunr.tokenizer.setSeperator(/[\s\-.]+|<[^>]*>/);
-                searchIndex = elasticlunr(function () {
-                    this.addField('qualname');
-                    this.addField('fullname');
-                    this.addField('doc');
-                    this.setRef('fullname');
-                });
-
-                for (let doc of docs) {
-                    searchIndex.addDoc(doc);
-                }
-                console.timeEnd("building search index");
-
-                onInput();
-            }
-
-            const searchBox = document.querySelector(".pdoc input[type=search]");
-            searchBox.addEventListener("input", function () {
-                if (searchBox.value.trim()) {
-                    location.hash = `search:${searchBox.value}`;
-                } else {
-                    location.hash = "";
-                }
-            });
-            window.addEventListener("hashchange", onInput);
 
             const originalContent = document.querySelector("main.pdoc");
             let currentContent = originalContent;
 
             function setContent(innerHTML) {
+                {# Replace the entire page contents. Calling this with an empty argument restores the original page. #}
                 let elem;
                 if (innerHTML) {
                     elem = document.createElement("main");
@@ -849,7 +804,127 @@
                 }
             }
 
-            let searchIndex;
+            function getSearchTerm() {
+                return (new URL(window.location)).searchParams.get("search");
+            }
+
+            {# the control flow here is: search input -> update location -> onInput #}
+            const searchBox = document.querySelector(".pdoc input[type=search]");
+            searchBox.addEventListener("input", function () {
+                let url = new URL(window.location);
+                if (searchBox.value.trim()) {
+                    url.hash = "";
+                    url.searchParams.set("search", searchBox.value);
+                } else {
+                    url.searchParams.delete("search");
+                }
+                history.replaceState("", "", url.toString());
+                onInput();
+            });
+            window.addEventListener("popstate", onInput);
+
+
+            let searchIndex, searchErr;
+
+            async function initialize() {
+                {# Get the search index and compile it if necessary.
+                   This function will only be called once. #}
+                let docs;
+                try {
+                    let resp = await fetch("{{ "../" * module.modulename.count(".") }}search.json");
+                    docs = await resp.json();
+                } catch (e) {
+                    searchErr = "Cannot fetch search index.";
+                    throw e;
+                }
+
+                {# mirrored in build-search-index.js (part 1) #}
+                // Also split on html tags. this is a cheap heuristic, but good enough.
+                elasticlunr.tokenizer.setSeperator(/[\s\-.;&]+|<[^>]*>/);
+
+                if (docs._isPrebuiltIndex) {
+                    searchIndex = elasticlunr.Index.load(docs);
+                } else {
+                    {# mirrored in build-search-index.js (part 2) #}
+                    searchIndex = elasticlunr(function () {
+                        this.addField('qualname');
+                        this.addField('fullname');
+                        this.addField('doc');
+                        this.setRef('fullname');
+                    });
+                    for (let doc of docs) {
+                        searchIndex.addDoc(doc);
+                    }
+                }
+                onInput();
+
+                {# if the user clicks an anchor link in the navigation, we need to restore the original contents. #}
+                document.querySelector("nav.pdoc").addEventListener("click", e => {
+                    if (e.target.hash) {
+                        searchBox.value = "";
+                        searchBox.dispatchEvent(new Event("input"));
+                    }
+                });
+            }
+
+            function onInput() {
+                setContent((() => {
+                    const search = getSearchTerm();
+                    if (!search) {
+                        return null
+                    }
+                    if (searchErr) {
+                        return `<h3>Error: ${searchErr}</h3>`
+                    }
+                    if (!searchIndex) {
+                        return "<h3>Searching...</h3>"
+                    }
+
+                    const results = searchIndex.search(search, {
+                        fields: {
+                            qualname: {boost: 4},
+                            fullname: {boost: 2},
+                            doc: {boost: 1},
+                        },
+                        expand: true
+                    });
+
+                    let html;
+                    if (results.length === 0) {
+                        html = `No search results for '${escapeHTML(search)}'.`
+                    } else {
+                        html = `<h1 class="modulename">${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(search)}':</h1>`;
+                    }
+                    for (let result of results.slice(0, 10)) {
+                        let doc = result.doc;
+                        let url = `{{ "../" * module.modulename.count(".") }}${doc.modulename.replaceAll(".", "/")}.html`;
+                        if (doc.qualname) {
+                            url += `#${doc.qualname}`;
+                        }
+
+                        let heading;
+                        switch (result.doc.type) {
+                            case "function":
+                                heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">(${doc.parameters.join(", ")})</span>`;
+                                break;
+                            case "class":
+                                heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                                break;
+                            default:
+                                heading = `<span class="name">${doc.fullname}</span>`;
+                                break;
+                        }
+                        html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.type}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+                    }
+                    return html;
+                })());
+            }
 
             if (getSearchTerm()) {
                 initialize();
@@ -857,60 +932,6 @@
                 onInput();
             } else {
                 searchBox.addEventListener("focus", initialize, {once: true});
-            }
-
-            function onInput() {
-                console.log("onInput", !searchIndex, getSearchTerm());
-                const search = getSearchTerm();
-                if (!search) {
-                    setContent();
-                    return
-                }
-                if (!searchIndex) {
-                    setContent("<h3>Searching...</h3>");
-                }
-
-                const results = searchIndex.search(search, {
-                    fields: {
-                        qualname: {boost: 4},
-                        fullname: {boost: 2},
-                        doc: {boost: 1},
-                    },
-                    expand: true
-                });
-
-                let html = `
-                    <h1 class="modulename">Search results for ${search}</h1>
-                `;
-                for (let result of results.slice(0, 10)) {
-                    let doc = result.doc;
-                    let url = `{{ "../" * module.modulename.count(".") }}${doc.modulename.replaceAll(".", "/")}.html`;
-                    if (doc.qualname) {
-                        url += `#${doc.qualname}`;
-                    }
-
-                    let head;
-                    switch (result.doc.type) {
-                        case "function":
-                            head = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">(${doc.parameters.join(", ")})</span>`;
-                            break;
-                        case "class":
-                            head = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
-                            break;
-                        default:
-                            head = `<span class="name">${doc.fullname}</span>`;
-                            break;
-                    }
-                    {# call setBody() here to restore the original page for links on the same site. #}
-                    html += `
-                        <section>
-                        <a onclick="setContent()" href="${url}" style="display:block" class="attr ${doc.type}">${head}</a>
-                        <div class="docstring">${doc.doc}</div>
-                        </section>
-                    `;
-
-                }
-                setContent(html);
             }
         </script>
     {% endblock %}

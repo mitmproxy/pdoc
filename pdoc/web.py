@@ -13,6 +13,7 @@ import importlib.util
 import pkgutil
 import sysconfig
 import traceback
+import warnings
 import webbrowser
 from typing import Collection, Optional, Union
 
@@ -44,6 +45,11 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
         if path == "/":
             out = render.html_index(self.server.all_modules)
+        elif path == "/search.json":
+            self.send_response(200)
+            self.send_header("content-type", "application/json")
+            self.end_headers()
+            return self.server.render_search_index()
         else:
             module = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
             if module not in self.server.all_modules:
@@ -103,6 +109,21 @@ class DocServer(http.server.HTTPServer):
     ):
         super().__init__(addr, DocHandler)
         self.all_modules = all_modules
+
+    @cache
+    def render_search_index(self) -> str:
+        """Render the search index. For performance reasons this is always cached."""
+        all_mods = {}
+        for mod in self.all_modules:
+            try:
+                m = extract.load_module(mod)
+            except RuntimeError:
+                warnings.warn(
+                    f"Error importing {mod}:\n{traceback.format_exc()}", RuntimeWarning
+                )
+            else:
+                all_mods[mod] = doc.Module(m)
+        return render.search_index(all_mods)
 
 
 # https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61

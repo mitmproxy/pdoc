@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Add search functionality.
  - Update Bootstrap to v5.0.0.
  - Do not fail if `inspect.getdoc()` raises.
 
