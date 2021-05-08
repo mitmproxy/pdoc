@@ -131,8 +131,7 @@ class Doc(Generic[T]):
 
         If no docstring can be found, an empty string is returned.
         """
-        doc = inspect.getdoc(self.obj) or ""
-        return doc.strip()
+        return _safe_getdoc(self.obj)
 
     @cached_property
     def source(self) -> str:
@@ -744,8 +743,7 @@ class Function(Doc[types.FunctionType]):
             cls = sys.modules.get(_safe_getattr(self.obj, "__module__", None), None)
             for name in _safe_getattr(self.obj, "__qualname__", "").split(".")[:-1]:
                 cls = _safe_getattr(cls, name, None)
-            doc = inspect.getdoc(_safe_getattr(cls, self.name, None)) or ""
-            doc = doc.strip()
+            doc = _safe_getdoc(_safe_getattr(cls, self.name, None))
 
         if doc == object.__init__.__doc__:
             # inspect.getdoc(Foo.__init__) returns the docstring, for object.__init__ if left undefined...
@@ -1040,3 +1038,17 @@ def _safe_getattr(obj, attr, default):
             RuntimeWarning,
         )
         return default
+
+
+def _safe_getdoc(obj: Any) -> str:
+    """Like `inspect.getdoc()`, but never raises. Always returns a stripped string."""
+    try:
+        doc = inspect.getdoc(obj) or ""
+    except Exception as e:
+        warnings.warn(
+            f"inspect.getdoc({obj!r}) raised an exception: {e}",
+            RuntimeWarning,
+        )
+        return ""
+    else:
+        return doc.strip()

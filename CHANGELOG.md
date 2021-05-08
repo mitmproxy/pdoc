@@ -3,6 +3,7 @@
 # Unreleased: pdoc next
 
  - Update Bootstrap to v5.0.0.
+ - Do not fail if `inspect.getdoc()` raises.
 
 # 2021-04-30: pdoc 6.6.0
 
