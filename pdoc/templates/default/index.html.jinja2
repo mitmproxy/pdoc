@@ -1,135 +1,53 @@
-{% extends "frame.html.jinja2" %}
-{% block title %}module list &ndash; pdoc {{ __version__ }}{% endblock %}
+{% extends "module.html.jinja2" %}
+{% block title %}Module List &ndash; pdoc {{ __version__ }}{% endblock %}
 {% block style %}
     {{ super() | safe }}
-    <style type="text/css">
-        {% block style_theme %}
-            :root {
-                --pdoc-background: #f8f9fa;
-            }
-            .pdoc {
-                --text: #212529;
-                --accent: #fff;
-                --active: #fff598;
-            }
-        {% endblock %}
-
-        {% block style_layout %}
-        html, body {
-            width: 100%;
-            background-color: var(--pdoc-background);
-
-        }
-        {% endblock %}
-
-        {% block style_content %}
-        .pdoc-index {
-            color: var(--text);
-            text-align: center;
+    <style>
+        header.pdoc {
+            margin-bottom: -4rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        #pdoc-logo {
-            display: block;
-            height: 6rem;
-            width: 12rem;
-            margin: 2rem auto;
-            transition: all 100ms;
+        header.pdoc img {
+            max-width: 200px;
+            max-height: 75px;
+            padding-right: 2rem;
         }
 
-        #pdoc-logo img {
-            max-width: 100%;
-            max-height: 100%;
+        header.pdoc input[type=search] {
+            outline-offset: 0;
+            font-size: 1.5rem;
+            min-width: 60%;
+            flex-grow: 1;
+            padding-left: .5rem;
+            margin: 1.75rem 0;
         }
-
-        #pdoc-logo:hover {
-            filter: saturate(150%);
-            transform: scale(1.02);
-        }
-
-        #pdoc-search {
-            color: var(--text);
-            background-color: var(--accent);
-            display: block;
-            margin: 0 auto;
-            border: solid gray 1px;
-            border-radius: 4px;
-            text-align: center;
-            padding: .4rem;
-            width: 20rem;
-        }
-
-        .pdoc h5 {
-            margin-top: 2rem;
-        }
-
-        #pdoc-modules {
-            max-width: 75rem;
-            margin: 0 auto;
-        }
-
-        #pdoc-modules a {
-            display: inline-block;
-            margin: .1rem;
-            padding: .1rem .5rem;
-            color: var(--text);
-            text-decoration: none;
-            background-color: var(--accent);
-        }
-
-        #pdoc-modules a:hover {
-            background-color: var(--accent);
-            transform: scale(1.05);
-        }
-
-        #pdoc-modules .active {
-            background-color: var(--active);
-        }
-        {% endblock %}
     </style>
 {% endblock %}
-{% block body %}
-<div class="pdoc pdoc-index">
-    {% block logo %}
-        <a id="pdoc-logo" href="https://pdoc.dev">
-            <img src="data:image/svg+xml,{% filter urlencode %}{% include "pdoc-logo.svg" %}{% endfilter %}" alt="pdoc logo"/>
-        </a>
-    {% endblock %}
-    <input id="pdoc-search" type="text" placeholder="search" aria-label="search for a module"/>
-    <h5>Available Modules</h5>
-    <div id="pdoc-modules">
-    {% for module in all_modules %}
-        <a href="{{ module.replace(".","/") }}.html">{{ module }}</a>
-    {% endfor %}
-    </div>
-    <script>
-        const modules = {{ all_modules | tojson }};
-        const module_list = document.getElementById("pdoc-modules");
-        const searchbox = document.getElementById("pdoc-search")
-
-        function render(filt) {
-            filt = filt.toLowerCase();
-            let filtered = filt ? modules.filter(x => x.toLowerCase().includes(filt)) : modules;
-            module_list.innerHTML = filtered.map(
-                root => `
-                    <a
-                    class="${filtered.length === 1 || root === filt ? 'active' : ''}"
-                    href="${root.replaceAll(".", "/")}.html"
-                    >${root}</a>`
-            ).join("");
-        }
-
-        render("");
-
-        searchbox.addEventListener("input", (e) => {
-            render(e.target.value);
-        });
-        searchbox.addEventListener("keyup", (e) => {
-            let active = module_list.querySelector("a.active")
-            if (e.key === "Enter" && active) {
-                active.click();
-            }
-        })
-        searchbox.focus()
-    </script>
-</div>
+{% block nav %}
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
+        <input id="togglestate" type="checkbox">
+        <div>
+            <h2>Available Modules</h2>
+            <ul>
+                {% for submodule in all_modules %}
+                    <li><a href="{{ submodule.replace(".","/") }}.html">{{ submodule }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+    <header class="pdoc">
+        {% block logo %}
+            <a href="https://pdoc.dev">
+                <img src="data:image/svg+xml,{% filter urlencode %}{% include "pdoc-logo.svg" %}{% endfilter %}"
+                     alt="pdoc logo"/>
+            </a>
+        {% endblock %}
+        <input type="search" placeholder="Search API Documentation..." aria-label="search box">
+    </header>
 {% endblock %}
+{% block module_info %}{% endblock %}
+{% block module_contents %}{% endblock %}

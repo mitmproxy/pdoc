@@ -3,9 +3,9 @@
 {% block style %}
     {% filter minify_css %}
         {{ super() }}
-        <style type="text/css">{% include 'syntax-highlighting.css' %}</style>
+        <style>{% include 'syntax-highlighting.css' %}</style>
         {% block style_pdoc %}
-            <style type="text/css">/*! pdoc */
+            <style>/*! pdoc */
             {#
              pdoc's CSS style is divided into three Jinja2 blocks:
                - style_theme: The color scheme.
@@ -77,7 +77,7 @@
                         display: inherit;
                     }
 
-                    main {
+                    main, header {
                         padding: 2rem 3vw;
                     }
 
@@ -98,7 +98,7 @@
                         width: var(--sidebar-width);
                     }
 
-                    main {
+                    main, header {
                         padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
                         width: calc(54rem + var(--sidebar-width));
                         max-width: 100%;
@@ -148,6 +148,12 @@
 
                 nav.pdoc .module-list-button:hover {
                     border-color: var(--text);
+                }
+
+                nav.pdoc input[type=search] {
+                    display: block;
+                    outline-offset: 0;
+                    width: calc(100% - var(--pad));
                 }
 
                 nav.pdoc ul {
@@ -233,7 +239,7 @@
                     border: 0 !important;
                 }
 
-                .pdoc h1, .pdoc h2, .pdoc h3, .pdoc h4 {
+                .pdoc h1, .pdoc h2, .pdoc h3 {
                     font-weight: 300;
                     margin: .3em 0;
                     padding: .2em 0;
@@ -280,11 +286,6 @@
                     background: none;
                     border: none;
                     padding: 0;
-                }
-
-                .pdoc input[type=search] {
-                    display: block;
-                    outline-offset: 0;
                 }
 
                 /* Page Heading */
@@ -337,7 +338,7 @@
                     /* Firefox hides the arrow if we specify inline-block,
                        see https://bugzilla.mozilla.org/show_bug.cgi?id=1270163.
                        Chrome on the other hand does not support the two-property syntax yet,
-                       so the last statement is ignored. */
+                       so the last statement is ignored. See https://crbug.com/995106. */
                     display: inline-block;
                     display: inline list-item;
                     user-select: none;
@@ -474,6 +475,9 @@
                 .pdoc .search-result .docstring {
                     overflow: auto;
                     max-height: 25vh;
+                }
+                .pdoc .search-result.focused > .attr {
+                    background-color: var(--active);
                 }
 
                 /* "built with pdoc" attribution */
@@ -689,7 +693,7 @@
                 {% endblock %}
 
                 {% block search %}
-                    <input type="search" placeholder="Search...">
+                    <input type="search" placeholder="Search..." role="searchbox" aria-label="search">
                 {% endblock %}
 
                 {% block nav_title %}{% endblock %}
@@ -779,6 +783,7 @@
         </script>
     {% endif %}
     {% block search_js %}
+        {% set rootprefix = "../" * module.modulename.count(".") if module else "" %}
         <script>{% include "elasticlunr.min.js" %}</script>
         <script>
             function escapeHTML(html) {
@@ -831,7 +836,7 @@
                    This function will only be called once. #}
                 let docs;
                 try {
-                    let resp = await fetch("{{ "../" * module.modulename.count(".") }}search.json");
+                    let resp = await fetch("{{ rootprefix }}search.json");
                     docs = await resp.json();
                 } catch (e) {
                     searchErr = "Cannot fetch search index.";
@@ -880,6 +885,8 @@
                         return "<h3>Searching...</h3>"
                     }
 
+                    window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
                     const results = searchIndex.search(search, {
                         fields: {
                             qualname: {boost: 4},
@@ -893,11 +900,11 @@
                     if (results.length === 0) {
                         html = `No search results for '${escapeHTML(search)}'.`
                     } else {
-                        html = `<h1 class="modulename">${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(search)}':</h1>`;
+                        html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(search)}'.</h4>`;
                     }
                     for (let result of results.slice(0, 10)) {
                         let doc = result.doc;
-                        let url = `{{ "../" * module.modulename.count(".") }}${doc.modulename.replaceAll(".", "/")}.html`;
+                        let url = `{{ rootprefix }}${doc.modulename.replaceAll(".", "/")}.html`;
                         if (doc.qualname) {
                             url += `#${doc.qualname}`;
                         }

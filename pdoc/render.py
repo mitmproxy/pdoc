@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import collections
 import json
 import os
 import subprocess
@@ -126,13 +125,13 @@ def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
             }
 
         def make_index(mod: pdoc.doc.Namespace):
-            if not ctx["is_public"](mod):
+            if not ctx["is_public"](mod).strip():
                 return
             yield make_item(mod)
             for m in mod.own_members:
-                if isinstance(m, pdoc.doc.Variable) and ctx["is_public"](m):
+                if isinstance(m, pdoc.doc.Variable) and ctx["is_public"](m).strip():
                     yield make_item(m)
-                elif isinstance(m, pdoc.doc.Function) and ctx["is_public"](m):
+                elif isinstance(m, pdoc.doc.Function) and ctx["is_public"](m).strip():
                     yield make_item(
                         m,
                         parameters=list(m.signature.parameters),
