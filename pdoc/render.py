@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import collections
 import json
 import os
 import subprocess
-import tempfile
+import types
 import warnings
 from pathlib import Path
 from typing import Collection, Mapping, Optional
 
+import jinja2
 from jinja2 import Environment, FileSystemLoader
 
 import pdoc.doc
@@ -106,6 +108,15 @@ def html_error(error: str, details: str = "") -> str:
 
 def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
     """Renders the search index."""
+    # This is a rather terrible hack to determine if a given object is public and should be included in the index.
+    module_template: jinja2.Template = env.select_template(["module.html.jinja2", "default/module.html.jinja2"])
+    ctx: jinja2.runtime.Context = module_template.new_context({
+        "module": pdoc.doc.Module(types.ModuleType("")),
+        "all_modules": {}
+    })
+    for _ in module_template.root_render_func(ctx):  # type: ignore
+        pass
+
     documents = []
     for modname, mod in all_modules.items():
         docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
@@ -121,11 +132,13 @@ def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
             }
 
         def make_index(mod: pdoc.doc.Namespace):
+            if not ctx["is_public"](mod):
+                return
             yield make_item(mod)
             for m in mod.own_members:
-                if isinstance(m, pdoc.doc.Variable):
+                if isinstance(m, pdoc.doc.Variable) and ctx["is_public"](m):
                     yield make_item(m)
-                elif isinstance(m, pdoc.doc.Function):
+                elif isinstance(m, pdoc.doc.Function) and ctx["is_public"](m):
                     yield make_item(
                         m,
                         parameters=list(m.signature.parameters),
