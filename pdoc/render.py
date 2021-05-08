@@ -75,9 +75,7 @@ def html_module(
       This is only passed by `pdoc.web`.
     """
     with defuse_unsafe_reprs():
-        return env.select_template(
-            ["module.html.jinja2", "default/module.html.jinja2"]
-        ).render(
+        return env.get_template("module.html.jinja2").render(
             module=module,
             all_modules=all_modules,
             mtime=mtime,
@@ -89,18 +87,14 @@ def html_module(
 
 def html_index(all_modules: Collection[str]) -> str:
     """Renders the module index."""
-    return env.select_template(
-        ["index.html.jinja2", "default/index.html.jinja2"]
-    ).render(
+    return env.get_template("index.html.jinja2").render(
         all_modules=[m for m in all_modules if "._" not in m],
     )
 
 
 def html_error(error: str, details: str = "") -> str:
     """Renders an error message."""
-    return env.select_template(
-        ["index.html.jinja2", "default/error.html.jinja2"]
-    ).render(
+    return env.get_template("error.html.jinja2").render(
         error=error,
         details=details,
     )
@@ -176,6 +170,7 @@ def repr_module(module: pdoc.doc.Module) -> str:
 _default_searchpath = [
     Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
     Path(__file__).parent / "templates",
+    Path(__file__).parent / "templates" / "default",
 ]
 
 env = Environment(
