@@ -933,6 +933,36 @@
             } else {
                 searchBox.addEventListener("focus", initialize, {once: true});
             }
+
+            {# keyboard navigation for results #}
+            searchBox.addEventListener("keydown", e => {
+                if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+                    let focused = currentContent.querySelector(".search-result.focused");
+                    if (!focused) {
+                        currentContent.querySelector(".search-result").classList.add("focused");
+                    } else if (
+                        e.key === "ArrowDown"
+                        && focused.nextElementSibling
+                        && focused.nextElementSibling.classList.contains("search-result")
+                    ) {
+                        focused.classList.remove("focused");
+                        focused.nextElementSibling.classList.add("focused");
+                        focused.nextElementSibling.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                    } else if (
+                        e.key === "ArrowUp"
+                        && focused.previousElementSibling
+                        && focused.previousElementSibling.classList.contains("search-result")
+                    ) {
+                        focused.classList.remove("focused");
+                        focused.previousElementSibling.classList.add("focused");
+                        focused.previousElementSibling.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                    } else if (
+                        e.key === "Enter"
+                    ) {
+                        focused.querySelector("a").click();
+                    }
+                }
+            });
         </script>
     {% endblock %}
 {% endblock %}
