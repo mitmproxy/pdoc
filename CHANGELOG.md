@@ -9,6 +9,7 @@
  - Redesign module list (index.html.jinja2).
  - Update Bootstrap to v5.0.0.
  - Do not fail if `inspect.getdoc()` raises.
+ - Fix compatibility with Jinja2 3.0.0.
 
 # 2021-04-30: pdoc 6.6.0
 
