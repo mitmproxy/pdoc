@@ -46,7 +46,7 @@ pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do i
 * Builtin web server with live reloading.
 * Customizable HTML templates.
 * Understands numpydoc and Google-style docstrings.
-* Standalone JS-free HTML output without additional dependencies.
+* Standalone HTML output without additional dependencies.
   
 Under the hood...
 
