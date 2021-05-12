@@ -2,7 +2,11 @@
 
 # Unreleased: pdoc next
 
- - **Add search functionality.**
+ -
+
+# 2021-05-12: pdoc 7.0.0
+
+ - Add search functionality.
    pdoc now has a search bar which allows users to quickly
    find relevant parts in the documentation.
    See https://pdoc.dev/docs/pdoc/search.html for details.
