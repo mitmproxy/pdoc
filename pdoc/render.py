@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import os
+import types
 from pathlib import Path
 from typing import Collection, Mapping, Optional
 
+import jinja2
 from jinja2 import Environment, FileSystemLoader
 
 import pdoc.doc
+import pdoc.docstrings
 from pdoc._compat import Literal
 from pdoc.render_helpers import (
     DefaultMacroExtension,
@@ -16,8 +19,9 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
-    render_docstring,
+    render_docstring_with_context,
 )
+from pdoc.search import make_index, precompile_index
 
 
 def configure(
@@ -67,9 +71,7 @@ def html_module(
       This is only passed by `pdoc.web`.
     """
     with defuse_unsafe_reprs():
-        return env.select_template(
-            ["module.html.jinja2", "default/module.html.jinja2"]
-        ).render(
+        return env.get_template("module.html.jinja2").render(
             module=module,
             all_modules=all_modules,
             mtime=mtime,
@@ -81,24 +83,42 @@ def html_module(
 
 def html_index(all_modules: Collection[str]) -> str:
     """Renders the module index."""
-    return env.select_template(
-        ["index.html.jinja2", "default/index.html.jinja2"]
-    ).render(
+    return env.get_template("index.html.jinja2").render(
         all_modules=[m for m in all_modules if "._" not in m],
     )
 
 
 def html_error(error: str, details: str = "") -> str:
     """Renders an error message."""
-    return env.select_template(
-        ["index.html.jinja2", "default/error.html.jinja2"]
-    ).render(
+    return env.get_template("error.html.jinja2").render(
         error=error,
         details=details,
     )
 
 
-@defuse_unsafe_reprs()
+def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
+    """Renders the Elasticlunr.js search index."""
+    # This is a rather terrible hack to determine if a given object is public and should be included in the index.
+    module_template: jinja2.Template = env.get_template("module.html.jinja2")
+    ctx: jinja2.runtime.Context = module_template.new_context(
+        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": {}}
+    )
+    for _ in module_template.root_render_func(ctx):  # type: ignore
+        pass
+
+    def is_public(x: pdoc.doc.Doc) -> bool:
+        return bool(ctx["is_public"](x).strip())
+
+    index = make_index(
+        all_modules,
+        is_public,
+        env.globals["docformat"],
+    )
+
+    compile_js = Path(env.get_template("build-search-index.js").filename)  # type: ignore
+    return precompile_index(index, compile_js)
+
+
 def repr_module(module: pdoc.doc.Module) -> str:
     """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
     with defuse_unsafe_reprs():
@@ -108,6 +128,7 @@ def repr_module(module: pdoc.doc.Module) -> str:
 _default_searchpath = [
     Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
     Path(__file__).parent / "templates",
+    Path(__file__).parent / "templates" / "default",
 ]
 
 env = Environment(
@@ -122,7 +143,7 @@ The Jinja2 environment used to render all templates.
 You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
-env.filters["render_docstring"] = render_docstring
+env.filters["render_docstring"] = render_docstring_with_context
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link

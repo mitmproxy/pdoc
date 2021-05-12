@@ -63,12 +63,19 @@ def _markdown(docstring: str) -> str:
 
 
 @contextfilter
-def render_docstring(context: Context, docstring: str) -> str:
+def render_docstring_with_context(context: Context, docstring: str) -> str:
     """
     Converts `docstring` from a custom docformat to Markdown (if necessary), and then from Markdown to HTML.
     """
     module: pdoc.doc.Module = context["module"]
-    docformat = getattr(module.obj, "__docformat__", context["docformat"]) or ""
+    docformat: str = context["docformat"]
+    return render_docstring(docstring, module, docformat)
+
+
+def render_docstring(
+    docstring: str, module: pdoc.doc.Module, default_docformat: str
+) -> str:
+    docformat = getattr(module.obj, "__docformat__", default_docformat) or ""
     docstring = docstrings.convert(docstring, docformat, module.source_file)
     return _markdown(docstring)
 

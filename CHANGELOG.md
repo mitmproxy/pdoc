@@ -2,7 +2,13 @@
 
 # Unreleased: pdoc next
 
+ - **Add search functionality.**
+   pdoc now has a search bar which allows users to quickly
+   find relevant parts in the documentation.
+   See https://pdoc.dev/docs/pdoc/search.html for details.
+ - Redesign module list (index.html.jinja2).
  - Update Bootstrap to v5.0.0.
+ - Do not fail if `inspect.getdoc()` raises.
 
 # 2021-04-30: pdoc 6.6.0
 
