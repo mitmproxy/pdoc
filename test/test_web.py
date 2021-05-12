@@ -23,7 +23,7 @@ class ReadResponse(threading.Thread):
 
 
 def handle_request(data: bytes) -> bytes:
-    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "markupsafe"], bind_and_activate=False)
+    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "jinja2"], bind_and_activate=False)
     a, b = socket.socketpair()
     b.send(data)
     t = ReadResponse(b)
@@ -55,7 +55,7 @@ def test_get_module():
 
 
 def test_get_dependency():
-    assert b"Pallets" in handle_request(b"GET /markupsafe.html HTTP/1.1\r\n\r\n")
+    assert b"a template engine written in pure Python" in handle_request(b"GET /jinja2.html HTTP/1.1\r\n\r\n")
 
 
 def test_get_module_err():
@@ -76,8 +76,8 @@ def test_get_unknown():
 
 def test_all_modules():
     a = AllModules()
-    assert "markupsafe" in list(a)
+    assert "jinja2" in list(a)
     assert len(a)
-    assert "markupsafe" in a
+    assert "jinja2" in a
     assert "typing" not in a
-    assert "markupsafe.unknown" not in a
+    assert "jinja2.unknown" not in a

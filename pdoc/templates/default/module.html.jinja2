@@ -625,7 +625,7 @@
     {% elif doc.name == "__doc__" %}
         {# Sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
         {# https://github.com/mitmproxy/pdoc/issues/235 #}
-    {% elif doc.qualname is in(module.obj.__all__) %}
+    {% elif doc.qualname is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
     {% endif %}
