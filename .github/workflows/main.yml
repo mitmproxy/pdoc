@@ -68,10 +68,7 @@ jobs:
     steps:
       - run: printenv
       - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9.5
-      - run: sudo apt install twine python-wheel
-      - run: python setup.py bdist_wheel
+      - run: sudo apt-get install -y twine python3-wheel
+      - run: python3 setup.py bdist_wheel
       - run: twine check dist/*
       - run: twine upload dist/*
