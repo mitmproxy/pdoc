@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import contextfilter, ext, nodes
+from jinja2 import pass_context, ext, nodes  # type: ignore
 from jinja2.runtime import Context
 from markupsafe import Markup
 
@@ -62,7 +62,7 @@ def _markdown(docstring: str) -> str:
     return pdoc.markdown2.markdown(docstring, extras=markdown_extensions)  # type: ignore
 
 
-@contextfilter
+@pass_context
 def render_docstring_with_context(context: Context, docstring: str) -> str:
     """
     Converts `docstring` from a custom docformat to Markdown (if necessary), and then from Markdown to HTML.
@@ -129,7 +129,7 @@ def qualname_candidates(identifier: str, context_qualname: str) -> list[str]:
     return ret
 
 
-@contextfilter
+@pass_context
 def linkify(context: Context, code: str, namespace: str = "") -> str:
     """
     Link all identifiers in a block of text. Identifiers referencing unknown modules or modules that
@@ -172,7 +172,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
     )
 
 
-@contextfilter
+@pass_context
 def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) -> str:
     """Create a link for a specific `(modulename, qualname)` tuple."""
     mod: pdoc.doc.Module = context["module"]
