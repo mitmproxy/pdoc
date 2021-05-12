@@ -119,7 +119,8 @@ class DocServer(http.server.HTTPServer):
                 m = extract.load_module(mod)
             except RuntimeError:
                 warnings.warn(
-                    f"Error importing {mod}:\n{traceback.format_exc()}", RuntimeWarning
+                    f"Error importing {mod!r}:\n{traceback.format_exc()}",
+                    RuntimeWarning,
                 )
             else:
                 all_mods[mod] = doc.Module(m)

@@ -68,7 +68,7 @@ def render_docstring_with_context(context: Context, docstring: str) -> str:
     Converts `docstring` from a custom docformat to Markdown (if necessary), and then from Markdown to HTML.
     """
     module: pdoc.doc.Module = context["module"]
-    docformat: Optional[str] = context["docformat"]
+    docformat: str = context["docformat"]
     return render_docstring(docstring, module, docformat)
 
 

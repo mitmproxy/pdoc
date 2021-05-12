@@ -75,4 +75,4 @@ def test_markdown_toc():
 
     It's easy to introduce a `.strip()` in there and this gets washed away, so let's test that it works properly.
     """
-    assert render_docstring(mock.MagicMock(), "#foo\n#bar").toc_html  # type: ignore
+    assert render_docstring("#foo\n#bar", mock.MagicMock(), "").toc_html  # type: ignore

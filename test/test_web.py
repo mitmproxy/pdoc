@@ -2,6 +2,8 @@ import io
 import socket
 import threading
 
+import pytest
+
 from pdoc.web import DocServer, DocHandler, AllModules
 
 
@@ -38,7 +40,12 @@ def test_head_index():
 
 
 def test_get_index():
-    assert b'["dataclasses",' in handle_request(b"GET / HTTP/1.1\r\n\r\n")
+    assert b'<a href="dataclasses.html">' in handle_request(b"GET / HTTP/1.1\r\n\r\n")
+
+
+def test_get_search_json(monkeypatch):
+    with pytest.warns(RuntimeWarning, match="Error importing 'err'"):
+        assert b'"dataclasses.is_dataclass"' in handle_request(b"GET /search.json HTTP/1.1\r\n\r\n")
 
 
 def test_get_module():

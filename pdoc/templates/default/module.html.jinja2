@@ -84,6 +84,10 @@
                     .git-button {
                         display: none !important;
                     }
+
+                    nav input[type="search"]:valid ~ * {
+                        display: none !important;
+                    }
                 }
 
                 @media (min-width: 770px) {
@@ -693,7 +697,9 @@
                 {% endblock %}
 
                 {% block search %}
-                    <input type="search" placeholder="Search..." role="searchbox" aria-label="search">
+                    {# we set a pattern here so that we can use the :valid CSS selector #}
+                    <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                           pattern=".+" required>
                 {% endblock %}
 
                 {% block nav_title %}{% endblock %}
@@ -848,8 +854,10 @@
                 elasticlunr.tokenizer.setSeperator(/[\s\-.;&]+|<[^>]*>/);
 
                 if (docs._isPrebuiltIndex) {
+                    console.info("using precompiled search index");
                     searchIndex = elasticlunr.Index.load(docs);
                 } else {
+                    console.time("building search index");
                     {# mirrored in build-search-index.js (part 2) #}
                     searchIndex = elasticlunr(function () {
                         this.addField('qualname');
@@ -860,6 +868,7 @@
                     for (let doc of docs) {
                         searchIndex.addDoc(doc);
                     }
+                    console.timeEnd("building search index");
                 }
                 onInput();
 
@@ -954,7 +963,11 @@
                     ) {
                         focused.classList.remove("focused");
                         focused.nextElementSibling.classList.add("focused");
-                        focused.nextElementSibling.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                        focused.nextElementSibling.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                            inline: "nearest"
+                        });
                     } else if (
                         e.key === "ArrowUp"
                         && focused.previousElementSibling
@@ -962,7 +975,11 @@
                     ) {
                         focused.classList.remove("focused");
                         focused.previousElementSibling.classList.add("focused");
-                        focused.previousElementSibling.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+                        focused.previousElementSibling.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                            inline: "nearest"
+                        });
                     } else if (
                         e.key === "Enter"
                     ) {

@@ -381,12 +381,13 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    all_modules: dict[str, Optional[doc.Module]] = extract.parse_specs(modules)
+    module_names = extract.parse_specs(modules)
+    all_modules: dict[str, doc.Module] = {}
 
     if format == "html":
 
         def r(mod: doc.Module) -> str:
-            return render.html_module(module=mod, all_modules=all_modules)
+            return render.html_module(module=mod, all_modules=module_names)
 
     elif format == "markdown":  # pragma: no cover
         raise NotImplementedError(
@@ -397,7 +398,7 @@ def pdoc(
     else:
         raise ValueError(f"Invalid rendering format {format!r}.")
 
-    for mod in all_modules:
+    for mod in module_names:
         try:
             m = extract.load_module(mod)
         except RuntimeError:

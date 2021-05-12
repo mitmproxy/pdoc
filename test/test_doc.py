@@ -86,3 +86,15 @@ def test_class_with_raising_getattr():
 def test_builtin_source_file():
     m = Module(builtins)
     assert m.source_file is None
+
+
+def test_raising_getdoc():
+    class Foo:
+        @classmethod
+        @property
+        def __doc__(self):
+            raise RuntimeError
+
+    x = Class(Foo.__module__, Foo.__qualname__, Foo, (Foo.__module__, Foo.__qualname__))
+    with pytest.warns(RuntimeWarning, match="inspect.getdoc(.+) raised an exception"):
+        assert x.docstring == ""

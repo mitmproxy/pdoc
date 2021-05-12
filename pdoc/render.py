@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import json
 import os
-import subprocess
 import types
-import warnings
 from pathlib import Path
 from typing import Collection, Mapping, Optional
 
@@ -22,9 +19,9 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
-    render_docstring,
     render_docstring_with_context,
 )
+from pdoc.search import make_index, precompile_index
 
 
 def configure(
@@ -100,64 +97,26 @@ def html_error(error: str, details: str = "") -> str:
 
 
 def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
-    """Renders the search index."""
+    """Renders the Elasticlunr.js search index."""
     # This is a rather terrible hack to determine if a given object is public and should be included in the index.
-    module_template: jinja2.Template = env.select_template(["module.html.jinja2", "default/module.html.jinja2"])
-    ctx: jinja2.runtime.Context = module_template.new_context({
-        "module": pdoc.doc.Module(types.ModuleType("")),
-        "all_modules": {}
-    })
+    module_template: jinja2.Template = env.get_template("module.html.jinja2")
+    ctx: jinja2.runtime.Context = module_template.new_context(
+        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": {}}
+    )
     for _ in module_template.root_render_func(ctx):  # type: ignore
         pass
 
-    documents = []
-    for modname, mod in all_modules.items():
-        docformat = getattr(mod.obj, "__docformat__", env.globals["docformat"]) or ""
+    def is_public(x: pdoc.doc.Doc) -> bool:
+        return bool(ctx["is_public"](x).strip())
 
-        def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
-            return {
-                "fullname": doc.fullname,
-                "modulename": doc.modulename,
-                "qualname": doc.qualname,
-                "type": doc.type,
-                "doc": render_docstring(doc.docstring, mod, docformat),
-                **kwargs,
-            }
+    index = make_index(
+        all_modules,
+        is_public,
+        env.globals["docformat"],
+    )
 
-        def make_index(mod: pdoc.doc.Namespace):
-            if not ctx["is_public"](mod).strip():
-                return
-            yield make_item(mod)
-            for m in mod.own_members:
-                if isinstance(m, pdoc.doc.Variable) and ctx["is_public"](m).strip():
-                    yield make_item(m)
-                elif isinstance(m, pdoc.doc.Function) and ctx["is_public"](m).strip():
-                    yield make_item(
-                        m,
-                        parameters=list(m.signature.parameters),
-                        funcdef=m.funcdef,
-                    )
-                elif isinstance(m, pdoc.doc.Class):
-                    yield from make_index(m)
-                else:
-                    pass
-
-        documents.extend(make_index(mod))
-
-    raw = json.dumps(documents)
-    try:
-        out = subprocess.check_output(
-            ["node", env.get_template("build-search-index.js").filename],
-            input=raw.encode(),
-            cwd=Path(__file__).parent / "templates",
-        )
-        index = json.loads(out)
-        index["_isPrebuiltIndex"] = True
-    except Exception as e:
-        warnings.warn(f"Error precompiling search index: {e}", UserWarning)
-        return raw
-    else:
-        return json.dumps(index)
+    compile_js = Path(env.get_template("build-search-index.js").filename)  # type: ignore
+    return precompile_index(index, compile_js)
 
 
 def repr_module(module: pdoc.doc.Module) -> str:
