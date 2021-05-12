@@ -106,8 +106,9 @@ class DocServer(http.server.HTTPServer):
         self,
         addr: tuple[str, int],
         all_modules: Collection[str],
+        **kwargs
     ):
-        super().__init__(addr, DocHandler)
+        super().__init__(addr, DocHandler, **kwargs)  # type: ignore
         self.all_modules = all_modules
 
     @cache

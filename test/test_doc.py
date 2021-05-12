@@ -1,5 +1,6 @@
 import builtins
 import dataclasses
+import sys
 from pathlib import Path
 from unittest.mock import patch
 
@@ -88,6 +89,7 @@ def test_builtin_source_file():
     assert m.source_file is None
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="3.9+ only")
 def test_raising_getdoc():
     class Foo:
         @classmethod

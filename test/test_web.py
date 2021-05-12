@@ -23,7 +23,7 @@ class ReadResponse(threading.Thread):
 
 
 def handle_request(data: bytes) -> bytes:
-    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "markupsafe"])
+    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "markupsafe"], bind_and_activate=False)
     a, b = socket.socketpair()
     b.send(data)
     t = ReadResponse(b)

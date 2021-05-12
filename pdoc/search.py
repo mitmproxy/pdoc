@@ -36,6 +36,8 @@ If you wish to hide the search box, you can add
 ```
 in your [`module.html.jinja2` template](../pdoc.html#editing-pdocs-html-template).
 """
+from __future__ import annotations
+
 import json
 import shutil
 import subprocess
