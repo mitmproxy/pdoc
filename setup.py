@@ -63,8 +63,6 @@ setup(
             "pytest-cov",
             "pytest-timeout",
             "tox",
-            "twine",
-            "wheel",
         ]
     },
 )
