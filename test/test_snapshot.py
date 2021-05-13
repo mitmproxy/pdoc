@@ -44,7 +44,7 @@ class Snapshot:
                 # noinspection PyTypeChecker
                 pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
 
-                rendered = '<style type="text/css">iframe {width: 100%; min-height: 50vh}</style>\n'
+                rendered = '<style>iframe {width: 100%; min-height: 50vh}</style>\n'
                 for f in sorted(tmpdir.glob("**/*"), reverse=True):
                     if not f.is_file():
                         continue
