@@ -19,6 +19,7 @@ class Snapshot:
     path: Path
     render_options: dict
     with_output_directory: bool
+    min_version: tuple[int, int]
 
     def __init__(
         self,
@@ -26,11 +27,13 @@ class Snapshot:
         filename: Optional[str] = None,
         render_options: Optional[dict] = None,
         with_output_directory: bool = False,
+        min_version: tuple[int, int] = (3, 7),
     ):
         self.id = id
         self.path = snapshot_dir / (filename or f"{id}.py")
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
+        self.min_version = min_version
 
     def __repr__(self):
         return f"Snapshot({self.id})"
@@ -72,7 +75,7 @@ class Snapshot:
 
 
 snapshots = [
-    Snapshot("demo"),
+    Snapshot("demo", min_version=(3, 9)),
     Snapshot("flavors_google"),
     Snapshot("flavors_numpy"),
     Snapshot("flavors_rst"),
@@ -80,11 +83,13 @@ snapshots = [
         "example_customtemplate",
         "demo.py",
         {"template_directory": here / ".." / "examples" / "custom-template"},
+        min_version=(3, 9),
     ),
     Snapshot(
         "example_darkmode",
         "demo.py",
         {"template_directory": here / ".." / "examples" / "dark-mode"},
+        min_version=(3, 9),
     ),
     Snapshot(
         "example_math",
@@ -95,13 +100,14 @@ snapshots = [
         "example_mkdocs",
         "demo.py",
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
+        min_version=(3, 9),
     ),
-    Snapshot("demo_long"),
-    Snapshot("demo_eager"),
+    Snapshot("demo_long", min_version=(3, 9)),
+    Snapshot("demo_eager", min_version=(3, 9)),
     Snapshot("demopackage", "demopackage"),
     Snapshot("demopackage_dir", "demopackage", with_output_directory=True),
     Snapshot("misc"),
-    Snapshot("misc_py39"),
+    Snapshot("misc_py39", min_version=(3, 9)),
 ]
 
 
@@ -111,17 +117,8 @@ def test_snapshots(snapshot: Snapshot, format: str):
     """
     Compare pdoc's rendered output against stored snapshots.
     """
-    if sys.version_info < (3, 9) and snapshot.id in (
-        "demo",
-        "demo_customtemplate",
-        "demo_long",
-        "demo_eager",
-        "example_customtemplate",
-        "example_darkmode",
-        "example_mkdocs",
-        "misc_py39",
-    ):
-        pytest.skip("minor rendering differences on Python <=3.8")
+    if sys.version_info < snapshot.min_version:
+        pytest.skip(f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above.")
     expected = snapshot.outfile(format).read_text("utf8")
     actual = snapshot.make(format)
     assert actual == expected, (
