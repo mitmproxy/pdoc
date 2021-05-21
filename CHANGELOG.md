@@ -2,7 +2,12 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-05-21: pdoc 7.0.1
+
  - Fix compatibility with older Jinja2 versions.
+ - Fix basic compatibility with Python 3.10b1.
 
 # 2021-05-12: pdoc 7.0.0
 
