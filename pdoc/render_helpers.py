@@ -8,7 +8,12 @@ from unittest.mock import patch
 
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import pass_context, ext, nodes  # type: ignore
+from jinja2 import ext, nodes
+try:
+    # Jinja2 >= 3.0
+    from jinja2 import pass_context  # type: ignore
+except ImportError:  # pragma: no cover
+    from jinja2 import contextfilter as pass_context  # type: ignore
 from jinja2.runtime import Context
 from markupsafe import Markup
 

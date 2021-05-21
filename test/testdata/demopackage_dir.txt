@@ -1,4 +1,4 @@
-<style type="text/css">iframe {width: 100%; min-height: 50vh}</style>
+<style>iframe {width: 100%; min-height: 50vh}</style>
 <h3>demopackage.html</h3>
 <iframe srcdoc="
 <module demopackage  # A test package

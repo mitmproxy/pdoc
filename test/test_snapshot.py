@@ -44,7 +44,7 @@ class Snapshot:
                 # noinspection PyTypeChecker
                 pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
 
-                rendered = '<style type="text/css">iframe {width: 100%; min-height: 50vh}</style>\n'
+                rendered = '<style>iframe {width: 100%; min-height: 50vh}</style>\n'
                 for f in sorted(tmpdir.glob("**/*"), reverse=True):
                     if not f.is_file():
                         continue
@@ -77,9 +77,24 @@ snapshots = [
     Snapshot("flavors_numpy"),
     Snapshot("flavors_rst"),
     Snapshot(
-        "demo_customtemplate",
+        "example_customtemplate",
         "demo.py",
         {"template_directory": here / ".." / "examples" / "custom-template"},
+    ),
+    Snapshot(
+        "example_darkmode",
+        "demo.py",
+        {"template_directory": here / ".." / "examples" / "dark-mode"},
+    ),
+    Snapshot(
+        "example_math",
+        str(here / ".." / "examples" / "math" / "math_demo.py"),
+        {"template_directory": here / ".." / "examples" / "math"},
+    ),
+    Snapshot(
+        "example_mkdocs",
+        "demo.py",
+        {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
     ),
     Snapshot("demo_long"),
     Snapshot("demo_eager"),
@@ -101,6 +116,9 @@ def test_snapshots(snapshot: Snapshot, format: str):
         "demo_customtemplate",
         "demo_long",
         "demo_eager",
+        "example_customtemplate",
+        "example_darkmode",
+        "example_mkdocs",
         "misc_py39",
     ):
         pytest.skip("minor rendering differences on Python <=3.8")
