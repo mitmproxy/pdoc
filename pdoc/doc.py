@@ -444,6 +444,9 @@ class Module(Namespace[types.ModuleType]):
                 members[name] = val
 
         else:
+            # Starting with Python 3.10, __annotations__ is created on demand,
+            # we access it here first so that we don't change obj.__dict__ while iterating over it.
+            _safe_getattr(self.obj, "__annotations__", {})
             for name, obj in self.obj.__dict__.items():
                 # We already exclude everything here that is imported, only a TypeVar,
                 # or a variable without annotation and docstring.
