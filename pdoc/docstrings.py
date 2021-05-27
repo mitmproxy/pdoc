@@ -74,7 +74,7 @@ def _google_section(m: re.Match[str]) -> str:
                 contents += f" - **{attr}** " + indent(desc, "   ")[3:]
             contents += "\n"
     else:
-        contents = indent(contents, "> ")
+        contents = indent(contents, "> ", lambda line: True)
 
     return f"\n###### {name}\n{contents}\n"
 

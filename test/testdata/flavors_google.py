@@ -42,7 +42,7 @@ Todo:
 """
 __docformat__ = "google"
 
-from typing import Mapping, Tuple, Sequence, Union, Any
+from typing import Any, Mapping, Sequence, Tuple
 
 
 module_level_variable1 = 12345
@@ -409,4 +409,18 @@ def invalid_format(test):
         there is a colon missing in the previous line
     Returns:
 
+    """
+
+
+def example_code():
+    """
+    Test case for https://github.com/mitmproxy/pdoc/issues/264.
+
+    Example:
+
+        ```python
+        tmp = a2()
+
+        tmp2 = a()
+        ```
     """

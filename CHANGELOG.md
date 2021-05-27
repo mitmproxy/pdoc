@@ -4,6 +4,10 @@
 
  -
 
+# 2021-05-27: pdoc 7.0.2
+
+ - Fix section indentation in Google-style docstrings.
+
 # 2021-05-21: pdoc 7.0.1
 
  - Fix compatibility with older Jinja2 versions.

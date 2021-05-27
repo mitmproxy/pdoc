@@ -27,4 +27,5 @@
     <class flavors_google.SampleClass  # Summary of class her…
         <method def __init__(self, likes_spam=False): ...  # Inits SampleClass wi…>
         <method def public_method(self): ...  # Performs operation b…>>
-    <function def invalid_format(test): ...  # In this example, the…>>
+    <function def invalid_format(test): ...  # In this example, the…>
+    <function def example_code(): ...  # Test case for https:…>>
