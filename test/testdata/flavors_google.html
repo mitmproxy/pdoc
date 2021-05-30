@@ -99,6 +99,9 @@
             <li>
                     <a class="function" href="#example_code">example_code</a>
             </li>
+            <li>
+                    <a class="function" href="#indented_code_blank_lines">indented_code_blank_lines</a>
+            </li>
     </ul>
 
 
@@ -582,6 +585,21 @@ with it.</p></li>
 <span class="sd">        tmp = a2()</span>
 
 <span class="sd">        tmp2 = a()</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">indented_code_blank_lines</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test case for blank lines interrupting code blocks when inside an indented block</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```python</span>
+<span class="sd">        if True:</span>
+<span class="sd">            print()</span>
+
+<span class="sd">            print()</span>
+
+<span class="sd">            print()</span>
 <span class="sd">        ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
@@ -1648,6 +1666,51 @@ there is a colon missing in the previous line</li>
   <div class="codehilite"><pre><span></span><code><span class="n">tmp</span> <span class="o">=</span> <span class="n">a2</span><span class="p">()</span>
 
 <span class="n">tmp2</span> <span class="o">=</span> <span class="n">a</span><span class="p">()</span>
+</code></pre></div>
+</blockquote>
+</div>
+
+
+                </section>
+                <section id="indented_code_blank_lines">
+                            <div class="attr function"><a class="headerlink" href="#indented_code_blank_lines">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">indented_code_blank_lines</span><span class="signature">()</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">indented_code_blank_lines</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test case for blank lines interrupting code blocks when inside an indented block</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```python</span>
+<span class="sd">        if True:</span>
+<span class="sd">            print()</span>
+
+<span class="sd">            print()</span>
+
+<span class="sd">            print()</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Test case for blank lines interrupting code blocks when inside an indented block</p>
+
+<h6 id="example">Example</h6>
+
+<blockquote>
+  <div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">()</span>
+ 
+    <span class="nb">print</span><span class="p">()</span>
+ 
+    <span class="nb">print</span><span class="p">()</span>
 </code></pre></div>
 </blockquote>
 </div>

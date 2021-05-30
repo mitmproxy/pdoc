@@ -424,3 +424,18 @@ def example_code():
         tmp2 = a()
         ```
     """
+
+def indented_code_blank_lines():
+    """
+    Test case for blank lines interrupting code blocks when inside an indented block
+
+    Example:
+        ```python
+        if True:
+            print()
+
+            print()
+
+            print()
+        ```
+    """

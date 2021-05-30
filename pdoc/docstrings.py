@@ -78,6 +78,21 @@ def _google_section(m: re.Match[str]) -> str:
             contents += "\n"
     else:
         contents = indent(contents, "> ", lambda line: True)
+        if '```' in contents:
+            lines = contents.split('\n')
+            inside_code_block = False
+            for index, line in enumerate(lines):
+                if '```' in line:
+                    inside_code_block = not inside_code_block
+                elif inside_code_block:
+                    if line[2:].startswith(' ') and lines[index - 1] == '> ':
+                        # if the line, minus the blockquote chars, starts with an indent
+                        # and the previous line was blank
+                        # the blockquote will be considered broken up by said blank line.
+                        # add in a character that doesn't register as a space to trick
+                        # the markdown parser into rendering the blockquote as one item
+                        lines[index - 1] = '> \u2028'
+            contents = '\n'.join(lines)
 
     return f"\n###### {name}\n{contents}\n"
 
