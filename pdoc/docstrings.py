@@ -58,6 +58,9 @@ def google(docstring: str) -> str:
     )
 
 
+GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
+
+
 def _google_section(m: re.Match[str]) -> str:
     name = m.group("name")
     contents = dedent(m.group("contents"))
@@ -360,6 +363,3 @@ def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
         contents,
         flags=re.MULTILINE | re.VERBOSE,
     )
-
-
-GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
