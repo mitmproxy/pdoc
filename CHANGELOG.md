@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-05-30: pdoc 7.0.3
+
  - Do not show a search bar on the module page if only one module is documented.
    If the entire documentation is contained on a single HTML page, the browser's search functionality is just as good.
    Users can piggyback on their preexisting knowledge about the search semantics in this case.
