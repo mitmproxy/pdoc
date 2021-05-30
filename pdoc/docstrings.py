@@ -61,7 +61,7 @@ def google(docstring: str) -> str:
 def _google_section(m: re.Match[str]) -> str:
     name = m.group("name")
     contents = dedent(m.group("contents"))
-    if name in ("Args", "Raises", "Attributes"):
+    if name in GOOGLE_LIST_SECTIONS:
         items = _indented_list(contents)
         contents = ""
         for item in items:
@@ -360,3 +360,6 @@ def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
         contents,
         flags=re.MULTILINE | re.VERBOSE,
     )
+
+
+GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
