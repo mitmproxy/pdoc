@@ -25,48 +25,28 @@ from unittest.mock import patch
 
 from . import doc_ast
 
-AnyException = (SystemExit, GeneratorExit, Exception)
-"""BaseException, but excluding KeyboardInterrupt.
 
-Modules may raise SystemExit on import (which we want to catch),
-but we don't want to catch a user's KeyboardInterrupt.
-"""
-
-
-@contextmanager
-def mock_some_common_side_effects():
+def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
     """
-    This context manager is applied when importing modules. It mocks some common side effects that may happen upon
-    module import. For example, importing the builtin `antigravity` module normally causes a webbrowser to open,
-    which we want to suppress. Note that this function must not be used for security purposes, it's easily bypassable.
-    """
-    _popen = subprocess.Popen
-
-    if platform.system() == "Windows":  # pragma: no cover
-        noop_exe = "echo.exe"
-    else:  # pragma: no cover
-        noop_exe = "echo"
-
-    def noop(*args, **kwargs):
-        pass
-
-    with patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)), patch(
-        "os.startfile", new=noop, create=True
-    ), patch("sys.stdout", new=io.StringIO()), patch(
-        "sys.stderr", new=io.StringIO()
-    ), patch(
-        "sys.stdin", new=io.StringIO()
-    ):
-        yield
-
-
-def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
-    """
-    This function processes a list of module specifications and returns the list of module names, including all
+    This function processes a list of module specifications and returns a collection of module names, including all
     submodules, that should be processed by pdoc.
+
+    A module specification can either be the name of an installed module, or the path to a specific file or package.
+    For example, the following strings are valid module specifications:
+
+     - `typing`
+     - `collections.abc`
+     - `./test/testdata/demo_long.py`
+     - `./test/testdata/demopackage`
+
+
+    Technically we return a dict with empty values,
+    which has efficient `__iter__` and `__contains__` implementations.
+
+    *This function has side-effects:* See `parse_spec`.
     """
     module_index: dict[str, None] = {}
-    for spec in modules:
+    for spec in specs:
         modname = parse_spec(spec)
 
         try:
@@ -90,71 +70,15 @@ def parse_specs(modules: Sequence[Union[Path, str]]) -> dict[str, None]:
                 module_index[m.name] = None
 
     if not module_index:
-        raise ValueError(f"Module not found: {', '.join(str(x) for x in modules)}.")
+        raise ValueError(f"Module not found: {', '.join(str(x) for x in specs)}.")
 
     return module_index
-
-
-def _all_submodules(modulename: str) -> bool:
-    return True
-
-
-def walk_packages2(
-    modules: Iterable[pkgutil.ModuleInfo],
-    module_filter: Callable[[str], bool] = _all_submodules,
-) -> Iterator[pkgutil.ModuleInfo]:
-    """
-    For a given list of modules, recursively yield their names and all their submodules' names.
-
-    This function is similar to pkgutil.walk_packages, but respects a package's __all__ attribute if specified.
-    If __all__ is defined, submodules not listed in __all__ are excluded.
-    """
-
-    # noinspection PyDefaultArgument
-    def seen(p, m={}):  # pragma: no cover
-        if p in m:
-            return True
-        m[p] = True
-
-    for mod in modules:
-        # is __all__ defined and the module not in __all__?
-        if not module_filter(mod.name.rpartition(".")[2]):
-            continue
-
-        yield mod
-
-        if mod.ispkg:
-            try:
-                module = load_module(mod.name)
-            except RuntimeError:
-                warnings.warn(
-                    f"Error loading {mod.name}:\n{traceback.format_exc()}",
-                    RuntimeWarning,
-                )
-                continue
-
-            mod_all: list[str] = getattr(module, "__all__", None)
-            if mod_all is not None:
-                filt = mod_all.__contains__
-            else:
-                filt = _all_submodules
-
-            # don't traverse path items we've seen before
-            path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
-
-            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
 
 
 def parse_spec(spec: Union[Path, str]) -> str:
     """
     This functions parses a user's module specification into a module identifier that can be imported.
-    A module specification can either be the name of an installed module, or the path to a specific file or package.
-    For example, the following strings are valid module specifications:
-
-     - typing
-     - collections.abc
-     - ./test/testdata/demo_long.py
-     - ./test/testdata/demopackage
+    If both a local file/directory and an importable module with the same name exist, a warning will be printed.
 
     *This function has side-effects:* `sys.path` will be amended if the specification is a path.
     If this side-effect is undesired, pass a module name instead.
@@ -210,6 +134,34 @@ def parse_spec(spec: Union[Path, str]) -> str:
         return spec
 
 
+@contextmanager
+def mock_some_common_side_effects():
+    """
+    This context manager is applied when importing modules. It mocks some common side effects that may happen upon
+    module import. For example, `import antigravity` normally causes a webbrowser to open, which we want to suppress.
+
+    Note that this function must not be used for security purposes, it's easily bypassable.
+    """
+    _popen = subprocess.Popen
+
+    if platform.system() == "Windows":  # pragma: no cover
+        noop_exe = "echo.exe"
+    else:  # pragma: no cover
+        noop_exe = "echo"
+
+    def noop(*args, **kwargs):
+        pass
+
+    with patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)), patch(
+        "os.startfile", new=noop, create=True
+    ), patch("sys.stdout", new=io.StringIO()), patch(
+        "sys.stderr", new=io.StringIO()
+    ), patch(
+        "sys.stdin", new=io.StringIO()
+    ):
+        yield
+
+
 @mock_some_common_side_effects()
 def load_module(module: str) -> types.ModuleType:
     """Try to import a module. If import fails, a RuntimeError is raised.
@@ -221,7 +173,64 @@ def load_module(module: str) -> types.ModuleType:
         raise RuntimeError(f"Error importing {module}") from e
 
 
-@mock_some_common_side_effects()
+AnyException = (SystemExit, GeneratorExit, Exception)
+"""BaseException, but excluding KeyboardInterrupt.
+
+Modules may raise SystemExit on import (which we want to catch),
+but we don't want to catch a user's KeyboardInterrupt.
+"""
+
+
+def _all_submodules(modulename: str) -> bool:
+    return True
+
+
+def walk_packages2(
+    modules: Iterable[pkgutil.ModuleInfo],
+    module_filter: Callable[[str], bool] = _all_submodules,
+) -> Iterator[pkgutil.ModuleInfo]:
+    """
+    For a given list of modules, recursively yield their names and all their submodules' names.
+
+    This function is similar to `pkgutil.walk_packages`, but respects a package's `__all__` attribute if specified.
+    If `__all__` is defined, submodules not listed in `__all__` are excluded.
+    """
+
+    # noinspection PyDefaultArgument
+    def seen(p, m={}):  # pragma: no cover
+        if p in m:
+            return True
+        m[p] = True
+
+    for mod in modules:
+        # is __all__ defined and the module not in __all__?
+        if not module_filter(mod.name.rpartition(".")[2]):
+            continue
+
+        yield mod
+
+        if mod.ispkg:
+            try:
+                module = load_module(mod.name)
+            except RuntimeError:
+                warnings.warn(
+                    f"Error loading {mod.name}:\n{traceback.format_exc()}",
+                    RuntimeWarning,
+                )
+                continue
+
+            mod_all: list[str] = getattr(module, "__all__", None)
+            if mod_all is not None:
+                filt = mod_all.__contains__
+            else:
+                filt = _all_submodules
+
+            # don't traverse path items we've seen before
+            path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
+
+            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
+
+
 def module_mtime(modulename: str) -> Optional[float]:
     """Returns the time the specified module file was last modified, or `None` if this cannot be determined.
     The primary use of this is live-reloading modules on modification."""
@@ -282,3 +291,14 @@ def invalidate_caches(module_name: str) -> None:
                 RuntimeWarning,
                 stacklevel=2,
             )
+
+
+def parse_specs(
+    modules: Sequence[Union[Path, str]]
+) -> dict[str, None]:  # pragma: no cover
+    """A deprecated alias for `walk_specs`."""
+    warnings.warn(
+        "pdoc.extract.parse_specs has been renamed to pdoc.extract.walk_specs",
+        PendingDeprecationWarning,
+    )
+    return walk_specs(modules)

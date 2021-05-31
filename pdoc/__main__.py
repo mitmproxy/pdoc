@@ -159,7 +159,7 @@ def cli(args: list[str] = None) -> None:
     else:
         all_modules: Collection[str]
         if opts.modules:
-            all_modules = extract.parse_specs(opts.modules)
+            all_modules = extract.walk_specs(opts.modules)
         else:
             all_modules = pdoc.web.AllModules()
 

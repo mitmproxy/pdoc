@@ -381,7 +381,7 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    module_names = extract.parse_specs(modules)
+    module_names = extract.walk_specs(modules)
     all_modules: dict[str, doc.Module] = {}
 
     if format == "html":

@@ -2,7 +2,8 @@
 
 # Unreleased: pdoc next
 
- -
+ - Improve documentation of `pdoc.extract`.
+ - Mark `pdoc.extract.parse_specs` as deprecated.
 
 # 2021-05-30: pdoc 7.0.3
 
