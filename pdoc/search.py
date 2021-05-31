@@ -49,7 +49,7 @@ from pdoc.render_helpers import render_docstring
 
 
 def make_index(
-    all_modules: dict[str, pdoc.doc.Module],
+    doc_objects: dict[str, pdoc.doc.Module],
     is_public: Callable[[pdoc.doc.Doc], bool],
     default_docformat: str,
 ) -> list[dict]:
@@ -59,7 +59,7 @@ def make_index(
     """
 
     documents = []
-    for modname, mod in all_modules.items():
+    for modname, mod in doc_objects.items():
 
         def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
             # TODO: We could be extra fancy here and split `doc.docstring` by toc sections.

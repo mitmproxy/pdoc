@@ -96,7 +96,7 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
+def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
     """Renders the Elasticlunr.js search index."""
     # This is a rather terrible hack to determine if a given object is public and should be included in the index.
     module_template: jinja2.Template = env.get_template("module.html.jinja2")
@@ -110,7 +110,7 @@ def search_index(all_modules: dict[str, pdoc.doc.Module]) -> str:
         return bool(ctx["is_public"](x).strip())
 
     index = make_index(
-        all_modules,
+        doc_objects,
         is_public,
         env.globals["docformat"],
     )
