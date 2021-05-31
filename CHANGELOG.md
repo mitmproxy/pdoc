@@ -2,8 +2,11 @@
 
 # Unreleased: pdoc next
 
- - Improve documentation of `pdoc.extract`.
- - Mark `pdoc.extract.parse_specs` as deprecated.
+ - Invoking `pdoc` without any arguments now asks the user to specify module name
+   instead of starting pdoc with all available modules. The previous implementation 
+   had a poor user experience as building the search index took too long.
+ - Improve documentation of `pdoc.extract`. `pdoc.extract.parse_specs` has been renamed to `walk_specs`, 
+   the old API now emits a deprecation warning.
 
 # 2021-05-30: pdoc 7.0.3
 

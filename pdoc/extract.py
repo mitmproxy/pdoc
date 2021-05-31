@@ -40,12 +40,12 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
      - `./test/testdata/demopackage`
 
 
-    Technically we return a dict with empty values,
+    Practically you can think of this function returning a list. Technically we return a dict with empty values,
     which has efficient `__iter__` and `__contains__` implementations.
 
     *This function has side-effects:* See `parse_spec`.
     """
-    module_index: dict[str, None] = {}
+    all_modules: dict[str, None] = {}
     for spec in specs:
         modname = parse_spec(spec)
 
@@ -67,12 +67,12 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
                 ispkg=bool(modspec.submodule_search_locations),
             )
             for m in walk_packages2([mod_info]):
-                module_index[m.name] = None
+                all_modules[m.name] = None
 
-    if not module_index:
+    if not all_modules:
         raise ValueError(f"Module not found: {', '.join(str(x) for x in specs)}.")
 
-    return module_index
+    return all_modules
 
 
 def parse_spec(spec: Union[Path, str]) -> str:

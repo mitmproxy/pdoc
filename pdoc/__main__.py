@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import platform
 import subprocess
-from collections.abc import Collection
 from pathlib import Path
 
 import pdoc
@@ -23,8 +22,7 @@ parser.add_argument(
     default=[],
     metavar="module",
     nargs="*",
-    help="Python module names. These may be import paths resolvable in "
-    "the current environment or file paths.",
+    help="Python module names. These may be importable Python module names or file paths.",
 )
 parser.add_argument(
     "-o",
@@ -85,12 +83,13 @@ parser.add_argument(
     "-n",
     "--no-browser",
     action="store_true",
-    help="Don't start a browser after the web server has started.",
+    help="Don't open a browser after the web server has started.",
 )
 parser.add_argument("--help", action="help", help="Show this help message and exit.")
 parser.add_argument(
     "--version",
     action="store_true",
+    default=argparse.SUPPRESS,
     help="Show version information and exit.",
 )
 
@@ -133,13 +132,20 @@ def get_dev_version() -> str:
 
 
 def cli(args: list[str] = None) -> None:
-    """ Command-line entry point """
+    """Command-line entry point"""
     opts = parser.parse_args(args)
-    if opts.version:
+    if getattr(opts, "version", False):
         print(
             f"pdoc: {get_dev_version()}\n"
             f"Python: {platform.python_version()}\n"
             f"Platform: {platform.platform()}"
+        )
+        return
+
+    if not opts.modules:
+        parser.print_help()
+        print(
+            "\n\x1b[31mError: Please specify which files or modules you want to document.\x1b[0m"
         )
         return
 
@@ -157,12 +163,7 @@ def cli(args: list[str] = None) -> None:
         )
         return
     else:
-        all_modules: Collection[str]
-        if opts.modules:
-            all_modules = extract.walk_specs(opts.modules)
-        else:
-            all_modules = pdoc.web.AllModules()
-
+        all_modules = extract.walk_specs(opts.modules)
         with pdoc.web.DocServer(
             (opts.host, opts.port),
             all_modules,

@@ -4,7 +4,7 @@ import threading
 
 import pytest
 
-from pdoc.web import DocServer, DocHandler, AllModules
+from pdoc.web import DocServer, DocHandler
 
 
 class ReadResponse(threading.Thread):
@@ -72,12 +72,3 @@ def test_get_module_mtime():
 
 def test_get_unknown():
     assert b"404 Not Found" in handle_request(b"GET /unknown HTTP/1.1\r\n\r\n")
-
-
-def test_all_modules():
-    a = AllModules()
-    assert "jinja2" in list(a)
-    assert len(a)
-    assert "jinja2" in a
-    assert "typing" not in a
-    assert "jinja2.unknown" not in a

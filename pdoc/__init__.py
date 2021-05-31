@@ -381,13 +381,13 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    module_names = extract.walk_specs(modules)
-    all_modules: dict[str, doc.Module] = {}
+    all_modules = extract.walk_specs(modules)
+    doc_objects: dict[str, doc.Module] = {}
 
     if format == "html":
 
         def r(mod: doc.Module) -> str:
-            return render.html_module(module=mod, all_modules=module_names)
+            return render.html_module(module=mod, all_modules=all_modules)
 
     elif format == "markdown":  # pragma: no cover
         raise NotImplementedError(
@@ -398,16 +398,16 @@ def pdoc(
     else:
         raise ValueError(f"Invalid rendering format {format!r}.")
 
-    for mod in module_names:
+    for module in all_modules:
         try:
-            m = extract.load_module(mod)
+            m = extract.load_module(module)
         except RuntimeError:
             warnings.warn(
-                f"Error importing {mod}:\n{traceback.format_exc()}", RuntimeWarning
+                f"Error importing {module}:\n{traceback.format_exc()}", RuntimeWarning
             )
         else:
-            all_modules[mod] = doc.Module(m)
-            write(all_modules[mod])
+            doc_objects[module] = doc.Module(m)
+            write(doc_objects[module])
 
         if not output_directory:
             return retval.getvalue()
@@ -415,11 +415,11 @@ def pdoc(
     assert output_directory
 
     if format == "html":
-        index = render.html_index(all_modules)
+        index = render.html_index(all_modules=all_modules)
         if index:
             (output_directory / "index.html").write_bytes(index.encode())
 
-        search = render.search_index(all_modules)
+        search = render.search_index(doc_objects)
         if search:
             (output_directory / "search.json").write_bytes(search.encode())
 

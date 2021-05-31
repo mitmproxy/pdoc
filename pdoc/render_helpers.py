@@ -3,12 +3,13 @@ from __future__ import annotations
 import os
 import re
 from contextlib import contextmanager
-from typing import Container, Mapping, Optional
+from typing import Collection, Mapping, Optional
 from unittest.mock import patch
 
 import pygments.formatters.html
 import pygments.lexers.python
 from jinja2 import ext, nodes
+
 try:
     # Jinja2 >= 3.0
     from jinja2 import pass_context  # type: ignore
@@ -85,7 +86,7 @@ def render_docstring(
     return _markdown(docstring)
 
 
-def split_identifier(all_modules: Container[str], fullname: str) -> tuple[str, str]:
+def split_identifier(all_modules: Collection[str], fullname: str) -> tuple[str, str]:
     """
     Split an identifier into a `(modulename, qualname)` tuple. For example, `pdoc.render_helpers.split_identifier`
     would be split into `("pdoc.render_helpers","split_identifier")`. This is necessary to generate links to the
