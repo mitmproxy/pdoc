@@ -152,6 +152,20 @@ class Doc(Generic[T]):
             return None
 
     @cached_property
+    def source_lines(self) -> Optional[tuple[int, int]]:
+        """
+        Return a `(start, end)` line number tuple for this object.
+
+        If no source file can be found, `None` is returned.
+        """
+        try:
+            obj = inspect.unwrap(self.obj)  # type: ignore
+            lines, start = inspect.getsourcelines(obj)
+            return start, start + len(lines) - 1
+        except Exception:
+            return None
+
+    @cached_property
     def is_inherited(self) -> bool:
         """
         If True, the doc object is inherited from another location.
