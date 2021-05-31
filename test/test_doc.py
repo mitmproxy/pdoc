@@ -33,6 +33,7 @@ def test_attrs():
     assert m.variables
     assert m.classes
     assert m.functions
+    assert m.source_lines
 
     c = m.members["Foo"]
     assert isinstance(c, Class)
@@ -84,9 +85,10 @@ def test_class_with_raising_getattr():
         assert c.members
 
 
-def test_builtin_source_file():
+def test_builtin_source():
     m = Module(builtins)
     assert m.source_file is None
+    assert m.source_lines is None
 
 
 @pytest.mark.skipif(sys.version_info < (3, 9), reason="3.9+ only")
