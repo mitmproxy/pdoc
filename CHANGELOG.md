@@ -8,6 +8,7 @@
  - Improve documentation of `pdoc.extract`. `pdoc.extract.parse_specs` has been renamed to `walk_specs`, 
    the old API now emits a deprecation warning.
  - Add `pdoc.doc.Doc.source_lines` to access where in a file an object is defined.
+ - Fix a crash when importing `asyncio` on Windows on Python 3.7. 
 
 # 2021-05-30: pdoc 7.0.3
 

@@ -142,8 +142,6 @@ def mock_some_common_side_effects():
 
     Note that this function must not be used for security purposes, it's easily bypassable.
     """
-    _popen = subprocess.Popen
-
     if platform.system() == "Windows":  # pragma: no cover
         noop_exe = "echo.exe"
     else:  # pragma: no cover
@@ -152,7 +150,12 @@ def mock_some_common_side_effects():
     def noop(*args, **kwargs):
         pass
 
-    with patch("subprocess.Popen", new=partial(_popen, executable=noop_exe)), patch(
+    class PdocDefusedPopen(subprocess.Popen):
+        def __init__(self, *args, **kwargs):
+            kwargs["executable"] = noop_exe
+            super().__init__(*args, **kwargs)
+
+    with patch("subprocess.Popen", new=PdocDefusedPopen), patch(
         "os.startfile", new=noop, create=True
     ), patch("sys.stdout", new=io.StringIO()), patch(
         "sys.stderr", new=io.StringIO()
