@@ -159,8 +159,7 @@ class Doc(Generic[T]):
         If no source file can be found, `None` is returned.
         """
         try:
-            obj = inspect.unwrap(self.obj)  # type: ignore
-            lines, start = inspect.getsourcelines(obj)
+            lines, start = inspect.getsourcelines(self.obj)  # type: ignore
             return start, start + len(lines) - 1
         except Exception:
             return None
@@ -619,7 +618,6 @@ class Class(Namespace[type]):
         Each parent class is represented as a `(modulename, qualname, display_text)` tuple.
         """
         bases = []
-        # noinspection PyUnresolvedReferences
         for x in _safe_getattr(self.obj, "__orig_bases__", self.obj.__bases__):
             if x is object:
                 continue
@@ -730,7 +728,6 @@ class Function(Doc[types.FunctionType]):
         """Initialize a function's documentation object."""
         unwrapped: types.FunctionType
         if isinstance(func, (classmethod, staticmethod)):
-            # noinspection PyTypeChecker
             unwrapped = func.__func__  # type: ignore
         else:
             unwrapped = func
@@ -786,7 +783,6 @@ class Function(Doc[types.FunctionType]):
     def decorators(self) -> list[str]:
         """A list of all decorators the function is decorated with."""
         decorators = []
-        # noinspection PyTypeChecker
         obj: types.FunctionType = self.obj  # type: ignore
         for t in doc_ast.parse(obj).decorator_list:
             decorators.append(f"@{doc_ast.unparse(t)}")
@@ -837,7 +833,6 @@ class Function(Doc[types.FunctionType]):
                 )
             )
         for p in sig.parameters.values():
-            # noinspection PyTypeHints
             p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
         return sig
 
@@ -875,7 +870,6 @@ class Variable(Doc[None]):
     If there is no type annotation, `pdoc.doc_types.empty` is used as a placeholder.
     """
 
-    # noinspection PyPropertyAccess
     def __init__(
         self,
         modulename: str,
@@ -895,6 +889,7 @@ class Variable(Doc[None]):
         must be passed manually in the constructor.
         """
         super().__init__(modulename, qualname, None, taken_from)
+        # noinspection PyPropertyAccess
         self.docstring = inspect.cleandoc(docstring)
         self.annotation = annotation
         self.default_value = default_value

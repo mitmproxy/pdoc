@@ -33,7 +33,6 @@ def get_source(obj: Any) -> str:
 @cache
 def _get_source(obj: Any) -> str:
     try:
-        obj = inspect.unwrap(obj)
         return inspect.getsource(obj)
     except Exception:
         return ""
