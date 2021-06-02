@@ -18,7 +18,6 @@ import traceback
 import types
 import warnings
 from contextlib import contextmanager
-from functools import partial
 from pathlib import Path
 from typing import Callable, Iterable, Iterator, Optional, Sequence, Union
 from unittest.mock import patch
@@ -151,7 +150,7 @@ def mock_some_common_side_effects():
         pass
 
     class PdocDefusedPopen(subprocess.Popen):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs):  # pragma: no cover
             kwargs["executable"] = noop_exe
             super().__init__(*args, **kwargs)
 

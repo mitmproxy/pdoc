@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-06-03: pdoc 7.1.0
+
  - Invoking `pdoc` without any arguments now asks the user to specify module name
    instead of starting pdoc with all available modules. The previous implementation 
    had a poor user experience as building the search index took too long.
