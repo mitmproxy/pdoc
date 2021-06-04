@@ -191,6 +191,15 @@
             <li>
                     <a class="function" href="#unhashable">unhashable</a>
             </li>
+            <li>
+                    <a class="class" href="#AbstractClass">AbstractClass</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#AbstractClass.foo">foo</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -209,7 +218,8 @@ misc    </h1>
                 
                         <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+            <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
 
@@ -485,6 +495,14 @@ misc    </h1>
 
 <span class="n">unhashable</span> <span class="o">=</span> <span class="n">UnhashableDataDescriptor</span><span class="p">()</span>
 
+
+<span class="k">class</span> <span class="nc">AbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -506,6 +524,7 @@ misc    </h1>
     <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
     <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
     <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1542,6 +1561,52 @@ indents</p>
         
     
 
+                </section>
+                <section id="AbstractClass">
+                                <div class="attr class">
+        <a class="headerlink" href="#AbstractClass">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">AbstractClass</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">AbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This class shouldn't show a constructor as it's abstract.</p>
+</div>
+
+
+                            <div id="AbstractClass.foo" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#AbstractClass.foo">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@abc.abstractmethod</div>
+
+            <span class="def">def</span>
+            <span class="name">foo</span><span class="signature">(self)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
                 </section>
     </main>
 </body>

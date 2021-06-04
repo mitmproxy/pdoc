@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Do not show constructors for abstract base classes unless they have a custom docstring.
 
 # 2021-06-03: pdoc 7.1.0
 

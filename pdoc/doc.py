@@ -604,6 +604,15 @@ class Class(Namespace[type]):
                 if not prefer_init_over_new:
                     unsorted["__init__"] = new
 
+        if (
+            inspect.isabstract(self.obj) and
+            _safe_getattr(self.obj, "__init__", object.__init__).__doc__ in (None, object.__init__.__doc__)
+        ):
+            # Special case: We don't want to show constructors for abstract base classes unless
+            # they have a custom docstring. If a docstring is present and display is still undesired,
+            # users need to override the is_public macro.
+            del unsorted["__init__"]
+
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)

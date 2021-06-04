@@ -1,3 +1,4 @@
+import abc
 from functools import lru_cache
 from typing import Generic
 from typing import TypeVar
@@ -274,6 +275,14 @@ class UnhashableDataDescriptor:
 
 unhashable = UnhashableDataDescriptor()
 
+
+class AbstractClass(metaclass=abc.ABCMeta):
+    """This class shouldn't show a constructor as it's abstract."""
+    @abc.abstractmethod
+    def foo(self):
+        pass
+
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -295,4 +304,5 @@ __all__ = [  # noqa
     "Indented",
     "fun_with_protected_decorator",
     "unhashable",
+    "AbstractClass",
 ]
