@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-06-11: pdoc 7.1.1
+
  - Do not show constructors for abstract base classes unless they have a custom docstring.
  - Fix math example to render formulae in search results.
 
