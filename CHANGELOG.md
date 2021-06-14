@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Fix hot-reloading of included Markdown files.
 
 # 2021-06-11: pdoc 7.1.1
 
