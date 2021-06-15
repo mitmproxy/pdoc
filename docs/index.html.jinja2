@@ -63,7 +63,7 @@
                 max-width: 200px;
             }
 
-            h1 {
+            h1, h2 {
                 font-size: 1.75rem;
             }
 
@@ -169,16 +169,22 @@
         </style>
     {% endfilter %}{% endautoescape %}
 </head>
+{%- macro icon(name) -%}
+    {% autoescape false %}
+    {% filter replace('<svg ', '<svg aria-hidden="true" ') %}
+        {% include "resources/" + name + ".svg" %}
+    {% endfilter %}
+    {% endautoescape %}
+{%- endmacro %}
 <body class="my-4">
-<div class="container-fluid">
+<header class="container-fluid">
     <div class="row py-4 my-4 align-items-center">
         <div class="col-md-6 text-center text-md-end">{% include "logo.svg" %}</div>
         <div class="col-md-6 pt-md-0 pt-4 text-center text-md-start"><h1><span class="visually-hidden">pdoc: </span>API Documentation<br>for Python Projects</h1>
         </div>
     </div>
-</div>
-
-<div id="example" class="d-flex align-items-stretch justify-content-center flex-wrap">
+</header>
+<aside id="example" class="d-flex align-items-stretch justify-content-center flex-wrap">
     <div id="example-invocation" class="col-12 text-center">
         <code class="shadow">pdoc demo.py</code>
     </div>
@@ -188,7 +194,7 @@
     <label class="btn btn-outline-success" for="view-render">Rendered Docs</label>
     <div class="col-12"></div>
     <div id="example-code">
-        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="14" viewBox="0 0 54 14">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="54" height="14" viewBox="0 0 54 14">
             <g>
                 <circle cx="6" cy="6" r="6" fill="#FF5F56" stroke="#E0443E" stroke-width=".5"></circle>
                 <circle cx="26" cy="6" r="6" fill="#FFBD2E" stroke="#DEA123" stroke-width=".5"></circle>
@@ -198,54 +204,54 @@
         <div class="title">demo.py</div>
         {{ example_html }}
     </div>
-    <iframe id="example-render" src="docs/demo.html"></iframe>
-</div>
-
-<div class="container text-center my-4 py-4">
-
-    <div class="row justify-content-center mb-4">
+    <iframe title="rendered demo.py documentation" id="example-render" src="docs/demo.html"></iframe>
+</aside>
+<main class="container text-center my-4 py-4">
+    <div class="row justify-content-center mb-2">
         <div class="col-md-7">
-            <code>pdoc</code> auto-generates API documentation that follows your project's Python module hierarchy.
-            It requires no configuration, has first-class support for type annotations,
-            cross-links between identifiers, comes with an integrated live-reloading web server,
-            uses customizable HTML templates, understands numpydoc and Google-style docstrings,
-            and is permissively licensed.
+            <p>
+                <code>pdoc</code> auto-generates API documentation that follows your project's Python module hierarchy.
+                It requires no configuration, has first-class support for type annotations,
+                cross-links between identifiers, comes with an integrated live-reloading web server,
+                uses customizable HTML templates, understands numpydoc and Google-style docstrings,
+                and is permissively licensed.
+            </p>
         </div>
     </div>
 
-    <h3>Installation</h3>
+    <h2>Installation</h2>
     <div class="d-inline-block" style="max-width: 16rem">
         <div class="input-group input-group-lg shadow" onclick="getElementById('install').select()">
             <label for="install" class="input-group-text" aria-label="install instructions">
-                {% include "resources/terminal-fill.svg" %}
+                {{ icon("terminal-fill") }}
             </label>
             <input id="install" type="text" class="form-control bg-white" value="pip install pdoc" readonly>
         </div>
     </div>
     <div class="mb-3 text-muted">Latest Release: {{ __version__ }}</div>
     <a href="docs/pdoc.html" class="btn btn-lg btn-success shadow mb-4 d-inline-flex align-items-center">
-        {% include "resources/book-half.svg" %}
+        {{ icon("book-half") }}
         &nbsp;Documentation
     </a>
     <a href="https://github.com/mitmproxy/pdoc/blob/main/CHANGELOG.md"
        class="btn btn-lg btn-danger shadow mb-4 d-inline-flex align-items-center">
-        {% include "resources/newspaper.svg" %}
+        {{ icon("newspaper") }}
         &nbsp;Changelog
     </a>
     <div class="d-md-none"></div>
     <a href="https://pypi.org/project/pdoc/"
        itemprop="sameAs"
        class="btn btn-lg btn-warning shadow mb-4 d-inline-flex align-items-center">
-        {% include "resources/box-seam.svg" %}
+        {{ icon("box-seam") }}
         &nbsp;PyPI
     </a>
     <a href="https://github.com/mitmproxy/pdoc"
        itemprop="sameAs"
        class="btn btn-lg btn-dark shadow mb-4 d-inline-flex align-items-center">
-        {% include "resources/github.svg" %}
+        {{ icon("github") }}
         &nbsp;GitHub
     </a>
-</div>
-<div class="d-none d-md-block">{% include "resources/_github-button.html" %}</div>
+</main>
+<footer class="d-none d-md-block">{% include "resources/_github-button.html" %}</footer>
 </body>
 </html>
