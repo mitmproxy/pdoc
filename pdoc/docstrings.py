@@ -45,7 +45,7 @@ def google(docstring: str) -> str:
     """Convert Google-style docstring sections into Markdown."""
     return re.sub(
         r"""
-        ^(?P<name>[A-Z][A-Za-z]+):\n
+        ^(?P<name>[A-Z][A-Z a-z]+):\n
         (?P<contents>(
             \n        # empty lines
             |         # or
