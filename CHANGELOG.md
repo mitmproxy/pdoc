@@ -3,6 +3,7 @@
 # Unreleased: pdoc next
 
  - Fix hot-reloading of included Markdown files.
+ - Allow google docstring section headers to contain spaces
 
 # 2021-06-11: pdoc 7.1.1
 
