@@ -29,6 +29,7 @@ def configure(
     template_directory: Optional[Path] = None,
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
+    show_source: bool = True,
 ):
     """
     Configure the rendering output.
@@ -55,6 +56,7 @@ def configure(
 
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
+    env.globals["show_source"] = show_source
 
 
 def html_module(
@@ -151,4 +153,5 @@ env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["edit_url_map"] = {}
 env.globals["docformat"] = ""
+env.globals["show_source"] = True
 env.globals["env"] = os.environ

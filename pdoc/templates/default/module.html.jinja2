@@ -651,7 +651,7 @@
 {% enddefaultmacro %}
 {# fmt: on #}
 {% defaultmacro view_source(doc) %}
-    {% if doc.source %}
+    {% if show_source and doc.source %}
         <details>
             <summary>View Source</summary>
             {{ doc.source | highlight }}

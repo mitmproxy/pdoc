@@ -85,6 +85,11 @@ parser.add_argument(
     action="store_true",
     help="Don't open a browser after the web server has started.",
 )
+parser.add_argument(
+    "--hide-source",
+    action="store_true",
+    help="Hide source code of documented functions",
+)
 parser.add_argument("--help", action="help", help="Show this help message and exit.")
 parser.add_argument(
     "--version",
@@ -153,6 +158,7 @@ def cli(args: list[str] = None) -> None:
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
         docformat=opts.docformat,
+        show_source=not opts.hide_source,
     )
 
     if opts.output_directory:
