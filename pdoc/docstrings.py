@@ -69,8 +69,8 @@ def _google_section(m: re.Match[str]) -> str:
         contents = ""
         for item in items:
             try:
-                # last ":" on the first line
-                _, attr, desc = re.split(r"^(.+:)", item, maxsplit=1)
+                # first ":" on the first line
+                _, attr, desc = re.split(r"^(.+?:)", item, maxsplit=1)
             except ValueError:
                 contents += " - " + indent(item, "   ")[3:]
             else:
