@@ -50,6 +50,9 @@ Similar to mypy, pdoc resolves
 automatically.
 """
 
+NO_DOCSTRING: int
+# this variable has a type annotation but not docstring, so it does not show up.
+
 
 def a_simple_function(a: str) -> str:
     """
@@ -206,8 +209,9 @@ class DataDemo:
 
     a: int
     """Again, we can document indivial properties with docstrings."""
-    b: Sequence[str]
-    c: bool = field(repr=False, default=True)
+    a2: Sequence[str]
+    # This property has a type annotation but is not documented, so it does not show up.
+    b: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""
 
 

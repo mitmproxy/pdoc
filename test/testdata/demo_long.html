@@ -131,9 +131,6 @@
                         <li>
                                 <a class="variable" href="#DataDemo.b">b</a>
                         </li>
-                        <li>
-                                <a class="variable" href="#DataDemo.c">c</a>
-                        </li>
                 </ul>
 
             </li>
@@ -244,6 +241,9 @@ which will also show up in the navigation.</p>
 <span class="sd">[string forward references](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#class-name-forward-references)</span>
 <span class="sd">automatically.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NO_DOCSTRING</span><span class="p">:</span> <span class="nb">int</span>
+<span class="c1"># this variable has a type annotation but not docstring, so it does not show up.</span>
 
 
 <span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -401,8 +401,9 @@ which will also show up in the navigation.</p>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 
 
@@ -1102,8 +1103,9 @@ but some special cases -- like os.environ -- are overriden to avoid leaking sens
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
-    <span class="n">b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </pre></div>
 
@@ -1121,7 +1123,7 @@ but you can override it by providing your own (like here!).</p>
                                         <div class="attr function"><a class="headerlink" href="#DataDemo.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">DataDemo</span><span class="signature">(a: int, b: Sequence[str], c: bool = True)</span>
+            <span class="name">DataDemo</span><span class="signature">(a: int, a2: Sequence[str], b: bool = True)</span>
     </div>
 
         
@@ -1142,16 +1144,7 @@ but you can override it by providing your own (like here!).</p>
                             <div id="DataDemo.b" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#DataDemo.b">#&nbsp;&nbsp</a>
 
-        <span class="name">b</span><span class="annotation">: Sequence[str]</span>
-    </div>
-
-    
-
-                            </div>
-                            <div id="DataDemo.c" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#DataDemo.c">#&nbsp;&nbsp</a>
-
-        <span class="name">c</span><span class="annotation">: bool</span><span class="default_value"> = True</span>
+        <span class="name">b</span><span class="annotation">: bool</span><span class="default_value"> = True</span>
     </div>
 
             <div class="docstring"><p>This property is assigned to <code>dataclasses.field()</code>, which works just as well.</p>

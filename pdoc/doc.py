@@ -472,7 +472,7 @@ class Module(Namespace[types.ModuleType]):
                 )
                 if declared_in_this_module or name in self._documented_members:
                     members[name] = obj
-            for name in self._var_annotations:
+            for name in self._var_docstrings:
                 members.setdefault(name, empty)
 
             members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
@@ -580,8 +580,6 @@ class Class(Namespace[type]):
         for cls in self.obj.__mro__:
             for name, obj in cls.__dict__.items():
                 unsorted.setdefault(name, obj)
-        for name in self._var_annotations:
-            unsorted.setdefault(name, empty)
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 

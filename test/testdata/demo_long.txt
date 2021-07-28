@@ -56,10 +56,9 @@ This …
         <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>>
     <var CONST_B = 'yes'  # A constant without t…>
     <@dataclass class demo_long.DataDemo  # This is an example f…
-        <method def __init__(self, a: int, b: Sequence[str], c: bool = True): ...>
+        <method def __init__(self, a: int, a2: Sequence[str], b: bool = True): ...>
         <var a: int  # Again, we can docume…>
-        <var b: Sequence[str]>
-        <var c: bool = True  # This property is ass…>>
+        <var b: bool = True  # This property is ass…>>
     <class demo_long.EnumDemo  # This is an example f…
         <var RED = <EnumDemo.RED: 1>>
         <var GREEN = <EnumDemo.GREEN: 2>>
