@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - 
+
+# 2021-07-28: pdoc 7.2.0
+
  - Don't include variables/attributes that only have a type annotation but no value and no docstring.
    If one wants to document a variable, a docstring should be added.
  - Templating: `render_docstring` is split into `to_markdown` and `to_html` to increase customizability.
