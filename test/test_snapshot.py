@@ -48,15 +48,17 @@ class Snapshot:
                 # noinspection PyTypeChecker
                 pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
 
-                rendered = '<style>iframe {width: 100%; min-height: 50vh}</style>\n'
+                rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
                 for f in sorted(tmpdir.glob("**/*"), reverse=True):
                     if not f.is_file():
                         continue
                     rendered += (
-                        f'<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n' +
-                        '<iframe srcdoc="\n' +
-                        f.read_text("utf8").replace("&", "&amp;").replace(""" " """.strip(), "&quot;") +
-                        '\n"></iframe>\n\n'
+                        f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
+                        + '<iframe srcdoc="\n'
+                        + f.read_text("utf8")
+                        .replace("&", "&amp;")
+                        .replace(""" " """.strip(), "&quot;")
+                        + '\n"></iframe>\n\n'
                     )
 
         else:
@@ -119,7 +121,9 @@ def test_snapshots(snapshot: Snapshot, format: str):
     Compare pdoc's rendered output against stored snapshots.
     """
     if sys.version_info < snapshot.min_version:
-        pytest.skip(f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above.")
+        pytest.skip(
+            f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above."
+        )
     expected = snapshot.outfile(format).read_text("utf8")
     actual = snapshot.make(format)
     assert actual == expected, (

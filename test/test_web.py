@@ -23,7 +23,11 @@ class ReadResponse(threading.Thread):
 
 
 def handle_request(data: bytes) -> bytes:
-    server = DocServer(("", 8080), all_modules=["dataclasses", "err", "jinja2"], bind_and_activate=False)
+    server = DocServer(
+        ("", 8080),
+        all_modules=["dataclasses", "err", "jinja2"],
+        bind_and_activate=False,
+    )
     a, b = socket.socketpair()
     b.send(data)
     t = ReadResponse(b)
@@ -45,7 +49,9 @@ def test_get_index():
 
 def test_get_search_json(monkeypatch):
     with pytest.warns(RuntimeWarning, match="Error importing 'err'"):
-        assert b'"dataclasses.is_dataclass"' in handle_request(b"GET /search.json HTTP/1.1\r\n\r\n")
+        assert b'"dataclasses.is_dataclass"' in handle_request(
+            b"GET /search.json HTTP/1.1\r\n\r\n"
+        )
 
 
 def test_get_module():
@@ -55,7 +61,9 @@ def test_get_module():
 
 
 def test_get_dependency():
-    assert b"a template engine written in pure Python" in handle_request(b"GET /jinja2.html HTTP/1.1\r\n\r\n")
+    assert b"a template engine written in pure Python" in handle_request(
+        b"GET /jinja2.html HTTP/1.1\r\n\r\n"
+    )
 
 
 def test_get_module_err():

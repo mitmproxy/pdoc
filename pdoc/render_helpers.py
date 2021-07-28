@@ -78,9 +78,7 @@ def to_markdown_with_context(context: Context, docstring: str) -> str:
     return to_markdown(docstring, module, docformat)
 
 
-def to_markdown(
-    docstring: str, module: pdoc.doc.Module, default_docformat: str
-) -> str:
+def to_markdown(docstring: str, module: pdoc.doc.Module, default_docformat: str) -> str:
     docformat = getattr(module.obj, "__docformat__", default_docformat) or ""
     return docstrings.convert(docstring, docformat, module.source_file)
 

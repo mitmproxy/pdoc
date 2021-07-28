@@ -5,8 +5,13 @@ from typing import Optional
 
 import pytest
 
-from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, to_html,
-                                 split_identifier)
+from pdoc.render_helpers import (
+    edit_url,
+    qualname_candidates,
+    relative_link,
+    to_html,
+    split_identifier,
+)
 
 
 @pytest.mark.parametrize(
@@ -24,11 +29,14 @@ def test_relative_link(current, target, relative):
     assert relative_link(current, target) == relative
 
 
-@pytest.mark.parametrize("context,candidates", [
-    ("", ["qux"]),
-    ("foo", ["foo.qux", "qux"]),
-    ("foo.bar", ["foo.bar.qux", "foo.qux", "qux"])
-])
+@pytest.mark.parametrize(
+    "context,candidates",
+    [
+        ("", ["qux"]),
+        ("foo", ["foo.qux", "qux"]),
+        ("foo.bar", ["foo.bar.qux", "foo.qux", "qux"]),
+    ],
+)
 def test_qualname_candidates(context, candidates):
     assert qualname_candidates("qux", context) == candidates
 
