@@ -58,7 +58,7 @@ def highlight(code: str) -> str:
 
 
 @cache
-def _markdown(docstring: str) -> str:
+def to_html(docstring: str) -> str:
     """
     Convert `docstring` from Markdown to HTML.
     """
@@ -69,21 +69,20 @@ def _markdown(docstring: str) -> str:
 
 
 @pass_context
-def render_docstring_with_context(context: Context, docstring: str) -> str:
+def to_markdown_with_context(context: Context, docstring: str) -> str:
     """
     Converts `docstring` from a custom docformat to Markdown (if necessary), and then from Markdown to HTML.
     """
     module: pdoc.doc.Module = context["module"]
     docformat: str = context["docformat"]
-    return render_docstring(docstring, module, docformat)
+    return to_markdown(docstring, module, docformat)
 
 
-def render_docstring(
+def to_markdown(
     docstring: str, module: pdoc.doc.Module, default_docformat: str
 ) -> str:
     docformat = getattr(module.obj, "__docformat__", default_docformat) or ""
-    docstring = docstrings.convert(docstring, docformat, module.source_file)
-    return _markdown(docstring)
+    return docstrings.convert(docstring, docformat, module.source_file)
 
 
 def split_identifier(all_modules: Collection[str], fullname: str) -> tuple[str, str]:

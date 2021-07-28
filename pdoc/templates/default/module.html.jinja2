@@ -587,7 +587,7 @@
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | render_docstring | linkify(namespace=var.qualname) }}</div>
+        <div class="docstring">{{ var.docstring | to_markdown | to_html | linkify(namespace=var.qualname) }}</div>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}
@@ -707,7 +707,7 @@
 
                 {% block nav_title %}{% endblock %}
 
-                {% set index = module.docstring | render_docstring | attr("toc_html") %}
+                {% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
                 {% if index %}
                     <h2>Contents</h2>
                     {{ index | safe }}

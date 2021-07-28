@@ -45,7 +45,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pdoc.doc
-from pdoc.render_helpers import render_docstring
+from pdoc.render_helpers import to_markdown, to_html
 
 
 def make_index(
@@ -68,7 +68,7 @@ def make_index(
                 "modulename": doc.modulename,
                 "qualname": doc.qualname,
                 "type": doc.type,
-                "doc": render_docstring(doc.docstring, mod, default_docformat),
+                "doc": to_html(to_markdown(doc.docstring, mod, default_docformat)),
                 **kwargs,
             }
 

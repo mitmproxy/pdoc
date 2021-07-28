@@ -4,6 +4,7 @@
 
  - Don't include variables/attributes that only have a type annotation but no value and no docstring.
    If one wants to document a variable, a docstring should be added.
+ - Templating: `render_docstring` is split into `to_markdown` and `to_html` to increase customizability.
  - Fix hot-reloading of included Markdown files.
  - Allow Google docstring section headers to contain spaces.
  - Fix formatting of Google docstrings that have multiple colons.

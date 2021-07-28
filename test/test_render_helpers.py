@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Optional
-from unittest import mock
 
 import pytest
 
-from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, render_docstring,
+from pdoc.render_helpers import (edit_url, qualname_candidates, relative_link, to_html,
                                  split_identifier)
 
 
@@ -75,4 +74,4 @@ def test_markdown_toc():
 
     It's easy to introduce a `.strip()` in there and this gets washed away, so let's test that it works properly.
     """
-    assert render_docstring("#foo\n#bar", mock.MagicMock(), "").toc_html  # type: ignore
+    assert to_html("#foo\n#bar").toc_html  # type: ignore

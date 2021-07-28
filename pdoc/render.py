@@ -19,7 +19,8 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
-    render_docstring_with_context,
+    to_html,
+    to_markdown_with_context,
 )
 from pdoc.search import make_index, precompile_index
 
@@ -143,7 +144,8 @@ The Jinja2 environment used to render all templates.
 You can modify this object to add custom filters and globals.
 Examples can be found in this module's source code.
 """
-env.filters["render_docstring"] = render_docstring_with_context
+env.filters["to_markdown"] = to_markdown_with_context
+env.filters["to_html"] = to_html
 env.filters["highlight"] = highlight
 env.filters["linkify"] = linkify
 env.filters["link"] = link
