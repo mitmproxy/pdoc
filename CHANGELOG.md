@@ -4,6 +4,7 @@
 
  - Fix hot-reloading of included Markdown files.
  - Allow google docstring section headers to contain spaces
+ - Fix a crash when importing a module from within its directory.
 
 # 2021-06-11: pdoc 7.1.1
 

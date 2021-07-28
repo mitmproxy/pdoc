@@ -116,12 +116,12 @@ def parse_spec(spec: Union[Path, str]) -> str:
 
     if isinstance(spec, Path):
         if (spec.parent / "__init__.py").exists():
-            return parse_spec(spec.parent) + f".{spec.stem}"
+            return parse_spec(spec.resolve().parent) + f".{spec.stem}"
         if str(spec.parent) not in sys.path:
             sys.path.insert(0, str(spec.parent))
         if spec.stem in sys.modules:
-            local_dir = spec.absolute()
-            origin = Path(sys.modules[spec.stem].__file__).absolute()
+            local_dir = spec.resolve()
+            origin = Path(sys.modules[spec.stem].__file__).resolve()
             if local_dir not in (origin, origin.parent):
                 print(
                     f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
