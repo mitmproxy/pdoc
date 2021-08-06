@@ -3,7 +3,6 @@ from functools import lru_cache
 from typing import Generic
 from typing import TypeVar
 
-import demo_long
 from pdoc._compat import cached_property
 
 
@@ -145,10 +144,6 @@ class Child(Base):
 
     quuux: int = 42
 
-
-# Testing a proper __module__, but no useful __qualname__ attribute.
-
-bad_qualname = demo_long.DataDemo.__init__
 
 # Testing that an attribute that is only annotated does not trigger a "submodule not found" warning.
 
@@ -292,7 +287,6 @@ __all__ = [  # noqa
     "GenericParent",
     "NonGenericChild",
     "Child",
-    "bad_qualname",
     "only_annotated",
     "CustomException",
     "_Private",

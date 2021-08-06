@@ -33,15 +33,17 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.9.5
+            py: 3.10.0-rc.1
           - os: macos-latest
-            py: 3.9.5
+            py: 3.10.0-rc.1
           - os: ubuntu-latest
-            py: 3.9.5
+            py: 3.10.0-rc.1
+          - os: ubuntu-latest
+            py: 3.9.6
           - os: ubuntu-latest
             py: 3.8.10
           - os: ubuntu-latest
-            py: 3.7.10
+            py: 3.7.11
     runs-on: ${{ matrix.os }}
     steps:
       - run: printenv

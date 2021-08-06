@@ -377,13 +377,9 @@ class Module(Namespace[types.ModuleType]):
         qual = _safe_getattr(obj, "__qualname__", None)
         if mod and qual and "<locals>" not in qual:
             return mod, qual
-        elif mod and mod != self.modulename:
-            # This might be wrong, but it's the best guess we have.
-            return mod, f"{self.qualname}.{member_name}".lstrip(".")
         else:
-            # We could conceivably also walk the AST here for imports,
-            # which would turn up the origin of variables.
-            return self.modulename, f"{self.qualname}.{member_name}".lstrip(".")
+            # This might be wrong, but it's the best guess we have.
+            return (mod or self.modulename), f"{self.qualname}.{member_name}".lstrip(".")
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
@@ -755,7 +751,7 @@ class Function(Doc[types.FunctionType]):
 
     @cached_property
     def docstring(self) -> str:
-        doc = Doc.docstring.__get__(self)
+        doc = Doc.docstring.__get__(self)  # type: ignore
         if not doc:
             # inspect.getdoc fails for inherited @classmethods and unbound @property descriptors.
             # We now do an ugly dance to obtain the bound object instead,

@@ -223,5 +223,8 @@ class EnumDemo(enum.Enum):
     """
 
     RED = 1
+    """I am the red."""
     GREEN = 2
+    """I am green."""
     BLUE = enum.auto()
+    """I am blue."""
