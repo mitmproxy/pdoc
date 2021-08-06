@@ -12,8 +12,8 @@ mccabe==0.6.1
 mypy==0.910
 mypy-extensions==0.4.3
 packaging==21.0
-pip==21.2.1
-platformdirs==2.1.0
+pip==21.2.2
+platformdirs==2.2.0
 pluggy==0.13.1
 py==1.10.0
 pycodestyle==2.7.0
@@ -23,10 +23,10 @@ pyparsing==2.4.7
 pytest==6.2.4
 pytest-cov==2.12.1
 pytest-timeout==1.4.2
-setuptools==49.2.1
+setuptools==57.4.0
 six==1.16.0
 sortedcontainers==2.4.0
 toml==0.10.2
-tox==3.24.0
+tox==3.24.1
 typing-extensions==3.10.0.0
-virtualenv==20.6.0
+virtualenv==20.7.0
