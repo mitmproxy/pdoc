@@ -751,7 +751,7 @@ class Function(Doc[types.FunctionType]):
 
     @cached_property
     def docstring(self) -> str:
-        doc = Doc.docstring.__get__(self)
+        doc = Doc.docstring.__get__(self)  # type: ignore
         if not doc:
             # inspect.getdoc fails for inherited @classmethods and unbound @property descriptors.
             # We now do an ugly dance to obtain the bound object instead,
