@@ -26,10 +26,14 @@ def test_walk_specs():
         assert walk_specs([])
 
 
-def test_parse_spec():
+def test_parse_spec(monkeypatch):
     p = sys.path
 
     assert parse_spec("dataclasses") == "dataclasses"
+    assert sys.path == p
+
+    monkeypatch.chdir(here)
+    assert parse_spec("import_err")
     assert sys.path == p
 
     assert parse_spec(here / "testdata" / "demo.py") == "demo"
