@@ -248,8 +248,8 @@ If you feel that it doesn't parse a docstring element properly, please amend
 
 ## ...render math formulas?
 
-You can render math in your docstrings with a custom template and MathJax (or any other renderer)!
-There is an example at [`examples/math`](https://github.com/mitmproxy/pdoc/tree/main/examples/math/).
+Pass `--math` when invoking pdoc, and it will render formulas in your docstrings:
+[Demo](https://pdoc.dev/docs/math/math_demo.html).
 
 ## ...add my project's logo?
 

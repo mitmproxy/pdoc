@@ -1,7 +1,9 @@
 r'''
-This is a small demo module showing how pdoc renders $\LaTeX$!
+This is a small demo module showing how pdoc renders $\LaTeX$ when invoked with `--math`!
 
-Note that docstrings work like regular strings, so backslashes are treated as escape characters.  
+# Using Math in Docstrings
+
+Note that docstrings work like regular strings, so backslashes are treated as escape characters.
 You can either escape a backslash with a second backslash:
 
 
@@ -20,8 +22,14 @@ def foo():
     r"""raw docstring with $\frac{x}{y}$."""
 ```
 
-Example: $\frac{x}{y}$
+# Advanced Usage
 
+pdoc uses MathJax's MathJax's in-browser renderer by default. Please note that while pdoc
+generally strives to be self-contained, these resources are included from MathJax's CDN.
+You can create a `math.html.jinja2` file in your pdoc template directory to override the
+[default implementation](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/math.html.jinja2).
+
+# Example
 '''
 import math
 

@@ -30,6 +30,7 @@ def configure(
     template_directory: Optional[Path] = None,
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
+    math: bool = False,
 ):
     """
     Configure the rendering output.
@@ -48,6 +49,7 @@ def configure(
         ```
 
         renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
+    - `math` enables math rendering by including MathJax into the rendered documentation.
     """
     searchpath = _default_searchpath
     if template_directory:
@@ -56,6 +58,7 @@ def configure(
 
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
+    env.globals["math"] = math
 
 
 def html_module(
@@ -151,6 +154,5 @@ env.filters["linkify"] = linkify
 env.filters["link"] = link
 env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
-env.globals["edit_url_map"] = {}
-env.globals["docformat"] = ""
 env.globals["env"] = os.environ
+configure()  # add default globals

@@ -674,6 +674,9 @@
         {% endfor %}
     </h1>
 {% enddefaultmacro %}
+{% block head %}
+    {% if math %}{% include "math.html.jinja2" %}{% endif %}
+{% endblock %}
 {% block body %}
     {% block nav %}
         <nav class="pdoc">

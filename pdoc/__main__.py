@@ -10,6 +10,7 @@ import pdoc.doc
 import pdoc.extract
 import pdoc.web
 from pdoc import extract, render
+from pdoc._compat import BooleanOptionalAction
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
@@ -58,6 +59,12 @@ renderopts.add_argument(
     help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
     "May be passed multiple times. "
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
+)
+renderopts.add_argument(
+    "--math",
+    action=BooleanOptionalAction,
+    default=False,
+    help="Include MathJax to enable math formula rendering.",
 )
 renderopts.add_argument(
     "-t",
@@ -158,6 +165,7 @@ def cli(args: list[str] = None) -> None:
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
         docformat=opts.docformat,
+        math=opts.math,
     )
 
     if opts.output_directory:
