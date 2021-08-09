@@ -122,7 +122,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
         if spec.stem in sys.modules:
             local_dir = spec.resolve()
             origin = Path(sys.modules[spec.stem].__file__).resolve()
-            if local_dir not in (origin, origin.parent):
+            if local_dir not in (origin, origin.parent, origin.with_suffix("")):
                 print(
                     f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
                     f"imported in pdoc's Python process. pdoc will document the loaded module from {origin} instead.",
