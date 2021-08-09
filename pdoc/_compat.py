@@ -248,7 +248,7 @@ if True:
                     _option_strings.append(option_string)
 
             if help is not None and default is not None:
-                help += f" (default: %(default)s)"
+                help += " (default: %(default)s)"
 
             super().__init__(
                 option_strings=_option_strings,

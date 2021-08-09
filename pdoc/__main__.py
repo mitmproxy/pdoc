@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     add_help=False,
 )
-mainargs = parser.add_argument_group("Main Arguments")
+mainargs = parser.add_argument_group("\x1b[1mMain Arguments\x1b[0m")
 mainargs.add_argument(
     "modules",
     type=str,
@@ -40,7 +40,7 @@ mainargs.add_argument(
 #     "--markdown", dest="format", action="store_const", const="markdown"
 # )
 
-renderopts = parser.add_argument_group("Customize Rendering")
+renderopts = parser.add_argument_group("\x1b[1mCustomize Rendering\x1b[0m")
 renderopts.add_argument(
     "-d",
     "--docformat",
@@ -73,6 +73,24 @@ renderopts.add_argument(
     help='Display "View Source" buttons.',
 )
 renderopts.add_argument(
+    "--logo",
+    type=str,
+    metavar="URL",
+    help='Add a project logo image.',
+)
+renderopts.add_argument(
+    "--logo-link",
+    type=str,
+    metavar="URL",
+    help='Optional URL the logo should point to.',
+)
+renderopts.add_argument(
+    "--footer-text",
+    type=str,
+    metavar="TEXT",
+    help="Custom text for the page footer, for example the project name and current version number.",
+)
+renderopts.add_argument(
     "-t",
     "--template-directory",
     metavar="DIR",
@@ -82,7 +100,7 @@ renderopts.add_argument(
     "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 
-miscargs = parser.add_argument_group("Miscellaneous Options")
+miscargs = parser.add_argument_group("\x1b[1mMiscellaneous Options\x1b[0m")
 miscargs.add_argument(
     "-h",
     "--host",
@@ -173,6 +191,9 @@ def cli(args: list[str] = None) -> None:
         docformat=opts.docformat,
         math=opts.math,
         show_source=opts.show_source,
+        logo=opts.logo,
+        logo_link=opts.logo_link,
+        footer_text=opts.footer_text,
     )
 
     if opts.output_directory:

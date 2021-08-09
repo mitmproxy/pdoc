@@ -30,8 +30,11 @@ def configure(
     template_directory: Optional[Path] = None,
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
-    math: bool = False,
     show_source: bool = True,
+    math: bool = False,
+    logo: Optional[str] = None,
+    logo_link: Optional[str] = None,
+    footer_text: str = "",
 ):
     """
     Configure the rendering output.
@@ -44,14 +47,15 @@ def configure(
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,
 
         ```json
-        {
-            "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"
-        }
+        {"pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"}
         ```
 
-        renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
-    - `math` enables math rendering by including MathJax into the rendered documentation.
+      renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
     - `show_source` controls whether a "View Source" button should be included in the output.
+    - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `logo` is an optional URL to the project's logo image
+    - `logo_link` is an optional URL the logo should point to
+    - `footer_text` is additional text that should appear in the navigation footer.
     """
     searchpath = _default_searchpath
     if template_directory:
@@ -62,6 +66,9 @@ def configure(
     env.globals["docformat"] = docformat
     env.globals["math"] = math
     env.globals["show_source"] = show_source
+    env.globals["logo"] = logo
+    env.globals["logo_link"] = logo_link
+    env.globals["footer_text"] = footer_text
 
 
 def html_module(

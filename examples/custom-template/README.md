@@ -11,5 +11,5 @@ pdoc -t ./examples/custom-template pdoc
 
 ### Additional Resources for Template Development
 
- - [Pdoc's Default Templates](https://github.com/mitmproxy/pdoc/tree/main/pdoc/templates)
+ - [pdoc's Default Templates](https://github.com/mitmproxy/pdoc/tree/main/pdoc/templates)
  - [Jinja2 Template Designer Documentation](https://jinja.palletsprojects.com/en/2.11.x/templates/)

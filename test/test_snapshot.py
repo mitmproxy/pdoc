@@ -108,7 +108,12 @@ snapshots = [
     Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("math_demo", render_options={"math": True}),
-    Snapshot("render_options", render_options={"show_source": False})
+    Snapshot("render_options", render_options={
+        "show_source": False,
+        "logo": "https://placedog.net/500?random",
+        "logo_link": "https://example.com/",
+        "footer_text": "custom footer text"
+    }),
 ]
 
 

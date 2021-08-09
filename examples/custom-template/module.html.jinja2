@@ -3,21 +3,12 @@ We want to extend the default template instead of defining everything ourselves.
 #}
 {% extends "default/module.html.jinja2" %}
 
-{#
-We want to add our logo in the navbar.
-The default template defines an empty `nav_title` block we can fill here:
-#}
-{% block nav_title %}
-    <img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
-{% endblock %}
-
 
 {#
 We can access system environment variables in the template, for example to pass version information.
 #}
-{% block attribution %}
-    {{ super()  }}
-    <p>Custom Template v{{ env["VERSION"] | default("1.0") }}</p>
+{% block nav_footer %}
+    <footer>My Package v{{ env["VERSION"] | default("1.0") }}</footer>
 {% endblock %}
 
 

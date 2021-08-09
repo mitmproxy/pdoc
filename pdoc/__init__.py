@@ -24,24 +24,11 @@ This implies a few things:
  - The structure of the generated documentation matches that of your Python package:
    There is a direct mapping from say `mypackage/helpers.py` to `mypackage/helpers.html`.
    As such, pdoc works best with small projects and projects that have a well-defined hierarchy.
- - You can customize the output by changing the template.
 
 # Example: `shelter.py`
 
 For this example, we have some code to keep track of the dogs in our local animal shelter.
 Here's our current code:
-
-```python
-class Dog:
-    def __init__(self, name):
-        self.name = name
-        self.friends = []
-
-    def bark(self, loud: bool = True):
-        ...
-```
-
-First, we add docstrings and type annotations to explain what we are doing.
 
 ```python
 """
@@ -71,9 +58,9 @@ class Dog:
 
 The docstrings we've added aren't pdoc-specific, we just use modern Python 3 conventions.
 pdoc will later take your module, class, function and variable docstrings and render them
-into a standalone documentation document.
+into a standalone HTML document.
 
-Additionally, all docstrings are interpreted as Markdown by pdoc.
+Additionally, all docstrings are interpreted as Markdown.
 For example, the todo list in the example will be rendered with bullet points in your documentation.
 
 
@@ -95,31 +82,50 @@ pdoc -o ./docs ./shelter.py
 
 This will create an HTML file at `docs/shelter.html` which contains our module documentation.
 
+### Configuring pdoc
+
+We can configure some parts of pdoc's output via command line flags.
+For example, we can add a project logo to the documentation:
+
+```shell
+pdoc --logo "https://placedog.net/300?random" ./shelter.py
+```
+
+To get a list of all available rendering options, run:
+
+```shell
+pdoc --help
+```
+
+Library users can call `pdoc.render.configure` to configure rendering.
+
+
 ### Editing pdoc's HTML template
 
-Next up, we want to insert the logo of our shelter in the navigation bar.
-To do this, we need to edit pdoc's
+For more advanced customization, we can edit pdoc's
 [default HTML template](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2),
 which uses the
 [Jinja2](https://jinja.palletsprojects.com/) templating language.
-Inspecting the default template, we see that it defines an empty `nav_title` block right at the place where we want to insert our logo.
-We can extend the default template by creating a file titled `module.html.jinja2` in the current directory
+
+Let's assume you want to replace the logo with custom button. We first find the right location in the template by searching
+for "logo", which shows us that the logo is defined in a Jinja2 block named `nav_title`.
+We now extend the default template by creating a file titled `module.html.jinja2` in the current directory
  with the following contents:
 
 ```html+jinja
 {% extends "default/module.html.jinja2" %}
 {% block nav_title %}
-<img src="https://placedog.net/200?random" style="display: block; margin: 1em auto">
+<button>Donate dog food</button>
 {% endblock %}
 ```
 
-We then specify a custom template directory when invoking pdoc...
+We then specify our custom template directory when invoking pdoc...
 
 ```shell
 pdoc -t . ./shelter.py
 ```
 
-...and the updated documentation – with logo – renders! 🎉
+...and the updated documentation – with button – renders! 🎉
 
 See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
 for more examples.
@@ -253,7 +259,7 @@ Pass `--math` when invoking pdoc, and it will render formulas in your docstrings
 
 ## ...add my project's logo?
 
-See [*Editing pdoc's HTML template*](#editing-pdocs-html-template).
+See [*Configuring pdoc*](#configuring-pdoc).
 
 ## ...pass arguments to the Jinja2 template?
 
