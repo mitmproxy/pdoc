@@ -2,8 +2,8 @@
 <a href="https://pdoc.dev/"><img alt="pdoc" src="https://pdoc.dev/logo.svg" width="200" height="100" /></a>
 <br><br>
 <a href="https://pdoc.dev/docs/pdoc.html"><img height="20" alt="pdoc documentation" src="https://shields.mitmproxy.org/badge/docs-pdoc.dev-brightgreen.svg"></a>
-<a href="https://github.com/mitmproxy/pdoc/actions?query=branch%3Amain"><img height="20" alt="CI Status" src="https://github.com/mitmproxy/pdoc/workflows/CI/badge.svg?branch=main"></a>
-<a href="https://codecov.io/gh/mitmproxy/pdoc"><img height="20" alt="Code Coverage" src="https://shields.mitmproxy.org/codecov/c/github/mitmproxy/pdoc/main.svg?label=codecov"></a>
+<a href="https://github.com/mitmproxy/pdoc/actions?query=branch%3Amain"><img height="20" alt="CI Status" src="https://shields.mitmproxy.org/github/workflow/status/mitmproxy/pdoc/CI?label=CI&logo=github"></a>
+<a href="https://codecov.io/gh/mitmproxy/pdoc"><img height="20" alt="Code Coverage" src="https://shields.mitmproxy.org/codecov/c/github/mitmproxy/pdoc/main.svg?label=codecov&logo=codecov&logoColor=white"></a>
 <a href="https://pypi.python.org/pypi/pdoc"><img height="20" alt="PyPI Version" src="https://shields.mitmproxy.org/pypi/v/pdoc.svg"></a>
 <a href="https://pypi.python.org/pypi/pdoc"><img height="20" alt="Supported Python Versions" src="https://shields.mitmproxy.org/pypi/pyversions/pdoc.svg"></a>
 </p>
