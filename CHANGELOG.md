@@ -4,6 +4,10 @@
 
  -
 
+# 2021-08-09: pdoc 7.3.1
+
+ - Fix a bug where an empty footer was incorrectly emitted by the template.
+
 # 2021-08-09: pdoc 7.3.0
 
  - Full compatibility with Python 3.10.

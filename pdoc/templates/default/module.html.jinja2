@@ -757,7 +757,9 @@
                 {% endif %}
 
                 {% block nav_footer %}
+                    {% if footer_text %}
                     <footer>{{ footer_text }}</footer>
+                    {% endif %}
                 {% endblock %}
 
                 {% block attribution %}
