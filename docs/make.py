@@ -36,7 +36,12 @@ if __name__ == "__main__":
     pdoc.render.configure(
         edit_url_map={
             "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
-        }
+            "demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/demo",
+            "demo_long": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/demo_long",
+        },
+        logo="/logo.svg",
+        logo_link="https://pdoc.dev",
+        footer_text=f"pdoc {pdoc.__version__}"
     )
 
     pdoc.pdoc(
@@ -51,7 +56,8 @@ if __name__ == "__main__":
     pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
 
     # Render math example
-    pdoc.render.configure(template_directory=None, math=True)
+    pdoc.render.configure(math=True, logo="/logo.svg", logo_link="https://pdoc.dev",
+                          edit_url_map={"math_demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/math_demo"})
     pdoc.pdoc(here / ".." / "test" / "testdata" / "math_demo.py", output_directory=here / "docs" / "math")
 
     # Add sitemap.xml
