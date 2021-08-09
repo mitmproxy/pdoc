@@ -95,11 +95,6 @@ snapshots = [
         min_version=(3, 9),
     ),
     Snapshot(
-        "example_math",
-        str(here / ".." / "examples" / "math" / "math_demo.py"),
-        {"template_directory": here / ".." / "examples" / "math"},
-    ),
-    Snapshot(
         "example_mkdocs",
         "demo.py",
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
@@ -112,6 +107,13 @@ snapshots = [
     Snapshot("misc"),
     Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
+    Snapshot("math_demo", render_options={"math": True}),
+    Snapshot("render_options", render_options={
+        "show_source": False,
+        "logo": "https://placedog.net/500?random",
+        "logo_link": "https://example.com/",
+        "footer_text": "custom footer text"
+    }),
 ]
 
 

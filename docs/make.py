@@ -51,11 +51,11 @@ if __name__ == "__main__":
     pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
 
     # Render math example
-    pdoc.render.configure(template_directory=here / ".." / "examples" / "math")
-    pdoc.pdoc(here / ".." / "examples" / "math" / "math_demo.py", output_directory=here / "docs" / "math")
+    pdoc.render.configure(template_directory=None, math=True)
+    pdoc.pdoc(here / ".." / "test" / "testdata" / "math_demo.py", output_directory=here / "docs" / "math")
 
     # Add sitemap.xml
-    with (here / "sitemap.xml").open("w") as f:
+    with (here / "sitemap.xml").open("w", newline="\n") as f:
         f.write(textwrap.dedent("""
         <?xml version="1.0" encoding="utf-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

@@ -10,21 +10,23 @@ import pdoc.doc
 import pdoc.extract
 import pdoc.web
 from pdoc import extract, render
+from pdoc._compat import BooleanOptionalAction
 
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     add_help=False,
 )
-parser.add_argument(
+mainargs = parser.add_argument_group("\x1b[1mMain Arguments\x1b[0m")
+mainargs.add_argument(
     "modules",
     type=str,
     default=[],
     metavar="module",
     nargs="*",
-    help="Python module names. These may be importable Python module names or file paths.",
+    help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py").',
 )
-parser.add_argument(
+mainargs.add_argument(
     "-o",
     "--output-directory",
     metavar="DIR",
@@ -37,7 +39,17 @@ parser.add_argument(
 # formats.add_argument(
 #     "--markdown", dest="format", action="store_const", const="markdown"
 # )
-parser.add_argument(
+
+renderopts = parser.add_argument_group("\x1b[1mCustomize Rendering\x1b[0m")
+renderopts.add_argument(
+    "-d",
+    "--docformat",
+    type=str,
+    default=None,
+    choices=("google", "numpy", "restructuredtext"),
+    help="The default docstring format.",
+)
+renderopts.add_argument(
     "-e",
     "--edit-url",
     action="append",
@@ -48,7 +60,37 @@ parser.add_argument(
     "May be passed multiple times. "
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
-parser.add_argument(
+renderopts.add_argument(
+    "--math",
+    action=BooleanOptionalAction,
+    default=False,
+    help="Include MathJax to enable math formula rendering.",
+)
+renderopts.add_argument(
+    "--show-source",
+    action=BooleanOptionalAction,
+    default=True,
+    help='Display "View Source" buttons.',
+)
+renderopts.add_argument(
+    "--logo",
+    type=str,
+    metavar="URL",
+    help='Add a project logo image.',
+)
+renderopts.add_argument(
+    "--logo-link",
+    type=str,
+    metavar="URL",
+    help='Optional URL the logo should point to.',
+)
+renderopts.add_argument(
+    "--footer-text",
+    type=str,
+    metavar="TEXT",
+    help="Custom text for the page footer, for example the project name and current version number.",
+)
+renderopts.add_argument(
     "-t",
     "--template-directory",
     metavar="DIR",
@@ -57,36 +99,30 @@ parser.add_argument(
     help="A directory containing Jinja2 templates to customize output. "
     "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
-parser.add_argument(
-    "-d",
-    "--docformat",
-    type=str,
-    default=None,
-    choices=("google", "numpy", "restructuredtext"),
-    help="The default docstring format.",
-)
-parser.add_argument(
+
+miscargs = parser.add_argument_group("\x1b[1mMiscellaneous Options\x1b[0m")
+miscargs.add_argument(
     "-h",
     "--host",
     type=str,
     default="localhost",
     help="The host on which to run the HTTP server.",
 )
-parser.add_argument(
+miscargs.add_argument(
     "-p",
     "--port",
     type=int,
     default=8080,
     help="The port on which to run the HTTP server.",
 )
-parser.add_argument(
+miscargs.add_argument(
     "-n",
     "--no-browser",
     action="store_true",
     help="Don't open a browser after the web server has started.",
 )
-parser.add_argument("--help", action="help", help="Show this help message and exit.")
-parser.add_argument(
+miscargs.add_argument("--help", action="help", help="Show this help message and exit.")
+miscargs.add_argument(
     "--version",
     action="store_true",
     default=argparse.SUPPRESS,
@@ -153,6 +189,11 @@ def cli(args: list[str] = None) -> None:
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
         docformat=opts.docformat,
+        math=opts.math,
+        show_source=opts.show_source,
+        logo=opts.logo,
+        logo_link=opts.logo_link,
+        footer_text=opts.footer_text,
     )
 
     if opts.output_directory:

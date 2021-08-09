@@ -2,7 +2,12 @@
 
 # Unreleased: pdoc next
 
- - 
+ - Full compatibility with Python 3.10.
+ - Many template customizations are now directly available as command line switches, for example:
+    - `--math`
+    - `--logo`
+    - `--no-show-source`
+    - `--footer-text`
 
 # 2021-07-28: pdoc 7.2.0
 

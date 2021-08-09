@@ -30,6 +30,11 @@ def configure(
     template_directory: Optional[Path] = None,
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
+    show_source: bool = True,
+    math: bool = False,
+    logo: Optional[str] = None,
+    logo_link: Optional[str] = None,
+    footer_text: str = "",
 ):
     """
     Configure the rendering output.
@@ -42,12 +47,15 @@ def configure(
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,
 
         ```json
-        {
-            "pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"
-        }
+        {"pdoc": "https://github.com/mitmproxy/pdoc/blob/main/pdoc/"}
         ```
 
-        renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
+      renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
+    - `show_source` controls whether a "View Source" button should be included in the output.
+    - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `logo` is an optional URL to the project's logo image
+    - `logo_link` is an optional URL the logo should point to
+    - `footer_text` is additional text that should appear in the navigation footer.
     """
     searchpath = _default_searchpath
     if template_directory:
@@ -56,6 +64,11 @@ def configure(
 
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
+    env.globals["math"] = math
+    env.globals["show_source"] = show_source
+    env.globals["logo"] = logo
+    env.globals["logo_link"] = logo_link
+    env.globals["footer_text"] = footer_text
 
 
 def html_module(
@@ -151,6 +164,5 @@ env.filters["linkify"] = linkify
 env.filters["link"] = link
 env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
-env.globals["edit_url_map"] = {}
-env.globals["docformat"] = ""
 env.globals["env"] = os.environ
+configure()  # add default globals

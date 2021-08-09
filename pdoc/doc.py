@@ -379,7 +379,9 @@ class Module(Namespace[types.ModuleType]):
             return mod, qual
         else:
             # This might be wrong, but it's the best guess we have.
-            return (mod or self.modulename), f"{self.qualname}.{member_name}".lstrip(".")
+            return (mod or self.modulename), f"{self.qualname}.{member_name}".lstrip(
+                "."
+            )
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:

@@ -1,0 +1,14 @@
+<script>
+    /* Periodically check with the pdoc server if there have been any changes. */
+    let mtime_generated = {{ mtime | tojson }},
+        url = new URL(window.location);
+    url.searchParams.set("mtime", 1);
+    window.setInterval(function () {
+        fetch(url.toString())
+            .then(response => response.text())
+            .then(mtime => {
+                if (mtime_generated !== mtime)
+                    location.reload();
+            });
+    }, 1000);
+</script>
