@@ -1,1 +1,2 @@
-<module misc_py310>
+<module misc_py310
+    <function def new_union(a: int | str) -> bool | None: ...  # Testing Python 3.10'…>>

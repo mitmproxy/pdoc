@@ -21,6 +21,13 @@
 
 
 
+                    <h2>API Documentation</h2>
+                        <ul class="memberlist">
+            <li>
+                    <a class="function" href="#new_union">new_union</a>
+            </li>
+    </ul>
+
 
                     <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
                         built with <span class="visually-hidden">pdoc</span><img
@@ -42,11 +49,36 @@ misc_py310    </h1>
 <span class="c1"># Testing a proper __module__, but no useful __qualname__ attribute.</span>
 
 <span class="n">bad_qualname</span> <span class="o">=</span> <span class="n">demo_long</span><span class="o">.</span><span class="n">DataDemo</span><span class="o">.</span><span class="fm">__init__</span>
+
+
+<span class="k">def</span> <span class="nf">new_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span><span class="s2">&quot;&quot;</span>
 </pre></div>
 
         </details>
 
             </section>
+                <section id="new_union">
+                            <div class="attr function"><a class="headerlink" href="#new_union">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">new_union</span><span class="signature">(a: int | str) -&gt; bool | None</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">new_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span><span class="s2">&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Testing Python 3.10's new type union syntax.</p>
+</div>
+
+
+                </section>
     </main>
 </body>
 </html>
