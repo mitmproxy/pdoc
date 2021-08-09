@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-08-09: pdoc 7.3.0
+
  - Full compatibility with Python 3.10.
  - Many template customizations are now directly available as command line switches, for example:
     - `--math`
