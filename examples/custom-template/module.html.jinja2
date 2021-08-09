@@ -22,16 +22,6 @@ We can access system environment variables in the template, for example to pass 
 
 
 {#
-We don't want to show any "View Source" buttons, so we override the macro with an empty one.
-
-pdoc's Jinja2 macros are defined using `{% defaultmacro %}`, which makes it possible to override them in a custom
-template using a regular `{% macro %}` statement.
-The default implementation of each macro is also available as `default_$macroname`.
-#}
-{% macro view_source(obj) %}{% endmacro %}
-
-
-{#
 We can also adjust which members are documented by overriding the is_public macro.
 In this example, the private function `Dog.__lt__` is exposed publicly.
 However, doing this is not recommended, see https://pdoc.dev/docs/pdoc.html#control-what-is-documented.

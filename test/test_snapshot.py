@@ -108,6 +108,7 @@ snapshots = [
     Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("math_demo", render_options={"math": True}),
+    Snapshot("render_options", render_options={"show_source": False})
 ]
 
 

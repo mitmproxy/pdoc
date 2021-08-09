@@ -67,6 +67,12 @@ renderopts.add_argument(
     help="Include MathJax to enable math formula rendering.",
 )
 renderopts.add_argument(
+    "--show-source",
+    action=BooleanOptionalAction,
+    default=True,
+    help='Display "View Source" buttons.',
+)
+renderopts.add_argument(
     "-t",
     "--template-directory",
     metavar="DIR",
@@ -166,6 +172,7 @@ def cli(args: list[str] = None) -> None:
         template_directory=opts.template_directory,
         docformat=opts.docformat,
         math=opts.math,
+        show_source=opts.show_source,
     )
 
     if opts.output_directory:

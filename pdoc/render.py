@@ -31,6 +31,7 @@ def configure(
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
     math: bool = False,
+    show_source: bool = True,
 ):
     """
     Configure the rendering output.
@@ -50,6 +51,7 @@ def configure(
 
         renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
     - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `show_source` controls whether a "View Source" button should be included in the output.
     """
     searchpath = _default_searchpath
     if template_directory:
@@ -59,6 +61,7 @@ def configure(
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
     env.globals["math"] = math
+    env.globals["show_source"] = show_source
 
 
 def html_module(
