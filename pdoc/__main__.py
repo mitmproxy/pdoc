@@ -16,15 +16,16 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     add_help=False,
 )
-parser.add_argument(
+mainargs = parser.add_argument_group("Main Arguments")
+mainargs.add_argument(
     "modules",
     type=str,
     default=[],
     metavar="module",
     nargs="*",
-    help="Python module names. These may be importable Python module names or file paths.",
+    help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py").',
 )
-parser.add_argument(
+mainargs.add_argument(
     "-o",
     "--output-directory",
     metavar="DIR",
@@ -37,7 +38,17 @@ parser.add_argument(
 # formats.add_argument(
 #     "--markdown", dest="format", action="store_const", const="markdown"
 # )
-parser.add_argument(
+
+renderopts = parser.add_argument_group("Customize Rendering")
+renderopts.add_argument(
+    "-d",
+    "--docformat",
+    type=str,
+    default=None,
+    choices=("google", "numpy", "restructuredtext"),
+    help="The default docstring format.",
+)
+renderopts.add_argument(
     "-e",
     "--edit-url",
     action="append",
@@ -48,7 +59,7 @@ parser.add_argument(
     "May be passed multiple times. "
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
-parser.add_argument(
+renderopts.add_argument(
     "-t",
     "--template-directory",
     metavar="DIR",
@@ -57,36 +68,30 @@ parser.add_argument(
     help="A directory containing Jinja2 templates to customize output. "
     "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
-parser.add_argument(
-    "-d",
-    "--docformat",
-    type=str,
-    default=None,
-    choices=("google", "numpy", "restructuredtext"),
-    help="The default docstring format.",
-)
-parser.add_argument(
+
+miscargs = parser.add_argument_group("Miscellaneous Options")
+miscargs.add_argument(
     "-h",
     "--host",
     type=str,
     default="localhost",
     help="The host on which to run the HTTP server.",
 )
-parser.add_argument(
+miscargs.add_argument(
     "-p",
     "--port",
     type=int,
     default=8080,
     help="The port on which to run the HTTP server.",
 )
-parser.add_argument(
+miscargs.add_argument(
     "-n",
     "--no-browser",
     action="store_true",
     help="Don't open a browser after the web server has started.",
 )
-parser.add_argument("--help", action="help", help="Show this help message and exit.")
-parser.add_argument(
+miscargs.add_argument("--help", action="help", help="Show this help message and exit.")
+miscargs.add_argument(
     "--version",
     action="store_true",
     default=argparse.SUPPRESS,
