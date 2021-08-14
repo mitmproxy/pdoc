@@ -155,7 +155,6 @@ env = Environment(
 """
 The Jinja2 environment used to render all templates.
 You can modify this object to add custom filters and globals.
-Examples can be found in this module's source code.
 """
 env.filters["to_markdown"] = to_markdown_with_context
 env.filters["to_html"] = to_html

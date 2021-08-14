@@ -247,9 +247,11 @@ If your documentation follows one of these styles, you can:
 1. Run `pdoc --docformat ...` to enable a particular docstring flavor globally, or
 2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.  
    The following values are supported: `google`, `numpy`, and `restructuredtext`.
+   `google` and `numpy` are both treated as a superset of `restructuredtext`.
 
 pdoc does not implement the full reStructuredText specification and does not plan on doing so.
-If you feel that it doesn't parse a docstring element properly, please amend
+Adding additional syntax elements is usually easy.
+If you feel that pdoc doesn't parse a docstring element properly, please amend
 `pdoc.docstrings` and send us a pull request!
 
 ## ...render math formulas?
@@ -280,6 +282,12 @@ You can include external Markdown files in your documentation by using reStructu
 """
 __docformat__ = "restructuredtext"
 ```
+
+Make sure that you either specify `__docformat__`
+or pass `--docformat`. pdoc only processes plain Markdown by default,
+`.. include::` is only evaluated for [`google`, `numpy`, or `restructuredtext`
+docstrings](#use-numpydoc-or-google-docstrings).
+
 
 
 ## ...integrate pdoc into other systems?
