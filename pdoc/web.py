@@ -68,6 +68,11 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             try:
                 extract.invalidate_caches(module)
                 mod = doc.Module(extract.load_module(module))
+                out = render.html_module(
+                    module=mod,
+                    all_modules=self.server.all_modules,
+                    mtime=mtime,
+                )
             except Exception:
                 self.send_response(500)
                 self.send_header("content-type", "text/html")
@@ -76,11 +81,6 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                     error=f"Error importing {module!r}",
                     details=traceback.format_exc(),
                 )
-            out = render.html_module(
-                module=mod,
-                all_modules=self.server.all_modules,
-                mtime=mtime,
-            )
 
         self.send_response(200)
         self.send_header("content-type", "text/html")

@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- -
+ - Display error webpage for template errors.
 
 # 2021-08-09: pdoc 7.3.1
 
