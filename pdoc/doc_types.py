@@ -7,20 +7,24 @@ exception.
 """
 from __future__ import annotations
 
+import operator
+
+import functools
+
 import inspect
 import sys
 import typing
 import warnings
 from types import BuiltinFunctionType, ModuleType
-from typing import (  # type: ignore
+from typing import (
     Any,
     Optional,
     TYPE_CHECKING,
-    _GenericAlias,
+    _GenericAlias,  # type: ignore
 )
 
 from . import extract
-from ._compat import ForwardRef, GenericAlias, Literal, get_args, get_origin
+from ._compat import GenericAlias, Literal, UnionType, get_args, get_origin
 
 if TYPE_CHECKING:
 
@@ -132,27 +136,36 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     if isinstance(t, str):
         if sys.version_info < (3, 9):  # pragma: no cover
             t = t.strip("\"'")
-        t = ForwardRef(t, is_argument=False)
+        t = typing.ForwardRef(t)
 
     if get_origin(t) is Literal:
         return t
 
-    if sys.version_info < (3, 9) and isinstance(
-        t, (typing.ForwardRef, ForwardRef)
-    ):  # pragma: no cover
-        # we do a very happy dance here for Python 3.8, where things are a bit crazy.
-        # In a nutshell, we convert Python 3.8's ForwardRef to our vendored ForwardRef,
-        # and then eval on the whole thing recursively.
-        if isinstance(t, typing.ForwardRef):
-            t = ForwardRef(t.__forward_arg__, is_argument=False)
-        return _eval_type(
-            t._evaluate(globalns, localns, recursive_guard),
-            globalns,
-            localns,
-            recursive_guard,
-        )
+    if isinstance(t, typing.ForwardRef):
+        # inlined from
+        # https://github.com/python/cpython/blob/4f51fa9e2d3ea9316e674fb9a9f3e3112e83661c/Lib/typing.py#L684-L707
+        if t.__forward_arg__ in recursive_guard:
+            return t
+        if not t.__forward_evaluated__ or localns is not globalns:
+            if globalns is None and localns is None:
+                globalns = localns = {}
+            elif globalns is None:
+                globalns = localns
+            elif localns is None:
+                localns = globalns
+            __forward_module__ = getattr(t, "__forward_module__", None)
+            if __forward_module__ is not None:
+                globalns = getattr(
+                    sys.modules.get(__forward_module__, None), '__dict__', globalns
+                )
+            type_, = eval(t.__forward_code__, globalns, localns),
+            t.__forward_value__ = _eval_type(
+                type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+            )
+            t.__forward_evaluated__ = True
+        return t.__forward_value__
 
-    # https://github.com/python/cpython/blob/4db8988420e0a122d617df741381b0c385af032c/Lib/typing.py#L299-L314
+    # https://github.com/python/cpython/blob/main/Lib/typing.py#L333-L343
     # fmt: off
     # ✂ start ✂
     """Evaluate all forward references in the given type t.
@@ -160,14 +173,14 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     recursive_guard is used to prevent prevent infinite recursion
     with recursive ForwardRef.
     """
-    if isinstance(t, ForwardRef):
-        return t._evaluate(globalns, localns, recursive_guard)
-    if isinstance(t, (_GenericAlias, GenericAlias)):
+    if isinstance(t, (_GenericAlias, GenericAlias, UnionType)):
         ev_args = tuple(_eval_type(a, globalns, localns, recursive_guard) for a in t.__args__)
         if ev_args == t.__args__:
             return t
         if isinstance(t, GenericAlias):
             return GenericAlias(t.__origin__, ev_args)
+        if isinstance(t, UnionType):
+            return functools.reduce(operator.or_, ev_args)
         else:
             return t.copy_with(ev_args)
     return t

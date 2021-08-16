@@ -136,8 +136,8 @@ def test_snapshots(snapshot: Snapshot, format: str):
 
 
 if __name__ == "__main__":
-    if sys.version_info < (3, 9):  # pragma: no cover
-        raise RuntimeError("Snapshots need to be generated on Python 3.9+")
+    if sys.version_info < (3, 10):  # pragma: no cover
+        raise RuntimeError("Snapshots need to be generated on Python 3.10+")
     for snapshot in snapshots:
         for format in ["html", "repr"]:
             print(f"Rendering {snapshot} to {format}...")
