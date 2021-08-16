@@ -833,11 +833,11 @@ class Function(Doc[types.FunctionType]):
         else:
             sig = sig.replace(
                 return_annotation=safe_eval_type(
-                    sig.return_annotation, globalns, self.fullname
+                    sig.return_annotation, globalns, mod, self.fullname
                 )
             )
         for p in sig.parameters.values():
-            p._annotation = safe_eval_type(p.annotation, globalns, self.fullname)  # type: ignore
+            p._annotation = safe_eval_type(p.annotation, globalns, mod, self.fullname)  # type: ignore
         return sig
 
     @cached_property

@@ -38,6 +38,18 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#Foo">Foo</a>
+                            <ul class="memberlist">
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Bar">Bar</a>
+                            <ul class="memberlist">
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -62,7 +74,8 @@ misc_py39    </h1>
             <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Testing features that either are 3.9+ only or render slightly different on 3.9.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypedDict</span>
 
 
 <span class="c1"># Testing a typing.NamedTuple</span>
@@ -77,6 +90,15 @@ misc_py39    </h1>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="sd">&quot;&quot;&quot;Name of our example tuple.&quot;&quot;&quot;</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<span class="c1"># Testing some edge cases in our inlined implementation of ForwardRef._evaluate in _eval_type.</span>
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
 </pre></div>
 
         </details>
@@ -149,6 +171,106 @@ misc_py39    </h1>
                                     <div><dt>builtins.tuple</dt>
                                 <dd id="NamedTupleExample.index" class="function">index</dd>
                 <dd id="NamedTupleExample.count" class="function">count</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="Foo">
+                                <div class="attr class">
+        <a class="headerlink" href="#Foo">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">Foo</span><wbr>(<span class="base">typing.TypedDict</span>):
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>dict() -> new empty dictionary
+dict(mapping) -> new dictionary initialized from a mapping object's
+    (key, value) pairs
+dict(iterable) -> new dictionary initialized as if via:
+    d = {}
+    for k, v in iterable:
+        d[k] = v
+dict(**kwargs) -> new dictionary initialized with the name=value pairs
+    in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+</div>
+
+
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>builtins.dict</dt>
+                                <dd id="Foo.__init__" class="class">dict</dd>
+                <dd id="Foo.get" class="function">get</dd>
+                <dd id="Foo.setdefault" class="function">setdefault</dd>
+                <dd id="Foo.pop" class="function">pop</dd>
+                <dd id="Foo.popitem" class="function">popitem</dd>
+                <dd id="Foo.keys" class="function">keys</dd>
+                <dd id="Foo.items" class="function">items</dd>
+                <dd id="Foo.values" class="function">values</dd>
+                <dd id="Foo.update" class="function">update</dd>
+                <dd id="Foo.fromkeys" class="function">fromkeys</dd>
+                <dd id="Foo.clear" class="function">clear</dd>
+                <dd id="Foo.copy" class="function">copy</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="Bar">
+                                <div class="attr class">
+        <a class="headerlink" href="#Bar">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">Bar</span><wbr>(<span class="base">builtins.dict</span>):
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>dict() -> new empty dictionary
+dict(mapping) -> new dictionary initialized from a mapping object's
+    (key, value) pairs
+dict(iterable) -> new dictionary initialized as if via:
+    d = {}
+    for k, v in iterable:
+        d[k] = v
+dict(**kwargs) -> new dictionary initialized with the name=value pairs
+    in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+</div>
+
+
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>builtins.dict</dt>
+                                <dd id="Bar.__init__" class="class">dict</dd>
+                <dd id="Bar.get" class="function">get</dd>
+                <dd id="Bar.setdefault" class="function">setdefault</dd>
+                <dd id="Bar.pop" class="function">pop</dd>
+                <dd id="Bar.popitem" class="function">popitem</dd>
+                <dd id="Bar.keys" class="function">keys</dd>
+                <dd id="Bar.items" class="function">items</dd>
+                <dd id="Bar.values" class="function">values</dd>
+                <dd id="Bar.update" class="function">update</dd>
+                <dd id="Bar.fromkeys" class="function">fromkeys</dd>
+                <dd id="Bar.clear" class="function">clear</dd>
+                <dd id="Bar.copy" class="function">copy</dd>
 
             </div>
                                 </dl>

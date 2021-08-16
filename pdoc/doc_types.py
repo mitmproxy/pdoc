@@ -7,20 +7,24 @@ exception.
 """
 from __future__ import annotations
 
+import functools
 import inspect
+import operator
 import sys
+import types
 import typing
 import warnings
 from types import BuiltinFunctionType, ModuleType
-from typing import (  # type: ignore
+from typing import (
     Any,
     Optional,
     TYPE_CHECKING,
-    _GenericAlias,
 )
+from typing import _GenericAlias  # type: ignore
 
 from . import extract
-from ._compat import ForwardRef, GenericAlias, Literal, get_args, get_origin
+from ._compat import GenericAlias, Literal, UnionType, get_args, get_origin
+from .doc_ast import type_checking_sections
 
 if TYPE_CHECKING:
 
@@ -35,7 +39,6 @@ This is useful to distinguish it from an actual annotation with `None`.
 This value is an alias of `inspect.Signature.empty`.
 """
 
-
 # adapted from
 # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L1740-L1747
 # ✂ start ✂
@@ -49,6 +52,8 @@ NonUserDefinedCallables = (
     _ClassMethodWrapper,
     BuiltinFunctionType,
 )
+
+
 # ✂ end ✂
 
 
@@ -78,7 +83,7 @@ def resolve_annotations(
 
     resolved = {}
     for name, value in annotations.items():
-        resolved[name] = safe_eval_type(value, ns, fullname)
+        resolved[name] = safe_eval_type(value, ns, module, fullname)
 
     return resolved
 
@@ -86,8 +91,8 @@ def resolve_annotations(
 def safe_eval_type(
     t: Any,
     globalns,
+    module: Optional[types.ModuleType],
     fullname: str,
-    last_err: Optional[str] = None,
 ) -> Any:
     """
     This method wraps `typing._eval_type`, but doesn't raise on errors.
@@ -99,29 +104,40 @@ def safe_eval_type(
     If that still fails, a warning is emitted and `t` is returned as-is.
     """
     try:
+        return _eval_type(t, globalns, None)
+    except AttributeError as e:
+        err = str(e)
+        _, obj, _, attr, _ = err.split("'")
+        mod = f"{obj}.{attr}"
+    except NameError as e:
+        err = str(e)
+        _, mod, _ = err.split("'")
+    except Exception as e:
+        warnings.warn(f"Error parsing type annotation {t} for {fullname}: {e}")
+        return t
+
+    # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
+    if module:
+        try:
+            code = compile(type_checking_sections(module), "<string>", "exec")
+            eval(code, globalns, globalns)
+        except Exception as e:
+            warnings.warn(
+                f"Failed to run TYPE_CHECKING code while parsing {t} type annotation for {fullname}: {e}"
+            )
         try:
             return _eval_type(t, globalns, None)
-        except AttributeError as e:
-            err = str(e)
-            _, obj, _, attr, _ = err.split("'")
-            mod = f"{obj}.{attr}"
-        except NameError as e:
-            err = str(e)
-            _, mod, _ = err.split("'")
-    except Exception as e:
-        err = last_err = str(e)
-        mod = ""  # make type checker happy
-    if err == last_err:
-        warnings.warn(f"Error parsing type annotation for {fullname}: {err}")
-        return t
+        except Exception:
+            pass
+
     try:
         val = extract.load_module(mod)
     except Exception:
         warnings.warn(
-            f"Error parsing type annotation for {fullname}. Import of {mod} failed: {err}"
+            f"Error parsing type annotation {t} for {fullname}. Import of {mod} failed: {err}"
         )
         return t
-    return safe_eval_type(t, {mod: val, **globalns}, fullname, err)
+    return safe_eval_type(t, {mod: val, **globalns}, module, fullname)
 
 
 def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
@@ -132,42 +148,46 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     if isinstance(t, str):
         if sys.version_info < (3, 9):  # pragma: no cover
             t = t.strip("\"'")
-        t = ForwardRef(t, is_argument=False)
+        t = typing.ForwardRef(t)
 
     if get_origin(t) is Literal:
         return t
 
-    if sys.version_info < (3, 9) and isinstance(
-        t, (typing.ForwardRef, ForwardRef)
-    ):  # pragma: no cover
-        # we do a very happy dance here for Python 3.8, where things are a bit crazy.
-        # In a nutshell, we convert Python 3.8's ForwardRef to our vendored ForwardRef,
-        # and then eval on the whole thing recursively.
-        if isinstance(t, typing.ForwardRef):
-            t = ForwardRef(t.__forward_arg__, is_argument=False)
-        return _eval_type(
-            t._evaluate(globalns, localns, recursive_guard),
-            globalns,
-            localns,
-            recursive_guard,
-        )
+    if isinstance(t, typing.ForwardRef):
+        # inlined from
+        # https://github.com/python/cpython/blob/4f51fa9e2d3ea9316e674fb9a9f3e3112e83661c/Lib/typing.py#L684-L707
+        if t.__forward_arg__ in recursive_guard:  # pragma: no cover
+            return t
+        if not t.__forward_evaluated__ or localns is not globalns:
+            if globalns is None and localns is None:  # pragma: no cover
+                globalns = localns = {}
+            elif globalns is None:  # pragma: no cover
+                globalns = localns
+            elif localns is None:  # pragma: no cover
+                localns = globalns
+            __forward_module__ = getattr(t, "__forward_module__", None)
+            if __forward_module__ is not None:
+                globalns = getattr(
+                    sys.modules.get(__forward_module__, None), "__dict__", globalns
+                )
+            (type_,) = (eval(t.__forward_code__, globalns, localns),)
+            t.__forward_value__ = _eval_type(
+                type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+            )
+            t.__forward_evaluated__ = True
+        return t.__forward_value__
 
-    # https://github.com/python/cpython/blob/4db8988420e0a122d617df741381b0c385af032c/Lib/typing.py#L299-L314
+    # https://github.com/python/cpython/blob/main/Lib/typing.py#L333-L343
     # fmt: off
     # ✂ start ✂
-    """Evaluate all forward references in the given type t.
-    For use of globalns and localns see the docstring for get_type_hints().
-    recursive_guard is used to prevent prevent infinite recursion
-    with recursive ForwardRef.
-    """
-    if isinstance(t, ForwardRef):
-        return t._evaluate(globalns, localns, recursive_guard)
-    if isinstance(t, (_GenericAlias, GenericAlias)):
+    if isinstance(t, (_GenericAlias, GenericAlias, UnionType)):
         ev_args = tuple(_eval_type(a, globalns, localns, recursive_guard) for a in t.__args__)
         if ev_args == t.__args__:
             return t
         if isinstance(t, GenericAlias):
             return GenericAlias(t.__origin__, ev_args)
+        if isinstance(t, UnionType):
+            return functools.reduce(operator.or_, ev_args)
         else:
             return t.copy_with(ev_args)
     return t

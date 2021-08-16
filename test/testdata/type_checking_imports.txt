@@ -1,0 +1,2 @@
+<module type_checking_imports
+    <function def foo(a: Sequence[str], b: Dict[str, str]): ...>>
