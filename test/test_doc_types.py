@@ -1,8 +1,9 @@
 import inspect
-import sys
-
 import pytest
+import sys
+import types
 
+from pdoc import doc_ast
 from pdoc.doc_types import formatannotation, safe_eval_type
 
 
@@ -14,8 +15,18 @@ def test_formatannotation_still_unfixed():
 
 
 @pytest.mark.parametrize(
-    "typestr", ["html", "totally_unknown_module", "!!!!", "html.unknown_attr"]
+    "typestr", ["totally_unknown_module", "!!!!", "html.unknown_attr"]
 )
 def test_eval_fail(typestr):
     with pytest.warns(UserWarning, match="Error parsing type annotation"):
-        assert safe_eval_type(typestr, {}, "test_eval_fail") == typestr
+        assert safe_eval_type(typestr, {}, types.ModuleType("a"), "a") == typestr
+
+
+def test_eval_fail2(monkeypatch):
+    monkeypatch.setattr(
+        doc_ast,
+        "get_source",
+        lambda _: "import typing\nif typing.TYPE_CHECKING:\n\traise RuntimeError()"
+    )
+    with pytest.warns(UserWarning, match="Failed to run TYPE_CHECKING code"):
+        assert safe_eval_type("xyz", {}, types.ModuleType("a"), "a") == "xyz"

@@ -114,6 +114,7 @@ snapshots = [
         "logo_link": "https://example.com/",
         "footer_text": "custom footer text"
     }),
+    Snapshot("type_checking_imports"),
 ]
 
 

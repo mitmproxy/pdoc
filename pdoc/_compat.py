@@ -19,11 +19,10 @@ else:  # pragma: no cover
 if sys.version_info >= (3, 9):
     from types import GenericAlias
 else:  # pragma: no cover
-    class GenericAlias:
-        pass
+    from typing import _GenericAlias as GenericAlias
 
 if sys.version_info >= (3, 10):
-    from types import UnionType
+    from types import UnionType  # type: ignore
 else:  # pragma: no cover
     class UnionType:
         pass
@@ -109,6 +108,7 @@ else:  # pragma: no cover
     from typing import Generic, _GenericAlias
     import collections.abc
     # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
+
     class Literal:
         pass
 

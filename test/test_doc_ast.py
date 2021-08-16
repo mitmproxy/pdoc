@@ -1,6 +1,8 @@
 import pytest
+import types
 
-from pdoc.doc_ast import _dedent, _parse
+from pdoc import doc_ast
+from pdoc.doc_ast import _dedent, _parse, type_checking_sections
 
 
 def test_dedent():
@@ -44,3 +46,13 @@ def test_dedent():
 def test_parse_error():
     with pytest.warns(RuntimeWarning, match="Error parsing source code"):
         assert _parse("!!!")
+
+
+@pytest.mark.parametrize("code,statements", [
+    ("""import typing\nif typing.TYPE_CHECKING:\n\tprint(42)""", 1),
+    ("""from typing import TYPE_CHECKING\nif TYPE_CHECKING:\n\tprint(42)\n\tprint(43)""", 2),
+    ("""print(1234)""", 0),
+])
+def test_type_checking_sections(code, statements, monkeypatch):
+    monkeypatch.setattr(doc_ast, "get_source", lambda _: code)
+    assert len(type_checking_sections(types.ModuleType("test_type_checking_sections")).body) == statements

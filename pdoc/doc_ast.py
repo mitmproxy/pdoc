@@ -168,6 +168,30 @@ def sort_by_source(
     return sorted, unsorted
 
 
+def type_checking_sections(mod: types.ModuleType) -> ast.Module:
+    """
+    Walks the abstract syntax tree for `mod` and returns all statements guarded by TYPE_CHECKING blocks.
+    """
+    ret = ast.Module(body=[], type_ignores=[])
+    tree = _parse_module(get_source(mod))
+    for node in tree.body:
+        if (
+            isinstance(node, ast.If)
+            and isinstance(node.test, ast.Name)
+            and node.test.id == "TYPE_CHECKING"
+        ):
+            ret.body.extend(node.body)
+        if (
+            isinstance(node, ast.If)
+            and isinstance(node.test, ast.Attribute)
+            and isinstance(node.test.value, ast.Name)
+            and node.test.value.id == "typing"
+            and node.test.attr == "TYPE_CHECKING"
+        ):
+            ret.body.extend(node.body)
+    return ret
+
+
 @cache
 def _parse_module(source: str) -> ast.Module:
     """

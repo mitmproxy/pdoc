@@ -1,2 +1,4 @@
 <module misc_py310
-    <function def new_union(a: int | str) -> bool | None: ...  # Testing Python 3.10'…>>
+    <function def new_union(a: int | dict[str, misc_py310.Foo]) -> bool | None: ...  # Testing Python 3.10'…>
+    <class misc_py310.Foo
+        <method def __init__(): ...>>>

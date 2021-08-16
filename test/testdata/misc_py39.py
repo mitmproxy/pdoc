@@ -1,7 +1,8 @@
 """
 Testing features that either are 3.9+ only or render slightly different on 3.9.
 """
-from typing import NamedTuple
+from __future__ import annotations
+from typing import NamedTuple, Optional, TypedDict
 
 
 # Testing a typing.NamedTuple
@@ -16,3 +17,12 @@ class NamedTupleExample(NamedTuple):
     name: str
     """Name of our example tuple."""
     id: int = 3
+
+
+# Testing some edge cases in our inlined implementation of ForwardRef._evaluate in _eval_type.
+class Foo(TypedDict):
+    a: Optional[int]
+
+
+class Bar(Foo, total=False):
+    b: int
