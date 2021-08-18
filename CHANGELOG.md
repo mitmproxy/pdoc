@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ -
+
+# 2021-08-18: pdoc 7.4.0
+
  - Display error webpage for template errors.
  - When processing type hints, detect imports in 
    [`TYPE_CHECKING`](https://docs.python.org/3/library/typing.html#typing.TYPE_CHECKING) 
