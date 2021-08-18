@@ -27,21 +27,19 @@ from pdoc.search import make_index, precompile_index
 
 def configure(
     *,
-    template_directory: Optional[Path] = None,
     docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
-    show_source: bool = True,
-    math: bool = False,
+    footer_text: str = "",
     logo: Optional[str] = None,
     logo_link: Optional[str] = None,
-    footer_text: str = "",
+    math: bool = False,
+    search: bool = True,
+    show_source: bool = True,
+    template_directory: Optional[Path] = None,
 ):
     """
     Configure the rendering output.
 
-    - `template_directory` can be used to set an additional (preferred) directory
-      for templates. You can find an example in the main documentation of `pdoc`
-      or in `examples/custom-template`.
     - `docformat` is the docstring flavor in use.
       pdoc prefers plain Markdown (the default), but also supports other formats.
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,
@@ -51,11 +49,15 @@ def configure(
         ```
 
       renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
-    - `show_source` controls whether a "View Source" button should be included in the output.
-    - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `footer_text` is additional text that should appear in the navigation footer.
     - `logo` is an optional URL to the project's logo image
     - `logo_link` is an optional URL the logo should point to
-    - `footer_text` is additional text that should appear in the navigation footer.
+    - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `search` controls whether search functionality is enabled and a search index is built.
+    - `show_source` controls whether a "View Source" button should be included in the output.
+    - `template_directory` can be used to set an additional (preferred) directory
+      for templates. You can find an example in the main documentation of `pdoc`
+      or in `examples/custom-template`.
     """
     searchpath = _default_searchpath
     if template_directory:
@@ -69,6 +71,7 @@ def configure(
     env.globals["logo"] = logo
     env.globals["logo_link"] = logo_link
     env.globals["footer_text"] = footer_text
+    env.globals["search"] = search
 
 
 def html_module(
@@ -112,6 +115,8 @@ def html_error(error: str, details: str = "") -> str:
 
 def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
     """Renders the Elasticlunr.js search index."""
+    if not env.globals["search"]:
+        return ""
     # This is a rather terrible hack to determine if a given object is public and should be included in the index.
     module_template: jinja2.Template = env.get_template("module.html.jinja2")
     ctx: jinja2.runtime.Context = module_template.new_context(

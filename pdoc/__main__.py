@@ -61,16 +61,10 @@ renderopts.add_argument(
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 renderopts.add_argument(
-    "--math",
-    action=BooleanOptionalAction,
-    default=False,
-    help="Include MathJax to enable math formula rendering.",
-)
-renderopts.add_argument(
-    "--show-source",
-    action=BooleanOptionalAction,
-    default=True,
-    help='Display "View Source" buttons.',
+    "--footer-text",
+    type=str,
+    metavar="TEXT",
+    help="Custom text for the page footer, for example the project name and current version number.",
 )
 renderopts.add_argument(
     "--logo",
@@ -85,10 +79,22 @@ renderopts.add_argument(
     help='Optional URL the logo should point to.',
 )
 renderopts.add_argument(
-    "--footer-text",
-    type=str,
-    metavar="TEXT",
-    help="Custom text for the page footer, for example the project name and current version number.",
+    "--math",
+    action=BooleanOptionalAction,
+    default=False,
+    help="Include MathJax to enable math formula rendering.",
+)
+renderopts.add_argument(
+    "--search",
+    action=BooleanOptionalAction,
+    default=True,
+    help='Enable search functionality.',
+)
+renderopts.add_argument(
+    "--show-source",
+    action=BooleanOptionalAction,
+    default=True,
+    help='Display "View Source" buttons.',
 )
 renderopts.add_argument(
     "-t",
@@ -191,6 +197,7 @@ def cli(args: list[str] = None) -> None:
         docformat=opts.docformat,
         math=opts.math,
         show_source=opts.show_source,
+        search=opts.search,
         logo=opts.logo,
         logo_link=opts.logo_link,
         footer_text=opts.footer_text,

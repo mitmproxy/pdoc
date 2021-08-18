@@ -46,7 +46,9 @@
                      alt="pdoc logo"/>
             </a>
         {% endblock %}
+        {% if search %}
         <input type="search" placeholder="Search API Documentation..." aria-label="search box">
+        {% endif %}
     </header>
 {% endblock %}
 {% block module_info %}{% endblock %}

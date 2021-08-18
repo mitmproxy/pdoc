@@ -728,8 +728,8 @@
                     {% endif %}
                 {% endblock %}
 
-                {% block search %}
-                    {% if all_modules|length > 1 %}
+                {% block search_box %}
+                    {% if search and all_modules|length > 1 %}
                         {# we set a pattern here so that we can use the :valid CSS selector #}
                         <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
                                pattern=".+" required>
@@ -814,7 +814,7 @@
         {% include "livereload.html.jinja2" %}
     {% endif %}
     {% block search_js %}
-        {% if all_modules|length > 1 %}
+        {% if search and all_modules|length > 1 %}
             {% include "search.html.jinja2" %}
         {% endif %}
     {% endblock %}

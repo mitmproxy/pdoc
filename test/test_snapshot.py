@@ -121,8 +121,9 @@ snapshots = [
         "show_source": False,
         "logo": "https://placedog.net/500?random",
         "logo_link": "https://example.com/",
-        "footer_text": "custom footer text"
-    }),
+        "footer_text": "custom footer text",
+        "search": False,
+    }, with_output_directory=True),
     Snapshot("type_checking_imports"),
 ]
 
