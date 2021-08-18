@@ -48,18 +48,27 @@ class Snapshot:
                 # noinspection PyTypeChecker
                 pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
 
-                rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
+                if format == "html":
+                    rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
+                else:
+                    rendered = ""
                 for f in sorted(tmpdir.glob("**/*"), reverse=True):
                     if not f.is_file():
                         continue
-                    rendered += (
-                        f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
-                        + '<iframe srcdoc="\n'
-                        + f.read_text("utf8")
-                        .replace("&", "&amp;")
-                        .replace(""" " """.strip(), "&quot;")
-                        + '\n"></iframe>\n\n'
-                    )
+                    if format == "html":
+                        rendered += (
+                            f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
+                            + '<iframe srcdoc="\n'
+                            + f.read_text("utf8")
+                            .replace("&", "&amp;")
+                            .replace(""" " """.strip(), "&quot;")
+                            + '\n"></iframe>\n\n'
+                        )
+                    else:
+                        rendered += (
+                            f"# {f.relative_to(tmpdir).as_posix()}\n"
+                            f"{f.read_text('utf8')}\n"
+                        )
 
         else:
             # noinspection PyTypeChecker
@@ -137,11 +146,15 @@ def test_snapshots(snapshot: Snapshot, format: str):
 
 
 if __name__ == "__main__":
-    if sys.version_info < (3, 10):  # pragma: no cover
-        raise RuntimeError("Snapshots need to be generated on Python 3.10+")
+    skipped_some = False
     for snapshot in snapshots:
+        if sys.version_info < snapshot.min_version:
+            print(f"Skipping {snapshot} as it requires a more recent version of Python.")
+            skipped_some = True
+            continue
         for format in ["html", "repr"]:
             print(f"Rendering {snapshot} to {format}...")
             rendered = snapshot.make(format)
             snapshot.outfile(format).write_bytes(rendered.encode())
     print("All snapshots rendered!")
+    sys.exit(int(skipped_some))

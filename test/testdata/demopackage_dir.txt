@@ -1,6 +1,4 @@
-<style>iframe {width: 100%; min-height: 50vh}</style>
-<h3>demopackage.html</h3>
-<iframe srcdoc="
+# demopackage.html
 <module demopackage  # A test package
     <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
         <method def __init__(): ...  # inherited from demopackage._child_d.Test.__init__>
@@ -22,27 +20,16 @@
             <method def c(self): ...  # inherited from demopackage.child_c.C.c>
             <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
     <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>>
-"></iframe>
-
-<h3>demopackage/child_c.html</h3>
-<iframe srcdoc="
+# demopackage/child_c.html
 <module demopackage.child_c  # child_c docstr
     <class demopackage.child_c.C  # This class is define…
         <method def __init__(): ...>
         <method def c(self): ...>
         <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
-"></iframe>
-
-<h3>demopackage/child_b.html</h3>
-<iframe srcdoc="
+# demopackage/child_b.html
 <module demopackage.child_b  # child_b docstr
     <class demopackage.child_b.B  # This class is define…
         <method def __init__(): ...>
         <method def b(self): ...>>>
-"></iframe>
-
-<h3>demopackage/_child_e.html</h3>
-<iframe srcdoc="
+# demopackage/_child_e.html
 <module demopackage._child_e  # _child_e docstr>
-"></iframe>
-
