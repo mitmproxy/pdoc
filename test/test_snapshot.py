@@ -153,6 +153,8 @@ if __name__ == "__main__":
             print(f"Skipping {snapshot} as it requires a more recent version of Python.")
             skipped_some = True
             continue
+        if len(sys.argv) > 1 and snapshot.id not in sys.argv:
+            continue
         for format in ["html", "repr"]:
             print(f"Rendering {snapshot} to {format}...")
             rendered = snapshot.make(format)

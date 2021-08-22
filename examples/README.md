@@ -4,6 +4,7 @@ This directory contains some pdoc template examples:
 
  - `custom-template`: Showcasing various template configuration options.
  - `dark-mode`: Style pdoc with a dark theme.
+ - `library-usage`: Using pdoc as a Python library.
  - `mkdocs`: Integrate pdoc with mkdocs.
 
 ### Third-Party Examples
