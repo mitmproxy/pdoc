@@ -135,7 +135,9 @@ def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
     )
 
     compile_js = Path(env.get_template("build-search-index.js").filename)  # type: ignore
-    return precompile_index(index, compile_js)
+    return env.get_template("search.js.jinja2").render(
+        search_index=precompile_index(index, compile_js)
+    )
 
 
 def repr_module(module: pdoc.doc.Module) -> str:

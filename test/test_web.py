@@ -50,7 +50,7 @@ def test_get_index():
 def test_get_search_json(monkeypatch):
     with pytest.warns(RuntimeWarning, match="Error importing 'err'"):
         assert b'"dataclasses.is_dataclass"' in handle_request(
-            b"GET /search.json HTTP/1.1\r\n\r\n"
+            b"GET /search.js HTTP/1.1\r\n\r\n"
         )
 
 
