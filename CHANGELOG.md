@@ -2,7 +2,7 @@
 
 # Unreleased: pdoc next
 
- -
+ - Improve display of (extension module) data descriptors.
 
 # 2021-08-18: pdoc 7.4.0
 
