@@ -245,7 +245,7 @@ including a limited subset of reStructuredText (as used by Sphinx).
 If your documentation follows one of these styles, you can:
 
 1. Run `pdoc --docformat ...` to enable a particular docstring flavor globally, or
-2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.  
+2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.
    The following values are supported: `google`, `numpy`, and `restructuredtext`.
    `google` and `numpy` are both treated as a superset of `restructuredtext`.
 
@@ -354,7 +354,7 @@ We would be happy to accept contributions for Markdown and PDF.
 '''
 from __future__ import annotations
 
-__version__ = "7.4.0"  # this is read from setup.py
+__version__ = "8.0.0"  # this is read from setup.py
 
 import io
 import traceback
