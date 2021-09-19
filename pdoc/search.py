@@ -2,7 +2,7 @@
 pdoc has a search box which allows users to quickly find relevant parts in the documentation.
 This feature is implemented entirely client-side so that pdoc can still be hosted statically,
 and works without any third-party services in a privacy-preserving way. When a user focuses the
-search box for the first time, pdoc will fetch the search index (`search.json`) and use that to
+search box for the first time, pdoc will fetch the search index (`search.js`) and use that to
 answer all upcoming queries.
 
 ##### Search Performance
@@ -23,7 +23,7 @@ then checking your browser's developer console.
 ##### Search Index Size
 
 The search index can be relatively large as it includes all docstrings. For larger projects, you should make sure that
-you have [HTTP compression](https://en.wikipedia.org/wiki/HTTP_compression) and caching enabled. `search.json` usually
+you have [HTTP compression](https://en.wikipedia.org/wiki/HTTP_compression) and caching enabled. `search.js` usually
 compresses to about 10% of its original size. For example, pdoc's own precompiled search index compresses from 312kB
 to 27kB.
 

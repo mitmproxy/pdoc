@@ -435,6 +435,6 @@ def pdoc(
 
         search = render.search_index(doc_objects)
         if search:
-            (output_directory / "search.json").write_bytes(search.encode())
+            (output_directory / "search.js").write_bytes(search.encode())
 
     return retval.getvalue()

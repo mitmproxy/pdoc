@@ -1,5 +1,4 @@
 {% set rootprefix = "../" * module.modulename.count(".") if module else "" %}
-<script>{% include "elasticlunr.min.js" %}</script>
 <script>
     function escapeHTML(html) {
         return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
@@ -44,40 +43,24 @@
     window.addEventListener("popstate", onInput);
 
 
-    let searchIndex, searchErr;
+    let search, searchErr;
 
     async function initialize() {
         {# Get the search index and compile it if necessary.
            This function will only be called once. #}
-        let docs;
         try {
-            let resp = await fetch("{{ rootprefix }}search.json");
-            docs = await resp.json();
-        } catch (e) {
-            searchErr = "Cannot fetch search index.";
-            throw e;
-        }
-
-        {# mirrored in build-search-index.js (part 1) #}
-        // Also split on html tags. this is a cheap heuristic, but good enough.
-        elasticlunr.tokenizer.setSeperator(/[\s\-.;&]+|<[^>]*>/);
-
-        if (docs._isPrebuiltIndex) {
-            console.info("using precompiled search index");
-            searchIndex = elasticlunr.Index.load(docs);
-        } else {
-            console.time("building search index");
-            {# mirrored in build-search-index.js (part 2) #}
-            searchIndex = elasticlunr(function () {
-                this.addField('qualname');
-                this.addField('fullname');
-                this.addField('doc');
-                this.setRef('fullname');
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "{{ rootprefix }}search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
             });
-            for (let doc of docs) {
-                searchIndex.addDoc(doc);
-            }
-            console.timeEnd("building search index");
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
         }
         onInput();
 
@@ -92,33 +75,26 @@
 
     function onInput() {
         setContent((() => {
-            const search = getSearchTerm();
-            if (!search) {
+            const term = getSearchTerm();
+            if (!term) {
                 return null
             }
             if (searchErr) {
                 return `<h3>Error: ${searchErr}</h3>`
             }
-            if (!searchIndex) {
+            if (!search) {
                 return "<h3>Searching...</h3>"
             }
 
             window.scrollTo({top: 0, left: 0, behavior: 'auto'});
 
-            const results = searchIndex.search(search, {
-                fields: {
-                    qualname: {boost: 4},
-                    fullname: {boost: 2},
-                    doc: {boost: 1},
-                },
-                expand: true
-            });
+            const results = search(term);
 
             let html;
             if (results.length === 0) {
-                html = `No search results for '${escapeHTML(search)}'.`
+                html = `No search results for '${escapeHTML(term)}'.`
             } else {
-                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(search)}'.</h4>`;
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
             }
             for (let result of results.slice(0, 10)) {
                 let doc = result.doc;

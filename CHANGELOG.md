@@ -1,7 +1,10 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-09-19: pdoc 8.0.0
 
+ - `search.json` -> `search.js`: Most of pdoc's search-related JavaScript code is now
+   only fetched on demand, which improves page size and performance.
+ - pdoc's search now works from `file://` pages.
  - Improve display of (extension module) data descriptors.
 
 # 2021-08-18: pdoc 7.4.0

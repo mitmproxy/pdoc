@@ -42,7 +42,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
         if path == "/":
             out = render.html_index(self.server.all_modules)
-        elif path == "/search.json":
+        elif path == "/search.js":
             self.send_response(200)
             self.send_header("content-type", "application/json")
             self.end_headers()
