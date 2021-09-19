@@ -63,5 +63,5 @@ This …
         <var RED = <EnumDemo.RED: 1>  # I am the red.>
         <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>
         <var BLUE = <EnumDemo.BLUE: 3>  # I am blue.>
-        <var name = <types.DynamicClassAttribute object>  # inherited from enum.Enum.name, The name of the Enum…>
-        <var value = <types.DynamicClassAttribute object>  # inherited from enum.Enum.value, The value of the Enu…>>>
+        <var name  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>>>
