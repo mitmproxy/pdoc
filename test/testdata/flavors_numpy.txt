@@ -7,7 +7,7 @@
     <class flavors_numpy.ExampleError  # Exceptions are docum…
         <method def __init__(self, msg, code): ...>
         <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <var args = <attribute 'args' of 'BaseException' objects>  # inherited from builtins.BaseException.args>>
+        <var args  # inherited from builtins.BaseException.args>>
     <class flavors_numpy.ExampleClass  # The summary line for…
         <method def __init__(self, param1, param2, param3): ...  # Example of docstring…>
         <var attr5  # str: Docstring *afte…>

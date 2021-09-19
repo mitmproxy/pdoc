@@ -1,7 +1,7 @@
 <module misc
     <class misc.Issue226
         <method def __init__(): ...>
-        <var size = <misc.Descriptor object>  # This is the size>>
+        <var size  # This is the size>>
     <var var_with_default_obj = <object object>  # this shouldn't rende…>
     <method def var_with_default_func(): ...  # inherited from misc.default_func>
     <function def func_with_defaults(a=<object object>, b=<function default_func>): ...  # this shouldn't rende…>
@@ -26,7 +26,7 @@
     <class misc.CustomException  # custom exception typ…
         <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
         <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <var args = <attribute 'args' of 'BaseException' objects>  # inherited from builtins.BaseException.args>>
+        <var args  # inherited from builtins.BaseException.args>>
     <class misc.LambdaAttr
         <method def __init__(): ...>
         <method def attr(x): ...>>
