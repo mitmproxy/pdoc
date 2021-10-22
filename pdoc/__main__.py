@@ -70,13 +70,13 @@ renderopts.add_argument(
     "--logo",
     type=str,
     metavar="URL",
-    help='Add a project logo image.',
+    help="Add a project logo image.",
 )
 renderopts.add_argument(
     "--logo-link",
     type=str,
     metavar="URL",
-    help='Optional URL the logo should point to.',
+    help="Optional URL the logo should point to.",
 )
 renderopts.add_argument(
     "--math",
@@ -88,7 +88,7 @@ renderopts.add_argument(
     "--search",
     action=BooleanOptionalAction,
     default=True,
-    help='Enable search functionality.',
+    help="Enable search functionality.",
 )
 renderopts.add_argument(
     "--show-source",
