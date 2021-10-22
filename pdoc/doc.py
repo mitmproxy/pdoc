@@ -547,23 +547,34 @@ class Class(Namespace[type]):
 
     @cached_property
     def _var_annotations(self) -> dict[str, type]:
-        annotations: dict[str, type] = {}
-        for cls in self.obj.__mro__:
+        # this is a bit tricky: __annotations__ also includes annotations from parent classes,
+        # but we need to execute them in the namespace of the parent class.
+        # Our workaround for this is to walk the MRO backwards, and only update/evaluate only if the annotation changes.
+        annotations: dict[
+            str, tuple[Any, type]
+        ] = {}  # attribute -> (annotation_unresolved, annotation_resolved)
+        for cls in reversed(self.obj.__mro__):
             cls_annotations = doc_ast.walk_tree(cls).annotations.copy()
             dynamic_annotations = _safe_getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
-                for k, v in dynamic_annotations.items():
-                    cls_annotations[k] = v
+                for attr, unresolved_annotation in dynamic_annotations.items():
+                    cls_annotations[attr] = unresolved_annotation
             cls_fullname = (
                 _safe_getattr(cls, "__module__", "") + "." + cls.__qualname__
             ).lstrip(".")
-            cls_annotations = resolve_annotations(
-                cls_annotations, inspect.getmodule(cls), cls_fullname
-            )
 
-            for k, v in cls_annotations.items():
-                annotations.setdefault(k, v)
-        return annotations
+            new_annotations = {
+                attr: unresolved_annotation
+                for attr, unresolved_annotation in cls_annotations.items()
+                if attr not in annotations
+                or annotations[attr][0] is not unresolved_annotation
+            }
+            for attr, t in resolve_annotations(
+                new_annotations, inspect.getmodule(cls), cls_fullname
+            ).items():
+                annotations[attr] = (new_annotations[attr], t)
+
+        return {k: v[1] for k, v in annotations.items()}
 
     @cached_property
     def own_members(self) -> list[Doc]:
