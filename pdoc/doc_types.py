@@ -127,8 +127,13 @@ def safe_eval_type(
             )
         try:
             return _eval_type(t, globalns, None)
-        except Exception:
-            pass
+        except (AttributeError, NameError):
+            pass  # still not found
+        except Exception as e:
+            warnings.warn(
+                f"Error parsing type annotation {t} for {fullname} after evaluating TYPE_CHECKING blocks: {e}"
+            )
+            return t
 
     try:
         val = extract.load_module(mod)

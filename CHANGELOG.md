@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Fix an edge case where class annotations were not evaluated properly.
+ - Improve error messages for invalid type hints.
+
 # 2021-09-19: pdoc 8.0.0
 
  - `search.json` -> `search.js`: Most of pdoc's search-related JavaScript code is now
