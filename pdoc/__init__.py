@@ -354,7 +354,7 @@ We would be happy to accept contributions for Markdown and PDF.
 '''
 from __future__ import annotations
 
-__version__ = "8.0.0"  # this is read from setup.py
+__version__ = "8.0.1"  # this is read from setup.py
 
 import io
 import traceback
