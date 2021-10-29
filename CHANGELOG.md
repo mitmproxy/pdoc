@@ -1,9 +1,10 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-10-29: pdoc 8.0.1
 
  - Fix an edge case where class annotations were not evaluated properly.
  - Improve error messages for invalid type hints.
+ - Fix module index when using pdoc's web server.
 
 # 2021-09-19: pdoc 8.0.0
 

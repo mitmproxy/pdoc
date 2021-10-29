@@ -40,7 +40,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
         path = self.path.split("?", 1)[0]
 
-        if path == "/":
+        if path == "/" or path == "/index.html":
             out = render.html_index(self.server.all_modules)
         elif path == "/search.js":
             self.send_response(200)
