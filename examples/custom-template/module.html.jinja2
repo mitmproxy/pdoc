@@ -3,6 +3,17 @@ We want to extend the default template instead of defining everything ourselves.
 #}
 {% extends "default/module.html.jinja2" %}
 
+{#
+We can extend a block using {{ super() }}, in this case we add custom css at the end of the style block.
+#}
+{% block style %}
+    {{ super() | safe }}
+    <style>
+        .pdoc .modulename {
+            color: orange;
+        }
+    </style>
+{% endblock %}
 
 {#
 We can access system environment variables in the template, for example to pass version information.
