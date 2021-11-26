@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Add CSS styling for Markdown tables. (@sitic)
+
 # 2021-10-29: pdoc 8.0.1
 
  - Fix an edge case where class annotations were not evaluated properly.
