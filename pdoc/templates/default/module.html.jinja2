@@ -525,6 +525,22 @@
                     width: 70px;
                     transition: all 200ms;
                 }
+
+                /* Tables */
+                .pdoc table {
+                    display: block;
+                    width: max-content;
+                    max-width: 100%;
+                    overflow: auto;
+                    margin-bottom: 1rem;
+                }
+                .pdoc table th {
+                    font-weight: 600;
+                }
+                .pdoc table th, .pdoc table td {
+                    padding: 6px 13px;
+                    border: 1px solid var(--accent2);
+                }
             {% endblock %}
             </style>
         {% endblock style_pdoc %}
