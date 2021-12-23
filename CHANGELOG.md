@@ -3,6 +3,8 @@
 # Unreleased: pdoc next
 
  - Add CSS styling for Markdown tables. (@sitic)
+ - Prefer epydoc-style docstrings after variable assignments 
+   over the variable's `__doc__`.
 
 # 2021-10-29: pdoc 8.0.1
 

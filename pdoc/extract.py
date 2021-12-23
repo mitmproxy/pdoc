@@ -119,7 +119,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
             return parse_spec(spec.resolve().parent) + f".{spec.stem}"
         if str(spec.parent) not in sys.path:
             sys.path.insert(0, str(spec.parent))
-        if spec.stem in sys.modules:
+        if spec.stem in sys.modules and sys.modules[spec.stem].__file__:
             local_dir = spec.resolve()
             origin = Path(sys.modules[spec.stem].__file__).resolve()
             if local_dir not in (origin, origin.parent, origin.with_suffix("")):
