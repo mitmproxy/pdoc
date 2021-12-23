@@ -197,6 +197,15 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="function" href="#add_four">add_four</a>
+            </li>
+            <li>
+                    <a class="function" href="#add_five">add_five</a>
+            </li>
+            <li>
+                    <a class="function" href="#add_six">add_six</a>
+            </li>
     </ul>
 
 
@@ -255,7 +264,7 @@ misc    </h1>
 <span class="n">var_with_default_obj</span> <span class="o">=</span> <span class="n">default_obj</span>
 <span class="sd">&quot;&quot;&quot;this shouldn&#39;t render the object address&quot;&quot;&quot;</span>
 <span class="n">var_with_default_func</span> <span class="o">=</span> <span class="n">default_func</span>
-<span class="sd">&quot;&quot;&quot;this just render like a normal function&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;this just renders like a normal function&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span>
@@ -496,6 +505,21 @@ misc    </h1>
         <span class="k">pass</span>
 
 
+<span class="c1"># Adapted from https://github.com/mitmproxy/pdoc/issues/320</span>
+
+<span class="k">def</span> <span class="nf">make_adder</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">add_func</span>
+
+
+<span class="n">add_four</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">add_five</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;This function adds five.&quot;&quot;&quot;</span>
+<span class="n">add_six</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">add_six</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;This function adds six.&quot;</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -517,6 +541,9 @@ misc    </h1>
     <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
     <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
     <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -594,7 +621,9 @@ misc    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>this just renders like a normal function</p>
+</div>
+
 
                 </section>
                 <section id="func_with_defaults">
@@ -1587,6 +1616,72 @@ indents</p>
     
 
                             </div>
+                </section>
+                <section id="add_four">
+                            <div class="attr function"><a class="headerlink" href="#add_four">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">add_four</span><span class="signature">(b: int) -&gt; int</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This function adds two numbers.</p>
+</div>
+
+
+                </section>
+                <section id="add_five">
+                            <div class="attr function"><a class="headerlink" href="#add_five">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">add_five</span><span class="signature">(b: int) -&gt; int</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This function adds five.</p>
+</div>
+
+
+                </section>
+                <section id="add_six">
+                            <div class="attr function"><a class="headerlink" href="#add_six">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">add_six</span><span class="signature">(b: int) -&gt; int</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This function adds six.</p>
+</div>
+
+
                 </section>
     </main>
 </body>

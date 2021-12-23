@@ -37,7 +37,7 @@ default_obj = object()
 var_with_default_obj = default_obj
 """this shouldn't render the object address"""
 var_with_default_func = default_func
-"""this just render like a normal function"""
+"""this just renders like a normal function"""
 
 
 def func_with_defaults(
@@ -278,6 +278,21 @@ class AbstractClass(metaclass=abc.ABCMeta):
         pass
 
 
+# Adapted from https://github.com/mitmproxy/pdoc/issues/320
+
+def make_adder(a: int):
+    def add_func(b: int) -> int:
+        """This function adds two numbers."""
+        return a + b
+    return add_func
+
+
+add_four = make_adder(4)
+add_five = make_adder(5)
+"""This function adds five."""
+add_six = make_adder(6)
+add_six.__doc__ = "This function adds six."
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -299,4 +314,7 @@ __all__ = [  # noqa
     "fun_with_protected_decorator",
     "unhashable",
     "AbstractClass",
+    "add_four",
+    "add_five",
+    "add_six",
 ]

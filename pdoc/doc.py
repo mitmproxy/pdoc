@@ -270,20 +270,26 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 doc = Module(obj)
                 doc.modulename = self.modulename
                 doc.qualname = qualname
-            else:
-                docstring = self._var_docstrings.get(name, "")
-                default_value = obj
-                if not docstring and inspect.isdatadescriptor(obj):
-                    docstring = getattr(obj, "__doc__", None) or ""
-                    default_value = empty
+            elif inspect.isdatadescriptor(obj):
                 doc = Variable(
                     self.modulename,
                     qualname,
-                    docstring=docstring,
+                    docstring=getattr(obj, "__doc__", None) or "",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=default_value,
+                    default_value=empty,
                     taken_from=taken_from,
                 )
+            else:
+                doc = Variable(
+                    self.modulename,
+                    qualname,
+                    docstring="",
+                    annotation=self._var_annotations.get(name, empty),
+                    default_value=obj,
+                    taken_from=taken_from,
+                )
+            if self._var_docstrings.get(name):
+                doc.docstring = self._var_docstrings[name]
             members[doc.name] = doc
         return members
 

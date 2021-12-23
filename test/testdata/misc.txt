@@ -3,7 +3,7 @@
         <method def __init__(): ...>
         <var size  # This is the size>>
     <var var_with_default_obj = <object object>  # this shouldn't rende…>
-    <method def var_with_default_func(): ...  # inherited from misc.default_func>
+    <method def var_with_default_func(): ...  # inherited from misc.default_func, this just renders li…>
     <function def func_with_defaults(a=<object object>, b=<function default_func>): ...  # this shouldn't rende…>
     <class misc.ClassmethodLink  # You can either do
 
@@ -58,4 +58,7 @@
     <@_protected_decorator function def fun_with_protected_decorator(): ...  # This function has a …>
     <method def unhashable(unknown): ...>
     <class misc.AbstractClass  # This class shouldn't…
-        <@abc.abstractmethod method def foo(self): ...>>>
+        <@abc.abstractmethod method def foo(self): ...>>
+    <method def add_four(b: int) -> int: ...  # This function adds t…>
+    <method def add_five(b: int) -> int: ...  # This function adds f…>
+    <method def add_six(b: int) -> int: ...  # This function adds s…>>
