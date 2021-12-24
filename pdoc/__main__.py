@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import platform
+import re
 import subprocess
 import sys
 import warnings
@@ -43,6 +44,13 @@ mainargs.add_argument(
     metavar="DIR",
     type=Path,
     help="Write rendered documentation to the specified directory, don't start a webserver.",
+)
+mainargs.add_argument(
+    "-i",
+    "--ignore",
+    metavar="PATTERN",
+    type=str,
+    help="Ignore modules matching the given regular expression pattern.",
 )
 # may be added again in the future:
 # formats = parser.add_mutually_exclusive_group()
@@ -179,15 +187,18 @@ def cli(args: list[str] = None) -> None:
         footer_text=opts.footer_text,
     )
 
+    ignore_pattern = re.compile(opts.ignore) if opts.ignore else None
+
     if opts.output_directory:
         pdoc.pdoc(
             *opts.modules,
             output_directory=opts.output_directory,
             format="html",  # opts.format or
+            ignore_pattern=ignore_pattern,
         )
         return
     else:
-        all_modules = extract.walk_specs(opts.modules)
+        all_modules = extract.walk_specs(opts.modules, ignore_pattern)
         with pdoc.web.DocServer(
             (opts.host, opts.port),
             all_modules,
