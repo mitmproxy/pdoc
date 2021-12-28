@@ -39,7 +39,7 @@ from pdoc.doc_types import (
     resolve_annotations,
     safe_eval_type,
 )
-from ._compat import _tuplegetter, cache, cached_property, get_origin
+from ._compat import cache, cached_property, get_origin
 
 
 def _include_fullname_in_traceback(f):
@@ -934,8 +934,6 @@ class Variable(Doc[None]):
     def default_value_str(self) -> str:
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
-            return ""
-        elif isinstance(self.default_value, _tuplegetter):
             return ""
         else:
             try:

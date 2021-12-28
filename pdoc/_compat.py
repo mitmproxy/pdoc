@@ -133,12 +133,6 @@ else:  # pragma: no cover
         return ()
 
 
-if sys.version_info >= (3, 8):
-    from collections import _tuplegetter  # type: ignore
-else:  # pragma: no cover
-    from operator import itemgetter as _tuplegetter
-
-
 if True:
     # https://github.com/python/cpython/pull/27672
     from argparse import Action
@@ -194,6 +188,5 @@ __all__ = [
     "get_origin",
     "get_args",
     "Literal",
-    "_tuplegetter",
     "BooleanOptionalAction",
 ]
