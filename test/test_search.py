@@ -37,6 +37,9 @@ def test_precompile_index(monkeypatch, capsys):
         == '{"foo": 42, "_isPrebuiltIndex": true}'
     )
 
-    monkeypatch.delattr(subprocess, "check_output")
+    def _raise(*_, **__):
+        raise subprocess.CalledProcessError(-1, ["cmd"], b"nodejs error")
+
+    monkeypatch.setattr(subprocess, "check_output", _raise)
     assert search.precompile_index(docs, compile_js) == json.dumps(docs)
     assert "pdoc failed to precompile the search index" in capsys.readouterr().out

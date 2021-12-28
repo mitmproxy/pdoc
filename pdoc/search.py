@@ -41,11 +41,12 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+import textwrap
 from collections.abc import Callable
 from pathlib import Path
 
 import pdoc.doc
-from pdoc.render_helpers import to_markdown, to_html
+from pdoc.render_helpers import to_html, to_markdown
 
 
 def make_index(
@@ -115,15 +116,24 @@ def precompile_index(documents: list[dict], compile_js: Path) -> str:
             [executable, compile_js],
             input=raw.encode(),
             cwd=Path(__file__).parent / "templates",
+            stderr=subprocess.STDOUT,
         )
         index = json.loads(out)
         index["_isPrebuiltIndex"] = True
     except Exception as e:
         if len(raw) > 3 * 1024 * 1024:
             print(
-                f"Note: pdoc failed to precompile the search index ({e}). "
-                f"To improve search speed, see https://pdoc.dev/docs/pdoc/search.html"
+                f"pdoc failed to precompile the search index: {e}\n"
+                f"Search will work, but may be slower. "
+                f"This error may only show up now because your index has reached a certain size. "
+                f"See https://pdoc.dev/docs/pdoc/search.html for details."
             )
+            if isinstance(e, subprocess.CalledProcessError):
+                print(f"{' Node.js Output ':=^80}")
+                print(
+                    textwrap.indent(e.output.decode("utf8", "replace"), "    ").rstrip()
+                )
+                print("=" * 80)
         return raw
     else:
         return json.dumps(index)

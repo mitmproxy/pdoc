@@ -5,6 +5,7 @@
  - Add CSS styling for Markdown tables. (@sitic)
  - Prefer epydoc-style docstrings after variable assignments 
    over the variable's `__doc__`.
+ - Improve error message on search index compilation failures.
 
 # 2021-10-29: pdoc 8.0.1
 
