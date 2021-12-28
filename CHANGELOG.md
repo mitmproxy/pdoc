@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2021-12-28: pdoc 8.1.0
 
  - Add CSS styling for Markdown tables. (@sitic)
  - Prefer epydoc-style docstrings after variable assignments 
