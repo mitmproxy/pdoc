@@ -53,3 +53,8 @@
 {% endblock %}
 {% block module_info %}{% endblock %}
 {% block module_contents %}{% endblock %}
+{% block search_js %}
+    {% if search %}
+        {% include "search.html.jinja2" %}
+    {% endif %}
+{% endblock %}
