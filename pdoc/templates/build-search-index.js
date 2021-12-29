@@ -8,10 +8,11 @@ let fs = require("fs");
 let docs = JSON.parse(fs.readFileSync(0, "utf-8"));
 
 /* mirrored in search.js.jinja2  (part 1) */
-elasticlunr.tokenizer.setSeperator(/[\s\-.;&]+|<[^>]*>/);
+elasticlunr.tokenizer.setSeperator(/[\s\-.;&_]+|<[^>]*>/);
 
 /* mirrored in search.js.jinja2  (part 2) */
 searchIndex = elasticlunr(function () {
+    this.pipeline.remove(elasticlunr.stemmer);
     this.addField("qualname");
     this.addField("fullname");
     this.addField("doc");

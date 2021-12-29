@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Fix some search misses by disabling the word stemmer.
+
 # 2021-12-28: pdoc 8.1.0
 
  - Add CSS styling for Markdown tables. (@sitic)
