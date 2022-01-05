@@ -9,7 +9,7 @@ from pdoc.extract import invalidate_caches, module_mtime, parse_spec, walk_specs
 here = Path(__file__).parent
 
 
-def test_walk_specs():
+def test_walk_specs(capsys):
     assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
     with pytest.raises(ValueError, match="Module not found"):
         with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
@@ -24,6 +24,13 @@ def test_walk_specs():
         ]
     with pytest.raises(ValueError, match="Module not found"):
         assert walk_specs([])
+
+    assert list(walk_specs(["dataclasses", "dataclasses"])) == ["dataclasses"]
+    captured = capsys.readouterr()
+    assert captured.err.startswith(
+        "Warning: The module specification 'dataclasses' adds a module named dataclasses, but a module with this name "
+        "has already been added."
+    )
 
 
 def test_parse_spec(monkeypatch):

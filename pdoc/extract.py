@@ -66,6 +66,14 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
                 ispkg=bool(modspec.submodule_search_locations),
             )
             for m in walk_packages2([mod_info]):
+                if m.name in all_modules:
+                    print(
+                        f"Warning: The module specification {spec!r} adds a module named {m.name}, but a module with "
+                        f"this name has already been added. You may have accidentally repeated a module spec, or you "
+                        f"are trying to document two modules with the same filename from two different directories, "
+                        f"which does not work. Only one documentation page will be generated.",
+                        file=sys.stderr,
+                    )
                 all_modules[m.name] = None
 
     if not all_modules:
