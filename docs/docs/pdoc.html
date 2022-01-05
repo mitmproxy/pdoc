@@ -347,8 +347,8 @@ If you feel that pdoc doesn't parse a docstring element properly, please amend
 
 <h2 id="render-math-formulas">...render math formulas?</h2>
 
-<p>Pass <code>--math</code> when invoking pdoc, and it will render formulas in your docstrings:
-<a href="https://pdoc.dev/docs/math/math_demo.html">Demo</a>.</p>
+<p>Run <code>pdoc --math</code>, and pdoc will render formulas in your docstrings. See
+<a href="https://pdoc.dev/docs/math/math_demo.html"><code>math_demo</code></a> for details.</p>
 
 <h2 id="add-my-projects-logo">...add my project's logo?</h2>
 
@@ -438,6 +438,10 @@ code, then it will automatically attach the docstring for <code>Dog.bark</code> 
 We would be happy to accept contributions for Markdown and PDF.</p>
 
 <h1 id="using-pdoc-as-a-library">Using pdoc as a library</h1>
+
+<p>pdoc provides the high-level <code><a href="#pdoc">pdoc.pdoc()</a></code> interface shown below, but it is also possible to create <code><a href="pdoc/doc.html#Module">pdoc.doc.Module</a></code>
+objects directly to modify them before rendering.
+You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage"><code>examples/library-usage</code></a>.</p>
 </div>
 
                         <details>
@@ -700,8 +704,8 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 
 <span class="sd">## ...render math formulas?</span>
 
-<span class="sd">Pass `--math` when invoking pdoc, and it will render formulas in your docstrings:</span>
-<span class="sd">[Demo](https://pdoc.dev/docs/math/math_demo.html).</span>
+<span class="sd">Run `pdoc --math`, and pdoc will render formulas in your docstrings. See</span>
+<span class="sd">[`math_demo`](https://pdoc.dev/docs/math/math_demo.html) for details.</span>
 
 <span class="sd">## ...add my project&#39;s logo?</span>
 
@@ -795,6 +799,10 @@ We would be happy to accept contributions for Markdown and PDF.</p>
 <span class="sd">We would be happy to accept contributions for Markdown and PDF.</span>
 
 <span class="sd"># Using pdoc as a library</span>
+
+<span class="sd">pdoc provides the high-level `pdoc.pdoc()` interface shown below, but it is also possible to create `pdoc.doc.Module`</span>
+<span class="sd">objects directly to modify them before rendering.</span>
+<span class="sd">You can find an example in [`examples/library-usage`](https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage).</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
