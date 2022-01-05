@@ -358,7 +358,7 @@ You can find an example in [`examples/library-usage`](https://github.com/mitmpro
 '''
 from __future__ import annotations
 
-__version__ = "8.1.0"  # this is read from setup.py
+__version__ = "8.2.0"  # this is read from setup.py
 
 import io
 import traceback

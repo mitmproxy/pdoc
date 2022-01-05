@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-01-05: pdoc 8.2.0
 
  - Improve rendering of warnings emitted by pdoc.
  - Improve search quality by disabling the word stemmer.
