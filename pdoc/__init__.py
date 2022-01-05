@@ -256,8 +256,8 @@ If you feel that pdoc doesn't parse a docstring element properly, please amend
 
 ## ...render math formulas?
 
-Pass `--math` when invoking pdoc, and it will render formulas in your docstrings:
-[Demo](https://pdoc.dev/docs/math/math_demo.html).
+Run `pdoc --math`, and pdoc will render formulas in your docstrings. See
+[`math_demo`](https://pdoc.dev/docs/math/math_demo.html) for details.
 
 ## ...add my project's logo?
 
@@ -351,6 +351,10 @@ pdoc currently only supports HTML as an output format.
 We would be happy to accept contributions for Markdown and PDF.
 
 # Using pdoc as a library
+
+pdoc provides the high-level `pdoc.pdoc()` interface shown below, but it is also possible to create `pdoc.doc.Module`
+objects directly to modify them before rendering.
+You can find an example in [`examples/library-usage`](https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage).
 '''
 from __future__ import annotations
 

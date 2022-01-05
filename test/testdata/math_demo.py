@@ -1,5 +1,5 @@
 r'''
-This is a small demo module showing how pdoc renders $\LaTeX$ when invoked with `--math`!
+This is a small demo module showing how pdoc renders $\LaTeX$ when invoked as `pdoc --math`!
 
 # Using Math in Docstrings
 
