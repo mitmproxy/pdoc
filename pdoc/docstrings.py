@@ -321,7 +321,7 @@ def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
             try:
                 included = (loc.parent / val).read_text("utf8", "replace")
             except IOError as e:
-                warnings.warn(f"Cannot include {val!r}: {e}", RuntimeWarning)
+                warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
             included = _rst_admonitions(included, loc.parent / val)
             return indent(included, ind)

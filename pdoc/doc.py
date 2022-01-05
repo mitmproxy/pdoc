@@ -427,8 +427,7 @@ class Module(Namespace[types.ModuleType]):
                     module = extract.load_module(mod.name)
                 except RuntimeError:
                     warnings.warn(
-                        f"Couldn't import {mod.name}:\n{traceback.format_exc()}",
-                        RuntimeWarning,
+                        f"Couldn't import {mod.name}:\n{traceback.format_exc()}"
                     )
                     continue
                 submodules.append(Module(module))
@@ -456,8 +455,7 @@ class Module(Namespace[types.ModuleType]):
                         val = extract.load_module(f"{self.modulename}.{name}")
                     except RuntimeError as e:
                         warnings.warn(
-                            f"Found {name!r} in {self.modulename}.__all__, but it does not resolve: {e}",
-                            RuntimeWarning,
+                            f"Found {name!r} in {self.modulename}.__all__, but it does not resolve: {e}"
                         )
                         val = empty
                 members[name] = val
@@ -1067,8 +1065,7 @@ def _safe_getattr(obj, attr, default):
         return getattr(obj, attr, default)
     except Exception as e:
         warnings.warn(
-            f"getattr({obj!r}, {attr!r}, {default!r}) raised an exception: {e}",
-            RuntimeWarning,
+            f"getattr({obj!r}, {attr!r}, {default!r}) raised an exception: {e!r}"
         )
         return default
 
@@ -1078,10 +1075,7 @@ def _safe_getdoc(obj: Any) -> str:
     try:
         doc = inspect.getdoc(obj) or ""
     except Exception as e:
-        warnings.warn(
-            f"inspect.getdoc({obj!r}) raised an exception: {e}",
-            RuntimeWarning,
-        )
+        warnings.warn(f"inspect.getdoc({obj!r}) raised an exception: {e!r}")
         return ""
     else:
         return doc.strip()

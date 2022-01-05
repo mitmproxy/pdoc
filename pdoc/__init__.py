@@ -420,9 +420,7 @@ def pdoc(
         try:
             m = extract.load_module(module)
         except RuntimeError:
-            warnings.warn(
-                f"Error importing {module}:\n{traceback.format_exc()}", RuntimeWarning
-            )
+            warnings.warn(f"Error importing {module}:\n{traceback.format_exc()}")
         else:
             doc_objects[module] = doc.Module(m)
             write(doc_objects[module])

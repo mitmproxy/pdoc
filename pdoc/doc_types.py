@@ -83,7 +83,7 @@ def resolve_annotations(
 
     resolved = {}
     for name, value in annotations.items():
-        resolved[name] = safe_eval_type(value, ns, module, fullname)
+        resolved[name] = safe_eval_type(value, ns, module, f"{fullname}.{name}")
 
     return resolved
 

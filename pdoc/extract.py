@@ -56,7 +56,6 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
         except AnyException:
             warnings.warn(
                 f"Cannot find spec for {modname} (from {spec}):\n{traceback.format_exc()}",
-                RuntimeWarning,
                 stacklevel=2,
             )
         else:
@@ -67,12 +66,11 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
             )
             for m in walk_packages2([mod_info]):
                 if m.name in all_modules:
-                    print(
-                        f"Warning: The module specification {spec!r} adds a module named {m.name}, but a module with "
-                        f"this name has already been added. You may have accidentally repeated a module spec, or you "
-                        f"are trying to document two modules with the same filename from two different directories, "
-                        f"which does not work. Only one documentation page will be generated.",
-                        file=sys.stderr,
+                    warnings.warn(
+                        f"The module specification {spec!r} adds a module named {m.name}, but a module with this name "
+                        f"has already been added. You may have accidentally repeated a module spec, or you are trying "
+                        f"to document two modules with the same filename from two different directories, which does "
+                        f"not work. Only one documentation page will be generated."
                     )
                 all_modules[m.name] = None
 
@@ -113,13 +111,13 @@ def parse_spec(spec: Union[Path, str]) -> str:
             )
             local_dir = Path(spec).absolute()
             if local_dir not in (origin, origin.parent):
-                print(
-                    f"Warning: {spec!r} may refer to either the installed Python module or the local file/directory "
-                    f"with the same name. pdoc will document the installed module, prepend './' to force "
-                    f"documentation of the local file/directory.\n"
+                warnings.warn(
+                    f"{spec!r} may refer to either the installed Python module or the local file/directory with the "
+                    f"same name. pdoc will document the installed module, prepend './' to force documentation of the "
+                    f"local file/directory.\n"
                     f" - Module location: {origin}\n"
                     f" - Local file/directory: {local_dir}",
-                    file=sys.stderr,
+                    RuntimeWarning,
                 )
 
     if isinstance(spec, Path):
@@ -131,10 +129,10 @@ def parse_spec(spec: Union[Path, str]) -> str:
             local_dir = spec.resolve()
             origin = Path(sys.modules[spec.stem].__file__).resolve()
             if local_dir not in (origin, origin.parent, origin.with_suffix("")):
-                print(
-                    f"Warning: pdoc cannot load {spec.stem!r} because a module with the same name is already "
-                    f"imported in pdoc's Python process. pdoc will document the loaded module from {origin} instead.",
-                    file=sys.stderr,
+                warnings.warn(
+                    f"pdoc cannot load {spec.stem!r} because a module with the same name is already imported in pdoc's "
+                    f"Python process. pdoc will document the loaded module from {origin} instead.",
+                    RuntimeWarning,
                 )
         return spec.stem
     else:
@@ -223,10 +221,7 @@ def walk_packages2(
             try:
                 module = load_module(mod.name)
             except RuntimeError:
-                warnings.warn(
-                    f"Error loading {mod.name}:\n{traceback.format_exc()}",
-                    RuntimeWarning,
-                )
+                warnings.warn(f"Error loading {mod.name}:\n{traceback.format_exc()}")
                 continue
 
             mod_all: list[str] = getattr(module, "__all__", None)
@@ -299,7 +294,6 @@ def invalidate_caches(module_name: str) -> None:
         except AnyException:
             warnings.warn(
                 f"Error reloading {modname}:\n{traceback.format_exc()}",
-                RuntimeWarning,
                 stacklevel=2,
             )
 

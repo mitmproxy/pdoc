@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Improve rendering of warnings emitted by pdoc.
  - Improve search quality by disabling the word stemmer.
  - Fix a bug where the search bar on the index page did not work if only a single module was documented.
  - Add a warning when multiple modules with the same name are added from different paths.

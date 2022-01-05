@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import platform
 import subprocess
+import sys
+import warnings
 from pathlib import Path
 
 import pdoc
@@ -12,12 +14,21 @@ import pdoc.web
 from pdoc import extract, render
 from pdoc._compat import BooleanOptionalAction
 
+if sys.stdout.isatty():  # pragma: no cover
+    red = "\x1b[31m"
+    yellow = "\x1b[33m"
+    gray = "\x1b[2m"
+    white = "\x1b[1m"
+    default = "\x1b[0m"
+else:
+    red = yellow = gray = white = default = ""
+
 parser = argparse.ArgumentParser(
     description="Automatically generate API docs for Python modules.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     add_help=False,
 )
-mainargs = parser.add_argument_group("\x1b[1mMain Arguments\x1b[0m")
+mainargs = parser.add_argument_group(f"{white}Main Arguments{default}")
 mainargs.add_argument(
     "modules",
     type=str,
@@ -40,7 +51,7 @@ mainargs.add_argument(
 #     "--markdown", dest="format", action="store_const", const="markdown"
 # )
 
-renderopts = parser.add_argument_group("\x1b[1mCustomize Rendering\x1b[0m")
+renderopts = parser.add_argument_group(f"{white}Customize Rendering{default}")
 renderopts.add_argument(
     "-d",
     "--docformat",
@@ -106,7 +117,7 @@ renderopts.add_argument(
     "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
 )
 
-miscargs = parser.add_argument_group("\x1b[1mMiscellaneous Options\x1b[0m")
+miscargs = parser.add_argument_group(f"{white}Miscellaneous Options{default}")
 miscargs.add_argument(
     "-h",
     "--host",
@@ -134,6 +145,65 @@ miscargs.add_argument(
     default=argparse.SUPPRESS,
     help="Show version information and exit.",
 )
+
+
+def cli(args: list[str] = None) -> None:
+    """Command-line entry point"""
+    opts = parser.parse_args(args)
+    if getattr(opts, "version", False):
+        print(
+            f"pdoc: {get_dev_version()}\n"
+            f"Python: {platform.python_version()}\n"
+            f"Platform: {platform.platform()}"
+        )
+        return
+
+    if not opts.modules:
+        parser.print_help()
+        print(
+            f"\n{red}Error: Please specify which files or modules you want to document.{default}"
+        )
+        sys.exit(1)
+
+    warnings.showwarning = _nicer_showwarning
+
+    render.configure(
+        edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
+        template_directory=opts.template_directory,
+        docformat=opts.docformat,
+        math=opts.math,
+        show_source=opts.show_source,
+        search=opts.search,
+        logo=opts.logo,
+        logo_link=opts.logo_link,
+        footer_text=opts.footer_text,
+    )
+
+    if opts.output_directory:
+        pdoc.pdoc(
+            *opts.modules,
+            output_directory=opts.output_directory,
+            format="html",  # opts.format or
+        )
+        return
+    else:
+        all_modules = extract.walk_specs(opts.modules)
+        with pdoc.web.DocServer(
+            (opts.host, opts.port),
+            all_modules,
+        ) as httpd:
+            url = f"http://{opts.host}:{opts.port}"
+            print(f"pdoc server ready at {url}")
+            if not opts.no_browser:
+                if len(opts.modules) == 1:
+                    mod = next(iter(all_modules))
+                    url += f"/{mod.replace('.', '/')}.html"
+                pdoc.web.open_browser(url)
+            try:
+                httpd.serve_forever()
+            except KeyboardInterrupt:
+                httpd.server_close()
+                return
 
 
 def get_dev_version() -> str:
@@ -173,61 +243,23 @@ def get_dev_version() -> str:
     return pdoc_version
 
 
-def cli(args: list[str] = None) -> None:
-    """Command-line entry point"""
-    opts = parser.parse_args(args)
-    if getattr(opts, "version", False):
+def _nicer_showwarning(message, category, filename, lineno, file=None, line=None):
+    """A replacement for `warnings.showwarning` that renders warnings in a more visually pleasying way."""
+    if category == UserWarning:
         print(
-            f"pdoc: {get_dev_version()}\n"
-            f"Python: {platform.python_version()}\n"
-            f"Platform: {platform.platform()}"
+            f"{yellow}Warn:{default} {message} {gray}({filename}:{lineno}){default}",
+            file=sys.stderr,
         )
-        return
-
-    if not opts.modules:
-        parser.print_help()
+    elif category == RuntimeWarning:
         print(
-            "\n\x1b[31mError: Please specify which files or modules you want to document.\x1b[0m"
+            f"{yellow}Warn:{default} {message}",
+            file=sys.stderr,
         )
-        return
-
-    render.configure(
-        edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
-        template_directory=opts.template_directory,
-        docformat=opts.docformat,
-        math=opts.math,
-        show_source=opts.show_source,
-        search=opts.search,
-        logo=opts.logo,
-        logo_link=opts.logo_link,
-        footer_text=opts.footer_text,
-    )
-
-    if opts.output_directory:
-        pdoc.pdoc(
-            *opts.modules,
-            output_directory=opts.output_directory,
-            format="html",  # opts.format or
-        )
-        return
     else:
-        all_modules = extract.walk_specs(opts.modules)
-        with pdoc.web.DocServer(
-            (opts.host, opts.port),
-            all_modules,
-        ) as httpd:
-            url = f"http://{opts.host}:{opts.port}"
-            print(f"pdoc server ready at {url}")
-            if not opts.no_browser:
-                if len(opts.modules) == 1:
-                    mod = next(iter(all_modules))
-                    url += f"/{mod.replace('.', '/')}.html"
-                pdoc.web.open_browser(url)
-            try:
-                httpd.serve_forever()
-            except KeyboardInterrupt:
-                httpd.server_close()
-                return
+        print(
+            f"{yellow}{category.__name__}:{default} {message} {gray}({filename}:{lineno}){default}",
+            file=sys.stderr,
+        )
 
 
 if __name__ == "__main__":  # pragma: no cover

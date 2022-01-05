@@ -48,7 +48,7 @@ def test_all_with_import_err():
     mod = extract.load_module(extract.parse_spec(here / "import_err"))
     m = Module(mod)
     with pytest.warns(
-        RuntimeWarning,
+        UserWarning,
         match="Found 'err' in test.import_err.__all__, but it does not resolve: Error importing test.import_err",
     ):
         assert m.members
@@ -81,7 +81,7 @@ def test_class_with_raising_getattr():
         pass
 
     c = Class("test", "Raising", RaisingGetAttr, ("test", "Raising"))
-    with pytest.warns(RuntimeWarning, match="getattr.+raised an exception"):
+    with pytest.warns(UserWarning, match="getattr.+raised an exception"):
         assert c.members
 
 
@@ -100,5 +100,5 @@ def test_raising_getdoc():
             raise RuntimeError
 
     x = Class(Foo.__module__, Foo.__qualname__, Foo, (Foo.__module__, Foo.__qualname__))
-    with pytest.warns(RuntimeWarning, match="inspect.getdoc(.+) raised an exception"):
+    with pytest.warns(UserWarning, match="inspect.getdoc(.+) raised an exception"):
         assert x.docstring == ""

@@ -1,10 +1,11 @@
-from pathlib import Path
-from unittest.mock import patch, call
+import warnings
 
 import pytest
+from pathlib import Path
+from unittest.mock import call, patch
 
 from pdoc import pdoc
-from pdoc.__main__ import cli
+from pdoc.__main__ import cli, _nicer_showwarning
 
 here = Path(__file__).parent
 
@@ -13,6 +14,9 @@ def test_cli(tmp_path):
     cli([str(here / "testdata" / "demo_long.py"), "-o", str(tmp_path)])
     assert (tmp_path / "demo_long.html").read_text().startswith("<!doctype html>")
     assert (tmp_path / "index.html").read_text().startswith("<!doctype html>")
+
+    with pytest.raises(SystemExit, match="1"):
+        cli([])
 
 
 def test_cli_version(capsys):
@@ -30,7 +34,6 @@ def test_cli_web(monkeypatch):
                 "http://localhost:8080/demopackage/_child_d.html"
             )
             assert serve_forever.call_args == call()
-            cli([])
 
 
 def test_api(tmp_path):
@@ -38,7 +41,7 @@ def test_api(tmp_path):
     with pytest.raises(ValueError, match="Invalid rendering format"):
         assert pdoc(here / "testdata" / "demo_long.py", format="invalid")
     with pytest.raises(ValueError, match="Module not found"):
-        with pytest.warns(RuntimeWarning, match="Cannot find spec"):
+        with pytest.warns(UserWarning, match="Cannot find spec"):
             assert pdoc(
                 here / "notfound.py",
             )
@@ -46,9 +49,22 @@ def test_api(tmp_path):
     # temporarily insert syntax error - we don't leave it permanently to not confuse mypy, flake8 and black.
     (here / "syntax_err" / "syntax_err.py").write_bytes(b"class")
     with pytest.warns(
-        RuntimeWarning, match="Error importing test.syntax_err.syntax_err"
+        UserWarning, match="Error importing test.syntax_err.syntax_err"
     ):
         pdoc(here / "syntax_err", output_directory=tmp_path)
     (here / "syntax_err" / "syntax_err.py").write_bytes(
         b"# syntax error will be inserted by test here\n"
     )
+
+
+def test_patch_showwarnings(capsys, monkeypatch):
+    monkeypatch.setattr(warnings, "showwarning", _nicer_showwarning)
+
+    warnings.warn("test")
+    assert capsys.readouterr().err.startswith("Warn: test (")
+
+    warnings.warn("test", RuntimeWarning)
+    assert capsys.readouterr().err == "Warn: test\n"
+
+    warnings.warn("test", SyntaxWarning)
+    assert capsys.readouterr().err.startswith("SyntaxWarning: test (")

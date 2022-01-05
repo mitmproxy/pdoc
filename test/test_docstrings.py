@@ -28,5 +28,5 @@ def test_rst(s):
 
 
 def test_rst_include_nonexistent():
-    with pytest.warns(RuntimeWarning, match="Cannot include 'nonexistent.txt'"):
+    with pytest.warns(UserWarning, match="Cannot include 'nonexistent.txt'"):
         docstrings.rst(".. include:: nonexistent.txt", None)

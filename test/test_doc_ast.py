@@ -44,7 +44,7 @@ def test_dedent():
 
 
 def test_parse_error():
-    with pytest.warns(RuntimeWarning, match="Error parsing source code"):
+    with pytest.warns(UserWarning, match="Error parsing source code"):
         assert _parse("!!!")
 
 

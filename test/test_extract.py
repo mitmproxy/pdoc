@@ -1,23 +1,22 @@
 import importlib
+import pytest
 import sys
 from pathlib import Path
-
-import pytest
 
 from pdoc.extract import invalidate_caches, module_mtime, parse_spec, walk_specs
 
 here = Path(__file__).parent
 
 
-def test_walk_specs(capsys):
+def test_walk_specs():
     assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
     with pytest.raises(ValueError, match="Module not found"):
-        with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
+        with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])
-    with pytest.warns(RuntimeWarning, match="Cannot find spec for unknown"):
+    with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
         assert list(walk_specs(["dataclasses", "unknown"])) == ["dataclasses"]
 
-    with pytest.warns(RuntimeWarning, match="Error loading test.import_err.err"):
+    with pytest.warns(UserWarning, match="Error loading test.import_err.err"):
         assert list(walk_specs([here / "import_err"])) == [
             "test.import_err",
             "test.import_err.err",
@@ -25,12 +24,9 @@ def test_walk_specs(capsys):
     with pytest.raises(ValueError, match="Module not found"):
         assert walk_specs([])
 
-    assert list(walk_specs(["dataclasses", "dataclasses"])) == ["dataclasses"]
-    captured = capsys.readouterr()
-    assert captured.err.startswith(
-        "Warning: The module specification 'dataclasses' adds a module named dataclasses, but a module with this name "
-        "has already been added."
-    )
+    with pytest.warns(UserWarning, match="The module specification 'dataclasses' adds a module named dataclasses, "
+                                         "but a module with this name has already been added."):
+        assert list(walk_specs(["dataclasses", "dataclasses"])) == ["dataclasses"]
 
 
 def test_parse_spec(monkeypatch):
@@ -55,7 +51,7 @@ def test_parse_spec(monkeypatch):
     sys.path = p
 
 
-def test_parse_spec_mod_and_dir(capsys, tmp_path, monkeypatch):
+def test_parse_spec_mod_and_dir(tmp_path, monkeypatch):
     """Test that we display a warning when both a module and a local directory exist with the provided name."""
     (tmp_path / "dataclasses").mkdir()
     (tmp_path / "dataclasses" / "__init__.py").touch()
@@ -63,22 +59,16 @@ def test_parse_spec_mod_and_dir(capsys, tmp_path, monkeypatch):
     (tmp_path / "pdoc" / "__init__.py").touch()
     monkeypatch.chdir(tmp_path)
 
-    assert parse_spec("dataclasses") == "dataclasses"
-    captured = capsys.readouterr()
-    assert captured.err.startswith(
-        "Warning: 'dataclasses' may refer to either the installed Python module or the local file/directory"
-    )
+    with pytest.warns(RuntimeWarning,
+                      match="'dataclasses' may refer to either the installed Python module or the local file/directory"):
+        assert parse_spec("dataclasses") == "dataclasses"
 
-    assert parse_spec("./pdoc") == "pdoc"
-    captured = capsys.readouterr()
-    assert captured.err.startswith(
-        "Warning: pdoc cannot load 'pdoc' because a module with the same name is already imported"
-    )
+    with pytest.warns(RuntimeWarning,
+                      match="pdoc cannot load 'pdoc' because a module with the same name is already imported"):
+        assert parse_spec("./pdoc") == "pdoc"
 
     monkeypatch.chdir(here / "testdata")
     assert parse_spec("demo.py") == "demo"
-    captured = capsys.readouterr()
-    assert not captured.out
 
 
 def test_module_mtime():
@@ -92,5 +82,5 @@ def test_invalidate_caches(monkeypatch):
         raise RuntimeError
 
     monkeypatch.setattr(importlib, "reload", raise_)
-    with pytest.warns(RuntimeWarning, match="Error reloading"):
+    with pytest.warns(UserWarning, match="Error reloading"):
         invalidate_caches("pdoc.render_helpers")
