@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import types
 from pathlib import Path
-from typing import Collection, Mapping, Optional
+from typing import Collection, Mapping, Optional, cast
 
 import jinja2
 from jinja2 import Environment, FileSystemLoader
@@ -93,7 +93,9 @@ def html_module(
             all_modules=all_modules,
             mtime=mtime,
             edit_url=edit_url(
-                module.modulename, module.is_package, env.globals["edit_url_map"]
+                module.modulename,
+                module.is_package,
+                cast(Mapping[str, str], env.globals["edit_url_map"]),
             ),
         )
 
@@ -131,7 +133,7 @@ def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
     index = make_index(
         doc_objects,
         is_public,
-        env.globals["docformat"],
+        cast(str, env.globals["docformat"]),
     )
 
     compile_js = Path(env.get_template("build-search-index.js").filename)  # type: ignore

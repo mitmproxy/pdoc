@@ -263,7 +263,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
             elif inspect.isroutine(obj):
-                doc = Function(self.modulename, qualname, obj, taken_from)
+                doc = Function(self.modulename, qualname, obj, taken_from)  # type: ignore
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):

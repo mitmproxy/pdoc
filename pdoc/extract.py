@@ -127,7 +127,9 @@ def parse_spec(spec: Union[Path, str]) -> str:
             sys.path.insert(0, str(spec.parent))
         if spec.stem in sys.modules and sys.modules[spec.stem].__file__:
             local_dir = spec.resolve()
-            origin = Path(sys.modules[spec.stem].__file__).resolve()
+            file = sys.modules[spec.stem].__file__
+            assert file is not None  # make mypy happy
+            origin = Path(file).resolve()
             if local_dir not in (origin, origin.parent, origin.with_suffix("")):
                 warnings.warn(
                     f"pdoc cannot load {spec.stem!r} because a module with the same name is already imported in pdoc's "
@@ -224,7 +226,7 @@ def walk_packages2(
                 warnings.warn(f"Error loading {mod.name}:\n{traceback.format_exc()}")
                 continue
 
-            mod_all: list[str] = getattr(module, "__all__", None)
+            mod_all = getattr(module, "__all__", None)
             if mod_all is not None:
                 filt = mod_all.__contains__
             else:
