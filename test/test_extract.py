@@ -1,4 +1,5 @@
 import importlib
+import re
 import pytest
 import sys
 from pathlib import Path
@@ -10,6 +11,11 @@ here = Path(__file__).parent
 
 def test_walk_specs():
     assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
+
+    ignore_pattern = re.compile("demopackage.child_.*")
+    assert list(walk_specs([here / "testdata" / "demopackage"],
+                           ignore_pattern=ignore_pattern)) == ["demopackage", "demopackage._child_e"]
+
     with pytest.raises(ValueError, match="Module not found"):
         with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])
