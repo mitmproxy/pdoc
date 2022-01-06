@@ -6,7 +6,7 @@
         <style>{% include 'syntax-highlighting.css' %}</style>
         {% block style_pdoc %}
             <style>/*! pdoc */
-            {#
+            /*
              pdoc's CSS style is divided into three Jinja2 blocks:
                - style_theme: The color scheme.
                - style_layout: The responsive page layout and navigation menu.
@@ -14,7 +14,7 @@
 
              This makes it easier to embed pdoc into other systems,
              see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
-             #}
+            */
 
             {% block style_theme %}
                 :root {
@@ -224,10 +224,10 @@
             {% endblock %}
 
             {% block style_content %}
-                {#
+                /*
                 In this block, all selectors are scopoed with ".pdoc".
                 This makes sure that the pdoc styling doesn't leak to the rest of the page.
-                 #}
+                */
                 /* General styling */
                 html, main {
                     scroll-behavior: smooth;
@@ -336,11 +336,6 @@
 
                 /* View Source */
                 .pdoc details {
-                    --shift: -40px;
-                    text-align: right;
-                    margin-top: var(--shift);
-                    margin-bottom: calc(0px - var(--shift));
-                    clear: both;
                     /*
                      stay on top of .attr even if it is filtered, see
                      https://stackoverflow.com/questions/25764404/why-does-stacking-order-change-on-webkit-filter-hover
@@ -350,21 +345,15 @@
 
                 .pdoc details:not([open]) {
                     height: 0;
-                    overflow: visible;
                 }
 
                 .pdoc details > summary {
+                    position: absolute;
+                    top: -35px;
+                    right: 0;
                     font-size: .75rem;
-                    cursor: pointer;
                     color: var(--muted);
-                    border-width: 0;
                     padding: 0 .7em;
-                    /* Firefox hides the arrow if we specify inline-block,
-                       see https://bugzilla.mozilla.org/show_bug.cgi?id=1270163.
-                       Chrome on the other hand does not support the two-property syntax yet,
-                       so the last statement is ignored. See https://crbug.com/995106. */
-                    display: inline-block;
-                    display: inline list-item;
                     user-select: none;
                 }
 
@@ -422,6 +411,7 @@
                     font-weight: normal;
                     transition: all 100ms ease-in-out;
                     opacity: 0;
+                    user-select: none;
                 }
 
                 .pdoc .attr > .headerlink {

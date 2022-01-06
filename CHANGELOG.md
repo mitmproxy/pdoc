@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Work around a Blink renderer bug to make sure that the small "expand" triangle is displayed next to the
+   *View Source* button.
+
 # 2022-01-05: pdoc 8.2.0
 
  - Improve rendering of warnings emitted by pdoc.
