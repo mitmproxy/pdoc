@@ -40,7 +40,7 @@ def test_api(tmp_path):
     assert pdoc(here / "testdata" / "demo_long.py").startswith("<!doctype html>")
     with pytest.raises(ValueError, match="Invalid rendering format"):
         assert pdoc(here / "testdata" / "demo_long.py", format="invalid")
-    with pytest.raises(ValueError, match="Module not found"):
+    with pytest.raises(ValueError, match="No modules found matching spec"):
         with pytest.warns(UserWarning, match="Cannot find spec"):
             assert pdoc(
                 here / "notfound.py",

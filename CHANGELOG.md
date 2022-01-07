@@ -4,6 +4,8 @@
 
  - Work around a Blink renderer bug to make sure that the small "expand" triangle is displayed next to the
    *View Source* button.
+ - Add negated module specs to exclude specific (sub)modules.
+   For example, `pdoc foo !foo.bar` documents `foo` and all submodules of `foo` except `foo.bar`.
 
 # 2022-01-05: pdoc 8.2.0
 

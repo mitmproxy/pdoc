@@ -35,7 +35,8 @@ mainargs.add_argument(
     default=[],
     metavar="module",
     nargs="*",
-    help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py").',
+    help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py")'
+    '. Exclude submodules by specifying a negative !regex pattern, e.g. "foo !foo.bar".',
 )
 mainargs.add_argument(
     "-o",
@@ -195,7 +196,7 @@ def cli(args: list[str] = None) -> None:
             url = f"http://{opts.host}:{opts.port}"
             print(f"pdoc server ready at {url}")
             if not opts.no_browser:
-                if len(opts.modules) == 1:
+                if len(opts.modules) == 1 or len(all_modules) == 1:
                     mod = next(iter(all_modules))
                     url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)

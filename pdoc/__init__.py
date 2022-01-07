@@ -218,6 +218,20 @@ As a last resort, you can override pdoc's behavior with a custom module template
 You can find an example at
 [`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2).
 
+### ...exclude submodules from being documented?
+
+If you would like to exclude specific submodules from the documentation, the recommended way is to specify `__all__` as
+shown in the previous section. Alternatively, you can pass negative regular expression `!patterns` as part of the
+module specification. Each pattern removes all previously specified (sub)module names that match. For example, the following
+invocation documents `foo` and all submodules of `foo`, but not `foo.bar`:
+
+```
+pdoc foo !foo.bar
+```
+
+Likewise, `pdoc pdoc !pdoc.` would document the pdoc module itself, but none of its submodules. Patterns are always
+matched on the final module name, even if modules are passed as file paths.
+
 ## ...link to other identifiers?
 
 In your documentation, you can link to other identifiers by enclosing them in backticks:
