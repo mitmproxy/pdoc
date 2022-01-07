@@ -10,7 +10,15 @@ here = Path(__file__).parent
 
 def test_walk_specs():
     assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
-    with pytest.raises(ValueError, match="Module not found"):
+    assert list(walk_specs(['test.testdata.demopackage',
+                            '!test.testdata.demopackage',
+                            'test.testdata.demopackage.child_b'])) == ['test.testdata.demopackage.child_b']
+
+    assert list(walk_specs(['test.testdata.demopackage',
+                            '!test.testdata.demopackage.child_b',
+                            '!test.testdata.demopackage.child_c'])) == ['test.testdata.demopackage',
+                                                                        'test.testdata.demopackage._child_e']
+    with pytest.raises(ValueError, match="No modules found matching spec: unknown"):
         with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])
     with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
@@ -21,7 +29,7 @@ def test_walk_specs():
             "test.import_err",
             "test.import_err.err",
         ]
-    with pytest.raises(ValueError, match="Module not found"):
+    with pytest.raises(ValueError, match="No modules found matching spec: "):
         assert walk_specs([])
 
     with pytest.warns(UserWarning, match="The module specification 'dataclasses' adds a module named dataclasses, "
