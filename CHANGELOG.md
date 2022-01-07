@@ -6,6 +6,7 @@
    *View Source* button.
  - Add negated module specs to exclude specific (sub)modules.
    For example, `pdoc foo !foo.bar` documents `foo` and all submodules of `foo` except `foo.bar`.
+ - Only display headings up to a depth of 2 in the table of contents for module docstrings.
 
 # 2022-01-05: pdoc 8.2.0
 

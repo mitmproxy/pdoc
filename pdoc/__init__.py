@@ -64,7 +64,7 @@ Additionally, all docstrings are interpreted as Markdown.
 For example, the todo list in the example will be rendered with bullet points in your documentation.
 
 
-### Invoking pdoc
+## Invoking pdoc
 
 Let's run pdoc on this module to see what we get:
 
@@ -82,7 +82,7 @@ pdoc -o ./docs ./shelter.py
 
 This will create an HTML file at `docs/shelter.html` which contains our module documentation.
 
-### Configuring pdoc
+## Configuring pdoc
 
 We can configure some parts of pdoc's output via command line flags.
 For example, we can add a project logo to the documentation:
@@ -100,7 +100,7 @@ pdoc --help
 Library users can call `pdoc.render.configure` to configure rendering.
 
 
-### Editing pdoc's HTML template
+## Editing pdoc's HTML template
 
 For more advanced customization, we can edit pdoc's
 [default HTML template](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2),

@@ -35,18 +35,18 @@ The pygments formatter used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments highlighting.
 """
 
-markdown_extensions = [
-    "code-friendly",
-    "cuddled-lists",
-    "fenced-code-blocks",
-    "footnotes",
-    "header-ids",
-    "pyshell",
-    "strike",
-    "tables",
-    "task_list",
-    "toc",
-]
+markdown_extensions = {
+    "code-friendly": None,
+    "cuddled-lists": None,
+    "fenced-code-blocks": None,
+    "footnotes": None,
+    "header-ids": None,
+    "pyshell": None,
+    "strike": None,
+    "tables": None,
+    "task_list": None,
+    "toc": {"depth": 2},
+}
 """
 The default extensions loaded for `markdown2`.
 Overwrite this to configure Markdown rendering.
