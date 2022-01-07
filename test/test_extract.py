@@ -10,14 +10,25 @@ here = Path(__file__).parent
 
 def test_walk_specs():
     assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
-    assert list(walk_specs(['test.testdata.demopackage',
-                            '!test.testdata.demopackage',
-                            'test.testdata.demopackage.child_b'])) == ['test.testdata.demopackage.child_b']
+    assert list(
+        walk_specs(
+            [
+                "test.testdata.demopackage",
+                "!test.testdata.demopackage",
+                "test.testdata.demopackage.child_b",
+            ]
+        )
+    ) == ["test.testdata.demopackage.child_b"]
 
-    assert list(walk_specs(['test.testdata.demopackage',
-                            '!test.testdata.demopackage.child_b',
-                            '!test.testdata.demopackage.child_c'])) == ['test.testdata.demopackage',
-                                                                        'test.testdata.demopackage._child_e']
+    assert list(
+        walk_specs(
+            [
+                "test.testdata.demopackage",
+                "!test.testdata.demopackage.child_b",
+                "!test.testdata.demopackage.child_c",
+            ]
+        )
+    ) == ["test.testdata.demopackage", "test.testdata.demopackage._child_e"]
     with pytest.raises(ValueError, match="No modules found matching spec: unknown"):
         with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])
@@ -32,8 +43,11 @@ def test_walk_specs():
     with pytest.raises(ValueError, match="No modules found matching spec: "):
         assert walk_specs([])
 
-    with pytest.warns(UserWarning, match="The module specification 'dataclasses' adds a module named dataclasses, "
-                                         "but a module with this name has already been added."):
+    with pytest.warns(
+        UserWarning,
+        match="The module specification 'dataclasses' adds a module named dataclasses, "
+        "but a module with this name has already been added.",
+    ):
         assert list(walk_specs(["dataclasses", "dataclasses"])) == ["dataclasses"]
 
 
@@ -67,12 +81,16 @@ def test_parse_spec_mod_and_dir(tmp_path, monkeypatch):
     (tmp_path / "pdoc" / "__init__.py").touch()
     monkeypatch.chdir(tmp_path)
 
-    with pytest.warns(RuntimeWarning,
-                      match="'dataclasses' may refer to either the installed Python module or the local file/directory"):
+    with pytest.warns(
+        RuntimeWarning,
+        match="'dataclasses' may refer to either the installed Python module or the local file/directory",
+    ):
         assert parse_spec("dataclasses") == "dataclasses"
 
-    with pytest.warns(RuntimeWarning,
-                      match="pdoc cannot load 'pdoc' because a module with the same name is already imported"):
+    with pytest.warns(
+        RuntimeWarning,
+        match="pdoc cannot load 'pdoc' because a module with the same name is already imported",
+    ):
         assert parse_spec("./pdoc") == "pdoc"
 
     monkeypatch.chdir(here / "testdata")

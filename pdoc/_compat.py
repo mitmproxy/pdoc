@@ -103,10 +103,11 @@ else:  # pragma: no cover
     # ✂ end ✂
 
 if sys.version_info >= (3, 8):
-    from typing import get_origin, get_args, Literal
+    from typing import Literal, get_args, get_origin
 else:  # pragma: no cover
-    from typing import Generic, _GenericAlias
     import collections.abc
+    from typing import Generic, _GenericAlias
+
     # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
 
     class Literal:

@@ -15,10 +15,12 @@ try:
     from jinja2 import pass_context  # type: ignore
 except ImportError:  # pragma: no cover
     from jinja2 import contextfilter as pass_context  # type: ignore
+
 from jinja2.runtime import Context
 from markupsafe import Markup
 
 import pdoc.markdown2
+
 from . import docstrings
 from ._compat import cache, removesuffix
 

@@ -39,6 +39,7 @@ from pdoc.doc_types import (
     resolve_annotations,
     safe_eval_type,
 )
+
 from ._compat import cache, cached_property, get_origin
 
 

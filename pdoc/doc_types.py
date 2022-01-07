@@ -15,12 +15,8 @@ import types
 import typing
 import warnings
 from types import BuiltinFunctionType, ModuleType
-from typing import (
-    Any,
-    Optional,
-    TYPE_CHECKING,
-)
 from typing import _GenericAlias  # type: ignore
+from typing import TYPE_CHECKING, Any, Optional
 
 from . import extract
 from ._compat import GenericAlias, Literal, UnionType, get_args, get_origin

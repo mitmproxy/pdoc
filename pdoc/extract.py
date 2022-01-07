@@ -50,7 +50,9 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
 
         if isinstance(spec, str) and spec.startswith("!"):
             ignore_pattern = re.compile(spec[1:])
-            all_modules = {k: v for k, v in all_modules.items() if not ignore_pattern.match(k)}
+            all_modules = {
+                k: v for k, v in all_modules.items() if not ignore_pattern.match(k)
+            }
             continue
 
         modname = parse_spec(spec)
@@ -82,7 +84,9 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
                 all_modules[m.name] = None
 
     if not all_modules:
-        raise ValueError(f"No modules found matching spec: {', '.join(str(x) for x in specs)}")
+        raise ValueError(
+            f"No modules found matching spec: {', '.join(str(x) for x in specs)}"
+        )
 
     return all_modules
 
@@ -204,7 +208,7 @@ def _all_submodules(modulename: str) -> bool:
 
 def walk_packages2(
     modules: Iterable[pkgutil.ModuleInfo],
-    module_filter: Callable[[str], bool] = _all_submodules
+    module_filter: Callable[[str], bool] = _all_submodules,
 ) -> Iterator[pkgutil.ModuleInfo]:
     """
     For a given list of modules, recursively yield their names and all their submodules' names.
