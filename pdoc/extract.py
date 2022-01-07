@@ -48,9 +48,8 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
     all_modules: dict[str, None] = {}
     for spec in specs:
 
-        str_spec = str(spec)
-        if len(str_spec) > 0 and str_spec[0] == '!':
-            ignore_pattern = re.compile(str_spec[1:])
+        if isinstance(spec, str) and spec.startswith("!"):
+            ignore_pattern = re.compile(spec[1:])
             all_modules = {k: v for k, v in all_modules.items() if not ignore_pattern.match(k)}
             continue
 
