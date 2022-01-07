@@ -12,6 +12,7 @@ import linecache
 import os
 import pkgutil
 import platform
+import re
 import subprocess
 import sys
 import traceback
@@ -19,14 +20,13 @@ import types
 import warnings
 from contextlib import contextmanager
 from pathlib import Path
-from re import Pattern
 from typing import Callable, Iterable, Iterator, Optional, Sequence, Union
 from unittest.mock import patch
 
 from . import doc_ast, docstrings
 
 
-def walk_specs(specs: Sequence[Union[Path, str]], ignore_pattern: Optional[Pattern] = None) -> dict[str, None]:
+def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
     """
     This function processes a list of module specifications and returns a collection of module names, including all
     submodules, that should be processed by pdoc.
@@ -46,7 +46,15 @@ def walk_specs(specs: Sequence[Union[Path, str]], ignore_pattern: Optional[Patte
     *This function has side-effects:* See `parse_spec`.
     """
     all_modules: dict[str, None] = {}
+
     for spec in specs:
+
+        str_spec = str(spec)
+        if len(str_spec) > 0 and str_spec[0] == '!':
+            ignore_pattern = re.compile(str_spec[1:])
+            all_modules = {k: v for k, v in all_modules.items() if not ignore_pattern.match(k)}
+            continue
+
         modname = parse_spec(spec)
 
         try:
@@ -65,7 +73,7 @@ def walk_specs(specs: Sequence[Union[Path, str]], ignore_pattern: Optional[Patte
                 name=modname,
                 ispkg=bool(modspec.submodule_search_locations),
             )
-            for m in walk_packages2([mod_info], ignore_pattern=ignore_pattern):
+            for m in walk_packages2([mod_info]):
                 if m.name in all_modules:
                     warnings.warn(
                         f"The module specification {spec!r} adds a module named {m.name}, but a module with this name "
@@ -197,9 +205,8 @@ def _all_submodules(modulename: str) -> bool:
 
 
 def walk_packages2(
-    modules: Iterable[pkgutil.ModuleInfo],
-    module_filter: Callable[[str], bool] = _all_submodules,
-    ignore_pattern: Optional[Pattern] = None,
+        modules: Iterable[pkgutil.ModuleInfo],
+        module_filter: Callable[[str], bool] = _all_submodules
 ) -> Iterator[pkgutil.ModuleInfo]:
     """
     For a given list of modules, recursively yield their names and all their submodules' names.
@@ -217,10 +224,6 @@ def walk_packages2(
     for mod in modules:
         # is __all__ defined and the module not in __all__?
         if not module_filter(mod.name.rpartition(".")[2]):
-            continue
-
-        # does the module match with the ignore pattern?
-        if ignore_pattern and ignore_pattern.fullmatch(mod.name):
             continue
 
         yield mod
@@ -241,7 +244,7 @@ def walk_packages2(
             # don't traverse path items we've seen before
             path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
 
-            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt, ignore_pattern)
+            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
 
 
 def module_mtime(modulename: str) -> Optional[float]:

@@ -45,13 +45,7 @@ mainargs.add_argument(
     type=Path,
     help="Write rendered documentation to the specified directory, don't start a webserver.",
 )
-mainargs.add_argument(
-    "-i",
-    "--ignore",
-    metavar="PATTERN",
-    type=str,
-    help="Ignore modules matching the given regular expression pattern.",
-)
+
 # may be added again in the future:
 # formats = parser.add_mutually_exclusive_group()
 # formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -187,18 +181,15 @@ def cli(args: list[str] = None) -> None:
         footer_text=opts.footer_text,
     )
 
-    ignore_pattern = re.compile(opts.ignore) if opts.ignore else None
-
     if opts.output_directory:
         pdoc.pdoc(
             *opts.modules,
             output_directory=opts.output_directory,
-            format="html",  # opts.format or
-            ignore_pattern=ignore_pattern,
+            format="html"  # opts.format or
         )
         return
     else:
-        all_modules = extract.walk_specs(opts.modules, ignore_pattern)
+        all_modules = extract.walk_specs(opts.modules)
         with pdoc.web.DocServer(
             (opts.host, opts.port),
             all_modules,

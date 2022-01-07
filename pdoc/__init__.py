@@ -364,7 +364,6 @@ import io
 import traceback
 import warnings
 from pathlib import Path
-from re import Pattern
 from typing import Optional, Union
 
 from pdoc import doc, extract, render
@@ -374,9 +373,7 @@ from pdoc._compat import Literal
 def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
-    format: Literal["html"] = "html",
-    ignore_pattern: Optional[Pattern] = None
-) -> str:
+    format: Literal["html"] = "html") -> str:
     """
     Render the documentation for a list of modules.
 
@@ -401,7 +398,7 @@ def pdoc(
         def write(mod: doc.Module):
             retval.write(r(mod))
 
-    all_modules = extract.walk_specs(modules, ignore_pattern)
+    all_modules = extract.walk_specs(modules)
     doc_objects: dict[str, doc.Module] = {}
 
     if format == "html":
