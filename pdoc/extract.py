@@ -83,7 +83,7 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
                 all_modules[m.name] = None
 
     if not all_modules:
-        raise ValueError(f"Module not found: {', '.join(str(x) for x in specs)}, or all modules ignored.")
+        raise ValueError(f"No modules found matching spec: {', '.join(str(x) for x in specs)}")
 
     return all_modules
 
