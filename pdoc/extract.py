@@ -46,7 +46,6 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
     *This function has side-effects:* See `parse_spec`.
     """
     all_modules: dict[str, None] = {}
-
     for spec in specs:
 
         str_spec = str(spec)
@@ -205,8 +204,8 @@ def _all_submodules(modulename: str) -> bool:
 
 
 def walk_packages2(
-        modules: Iterable[pkgutil.ModuleInfo],
-        module_filter: Callable[[str], bool] = _all_submodules
+    modules: Iterable[pkgutil.ModuleInfo],
+    module_filter: Callable[[str], bool] = _all_submodules
 ) -> Iterator[pkgutil.ModuleInfo]:
     """
     For a given list of modules, recursively yield their names and all their submodules' names.

@@ -373,7 +373,8 @@ from pdoc._compat import Literal
 def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
-    format: Literal["html"] = "html") -> str:
+    format: Literal["html"] = "html",
+) -> str:
     """
     Render the documentation for a list of modules.
 

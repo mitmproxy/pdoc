@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import platform
-import re
 import subprocess
 import sys
 import warnings
@@ -45,7 +44,6 @@ mainargs.add_argument(
     type=Path,
     help="Write rendered documentation to the specified directory, don't start a webserver.",
 )
-
 # may be added again in the future:
 # formats = parser.add_mutually_exclusive_group()
 # formats.add_argument("--html", dest="format", action="store_const", const="html")
@@ -185,7 +183,7 @@ def cli(args: list[str] = None) -> None:
         pdoc.pdoc(
             *opts.modules,
             output_directory=opts.output_directory,
-            format="html"  # opts.format or
+            format="html",  # opts.format or
         )
         return
     else:
