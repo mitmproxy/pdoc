@@ -166,6 +166,16 @@
                 color: #0978a5;
             }
 
+            #testimonials img {
+                margin: 0 10px 4px;
+                filter: opacity(0.5) grayscale(100%);
+                transition: all 200ms ease-in-out;
+            }
+
+            #testimonials a:hover img {
+                filter: opacity(1) grayscale(0%);
+            }
+
         </style>
     {% endfilter %}{% endautoescape %}
 </head>
@@ -180,7 +190,8 @@
 <header class="container-fluid">
     <div class="row py-4 my-4 align-items-center">
         <div class="col-md-6 text-center text-md-end">{% include "logo.svg" %}</div>
-        <div class="col-md-6 pt-md-0 pt-4 text-center text-md-start"><h1><span class="visually-hidden">pdoc: </span>API Documentation<br>for Python Projects</h1>
+        <div class="col-md-6 pt-md-0 pt-4 text-center text-md-start">
+            <h1><span class="visually-hidden">pdoc: </span>API Documentation<br>for Python Projects</h1>
         </div>
     </div>
 </header>
@@ -251,6 +262,23 @@
         {{ icon("github") }}
         &nbsp;GitHub
     </a>
+
+    <div id="testimonials" class="mt-5">
+        <a href="https://google.github.io/or-tools/">
+            <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/used-by-logos/google.svg" %}{% endfilter %}"
+                 alt="Google" width="89" height="30"  style="margin-top: 6px"></a>
+        <a href="https://github.com/microsoft/LMChallenge">
+            <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/used-by-logos/microsoft.svg" %}{% endfilter %}"
+                 alt="Microsoft" width="141" height="30"></a>
+        <a href="https://mozilla.github.io/mozilla-schema-generator/mozilla_schema_generator.html">
+            <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/used-by-logos/mozilla.svg" %}{% endfilter %}"
+                 alt="Mozilla" width="105" height="30"></a>
+        <a href="https://docs.mitmproxy.org/stable/api/events.html">
+            <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/used-by-logos/mitmproxy.svg" %}{% endfilter %}"
+                 alt="mitmproxy" width="132" height="30">
+        </a>
+        <div>and many others use pdoc to document their Python projects.</div>
+    </div>
 </main>
 <footer class="d-none d-md-block">{% include "resources/_github-button.html" %}</footer>
 </body>
