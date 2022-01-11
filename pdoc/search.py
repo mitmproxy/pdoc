@@ -5,6 +5,11 @@ and works without any third-party services in a privacy-preserving way. When a u
 search box for the first time, pdoc will fetch the search index (`search.js`) and use that to
 answer all upcoming queries.
 
+##### Search Coverage
+
+The search functionality covers all documented elements and their docstrings.
+You may find documentation objects using their name, arguments, or type annotations; the source code is not considered.
+
 ##### Search Performance
 
 pdoc uses [Elasticlunr.js](https://github.com/weixsong/elasticlunr.js) to implement search. To improve end user
@@ -74,6 +79,10 @@ def make_index(
             }
             return {k: v for k, v in ret.items() if v}
 
+        # TODO: Instead of building our own JSON objects here we could also use module.html.jinja2's member()
+        #  implementation to render HTML for each documentation object and then implement a elasticlunr tokenizer that
+        #  removes HTML. It wouldn't be great for search index size, but the rendered search entries would be fully
+        #  consistent.
         def make_index(mod: pdoc.doc.Namespace, **extra):
             if not is_public(mod):
                 return
