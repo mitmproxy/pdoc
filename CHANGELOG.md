@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - The search functionality now also covers function parameters,
+   annotated types, default values, and base classes.
  - Work around a Blink renderer bug to make sure that the small "expand" triangle is displayed next to the
    *View Source* button.
  - Add negated module specs to exclude specific (sub)modules.

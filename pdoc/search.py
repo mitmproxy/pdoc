@@ -64,7 +64,7 @@ def make_index(
 
         def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
             # TODO: We could be extra fancy here and split `doc.docstring` by toc sections.
-            return {
+            ret = {
                 "fullname": doc.fullname,
                 "modulename": doc.modulename,
                 "qualname": doc.qualname,
@@ -72,22 +72,30 @@ def make_index(
                 "doc": to_html(to_markdown(doc.docstring, mod, default_docformat)),
                 **kwargs,
             }
+            return {k: v for k, v in ret.items() if v}
 
-        def make_index(mod: pdoc.doc.Namespace):
+        def make_index(mod: pdoc.doc.Namespace, **extra):
             if not is_public(mod):
                 return
-            yield make_item(mod)
+            yield make_item(mod, **extra)
             for m in mod.own_members:
                 if isinstance(m, pdoc.doc.Variable) and is_public(m):
-                    yield make_item(m)
+                    yield make_item(
+                        m,
+                        annotation=m.annotation_str,
+                        default_value=m.default_value_str,
+                    )
                 elif isinstance(m, pdoc.doc.Function) and is_public(m):
                     yield make_item(
                         m,
-                        parameters=list(m.signature.parameters),
+                        signature=str(m.signature),
                         funcdef=m.funcdef,
                     )
                 elif isinstance(m, pdoc.doc.Class):
-                    yield from make_index(m)
+                    yield from make_index(
+                        m,
+                        bases=", ".join(x[2] for x in m.bases),
+                    )
                 else:
                     pass
 

@@ -15,6 +15,10 @@ searchIndex = elasticlunr(function () {
     this.pipeline.remove(elasticlunr.stemmer);
     this.addField("qualname");
     this.addField("fullname");
+    this.addField("annotation");
+    this.addField("default_value");
+    this.addField("signature");
+    this.addField("bases");
     this.addField("doc");
     this.setRef("fullname");
 });
