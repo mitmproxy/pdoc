@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-01-14: pdoc 8.3.0
 
  - The search functionality now also covers function parameters,
    annotated types, default values, and base classes.
