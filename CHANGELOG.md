@@ -4,8 +4,9 @@
 
  - The search functionality now also covers function parameters,
    annotated types, default values, and base classes.
- - Work around a Blink renderer bug to make sure that the small "expand" triangle is displayed next to the
-   *View Source* button.
+ - Work around a Blink renderer bug to make sure that arguments
+   are clickable and the small "expand" triangle is displayed
+   next to the *View Source* button.
  - Add negated module specs to exclude specific (sub)modules.
    For example, `pdoc foo !foo.bar` documents `foo` and all submodules of `foo` except `foo.bar`.
  - Only display headings up to a depth of 2 in the table of contents for module docstrings.
