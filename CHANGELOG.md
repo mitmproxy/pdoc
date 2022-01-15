@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+ - Improve search tokenization to better match
+   on function arguments.
+
 # 2022-01-14: pdoc 8.3.0
 
  - The search functionality now also covers function parameters,
