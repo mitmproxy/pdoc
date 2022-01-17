@@ -61,4 +61,5 @@
         <@abc.abstractmethod method def foo(self): ...>>
     <method def add_four(b: int) -> int: ...  # This function adds t…>
     <method def add_five(b: int) -> int: ...  # This function adds f…>
-    <method def add_six(b: int) -> int: ...  # This function adds s…>>
+    <method def add_six(b: int) -> int: ...  # This function adds s…>
+    <function def linkify_links(): ...  # This docstring conta…>>

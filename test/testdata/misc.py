@@ -293,6 +293,18 @@ add_five = make_adder(5)
 add_six = make_adder(6)
 add_six.__doc__ = "This function adds six."
 
+
+# Adapted from https://github.com/mitmproxy/pdoc/issues/335
+def linkify_links():
+    """
+    This docstring contains links that are also identifiers:
+
+    - [`linkify_links`](https://example.com/)
+    - [misc.linkify_links](https://example.com/)
+    - [`linkify_links()`](https://example.com/)
+    - [misc.linkify_links()](https://example.com/)
+    """
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -317,4 +329,5 @@ __all__ = [  # noqa
     "add_four",
     "add_five",
     "add_six",
+    "linkify_links",
 ]

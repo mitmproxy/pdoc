@@ -206,6 +206,9 @@
             <li>
                     <a class="function" href="#add_six">add_six</a>
             </li>
+            <li>
+                    <a class="function" href="#linkify_links">linkify_links</a>
+            </li>
     </ul>
 
 
@@ -520,6 +523,18 @@ misc    </h1>
 <span class="n">add_six</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">add_six</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;This function adds six.&quot;</span>
 
+
+<span class="c1"># Adapted from https://github.com/mitmproxy/pdoc/issues/335</span>
+<span class="k">def</span> <span class="nf">linkify_links</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This docstring contains links that are also identifiers:</span>
+
+<span class="sd">    - [`linkify_links`](https://example.com/)</span>
+<span class="sd">    - [misc.linkify_links](https://example.com/)</span>
+<span class="sd">    - [`linkify_links()`](https://example.com/)</span>
+<span class="sd">    - [misc.linkify_links()](https://example.com/)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -544,6 +559,7 @@ misc    </h1>
     <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
     <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
     <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1679,6 +1695,41 @@ indents</p>
         </details>
 
             <div class="docstring"><p>This function adds six.</p>
+</div>
+
+
+                </section>
+                <section id="linkify_links">
+                            <div class="attr function"><a class="headerlink" href="#linkify_links">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">linkify_links</span><span class="signature">()</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">linkify_links</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This docstring contains links that are also identifiers:</span>
+
+<span class="sd">    - [`linkify_links`](https://example.com/)</span>
+<span class="sd">    - [misc.linkify_links](https://example.com/)</span>
+<span class="sd">    - [`linkify_links()`](https://example.com/)</span>
+<span class="sd">    - [misc.linkify_links()](https://example.com/)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This docstring contains links that are also identifiers:</p>
+
+<ul>
+<li><a href="https://example.com/"><code>linkify_links</code></a></li>
+<li><a href="https://example.com/">misc.linkify_links</a></li>
+<li><a href="https://example.com/"><code>linkify_links()</code></a></li>
+<li><a href="https://example.com/">misc.linkify_links()</a></li>
+</ul>
 </div>
 
 
