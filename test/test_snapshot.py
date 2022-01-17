@@ -112,18 +112,33 @@ snapshots = [
     Snapshot("demo_long", min_version=(3, 9)),
     Snapshot("demo_eager", min_version=(3, 9)),
     Snapshot("demopackage", "demopackage"),
-    Snapshot("demopackage_dir", "demopackage", with_output_directory=True),
+    Snapshot(
+        "demopackage_dir",
+        "demopackage",
+        render_options={
+            "edit_url_map": {
+                "demopackage.child_b": "https://gitlab.example.com/foo/bar/-/blob/main/demopackage/child_b",
+                "demopackage.child_c": "https://custom.example.com/demopackage/child_c",
+                "demopackage": "https://github.com/mitmproxy/pdoc/tree/main/test/testdata/demopackage/",
+            }
+        },
+        with_output_directory=True,
+    ),
     Snapshot("misc"),
     Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("math_demo", render_options={"math": True}),
-    Snapshot("render_options", render_options={
-        "show_source": False,
-        "logo": "https://placedog.net/500?random",
-        "logo_link": "https://example.com/",
-        "footer_text": "custom footer text",
-        "search": False,
-    }, with_output_directory=True),
+    Snapshot(
+        "render_options",
+        render_options={
+            "show_source": False,
+            "logo": "https://placedog.net/500?random",
+            "logo_link": "https://example.com/",
+            "footer_text": "custom footer text",
+            "search": False,
+        },
+        with_output_directory=True,
+    ),
     Snapshot("type_checking_imports"),
 ]
 
@@ -150,7 +165,9 @@ if __name__ == "__main__":
     skipped_some = False
     for snapshot in snapshots:
         if sys.version_info < snapshot.min_version:
-            print(f"Skipping {snapshot} as it requires a more recent version of Python.")
+            print(
+                f"Skipping {snapshot} as it requires a more recent version of Python."
+            )
             skipped_some = True
             continue
         if len(sys.argv) > 1 and snapshot.id not in sys.argv:

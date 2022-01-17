@@ -779,7 +779,14 @@
             <section>
                 {% block edit_button %}
                     {% if edit_url %}
-                        <a class="pdoc-button git-button" href="{{ edit_url }}">Edit on GitHub</a>
+                        {% if "github.com" in edit_url %}
+                            {% set edit_text = "Edit on GitHub" %}
+                        {% elif "gitlab" in edit_url %}
+                            {% set edit_text = "Edit on GitLab" %}
+                        {% else %}
+                            {% set edit_text = "Edit Source" %}
+                        {% endif %}
+                        <a class="pdoc-button git-button" href="{{ edit_url }}">{{ edit_text }}</a>
                     {% endif %}
                 {% endblock %}
                 {{ module_name() }}

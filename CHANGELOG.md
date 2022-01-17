@@ -1,8 +1,11 @@
 # Release History
 
 # Unreleased: pdoc next
+
  - Improve search tokenization to better match
    on function arguments.
+ - The "Edit on GitHub" button now says "Edit on GitLab" if it points to
+   GitLab, or "Edit Source" if neither platform is used.
 
 # 2022-01-14: pdoc 8.3.0
 
