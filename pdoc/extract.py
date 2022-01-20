@@ -23,7 +23,9 @@ from pathlib import Path
 from typing import Callable, Iterable, Iterator, Optional, Sequence, Union
 from unittest.mock import patch
 
-from . import doc_ast, docstrings
+import pdoc
+import pdoc.doc_ast
+import pdoc.docstrings
 
 
 def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
@@ -288,8 +290,9 @@ def invalidate_caches(module_name: str) -> None:
 
     importlib.invalidate_caches()
     linecache.clearcache()
-    doc_ast._get_source.cache_clear()
-    docstrings.convert.cache_clear()
+    pdoc.doc.Module.from_name.cache_clear()
+    pdoc.doc_ast._get_source.cache_clear()
+    pdoc.docstrings.convert.cache_clear()
 
     prefix = f"{module_name}."
     mods = sorted(

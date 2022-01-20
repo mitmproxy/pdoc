@@ -68,7 +68,6 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
             try:
                 extract.invalidate_caches(module_name)
-                self.server.all_modules.invalidate_cache()
                 mod = self.server.all_modules[module_name]
                 out = render.html_module(
                     module=mod,
@@ -109,21 +108,24 @@ class DocServer(http.server.HTTPServer):
     @cache
     def render_search_index(self) -> str:
         """Render the search index. For performance reasons this is always cached."""
-        all_mods = {}
+        # Some modules may not be importable, which means that they would raise an RuntimeError
+        # when accessed. We "fix" this by pre-loading all modules here and only passing the ones that work.
+        all_modules_safe = {}
         for mod in self.all_modules:
             try:
-                m = extract.load_module(mod)
+                all_modules_safe[mod] = doc.Module.from_name(mod)
             except RuntimeError:
                 warnings.warn(f"Error importing {mod!r}:\n{traceback.format_exc()}")
-            else:
-                all_mods[mod] = doc.Module(m)
-        return render.search_index(all_mods)
+        return render.search_index(all_modules_safe)
 
 
 class AllModules(Mapping[str, doc.Module]):
-    """A lazy_loading implementation of all_modules.
+    """A lazy-loading implementation of all_modules.
 
     This behaves like a regular dict, but modules are only imported on demand for performance reasons.
+    This has the somewhat annoying side-effect that __getitem__ may raise a RuntimeError.
+    We can ignore that when rendering HTML as the default templates do not access all_modules values,
+    but we need to perform additional steps for the search index.
     """
 
     def __init__(self, allowed_modules: Iterable[str]):
@@ -139,18 +141,11 @@ class AllModules(Mapping[str, doc.Module]):
     def __contains__(self, item):
         return self.allowed_modules.__contains__(item)
 
-    def __hash__(self):
-        return id(self)
-
-    @cache
     def __getitem__(self, item: str):
         if item in self.allowed_modules:
-            return doc.Module(extract.load_module(item))
+            return doc.Module.from_name(item)
         else:  # pragma: no cover
             raise KeyError(item)
-
-    def invalidate_cache(self) -> None:
-        self.__getitem__.cache_clear()
 
 
 # https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61

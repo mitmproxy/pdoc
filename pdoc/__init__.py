@@ -426,7 +426,7 @@ def pdoc(
     all_modules: dict[str, doc.Module] = {}
     for module_name in extract.walk_specs(modules):
         try:
-            all_modules[module_name] = doc.Module(extract.load_module(module_name))
+            all_modules[module_name] = doc.Module.from_name(module_name)
         except RuntimeError:
             warnings.warn(f"Error importing {module_name}:\n{traceback.format_exc()}")
 

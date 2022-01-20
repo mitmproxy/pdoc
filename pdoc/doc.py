@@ -268,9 +268,14 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
-                doc = Module(obj)
-                doc.modulename = self.modulename
-                doc.qualname = qualname
+                if obj.__name__ == f"{self.modulename}.{qualname}":
+                    doc = Module.from_name(obj.__name__)
+                else:
+                    # This module has been reimported to be exposed under another name.
+                    # We cannot reuse the existing module object and need to manually create a new one.
+                    doc = Module(obj)
+                    doc.modulename = self.modulename
+                    doc.qualname = qualname
             elif inspect.isdatadescriptor(obj):
                 doc = Variable(
                     self.modulename,
@@ -355,6 +360,12 @@ class Module(Namespace[types.ModuleType]):
         Python module object.
         """
         super().__init__(module.__name__, "", module, (module.__name__, ""))
+
+    @classmethod
+    @cache
+    def from_name(cls, name: str) -> Module:
+        """Create a `Module` object by supplying the module's (full) name."""
+        return cls(extract.load_module(name))
 
     @cache
     @_include_fullname_in_traceback

@@ -29,7 +29,7 @@ class ReadResponse(threading.Thread):
 def handle_request(data: bytes) -> bytes:
     server = DocServer(
         ("", 8080),
-        specs=["dataclasses", str(here / "import_err"), "jinja2", "!jinja2."],
+        specs=["dataclasses", str(here / "testdata" / "import_err_simple.py"), "jinja2", "!jinja2."],
         bind_and_activate=False,
     )
     a, b = socket.socketpair()
@@ -52,7 +52,7 @@ def test_get_index():
 
 
 def test_get_search_json():
-    with pytest.warns(UserWarning, match="Error loading test.import_err.err"):
+    with pytest.warns(UserWarning, match="Error importing 'import_err_simple'"):
         assert b'"dataclasses.is_dataclass"' in handle_request(
             b"GET /search.js HTTP/1.1\r\n\r\n"
         )
@@ -71,7 +71,7 @@ def test_get_dependency():
 
 
 def test_get_module_err():
-    assert b"I fail on import" in handle_request(b"GET /test/import_err/err.html HTTP/1.1\r\n\r\n")
+    assert b"I fail on import" in handle_request(b"GET /import_err_simple.html HTTP/1.1\r\n\r\n")
 
 
 def test_get_module_mtime():

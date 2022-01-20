@@ -557,7 +557,7 @@
     {% endfor %}
 {% enddefaultmacro %}
 {% defaultmacro headerlink(doc) -%}
-    <a class="headerlink" href="#{{ doc.qualname }}">#&nbsp;&nbsp</a>
+    <a class="headerlink" href="#{{ doc.qualname or doc.name }}">#&nbsp;&nbsp</a>
 {% enddefaultmacro %}
 {% defaultmacro function(fn) -%}
     <div class="attr function">{{ headerlink(fn) }}
@@ -646,7 +646,7 @@
     {% elif doc.name == "__doc__" %}
         {# Sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
         {# https://github.com/mitmproxy/pdoc/issues/235 #}
-    {% elif doc.qualname is in(module.obj.__all__ or []) %}
+    {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
     {% endif %}

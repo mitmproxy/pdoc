@@ -46,7 +46,8 @@ def test_api(tmp_path):
             pdoc(here / "notfound.py")
 
     with pytest.raises(RuntimeError, match="Unable to import any modules."):
-        pdoc(here / "import_err" / "err")
+        with pytest.warns(UserWarning, match="Error importing"):
+            pdoc(here / "testdata" / "import_err_simple.py")
 
     # temporarily insert syntax error - we don't leave it permanently to not confuse mypy, flake8 and black.
     f = here / "syntax_err" / "syntax_err.py"
