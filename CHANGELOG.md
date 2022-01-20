@@ -7,6 +7,8 @@
  - The "Edit on GitHub" button now says "Edit on GitLab" if it points to
    GitLab, or "Edit Source" if neither platform is used.
  - Do not linkify identifiers that are already manually linked.
+ - When importing local file paths, always make sure that the directory is
+   at the front of `sys.path`.
 
 # 2022-01-14: pdoc 8.3.0
 

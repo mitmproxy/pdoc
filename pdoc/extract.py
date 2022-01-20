@@ -134,8 +134,8 @@ def parse_spec(spec: Union[Path, str]) -> str:
     if isinstance(spec, Path):
         if (spec.parent / "__init__.py").exists():
             return parse_spec(spec.resolve().parent) + f".{spec.stem}"
-        if str(spec.parent) not in sys.path:
-            sys.path.insert(0, str(spec.parent))
+        parent_dir = str(spec.parent)
+        sys.path = [parent_dir] + [x for x in sys.path if x != parent_dir]
         if spec.stem in sys.modules and sys.modules[spec.stem].__file__:
             local_dir = spec.resolve()
             file = sys.modules[spec.stem].__file__
