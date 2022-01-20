@@ -10,8 +10,8 @@ from pathlib import Path
 import pdoc
 import pdoc.doc
 import pdoc.extract
+import pdoc.render
 import pdoc.web
-from pdoc import extract, render
 from pdoc._compat import BooleanOptionalAction
 
 if sys.stdout.isatty():  # pragma: no cover
@@ -168,7 +168,7 @@ def cli(args: list[str] = None) -> None:
 
     warnings.showwarning = _nicer_showwarning
 
-    render.configure(
+    pdoc.render.configure(
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
         docformat=opts.docformat,
@@ -188,16 +188,15 @@ def cli(args: list[str] = None) -> None:
         )
         return
     else:
-        all_modules = extract.walk_specs(opts.modules)
         with pdoc.web.DocServer(
             (opts.host, opts.port),
-            all_modules,
+            opts.modules,
         ) as httpd:
             url = f"http://{opts.host}:{opts.port}"
             print(f"pdoc server ready at {url}")
             if not opts.no_browser:
-                if len(opts.modules) == 1 or len(all_modules) == 1:
-                    mod = next(iter(all_modules))
+                if len(opts.modules) == 1 or len(httpd.all_modules) == 1:
+                    mod = next(iter(httpd.all_modules))
                     url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)
             try:

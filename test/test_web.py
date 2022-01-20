@@ -1,10 +1,14 @@
 import io
 import socket
 import threading
+from pathlib import Path
 
 import pytest
 
 from pdoc.web import DocServer, DocHandler
+
+
+here = Path(__file__).parent
 
 
 class ReadResponse(threading.Thread):
@@ -25,7 +29,7 @@ class ReadResponse(threading.Thread):
 def handle_request(data: bytes) -> bytes:
     server = DocServer(
         ("", 8080),
-        all_modules=["dataclasses", "err", "jinja2"],
+        specs=["dataclasses", str(here / "import_err"), "jinja2", "!jinja2."],
         bind_and_activate=False,
     )
     a, b = socket.socketpair()
@@ -47,8 +51,8 @@ def test_get_index():
     assert b'<a href="dataclasses.html">' in handle_request(b"GET / HTTP/1.1\r\n\r\n")
 
 
-def test_get_search_json(monkeypatch):
-    with pytest.warns(UserWarning, match="Error importing 'err'"):
+def test_get_search_json():
+    with pytest.warns(UserWarning, match="Error loading test.import_err.err"):
         assert b'"dataclasses.is_dataclass"' in handle_request(
             b"GET /search.js HTTP/1.1\r\n\r\n"
         )
@@ -67,7 +71,7 @@ def test_get_dependency():
 
 
 def test_get_module_err():
-    assert b"ModuleNotFoundError" in handle_request(b"GET /err.html HTTP/1.1\r\n\r\n")
+    assert b"I fail on import" in handle_request(b"GET /test/import_err/err.html HTTP/1.1\r\n\r\n")
 
 
 def test_get_module_mtime():

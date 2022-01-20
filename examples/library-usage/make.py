@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # We can override most pdoc doc attributes by just assigning to them.
     doc.get("Foo.A").docstring = "I'm a docstring for Foo.A."
 
-    out = pdoc.render.html_module(module=doc, all_modules=["foo"])
+    out = pdoc.render.html_module(module=doc, all_modules={"foo": doc})
 
     with open("foo.html", "w") as f:
         f.write(out)

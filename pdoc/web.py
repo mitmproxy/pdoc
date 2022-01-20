@@ -12,7 +12,8 @@ import http.server
 import traceback
 import warnings
 import webbrowser
-from typing import Collection, Optional, Union
+from collections.abc import Mapping
+from typing import Iterable, Iterator, Optional, Union
 
 from pdoc import doc, extract, render
 from pdoc._compat import cache, removesuffix
@@ -48,15 +49,15 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             return self.server.render_search_index()
         else:
-            module = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
-            if module not in self.server.all_modules:
+            module_name = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
+            if module_name not in self.server.all_modules:
                 self.send_response(404)
                 self.send_header("content-type", "text/html")
                 self.end_headers()
-                return render.html_error(error=f"Module {module!r} not found")
+                return render.html_error(error=f"Module {module_name!r} not found")
 
             mtime = ""
-            t = extract.module_mtime(module)
+            t = extract.module_mtime(module_name)
             if t:
                 mtime = f"{t:.1f}"
             if "mtime=1" in self.path:
@@ -66,8 +67,9 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 return mtime
 
             try:
-                extract.invalidate_caches(module)
-                mod = doc.Module(extract.load_module(module))
+                extract.invalidate_caches(module_name)
+                self.server.all_modules.invalidate_cache()
+                mod = self.server.all_modules[module_name]
                 out = render.html_module(
                     module=mod,
                     all_modules=self.server.all_modules,
@@ -78,7 +80,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
                 self.send_header("content-type", "text/html")
                 self.end_headers()
                 return render.html_error(
-                    error=f"Error importing {module!r}",
+                    error=f"Error importing {module_name!r}",
                     details=traceback.format_exc(),
                 )
 
@@ -97,11 +99,12 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 class DocServer(http.server.HTTPServer):
     """pdoc's live-reloading web server"""
 
-    all_modules: Collection[str]
+    all_modules: AllModules
 
-    def __init__(self, addr: tuple[str, int], all_modules: Collection[str], **kwargs):
+    def __init__(self, addr: tuple[str, int], specs: list[str], **kwargs):
         super().__init__(addr, DocHandler, **kwargs)  # type: ignore
-        self.all_modules = all_modules
+        module_names = extract.walk_specs(specs)
+        self.all_modules = AllModules(module_names)
 
     @cache
     def render_search_index(self) -> str:
@@ -115,6 +118,39 @@ class DocServer(http.server.HTTPServer):
             else:
                 all_mods[mod] = doc.Module(m)
         return render.search_index(all_mods)
+
+
+class AllModules(Mapping[str, doc.Module]):
+    """A lazy_loading implementation of all_modules.
+
+    This behaves like a regular dict, but modules are only imported on demand for performance reasons.
+    """
+
+    def __init__(self, allowed_modules: Iterable[str]):
+        # use a dict to preserve order
+        self.allowed_modules: dict[str, None] = dict.fromkeys(allowed_modules)
+
+    def __len__(self) -> int:
+        return self.allowed_modules.__len__()
+
+    def __iter__(self) -> Iterator[str]:
+        return self.allowed_modules.__iter__()
+
+    def __contains__(self, item):
+        return self.allowed_modules.__contains__(item)
+
+    def __hash__(self):
+        return id(self)
+
+    @cache
+    def __getitem__(self, item: str):
+        if item in self.allowed_modules:
+            return doc.Module(extract.load_module(item))
+        else:  # pragma: no cover
+            raise KeyError(item)
+
+    def invalidate_cache(self) -> None:
+        self.__getitem__.cache_clear()
 
 
 # https://github.com/mitmproxy/mitmproxy/blob/af3dfac85541ce06c0e3302a4ba495fe3c77b18a/mitmproxy/tools/web/webaddons.py#L35-L61

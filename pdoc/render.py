@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import os
 import types
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Collection, Mapping, Optional, cast
+from typing import Optional, cast
 
 import jinja2
 from jinja2 import Environment, FileSystemLoader
@@ -76,7 +77,7 @@ def configure(
 
 def html_module(
     module: pdoc.doc.Module,
-    all_modules: Collection[str],
+    all_modules: Mapping[str, pdoc.doc.Module],
     mtime: Optional[str] = None,
 ) -> str:
     """
@@ -100,10 +101,10 @@ def html_module(
         )
 
 
-def html_index(all_modules: Collection[str]) -> str:
+def html_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the module index."""
     return env.get_template("index.html.jinja2").render(
-        all_modules=[m for m in all_modules if "._" not in m],
+        all_modules=all_modules,
     )
 
 
@@ -115,7 +116,7 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
+def search_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the Elasticlunr.js search index."""
     if not env.globals["search"]:
         return ""
@@ -131,7 +132,7 @@ def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
         return bool(ctx["is_public"](x).strip())
 
     index = make_index(
-        doc_objects,
+        all_modules,
         is_public,
         cast(str, env.globals["docformat"]),
     )

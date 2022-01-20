@@ -40,21 +40,22 @@ def test_api(tmp_path):
     assert pdoc(here / "testdata" / "demo_long.py").startswith("<!doctype html>")
     with pytest.raises(ValueError, match="Invalid rendering format"):
         assert pdoc(here / "testdata" / "demo_long.py", format="invalid")
+
     with pytest.raises(ValueError, match="No modules found matching spec"):
         with pytest.warns(UserWarning, match="Cannot find spec"):
-            assert pdoc(
-                here / "notfound.py",
-            )
+            pdoc(here / "notfound.py")
+
+    with pytest.raises(RuntimeError, match="Unable to import any modules."):
+        pdoc(here / "import_err" / "err")
 
     # temporarily insert syntax error - we don't leave it permanently to not confuse mypy, flake8 and black.
-    (here / "syntax_err" / "syntax_err.py").write_bytes(b"class")
-    with pytest.warns(
-        UserWarning, match="Error importing test.syntax_err.syntax_err"
-    ):
-        pdoc(here / "syntax_err", output_directory=tmp_path)
-    (here / "syntax_err" / "syntax_err.py").write_bytes(
-        b"# syntax error will be inserted by test here\n"
-    )
+    f = here / "syntax_err" / "syntax_err.py"
+    f.write_bytes(b"class")
+    try:
+        with pytest.warns(UserWarning, match="Error importing"):
+            pdoc(here / "syntax_err", output_directory=tmp_path)
+    finally:
+        f.write_bytes(b"# syntax error will be inserted by test here\n")
 
 
 def test_patch_showwarnings(capsys, monkeypatch):

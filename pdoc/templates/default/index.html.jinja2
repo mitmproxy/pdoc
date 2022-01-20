@@ -33,7 +33,7 @@
         <div>
             <h2>Available Modules</h2>
             <ul>
-                {% for submodule in all_modules %}
+                {% for submodule in all_modules if "._" not in submodule %}
                     <li><a href="{{ submodule.replace(".","/") }}.html">{{ submodule }}</a></li>
                 {% endfor %}
             </ul>

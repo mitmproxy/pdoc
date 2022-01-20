@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - The `all_modules` variable now allows templates to access all other module objects.
  - Improve search tokenization to better match
    on function arguments.
  - The "Edit on GitHub" button now says "Edit on GitLab" if it points to
