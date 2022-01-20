@@ -378,17 +378,35 @@ import io
 import traceback
 import warnings
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, overload
 
 from pdoc import doc, extract, render
 from pdoc._compat import Literal
+
+
+@overload
+def pdoc(
+    *modules: Union[Path, str],
+    output_directory: None = None,
+    format: Literal["html"] = "html",
+) -> str:
+    pass
+
+
+@overload
+def pdoc(
+    *modules: Union[Path, str],
+    output_directory: Path,
+    format: Literal["html"] = "html",
+) -> None:
+    pass
 
 
 def pdoc(
     *modules: Union[Path, str],
     output_directory: Optional[Path] = None,
     format: Literal["html"] = "html",
-) -> str:
+) -> Optional[str]:
     """
     Render the documentation for a list of modules.
 
