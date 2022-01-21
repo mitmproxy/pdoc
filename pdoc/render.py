@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import os
 import types
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Optional, cast
+from typing import Mapping, Optional, cast
 
 import jinja2
 from jinja2 import Environment, FileSystemLoader
