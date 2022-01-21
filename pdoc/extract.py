@@ -28,7 +28,7 @@ import pdoc.doc_ast
 import pdoc.docstrings
 
 
-def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
+def walk_specs(specs: Sequence[Union[Path, str]]) -> list[str]:
     """
     This function processes a list of module specifications and returns a collection of module names, including all
     submodules, that should be processed by pdoc.
@@ -40,10 +40,6 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
      - `collections.abc`
      - `./test/testdata/demo_long.py`
      - `./test/testdata/demopackage`
-
-
-    Practically you can think of this function returning a list. Technically we return a dict with empty values,
-    which has efficient `__iter__` and `__contains__` implementations.
 
     *This function has side-effects:* See `parse_spec`.
     """
@@ -90,7 +86,7 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> dict[str, None]:
             f"No modules found matching spec: {', '.join(str(x) for x in specs)}"
         )
 
-    return all_modules
+    return list(all_modules)
 
 
 def parse_spec(spec: Union[Path, str]) -> str:
@@ -312,14 +308,3 @@ def invalidate_caches(module_name: str) -> None:
                 f"Error reloading {modname}:\n{traceback.format_exc()}",
                 stacklevel=2,
             )
-
-
-def parse_specs(
-    modules: Sequence[Union[Path, str]]
-) -> dict[str, None]:  # pragma: no cover
-    """A deprecated alias for `walk_specs`."""
-    warnings.warn(
-        "pdoc.extract.parse_specs has been renamed to pdoc.extract.walk_specs",
-        PendingDeprecationWarning,
-    )
-    return walk_specs(modules)
