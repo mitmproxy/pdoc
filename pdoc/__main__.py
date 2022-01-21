@@ -130,7 +130,7 @@ miscargs.add_argument(
     "-p",
     "--port",
     type=int,
-    default=8080,
+    default=None,
     help="The port on which to run the HTTP server.",
 )
 miscargs.add_argument(
@@ -188,11 +188,18 @@ def cli(args: list[str] = None) -> None:
         )
         return
     else:
-        with pdoc.web.DocServer(
-            (opts.host, opts.port),
-            opts.modules,
-        ) as httpd:
-            url = f"http://{opts.host}:{opts.port}"
+        try:
+            try:
+                httpd = pdoc.web.DocServer((opts.host, opts.port or 8080), opts.modules)
+            except OSError:
+                # Couldn't bind, let's try again with a random port.
+                httpd = pdoc.web.DocServer((opts.host, opts.port or 0), opts.modules)
+        except OSError as e:
+            print(f"{red}Cannot start web server on {opts.host}:{opts.port}: {e}{default}")
+            sys.exit(1)
+
+        with httpd:
+            url = f"http://{opts.host}:{httpd.server_port}"
             print(f"pdoc server ready at {url}")
             if not opts.no_browser:
                 if len(opts.modules) == 1 or len(httpd.all_modules) == 1:

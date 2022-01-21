@@ -24,16 +24,21 @@ def test_cli_version(capsys):
     assert "pdoc:" in capsys.readouterr().out
 
 
-def test_cli_web(monkeypatch):
+def test_cli_web():
     with patch("pdoc.web.open_browser") as open_browser:
         with patch(
             "pdoc.web.DocServer.serve_forever", side_effect=KeyboardInterrupt
         ) as serve_forever:
             cli([str(here / "testdata" / "demopackage" / "_child_d.py")])
-            assert open_browser.call_args == call(
-                "http://localhost:8080/demopackage/_child_d.html"
-            )
+            assert open_browser.call_args.args[0].startswith("http://localhost")
             assert serve_forever.call_args == call()
+
+
+def test_cli_web_port_used(capsys):
+    with patch("pdoc.web.DocServer", side_effect=OSError):
+        with pytest.raises(SystemExit, match="1"):
+            cli(["dataclasses"])
+    assert "Cannot start web server" in capsys.readouterr().out
 
 
 def test_api(tmp_path):
