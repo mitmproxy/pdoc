@@ -712,7 +712,7 @@
                             &nbsp;
                             {{- parentmodule -}}
                         </a>
-                    {% elif all_modules|length > 1 %}
+                    {% elif not root_module_name()  %}
                         <a class="pdoc-button module-list-button" href="{{ "../" * module.modulename.count(".") }}index.html">
                             {% include "box-arrow-in-left.svg" %}
                             &nbsp;

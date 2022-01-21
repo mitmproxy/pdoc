@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - **Breaking:** For projects that only document a single module (and its submodules),
+   the module index has been removed. `index.html` now redirects to the top-level module instead.
+   Direct submodules continue to be accessible in the menu.
+   See [#318](https://github.com/mitmproxy/pdoc/issues/318) for details.
  - pdoc web server now picks a random port if 8080 is unavailable and no explicit port has been passed.
  - Improve search tokenization to better match
    on function arguments.

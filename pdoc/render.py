@@ -19,6 +19,7 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
+    root_module_name,
     to_html,
     to_markdown_with_context,
 )
@@ -173,4 +174,5 @@ env.filters["link"] = link
 env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["env"] = os.environ
+env.globals["root_module_name"] = root_module_name
 configure()  # add default globals

@@ -17,7 +17,7 @@ snapshot_dir = here / "testdata"
 
 class Snapshot:
     id: str
-    path: Path
+    specs: list[Path]
     render_options: dict
     with_output_directory: bool
     min_version: tuple[int, int]
@@ -25,13 +25,16 @@ class Snapshot:
     def __init__(
         self,
         id: str,
-        filename: Optional[str] = None,
+        filenames: Optional[list[str]] = None,
         render_options: Optional[dict] = None,
         with_output_directory: bool = False,
         min_version: tuple[int, int] = (3, 7),
     ):
         self.id = id
-        self.path = snapshot_dir / (filename or f"{id}.py")
+        self.specs = [
+            snapshot_dir / f
+            for f in (filenames or [f"{id}.py"])
+        ]
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
         self.min_version = min_version
@@ -46,7 +49,7 @@ class Snapshot:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 tmpdir = Path(tmpdirname)
                 # noinspection PyTypeChecker
-                pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
+                pdoc.pdoc(*self.specs, format=format, output_directory=Path(tmpdir))  # type: ignore
 
                 if format == "html":
                     rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
@@ -72,7 +75,7 @@ class Snapshot:
 
         else:
             # noinspection PyTypeChecker
-            rendered = pdoc.pdoc(self.path, format=format)  # type: ignore
+            rendered = pdoc.pdoc(*self.specs, format=format)  # type: ignore
         pdoc.render.configure()
         pdoc.render.env.globals["__version__"] = pdoc.__version__
         return rendered
@@ -93,28 +96,28 @@ snapshots = [
     Snapshot("flavors_rst"),
     Snapshot(
         "example_customtemplate",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "custom-template"},
         min_version=(3, 9),
     ),
     Snapshot(
         "example_darkmode",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "dark-mode"},
         min_version=(3, 9),
     ),
     Snapshot(
         "example_mkdocs",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
         min_version=(3, 9),
     ),
     Snapshot("demo_long", min_version=(3, 9)),
     Snapshot("demo_eager", min_version=(3, 9)),
-    Snapshot("demopackage", "demopackage"),
+    Snapshot("demopackage", ["demopackage"]),
     Snapshot(
         "demopackage_dir",
-        "demopackage",
+        ["demopackage", "demo.py"],
         render_options={
             "edit_url_map": {
                 "demopackage.child_b": "https://gitlab.example.com/foo/bar/-/blob/main/demopackage/child_b",

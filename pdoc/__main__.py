@@ -202,9 +202,6 @@ def cli(args: list[str] = None) -> None:
             url = f"http://{opts.host}:{httpd.server_port}"
             print(f"pdoc server ready at {url}")
             if not opts.no_browser:
-                if len(opts.modules) == 1 or len(httpd.all_modules) == 1:
-                    mod = next(iter(httpd.all_modules))
-                    url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)
             try:
                 httpd.serve_forever()

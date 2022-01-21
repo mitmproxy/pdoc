@@ -229,6 +229,29 @@ def edit_url(
     return None
 
 
+@pass_context
+@cache
+def root_module_name(context: Context) -> Optional[str]:
+    """
+    Return the name of the (unique) top-level module, or `None`
+    if no such module exists.
+
+    For example, assuming `foo`, `foo.bar`, and `foo.baz` are documented,
+    this function will return `foo`. If `foo` and `bar` are documented,
+    this function will return `None` as there is no unique top-level module.
+    """
+    all_modules: dict[str, pdoc.doc.Module] = context["all_modules"]
+    shortest_name = min(all_modules, key=len, default=None)
+    prefix = f"{shortest_name}."
+    all_others_are_submodules = all(
+        x.startswith(prefix) or x == shortest_name for x in all_modules
+    )
+    if all_others_are_submodules:
+        return shortest_name
+    else:
+        return None
+
+
 def minify_css(css: str) -> str:
     """Do some very basic CSS minification."""
     css = re.sub(r"[ ]{4}|\n|(?<=[:{}]) | (?=[{}])", "", css)
