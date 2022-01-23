@@ -37,7 +37,7 @@
 {% endblock %}
 {% block nav %}
     <nav class="pdoc">
-        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'navtoggle.svg' %}</label>
+        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'resources/navtoggle.svg' %}</label>
         <input id="togglestate" type="checkbox">
         <div>
             <h2>Available Modules</h2>
@@ -51,7 +51,7 @@
     <header class="pdoc">
         {% block logo %}
             <a href="https://pdoc.dev">
-                <img src="data:image/svg+xml,{% filter urlencode %}{% include "pdoc-logo.svg" %}{% endfilter %}"
+                <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"
                      alt="pdoc logo"/>
             </a>
         {% endblock %}

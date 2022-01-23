@@ -2,7 +2,7 @@
  * This script is invoked by pdoc to precompile the search index.
  * Precompiling the search index increases file size, but skips the CPU-heavy index building in the browser.
  */
-let elasticlunr = require("./elasticlunr.min");
+let elasticlunr = require("./resources/elasticlunr.min");
 
 let fs = require("fs");
 let docs = JSON.parse(fs.readFileSync(0, "utf-8"));

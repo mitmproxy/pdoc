@@ -6,12 +6,12 @@
     <meta name="generator" content="pdoc {{ __version__ }}" />
     <title>{% block title %}{% endblock %}</title>
     {% block favicon %}
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "favicon.svg" %}{% endfilter %}"/>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/favicon.svg" %}{% endfilter %}"/>
     {% endblock %}
 
     {% block head %}{% endblock %}
     {% block style %}
-        <style>{% include 'bootstrap-reboot.min.css' %}</style>
+        <style>{% include 'resources/bootstrap-reboot.min.css' %}</style>
     {% endblock %}
 
 </head>
