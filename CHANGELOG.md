@@ -17,6 +17,7 @@
  - Hide modules in the submodule list if the were explicitly excluded from documentation.
  - When importing local file paths, always make sure that the directory is
    at the front of `sys.path`.
+ - Improve evaluation of type annotations.
 
 # 2022-01-14: pdoc 8.3.0
 

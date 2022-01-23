@@ -185,7 +185,8 @@ def type_checking_sections(mod: types.ModuleType) -> ast.Module:
             isinstance(node, ast.If)
             and isinstance(node.test, ast.Attribute)
             and isinstance(node.test.value, ast.Name)
-            and node.test.value.id == "typing"
+            # some folks do "import typing as t", the accuracy with just TYPE_CHECKING is good enough.
+            # and node.test.value.id == "typing"
             and node.test.attr == "TYPE_CHECKING"
         ):
             ret.body.extend(node.body)
