@@ -9,34 +9,32 @@ here = Path(__file__).parent
 
 
 def test_walk_specs():
-    assert list(walk_specs(["dataclasses"])) == ["dataclasses"]
-    assert list(
+    assert walk_specs(["dataclasses"]) == ["dataclasses"]
+    assert (
         walk_specs(
             [
-                "test.testdata.demopackage",
-                "!test.testdata.demopackage",
-                "test.testdata.demopackage.child_b",
+                here / "testdata" / "demopackage",
+                "!demopackage",
+                "demopackage.child_b",
             ]
         )
-    ) == ["test.testdata.demopackage.child_b"]
+        == ["demopackage.child_b"]
+    )
 
-    assert list(
-        walk_specs(
-            [
-                "test.testdata.demopackage",
-                "!test.testdata.demopackage.child_b",
-                "!test.testdata.demopackage.child_c",
-            ]
-        )
-    ) == ["test.testdata.demopackage", "test.testdata.demopackage._child_e"]
+    assert walk_specs(["demopackage", "!demopackage.child_excluded"]) == [
+        "demopackage",
+        "demopackage._child_e",
+        "demopackage.child_b",
+        "demopackage.child_c",
+    ]
     with pytest.raises(ValueError, match="No modules found matching spec: unknown"):
         with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])
     with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
-        assert list(walk_specs(["dataclasses", "unknown"])) == ["dataclasses"]
+        assert walk_specs(["dataclasses", "unknown"]) == ["dataclasses"]
 
     with pytest.warns(UserWarning, match="Error loading test.import_err.err"):
-        assert list(walk_specs([here / "import_err"])) == [
+        assert walk_specs([here / "import_err"]) == [
             "test.import_err",
             "test.import_err.err",
         ]
@@ -48,7 +46,7 @@ def test_walk_specs():
         match="The module specification 'dataclasses' adds a module named dataclasses, "
         "but a module with this name has already been added.",
     ):
-        assert list(walk_specs(["dataclasses", "dataclasses"])) == ["dataclasses"]
+        assert walk_specs(["dataclasses", "dataclasses"]) == ["dataclasses"]
 
 
 def test_parse_spec(monkeypatch):

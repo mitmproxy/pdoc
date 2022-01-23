@@ -2,11 +2,19 @@
 
 # Unreleased: pdoc next
 
+ - **Breaking:** For projects that only document a single module (and its submodules),
+   the module index has been removed. `index.html` now redirects to the top-level module instead.
+   Direct submodules continue to be accessible in the menu.
+   See [#318](https://github.com/mitmproxy/pdoc/issues/318) for details.
+ - pdoc web server now picks a random port if 8080 is unavailable and no explicit port has been passed.
  - Improve search tokenization to better match
    on function arguments.
  - The "Edit on GitHub" button now says "Edit on GitLab" if it points to
    GitLab, or "Edit Source" if neither platform is used.
+ - The `all_modules` variable now allows templates to access all other module objects.
+ - Add `pdoc.doc.Module.from_name` to simplify module creation.
  - Do not linkify identifiers that are already manually linked.
+ - Hide modules in the submodule list if the were explicitly excluded from documentation.
  - When importing local file paths, always make sure that the directory is
    at the front of `sys.path`.
 

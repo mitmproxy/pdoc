@@ -1,3 +1,12 @@
+{% if root_module_name() %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url=./{{ root_module_name().replace(".","/") }}.html" />
+</head>
+</html>
+{% else %}
 {% extends "default/module.html.jinja2" %}
 {% block title %}Module List &ndash; pdoc {{ __version__ }}{% endblock %}
 {% block style %}
@@ -33,7 +42,7 @@
         <div>
             <h2>Available Modules</h2>
             <ul>
-                {% for submodule in all_modules %}
+                {% for submodule in all_modules if "._" not in submodule and not submodule.startswith("_") %}
                     <li><a href="{{ submodule.replace(".","/") }}.html">{{ submodule }}</a></li>
                 {% endfor %}
             </ul>
@@ -58,3 +67,4 @@
         {% include "search.html.jinja2" %}
     {% endif %}
 {% endblock %}
+{% endif %}

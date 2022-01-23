@@ -47,7 +47,7 @@ import json
 import shutil
 import subprocess
 import textwrap
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from pathlib import Path
 
 import pdoc.doc
@@ -55,7 +55,7 @@ from pdoc.render_helpers import to_html, to_markdown
 
 
 def make_index(
-    doc_objects: dict[str, pdoc.doc.Module],
+    all_modules: Mapping[str, pdoc.doc.Module],
     is_public: Callable[[pdoc.doc.Doc], bool],
     default_docformat: str,
 ) -> list[dict]:
@@ -65,7 +65,7 @@ def make_index(
     """
 
     documents = []
-    for modname, mod in doc_objects.items():
+    for modname, module in all_modules.items():
 
         def make_item(doc: pdoc.doc.Doc, **kwargs) -> dict[str, str]:
             # TODO: We could be extra fancy here and split `doc.docstring` by toc sections.
@@ -74,7 +74,7 @@ def make_index(
                 "modulename": doc.modulename,
                 "qualname": doc.qualname,
                 "type": doc.type,
-                "doc": to_html(to_markdown(doc.docstring, mod, default_docformat)),
+                "doc": to_html(to_markdown(doc.docstring, module, default_docformat)),
                 **kwargs,
             }
             return {k: v for k, v in ret.items() if v}
@@ -108,7 +108,7 @@ def make_index(
                 else:
                     pass
 
-        documents.extend(make_index(mod))
+        documents.extend(make_index(module))
 
     return documents
 

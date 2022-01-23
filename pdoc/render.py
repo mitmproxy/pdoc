@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import types
 from pathlib import Path
-from typing import Collection, Mapping, Optional, cast
+from typing import Mapping, Optional, cast
 
 import jinja2
 from jinja2 import Environment, FileSystemLoader
@@ -19,6 +19,7 @@ from pdoc.render_helpers import (
     link,
     linkify,
     minify_css,
+    root_module_name,
     to_html,
     to_markdown_with_context,
 )
@@ -76,7 +77,7 @@ def configure(
 
 def html_module(
     module: pdoc.doc.Module,
-    all_modules: Collection[str],
+    all_modules: Mapping[str, pdoc.doc.Module],
     mtime: Optional[str] = None,
 ) -> str:
     """
@@ -100,10 +101,10 @@ def html_module(
         )
 
 
-def html_index(all_modules: Collection[str]) -> str:
+def html_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the module index."""
     return env.get_template("index.html.jinja2").render(
-        all_modules=[m for m in all_modules if "._" not in m],
+        all_modules=all_modules,
     )
 
 
@@ -115,14 +116,14 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
-def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
+def search_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the Elasticlunr.js search index."""
     if not env.globals["search"]:
         return ""
     # This is a rather terrible hack to determine if a given object is public and should be included in the index.
     module_template: jinja2.Template = env.get_template("module.html.jinja2")
     ctx: jinja2.runtime.Context = module_template.new_context(
-        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": {}}
+        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": all_modules}
     )
     for _ in module_template.root_render_func(ctx):  # type: ignore
         pass
@@ -131,7 +132,7 @@ def search_index(doc_objects: dict[str, pdoc.doc.Module]) -> str:
         return bool(ctx["is_public"](x).strip())
 
     index = make_index(
-        doc_objects,
+        all_modules,
         is_public,
         cast(str, env.globals["docformat"]),
     )
@@ -173,4 +174,5 @@ env.filters["link"] = link
 env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["env"] = os.environ
+env.globals["root_module_name"] = root_module_name
 configure()  # add default globals

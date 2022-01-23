@@ -10,8 +10,8 @@ from pathlib import Path
 import pdoc
 import pdoc.doc
 import pdoc.extract
+import pdoc.render
 import pdoc.web
-from pdoc import extract, render
 from pdoc._compat import BooleanOptionalAction
 
 if sys.stdout.isatty():  # pragma: no cover
@@ -130,7 +130,7 @@ miscargs.add_argument(
     "-p",
     "--port",
     type=int,
-    default=8080,
+    default=None,
     help="The port on which to run the HTTP server.",
 )
 miscargs.add_argument(
@@ -168,7 +168,7 @@ def cli(args: list[str] = None) -> None:
 
     warnings.showwarning = _nicer_showwarning
 
-    render.configure(
+    pdoc.render.configure(
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         template_directory=opts.template_directory,
         docformat=opts.docformat,
@@ -188,17 +188,22 @@ def cli(args: list[str] = None) -> None:
         )
         return
     else:
-        all_modules = extract.walk_specs(opts.modules)
-        with pdoc.web.DocServer(
-            (opts.host, opts.port),
-            all_modules,
-        ) as httpd:
-            url = f"http://{opts.host}:{opts.port}"
+        try:
+            try:
+                httpd = pdoc.web.DocServer((opts.host, opts.port or 8080), opts.modules)
+            except OSError:
+                # Couldn't bind, let's try again with a random port.
+                httpd = pdoc.web.DocServer((opts.host, opts.port or 0), opts.modules)
+        except OSError as e:
+            print(
+                f"{red}Cannot start web server on {opts.host}:{opts.port}: {e}{default}"
+            )
+            sys.exit(1)
+
+        with httpd:
+            url = f"http://{opts.host}:{httpd.server_port}"
             print(f"pdoc server ready at {url}")
             if not opts.no_browser:
-                if len(opts.modules) == 1 or len(all_modules) == 1:
-                    mod = next(iter(all_modules))
-                    url += f"/{mod.replace('.', '/')}.html"
                 pdoc.web.open_browser(url)
             try:
                 httpd.serve_forever()

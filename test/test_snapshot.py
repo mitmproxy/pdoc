@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -17,7 +19,7 @@ snapshot_dir = here / "testdata"
 
 class Snapshot:
     id: str
-    path: Path
+    specs: list[str]
     render_options: dict
     with_output_directory: bool
     min_version: tuple[int, int]
@@ -25,13 +27,13 @@ class Snapshot:
     def __init__(
         self,
         id: str,
-        filename: Optional[str] = None,
+        filenames: Optional[list[str]] = None,
         render_options: Optional[dict] = None,
         with_output_directory: bool = False,
         min_version: tuple[int, int] = (3, 7),
     ):
         self.id = id
-        self.path = snapshot_dir / (filename or f"{id}.py")
+        self.specs = filenames or [f"{id}.py"]
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
         self.min_version = min_version
@@ -46,7 +48,7 @@ class Snapshot:
             with tempfile.TemporaryDirectory() as tmpdirname:
                 tmpdir = Path(tmpdirname)
                 # noinspection PyTypeChecker
-                pdoc.pdoc(self.path, format=format, output_directory=Path(tmpdir))  # type: ignore
+                pdoc.pdoc(*self.specs, format=format, output_directory=Path(tmpdir))  # type: ignore
 
                 if format == "html":
                     rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
@@ -72,7 +74,7 @@ class Snapshot:
 
         else:
             # noinspection PyTypeChecker
-            rendered = pdoc.pdoc(self.path, format=format)  # type: ignore
+            rendered = pdoc.pdoc(*self.specs, format=format)  # type: ignore
         pdoc.render.configure()
         pdoc.render.env.globals["__version__"] = pdoc.__version__
         return rendered
@@ -93,28 +95,28 @@ snapshots = [
     Snapshot("flavors_rst"),
     Snapshot(
         "example_customtemplate",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "custom-template"},
         min_version=(3, 9),
     ),
     Snapshot(
         "example_darkmode",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "dark-mode"},
         min_version=(3, 9),
     ),
     Snapshot(
         "example_mkdocs",
-        "demo.py",
+        ["demo.py"],
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
         min_version=(3, 9),
     ),
     Snapshot("demo_long", min_version=(3, 9)),
     Snapshot("demo_eager", min_version=(3, 9)),
-    Snapshot("demopackage", "demopackage"),
+    Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
         "demopackage_dir",
-        "demopackage",
+        ["demopackage", "demopackage2", "!demopackage.child_excluded"],
         render_options={
             "edit_url_map": {
                 "demopackage.child_b": "https://gitlab.example.com/foo/bar/-/blob/main/demopackage/child_b",
@@ -143,12 +145,13 @@ snapshots = [
 ]
 
 
-@pytest.mark.parametrize("snapshot", snapshots)
+@pytest.mark.parametrize("snapshot", snapshots, ids=[x.id for x in snapshots])
 @pytest.mark.parametrize("format", ["html", "repr"])
-def test_snapshots(snapshot: Snapshot, format: str):
+def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
     """
     Compare pdoc's rendered output against stored snapshots.
     """
+    monkeypatch.chdir(snapshot_dir)
     if sys.version_info < snapshot.min_version:
         pytest.skip(
             f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above."
@@ -162,6 +165,7 @@ def test_snapshots(snapshot: Snapshot, format: str):
 
 
 if __name__ == "__main__":
+    os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
         if sys.version_info < snapshot.min_version:

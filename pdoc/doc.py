@@ -268,9 +268,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
-                doc = Module(obj)
-                doc.modulename = self.modulename
-                doc.qualname = qualname
+                doc = Module.from_name(obj.__name__)
             elif inspect.isdatadescriptor(obj):
                 doc = Variable(
                     self.modulename,
@@ -356,6 +354,12 @@ class Module(Namespace[types.ModuleType]):
         """
         super().__init__(module.__name__, "", module, (module.__name__, ""))
 
+    @classmethod
+    @cache
+    def from_name(cls, name: str) -> Module:
+        """Create a `Module` object by supplying the module's (full) name."""
+        return cls(extract.load_module(name))
+
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
@@ -412,17 +416,21 @@ class Module(Namespace[types.ModuleType]):
 
         if _safe_getattr(self.obj, "__all__", False):
             # If __all__ is set, only show submodules specified there.
+            prefix = f"{self.modulename}."
             return [
                 mod
                 for mod in self.members.values()
-                if isinstance(mod, Module)
-                and mod.modulename.startswith(self.modulename)
+                if isinstance(mod, Module) and mod.modulename.startswith(prefix)
             ]
 
         else:
             submodules = []
             for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
                 if mod.name.split(".")[-1].startswith("_"):
+                    # optimization: we don't even try to load modules starting with an underscore as they would not be
+                    # visible by default. The downside of this is that someone who overrides `is_public` will miss those
+                    # entries, the upsides are 1) better performance and 2) less warnings because of import failures
+                    # (think of OS-specific modules, e.g. _linux.py failing to import on Windows).
                     continue
                 try:
                     module = extract.load_module(mod.name)

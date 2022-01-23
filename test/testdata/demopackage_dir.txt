@@ -1,3 +1,5 @@
+# demopackage2.html
+<module demopackage2  # I'm a different pack…>
 # demopackage.html
 <module demopackage  # A test package
     <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
@@ -12,18 +14,19 @@
         <method def c(self): ...  # inherited from demopackage.child_c.C.c>
         <var b_type: Type[demopackage.child_b.B]  # inherited from demopackage.child_b.B.b_type, we have a self-refer…>
         <method def b(self): ...  # inherited from demopackage.child_b.B.b>>
-    <module demopackage.child_b  # inherited from demopackage.child_b, child_b docstr
-        <class demopackage.child_b.B  # inherited from demopackage.child_b.B, This class is define…
-            <method def __init__(): ...  # inherited from demopackage.child_b.B.__init__>
+    <module demopackage.child_b  # child_b docstr
+        <class demopackage.child_b.B  # This class is define…
+            <method def __init__(): ...>
+            <var b_type: Type[demopackage.child_b.B]  # we have a self-refer…>
+            <method def b(self): ...>>>
+    <module demopackage.child_c  # child_c docstr
+        <class demopackage.child_c.C  # This class is define…
+            <method def __init__(): ...>
+            <method def c(self): ...>
             <var b_type: Type[demopackage.child_b.B]  # inherited from demopackage.child_b.B.b_type, we have a self-refer…>
             <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
-    <module demopackage.child_c  # inherited from demopackage.child_c, child_c docstr
-        <class demopackage.child_c.C  # inherited from demopackage.child_c.C, This class is define…
-            <method def __init__(): ...  # inherited from demopackage.child_c.C.__init__>
-            <method def c(self): ...  # inherited from demopackage.child_c.C.c>
-            <var b_type: Type[demopackage.child_b.B]  # inherited from demopackage.child_b.B.b_type, we have a self-refer…>
-            <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
-    <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>>
+    <module demopackage2  # I'm a different pack…>
+    <module demopackage.child_excluded  # child_excluded docst…>>
 # demopackage/child_c.html
 <module demopackage.child_c  # child_c docstr
     <class demopackage.child_c.C  # This class is define…

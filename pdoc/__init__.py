@@ -374,7 +374,6 @@ from __future__ import annotations
 
 __version__ = "8.3.0"  # this is read from setup.py
 
-import io
 import traceback
 import warnings
 from pathlib import Path
@@ -417,58 +416,44 @@ def pdoc(
 
     Rendering options can be configured by calling `pdoc.render.configure` in advance.
     """
-    retval = io.StringIO()
-    if output_directory:
-
-        def write(mod: doc.Module):
-            assert output_directory
-            outfile = output_directory / f"{mod.fullname.replace('.', '/')}.html"
-            outfile.parent.mkdir(parents=True, exist_ok=True)
-            outfile.write_bytes(r(mod).encode())
-
-    else:
-
-        def write(mod: doc.Module):
-            retval.write(r(mod))
-
-    all_modules = extract.walk_specs(modules)
-    doc_objects: dict[str, doc.Module] = {}
-
-    if format == "html":
-
-        def r(mod: doc.Module) -> str:
-            return render.html_module(module=mod, all_modules=all_modules)
-
-    elif format == "markdown":  # pragma: no cover
+    if format not in ("html", "markdown", "repr"):
+        raise ValueError(f"Invalid rendering format {format!r}.")
+    if format == "markdown":  # pragma: no cover
         raise NotImplementedError(
             "Markdown support is currently unimplemented, but PRs are welcome!"
         )
-    elif format == "repr":
-        r = render.repr_module
-    else:
-        raise ValueError(f"Invalid rendering format {format!r}.")
 
-    for module in all_modules:
+    all_modules: dict[str, doc.Module] = {}
+    for module_name in extract.walk_specs(modules):
         try:
-            m = extract.load_module(module)
+            all_modules[module_name] = doc.Module.from_name(module_name)
         except RuntimeError:
-            warnings.warn(f"Error importing {module}:\n{traceback.format_exc()}")
+            warnings.warn(f"Error importing {module_name}:\n{traceback.format_exc()}")
+
+    if not all_modules:
+        raise RuntimeError("Unable to import any modules.")
+
+    for module in all_modules.values():
+        if format == "html":
+            out = render.html_module(module, all_modules)
         else:
-            doc_objects[module] = doc.Module(m)
-            write(doc_objects[module])
+            out = render.repr_module(module)
 
         if not output_directory:
-            return retval.getvalue()
+            return out
+        else:
+            outfile = output_directory / f"{module.fullname.replace('.', '/')}.html"
+            outfile.parent.mkdir(parents=True, exist_ok=True)
+            outfile.write_bytes(out.encode())
 
     assert output_directory
-
     if format == "html":
-        index = render.html_index(all_modules=all_modules)
+        index = render.html_index(all_modules)
         if index:
             (output_directory / "index.html").write_bytes(index.encode())
 
-        search = render.search_index(doc_objects)
+        search = render.search_index(all_modules)
         if search:
             (output_directory / "search.js").write_bytes(search.encode())
 
-    return retval.getvalue()
+    return None
