@@ -1,9 +1,9 @@
-{% if root_module_name() %}
+{% if root_module_name %}
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=./{{ root_module_name().replace(".","/") }}.html" />
+    <meta http-equiv="refresh" content="0; url=./{{ root_module_name.replace(".","/") }}.html" />
 </head>
 </html>
 {% else %}

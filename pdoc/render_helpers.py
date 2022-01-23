@@ -229,9 +229,7 @@ def edit_url(
     return None
 
 
-@pass_context
-@cache
-def root_module_name(context: Context) -> Optional[str]:
+def root_module_name(all_modules: Mapping[str, pdoc.doc.Module]) -> Optional[str]:
     """
     Return the name of the (unique) top-level module, or `None`
     if no such module exists.
@@ -240,7 +238,6 @@ def root_module_name(context: Context) -> Optional[str]:
     this function will return `foo`. If `foo` and `bar` are documented,
     this function will return `None` as there is no unique top-level module.
     """
-    all_modules: dict[str, pdoc.doc.Module] = context["all_modules"]
     shortest_name = min(all_modules, key=len, default=None)
     prefix = f"{shortest_name}."
     all_others_are_submodules = all(
