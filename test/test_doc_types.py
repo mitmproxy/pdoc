@@ -28,7 +28,7 @@ def test_eval_fail2(monkeypatch):
     monkeypatch.setattr(
         doc_ast,
         "get_source",
-        lambda _: "import typing\nif typing.TYPE_CHECKING:\n\traise RuntimeError()"
+        lambda _: "import typing\nif typing.TYPE_CHECKING:\n\traise RuntimeError()",
     )
     with pytest.warns(UserWarning, match="Failed to run TYPE_CHECKING code"):
         assert safe_eval_type("xyz", {}, types.ModuleType("a"), "a") == "xyz"
@@ -38,7 +38,13 @@ def test_eval_fail3(monkeypatch):
     monkeypatch.setattr(
         doc_ast,
         "get_source",
-        lambda _: "import typing\nif typing.TYPE_CHECKING:\n\tFooFn = typing.Callable[[],int]"
+        lambda _: "import typing\nif typing.TYPE_CHECKING:\n\tFooFn = typing.Callable[[],int]",
     )
-    with pytest.warns(UserWarning, match="Error parsing type annotation .+ after evaluating TYPE_CHECKING blocks"):
-        assert safe_eval_type("FooFn[int]", {"typing": typing}, types.ModuleType("a"), "a") == "FooFn[int]"
+    with pytest.warns(
+        UserWarning,
+        match="Error parsing type annotation .+ after evaluating TYPE_CHECKING blocks",
+    ):
+        assert (
+            safe_eval_type("FooFn[int]", {"typing": typing}, types.ModuleType("a"), "a")
+            == "FooFn[int]"
+        )

@@ -48,11 +48,14 @@ def test_parse_error():
         assert _parse("!!!")
 
 
+# fmt: off
 @pytest.mark.parametrize("code,statements", [
     ("""import typing\nif typing.TYPE_CHECKING:\n\tprint(42)""", 1),
     ("""from typing import TYPE_CHECKING\nif TYPE_CHECKING:\n\tprint(42)\n\tprint(43)""", 2),
     ("""print(1234)""", 0),
 ])
+# fmt: on
 def test_type_checking_sections(code, statements, monkeypatch):
     monkeypatch.setattr(doc_ast, "get_source", lambda _: code)
-    assert len(type_checking_sections(types.ModuleType("test_type_checking_sections")).body) == statements
+    mod = types.ModuleType("test_type_checking_sections")
+    assert len(type_checking_sections(mod).body) == statements

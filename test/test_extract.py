@@ -21,12 +21,7 @@ def test_walk_specs():
         == ["demopackage.child_b"]
     )
 
-    assert walk_specs(
-        [
-            "demopackage",
-            "!demopackage.child_excluded",
-        ]
-    ) == [
+    assert walk_specs(["demopackage", "!demopackage.child_excluded"]) == [
         "demopackage",
         "demopackage._child_e",
         "demopackage.child_b",
