@@ -195,7 +195,9 @@ def cli(args: list[str] = None) -> None:
                 # Couldn't bind, let's try again with a random port.
                 httpd = pdoc.web.DocServer((opts.host, opts.port or 0), opts.modules)
         except OSError as e:
-            print(f"{red}Cannot start web server on {opts.host}:{opts.port}: {e}{default}")
+            print(
+                f"{red}Cannot start web server on {opts.host}:{opts.port}: {e}{default}"
+            )
             sys.exit(1)
 
         with httpd:

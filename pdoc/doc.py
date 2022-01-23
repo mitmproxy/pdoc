@@ -268,14 +268,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
-                if obj.__name__ == f"{self.modulename}.{qualname}":
-                    doc = Module.from_name(obj.__name__)
-                else:
-                    # This module has been reimported to be exposed under another name.
-                    # We cannot reuse the existing module object and need to manually create a new one.
-                    doc = Module(obj)
-                    doc.modulename = self.modulename
-                    doc.qualname = qualname
+                doc = Module.from_name(obj.__name__)
             elif inspect.isdatadescriptor(obj):
                 doc = Variable(
                     self.modulename,
@@ -423,11 +416,11 @@ class Module(Namespace[types.ModuleType]):
 
         if _safe_getattr(self.obj, "__all__", False):
             # If __all__ is set, only show submodules specified there.
+            prefix = f"{self.modulename}."
             return [
                 mod
                 for mod in self.members.values()
-                if isinstance(mod, Module)
-                and mod.modulename.startswith(self.modulename)
+                if isinstance(mod, Module) and mod.modulename.startswith(prefix)
             ]
 
         else:

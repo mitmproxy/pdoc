@@ -1,3 +1,5 @@
+# demopackage2.html
+<module demopackage2  # I'm a different pack…>
 # demopackage.html
 <module demopackage  # A test package
     <class demopackage.Test  # inherited from demopackage._child_d.Test, The Test class from …
@@ -23,7 +25,7 @@
             <method def c(self): ...>
             <var b_type: Type[demopackage.child_b.B]  # inherited from demopackage.child_b.B.b_type, we have a self-refer…>
             <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
-    <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>
+    <module demopackage2  # I'm a different pack…>
     <module demopackage.child_excluded  # child_excluded docst…>>
 # demopackage/child_c.html
 <module demopackage.child_c  # child_c docstr
@@ -40,10 +42,3 @@
         <method def b(self): ...>>>
 # demopackage/_child_e.html
 <module demopackage._child_e  # _child_e docstr>
-# demo.html
-<module demo  # A small `pdoc` examp…
-    <class demo.Dog  # 🐕
-        <method def __init__(self, name: str): ...  # Make a Dog without a…>
-        <var name: str  # The name of our dog.…>
-        <var friends: list[demo.Dog]  # The friends of our d…>
-        <method def bark(self, loud: bool = True): ...  # *woof*>>>

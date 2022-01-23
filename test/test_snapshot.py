@@ -116,7 +116,7 @@ snapshots = [
     Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
         "demopackage_dir",
-        ["demopackage", "demo.py", "!demopackage.child_excluded"],
+        ["demopackage", "demopackage2", "!demopackage.child_excluded"],
         render_options={
             "edit_url_map": {
                 "demopackage.child_b": "https://gitlab.example.com/foo/bar/-/blob/main/demopackage/child_b",
@@ -145,7 +145,7 @@ snapshots = [
 ]
 
 
-@pytest.mark.parametrize("snapshot", snapshots)
+@pytest.mark.parametrize("snapshot", snapshots, ids=[x.id for x in snapshots])
 @pytest.mark.parametrize("format", ["html", "repr"])
 def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
     """
