@@ -635,9 +635,12 @@
     {#
     This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
     Returning no text is interpreted as false, returning any other text is iterpreted as true.
-    Implementing this as a macro makes it very easy to override with a custom template..
+    Implementing this as a macro makes it very easy to override with a custom template.
     #}
-    {% if not doc.name.startswith("_") %}
+    {% if doc.type == "module" and doc.fullname not in all_modules %}
+        {# Don't document modules that were manually excluded from the documentation #}
+        {# https://github.com/mitmproxy/pdoc/issues/334 #}
+    {% elif not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
         true
     {% elif doc.name == "__init__" %}
@@ -746,7 +749,7 @@
                 {% if module.submodules %}
                     <h2>Submodules</h2>
                     <ul>
-                        {% for submodule in module.submodules %}
+                        {% for submodule in module.submodules if is_public(submodule) | trim %}
                             <li>{{ submodule.taken_from | link }}</li>
                         {% endfor %}
                     </ul>

@@ -44,7 +44,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             out = render.html_index(self.server.all_modules)
         elif path == "/search.js":
             self.send_response(200)
-            self.send_header("content-type", "application/json")
+            self.send_header("content-type", "application/javascript")
             self.end_headers()
             return self.server.render_search_index()
         else:

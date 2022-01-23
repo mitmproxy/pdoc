@@ -14,6 +14,7 @@
  - The `all_modules` variable now allows templates to access all other module objects.
  - Add `pdoc.doc.Module.from_name` to simplify module creation.
  - Do not linkify identifiers that are already manually linked.
+ - Hide modules in the submodule list if the were explicitly excluded from documentation.
  - When importing local file paths, always make sure that the directory is
    at the front of `sys.path`.
 

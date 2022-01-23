@@ -23,7 +23,8 @@
             <method def c(self): ...>
             <var b_type: Type[demopackage.child_b.B]  # inherited from demopackage.child_b.B.b_type, we have a self-refer…>
             <method def b(self): ...  # inherited from demopackage.child_b.B.b>>>
-    <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>>
+    <module demopackage.demopackage2  # inherited from demopackage2, I'm a different pack…>
+    <module demopackage.child_excluded  # child_excluded docst…>>
 # demopackage/child_c.html
 <module demopackage.child_c  # child_c docstr
     <class demopackage.child_c.C  # This class is define…

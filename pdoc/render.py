@@ -123,7 +123,7 @@ def search_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     # This is a rather terrible hack to determine if a given object is public and should be included in the index.
     module_template: jinja2.Template = env.get_template("module.html.jinja2")
     ctx: jinja2.runtime.Context = module_template.new_context(
-        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": {}}
+        {"module": pdoc.doc.Module(types.ModuleType("")), "all_modules": all_modules}
     )
     for _ in module_template.root_render_func(ctx):  # type: ignore
         pass

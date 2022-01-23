@@ -18,4 +18,5 @@ __all__ = [
     "child_c",
     "demopackage2",
     "_child_e",
+    "child_excluded",
 ]

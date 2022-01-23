@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -17,7 +19,7 @@ snapshot_dir = here / "testdata"
 
 class Snapshot:
     id: str
-    specs: list[Path]
+    specs: list[str]
     render_options: dict
     with_output_directory: bool
     min_version: tuple[int, int]
@@ -31,10 +33,7 @@ class Snapshot:
         min_version: tuple[int, int] = (3, 7),
     ):
         self.id = id
-        self.specs = [
-            snapshot_dir / f
-            for f in (filenames or [f"{id}.py"])
-        ]
+        self.specs = filenames or [f"{id}.py"]
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
         self.min_version = min_version
@@ -114,10 +113,10 @@ snapshots = [
     ),
     Snapshot("demo_long", min_version=(3, 9)),
     Snapshot("demo_eager", min_version=(3, 9)),
-    Snapshot("demopackage", ["demopackage"]),
+    Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
         "demopackage_dir",
-        ["demopackage", "demo.py"],
+        ["demopackage", "demo.py", "!demopackage.child_excluded"],
         render_options={
             "edit_url_map": {
                 "demopackage.child_b": "https://gitlab.example.com/foo/bar/-/blob/main/demopackage/child_b",
@@ -148,10 +147,11 @@ snapshots = [
 
 @pytest.mark.parametrize("snapshot", snapshots)
 @pytest.mark.parametrize("format", ["html", "repr"])
-def test_snapshots(snapshot: Snapshot, format: str):
+def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
     """
     Compare pdoc's rendered output against stored snapshots.
     """
+    monkeypatch.chdir(snapshot_dir)
     if sys.version_info < snapshot.min_version:
         pytest.skip(
             f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above."
@@ -165,6 +165,7 @@ def test_snapshots(snapshot: Snapshot, format: str):
 
 
 if __name__ == "__main__":
+    os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
         if sys.version_info < snapshot.min_version:

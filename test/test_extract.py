@@ -13,24 +13,25 @@ def test_walk_specs():
     assert (
         walk_specs(
             [
-                "test.testdata.demopackage",
-                "!test.testdata.demopackage",
-                "test.testdata.demopackage.child_b",
+                here / "testdata" / "demopackage",
+                "!demopackage",
+                "demopackage.child_b",
             ]
         )
-        == ["test.testdata.demopackage.child_b"]
+        == ["demopackage.child_b"]
     )
 
-    assert (
-        walk_specs(
-            [
-                "test.testdata.demopackage",
-                "!test.testdata.demopackage.child_b",
-                "!test.testdata.demopackage.child_c",
-            ]
-        )
-        == ["test.testdata.demopackage", "test.testdata.demopackage._child_e"]
-    )
+    assert walk_specs(
+        [
+            "demopackage",
+            "!demopackage.child_excluded",
+        ]
+    ) == [
+        "demopackage",
+        "demopackage._child_e",
+        "demopackage.child_b",
+        "demopackage.child_c",
+    ]
     with pytest.raises(ValueError, match="No modules found matching spec: unknown"):
         with pytest.warns(UserWarning, match="Cannot find spec for unknown"):
             assert walk_specs(["unknown"])

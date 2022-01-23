@@ -434,6 +434,10 @@ class Module(Namespace[types.ModuleType]):
             submodules = []
             for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
                 if mod.name.split(".")[-1].startswith("_"):
+                    # optimization: we don't even try to load modules starting with an underscore as they would not be
+                    # visible by default. The downside of this is that someone who overrides `is_public` will miss those
+                    # entries, the upsides are 1) better performance and 2) less warnings because of import failures
+                    # (think of OS-specific modules, e.g. _linux.py failing to import on Windows).
                     continue
                 try:
                     module = extract.load_module(mod.name)
