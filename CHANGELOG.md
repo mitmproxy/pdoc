@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-01-24: pdoc 9.0.0
 
  - **Breaking:** For projects that only document a single module (and its submodules),
    the module index has been removed. `index.html` now redirects to the top-level module instead.
