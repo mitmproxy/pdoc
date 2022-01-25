@@ -2,8 +2,10 @@
 
 # Unreleased: pdoc next
 
- - When clicking the hamburger menu on mobile devices,
-   pdoc now always scrolls to the top of the menu.
+ - On mobile devices, scroll the menu into view
+   when the hamburger menu button is clicked.
+ - On mobile devices, restrict the width of the search bar
+   to avoid overflowing into the menu button.
 
 # 2022-01-24: pdoc 9.0.0
 

@@ -85,6 +85,16 @@
                         display: none !important;
                     }
 
+                    nav input[type="search"] {
+                        /* don't overflow into menu button */
+                        max-width: 77%;
+                    }
+
+                    nav input[type="search"]:first-child {
+                        /* align vertically with the hamburger menu */
+                        margin-top: -6px;
+                    }
+
                     nav input[type="search"]:valid ~ * {
                         display: none !important;
                     }
