@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Improve representation of default values.
  - On mobile devices, scroll the menu into view
    when the hamburger menu button is clicked.
  - On mobile devices, restrict the width of the search bar

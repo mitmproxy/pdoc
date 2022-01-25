@@ -945,7 +945,7 @@ class Variable(Doc[None]):
         else:
             try:
                 return re.sub(
-                    r" at 0x[0-9a-fA-F]+(?=>$)",
+                    r" at 0x[0-9a-fA-F]+(?=>)",
                     "",
                     f" = {repr(self.default_value)}",
                 )
