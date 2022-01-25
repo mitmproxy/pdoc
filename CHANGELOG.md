@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - When clicking the hamburger menu on mobile devices,
+   pdoc now always scrolls to the top of the menu.
+
 # 2022-01-24: pdoc 9.0.0
 
  - **Breaking:** For projects that only document a single module (and its submodules),
