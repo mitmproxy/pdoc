@@ -197,7 +197,7 @@ For example, we can add a project logo to the documentation:</p>
 which uses the
 <a href="https://jinja.palletsprojects.com/">Jinja2</a> templating language.</p>
 
-<p>Let's assume you want to replace the logo with custom button. We first find the right location in the template by searching
+<p>Let's assume you want to replace the logo with a custom button. We first find the right location in the template by searching
 for "logo", which shows us that the logo is defined in a Jinja2 block named <code>nav_title</code>.
 We now extend the default template by creating a file titled <code>module.html.jinja2</code> in the current directory
  with the following contents:</p>
@@ -245,7 +245,7 @@ function and method listed in the documentation produced by pdoc.</p>
 
 <h2 id="document-variables">...document variables?</h2>
 
-<p>Python itself <a href="http://www.python.org/dev/peps/pep-0224">does not attach docstrings to
+<p>Python itself <a href="https://www.python.org/dev/peps/pep-0224/">does not attach docstrings to
 variables</a>. For example:</p>
 
 <div class="codehilite"><pre><span></span><code><span class="n">variable</span> <span class="o">=</span> <span class="s2">&quot;SomeValue&quot;</span>
@@ -293,7 +293,7 @@ No other identifiers will be considered as public.</li>
 </ol></li>
 </ul>
 
-<p>In general, we recommend to keep these conventions:</p>
+<p>In general, we recommend keeping these conventions:</p>
 
 <ul>
 <li>If you want to document a private member, consider making it public.</li>
@@ -336,7 +336,7 @@ If you run <code>pdoc module_a</code> followed by <code>pdoc module_b</code>, th
 
 <p>By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
-you need to move it there in your source code. This is not only useful to the readers of your documentation
+you need to move it there in your source code. This is not only useful to the readers of your documentation,
 but also useful to the consumers of your source code.</p>
 
 <h2 id="use-numpydoc-or-google-docstrings">...use numpydoc or Google docstrings?</h2>
@@ -568,7 +568,7 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 <span class="sd">which uses the</span>
 <span class="sd">[Jinja2](https://jinja.palletsprojects.com/) templating language.</span>
 
-<span class="sd">Let&#39;s assume you want to replace the logo with custom button. We first find the right location in the template by searching</span>
+<span class="sd">Let&#39;s assume you want to replace the logo with a custom button. We first find the right location in the template by searching</span>
 <span class="sd">for &quot;logo&quot;, which shows us that the logo is defined in a Jinja2 block named `nav_title`.</span>
 <span class="sd">We now extend the default template by creating a file titled `module.html.jinja2` in the current directory</span>
 <span class="sd"> with the following contents:</span>
@@ -620,7 +620,7 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 <span class="sd">## ...document variables?</span>
 
 <span class="sd">Python itself [does not attach docstrings to</span>
-<span class="sd">variables](http://www.python.org/dev/peps/pep-0224). For example:</span>
+<span class="sd">variables](https://www.python.org/dev/peps/pep-0224/). For example:</span>
 
 <span class="sd">```python</span>
 <span class="sd">variable = &quot;SomeValue&quot;</span>
@@ -667,7 +667,7 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 <span class="sd">   1. do not start with an underscore</span>
 <span class="sd">   2. and are defined in the current module (i.e. they are not imported).</span>
 
-<span class="sd">In general, we recommend to keep these conventions:</span>
+<span class="sd">In general, we recommend keeping these conventions:</span>
 
 <span class="sd">- If you want to document a private member, consider making it public.</span>
 <span class="sd">- If you want to hide a public member, consider making it private.</span>
@@ -709,7 +709,7 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 
 <span class="sd">By default, documentation items are sorted in order of (first) appearance in the source code.</span>
 <span class="sd">This means that if you want to move a particular function to the beginning of your documentation,</span>
-<span class="sd">you need to move it there in your source code. This is not only useful to the readers of your documentation</span>
+<span class="sd">you need to move it there in your source code. This is not only useful to the readers of your documentation,</span>
 <span class="sd">but also useful to the consumers of your source code.</span>
 
 <span class="sd">## ...use numpydoc or Google docstrings?</span>

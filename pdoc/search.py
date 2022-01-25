@@ -119,7 +119,7 @@ def precompile_index(documents: list[dict], compile_js: Path) -> str:
     If that fails, an unprocessed index will be returned (which will be compiled locally on the client side).
     If this happens and the index is rather large (>3MB), a warning with precompile instructions is printed.
 
-    We currently require nodejs, but we'd welcome PRs that support other JaveScript runtimes or
+    We currently require nodejs, but we'd welcome PRs that support other JavaScript runtimes or
     – even better – a Python-based search index generation similar to
     [elasticlunr-rs](https://github.com/mattico/elasticlunr-rs) that could be shipped as part of pdoc.
     """

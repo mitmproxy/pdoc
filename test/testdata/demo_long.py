@@ -17,7 +17,7 @@ This is a test module demonstrating pdoc's parsing capabilities.
 
 # A Second Section
 
-You can have multiple section in your module docstring,
+You can have multiple sections in your module docstring,
 which will also show up in the navigation.
 """
 from __future__ import annotations
@@ -79,7 +79,7 @@ def a_complex_function(
 
 class Foo:
     """
-    `Foo` is a basic class without any parent classes (except for the implict `object` class).
+    `Foo` is a basic class without any parent classes (except for the implicit `object` class).
 
     You will see in the definition of `Bar` that docstrings are inherited by default.
 
@@ -182,7 +182,7 @@ def fib(n):
 def security(test=os.environ):
     """
     Default values are generally rendered using repr(),
-    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.
+    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.
     """
     return False
 
@@ -208,7 +208,7 @@ class DataDemo:
     """
 
     a: int
-    """Again, we can document indivial properties with docstrings."""
+    """Again, we can document individual properties with docstrings."""
     a2: Sequence[str]
     # This property has a type annotation but is not documented, so it does not show up.
     b: bool = field(repr=False, default=True)
@@ -217,7 +217,7 @@ class DataDemo:
 
 class EnumDemo(enum.Enum):
     """
-    This is an example for an Enum.
+    This is an example of an Enum.
 
     As usual, you can link to individual properties: `GREEN`.
     """

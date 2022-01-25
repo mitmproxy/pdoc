@@ -41,7 +41,7 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> list[str]:
      - `./test/testdata/demo_long.py`
      - `./test/testdata/demopackage`
 
-    *This function has side-effects:* See `parse_spec`.
+    *This function has side effects:* See `parse_spec`.
     """
     all_modules: dict[str, None] = {}
     for spec in specs:
@@ -94,8 +94,8 @@ def parse_spec(spec: Union[Path, str]) -> str:
     This functions parses a user's module specification into a module identifier that can be imported.
     If both a local file/directory and an importable module with the same name exist, a warning will be printed.
 
-    *This function has side-effects:* `sys.path` will be amended if the specification is a path.
-    If this side-effect is undesired, pass a module name instead.
+    *This function has side effects:* `sys.path` will be amended if the specification is a path.
+    If this side effect is undesired, pass a module name instead.
     """
     pspec = Path(spec)
     if isinstance(spec, str) and (os.sep in spec or (os.altsep and os.altsep in spec)):
@@ -154,7 +154,7 @@ def parse_spec(spec: Union[Path, str]) -> str:
 def mock_some_common_side_effects():
     """
     This context manager is applied when importing modules. It mocks some common side effects that may happen upon
-    module import. For example, `import antigravity` normally causes a webbrowser to open, which we want to suppress.
+    module import. For example, `import antigravity` normally causes a web browser to open, which we want to suppress.
 
     Note that this function must not be used for security purposes, it's easily bypassable.
     """
@@ -265,7 +265,7 @@ def invalidate_caches(module_name: str) -> None:
     """
     Invalidate module cache to allow live-reloading of modules.
     """
-    # Getting this right is tricky – reloading modules causes a bunch of surprising side-effects.
+    # Getting this right is tricky – reloading modules causes a bunch of surprising side effects.
     # Our current best effort is to call `importlib.reload` on all modules that start with module_name.
     # We also exclude our own dependencies, which cause fun errors otherwise.
     if module_name not in sys.modules:

@@ -107,7 +107,7 @@ For more advanced customization, we can edit pdoc's
 which uses the
 [Jinja2](https://jinja.palletsprojects.com/) templating language.
 
-Let's assume you want to replace the logo with custom button. We first find the right location in the template by searching
+Let's assume you want to replace the logo with a custom button. We first find the right location in the template by searching
 for "logo", which shows us that the logo is defined in a Jinja2 block named `nav_title`.
 We now extend the default template by creating a file titled `module.html.jinja2` in the current directory
  with the following contents:
@@ -159,7 +159,7 @@ function and method listed in the documentation produced by pdoc.
 ## ...document variables?
 
 Python itself [does not attach docstrings to
-variables](http://www.python.org/dev/peps/pep-0224). For example:
+variables](https://www.python.org/dev/peps/pep-0224/). For example:
 
 ```python
 variable = "SomeValue"
@@ -206,7 +206,7 @@ ways.
    1. do not start with an underscore
    2. and are defined in the current module (i.e. they are not imported).
 
-In general, we recommend to keep these conventions:
+In general, we recommend keeping these conventions:
 
 - If you want to document a private member, consider making it public.
 - If you want to hide a public member, consider making it private.
@@ -248,7 +248,7 @@ If you run `pdoc module_a` followed by `pdoc module_b`, there will be no cross-l
 
 By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
-you need to move it there in your source code. This is not only useful to the readers of your documentation
+you need to move it there in your source code. This is not only useful to the readers of your documentation,
 but also useful to the consumers of your source code.
 
 ## ...use numpydoc or Google docstrings?

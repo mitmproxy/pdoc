@@ -138,7 +138,7 @@ def sort_by_source(
     Takes items from `unsorted` and inserts them into `sorted` in order of appearance in the source code of `obj`.
     The only exception to this rule is `__init__`, which (if present) is always inserted first.
 
-    Some items may not be found, for example because they've been inherited from a superclass. The are returned as-is.
+    Some items may not be found, for example because they've been inherited from a superclass. They are returned as-is.
 
     Returns a `(sorted, not found)` tuple.
     """

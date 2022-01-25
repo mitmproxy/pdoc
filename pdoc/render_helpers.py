@@ -172,10 +172,10 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                  (?!\d)[a-zA-Z0-9_]+
             (?:\.(?!\d)[a-zA-Z0-9_]+)+
             (?:\(\))?
-            \b(?!\(\))(?!</a>)(?!/)  # foo.bar
+            \b(?!\(\))(?!</a>)(?![/#])  # foo.bar
             |
             (?<=<code>)
-                (?!\d)[a-zA-Z0-9_]+
+                 (?!\d)[a-zA-Z0-9_]+
             (?:\.(?!\d)[a-zA-Z0-9_]+)*
             (?:\(\))?
             (?=</code>(?!</a>))  # `foo` or `foo()`
@@ -261,7 +261,7 @@ def minify_css(css: str) -> str:
 @contextmanager
 def defuse_unsafe_reprs():
     """This decorator is applied by pdoc before calling an object's repr().
-    It applys some heuristics to patch our sensitive information.
+    It applies some heuristics to patch our sensitive information.
     For example, `os.environ`'s default `__repr__` implementation exposes all
     local secrets.
     """

@@ -289,10 +289,10 @@
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)+</span>
 <span class="sd">            (?:\(\))?</span>
-<span class="sd">            \b(?!\(\))(?!&lt;/a&gt;)(?!/)  # foo.bar</span>
+<span class="sd">            \b(?!\(\))(?!&lt;/a&gt;)(?![/#])  # foo.bar</span>
 <span class="sd">            |</span>
 <span class="sd">            (?&lt;=&lt;code&gt;)</span>
-<span class="sd">                (?!\d)[a-zA-Z0-9_]+</span>
+<span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)*</span>
 <span class="sd">            (?:\(\))?</span>
 <span class="sd">            (?=&lt;/code&gt;(?!&lt;/a&gt;))  # `foo` or `foo()`</span>
@@ -378,7 +378,7 @@
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">defuse_unsafe_reprs</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;This decorator is applied by pdoc before calling an object&#39;s repr().</span>
-<span class="sd">    It applys some heuristics to patch our sensitive information.</span>
+<span class="sd">    It applies some heuristics to patch our sensitive information.</span>
 <span class="sd">    For example, `os.environ`&#39;s default `__repr__` implementation exposes all</span>
 <span class="sd">    local secrets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -722,10 +722,10 @@ correct module.</p>
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)+</span>
 <span class="sd">            (?:\(\))?</span>
-<span class="sd">            \b(?!\(\))(?!&lt;/a&gt;)(?!/)  # foo.bar</span>
+<span class="sd">            \b(?!\(\))(?!&lt;/a&gt;)(?![/#])  # foo.bar</span>
 <span class="sd">            |</span>
 <span class="sd">            (?&lt;=&lt;code&gt;)</span>
-<span class="sd">                (?!\d)[a-zA-Z0-9_]+</span>
+<span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)*</span>
 <span class="sd">            (?:\(\))?</span>
 <span class="sd">            (?=&lt;/code&gt;(?!&lt;/a&gt;))  # `foo` or `foo()`</span>
@@ -913,7 +913,7 @@ this function will return <code>None</code> as there is no unique top-level modu
             <div class="codehilite"><pre><span></span><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">defuse_unsafe_reprs</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;This decorator is applied by pdoc before calling an object&#39;s repr().</span>
-<span class="sd">    It applys some heuristics to patch our sensitive information.</span>
+<span class="sd">    It applies some heuristics to patch our sensitive information.</span>
 <span class="sd">    For example, `os.environ`&#39;s default `__repr__` implementation exposes all</span>
 <span class="sd">    local secrets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -924,7 +924,7 @@ this function will return <code>None</code> as there is no unique top-level modu
         </details>
 
             <div class="docstring"><p>This decorator is applied by pdoc before calling an object's repr().
-It applys some heuristics to patch our sensitive information.
+It applies some heuristics to patch our sensitive information.
 For example, <code>os.environ</code>'s default <code>__repr__</code> implementation exposes all
 local secrets.</p>
 </div>

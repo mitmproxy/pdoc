@@ -122,7 +122,7 @@ class AllModules(Mapping[str, doc.Module]):
     """A lazy-loading implementation of all_modules.
 
     This behaves like a regular dict, but modules are only imported on demand for performance reasons.
-    This has the somewhat annoying side-effect that __getitem__ may raise a RuntimeError.
+    This has the somewhat annoying side effect that __getitem__ may raise a RuntimeError.
     We can ignore that when rendering HTML as the default templates do not access all_modules values,
     but we need to perform additional steps for the search index.
     """

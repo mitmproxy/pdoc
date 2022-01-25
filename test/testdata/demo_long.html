@@ -185,7 +185,7 @@ If you do not like the order in pdoc, you should probably have a different order
 
 <h1 id="a-second-section">A Second Section</h1>
 
-<p>You can have multiple section in your module docstring,
+<p>You can have multiple sections in your module docstring,
 which will also show up in the navigation.</p>
 </div>
 
@@ -210,7 +210,7 @@ which will also show up in the navigation.</p>
 
 <span class="sd"># A Second Section</span>
 
-<span class="sd">You can have multiple section in your module docstring,</span>
+<span class="sd">You can have multiple sections in your module docstring,</span>
 <span class="sd">which will also show up in the navigation.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
@@ -272,7 +272,7 @@ which will also show up in the navigation.</p>
 
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
+<span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
 
 <span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
 
@@ -375,7 +375,7 @@ which will also show up in the navigation.</p>
 <span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default values are generally rendered using repr(),</span>
-<span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
+<span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
 
@@ -401,7 +401,7 @@ which will also show up in the navigation.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
     <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -410,7 +410,7 @@ which will also show up in the navigation.</p>
 
 <span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is an example for an Enum.</span>
+<span class="sd">    This is an example of an Enum.</span>
 
 <span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -534,7 +534,7 @@ as well as a keyword-only arguments (*).</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `Foo` is a basic class without any parent classes (except for the implict `object` class).</span>
+<span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
 
 <span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
 
@@ -594,7 +594,7 @@ as well as a keyword-only arguments (*).</p>
 
         </details>
 
-            <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
+            <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implicit <code>object</code> class).</p>
 
 <p>You will see in the definition of <code><a href="#Bar">Bar</a></code> that docstrings are inherited by default.</p>
 
@@ -823,7 +823,7 @@ as well as a keyword-only arguments (*).</p>
 
         </details>
 
-            <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implict <code>object</code> class).</p>
+            <div class="docstring"><p><code><a href="#Foo">Foo</a></code> is a basic class without any parent classes (except for the implicit <code>object</code> class).</p>
 
 <p>You will see in the definition of <code><a href="#Bar">Bar</a></code> that docstrings are inherited by default.</p>
 
@@ -1014,7 +1014,7 @@ This is often useful when documenting web APIs, for example.</p>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default values are generally rendered using repr(),</span>
-<span class="sd">    but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</span>
+<span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
@@ -1022,7 +1022,7 @@ This is often useful when documenting web APIs, for example.</p>
         </details>
 
             <div class="docstring"><p>Default values are generally rendered using repr(),
-but some special cases -- like os.environ -- are overriden to avoid leaking sensitive data.</p>
+but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</p>
 </div>
 
 
@@ -1106,7 +1106,7 @@ but some special cases -- like os.environ -- are overriden to avoid leaking sens
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="sd">&quot;&quot;&quot;Again, we can document indivial properties with docstrings.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
     <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1140,7 +1140,7 @@ but you can override it by providing your own (like here!).</p>
         <span class="name">a</span><span class="annotation">: int</span>
     </div>
 
-            <div class="docstring"><p>Again, we can document indivial properties with docstrings.</p>
+            <div class="docstring"><p>Again, we can document individual properties with docstrings.</p>
 </div>
 
 
@@ -1170,7 +1170,7 @@ but you can override it by providing your own (like here!).</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is an example for an Enum.</span>
+<span class="sd">    This is an example of an Enum.</span>
 
 <span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1185,7 +1185,7 @@ but you can override it by providing your own (like here!).</p>
 
         </details>
 
-            <div class="docstring"><p>This is an example for an Enum.</p>
+            <div class="docstring"><p>This is an example of an Enum.</p>
 
 <p>As usual, you can link to individual properties: <code><a href="#EnumDemo.GREEN">GREEN</a></code>.</p>
 </div>

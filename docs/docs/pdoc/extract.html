@@ -123,7 +123,7 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="sd">     - `./test/testdata/demo_long.py`</span>
 <span class="sd">     - `./test/testdata/demopackage`</span>
 
-<span class="sd">    *This function has side-effects:* See `parse_spec`.</span>
+<span class="sd">    *This function has side effects:* See `parse_spec`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">all_modules</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
@@ -176,8 +176,8 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="sd">    This functions parses a user&#39;s module specification into a module identifier that can be imported.</span>
 <span class="sd">    If both a local file/directory and an importable module with the same name exist, a warning will be printed.</span>
 
-<span class="sd">    *This function has side-effects:* `sys.path` will be amended if the specification is a path.</span>
-<span class="sd">    If this side-effect is undesired, pass a module name instead.</span>
+<span class="sd">    *This function has side effects:* `sys.path` will be amended if the specification is a path.</span>
+<span class="sd">    If this side effect is undesired, pass a module name instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pspec</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="ow">in</span> <span class="n">spec</span> <span class="ow">or</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">altsep</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">altsep</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">)):</span>
@@ -236,7 +236,7 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="k">def</span> <span class="nf">mock_some_common_side_effects</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This context manager is applied when importing modules. It mocks some common side effects that may happen upon</span>
-<span class="sd">    module import. For example, `import antigravity` normally causes a webbrowser to open, which we want to suppress.</span>
+<span class="sd">    module import. For example, `import antigravity` normally causes a web browser to open, which we want to suppress.</span>
 
 <span class="sd">    Note that this function must not be used for security purposes, it&#39;s easily bypassable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -347,7 +347,7 @@ and provides the rest of pdoc with some additional module metadata.</p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Invalidate module cache to allow live-reloading of modules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side-effects.</span>
+    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side effects.</span>
     <span class="c1"># Our current best effort is to call `importlib.reload` on all modules that start with module_name.</span>
     <span class="c1"># We also exclude our own dependencies, which cause fun errors otherwise.</span>
     <span class="k">if</span> <span class="n">module_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
@@ -418,7 +418,7 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="sd">     - `./test/testdata/demo_long.py`</span>
 <span class="sd">     - `./test/testdata/demopackage`</span>
 
-<span class="sd">    *This function has side-effects:* See `parse_spec`.</span>
+<span class="sd">    *This function has side effects:* See `parse_spec`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">all_modules</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
@@ -481,7 +481,7 @@ For example, the following strings are valid module specifications:</p>
 <li><code>./test/testdata/demopackage</code></li>
 </ul>
 
-<p><em>This function has side-effects:</em> See <code><a href="#parse_spec">parse_spec</a></code>.</p>
+<p><em>This function has side effects:</em> See <code><a href="#parse_spec">parse_spec</a></code>.</p>
 </div>
 
 
@@ -501,8 +501,8 @@ For example, the following strings are valid module specifications:</p>
 <span class="sd">    This functions parses a user&#39;s module specification into a module identifier that can be imported.</span>
 <span class="sd">    If both a local file/directory and an importable module with the same name exist, a warning will be printed.</span>
 
-<span class="sd">    *This function has side-effects:* `sys.path` will be amended if the specification is a path.</span>
-<span class="sd">    If this side-effect is undesired, pass a module name instead.</span>
+<span class="sd">    *This function has side effects:* `sys.path` will be amended if the specification is a path.</span>
+<span class="sd">    If this side effect is undesired, pass a module name instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pspec</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span> <span class="ow">in</span> <span class="n">spec</span> <span class="ow">or</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">altsep</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">altsep</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">)):</span>
@@ -562,8 +562,8 @@ For example, the following strings are valid module specifications:</p>
             <div class="docstring"><p>This functions parses a user's module specification into a module identifier that can be imported.
 If both a local file/directory and an importable module with the same name exist, a warning will be printed.</p>
 
-<p><em>This function has side-effects:</em> <code>sys.path</code> will be amended if the specification is a path.
-If this side-effect is undesired, pass a module name instead.</p>
+<p><em>This function has side effects:</em> <code>sys.path</code> will be amended if the specification is a path.
+If this side effect is undesired, pass a module name instead.</p>
 </div>
 
 
@@ -583,7 +583,7 @@ If this side-effect is undesired, pass a module name instead.</p>
 <span class="k">def</span> <span class="nf">mock_some_common_side_effects</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This context manager is applied when importing modules. It mocks some common side effects that may happen upon</span>
-<span class="sd">    module import. For example, `import antigravity` normally causes a webbrowser to open, which we want to suppress.</span>
+<span class="sd">    module import. For example, `import antigravity` normally causes a web browser to open, which we want to suppress.</span>
 
 <span class="sd">    Note that this function must not be used for security purposes, it&#39;s easily bypassable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -613,7 +613,7 @@ If this side-effect is undesired, pass a module name instead.</p>
         </details>
 
             <div class="docstring"><p>This context manager is applied when importing modules. It mocks some common side effects that may happen upon
-module import. For example, <code>import antigravity</code> normally causes a webbrowser to open, which we want to suppress.</p>
+module import. For example, <code>import antigravity</code> normally causes a web browser to open, which we want to suppress.</p>
 
 <p>Note that this function must not be used for security purposes, it's easily bypassable.</p>
 </div>
@@ -777,7 +777,7 @@ The primary use of this is live-reloading modules on modification.</p>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Invalidate module cache to allow live-reloading of modules.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side-effects.</span>
+    <span class="c1"># Getting this right is tricky – reloading modules causes a bunch of surprising side effects.</span>
     <span class="c1"># Our current best effort is to call `importlib.reload` on all modules that start with module_name.</span>
     <span class="c1"># We also exclude our own dependencies, which cause fun errors otherwise.</span>
     <span class="k">if</span> <span class="n">module_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>

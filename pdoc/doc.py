@@ -11,9 +11,9 @@ There are four main types of documentation objects:
 - `Function`
 - `Variable`
 
-All documentation types types make heavy use of `@functools.cached_property` decorators.
+All documentation types make heavy use of `@functools.cached_property` decorators.
 This means they have a large set of attributes that are lazily computed on first access.
-By convention, all attributes are read-only, although this this not enforced at runtime.
+By convention, all attributes are read-only, although this is not enforced at runtime.
 """
 from __future__ import annotations
 
@@ -97,7 +97,7 @@ class Doc(Generic[T]):
     """
     `(modulename, qualname)` of this doc object's original location.
     In the context of a module, this points to the location it was imported from,
-    in the context classes, this points to the class an attribute is inherited from.
+    in the context of classes, this points to the class an attribute is inherited from.
     """
 
     def __init__(
@@ -370,7 +370,7 @@ class Module(Namespace[types.ModuleType]):
         """
         `True` if the module is a package, `False` otherwise.
 
-        Packages are special kind of module that may have submodules.
+        Packages are a special kind of module that may have submodules.
         Typically, this means that this file is in a directory named like the
         module with the name `__init__.py`.
         """

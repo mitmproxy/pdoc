@@ -249,9 +249,9 @@ from the abstract syntax tree, which means that variables (module, class or inst
 <li><code><a href="#Variable">Variable</a></code></li>
 </ul>
 
-<p>All documentation types types make heavy use of <code>@functools.cached_property</code> decorators.
+<p>All documentation types make heavy use of <code>@functools.cached_property</code> decorators.
 This means they have a large set of attributes that are lazily computed on first access.
-By convention, all attributes are read-only, although this this not enforced at runtime.</p>
+By convention, all attributes are read-only, although this is not enforced at runtime.</p>
 </div>
 
                         <details>
@@ -269,9 +269,9 @@ By convention, all attributes are read-only, although this this not enforced at 
 <span class="sd">- `Function`</span>
 <span class="sd">- `Variable`</span>
 
-<span class="sd">All documentation types types make heavy use of `@functools.cached_property` decorators.</span>
+<span class="sd">All documentation types make heavy use of `@functools.cached_property` decorators.</span>
 <span class="sd">This means they have a large set of attributes that are lazily computed on first access.</span>
-<span class="sd">By convention, all attributes are read-only, although this this not enforced at runtime.</span>
+<span class="sd">By convention, all attributes are read-only, although this is not enforced at runtime.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
@@ -355,7 +355,7 @@ By convention, all attributes are read-only, although this this not enforced at 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    `(modulename, qualname)` of this doc object&#39;s original location.</span>
 <span class="sd">    In the context of a module, this points to the location it was imported from,</span>
-<span class="sd">    in the context classes, this points to the class an attribute is inherited from.</span>
+<span class="sd">    in the context of classes, this points to the class an attribute is inherited from.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -628,7 +628,7 @@ By convention, all attributes are read-only, although this this not enforced at 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        `True` if the module is a package, `False` otherwise.</span>
 
-<span class="sd">        Packages are special kind of module that may have submodules.</span>
+<span class="sd">        Packages are a special kind of module that may have submodules.</span>
 <span class="sd">        Typically, this means that this file is in a directory named like the</span>
 <span class="sd">        module with the name `__init__.py`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1396,7 +1396,7 @@ By convention, all attributes are read-only, although this this not enforced at 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    `(modulename, qualname)` of this doc object&#39;s original location.</span>
 <span class="sd">    In the context of a module, this points to the location it was imported from,</span>
-<span class="sd">    in the context classes, this points to the class an attribute is inherited from.</span>
+<span class="sd">    in the context of classes, this points to the class an attribute is inherited from.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1585,7 +1585,7 @@ By convention, all attributes are read-only, although this this not enforced at 
 
             <div class="docstring"><p><code>(modulename, qualname)</code> of this doc object's original location.
 In the context of a module, this points to the location it was imported from,
-in the context classes, this points to the class an attribute is inherited from.</p>
+in the context of classes, this points to the class an attribute is inherited from.</p>
 </div>
 
 
@@ -1988,7 +1988,7 @@ in a different module.</p>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        `True` if the module is a package, `False` otherwise.</span>
 
-<span class="sd">        Packages are special kind of module that may have submodules.</span>
+<span class="sd">        Packages are a special kind of module that may have submodules.</span>
 <span class="sd">        Typically, this means that this file is in a directory named like the</span>
 <span class="sd">        module with the name `__init__.py`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2201,7 +2201,7 @@ Python module object.</p>
 
             <div class="docstring"><p><code>True</code> if the module is a package, <code>False</code> otherwise.</p>
 
-<p>Packages are special kind of module that may have submodules.
+<p>Packages are a special kind of module that may have submodules.
 Typically, this means that this file is in a directory named like the
 module with the name <code>__init__.py</code>.</p>
 </div>

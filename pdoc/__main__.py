@@ -250,7 +250,7 @@ def get_dev_version() -> str:
 
 
 def _nicer_showwarning(message, category, filename, lineno, file=None, line=None):
-    """A replacement for `warnings.showwarning` that renders warnings in a more visually pleasying way."""
+    """A replacement for `warnings.showwarning` that renders warnings in a more visually pleasing way."""
     if category == UserWarning:
         print(
             f"{yellow}Warn:{default} {message} {gray}({filename}:{lineno}){default}",
