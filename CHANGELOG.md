@@ -1,7 +1,8 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-01-26: pdoc 9.0.1
 
+ - Emit a deprecation warning if custom templates attempt to include assets that were removed from or moved within pdoc.
  - Improve representation of default values.
  - On mobile devices, scroll the menu into view
    when the hamburger menu button is clicked.
@@ -14,6 +15,8 @@
    the module index has been removed. `index.html` now redirects to the top-level module instead.
    Direct submodules continue to be accessible in the menu.
    See [#318](https://github.com/mitmproxy/pdoc/issues/318) for details.
+ - Moved template assets (SVG, CSS, JS) into a `resources/` subdirectory in the template folder.  
+   Custom templates may need to adjust their paths if they reference these files.
  - pdoc web server now picks a random port if 8080 is unavailable and no explicit port has been passed.
  - Improve search tokenization to better match
    on function arguments.

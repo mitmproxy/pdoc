@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import types
+import warnings
 from pathlib import Path
 from typing import Mapping, Optional, cast
 
@@ -155,6 +156,7 @@ _default_searchpath = [
     Path(os.environ.get("XDG_CONFIG_HOME", "~/.config")).expanduser() / "pdoc",
     Path(__file__).parent / "templates",
     Path(__file__).parent / "templates" / "default",
+    Path(__file__).parent / "templates" / "deprecated",
 ]
 
 env = Environment(
@@ -176,4 +178,5 @@ env.filters["link"] = link
 env.filters["minify_css"] = minify_css
 env.globals["__version__"] = pdoc.__version__
 env.globals["env"] = os.environ
+env.globals["warn"] = warnings.warn
 configure()  # add default globals
