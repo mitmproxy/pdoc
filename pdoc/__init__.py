@@ -372,7 +372,7 @@ You can find an example in [`examples/library-usage`](https://github.com/mitmpro
 '''
 from __future__ import annotations
 
-__version__ = "9.0.0"  # this is read from setup.py
+__version__ = "9.0.1"  # this is read from setup.py
 
 import traceback
 import warnings
