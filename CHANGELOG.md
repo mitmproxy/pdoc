@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Add a better warning message if users use `X | Y`-style type annotations
+   ([PEP 604](https://www.python.org/dev/peps/pep-0604/)) on older Python versions which do not support them.
+
 # 2022-01-26: pdoc 9.0.1
 
  - Emit a deprecation warning if custom templates attempt to include assets that were removed from or moved within pdoc.

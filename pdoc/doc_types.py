@@ -109,7 +109,19 @@ def safe_eval_type(
         err = str(e)
         _, mod, _ = err.split("'")
     except Exception as e:
-        warnings.warn(f"Error parsing type annotation {t} for {fullname}: {e}")
+        if "unsupported operand type(s) for |" in str(e) and sys.version_info < (3, 10):
+            py_ver = ".".join(str(x) for x in sys.version_info[:3])
+            warnings.warn(
+                f"Error parsing type annotation {t} for {fullname}: {e}. "
+                f"You are likely attempting to use Python 3.10 syntax (PEP 604 union types) with an older Python "
+                f"release. `X | Y`-style type annotations are invalid syntax on Python {py_ver}, which is what your "
+                f"pdoc instance is using. `from future import __annotations__` (PEP 563) postpones evaluation of "
+                f"annotations, which is why your program won't crash right away. However, pdoc needs to evaluate your "
+                f"type annotations and is unable to do so on Python {py_ver}. To fix this issue, either invoke pdoc "
+                f"from Python 3.10+, or switch to `typing.Union[]` syntax."
+            )
+        else:
+            warnings.warn(f"Error parsing type annotation {t} for {fullname}: {e}")
         return t
 
     # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
