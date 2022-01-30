@@ -76,6 +76,7 @@ def configure(
     env.globals["search"] = search
 
 
+@defuse_unsafe_reprs()
 def html_module(
     module: pdoc.doc.Module,
     all_modules: Mapping[str, pdoc.doc.Module],
@@ -89,20 +90,20 @@ def html_module(
     - If `mtime` is given, include additional JavaScript on the page for live-reloading.
       This is only passed by `pdoc.web`.
     """
-    with defuse_unsafe_reprs():
-        return env.get_template("module.html.jinja2").render(
-            module=module,
-            all_modules=all_modules,
-            root_module_name=root_module_name(all_modules),
-            edit_url=edit_url(
-                module.modulename,
-                module.is_package,
-                cast(Mapping[str, str], env.globals["edit_url_map"]),
-            ),
-            mtime=mtime,
-        )
+    return env.get_template("module.html.jinja2").render(
+        module=module,
+        all_modules=all_modules,
+        root_module_name=root_module_name(all_modules),
+        edit_url=edit_url(
+            module.modulename,
+            module.is_package,
+            cast(Mapping[str, str], env.globals["edit_url_map"]),
+        ),
+        mtime=mtime,
+    )
 
 
+@defuse_unsafe_reprs()
 def html_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the module index."""
     return env.get_template("index.html.jinja2").render(
@@ -111,6 +112,7 @@ def html_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     )
 
 
+@defuse_unsafe_reprs()
 def html_error(error: str, details: str = "") -> str:
     """Renders an error message."""
     return env.get_template("error.html.jinja2").render(
@@ -119,6 +121,7 @@ def html_error(error: str, details: str = "") -> str:
     )
 
 
+@defuse_unsafe_reprs()
 def search_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     """Renders the Elasticlunr.js search index."""
     if not env.globals["search"]:
@@ -146,10 +149,10 @@ def search_index(all_modules: Mapping[str, pdoc.doc.Module]) -> str:
     )
 
 
+@defuse_unsafe_reprs()
 def repr_module(module: pdoc.doc.Module) -> str:
     """Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging."""
-    with defuse_unsafe_reprs():
-        return repr(module)
+    return repr(module)
 
 
 _default_searchpath = [
