@@ -615,18 +615,6 @@ demopackage2    </h1>
                 </ul>
 
             </li>
-            <li>
-                    <a class=&quot;module&quot; href=&quot;#child_b&quot;>child_b</a>
-            </li>
-            <li>
-                    <a class=&quot;module&quot; href=&quot;#child_c&quot;>child_c</a>
-            </li>
-            <li>
-                    <a class=&quot;module&quot; href=&quot;#demopackage2&quot;>demopackage2</a>
-            </li>
-            <li>
-                    <a class=&quot;module&quot; href=&quot;#_child_e&quot;>_child_e</a>
-            </li>
     </ul>
 
 
@@ -865,91 +853,6 @@ demopackage    </h1>
             </div>
                                 </dl>
                             </div>
-                </section>
-                <section id=&quot;child_b&quot;>
-                                <div class=&quot;attr module&quot;><a class=&quot;headerlink&quot; href=&quot;#child_b&quot;>#&amp;nbsp;&amp;nbsp</a>
-<span class=&quot;name&quot;><a href=&quot;demopackage/child_b.html&quot;>demopackage.child_b</a></span></div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class=&quot;codehilite&quot;><pre><span></span><span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;child_b docstr&amp;quot;&amp;quot;&amp;quot;</span>
-<span class=&quot;kn&quot;>from</span> <span class=&quot;nn&quot;>__future__</span> <span class=&quot;kn&quot;>import</span> <span class=&quot;n&quot;>annotations</span>
-
-<span class=&quot;kn&quot;>import</span> <span class=&quot;nn&quot;>typing</span>
-
-
-<span class=&quot;k&quot;>class</span> <span class=&quot;nc&quot;>B</span><span class=&quot;p&quot;>:</span>
-    <span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;This class is defined in .child_b.&amp;quot;&amp;quot;&amp;quot;</span>
-
-    <span class=&quot;n&quot;>b_type</span><span class=&quot;p&quot;>:</span> <span class=&quot;n&quot;>typing</span><span class=&quot;o&quot;>.</span><span class=&quot;n&quot;>Type</span><span class=&quot;p&quot;>[</span><span class=&quot;n&quot;>B</span><span class=&quot;p&quot;>]</span>
-    <span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;we have a self-referential attribute here&amp;quot;&amp;quot;&amp;quot;</span>
-
-    <span class=&quot;k&quot;>def</span> <span class=&quot;nf&quot;>b</span><span class=&quot;p&quot;>(</span><span class=&quot;bp&quot;>self</span><span class=&quot;p&quot;>):</span>
-        <span class=&quot;k&quot;>return</span> <span class=&quot;mi&quot;>1</span>
-</pre></div>
-
-        </details>
-
-            <div class=&quot;docstring&quot;><p>child_b docstr</p>
-</div>
-
-
-                </section>
-                <section id=&quot;child_c&quot;>
-                                <div class=&quot;attr module&quot;><a class=&quot;headerlink&quot; href=&quot;#child_c&quot;>#&amp;nbsp;&amp;nbsp</a>
-<span class=&quot;name&quot;><a href=&quot;demopackage/child_c.html&quot;>demopackage.child_c</a></span></div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class=&quot;codehilite&quot;><pre><span></span><span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;child_c docstr&amp;quot;&amp;quot;&amp;quot;</span>
-<span class=&quot;kn&quot;>from</span> <span class=&quot;nn&quot;>.</span> <span class=&quot;kn&quot;>import</span> <span class=&quot;n&quot;>child_b</span>
-
-
-<span class=&quot;k&quot;>class</span> <span class=&quot;nc&quot;>C</span><span class=&quot;p&quot;>(</span><span class=&quot;n&quot;>child_b</span><span class=&quot;o&quot;>.</span><span class=&quot;n&quot;>B</span><span class=&quot;p&quot;>):</span>
-    <span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;This class is defined in .child_c and inherits from .child_b.B&amp;quot;&amp;quot;&amp;quot;</span>
-    <span class=&quot;k&quot;>def</span> <span class=&quot;nf&quot;>c</span><span class=&quot;p&quot;>(</span><span class=&quot;bp&quot;>self</span><span class=&quot;p&quot;>):</span>
-        <span class=&quot;k&quot;>return</span> <span class=&quot;mi&quot;>2</span>
-</pre></div>
-
-        </details>
-
-            <div class=&quot;docstring&quot;><p>child_c docstr</p>
-</div>
-
-
-                </section>
-                <section id=&quot;demopackage2&quot;>
-                                <div class=&quot;attr module&quot;><a class=&quot;headerlink&quot; href=&quot;#demopackage2&quot;>#&amp;nbsp;&amp;nbsp</a>
-<span class=&quot;name&quot;><a href=&quot;demopackage2.html&quot;>demopackage2</a></span></div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class=&quot;codehilite&quot;><pre><span></span><span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;I&amp;#39;m a different package, but I&amp;#39;m in demopackage.__all__!&amp;quot;&amp;quot;&amp;quot;</span>
-<span class=&quot;n&quot;>x</span> <span class=&quot;o&quot;>=</span> <span class=&quot;mi&quot;>42</span>
-</pre></div>
-
-        </details>
-
-            <div class=&quot;docstring&quot;><p>I'm a different package, but I'm in <a href=&quot;#__all__&quot;>demopackage.__all__</a>!</p>
-</div>
-
-
-                </section>
-                <section id=&quot;_child_e&quot;>
-                                <div class=&quot;attr module&quot;><a class=&quot;headerlink&quot; href=&quot;#_child_e&quot;>#&amp;nbsp;&amp;nbsp</a>
-<span class=&quot;name&quot;><a href=&quot;demopackage/_child_e.html&quot;>demopackage._child_e</a></span></div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class=&quot;codehilite&quot;><pre><span></span><span class=&quot;sd&quot;>&amp;quot;&amp;quot;&amp;quot;_child_e docstr&amp;quot;&amp;quot;&amp;quot;</span>
-</pre></div>
-
-        </details>
-
-            <div class=&quot;docstring&quot;><p>_child_e docstr</p>
-</div>
-
-
                 </section>
     </main>
 <script>

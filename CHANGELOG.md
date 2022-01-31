@@ -2,6 +2,11 @@
 
 # Unreleased: pdoc next
 
+ - [`pdoc.doc.Module.members`](https://pdoc.dev/docs/pdoc/doc.html#Namespace.members) does not contain submodules
+   anymore if they were explicitly added to `__all__`. Instead, submodules continue to be accessible as
+   [`pdoc.doc.Module.submodules`](https://pdoc.dev/docs/pdoc/doc.html#Module.submodules).
+   If this affects you, please leave feedback in [#341](https://github.com/mitmproxy/pdoc/issues/341).
+   The old behavior can be temporarily restored by setting `PDOC_SUBMODULES=1` as an environment variable.
  - Add a better warning message if users use `X | Y`-style type annotations
    ([PEP 604](https://www.python.org/dev/peps/pep-0604/)) on older Python versions which do not support them.
  - Always defuse insecure `repr()` calls to also cover customized templates.

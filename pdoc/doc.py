@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import enum
 import inspect
+import os
 import pkgutil
 import re
 import sys
@@ -29,7 +30,7 @@ import warnings
 from abc import ABCMeta, abstractmethod
 from functools import wraps
 from pathlib import Path
-from typing import Any, ClassVar, Generic, TypeVar, Union
+from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import (
@@ -268,7 +269,10 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             elif inspect.isclass(obj) and obj is not empty:
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
-                doc = Module.from_name(obj.__name__)
+                if os.environ.get("PDOC_SUBMODULES"):  # pragma: no cover
+                    doc = Module.from_name(obj.__name__)
+                else:
+                    continue
             elif inspect.isdatadescriptor(obj):
                 doc = Variable(
                     self.modulename,
@@ -414,33 +418,36 @@ class Module(Namespace[types.ModuleType]):
         if not self.is_package:
             return []
 
-        if _safe_getattr(self.obj, "__all__", False):
-            # If __all__ is set, only show submodules specified there.
-            prefix = f"{self.modulename}."
-            return [
-                mod
-                for mod in self.members.values()
-                if isinstance(mod, Module) and mod.modulename.startswith(prefix)
-            ]
-
+        include: Callable[[str], bool]
+        mod_all = _safe_getattr(self.obj, "__all__", False)
+        if mod_all is not False:
+            mod_all_pos = {name: i for i, name in enumerate(mod_all)}
+            include = mod_all_pos.__contains__
         else:
-            submodules = []
-            for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):  # type: ignore
-                if mod.name.split(".")[-1].startswith("_"):
-                    # optimization: we don't even try to load modules starting with an underscore as they would not be
-                    # visible by default. The downside of this is that someone who overrides `is_public` will miss those
-                    # entries, the upsides are 1) better performance and 2) less warnings because of import failures
-                    # (think of OS-specific modules, e.g. _linux.py failing to import on Windows).
-                    continue
-                try:
-                    module = extract.load_module(mod.name)
-                except RuntimeError:
-                    warnings.warn(
-                        f"Couldn't import {mod.name}:\n{traceback.format_exc()}"
-                    )
-                    continue
-                submodules.append(Module(module))
-            return submodules
+
+            def include(name: str) -> bool:
+                # optimization: we don't even try to load modules starting with an underscore as they would not be
+                # visible by default. The downside of this is that someone who overrides `is_public` will miss those
+                # entries, the upsides are 1) better performance and 2) less warnings because of import failures
+                # (think of OS-specific modules, e.g. _linux.py failing to import on Windows).
+                return not name.startswith("_")
+
+        submodules = []
+        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):
+            _, _, mod_name = mod.name.rpartition(".")
+            if not include(mod_name):
+                continue
+            try:
+                module = Module.from_name(mod.name)
+            except RuntimeError:
+                warnings.warn(f"Couldn't import {mod.name}:\n{traceback.format_exc()}")
+                continue
+            submodules.append(module)
+
+        if mod_all:
+            submodules = sorted(submodules, key=lambda m: mod_all_pos[m.name])
+
+        return submodules
 
     @cached_property
     def _documented_members(self) -> set[str]:
@@ -733,7 +740,7 @@ class Class(Namespace[type]):
 
 if sys.version_info >= (3, 10):
     WrappedFunction = types.FunctionType | staticmethod | classmethod
-else:
+else:  # pragma: no cover
     WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
 
 
@@ -745,7 +752,7 @@ class Function(Doc[types.FunctionType]):
     supports `@classmethod`s or `@staticmethod`s.
     """
 
-    wrapped: types.FunctionType | staticmethod | classmethod
+    wrapped: WrappedFunction
     """The original wrapped function (e.g., `staticmethod(func)`)"""
 
     obj: types.FunctionType
