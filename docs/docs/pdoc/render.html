@@ -79,7 +79,7 @@
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">jinja2</span>
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
@@ -104,15 +104,15 @@
 
 <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">docformat</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">footer_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">logo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">logo_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logo_link</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">math</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">show_source</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">template_directory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">template_directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configure the rendering output.</span>
@@ -151,10 +151,11 @@
     <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;search&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">search</span>
 
 
+<span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">html_module</span><span class="p">(</span>
     <span class="n">module</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">],</span>
-    <span class="n">mtime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mtime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renders the documentation for a `pdoc.doc.Module`.</span>
@@ -164,20 +165,20 @@
 <span class="sd">    - If `mtime` is given, include additional JavaScript on the page for live-reloading.</span>
 <span class="sd">      This is only passed by `pdoc.web`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">defuse_unsafe_reprs</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;module.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
-            <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">,</span>
-            <span class="n">root_module_name</span><span class="o">=</span><span class="n">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">),</span>
-            <span class="n">edit_url</span><span class="o">=</span><span class="n">edit_url</span><span class="p">(</span>
-                <span class="n">module</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">.</span><span class="n">is_package</span><span class="p">,</span>
-                <span class="n">cast</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;edit_url_map&quot;</span><span class="p">]),</span>
-            <span class="p">),</span>
-            <span class="n">mtime</span><span class="o">=</span><span class="n">mtime</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;module.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+        <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+        <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">,</span>
+        <span class="n">root_module_name</span><span class="o">=</span><span class="n">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">),</span>
+        <span class="n">edit_url</span><span class="o">=</span><span class="n">edit_url</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
+            <span class="n">module</span><span class="o">.</span><span class="n">is_package</span><span class="p">,</span>
+            <span class="n">cast</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;edit_url_map&quot;</span><span class="p">]),</span>
+        <span class="p">),</span>
+        <span class="n">mtime</span><span class="o">=</span><span class="n">mtime</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
+<span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders the module index.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;index.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
@@ -186,6 +187,7 @@
     <span class="p">)</span>
 
 
+<span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">html_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders an error message.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;error.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
@@ -194,6 +196,7 @@
     <span class="p">)</span>
 
 
+<span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">search_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders the Elasticlunr.js search index.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;search&quot;</span><span class="p">]:</span>
@@ -221,10 +224,10 @@
     <span class="p">)</span>
 
 
+<span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">repr_module</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">defuse_unsafe_reprs</span><span class="p">():</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
 
 <span class="n">_default_searchpath</span> <span class="o">=</span> <span class="p">[</span>
@@ -270,12 +273,12 @@
     docformat: Optional[Literal[&#39;google&#39;, &#39;numpy&#39;, &#39;restructuredtext&#39;]] = None,
     edit_url_map: Optional[Mapping[str, str]] = None,
     footer_text: str = &#39;&#39;,
-    logo: Optional[str] = None,
-    logo_link: Optional[str] = None,
+    logo: str | None = None,
+    logo_link: str | None = None,
     math: bool = False,
     search: bool = True,
     show_source: bool = True,
-    template_directory: Optional[pathlib.Path] = None
+    template_directory: pathlib.Path | None = None
 )</span>:
     </div>
 
@@ -283,15 +286,15 @@
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">docformat</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">footer_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">logo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">logo_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logo_link</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">math</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">show_source</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">template_directory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">template_directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configure the rendering output.</span>
@@ -360,21 +363,23 @@ or in <code>examples/custom-template</code>.</li>
                 <section id="html_module">
                             <div class="attr function"><a class="headerlink" href="#html_module">#&nbsp;&nbsp</a>
 
-        
+                <div class="decorator">@defuse_unsafe_reprs()</div>
+
             <span class="def">def</span>
             <span class="name">html_module</span><span class="signature">(
     module: <a href="doc.html#Module">pdoc.doc.Module</a>,
     all_modules: Mapping[str, <a href="doc.html#Module">pdoc.doc.Module</a>],
-    mtime: Optional[str] = None
+    mtime: str | None = None
 ) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">html_module</span><span class="p">(</span>
+            <div class="codehilite"><pre><span></span><span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">html_module</span><span class="p">(</span>
     <span class="n">module</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
     <span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">],</span>
-    <span class="n">mtime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mtime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renders the documentation for a `pdoc.doc.Module`.</span>
@@ -384,18 +389,17 @@ or in <code>examples/custom-template</code>.</li>
 <span class="sd">    - If `mtime` is given, include additional JavaScript on the page for live-reloading.</span>
 <span class="sd">      This is only passed by `pdoc.web`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">defuse_unsafe_reprs</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;module.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
-            <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">,</span>
-            <span class="n">root_module_name</span><span class="o">=</span><span class="n">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">),</span>
-            <span class="n">edit_url</span><span class="o">=</span><span class="n">edit_url</span><span class="p">(</span>
-                <span class="n">module</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">.</span><span class="n">is_package</span><span class="p">,</span>
-                <span class="n">cast</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;edit_url_map&quot;</span><span class="p">]),</span>
-            <span class="p">),</span>
-            <span class="n">mtime</span><span class="o">=</span><span class="n">mtime</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;module.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+        <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+        <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">,</span>
+        <span class="n">root_module_name</span><span class="o">=</span><span class="n">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">),</span>
+        <span class="n">edit_url</span><span class="o">=</span><span class="n">edit_url</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
+            <span class="n">module</span><span class="o">.</span><span class="n">is_package</span><span class="p">,</span>
+            <span class="n">cast</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;edit_url_map&quot;</span><span class="p">]),</span>
+        <span class="p">),</span>
+        <span class="n">mtime</span><span class="o">=</span><span class="n">mtime</span><span class="p">,</span>
+    <span class="p">)</span>
 </pre></div>
 
         </details>
@@ -415,14 +419,16 @@ This is only passed by <code><a href="web.html">pdoc.web</a></code>.</li>
                 <section id="html_index">
                             <div class="attr function"><a class="headerlink" href="#html_index">#&nbsp;&nbsp</a>
 
-        
+                <div class="decorator">@defuse_unsafe_reprs()</div>
+
             <span class="def">def</span>
             <span class="name">html_index</span><span class="signature">(all_modules: Mapping[str, <a href="doc.html#Module">pdoc.doc.Module</a>]) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">html_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders the module index.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;index.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
         <span class="n">all_modules</span><span class="o">=</span><span class="n">all_modules</span><span class="p">,</span>
@@ -440,14 +446,16 @@ This is only passed by <code><a href="web.html">pdoc.web</a></code>.</li>
                 <section id="html_error">
                             <div class="attr function"><a class="headerlink" href="#html_error">#&nbsp;&nbsp</a>
 
-        
+                <div class="decorator">@defuse_unsafe_reprs()</div>
+
             <span class="def">def</span>
             <span class="name">html_error</span><span class="signature">(error: str, details: str = &#39;&#39;) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">html_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">html_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders an error message.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;error.html.jinja2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
         <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span>
@@ -465,14 +473,16 @@ This is only passed by <code><a href="web.html">pdoc.web</a></code>.</li>
                 <section id="search_index">
                             <div class="attr function"><a class="headerlink" href="#search_index">#&nbsp;&nbsp</a>
 
-        
+                <div class="decorator">@defuse_unsafe_reprs()</div>
+
             <span class="def">def</span>
             <span class="name">search_index</span><span class="signature">(all_modules: Mapping[str, <a href="doc.html#Module">pdoc.doc.Module</a>]) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">search_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">search_index</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders the Elasticlunr.js search index.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="p">[</span><span class="s2">&quot;search&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
@@ -509,17 +519,18 @@ This is only passed by <code><a href="web.html">pdoc.web</a></code>.</li>
                 <section id="repr_module">
                             <div class="attr function"><a class="headerlink" href="#repr_module">#&nbsp;&nbsp</a>
 
-        
+                <div class="decorator">@defuse_unsafe_reprs()</div>
+
             <span class="def">def</span>
             <span class="name">repr_module</span><span class="signature">(module: <a href="doc.html#Module">pdoc.doc.Module</a>) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">repr_module</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="nd">@defuse_unsafe_reprs</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">repr_module</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Renders `repr(pdoc.doc.Module)`, primarily used for tests and debugging.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">defuse_unsafe_reprs</span><span class="p">():</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 </pre></div>
 
         </details>

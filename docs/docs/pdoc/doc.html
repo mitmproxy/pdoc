@@ -277,6 +277,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 
 <span class="kn">import</span> <span class="nn">enum</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -287,7 +288,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">doc_ast</span><span class="p">,</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">pdoc.doc_types</span> <span class="kn">import</span> <span class="p">(</span>
@@ -403,7 +404,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">source_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">source_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;The name of the Python source file in which this object was defined. `None` for built-in objects.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsourcefile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span> <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
@@ -411,7 +412,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">source_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">source_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a `(start, end)` line number tuple for this object.</span>
 
@@ -526,7 +527,10 @@ By convention, all attributes are read-only, although this is not enforced at ru
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-                <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PDOC_SUBMODULES&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+                    <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isdatadescriptor</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
@@ -585,7 +589,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">flattened</span>
 
     <span class="nd">@cache</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the documentation object for a particular identifier, or `None` if the identifier cannot be found.&quot;&quot;&quot;</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
@@ -667,38 +671,41 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Module&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Module</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A list of all (direct) submodules.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_package</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="c1"># If __all__ is set, only show submodules specified there.</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="k">return</span> <span class="p">[</span>
-                <span class="n">mod</span>
-                <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">Module</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mod</span><span class="o">.</span><span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
-            <span class="p">]</span>
-
+        <span class="n">include</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+        <span class="n">mod_all</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mod_all</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">mod_all_pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mod_all</span><span class="p">)}</span>
+            <span class="n">include</span> <span class="o">=</span> <span class="n">mod_all_pos</span><span class="o">.</span><span class="fm">__contains__</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-                <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
-                    <span class="c1"># optimization: we don&#39;t even try to load modules starting with an underscore as they would not be</span>
-                    <span class="c1"># visible by default. The downside of this is that someone who overrides `is_public` will miss those</span>
-                    <span class="c1"># entries, the upsides are 1) better performance and 2) less warnings because of import failures</span>
-                    <span class="c1"># (think of OS-specific modules, e.g. _linux.py failing to import on Windows).</span>
-                    <span class="k">continue</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">module</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">submodules</span>
+
+            <span class="k">def</span> <span class="nf">include</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+                <span class="c1"># optimization: we don&#39;t even try to load modules starting with an underscore as they would not be</span>
+                <span class="c1"># visible by default. The downside of this is that someone who overrides `is_public` will miss those</span>
+                <span class="c1"># entries, the upsides are 1) better performance and 2) less warnings because of import failures</span>
+                <span class="c1"># (think of OS-specific modules, e.g. _linux.py failing to import on Windows).</span>
+                <span class="k">return</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+        <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">mod_name</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include</span><span class="p">(</span><span class="n">mod_name</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mod_all</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">submodules</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">mod_all_pos</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">submodules</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_documented_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -752,21 +759,21 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">members</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Variable</span><span class="p">)]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Class&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Class</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level classes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -929,7 +936,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">decorators</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">class_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">class_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented class variables in the class.</span>
 
@@ -943,7 +950,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">instance_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">instance_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all instance variables in the class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -954,7 +961,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">classmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">classmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented `@classmethod`s.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -965,7 +972,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">staticmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">staticmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented `@staticmethod`s.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -976,7 +983,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">methods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">methods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented methods in the class that are neither static- nor classmethods.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -989,7 +996,10 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="p">]</span>
 
 
-<span class="n">WrappedFunction</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">,</span> <span class="nb">classmethod</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">WrappedFunction</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span> <span class="o">|</span> <span class="nb">staticmethod</span> <span class="o">|</span> <span class="nb">classmethod</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">WrappedFunction</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">,</span> <span class="nb">classmethod</span><span class="p">]</span>
 
 
 <span class="k">class</span> <span class="nc">Function</span><span class="p">(</span><span class="n">Doc</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">]):</span>
@@ -1000,7 +1010,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 <span class="sd">    supports `@classmethod`s or `@staticmethod`s.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">wrapped</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">,</span> <span class="nb">classmethod</span><span class="p">]</span>
+    <span class="n">wrapped</span><span class="p">:</span> <span class="n">WrappedFunction</span>
     <span class="sd">&quot;&quot;&quot;The original wrapped function (e.g., `staticmethod(func)`)&quot;&quot;&quot;</span>
 
     <span class="n">obj</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span>
@@ -1140,9 +1150,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 <span class="sd">    Representation of a variable&#39;s documentation. This includes module, class and instance variables.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">default_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
-        <span class="n">Any</span><span class="p">,</span> <span class="n">empty</span>
-    <span class="p">]</span>  <span class="c1"># technically Any includes empty, but this conveys intent.</span>
+    <span class="n">default_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="n">empty</span>  <span class="c1"># technically Any includes empty, but this conveys intent.</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The variable&#39;s default value.</span>
 <span class="sd">    </span>
@@ -1151,7 +1159,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 <span class="sd">    To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">annotation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span>
+    <span class="n">annotation</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="n">empty</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The variable&#39;s type annotation.</span>
 <span class="sd">    </span>
@@ -1165,8 +1173,8 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="o">*</span><span class="p">,</span>
         <span class="n">taken_from</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">docstring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">annotation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
-        <span class="n">default_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">annotation</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a variable doc object.</span>
@@ -1294,7 +1302,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;…&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_docstr</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="s2">&quot;Doc&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_docstr</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;helper function for Doc.__repr__()&quot;&quot;&quot;</span>
     <span class="n">docstr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">is_inherited</span><span class="p">:</span>
@@ -1307,7 +1315,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_decorators</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Class&quot;</span><span class="p">,</span> <span class="s2">&quot;Function&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_decorators</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Class</span> <span class="o">|</span> <span class="n">Function</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;helper function for Doc.__repr__()&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">decorators</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">decorators</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
@@ -1444,7 +1452,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">return</span> <span class="n">doc_ast</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">source_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">source_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;The name of the Python source file in which this object was defined. `None` for built-in objects.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsourcefile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span> <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
@@ -1452,7 +1460,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">source_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">source_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a `(start, end)` line number tuple for this object.</span>
 
@@ -1642,7 +1650,7 @@ an empty string is returned.</p>
                             <div id="Doc.source_file" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#Doc.source_file">#&nbsp;&nbsp</a>
 
-        <span class="name">source_file</span><span class="annotation">: Optional[pathlib.Path]</span>
+        <span class="name">source_file</span><span class="annotation">: pathlib.Path | None</span>
     </div>
 
             <div class="docstring"><p>The name of the Python source file in which this object was defined. <code>None</code> for built-in objects.</p>
@@ -1653,7 +1661,7 @@ an empty string is returned.</p>
                             <div id="Doc.source_lines" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#Doc.source_lines">#&nbsp;&nbsp</a>
 
-        <span class="name">source_lines</span><span class="annotation">: Optional[tuple[int, int]]</span>
+        <span class="name">source_lines</span><span class="annotation">: tuple[int, int] | None</span>
     </div>
 
             <div class="docstring"><p>Return a <code>(start, end)</code> line number tuple for this object.</p>
@@ -1772,7 +1780,10 @@ in a different module.</p>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-                <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PDOC_SUBMODULES&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+                    <span class="n">doc</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isdatadescriptor</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span>
@@ -1831,7 +1842,7 @@ in a different module.</p>
         <span class="k">return</span> <span class="n">flattened</span>
 
     <span class="nd">@cache</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the documentation object for a particular identifier, or `None` if the identifier cannot be found.&quot;&quot;&quot;</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
@@ -1899,13 +1910,13 @@ in a different module.</p>
                 <div class="decorator">@cache</div>
 
             <span class="def">def</span>
-            <span class="name">get</span><span class="signature">(self, identifier: str) -&gt; Optional[<a href="#Doc">pdoc.doc.Doc</a>]</span>:
+            <span class="name">get</span><span class="signature">(self, identifier: str) -&gt; <a href="#Doc">pdoc.doc.Doc</a> | None</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@cache</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Doc</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the documentation object for a particular identifier, or `None` if the identifier cannot be found.&quot;&quot;&quot;</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
@@ -2027,38 +2038,41 @@ in a different module.</p>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Module&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Module</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;A list of all (direct) submodules.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_package</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="c1"># If __all__ is set, only show submodules specified there.</span>
-            <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="k">return</span> <span class="p">[</span>
-                <span class="n">mod</span>
-                <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">Module</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mod</span><span class="o">.</span><span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
-            <span class="p">]</span>
-
+        <span class="n">include</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+        <span class="n">mod_all</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__all__&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mod_all</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">mod_all_pos</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mod_all</span><span class="p">)}</span>
+            <span class="n">include</span> <span class="o">=</span> <span class="n">mod_all_pos</span><span class="o">.</span><span class="fm">__contains__</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
-                <span class="k">if</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
-                    <span class="c1"># optimization: we don&#39;t even try to load modules starting with an underscore as they would not be</span>
-                    <span class="c1"># visible by default. The downside of this is that someone who overrides `is_public` will miss those</span>
-                    <span class="c1"># entries, the upsides are 1) better performance and 2) less warnings because of import failures</span>
-                    <span class="c1"># (think of OS-specific modules, e.g. _linux.py failing to import on Windows).</span>
-                    <span class="k">continue</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">module</span> <span class="o">=</span> <span class="n">extract</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">submodules</span>
+
+            <span class="k">def</span> <span class="nf">include</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+                <span class="c1"># optimization: we don&#39;t even try to load modules starting with an underscore as they would not be</span>
+                <span class="c1"># visible by default. The downside of this is that someone who overrides `is_public` will miss those</span>
+                <span class="c1"># entries, the upsides are 1) better performance and 2) less warnings because of import failures</span>
+                <span class="c1"># (think of OS-specific modules, e.g. _linux.py failing to import on Windows).</span>
+                <span class="k">return</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+        <span class="n">submodules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">__path__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">mod_name</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include</span><span class="p">(</span><span class="n">mod_name</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">Module</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t import </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">submodules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mod_all</span><span class="p">:</span>
+            <span class="n">submodules</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">submodules</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="n">mod_all_pos</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">submodules</span>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">_documented_members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -2112,21 +2126,21 @@ in a different module.</p>
         <span class="k">return</span> <span class="n">members</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level variables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Variable</span><span class="p">)]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Class&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Class</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level classes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Class</span><span class="p">)]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented module level functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2456,7 +2470,7 @@ module with the name <code>__init__.py</code>.</p>
         <span class="k">return</span> <span class="n">decorators</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">class_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">class_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented class variables in the class.</span>
 
@@ -2470,7 +2484,7 @@ module with the name <code>__init__.py</code>.</p>
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">instance_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">instance_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Variable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all instance variables in the class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2481,7 +2495,7 @@ module with the name <code>__init__.py</code>.</p>
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">classmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">classmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented `@classmethod`s.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2492,7 +2506,7 @@ module with the name <code>__init__.py</code>.</p>
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">staticmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">staticmethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented `@staticmethod`s.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2503,7 +2517,7 @@ module with the name <code>__init__.py</code>.</p>
         <span class="p">]</span>
 
     <span class="nd">@cached_property</span>
-    <span class="k">def</span> <span class="nf">methods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;Function&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">methods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Function</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A list of all documented methods in the class that are neither static- nor classmethods.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2661,7 +2675,7 @@ All other variables are treated as instance variables.</p>
 <span class="sd">    supports `@classmethod`s or `@staticmethod`s.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">wrapped</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">,</span> <span class="nb">classmethod</span><span class="p">]</span>
+    <span class="n">wrapped</span><span class="p">:</span> <span class="n">WrappedFunction</span>
     <span class="sd">&quot;&quot;&quot;The original wrapped function (e.g., `staticmethod(func)`)&quot;&quot;&quot;</span>
 
     <span class="n">obj</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span>
@@ -2812,7 +2826,7 @@ supports <code>@classmethod</code>s or <code>@staticmethod</code>s.</p>
             <span class="name">Function</span><span class="signature">(
     modulename: str,
     qualname: str,
-    func: Union[function, staticmethod, classmethod],
+    func: function | staticmethod | classmethod,
     taken_from: tuple
 )</span>
     </div>
@@ -2846,7 +2860,7 @@ supports <code>@classmethod</code>s or <code>@staticmethod</code>s.</p>
                             <div id="Function.wrapped" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#Function.wrapped">#&nbsp;&nbsp</a>
 
-        <span class="name">wrapped</span><span class="annotation">: Union[function, staticmethod, classmethod]</span>
+        <span class="name">wrapped</span><span class="annotation">: function | staticmethod | classmethod</span>
     </div>
 
             <div class="docstring"><p>The original wrapped function (e.g., <code>staticmethod(func)</code>)</p>
@@ -2983,9 +2997,7 @@ in repr(). Additionally, all types are already resolved.</p>
 <span class="sd">    Representation of a variable&#39;s documentation. This includes module, class and instance variables.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">default_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
-        <span class="n">Any</span><span class="p">,</span> <span class="n">empty</span>
-    <span class="p">]</span>  <span class="c1"># technically Any includes empty, but this conveys intent.</span>
+    <span class="n">default_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="n">empty</span>  <span class="c1"># technically Any includes empty, but this conveys intent.</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The variable&#39;s default value.</span>
 <span class="sd">    </span>
@@ -2994,7 +3006,7 @@ in repr(). Additionally, all types are already resolved.</p>
 <span class="sd">    To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">annotation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span>
+    <span class="n">annotation</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="n">empty</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The variable&#39;s type annotation.</span>
 <span class="sd">    </span>
@@ -3008,8 +3020,8 @@ in repr(). Additionally, all types are already resolved.</p>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">taken_from</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">docstring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">annotation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
-        <span class="n">default_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">annotation</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a variable doc object.</span>
@@ -3078,7 +3090,7 @@ in repr(). Additionally, all types are already resolved.</p>
     *,
     taken_from: tuple,
     docstring: str,
-    annotation: Union[type, inspect._empty],
+    annotation: type | inspect._empty,
     default_value: Union[Any, inspect._empty]
 )</span>
     </div>
@@ -3092,8 +3104,8 @@ in repr(). Additionally, all types are already resolved.</p>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">taken_from</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">docstring</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">annotation</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
-        <span class="n">default_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">empty</span><span class="p">]</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">annotation</span><span class="p">:</span> <span class="nb">type</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
+        <span class="n">default_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="n">empty</span> <span class="o">=</span> <span class="n">empty</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct a variable doc object.</span>
@@ -3140,7 +3152,7 @@ To distinguish this case from a default value of <code>None</code>, <code><a hre
                             <div id="Variable.annotation" class="classattr">
                                             <div class="attr variable"><a class="headerlink" href="#Variable.annotation">#&nbsp;&nbsp</a>
 
-        <span class="name">annotation</span><span class="annotation">: Union[type, inspect._empty]</span>
+        <span class="name">annotation</span><span class="annotation">: type | inspect._empty</span>
     </div>
 
             <div class="docstring"><p>The variable's type annotation.</p>

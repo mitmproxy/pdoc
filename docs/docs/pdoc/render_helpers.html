@@ -120,7 +120,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Mapping</span>
 <span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
 
 <span class="kn">import</span> <span class="nn">pygments.formatters.html</span>
@@ -305,7 +305,7 @@
 
 
 <span class="nd">@pass_context</span>
-<span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create a link for a specific `(modulename, qualname)` tuple.&quot;&quot;&quot;</span>
     <span class="n">mod</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span>
     <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">spec</span>
@@ -333,7 +333,7 @@
 
 <span class="k">def</span> <span class="nf">edit_url</span><span class="p">(</span>
     <span class="n">modulename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_package</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create a link to edit a particular file in the used version control system.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">modulename</span> <span class="ow">or</span> <span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>
@@ -346,7 +346,7 @@
     <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the name of the (unique) top-level module, or `None`</span>
 <span class="sd">    if no such module exists.</span>
@@ -755,14 +755,14 @@ A piece of text is considered to be an identifier if it either contains a <code>
             <span class="name">link</span><span class="signature">(
     context: jinja2.runtime.Context,
     spec: tuple,
-    text: Optional[str] = None
+    text: str | None = None
 ) -&gt; str</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="nd">@pass_context</span>
-<span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create a link for a specific `(modulename, qualname)` tuple.&quot;&quot;&quot;</span>
     <span class="n">mod</span><span class="p">:</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span>
     <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">spec</span>
@@ -804,14 +804,14 @@ A piece of text is considered to be an identifier if it either contains a <code>
     modulename: str,
     is_package: bool,
     mapping: Mapping[str, str]
-) -&gt; Optional[str]</span>:
+) -&gt; str | None</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">edit_url</span><span class="p">(</span>
     <span class="n">modulename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_package</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Create a link to edit a particular file in the used version control system.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">modulename</span> <span class="ow">or</span> <span class="n">modulename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">):</span>
@@ -836,12 +836,12 @@ A piece of text is considered to be an identifier if it either contains a <code>
 
         
             <span class="def">def</span>
-            <span class="name">root_module_name</span><span class="signature">(all_modules: Mapping[str, <a href="doc.html#Module">pdoc.doc.Module</a>]) -&gt; Optional[str]</span>:
+            <span class="name">root_module_name</span><span class="signature">(all_modules: Mapping[str, <a href="doc.html#Module">pdoc.doc.Module</a>]) -&gt; str | None</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">root_module_name</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pdoc</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Module</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the name of the (unique) top-level module, or `None`</span>
 <span class="sd">    if no such module exists.</span>

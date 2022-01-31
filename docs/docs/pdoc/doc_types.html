@@ -88,7 +88,7 @@ exception.</p>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">BuiltinFunctionType</span><span class="p">,</span> <span class="n">ModuleType</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">_GenericAlias</span>  <span class="c1"># type: ignore</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">._compat</span> <span class="kn">import</span> <span class="n">GenericAlias</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">UnionType</span><span class="p">,</span> <span class="n">get_args</span><span class="p">,</span> <span class="n">get_origin</span>
@@ -138,7 +138,7 @@ exception.</p>
 
 <span class="k">def</span> <span class="nf">resolve_annotations</span><span class="p">(</span>
     <span class="n">annotations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -159,7 +159,7 @@ exception.</p>
 <span class="k">def</span> <span class="nf">safe_eval_type</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">globalns</span><span class="p">,</span>
-    <span class="n">module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">],</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -181,7 +181,19 @@ exception.</p>
         <span class="n">err</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;unsupported operand type(s) for |&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">py_ver</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;You are likely attempting to use Python 3.10 syntax (PEP 604 union types) with an older Python &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;release. `X | Y`-style type annotations are invalid syntax on Python </span><span class="si">{</span><span class="n">py_ver</span><span class="si">}</span><span class="s2">, which is what your &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;pdoc instance is using. `from future import __annotations__` (PEP 563) postpones evaluation of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;annotations, which is why your program won&#39;t crash right away. However, pdoc needs to evaluate your &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;type annotations and is unable to do so on Python </span><span class="si">{</span><span class="n">py_ver</span><span class="si">}</span><span class="s2">. To fix this issue, either invoke pdoc &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;from Python 3.10+, or switch to `typing.Union[]` syntax.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">t</span>
 
     <span class="c1"># Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.</span>
@@ -318,7 +330,7 @@ This value is an alias of <code>inspect.Signature.empty</code>.</p>
             <span class="def">def</span>
             <span class="name">resolve_annotations</span><span class="signature">(
     annotations: dict,
-    module: Optional[module],
+    module: module | None,
     fullname: str
 ) -&gt; dict[str, typing.Any]</span>:
     </div>
@@ -327,7 +339,7 @@ This value is an alias of <code>inspect.Signature.empty</code>.</p>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">resolve_annotations</span><span class="p">(</span>
     <span class="n">annotations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">],</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -360,7 +372,7 @@ this function tries to resolve all types using <code><a href="#safe_eval_type">p
 
         
             <span class="def">def</span>
-            <span class="name">safe_eval_type</span><span class="signature">(t: Any, globalns, module: Optional[module], fullname: str) -&gt; Any</span>:
+            <span class="name">safe_eval_type</span><span class="signature">(t: Any, globalns, module: module | None, fullname: str) -&gt; Any</span>:
     </div>
 
                 <details>
@@ -368,7 +380,7 @@ this function tries to resolve all types using <code><a href="#safe_eval_type">p
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">safe_eval_type</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">globalns</span><span class="p">,</span>
-    <span class="n">module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">],</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -390,7 +402,19 @@ this function tries to resolve all types using <code><a href="#safe_eval_type">p
         <span class="n">err</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;unsupported operand type(s) for |&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">py_ver</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;You are likely attempting to use Python 3.10 syntax (PEP 604 union types) with an older Python &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;release. `X | Y`-style type annotations are invalid syntax on Python </span><span class="si">{</span><span class="n">py_ver</span><span class="si">}</span><span class="s2">, which is what your &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;pdoc instance is using. `from future import __annotations__` (PEP 563) postpones evaluation of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;annotations, which is why your program won&#39;t crash right away. However, pdoc needs to evaluate your &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;type annotations and is unable to do so on Python </span><span class="si">{</span><span class="n">py_ver</span><span class="si">}</span><span class="s2">. To fix this issue, either invoke pdoc &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;from Python 3.10+, or switch to `typing.Union[]` syntax.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing type annotation </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">fullname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">t</span>
 
     <span class="c1"># Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.</span>
