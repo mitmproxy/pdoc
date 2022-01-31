@@ -12,7 +12,7 @@ import http.server
 import traceback
 import warnings
 import webbrowser
-from typing import Iterable, Iterator, Mapping, Optional, Union
+from typing import Iterable, Iterator, Mapping
 
 from pdoc import doc, extract, render
 from pdoc._compat import cache, removesuffix
@@ -21,7 +21,7 @@ from pdoc._compat import cache, removesuffix
 class DocHandler(http.server.BaseHTTPRequestHandler):
     """A handler for individual requests."""
 
-    server: "DocServer"
+    server: DocServer
     """A reference to the main web server."""
 
     def do_HEAD(self):
@@ -36,7 +36,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         except ConnectionError:  # pragma: no cover
             pass
 
-    def handle_request(self) -> Optional[str]:
+    def handle_request(self) -> str | None:
         """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
         path = self.path.split("?", 1)[0]
 
@@ -87,9 +87,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         return out
 
-    def log_request(
-        self, code: Union[int, str] = ..., size: Union[int, str] = ...
-    ) -> None:
+    def log_request(self, code: int | str = ..., size: int | str = ...) -> None:
         """Override logging to disable it."""
         pass
 

@@ -17,13 +17,12 @@ import re
 import warnings
 from pathlib import Path
 from textwrap import dedent, indent
-from typing import Optional
 
 from ._compat import cache
 
 
 @cache
-def convert(docstring: str, docformat: str, source_file: Optional[Path]) -> str:
+def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
     """
     Convert `docstring` from `docformat` to Markdown.
     """
@@ -201,7 +200,7 @@ def _numpy_parameters(content: str) -> str:
     return f"{contents}\n"
 
 
-def rst(contents: str, source_file: Optional[Path]) -> str:
+def rst(contents: str, source_file: Path | None) -> str:
     """
     Convert reStructuredText elements to Markdown.
     We support the most common elements, but we do not aim to mirror the full complexity of the spec here.
@@ -304,7 +303,7 @@ def _rst_links(contents: str) -> str:
     return contents
 
 
-def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
+def _rst_admonitions(contents: str, source_file: Path | None) -> str:
     """
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
     <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>
@@ -320,7 +319,7 @@ def _rst_admonitions(contents: str, source_file: Optional[Path]) -> str:
             loc = source_file or Path(".")
             try:
                 included = (loc.parent / val).read_text("utf8", "replace")
-            except IOError as e:
+            except OSError as e:
                 warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
             included = _rst_admonitions(included, loc.parent / val)

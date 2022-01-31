@@ -29,7 +29,7 @@ import warnings
 from abc import ABCMeta, abstractmethod
 from functools import wraps
 from pathlib import Path
-from typing import Any, ClassVar, Generic, Optional, TypeVar, Union
+from typing import Any, ClassVar, Generic, TypeVar, Union
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import (
@@ -145,7 +145,7 @@ class Doc(Generic[T]):
         return doc_ast.get_source(self.obj)
 
     @cached_property
-    def source_file(self) -> Optional[Path]:
+    def source_file(self) -> Path | None:
         """The name of the Python source file in which this object was defined. `None` for built-in objects."""
         try:
             return Path(inspect.getsourcefile(self.obj) or inspect.getfile(self.obj))  # type: ignore
@@ -153,7 +153,7 @@ class Doc(Generic[T]):
             return None
 
     @cached_property
-    def source_lines(self) -> Optional[tuple[int, int]]:
+    def source_lines(self) -> tuple[int, int] | None:
         """
         Return a `(start, end)` line number tuple for this object.
 
@@ -327,7 +327,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         return flattened
 
     @cache
-    def get(self, identifier: str) -> Optional[Doc]:
+    def get(self, identifier: str) -> Doc | None:
         """Returns the documentation object for a particular identifier, or `None` if the identifier cannot be found."""
         head, _, tail = identifier.partition(".")
         if tail:
@@ -409,7 +409,7 @@ class Module(Namespace[types.ModuleType]):
         return list(self.members.values())
 
     @cached_property
-    def submodules(self) -> list["Module"]:
+    def submodules(self) -> list[Module]:
         """A list of all (direct) submodules."""
         if not self.is_package:
             return []
@@ -494,21 +494,21 @@ class Module(Namespace[types.ModuleType]):
         return members
 
     @cached_property
-    def variables(self) -> list["Variable"]:
+    def variables(self) -> list[Variable]:
         """
         A list of all documented module level variables.
         """
         return [x for x in self.members.values() if isinstance(x, Variable)]
 
     @cached_property
-    def classes(self) -> list["Class"]:
+    def classes(self) -> list[Class]:
         """
         A list of all documented module level classes.
         """
         return [x for x in self.members.values() if isinstance(x, Class)]
 
     @cached_property
-    def functions(self) -> list["Function"]:
+    def functions(self) -> list[Function]:
         """
         A list of all documented module level functions.
         """
@@ -671,7 +671,7 @@ class Class(Namespace[type]):
         return decorators
 
     @cached_property
-    def class_variables(self) -> list["Variable"]:
+    def class_variables(self) -> list[Variable]:
         """
         A list of all documented class variables in the class.
 
@@ -685,7 +685,7 @@ class Class(Namespace[type]):
         ]
 
     @cached_property
-    def instance_variables(self) -> list["Variable"]:
+    def instance_variables(self) -> list[Variable]:
         """
         A list of all instance variables in the class.
         """
@@ -696,7 +696,7 @@ class Class(Namespace[type]):
         ]
 
     @cached_property
-    def classmethods(self) -> list["Function"]:
+    def classmethods(self) -> list[Function]:
         """
         A list of all documented `@classmethod`s.
         """
@@ -707,7 +707,7 @@ class Class(Namespace[type]):
         ]
 
     @cached_property
-    def staticmethods(self) -> list["Function"]:
+    def staticmethods(self) -> list[Function]:
         """
         A list of all documented `@staticmethod`s.
         """
@@ -718,7 +718,7 @@ class Class(Namespace[type]):
         ]
 
     @cached_property
-    def methods(self) -> list["Function"]:
+    def methods(self) -> list[Function]:
         """
         A list of all documented methods in the class that are neither static- nor classmethods.
         """
@@ -731,7 +731,10 @@ class Class(Namespace[type]):
         ]
 
 
-WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
+if sys.version_info >= (3, 10):
+    WrappedFunction = types.FunctionType | staticmethod | classmethod
+else:
+    WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
 
 
 class Function(Doc[types.FunctionType]):
@@ -742,7 +745,7 @@ class Function(Doc[types.FunctionType]):
     supports `@classmethod`s or `@staticmethod`s.
     """
 
-    wrapped: Union[types.FunctionType, staticmethod, classmethod]
+    wrapped: types.FunctionType | staticmethod | classmethod
     """The original wrapped function (e.g., `staticmethod(func)`)"""
 
     obj: types.FunctionType
@@ -882,9 +885,7 @@ class Variable(Doc[None]):
     Representation of a variable's documentation. This includes module, class and instance variables.
     """
 
-    default_value: Union[
-        Any, empty
-    ]  # technically Any includes empty, but this conveys intent.
+    default_value: Any | empty  # technically Any includes empty, but this conveys intent.
     """
     The variable's default value.
     
@@ -893,7 +894,7 @@ class Variable(Doc[None]):
     To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.
     """
 
-    annotation: Union[type, empty]
+    annotation: type | empty
     """
     The variable's type annotation.
     
@@ -907,8 +908,8 @@ class Variable(Doc[None]):
         *,
         taken_from: tuple[str, str],
         docstring: str,
-        annotation: Union[type, empty] = empty,
-        default_value: Union[Any, empty] = empty,
+        annotation: type | empty = empty,
+        default_value: Any | empty = empty,
     ):
         """
         Construct a variable doc object.
@@ -1036,7 +1037,7 @@ def _cut(x: str) -> str:
         return x[:20] + "…"
 
 
-def _docstr(doc: "Doc") -> str:
+def _docstr(doc: Doc) -> str:
     """helper function for Doc.__repr__()"""
     docstr = []
     if doc.is_inherited:
@@ -1049,7 +1050,7 @@ def _docstr(doc: "Doc") -> str:
         return ""
 
 
-def _decorators(doc: Union["Class", "Function"]) -> str:
+def _decorators(doc: Class | Function) -> str:
     """helper function for Doc.__repr__()"""
     if doc.decorators:
         return " ".join(doc.decorators) + " "

@@ -16,7 +16,7 @@ import typing
 import warnings
 from types import BuiltinFunctionType, ModuleType
 from typing import _GenericAlias  # type: ignore
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from . import extract
 from ._compat import GenericAlias, Literal, UnionType, get_args, get_origin
@@ -66,7 +66,7 @@ def formatannotation(annotation: Any) -> str:
 
 def resolve_annotations(
     annotations: dict[str, Any],
-    module: Optional[ModuleType],
+    module: ModuleType | None,
     fullname: str,
 ) -> dict[str, Any]:
     """
@@ -87,7 +87,7 @@ def resolve_annotations(
 def safe_eval_type(
     t: Any,
     globalns,
-    module: Optional[types.ModuleType],
+    module: types.ModuleType | None,
     fullname: str,
 ) -> Any:
     """

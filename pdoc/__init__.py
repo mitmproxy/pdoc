@@ -377,7 +377,7 @@ __version__ = "9.0.1"  # this is read from setup.py
 import traceback
 import warnings
 from pathlib import Path
-from typing import Optional, Union, overload
+from typing import overload
 
 from pdoc import doc, extract, render
 from pdoc._compat import Literal
@@ -385,7 +385,7 @@ from pdoc._compat import Literal
 
 @overload
 def pdoc(
-    *modules: Union[Path, str],
+    *modules: Path | str,
     output_directory: None = None,
     format: Literal["html"] = "html",
 ) -> str:
@@ -394,7 +394,7 @@ def pdoc(
 
 @overload
 def pdoc(
-    *modules: Union[Path, str],
+    *modules: Path | str,
     output_directory: Path,
     format: Literal["html"] = "html",
 ) -> None:
@@ -402,10 +402,10 @@ def pdoc(
 
 
 def pdoc(
-    *modules: Union[Path, str],
-    output_directory: Optional[Path] = None,
+    *modules: Path | str,
+    output_directory: Path | None = None,
     format: Literal["html"] = "html",
-) -> Optional[str]:
+) -> str | None:
     """
     Render the documentation for a list of modules.
 

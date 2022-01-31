@@ -11,7 +11,7 @@ import types
 import warnings
 from dataclasses import dataclass
 from itertools import tee, zip_longest
-from typing import Any, Iterable, Iterator, TypeVar, Union, overload
+from typing import Any, Iterable, Iterator, TypeVar, overload
 
 from ._compat import ast_unparse, cache
 
@@ -44,7 +44,7 @@ def parse(obj: types.ModuleType) -> ast.Module:
 
 
 @overload
-def parse(obj: types.FunctionType) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]:
+def parse(obj: types.FunctionType) -> ast.FunctionDef | ast.AsyncFunctionDef:
     ...
 
 
@@ -86,7 +86,7 @@ class AstInfo:
     Annotations are not evaluated by this module and only returned as strings."""
 
 
-def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
+def walk_tree(obj: types.ModuleType | type) -> AstInfo:
     """
     Walks the abstract syntax tree for `obj` and returns the extracted information.
     """
@@ -95,7 +95,7 @@ def walk_tree(obj: Union[types.ModuleType, type]) -> AstInfo:
 
 @cache
 def _walk_tree(
-    tree: Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]
+    tree: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,
 ) -> AstInfo:
     docstrings = {}
     annotations = {}
@@ -132,7 +132,7 @@ T = TypeVar("T")
 
 
 def sort_by_source(
-    obj: Union[types.ModuleType, type], sorted: dict[str, T], unsorted: dict[str, T]
+    obj: types.ModuleType | type, sorted: dict[str, T], unsorted: dict[str, T]
 ) -> tuple[dict[str, T], dict[str, T]]:
     """
     Takes items from `unsorted` and inserts them into `sorted` in order of appearance in the source code of `obj`.
@@ -222,7 +222,7 @@ def _parse_class(source: str) -> ast.ClassDef:
 
 
 @cache
-def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]:
+def _parse_function(source: str) -> ast.FunctionDef | ast.AsyncFunctionDef:
     """
     Parse the AST for the source code of a (async) function and return the matching AST node.
 
@@ -243,7 +243,7 @@ def _parse_function(source: str) -> Union[ast.FunctionDef, ast.AsyncFunctionDef]
 
 def _parse(
     source: str,
-) -> Union[ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef]:
+) -> ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef:
     try:
         return ast.parse(_dedent(source))
     except Exception as e:
@@ -278,7 +278,7 @@ def _dedent(source: str) -> str:
 
 
 @cache
-def _nodes(tree: Union[ast.Module, ast.ClassDef]) -> list[ast.AST]:
+def _nodes(tree: ast.Module | ast.ClassDef) -> list[ast.AST]:
     """
     Returns the list of all nodes in tree's body, but also inlines the body of __init__.
 
@@ -287,7 +287,7 @@ def _nodes(tree: Union[ast.Module, ast.ClassDef]) -> list[ast.AST]:
     return list(_nodes_iter(tree))
 
 
-def _nodes_iter(tree: Union[ast.Module, ast.ClassDef]) -> Iterator[ast.AST]:
+def _nodes_iter(tree: ast.Module | ast.ClassDef) -> Iterator[ast.AST]:
     for a in tree.body:
         yield a
         if isinstance(a, ast.FunctionDef) and a.name == "__init__":

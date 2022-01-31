@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import re
 from contextlib import contextmanager
-from typing import Collection, Mapping, Optional
+from typing import Collection, Mapping
 from unittest.mock import patch
 
 import pygments.formatters.html
@@ -188,7 +188,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
 
 @pass_context
-def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) -> str:
+def link(context: Context, spec: tuple[str, str], text: str | None = None) -> str:
     """Create a link for a specific `(modulename, qualname)` tuple."""
     mod: pdoc.doc.Module = context["module"]
     modulename, qualname = spec
@@ -216,7 +216,7 @@ def link(context: Context, spec: tuple[str, str], text: Optional[str] = None) ->
 
 def edit_url(
     modulename: str, is_package: bool, mapping: Mapping[str, str]
-) -> Optional[str]:
+) -> str | None:
     """Create a link to edit a particular file in the used version control system."""
     for m, prefix in mapping.items():
         if m == modulename or modulename.startswith(f"{m}."):
@@ -229,7 +229,7 @@ def edit_url(
     return None
 
 
-def root_module_name(all_modules: Mapping[str, pdoc.doc.Module]) -> Optional[str]:
+def root_module_name(all_modules: Mapping[str, pdoc.doc.Module]) -> str | None:
     """
     Return the name of the (unique) top-level module, or `None`
     if no such module exists.

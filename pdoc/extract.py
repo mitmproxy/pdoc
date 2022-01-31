@@ -20,7 +20,7 @@ import types
 import warnings
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, Optional, Sequence, Union
+from typing import Callable, Iterable, Iterator, Sequence
 from unittest.mock import patch
 
 import pdoc
@@ -28,7 +28,7 @@ import pdoc.doc_ast
 import pdoc.docstrings
 
 
-def walk_specs(specs: Sequence[Union[Path, str]]) -> list[str]:
+def walk_specs(specs: Sequence[Path | str]) -> list[str]:
     """
     This function processes a list of module specifications and returns a collection of module names, including all
     submodules, that should be processed by pdoc.
@@ -89,7 +89,7 @@ def walk_specs(specs: Sequence[Union[Path, str]]) -> list[str]:
     return list(all_modules)
 
 
-def parse_spec(spec: Union[Path, str]) -> str:
+def parse_spec(spec: Path | str) -> str:
     """
     This functions parses a user's module specification into a module identifier that can be imported.
     If both a local file/directory and an importable module with the same name exist, a warning will be printed.
@@ -247,7 +247,7 @@ def walk_packages2(
             yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
 
 
-def module_mtime(modulename: str) -> Optional[float]:
+def module_mtime(modulename: str) -> float | None:
     """Returns the time the specified module file was last modified, or `None` if this cannot be determined.
     The primary use of this is live-reloading modules on modification."""
     try:

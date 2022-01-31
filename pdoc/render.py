@@ -4,7 +4,7 @@ import os
 import types
 import warnings
 from pathlib import Path
-from typing import Mapping, Optional, cast
+from typing import Mapping, cast
 
 import jinja2
 from jinja2 import Environment, FileSystemLoader
@@ -29,15 +29,15 @@ from pdoc.search import make_index, precompile_index
 
 def configure(
     *,
-    docformat: Optional[Literal["google", "numpy", "restructuredtext"]] = None,
-    edit_url_map: Optional[Mapping[str, str]] = None,
+    docformat: Literal["google", "numpy", "restructuredtext"] | None = None,
+    edit_url_map: Mapping[str, str] | None = None,
     footer_text: str = "",
-    logo: Optional[str] = None,
-    logo_link: Optional[str] = None,
+    logo: str | None = None,
+    logo_link: str | None = None,
     math: bool = False,
     search: bool = True,
     show_source: bool = True,
-    template_directory: Optional[Path] = None,
+    template_directory: Path | None = None,
 ):
     """
     Configure the rendering output.
@@ -80,7 +80,7 @@ def configure(
 def html_module(
     module: pdoc.doc.Module,
     all_modules: Mapping[str, pdoc.doc.Module],
-    mtime: Optional[str] = None,
+    mtime: str | None = None,
 ) -> str:
     """
     Renders the documentation for a `pdoc.doc.Module`.
