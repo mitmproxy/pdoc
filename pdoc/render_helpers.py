@@ -163,22 +163,26 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                 qualname = f"#{qualname}"
             return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{text}</a>'
 
-    # - (?!/) to not match on http://example.com/
-    # - (?!</a>) to not match existing URLs.
     return Markup(
         re.sub(
             r"""
+            # Part 1: foo.bar or foo.bar() (without backticks)
+            (?<![/=?])  # heuristic: not part of a URL
             \b
                  (?!\d)[a-zA-Z0-9_]+
             (?:\.(?!\d)[a-zA-Z0-9_]+)+
             (?:\(\))?
-            \b(?!\(\))(?!</a>)(?![/#])  # foo.bar
-            |
+            \b
+            (?!</a>)  # not an existing link
+            (?![/#])  # heuristic: not part of a URL
+            (?!\(\))  # not followed by parentheses (which should be part of the capture)
+
+            | # Part 2: `foo` or `foo()`
             (?<=<code>)
                  (?!\d)[a-zA-Z0-9_]+
             (?:\.(?!\d)[a-zA-Z0-9_]+)*
             (?:\(\))?
-            (?=</code>(?!</a>))  # `foo` or `foo()`
+            (?=</code>(?!</a>))
             """,
             linkify_repl,
             code,

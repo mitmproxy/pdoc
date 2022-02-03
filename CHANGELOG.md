@@ -13,6 +13,7 @@
  - Add a better warning message if users use `X | Y`-style type annotations
    ([PEP 604](https://www.python.org/dev/peps/pep-0604/)) on older Python versions which do not support them.
  - Always defuse insecure `repr()` calls to also cover customized templates.
+ - Improve overly greedy linking of identifiers ([#342](https://github.com/mitmproxy/pdoc/issues/342))
 
 # 2022-01-26: pdoc 9.0.1
 

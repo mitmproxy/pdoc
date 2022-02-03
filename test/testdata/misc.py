@@ -303,6 +303,7 @@ def linkify_links():
     - [misc.linkify_links](https://example.com/)
     - [`linkify_links()`](https://example.com/)
     - [misc.linkify_links()](https://example.com/)
+    - [link in target](https://example.com/misc.linkify_links)
     """
 
 __all__ = [  # noqa
