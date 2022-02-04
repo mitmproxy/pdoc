@@ -576,7 +576,7 @@ misc    </h1>
         <span class="name">Issue226</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Issue226</span><span class="p">:</span>
     <span class="nd">@Descriptor</span>
@@ -595,7 +595,7 @@ misc    </h1>
             <span class="name">Issue226</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -605,6 +605,7 @@ misc    </h1>
         <span class="name">size</span>
     </div>
 
+    
             <div class="docstring"><p>This is the size</p>
 </div>
 
@@ -617,6 +618,7 @@ misc    </h1>
         <span class="name">var_with_default_obj</span><span class="default_value"> = &lt;object object&gt;</span>
     </div>
 
+    
             <div class="docstring"><p>this shouldn't render the object address</p>
 </div>
 
@@ -630,7 +632,7 @@ misc    </h1>
             <span class="name">var_with_default_func</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">default_func</span><span class="p">():</span>
     <span class="k">pass</span>
@@ -651,7 +653,7 @@ misc    </h1>
             <span class="name">func_with_defaults</span><span class="signature">(a=&lt;object object&gt;, b=&lt;function default_func&gt;)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span>
     <span class="n">a</span><span class="o">=</span><span class="n">default_obj</span><span class="p">,</span>
@@ -677,7 +679,7 @@ misc    </h1>
         <span class="name">ClassmethodLink</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ClassmethodLink</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -724,7 +726,7 @@ misc    </h1>
             <span class="name">ClassmethodLink</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -737,7 +739,7 @@ misc    </h1>
             <span class="name">bar</span><span class="signature">(cls)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -759,7 +761,7 @@ misc    </h1>
         <span class="name">GenericParent</span><wbr>(<span class="base">typing.Generic[~T]</span>):
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">GenericParent</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
     <span class="k">pass</span>
@@ -795,7 +797,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">GenericParent</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -809,7 +811,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">NonGenericChild</span><wbr>(<span class="base"><a href="#GenericParent">misc.GenericParent[str]</a></span>):
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NonGenericChild</span><span class="p">(</span><span class="n">GenericParent</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
     <span class="k">pass</span>
@@ -845,7 +847,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">NonGenericChild</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -859,7 +861,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">Child</span><wbr>(<span class="base"><a href="#Base">Base</a></span>):
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -898,7 +900,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">Child</span><span class="signature">()</span>
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -919,7 +921,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">foo</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
@@ -941,7 +943,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">bar</span><span class="signature">(cls)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -964,7 +966,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">baz</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
@@ -984,6 +986,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">qux</span>
     </div>
 
+    
             <div class="docstring"><p>qux</p>
 </div>
 
@@ -996,6 +999,7 @@ For example, a generic mapping type might be defined as::</p>
     </div>
 
     
+    
 
                             </div>
                             <div id="Child.quuux" class="classattr">
@@ -1004,6 +1008,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">quuux</span><span class="annotation">: int</span><span class="default_value"> = 42</span>
     </div>
 
+    
             <div class="docstring"><p>quuux</p>
 </div>
 
@@ -1017,6 +1022,7 @@ For example, a generic mapping type might be defined as::</p>
     </div>
 
     
+    
 
                 </section>
                 <section id="CustomException">
@@ -1028,7 +1034,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">CustomException</span><wbr>(<span class="base">builtins.RuntimeError</span>):
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
@@ -1064,7 +1070,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">_Private</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">_Private</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
@@ -1088,7 +1094,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">_Private</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -1102,7 +1108,7 @@ For example, a generic mapping type might be defined as::</p>
         <span class="name">LambdaAttr</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LambdaAttr</span><span class="p">:</span>
     <span class="c1"># not really supported, but also shouldn&#39;t crash.</span>
@@ -1120,7 +1126,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">LambdaAttr</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -1132,7 +1138,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">attr</span><span class="signature">(x)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="n">attr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">42</span>  <span class="c1"># noqa</span>
 </pre></div>
@@ -1151,7 +1157,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">foo</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
@@ -1172,7 +1178,7 @@ For example, a generic mapping type might be defined as::</p>
             <span class="name">bar</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;no</span>
@@ -1195,7 +1201,7 @@ indents</p>
             <span class="name">baz</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;one</span>
@@ -1218,7 +1224,7 @@ indent</p>
             <span class="name">qux</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">qux</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1244,7 +1250,7 @@ indents</p>
         <span class="name">Indented</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Indented</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1308,7 +1314,7 @@ indents</p>
             <span class="name">Indented</span><span class="signature">()</span>
     </div>
 
-        
+    
     
 
                             </div>
@@ -1320,7 +1326,7 @@ indents</p>
             <span class="name">foo</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
@@ -1341,7 +1347,7 @@ indents</p>
             <span class="name">bar</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no</span>
@@ -1364,7 +1370,7 @@ indents</p>
             <span class="name">baz</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;one</span>
@@ -1387,7 +1393,7 @@ indent</p>
             <span class="name">qux</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1413,7 +1419,7 @@ indents</p>
             <span class="name">foo_decorated</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1436,7 +1442,7 @@ indents</p>
             <span class="name">foo_commented</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="c1"># comment</span>
@@ -1460,7 +1466,7 @@ indents</p>
             <span class="name">bar_decorated</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1485,7 +1491,7 @@ indents</p>
             <span class="name">baz_decorated</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1510,7 +1516,7 @@ indent</p>
             <span class="name">qux_decorated</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1537,7 +1543,7 @@ indents</p>
             <span class="name">quux_decorated</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@lru_cache</span><span class="p">(</span>
         <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
@@ -1562,7 +1568,7 @@ indents</p>
             <span class="name">fun_with_protected_decorator</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="nd">@_protected_decorator</span>
 <span class="k">def</span> <span class="nf">fun_with_protected_decorator</span><span class="p">():</span>
@@ -1584,7 +1590,7 @@ indents</p>
             <span class="name">unhashable</span><span class="signature">(unknown)</span>:
     </div>
 
-        
+    
     
 
                 </section>
@@ -1597,7 +1603,7 @@ indents</p>
         <span class="name">AbstractClass</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">AbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
@@ -1621,7 +1627,7 @@ indents</p>
             <span class="name">foo</span><span class="signature">(self)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1642,7 +1648,7 @@ indents</p>
             <span class="name">add_four</span><span class="signature">(b: int) -&gt; int</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
@@ -1664,7 +1670,7 @@ indents</p>
             <span class="name">add_five</span><span class="signature">(b: int) -&gt; int</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
@@ -1686,7 +1692,7 @@ indents</p>
             <span class="name">add_six</span><span class="signature">(b: int) -&gt; int</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
@@ -1708,7 +1714,7 @@ indents</p>
             <span class="name">linkify_links</span><span class="signature">()</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">linkify_links</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>

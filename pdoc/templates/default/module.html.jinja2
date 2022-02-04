@@ -612,9 +612,7 @@
     {% else %}
         {{ variable(doc) }}
     {% endif %}
-    {% if doc.type != "variable" %}
-        {{ view_source(doc) }}
-    {% endif %}
+    {{ view_source(doc) }}
     {{ docstring(doc) }}
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}

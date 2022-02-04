@@ -614,6 +614,7 @@ with it.</p></li>
         <span class="name">module_level_variable2</span><span class="default_value"> = 98765</span>
     </div>
 
+    
             <div class="docstring"><p>int: Module level variable documented inline.</p>
 
 <p>The docstring may span multiple lines. The type may optionally be specified
@@ -630,7 +631,7 @@ on the first line, separated by a colon.</p>
             <span class="name">function_with_types_in_docstring</span><span class="signature">(param1, param2)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">function_with_types_in_docstring</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Example function with types documented in the docstring.</span>
@@ -691,7 +692,7 @@ The second parameter.</li>
             <span class="name">function_with_pep484_type_annotations</span><span class="signature">(param1: int, param2: str) -&gt; bool</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">function_with_pep484_type_annotations</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Example function with PEP 484 type annotations.</span>
@@ -745,7 +746,7 @@ with the NumPy docstring style.</p>
             <span class="name">module_level_function</span><span class="signature">(param1, param2=None, *args, **kwargs)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">module_level_function</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This is an example of a module level function.</span>
@@ -884,7 +885,7 @@ that are relevant to the interface.</li>
             <span class="name">example_generator</span><span class="signature">(n)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">example_generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generators have a ``Yields`` section instead of a ``Returns`` section.</span>
@@ -950,7 +951,7 @@ to use the function.</p>
         <span class="name">ExampleError</span><wbr>(<span class="base">builtins.Exception</span>):
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ExampleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Exceptions are documented in the same way as classes.</span>
@@ -1027,7 +1028,7 @@ Numeric error code.</li>
             <span class="name">ExampleError</span><span class="signature">(msg, code)</span>
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
@@ -1059,7 +1060,7 @@ Numeric error code.</li>
         <span class="name">ExampleClass</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
@@ -1224,7 +1225,7 @@ Description of <code>attr2</code>.</li>
             <span class="name">ExampleClass</span><span class="signature">(param1, param2, param3)</span>
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
@@ -1296,6 +1297,7 @@ Description of <code>param3</code>.</li>
         <span class="name">attr5</span>
     </div>
 
+    
             <div class="docstring"><p>str: Docstring <em>after</em> attribute, with type specified.</p>
 </div>
 
@@ -1307,6 +1309,7 @@ Description of <code>param3</code>.</li>
         <span class="name">readonly_property</span>
     </div>
 
+    
             <div class="docstring"><p>str: Properties should be documented in their getter method.</p>
 </div>
 
@@ -1318,6 +1321,7 @@ Description of <code>param3</code>.</li>
         <span class="name">readwrite_property</span>
     </div>
 
+    
             <div class="docstring"><p><code>list</code> of <code>str</code>: Properties with both a getter and setter
 should only be documented in their getter method.</p>
 
@@ -1335,7 +1339,7 @@ mentioned here.</p>
             <span class="name">example_method</span><span class="signature">(self, param1, param2)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
@@ -1393,7 +1397,7 @@ mentioned here.</p>
             <span class="name">foo</span><span class="signature">(var1, var2, *args, long_var_name=&#39;hi&#39;, **kwargs)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Summarize the function in one line.</span>
@@ -1602,7 +1606,7 @@ pp. 585-588, 1996.&#160;<a href="#fnref-1" class="footnoteBackLink" title="Jump 
             <span class="name">invalid_format</span><span class="signature">(test)</span>:
     </div>
 
-                <details>
+            <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
