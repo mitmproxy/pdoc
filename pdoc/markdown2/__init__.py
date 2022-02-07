@@ -1927,9 +1927,11 @@ class Markdown(object):
             ((?=^[ ]{0,%d}\S)|\Z)   # Lookahead for non-space at line-start, or end of doc
             # Lookahead to make sure this block isn't already in a code block.
             # Needed when syntax highlighting is being used.
-            (?![^<]*\</code\>)
+            # (?![^<]*\</code\>)
+            (?![^*]*\</code\>)  # updated regex to fix https://github.com/mitmproxy/pdoc/pull/267
             ''' % (self.tab_width, self.tab_width),
             re.M | re.X)
+
         return code_block_re.sub(self._code_block_sub, text)
 
     _fenced_code_block_re = re.compile(r'''

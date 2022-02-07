@@ -424,3 +424,22 @@ def example_code():
         tmp2 = a()
         ```
     """
+
+
+def indented_code_with_blank_lines():
+    """
+    Test case for blank lines interrupting a code block when inside an indented block.
+    See https://github.com/mitmproxy/pdoc/issues/267
+
+    Example:
+        ```python
+        if True:
+            print()
+
+            print()
+
+            print()
+
+            print()
+        ```
+    """
