@@ -72,18 +72,9 @@ Also, please feel free to join our developer Slack!
 
 ## pdoc vs. pdoc3
 
-This project is not associated with "pdoc3", which often falsely assumes our name.
-Quoting [@BurntSushi](https://github.com/BurntSushi), the original author of pdoc:
+**This project is not associated with "pdoc3", which has not only falsely assumed our name, but previously engaged in conduct aimed at misleading users - including making erroneous entries on the official Python Wiki and relicensing the codebase despite the protestations of the original team. It's with some regret that the maintainer of pdoc3 has been uncooperative when seeking a solution to these issues. For further details see [issue 64 on pdoc3/pdoc](https://github.com/pdoc3/pdoc/issues/64).**
 
-> I'm pretty disgusted that someone has taken a project I built, relicensed it, 
-> [attempted to erase its entry on the Python Wiki](https://wiki.python.org/moin/DocumentationTools?action=diff&rev1=36&rev2=37), 
-> released it under effectively the same name and, worst of all, associated it with Nazi symbols.
-> 
-> *Source: https://github.com/pdoc3/pdoc/issues/64*
-
-In contrast, the pdoc project strives to uphold a healthy community where everyone is treated with respect.
-Everyone is welcome to contribute as long as they adhere to basic civility. We expressly distance ourselves from the use
-of Nazi symbols and ideology.
+In contrast the `pdoc` project strives to uphold a healthy community where everyone is treated with respect, and contributions are welcome from all - as long as they adhere to basic civility. We expressly distance ourselves from the actions of the "pydoc3" project and it's maintainer.
 
 ----
 
