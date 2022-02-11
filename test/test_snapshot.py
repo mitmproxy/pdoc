@@ -132,7 +132,7 @@ snapshots = [
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot(
         "render_options",
-        ["render_options", "demo"],
+        ["render_options", "math_demo"],
         render_options={
             "show_source": False,
             "logo": "https://placedog.net/500?random",

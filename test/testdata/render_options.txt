@@ -1,9 +1,5 @@
 # render_options.html
 <module render_options  # Testing some render …>
-# demo.html
-<module demo  # A small `pdoc` examp…
-    <class demo.Dog  # 🐕
-        <method def __init__(self, name: str): ...  # Make a Dog without a…>
-        <var name: str  # The name of our dog.…>
-        <var friends: list[demo.Dog]  # The friends of our d…>
-        <method def bark(self, loud: bool = True): ...  # *woof*>>>
+# math_demo.html
+<module math_demo  # This is a small demo…
+    <function def binom_coef(n: int, k: int) -> int: ...  # Return the number of…>>
