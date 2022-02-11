@@ -1,10 +1,11 @@
 {% extends "frame.html.jinja2" %}
 {% block title %}{{ error }}{% endblock %}
 {% block style %}
-    {{ super() | safe }}
+    <style>{% include "resources/bootstrap-reboot.min.css" %}</style>
     <style>
         body {
             padding: 2rem;
+            max-width: 54rem;
         }
 
         footer {
@@ -17,6 +18,7 @@
 
         footer svg {
             max-width: 70px;
+            max-height: 35px;
             transition: all 200ms;
             filter: grayscale(100%);
         }

@@ -1,0 +1,212 @@
+/* Responsive Layout */
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+html, main {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--pdoc-background);
+}
+
+@media (max-width: 769px) {
+    #navtoggle {
+        cursor: pointer;
+        position: absolute;
+        width: 50px;
+        height: 40px;
+        top: 1rem;
+        right: 1rem;
+        border-color: var(--text);
+        color: var(--text);
+        display: flex;
+        opacity: 0.8;
+    }
+
+    #navtoggle:hover {
+        opacity: 1;
+    }
+
+    #togglestate + div {
+        display: none;
+    }
+
+    #togglestate:checked + div {
+        display: inherit;
+    }
+
+    main, header {
+        padding: 2rem 3vw;
+    }
+
+    header + main {
+        margin-top: -3rem;
+    }
+
+    .git-button {
+        display: none !important;
+    }
+
+    nav input[type="search"] {
+        /* don't overflow into menu button */
+        max-width: 77%;
+    }
+
+    nav input[type="search"]:first-child {
+        /* align vertically with the hamburger menu */
+        margin-top: -6px;
+    }
+
+    nav input[type="search"]:valid ~ * {
+        /* hide rest of the menu when search has contents */
+        display: none !important;
+    }
+}
+
+@media (min-width: 770px) {
+    :root {
+        --sidebar-width: clamp(12.5rem, 28vw, 22rem);
+    }
+
+    nav {
+        position: fixed;
+        overflow: auto;
+        height: 100vh;
+        width: var(--sidebar-width);
+    }
+
+    main, header {
+        padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
+        width: calc(54rem + var(--sidebar-width));
+        max-width: 100%;
+    }
+
+    header + main {
+        margin-top: -4rem;
+    }
+
+    #navtoggle {
+        display: none;
+    }
+}
+
+#togglestate {
+    /*
+    Don't do `display: none` here.
+    When a mobile browser is not scrolled all the way to the top,
+    clicking the label would insert the menu above the scrolling position
+    and it would stay out of view. By making the checkbox technically
+    visible it jumps up first and we always get the menu into view when clicked.
+    */
+    position: absolute;
+    height: 0;
+}
+
+/* Nav */
+nav.pdoc {
+    --pad: 1.75rem;
+    --indent: 1.5rem;
+    background-color: var(--accent);
+    border-right: 1px solid var(--accent2);
+    box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
+    padding: 0 0 0 var(--pad);
+    overflow-wrap: anywhere;
+    scrollbar-width: thin; /* Scrollbar width on Firefox */
+    scrollbar-color: var(--accent2) transparent /* Scrollbar color on Firefox */
+}
+
+nav.pdoc::-webkit-scrollbar {
+    width: .4rem; /* Scrollbar width on Chromium-based browsers */
+}
+
+nav.pdoc::-webkit-scrollbar-thumb {
+    background-color: var(--accent2); /* Scrollbar color on Chromium-based browsers */
+}
+
+nav.pdoc > div {
+    padding: var(--pad) 0;
+}
+
+nav.pdoc .module-list-button {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text);
+    border-color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+nav.pdoc .module-list-button:hover {
+    border-color: var(--text);
+}
+
+nav.pdoc input[type=search] {
+    display: block;
+    outline-offset: 0;
+    width: calc(100% - var(--pad));
+}
+
+nav.pdoc .logo {
+    max-width: calc(100% - var(--pad));
+    max-height: 35vh;
+    display: block;
+    margin: 0 auto 1rem;
+    transform: translate(calc(-.5 * var(--pad)), 0);
+}
+
+nav.pdoc ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+nav.pdoc li {
+    display: block;
+    margin: 0;
+    padding: .2rem 0 .2rem var(--indent);
+    transition: all 100ms;
+}
+
+nav.pdoc > div > ul > li {
+    padding-left: 0;
+}
+
+nav.pdoc li:hover {
+    background-color: var(--nav-hover);
+}
+
+nav.pdoc a, nav.pdoc a:hover {
+    color: var(--text);
+}
+
+nav.pdoc a {
+    display: block;
+}
+
+nav.pdoc > h2:first-of-type {
+    margin-top: 1.5rem;
+}
+
+nav.pdoc .class:before {
+    content: "class ";
+    color: var(--muted);
+}
+
+nav.pdoc .function:after {
+    content: "()";
+    color: var(--muted);
+}
+
+nav.pdoc footer:before {
+    content: "";
+    display: block;
+    width: calc(100% - var(--pad));
+    border-top: solid var(--accent2) 1px;
+    margin-top: 1.5rem;
+    padding-top: .5rem;
+}
+
+nav.pdoc footer {
+    font-size: small;
+}

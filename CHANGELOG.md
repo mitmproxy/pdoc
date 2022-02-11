@@ -2,6 +2,28 @@
 
 # Unreleased: pdoc next
 
+ - Template improvements may require adjustments to custom templates. Users who do not use custom templates are
+   unaffected. ([#346](https://github.com/mitmproxy/pdoc/issues/346))
+   - Users who embed pdoc's output into other systems: The main layout (sidebar/content) is now part of
+     [`frame.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/frame.html.jinja2)
+     instead of
+     [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2).
+     This allows
+     [`index.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/index.html.jinja2)
+     to cleanly extend `frame.html.jinja2` instead of patching `module.html.jinja2`.
+   - Users who customized pdoc's CSS: CSS style definitions moved from `module.html.jinja2` into individual CSS files,
+     namely
+     [`theme.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/theme.css),
+     [`layout.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/layout.css), and
+     [`content.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/content.css). You can now either
+     provide replacements for these files directly, or
+     [append custom styles to the `style` block](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2)
+     . The existing Jinja2 blocks `style_pdoc`, `style_theme`, `style_layout`, `style_content` are deprecated, see
+     [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2)
+     for details.
+   - Users who customized `syntax-highlighting.css`: pdoc now consistently uses `.pdoc-code` instead of `.pdoc`
+     or `.codehilite` for syntax highlighting. `.codehilite` is deprecated but will continue to work, giving custom
+     templates time to migrate.
  - Submodules that are mentioned in `__all__` are not listed as part of the module contents anymore. Instead, they
    are listed in the navigation. This now matches the behavior as if `__all__` were not specified.
    If this affects you, please leave feedback in [#341](https://github.com/mitmproxy/pdoc/issues/341).

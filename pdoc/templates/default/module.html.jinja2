@@ -1,547 +1,132 @@
 {% extends "frame.html.jinja2" %}
 {% block title %}{{ module.modulename }} API documentation{% endblock %}
-{% block style %}
-    {% filter minify_css %}
-        {{ super() }}
-        <style>{% include 'syntax-highlighting.css' %}</style>
-        {% block style_pdoc %}
-            <style>/*! pdoc */
-            /*
-             pdoc's CSS style is divided into three Jinja2 blocks:
-               - style_theme: The color scheme.
-               - style_layout: The responsive page layout and navigation menu.
-               - style_content: The documentation contents.
-
-             This makes it easier to embed pdoc into other systems,
-             see https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems.
-            */
-
-            {% block style_theme %}
-                :root {
-                    --pdoc-background: #fff;
-                }
-
-                .pdoc {
-                    --text: #212529;
-                    --muted: #6c757d;
-                    --link: #3660a5;
-                    --link-hover: #1659c5;
-                    --code: #f7f7f7;
-                    --active: #fff598;
-
-                    --accent: #eee;
-                    --accent2: #c1c1c1;
-
-                    --nav-hover: rgba(255, 255, 255, 0.5);
-                    --name: #0066BB;
-                    --def: #008800;
-                    --annotation: #007020;
-                }
-            {% endblock %}
-
-            {% block style_layout %}
-                /* Colors of overall document */
-                body {
-                    background-color: var(--pdoc-background);
-                }
-
-                /* Responsive Layout */
-                html, body {
-                    width: 100%;
-                    height: 100%;
-                }
-
-                @media (max-width: 769px) {
-                    #navtoggle {
-                        cursor: pointer;
-                        position: absolute;
-                        width: 50px;
-                        height: 40px;
-                        top: 1rem;
-                        right: 1rem;
-                        border-color: var(--text);
-                        color: var(--text);
-                        display: flex;
-                        opacity: 0.8;
-                    }
-
-                    #navtoggle:hover {
-                        opacity: 1;
-                    }
-
-                    #togglestate + div {
-                        display: none;
-                    }
-
-                    #togglestate:checked + div {
-                        display: inherit;
-                    }
-
-                    main, header {
-                        padding: 2rem 3vw;
-                    }
-
-                    .git-button {
-                        display: none !important;
-                    }
-
-                    nav input[type="search"] {
-                        /* don't overflow into menu button */
-                        max-width: 77%;
-                    }
-
-                    nav input[type="search"]:first-child {
-                        /* align vertically with the hamburger menu */
-                        margin-top: -6px;
-                    }
-
-                    nav input[type="search"]:valid ~ * {
-                        display: none !important;
-                    }
-                }
-
-                @media (min-width: 770px) {
-                    :root {
-                        --sidebar-width: clamp(12.5rem, 28vw, 22rem);
-                    }
-
-                    nav {
-                        position: fixed;
-                        overflow: auto;
-                        height: 100vh;
-                        width: var(--sidebar-width);
-                    }
-
-                    main, header {
-                        padding: 3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);
-                        width: calc(54rem + var(--sidebar-width));
-                        max-width: 100%;
-                    }
-
-                    #navtoggle {
-                        display: none;
-                    }
-                }
-
-                #togglestate {
-                    position: absolute;
-                    height: 0;
-                }
-
-                /* Nav */
-                nav.pdoc {
-                    --pad: 1.75rem;
-                    --indent: 1.5rem;
-                    background-color: var(--accent);
-                    border-right: 1px solid var(--accent2);
-                    box-shadow: 0 0 20px rgba(50, 50, 50, .2) inset;
-                    padding: 0 0 0 var(--pad);
-                    overflow-wrap: anywhere;
-                    scrollbar-width: thin; /* Scrollbar width on Firefox */
-                    scrollbar-color: var(--accent2) transparent /* Scrollbar color on Firefox */
-                }
-
-                nav.pdoc::-webkit-scrollbar {
-                    width: .4rem; /* Scrollbar width on Chromium-based browsers */
-                }
-
-                nav.pdoc::-webkit-scrollbar-thumb {
-                    background-color: var(--accent2); /* Scrollbar color on Chromium-based browsers */
-                }
-
-                nav.pdoc > div {
-                    padding: var(--pad) 0;
-                }
-
-                nav.pdoc .module-list-button {
-                    display: inline-flex;
-                    align-items: center;
-                    color: var(--text);
-                    border-color: var(--muted);
-                    margin-bottom: 1rem;
-                }
-
-                nav.pdoc .module-list-button:hover {
-                    border-color: var(--text);
-                }
-
-                nav.pdoc input[type=search] {
-                    display: block;
-                    outline-offset: 0;
-                    width: calc(100% - var(--pad));
-                }
-
-                nav.pdoc .logo {
-                    max-width: calc(100% - var(--pad));
-                    max-height: 35vh;
-                    display: block;
-                    margin: 0 auto 1rem;
-                    transform: translate(calc(-.5 * var(--pad)), 0);
-                }
-
-                nav.pdoc ul {
-                    list-style: none;
-                    padding-left: 0;
-                }
-
-                nav.pdoc li {
-                    display: block;
-                    margin: 0;
-                    padding: .2rem 0 .2rem var(--indent);
-                    transition: all 100ms;
-                }
-
-                nav.pdoc > div > ul > li {
-                    padding-left: 0;
-                }
-
-                nav.pdoc li:hover {
-                    background-color: var(--nav-hover);
-                }
-
-                nav.pdoc a, nav.pdoc a:hover {
-                    color: var(--text);
-                }
-
-                nav.pdoc a {
-                    display: block;
-                }
-
-                nav.pdoc > h2:first-of-type {
-                    margin-top: 1.5rem;
-                }
-
-                nav.pdoc .class:before {
-                    content: "class ";
-                    color: var(--muted);
-                }
-
-                nav.pdoc .function:after {
-                    content: "()";
-                    color: var(--muted);
-                }
-
-                nav.pdoc footer:before {
-                    content: "";
-                    display: block;
-                    width: calc(100% - var(--pad));
-                    border-top: solid var(--accent2) 1px;
-                    margin-top: 1.5rem;
-                    padding-top: .5rem;
-                }
-                nav.pdoc footer {
-                    font-size: small;
-                }
-            {% endblock %}
-
-            {% block style_content %}
-                /*
-                In this block, all selectors are scopoed with ".pdoc".
-                This makes sure that the pdoc styling doesn't leak to the rest of the page.
-                */
-                /* General styling */
-                html, main {
-                    scroll-behavior: smooth;
-                }
-
-                .pdoc {
-                    color: var(--text);
-                    /* enforce some styling even if bootstrap reboot is not included */
-                    box-sizing: border-box;
-                    line-height: 1.5;
-                    /* override background from pygments */
-                    background: none;
-                }
-
-                .pdoc .pdoc-button {
-                    display: inline-block;
-                    border: solid black 1px;
-                    border-radius: 2px;
-                    font-size: .75rem;
-                    padding: calc(0.5em - 1px) 1em;
-                    transition: 100ms all;
-                }
-
-                .pdoc .visually-hidden {
-                    position: absolute !important;
-                    width: 1px !important;
-                    height: 1px !important;
-                    padding: 0 !important;
-                    margin: -1px !important;
-                    overflow: hidden !important;
-                    clip: rect(0, 0, 0, 0) !important;
-                    white-space: nowrap !important;
-                    border: 0 !important;
-                }
-
-                .pdoc h1, .pdoc h2, .pdoc h3 {
-                    font-weight: 300;
-                    margin: .3em 0;
-                    padding: .2em 0;
-                }
-
-                .pdoc a {
-                    text-decoration: none;
-                    color: var(--link);
-                }
-
-                .pdoc a:hover {
-                    color: var(--link-hover);
-                }
-
-                .pdoc blockquote {
-                    margin-left: 2rem;
-                }
-
-                .pdoc pre {
-                    background-color: var(--code);
-                    border-top: 1px solid var(--accent2);
-                    border-bottom: 1px solid var(--accent2);
-                    margin-bottom: 1em;
-                    padding: .5rem 0 .5rem .5rem;
-                    overflow-x: auto;
-                }
-
-                .pdoc code {
-                    color: var(--text);
-                    padding: .2em .4em;
-                    margin: 0;
-                    font-size: 85%;
-                    background-color: var(--code);
-                    border-radius: 6px;
-                }
-
-                .pdoc a > code {
-                    color: inherit;
-                }
-
-                .pdoc pre > code {
-                    display: inline-block;
-                    font-size: inherit;
-                    background: none;
-                    border: none;
-                    padding: 0;
-                }
-
-                /* Page Heading */
-                .pdoc .modulename {
-                    margin-top: 0;
-                    font-weight: bold;
-                }
-
-                .pdoc .modulename a {
-                    color: var(--link);
-                    transition: 100ms all;
-                }
-
-                /* GitHub Button */
-                .pdoc .git-button {
-                    float: right;
-                    border: solid var(--link) 1px;
-                }
-
-                .pdoc .git-button:hover {
-                    background-color: var(--link);
-                    color: var(--pdoc-background);
-                }
-
-                /* View Source */
-                .pdoc details {
-                    /*
-                     stay on top of .attr even if it is filtered, see
-                     https://stackoverflow.com/questions/25764404/why-does-stacking-order-change-on-webkit-filter-hover
-                     */
-                    filter: opacity(1);
-                }
-
-                .pdoc details:not([open]) {
-                    height: 0;
-                }
-
-                .pdoc details > summary {
-                    position: absolute;
-                    top: -35px;
-                    right: 0;
-                    font-size: .75rem;
-                    color: var(--muted);
-                    padding: 0 .7em;
-                    user-select: none;
-                }
-
-                .pdoc details > summary:focus {
-                    outline: 0;
-                }
-
-                /* Docstrings */
-                .pdoc .docstring {
-                    margin-bottom: 1.5rem;
-                }
-
-                .pdoc > section:first-of-type > .docstring {
-                    margin-bottom: 2.5rem;
-                }
-
-                .pdoc .docstring pre {
-                    margin-left: 1em;
-                    margin-right: 1em;
-                }
-
-                /* Highlight focused element */
-                .pdoc h1:target,
-                .pdoc h2:target,
-                .pdoc h3:target,
-                .pdoc h4:target,
-                .pdoc h5:target,
-                .pdoc h6:target {
-                    background-color: var(--active);
-                    box-shadow: -1rem 0 0 0 var(--active);
-                }
-
-                .pdoc div:target > .attr,
-                .pdoc section:target > .attr,
-                .pdoc dd:target > a {
-                    background-color: var(--active);
-                }
-
-                .pdoc .attr:hover {
-                    filter: contrast(0.95);
-                }
-
-                /* Header link */
-                .pdoc .headerlink {
-                    position: absolute;
-                    width: 0;
-                    margin-left: -1.5rem;
-                    line-height: 1.4rem;
-                    font-size: 1.5rem;
-                    font-weight: normal;
-                    transition: all 100ms ease-in-out;
-                    opacity: 0;
-                    user-select: none;
-                }
-
-                .pdoc .attr > .headerlink {
-                    margin-left: -2.5rem;
-                }
-
-                .pdoc *:hover > .headerlink,
-                .pdoc *:target > .attr > .headerlink {
-                    opacity: 1;
-                }
-
-                /* Attributes */
-                .pdoc .attr {
-                    display: block;
-                    color: var(--text);
-                    margin: .5rem 0 .5rem;
-                    /*
-                    lots of padding on the right to accomodate the view source button.
-                    This is not ideal, but probably good enough for now.
-                    */
-                    padding: .4rem 5rem .4rem 1rem;
-                    background-color: var(--accent);
-                }
-
-                .pdoc .classattr {
-                    margin-left: 2rem;
-                }
-
-                .pdoc .name {
-                    color: var(--name);
-                    font-weight: bold;
-                }
-
-                .pdoc .def {
-                    color: var(--def);
-                    font-weight: bold;
-                }
-
-                .pdoc .signature {
-                    white-space: pre-wrap;
-                }
-
-                .pdoc .annotation {
-                    color: var(--annotation);
-                }
-
-                /* Inherited Members */
-                .pdoc .inherited {
-                    margin-left: 2rem;
-                }
-
-                .pdoc .inherited dt {
-                    font-weight: 700;
-                }
-
-                .pdoc .inherited dt, .pdoc .inherited dd {
-                    display: inline;
-                    margin-left: 0;
-                    margin-bottom: .5rem;
-                }
-
-                .pdoc .inherited dd:not(:last-child):after {
-                    content: ", ";
-                }
-
-                .pdoc .inherited .class:before {
-                    content: "class ";
-                }
-
-                .pdoc .inherited .function a:after {
-                    content: "()";
-                }
-
-                /* Search results */
-                .pdoc .search-result .docstring {
-                    overflow: auto;
-                    max-height: 25vh;
-                }
-                .pdoc .search-result.focused > .attr {
-                    background-color: var(--active);
-                }
-
-                /* "built with pdoc" attribution */
-                .pdoc .attribution {
-                    margin-top: 2rem;
-                    display: block;
-                    opacity: 0.5;
-                    transition: all 200ms;
-                    filter: grayscale(100%);
-                }
-
-                .pdoc .attribution:hover {
-                    opacity: 1;
-                    filter: grayscale(0%);
-                }
-
-                .pdoc .attribution img {
-                    margin-left: 5px;
-                    height: 35px;
-                    vertical-align: middle;
-                    width: 70px;
-                    transition: all 200ms;
-                }
-
-                /* Tables */
-                .pdoc table {
-                    display: block;
-                    width: max-content;
-                    max-width: 100%;
-                    overflow: auto;
-                    margin-bottom: 1rem;
-                }
-                .pdoc table th {
-                    font-weight: 600;
-                }
-                .pdoc table th, .pdoc table td {
-                    padding: 6px 13px;
-                    border: 1px solid var(--accent2);
-                }
-            {% endblock %}
-            </style>
-        {% endblock style_pdoc %}
-    {% endfilter %}
-{% endblock %}
+{% block nav %}
+    {% block module_list_link %}
+        {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
+        {% if parentmodule and parentmodule in all_modules %}
+            <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
+                {% include "resources/box-arrow-in-left.svg" %}
+                &nbsp;
+                {{- parentmodule -}}
+            </a>
+        {% elif not root_module_name %}
+            <a class="pdoc-button module-list-button" href="{{ "../" * module.modulename.count(".") }}index.html">
+                {% include "resources/box-arrow-in-left.svg" %}
+                &nbsp;
+                Module Index
+            </a>
+        {% endif %}
+    {% endblock %}
+
+    {% block nav_title %}
+        {% if logo %}
+            {% if logo_link %}<a href="{{ logo_link }}">{% endif %}
+            <img src="{{ logo }}" class="logo" alt="project logo"/>
+            {% if logo_link %}</a>{% endif %}
+        {% endif %}
+    {% endblock %}
+
+    {% block search_box %}
+        {% if search and all_modules|length > 1 %}
+            {# we set a pattern here so that we can use the :valid CSS selector #}
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
+        {% endif %}
+    {% endblock %}
+
+    {% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
+    {% if index %}
+        <h2>Contents</h2>
+        {{ index | safe }}
+    {% endif %}
+
+    {% if module.submodules %}
+        <h2>Submodules</h2>
+        <ul>
+            {% for submodule in module.submodules if is_public(submodule) | trim %}
+                <li>{{ submodule.taken_from | link }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if module.members %}
+        <h2>API Documentation</h2>
+        {{ nav_members(module.members.values()) }}
+    {% endif %}
+
+    {% block nav_footer %}
+        {% if footer_text %}
+            <footer>{{ footer_text }}</footer>
+        {% endif %}
+    {% endblock %}
+
+    {% block attribution %}
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
+            built with <span class="visually-hidden">pdoc</span><img
+                alt="pdoc logo"
+                src="data:image/svg+xml,
+                        {%- filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"/>
+        </a>
+    {% endblock %}
+{% endblock nav %}
+{% block content %}
+    <main class="pdoc">
+        {% block module_info %}
+            <section>
+                {% block edit_button %}
+                    {% if edit_url %}
+                        {% if "github.com" in edit_url %}
+                            {% set edit_text = "Edit on GitHub" %}
+                        {% elif "gitlab" in edit_url %}
+                            {% set edit_text = "Edit on GitLab" %}
+                        {% else %}
+                            {% set edit_text = "Edit Source" %}
+                        {% endif %}
+                        <a class="pdoc-button git-button" href="{{ edit_url }}">{{ edit_text }}</a>
+                    {% endif %}
+                {% endblock %}
+                {{ module_name() }}
+                {{ docstring(module) }}
+                {{ view_source(module) }}
+            </section>
+        {% endblock %}
+        {% block module_contents %}
+            {% for m in module.flattened_own_members if is_public(m) | trim %}
+                <section id="{{ m.qualname or m.name }}">
+                    {{ member(m) }}
+                    {% if m.type == "class" %}
+                        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
+                            <div id="{{ m.qualname }}" class="classattr">
+                                {{ member(m) }}
+                            </div>
+                        {% endfor %}
+                        {% set inherited_members = inherited(m) | trim %}
+                        {% if inherited_members %}
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    {{ inherited_members }}
+                                </dl>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </section>
+            {% endfor %}
+        {% endblock %}
+    </main>
+    {% if mtime %}
+        {% include "livereload.html.jinja2" %}
+    {% endif %}
+    {% block search_js %}
+        {% if search and all_modules|length > 1 %}
+            {% include "search.html.jinja2" %}
+        {% endif %}
+    {% endblock %}
+{% endblock content %}
+{#
+End of content, beginning of helper macros.
+See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an explanation of defaultmacro.
+#}
 {% defaultmacro bases(cls) %}
     {%- if cls.bases -%}
         <wbr>(
@@ -655,12 +240,13 @@
     {% elif doc.name == "__init__" %}
         {# the constructor is our special case which we also treat as public #}
         true
-    {% elif doc.name == "__doc__" %}
-        {# Sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
-        {# https://github.com/mitmproxy/pdoc/issues/235 #}
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
-        true
+        {% if doc.name != "__doc__" %}
+            {# ... but sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
+            {# https://github.com/mitmproxy/pdoc/issues/235 #}
+            true
+        {% endif %}
     {% endif %}
 {% enddefaultmacro %}
 {# fmt: off #}
@@ -707,135 +293,3 @@
         {% endfor %}
     </h1>
 {% enddefaultmacro %}
-{% block head %}
-    {% if math %}{% include "math.html.jinja2" %}{% endif %}
-{% endblock %}
-{% block body %}
-    {% block nav %}
-        <nav class="pdoc">
-            <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'resources/navtoggle.svg' %}</label>
-            <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
-            <div>
-                {% block module_list_link %}
-                    {% set parentmodule = ".".join(module.modulename.split(".")[:-1]) %}
-                    {% if parentmodule and parentmodule in all_modules %}
-                        <a class="pdoc-button module-list-button" href="../{{ parentmodule.split(".")[-1] }}.html">
-                            {% include "resources/box-arrow-in-left.svg" %}
-                            &nbsp;
-                            {{- parentmodule -}}
-                        </a>
-                    {% elif not root_module_name  %}
-                        <a class="pdoc-button module-list-button" href="{{ "../" * module.modulename.count(".") }}index.html">
-                            {% include "resources/box-arrow-in-left.svg" %}
-                            &nbsp;
-                            Module Index
-                        </a>
-                    {% endif %}
-                {% endblock %}
-
-                {% block nav_title %}
-                    {% if logo %}
-                        {% if logo_link %}<a href="{{ logo_link }}">{% endif %}
-                        <img src="{{ logo }}" class="logo" alt="project logo"/>
-                        {% if logo_link %}</a>{% endif %}
-                    {% endif %}
-                {% endblock %}
-
-                {% block search_box %}
-                    {% if search and all_modules|length > 1 %}
-                        {# we set a pattern here so that we can use the :valid CSS selector #}
-                        <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
-                               pattern=".+" required>
-                    {% endif %}
-                {% endblock %}
-
-                {% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
-                {% if index %}
-                    <h2>Contents</h2>
-                    {{ index | safe }}
-                {% endif %}
-
-                {% if module.submodules %}
-                    <h2>Submodules</h2>
-                    <ul>
-                        {% for submodule in module.submodules if is_public(submodule) | trim %}
-                            <li>{{ submodule.taken_from | link }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-
-                {% if module.members %}
-                    <h2>API Documentation</h2>
-                    {{ nav_members(module.members.values()) }}
-                {% endif %}
-
-                {% block nav_footer %}
-                    {% if footer_text %}
-                    <footer>{{ footer_text }}</footer>
-                    {% endif %}
-                {% endblock %}
-
-                {% block attribution %}
-                    <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
-                        built with <span class="visually-hidden">pdoc</span><img
-                            alt="pdoc logo"
-                            src="data:image/svg+xml,
-                                    {%- filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"/>
-                    </a>
-                {% endblock %}
-            </div>
-        </nav>
-    {% endblock %}
-    <main class="pdoc">
-        {% block module_info %}
-            <section>
-                {% block edit_button %}
-                    {% if edit_url %}
-                        {% if "github.com" in edit_url %}
-                            {% set edit_text = "Edit on GitHub" %}
-                        {% elif "gitlab" in edit_url %}
-                            {% set edit_text = "Edit on GitLab" %}
-                        {% else %}
-                            {% set edit_text = "Edit Source" %}
-                        {% endif %}
-                        <a class="pdoc-button git-button" href="{{ edit_url }}">{{ edit_text }}</a>
-                    {% endif %}
-                {% endblock %}
-                {{ module_name() }}
-                {{ docstring(module) }}
-                {{ view_source(module) }}
-            </section>
-        {% endblock %}
-        {% block module_contents %}
-            {% for m in module.flattened_own_members if is_public(m) | trim %}
-                <section id="{{ m.qualname or m.name }}">
-                    {{ member(m) }}
-                    {% if m.type == "class" %}
-                        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
-                            <div id="{{ m.qualname }}" class="classattr">
-                                {{ member(m) }}
-                            </div>
-                        {% endfor %}
-                        {% set inherited_members = inherited(m) | trim %}
-                        {% if inherited_members %}
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    {{ inherited_members }}
-                                </dl>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                </section>
-            {% endfor %}
-        {% endblock %}
-    </main>
-    {% if mtime %}
-        {% include "livereload.html.jinja2" %}
-    {% endif %}
-    {% block search_js %}
-        {% if search and all_modules|length > 1 %}
-            {% include "search.html.jinja2" %}
-        {% endif %}
-    {% endblock %}
-{% endblock %}

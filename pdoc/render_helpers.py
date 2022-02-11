@@ -29,16 +29,18 @@ lexer = pygments.lexers.python.PythonLexer()
 The pygments lexer used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments lexing.
 """
-formatter = pygments.formatters.html.HtmlFormatter(cssclass="codehilite")
+formatter = pygments.formatters.html.HtmlFormatter(cssclass="pdoc-code codehilite")
 """
 The pygments formatter used for pdoc.render_helpers.highlight. 
 Overwrite this to configure pygments highlighting.
+
+The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
 """
 
 markdown_extensions = {
     "code-friendly": None,
     "cuddled-lists": None,
-    "fenced-code-blocks": None,
+    "fenced-code-blocks": {"cssclass": formatter.cssclass},
     "footnotes": None,
     "header-ids": None,
     "pyshell": None,

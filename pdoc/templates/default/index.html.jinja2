@@ -1,19 +1,22 @@
 {% if root_module_name %}
+{#
+If there is one shared parent module for all documented modules, redirect there immediately.
+A custom template could override this by setting root_module_name to false before `{% extend ... %}`.
+#}
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=./{{ root_module_name.replace(".","/") }}.html" />
+    <meta http-equiv="refresh" content="0; url=./{{ root_module_name.replace(".","/") }}.html"/>
 </head>
 </html>
 {% else %}
-{% extends "default/module.html.jinja2" %}
+{% extends "frame.html.jinja2" %}
 {% block title %}Module List &ndash; pdoc {{ __version__ }}{% endblock %}
 {% block style %}
     {{ super() | safe }}
     <style>
         header.pdoc {
-            margin-bottom: -4rem;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
@@ -36,33 +39,32 @@
     </style>
 {% endblock %}
 {% block nav %}
-    <nav class="pdoc">
-        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'resources/navtoggle.svg' %}</label>
-        <input id="togglestate" type="checkbox">
-        <div>
-            <h2>Available Modules</h2>
-            <ul>
-                {% for submodule in all_modules if "._" not in submodule and not submodule.startswith("_") %}
-                    <li><a href="{{ submodule.replace(".","/") }}.html">{{ submodule }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-    </nav>
+    <h2>Available Modules</h2>
+    <ul>
+        {% for submodule in all_modules if "._" not in submodule and not submodule.startswith("_") %}
+            <li><a href="{{ submodule.replace(".","/") }}.html">{{ submodule }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block content %}
     <header class="pdoc">
         {% block logo %}
-            <a href="https://pdoc.dev">
-                <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"
-                     alt="pdoc logo"/>
-            </a>
+            {% if logo %}
+                {% if logo_link %}<a href="{{ logo_link }}">{% endif %}
+                <img src="{{ logo }}" alt="project logo"/>
+                {% if logo_link %}</a>{% endif %}
+            {% else %}
+                <a href="https://pdoc.dev">
+                    <img src="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"
+                         alt="pdoc"/>
+                </a>
+            {% endif %}
         {% endblock %}
         {% if search %}
-        <input type="search" placeholder="Search API Documentation..." aria-label="search box">
+            <input type="search" placeholder="Search API Documentation..." aria-label="search box">
         {% endif %}
     </header>
-{% endblock %}
-{% block module_info %}{% endblock %}
-{% block module_contents %}{% endblock %}
-{% block search_js %}
+    <main class="pdoc"></main>
     {% if search %}
         {% include "search.html.jinja2" %}
     {% endif %}

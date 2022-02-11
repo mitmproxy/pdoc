@@ -63,7 +63,7 @@ class Snapshot:
                             + '<iframe srcdoc="\n'
                             + f.read_text("utf8")
                             .replace("&", "&amp;")
-                            .replace(""" " """.strip(), "&quot;")
+                            .replace('"', "&quot;")
                             + '\n"></iframe>\n\n'
                         )
                     else:
@@ -132,6 +132,7 @@ snapshots = [
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot(
         "render_options",
+        ["render_options", "demo"],
         render_options={
             "show_source": False,
             "logo": "https://placedog.net/500?random",

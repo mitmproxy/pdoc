@@ -1,0 +1,305 @@
+/*
+In this CSS file, all selectors are scopoed with ".pdoc".
+This makes sure that the pdoc styling doesn't leak to the rest of the page.
+*/
+
+.pdoc {
+    color: var(--text);
+    /* enforce some styling even if bootstrap reboot is not included */
+    box-sizing: border-box;
+    line-height: 1.5;
+    /* override background from pygments */
+    /*unnecessary since pdoc 10, only left here to keep old custom templates working. */
+    background: none;
+}
+
+.pdoc .pdoc-button {
+    display: inline-block;
+    border: solid black 1px;
+    border-radius: 2px;
+    font-size: .75rem;
+    padding: calc(0.5em - 1px) 1em;
+    transition: 100ms all;
+}
+
+.pdoc .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.pdoc h1, .pdoc h2, .pdoc h3 {
+    font-weight: 300;
+    margin: .3em 0;
+    padding: .2em 0;
+}
+
+.pdoc a {
+    text-decoration: none;
+    color: var(--link);
+}
+
+.pdoc a:hover {
+    color: var(--link-hover);
+}
+
+.pdoc blockquote {
+    margin-left: 2rem;
+}
+
+.pdoc pre {
+    border-top: 1px solid var(--accent2);
+    border-bottom: 1px solid var(--accent2);
+    margin-top: 0;
+    margin-bottom: 1em;
+    padding: .5rem 0 .5rem .5rem;
+    overflow-x: auto;
+    /*unnecessary since pdoc 10, only left here to keep old custom templates working. */
+    background-color: var(--code);
+}
+
+.pdoc code {
+    color: var(--text);
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: var(--code);
+    border-radius: 6px;
+}
+
+.pdoc a > code {
+    color: inherit;
+}
+
+.pdoc pre > code {
+    display: inline-block;
+    font-size: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* Page Heading */
+.pdoc .modulename {
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.pdoc .modulename a {
+    color: var(--link);
+    transition: 100ms all;
+}
+
+/* GitHub Button */
+.pdoc .git-button {
+    float: right;
+    border: solid var(--link) 1px;
+}
+
+.pdoc .git-button:hover {
+    background-color: var(--link);
+    color: var(--pdoc-background);
+}
+
+/* View Source */
+.pdoc details {
+    /*
+     stay on top of .attr even if it is filtered, see
+     https://stackoverflow.com/questions/25764404/why-does-stacking-order-change-on-webkit-filter-hover
+     */
+    filter: opacity(1);
+}
+
+.pdoc details:not([open]) {
+    height: 0;
+}
+
+.pdoc details > summary {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    font-size: .75rem;
+    color: var(--muted);
+    padding: 0 .7em;
+    user-select: none;
+    cursor: pointer;
+}
+
+.pdoc details > summary:focus {
+    outline: 0;
+}
+
+/* Docstrings */
+.pdoc .docstring {
+    margin-bottom: 1.5rem;
+}
+
+.pdoc > section:first-of-type > .docstring {
+    margin-bottom: 2.5rem;
+}
+
+.pdoc .docstring .pdoc-code {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+/* Highlight focused element */
+.pdoc h1:target,
+.pdoc h2:target,
+.pdoc h3:target,
+.pdoc h4:target,
+.pdoc h5:target,
+.pdoc h6:target {
+    background-color: var(--active);
+    box-shadow: -1rem 0 0 0 var(--active);
+}
+
+.pdoc div:target > .attr,
+.pdoc section:target > .attr,
+.pdoc dd:target > a {
+    background-color: var(--active);
+}
+
+.pdoc .attr:hover {
+    filter: contrast(0.95);
+}
+
+/* Header link */
+.pdoc .headerlink {
+    position: absolute;
+    width: 0;
+    margin-left: -1.5rem;
+    line-height: 1.4rem;
+    font-size: 1.5rem;
+    font-weight: normal;
+    transition: all 100ms ease-in-out;
+    opacity: 0;
+    user-select: none;
+}
+
+.pdoc .attr > .headerlink {
+    margin-left: -2.5rem;
+}
+
+.pdoc *:hover > .headerlink,
+.pdoc *:target > .attr > .headerlink {
+    opacity: 1;
+}
+
+/* Attributes */
+.pdoc .attr {
+    display: block;
+    color: var(--text);
+    margin: .5rem 0 .5rem;
+    /*
+    lots of padding on the right to accomodate the view source button.
+    This is not ideal, but probably good enough for now.
+    */
+    padding: .4rem 5rem .4rem 1rem;
+    background-color: var(--accent);
+}
+
+.pdoc .classattr {
+    margin-left: 2rem;
+}
+
+.pdoc .name {
+    color: var(--name);
+    font-weight: bold;
+}
+
+.pdoc .def {
+    color: var(--def);
+    font-weight: bold;
+}
+
+.pdoc .signature {
+    white-space: pre-wrap;
+}
+
+.pdoc .annotation {
+    color: var(--annotation);
+}
+
+/* Inherited Members */
+.pdoc .inherited {
+    margin-left: 2rem;
+}
+
+.pdoc .inherited dt {
+    font-weight: 700;
+}
+
+.pdoc .inherited dt, .pdoc .inherited dd {
+    display: inline;
+    margin-left: 0;
+    margin-bottom: .5rem;
+}
+
+.pdoc .inherited dd:not(:last-child):after {
+    content: ", ";
+}
+
+.pdoc .inherited .class:before {
+    content: "class ";
+}
+
+.pdoc .inherited .function a:after {
+    content: "()";
+}
+
+/* Search results */
+.pdoc .search-result .docstring {
+    overflow: auto;
+    max-height: 25vh;
+}
+
+.pdoc .search-result.focused > .attr {
+    background-color: var(--active);
+}
+
+/* "built with pdoc" attribution */
+.pdoc .attribution {
+    margin-top: 2rem;
+    display: block;
+    opacity: 0.5;
+    transition: all 200ms;
+    filter: grayscale(100%);
+}
+
+.pdoc .attribution:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+.pdoc .attribution img {
+    margin-left: 5px;
+    height: 35px;
+    vertical-align: middle;
+    width: 70px;
+    transition: all 200ms;
+}
+
+/* Tables */
+.pdoc table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-bottom: 1rem;
+}
+
+.pdoc table th {
+    font-weight: 600;
+}
+
+.pdoc table th, .pdoc table td {
+    padding: 6px 13px;
+    border: 1px solid var(--accent2);
+}

@@ -3,17 +3,38 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc {{ __version__ }}" />
+    <meta name="generator" content="pdoc {{ __version__ }}"/>
     <title>{% block title %}{% endblock %}</title>
     {% block favicon %}
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/favicon.svg" %}{% endfilter %}"/>
     {% endblock %}
-
     {% block head %}{% endblock %}
-    {% block style %}
-        <style>{% include 'resources/bootstrap-reboot.min.css' %}</style>
-    {% endblock %}
-
+    {% filter minify_css | indent %}
+        {% block style %}
+            <style>{% include "resources/bootstrap-reboot.min.css" %}</style>
+            <style>/*! syntax-highlighting.css */{% include "syntax-highlighting.css" %}</style>
+            {#
+            The style_pdoc, style_theme, style_layout, and style_content sub-blocks are deprecated and will be removed
+            in a future release. Custom templates should either provide alternatives for the specific CSS files,
+            or append their own styles to the top-level `style` block (see examples/custom-template/module.html.jinja2).
+            #}
+            {% block style_pdoc %}
+                {% block style_theme %}<style>/*! theme.css */{% include "theme.css" %}</style>{% endblock %}
+                {% block style_layout %}<style>/*! layout.css */{% include "layout.css" %}</style>{% endblock %}
+                {% block style_content %}<style>/*! content.css */{% include "content.css" %}</style>{% endblock %}
+            {% endblock %}
+        {% endblock %}
+    {% endfilter %}
+    {% if math %}{% include "math.html.jinja2" %}{% endif %}
 </head>
-<body>{% block body %}{% endblock %}</body>
+<body>
+{% block body %}
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button">{% include 'resources/navtoggle.svg' %}</label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>{% block nav %}{% endblock %}</div>
+    </nav>
+    {% block content %}{% endblock %}
+{% endblock body %}
+</body>
 </html>

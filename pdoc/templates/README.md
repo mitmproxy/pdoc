@@ -16,8 +16,8 @@ The `syntax-highlighting.css` file contains the CSS styles used for syntax highl
 It is generated as follows:
 
 ```
-pygmentize -f html -a .pdoc -S <theme> > syntax-highlighting.css
+pygmentize -f html -a .pdoc-code -S <theme> > default/syntax-highlighting.css
 ```
 
-The default theme is `default`. Alternative color schemes can be tested on 
-[the Pygments website](https://pygments.org/demo/).
+The default theme is `default`, with extended padding added to the `.linenos` class.
+Alternative color schemes can be tested on [the Pygments website](https://pygments.org/demo/).

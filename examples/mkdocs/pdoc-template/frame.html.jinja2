@@ -1,7 +1,20 @@
 ---
 title: {{ module.modulename if module else "API Reference" }}
 ---
+
 <div>
-    {% block style %}{% endblock %}
-    {% block body %}{% endblock %}
+    {% block content %}{% endblock %}
+
+    {% filter minify_css %}
+        {% block style %}
+            {#
+            The important part is that we leave out layout.css here.
+            Ideally we would still include Bootstrap Reboot, but that breaks mkdocs' theme.
+            <style>{% include "resources/bootstrap-reboot.min.css" %}</style>
+            #}
+            <style>{% include "syntax-highlighting.css" %}</style>
+            <style>{% include "theme.css" %}</style>
+            <style>{% include "content.css" %}</style>
+        {% endblock %}
+    {% endfilter %}
 </div>
