@@ -103,17 +103,16 @@ else:  # pragma: no cover
     # ✂ end ✂
 
 if sys.version_info >= (3, 8):
-    from typing import Literal, get_args, get_origin
+    from typing import Literal, get_origin
 else:  # pragma: no cover
-    import collections.abc
-    from typing import Generic, _GenericAlias
+    from typing import Generic
 
     # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
 
     class Literal:
         pass
 
-    # get_origin and get_args are adapted from
+    # get_origin is adapted from
     # https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/typing.py#L1474-L1515
     # with Annotations removed (not present in 3.7)
     def get_origin(tp):  # type: ignore
@@ -123,16 +122,19 @@ else:  # pragma: no cover
             return Generic
         return None
 
-    def get_args(tp):  # type: ignore
-        if isinstance(tp, _GenericAlias):
-            res = tp.__args__
-            if tp.__origin__ is collections.abc.Callable and res[0] is not Ellipsis:
-                res = (list(res[:-1]), res[-1])
-            return res
-        if isinstance(tp, GenericAlias):
-            return tp.__args__
-        return ()
+if (3, 9) <= sys.version_info < (3, 9, 8) or (3, 10) <= sys.version_info < (3, 10, 1):  # pragma: no cover
+    import inspect
+    import types
 
+    def formatannotation(annotation) -> str:
+        """
+        https://github.com/python/cpython/pull/29212
+        """
+        if isinstance(annotation, types.GenericAlias):
+            return str(annotation)
+        return inspect.formatannotation(annotation)
+else:
+    from inspect import formatannotation
 
 if True:
     # https://github.com/python/cpython/pull/27672
@@ -187,7 +189,7 @@ __all__ = [
     "removesuffix",
     "cached_property",
     "get_origin",
-    "get_args",
     "Literal",
+    "formatannotation",
     "BooleanOptionalAction",
 ]

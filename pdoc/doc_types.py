@@ -19,7 +19,7 @@ from typing import _GenericAlias  # type: ignore
 from typing import TYPE_CHECKING, Any
 
 from . import extract
-from ._compat import GenericAlias, Literal, UnionType, get_args, get_origin
+from ._compat import GenericAlias, Literal, UnionType, get_origin
 from .doc_ast import type_checking_sections
 
 if TYPE_CHECKING:
@@ -51,17 +51,6 @@ NonUserDefinedCallables = (
 
 
 # ✂ end ✂
-
-
-def formatannotation(annotation: Any) -> str:
-    """
-    Like `inspect.formatannotation()`, but with a small bugfix for Python 3.9's GenericAlias annotations.
-    """
-    # a small inconsistency in Python 3.9,
-    # formatannotation(list[str]) returns "list".
-    if isinstance(annotation, type) and get_args(annotation):
-        return repr(annotation)
-    return inspect.formatannotation(annotation)
 
 
 def resolve_annotations(

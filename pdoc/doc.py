@@ -36,12 +36,11 @@ from pdoc import doc_ast, extract
 from pdoc.doc_types import (
     NonUserDefinedCallables,
     empty,
-    formatannotation,
     resolve_annotations,
     safe_eval_type,
 )
 
-from ._compat import cache, cached_property, get_origin
+from ._compat import cache, cached_property, formatannotation, get_origin
 
 
 def _include_fullname_in_traceback(f):
