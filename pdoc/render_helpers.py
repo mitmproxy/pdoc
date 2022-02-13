@@ -274,18 +274,6 @@ def defuse_unsafe_reprs():
     with (patch.object(os._Environ, "__repr__", lambda self: "os.environ")):
         yield
 
-def image_type(filename: str | None) -> str | None:
-    """Return a media type for an image based on its name."""
-    # We just do the common ones, and default to no-declared-type for anything else
-    # Note that the ico format doesn't need a declared type, and we don't give it one.
-    if filename:
-        suffix = (filename.split(".")[-1]).lower()
-        if suffix in ['png','gif','bmp','jpeg']:
-            return suffix
-        if suffix == "svg":
-            return "svg+xml"
-    return None
-
 
 class DefaultMacroExtension(ext.Extension):
     """

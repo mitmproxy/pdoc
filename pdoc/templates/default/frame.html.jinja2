@@ -7,7 +7,7 @@
     <title>{% block title %}{% endblock %}</title>
     {% block favicon %}
         {% if favicon %}
-            <link rel="icon" {% if favicon_type %}type="image/{{ favicon_type }}"{% endif %} href="{{ favicon }}"/>
+            <link rel="icon" href="{{ favicon }}"/>
         {% endif %}
     {% endblock %}
     {% block head %}{% endblock %}

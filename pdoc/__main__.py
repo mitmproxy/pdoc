@@ -73,6 +73,12 @@ renderopts.add_argument(
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 renderopts.add_argument(
+    "--favicon",
+    type=str,
+    metavar="URL",
+    help="Add a favicon at a non-default location.",
+)
+renderopts.add_argument(
     "--footer-text",
     type=str,
     metavar="TEXT",
@@ -169,15 +175,16 @@ def cli(args: list[str] = None) -> None:
     warnings.showwarning = _nicer_showwarning
 
     pdoc.render.configure(
-        edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
-        template_directory=opts.template_directory,
         docformat=opts.docformat,
-        math=opts.math,
-        show_source=opts.show_source,
-        search=opts.search,
+        edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
+        favicon=opts.favicon,
+        footer_text=opts.footer_text,
         logo=opts.logo,
         logo_link=opts.logo_link,
-        footer_text=opts.footer_text,
+        math=opts.math,
+        search=opts.search,
+        show_source=opts.show_source,
+        template_directory=opts.template_directory,
     )
 
     if opts.output_directory:

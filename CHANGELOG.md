@@ -24,6 +24,8 @@
    - Users who customized `syntax-highlighting.css`: pdoc now consistently uses `.pdoc-code` instead of `.pdoc`
      or `.codehilite` for syntax highlighting. `.codehilite` is deprecated but will continue to work, giving custom
      templates time to migrate.
+ - A new `--favicon` option can be used to specify a favicon. The existing default favicon has been removed
+   to reduce page size. ([#345](https://github.com/mitmproxy/pdoc/issues/345))
  - Submodules that are mentioned in `__all__` are not listed as part of the module contents anymore. Instead, they
    are listed in the navigation. This now matches the behavior as if `__all__` were not specified.
    If this affects you, please leave feedback in [#341](https://github.com/mitmproxy/pdoc/issues/341).

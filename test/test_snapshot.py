@@ -111,10 +111,7 @@ snapshots = [
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
         min_version=(3, 9),
     ),
-    Snapshot("demo_long", min_version=(3, 9),
-        render_options={
-            "favicon": "favicon.ico"
-        }),
+    Snapshot("demo_long", min_version=(3, 9)),
     Snapshot("demo_eager", min_version=(3, 9)),
     Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
@@ -142,6 +139,7 @@ snapshots = [
             "logo_link": "https://example.com/",
             "footer_text": "custom footer text",
             "search": False,
+            "favicon": "https://pdoc.dev/favicon.svg",
         },
         with_output_directory=True,
     ),

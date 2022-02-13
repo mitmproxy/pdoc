@@ -17,7 +17,6 @@ from pdoc.render_helpers import (
     defuse_unsafe_reprs,
     edit_url,
     highlight,
-    image_type,
     link,
     linkify,
     minify_css,
@@ -74,7 +73,6 @@ def configure(
     env.globals["math"] = math
     env.globals["show_source"] = show_source
     env.globals["favicon"] = favicon
-    env.globals["favicon_type"] = image_type(favicon)
     env.globals["logo"] = logo
     env.globals["logo_link"] = logo_link
     env.globals["footer_text"] = footer_text
