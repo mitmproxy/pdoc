@@ -111,7 +111,10 @@ snapshots = [
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
         min_version=(3, 9),
     ),
-    Snapshot("demo_long", min_version=(3, 9)),
+    Snapshot("demo_long", min_version=(3, 9),
+        render_options={
+            "favicon": "favicon.ico"
+        }),
     Snapshot("demo_eager", min_version=(3, 9)),
     Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
