@@ -1,4 +1,6 @@
-graft pdoc/templates
+graft pdoc
 include CHANGELOG.md
 include LICENSE
 include README.md
+prune **/.mypy_cache
+prune **/__pycache__
