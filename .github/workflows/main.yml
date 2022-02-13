@@ -33,13 +33,13 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.10.0
+            py: 3.10.2
           - os: macos-latest
-            py: 3.10.0
+            py: 3.10.2
           - os: ubuntu-latest
-            py: 3.10.0
+            py: 3.10.2
           - os: ubuntu-latest
-            py: 3.9.7
+            py: 3.9.9
           - os: ubuntu-latest
             py: 3.8.12
           - os: ubuntu-latest

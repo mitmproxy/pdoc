@@ -53,17 +53,6 @@ NonUserDefinedCallables = (
 # ✂ end ✂
 
 
-def formatannotation(annotation: Any) -> str:
-    """
-    Like `inspect.formatannotation()`, but with a small bugfix for Python 3.9's GenericAlias annotations.
-    """
-    # a small inconsistency in Python 3.9,
-    # formatannotation(list[str]) returns "list".
-    if isinstance(annotation, type) and get_args(annotation):
-        return repr(annotation)
-    return inspect.formatannotation(annotation)
-
-
 def resolve_annotations(
     annotations: dict[str, Any],
     module: ModuleType | None,

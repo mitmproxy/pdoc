@@ -133,6 +133,19 @@ else:  # pragma: no cover
             return tp.__args__
         return ()
 
+if (3, 9) <= sys.version_info < (3, 9, 8) or (3, 10) <= sys.version_info < (3, 10, 1):  # pragma: no cover
+    import inspect
+    import types
+
+    def formatannotation(annotation) -> str:
+        """
+        https://github.com/python/cpython/pull/29212
+        """
+        if isinstance(annotation, types.GenericAlias):
+            return str(annotation)
+        return inspect.formatannotation(annotation)
+else:
+    from inspect import formatannotation
 
 if True:
     # https://github.com/python/cpython/pull/27672
@@ -189,5 +202,6 @@ __all__ = [
     "get_origin",
     "get_args",
     "Literal",
+    "formatannotation",
     "BooleanOptionalAction",
 ]
