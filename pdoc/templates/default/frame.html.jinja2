@@ -6,7 +6,9 @@
     <meta name="generator" content="pdoc {{ __version__ }}"/>
     <title>{% block title %}{% endblock %}</title>
     {% block favicon %}
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/favicon.svg" %}{% endfilter %}"/>
+        {% if favicon %}
+            <link rel="icon" {% if favicon_type %}type="image/{{ favicon_type }}"{% endif %} href="{{ favicon }}"/>
+        {% endif %}
     {% endblock %}
     {% block head %}{% endblock %}
     {% filter minify_css | indent %}
