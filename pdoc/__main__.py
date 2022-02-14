@@ -57,8 +57,8 @@ renderopts.add_argument(
     "-d",
     "--docformat",
     type=str,
-    default=None,
-    choices=("google", "numpy", "restructuredtext"),
+    default="markdown",
+    choices=("markdown", "google", "numpy", "restructuredtext"),
     help="The default docstring format.",
 )
 renderopts.add_argument(

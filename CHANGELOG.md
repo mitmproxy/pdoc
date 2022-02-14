@@ -1,5 +1,9 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Make it more clear that Markdown ist the default docformat. ([@Dliwk](https://github.com/Dliwk))
+
 # 2022-02-14: pdoc 10.0.1
 
  - Fix a bug where pdoc would crash after executing `TYPE_CHECKING` blocks.

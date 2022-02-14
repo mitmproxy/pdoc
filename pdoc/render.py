@@ -29,7 +29,7 @@ from pdoc.search import make_index, precompile_index
 
 def configure(
     *,
-    docformat: Literal["google", "numpy", "restructuredtext"] | None = None,
+    docformat: Literal["markdown", "google", "numpy", "restructuredtext"] = "markdown",
     edit_url_map: Mapping[str, str] | None = None,
     favicon: str | None = None,
     footer_text: str = "",
