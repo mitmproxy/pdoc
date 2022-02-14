@@ -31,6 +31,7 @@ def configure(
     *,
     docformat: Literal["google", "numpy", "restructuredtext"] | None = None,
     edit_url_map: Mapping[str, str] | None = None,
+    favicon: str | None = None,
     footer_text: str = "",
     logo: str | None = None,
     logo_link: str | None = None,
@@ -51,6 +52,7 @@ def configure(
         ```
 
       renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
+    - `favicon` is an optional path/URL for a favicon image
     - `footer_text` is additional text that should appear in the navigation footer.
     - `logo` is an optional URL to the project's logo image
     - `logo_link` is an optional URL the logo should point to
@@ -70,6 +72,7 @@ def configure(
     env.globals["docformat"] = docformat
     env.globals["math"] = math
     env.globals["show_source"] = show_source
+    env.globals["favicon"] = favicon
     env.globals["logo"] = logo
     env.globals["logo_link"] = logo_link
     env.globals["footer_text"] = footer_text

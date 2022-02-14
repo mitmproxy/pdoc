@@ -22,6 +22,12 @@ We can access system environment variables in the template, for example to pass 
     <footer>My Package v{{ env["VERSION"] | default("1.0") }}</footer>
 {% endblock %}
 
+{#
+If the favicon config option doesn't do what we want, we can redefine the block instead.
+#}
+{% block favicon %}
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"/>
+{% endblock %}
 
 {#
 We can also adjust which members are documented by overriding the is_public macro.

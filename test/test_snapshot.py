@@ -139,6 +139,7 @@ snapshots = [
             "logo_link": "https://example.com/",
             "footer_text": "custom footer text",
             "search": False,
+            "favicon": "https://pdoc.dev/favicon.svg",
         },
         with_output_directory=True,
     ),
