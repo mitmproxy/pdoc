@@ -298,7 +298,7 @@ __docformat__ = "restructuredtext"
 ```
 
 Make sure that you either specify `__docformat__`
-or pass `--docformat`. pdoc only processes plain Markdown by default,
+or pass `--docformat`. pdoc processes plain Markdown by default,
 `.. include::` is only evaluated for [`google`, `numpy`, or `restructuredtext`
 docstrings](#use-numpydoc-or-google-docstrings).
 
@@ -309,21 +309,25 @@ docstrings](#use-numpydoc-or-google-docstrings).
 pdoc's HTML and CSS are written in a way that the default template can be easily adjusted
 to produce standalone HTML fragments that can be embedded in other systems.
 This makes it possible to integrate pdoc with almost every CMS or static site generator.
-The only limitation at the moment is that you need to retain pdoc's directory structure
+The only limitation is that you need to retain pdoc's directory structure
 if you would like to link between modules.
 
-First, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) to only emit CSS and HTML body
-contents instead of a standalone HTML document:
+To do so, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) which only emits CSS and the main
+page contents instead of a full standalone HTML document:
 ```html+jinja
-{% block style %}{% endblock %}
-{% block body %}{% endblock %}
-```
+{% block content %}{% endblock %}
 
-Second, create a custom `module.html.jinja2` to suppress the navigation bar and layout CSS:
-```html+jinja
-{% extends "default/module.html.jinja2" %}
-{% block nav %}{% endblock %}
-{% block style_layout %}{% endblock %}
+{% filter minify_css %}
+    {% block style %}
+        {# The same CSS files as in pdoc's default template, except for layout.css.
+        You may leave out Bootstrap Reboot, which corrects inconsistences across browsers
+        but may conflict with you website's stylesheet. #}
+        <style>{% include "resources/bootstrap-reboot.min.css" %}</style>
+        <style>{% include "syntax-highlighting.css" %}</style>
+        <style>{% include "theme.css" %}</style>
+        <style>{% include "content.css" %}</style>
+    {% endblock %}
+{% endfilter %}
 ```
 
 This should be enough to produce HTML files that can be embedded into other pages.
@@ -341,14 +345,14 @@ This is useful to not unnecessarily repeat information. Consider this example:
 
 ```python
 class Dog:
-    def bark(self, loud: bool = True) -> None:
+    def bark(self, loud: bool) -> None:
         """
         Make the dog bark. If `loud` is True,
         use full volume. Not supported by all breeds.
         """
 
 class GoldenRetriever(Dog):
-    def bark(self, loud):
+    def bark(self, loud: bool) -> None:
         print("Woof Woof")
 ```
 
