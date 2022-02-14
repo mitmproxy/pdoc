@@ -1,8 +1,8 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-02-14: pdoc 10.0.0
 
- - Template improvements may require adjustments to custom templates. Users who do not use custom templates are
+ - Template improvements may require minor adjustments to custom templates. Users who do not use custom templates are
    unaffected. ([#346](https://github.com/mitmproxy/pdoc/issues/346))
    - Users who embed pdoc's output into other systems: The main layout (sidebar/content) is now part of
      [`frame.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/frame.html.jinja2)
@@ -18,13 +18,13 @@
      [`content.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/content.css). You can now either
      provide replacements for these files directly, or
      [append custom styles to the `style` block](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2)
-     . The existing Jinja2 blocks `style_pdoc`, `style_theme`, `style_layout`, `style_content` are deprecated, see
+     . The existing Jinja2 blocks `style_pdoc`, `style_theme`, `style_layout`, `style_content` are being deprecated, see
      [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2)
      for details.
    - Users who customized `syntax-highlighting.css`: pdoc now consistently uses `.pdoc-code` instead of `.pdoc`
-     or `.codehilite` for syntax highlighting. `.codehilite` is deprecated but will continue to work, giving custom
-     templates time to migrate.
- - A new `--favicon` option can be used to specify a favicon. The existing default favicon has been removed
+     or `.codehilite` for syntax highlighting. `.codehilite` is being deprecated but will continue to work, giving
+     custom templates time to migrate.
+ - A new `--favicon` option can be used to specify a favicon. The existing embedded default favicon has been removed
    to reduce page size. ([#345](https://github.com/mitmproxy/pdoc/issues/345))
  - Submodules that are mentioned in `__all__` are not listed as part of the module contents anymore. Instead, they
    are listed in the navigation. This now matches the behavior as if `__all__` were not specified.

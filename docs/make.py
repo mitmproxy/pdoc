@@ -39,6 +39,7 @@ if __name__ == "__main__":
             "demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/demo",
             "demo_long": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/demo_long",
         },
+        favicon="/favicon.svg",
         logo="/logo.svg",
         logo_link="https://pdoc.dev",
         footer_text=f"pdoc {pdoc.__version__}"
