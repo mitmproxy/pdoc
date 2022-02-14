@@ -4,6 +4,8 @@
 
  - Fix a bug where pdoc would crash after executing `TYPE_CHECKING` blocks.
    ([#351](https://github.com/mitmproxy/pdoc/issues/351), [@Dliwk](https://github.com/Dliwk))
+ - Add ability to specify custom CSS rules in `custom.css`.
+   The migration instructions in the 10.0.0 changelog entry have been updated accordingly.
 
 # 2022-02-14: pdoc 10.0.0
 
@@ -15,16 +17,17 @@
      [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2).
      This allows
      [`index.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/index.html.jinja2)
-     to cleanly extend `frame.html.jinja2` instead of patching `module.html.jinja2`.
+     to cleanly extend `frame.html.jinja2` instead of patching `module.html.jinja2`. See
+     [`examples/mkdocs`](https://github.com/mitmproxy/pdoc/tree/main/examples/mkdocs) for an updated example.
    - Users who customized pdoc's CSS: CSS style definitions moved from `module.html.jinja2` into individual CSS files,
      namely
      [`theme.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/theme.css),
      [`layout.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/layout.css), and
-     [`content.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/content.css). You can now either
-     provide replacements for these files directly, or
-     [append custom styles to the `style` block](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2)
-     . The existing Jinja2 blocks `style_pdoc`, `style_theme`, `style_layout`, `style_content` are being deprecated, see
-     [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2)
+     [`content.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/content.css).
+     You can now either provide replacements for these files, or
+     [specify additional CSS rules in `custom.css`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/).
+     The existing Jinja2 blocks `style_pdoc`, `style_theme`, `style_layout`, `style_content` are being deprecated, see
+     [`frame.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/frame.html.jinja2)
      for details.
    - Users who customized `syntax-highlighting.css`: pdoc now consistently uses `.pdoc-code` instead of `.pdoc`
      or `.codehilite` for syntax highlighting. `.codehilite` is being deprecated but will continue to work, giving

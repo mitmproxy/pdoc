@@ -4,15 +4,11 @@ We want to extend the default template instead of defining everything ourselves.
 {% extends "default/module.html.jinja2" %}
 
 {#
-We can extend a block using {{ super() }}, in this case we add custom css at the end of the style block.
+We can redefine individual blocks.
+For example, if the `--favicon` option does not do what you want, you can specify a replacement like this.
 #}
-{% block style %}
-    {{ super() | safe }}
-    <style>
-        .pdoc .modulename {
-            color: orange;
-        }
-    </style>
+{% block favicon %}
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"/>
 {% endblock %}
 
 {#
@@ -20,13 +16,6 @@ We can access system environment variables in the template, for example to pass 
 #}
 {% block nav_footer %}
     <footer>My Package v{{ env["VERSION"] | default("1.0") }}</footer>
-{% endblock %}
-
-{#
-If the favicon config option doesn't do what we want, we can redefine the block instead.
-#}
-{% block favicon %}
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,{% filter urlencode %}{% include "resources/pdoc-logo.svg" %}{% endfilter %}"/>
 {% endblock %}
 
 {#

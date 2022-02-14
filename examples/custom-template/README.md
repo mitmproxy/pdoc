@@ -1,7 +1,7 @@
 # Using a Custom Template
 
 This is an example showing how one can customize pdoc's default template.  
-The individual changes are explained in the template file itself.
+The individual changes are explained in the template files themselves.
 
 To use a custom template, run pdoc with the `--template-directory` (short: `-t`) command line argument:
 
