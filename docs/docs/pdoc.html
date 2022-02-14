@@ -255,9 +255,10 @@ variables</a>. For example:</p>
 
 <p>The resulting <code>variable</code> will have no <code>__doc__</code> attribute.
 To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)
-and include all assignment statements immediately followed by a docstring.</p>
+and include all assignment statements immediately followed by a docstring. This approach is not formally standardized,
+but followed by many tools, including Sphinx's autodoc extension in case you ever decide to migrate off pdoc.</p>
 
-<p>Something similar is done for instance variables as well, which are either type-annotated in the class
+<p>Something similar is done for instance variables, which are either type-annotated in the class
 or defined in a class's <code>__init__</code>. Here is an example showing both conventions detected by pdoc:</p>
 
 <div class="pdoc-code codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GoldenRetriever</span><span class="p">(</span><span class="n">Dog</span><span class="p">):</span>
@@ -270,7 +271,7 @@ or defined in a class's <code>__init__</code>. Here is an example showing both c
 </code></pre></div>
 
 <p>If you would like to distinguish an instance variable from a class variable,
-you should use <a href="https://docs.python.org/3/library/typing.html#typing.ClassVar"><code>typing.ClassVar</code></a>:</p>
+you can use <a href="https://docs.python.org/3/library/typing.html#typing.ClassVar"><code>typing.ClassVar</code></a>:</p>
 
 <div class="pdoc-code codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GoldenRetriever</span><span class="p">(</span><span class="n">Dog</span><span class="p">):</span>
     <span class="n">breed_code</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GOLD&quot;</span>
@@ -634,9 +635,10 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 
 <span class="sd">The resulting `variable` will have no `__doc__` attribute.</span>
 <span class="sd">To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)</span>
-<span class="sd">and include all assignment statements immediately followed by a docstring.</span>
+<span class="sd">and include all assignment statements immediately followed by a docstring. This approach is not formally standardized,</span>
+<span class="sd">but followed by many tools, including Sphinx&#39;s autodoc extension in case you ever decide to migrate off pdoc.</span>
 
-<span class="sd">Something similar is done for instance variables as well, which are either type-annotated in the class</span>
+<span class="sd">Something similar is done for instance variables, which are either type-annotated in the class</span>
 <span class="sd">or defined in a class&#39;s `__init__`. Here is an example showing both conventions detected by pdoc:</span>
 
 <span class="sd">```python</span>
@@ -651,7 +653,7 @@ You can find an example in <a href="https://github.com/mitmproxy/pdoc/tree/main/
 
 
 <span class="sd">If you would like to distinguish an instance variable from a class variable,</span>
-<span class="sd">you should use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html#typing.ClassVar):</span>
+<span class="sd">you can use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html#typing.ClassVar):</span>
 
 <span class="sd">```python</span>
 <span class="sd">class GoldenRetriever(Dog):</span>

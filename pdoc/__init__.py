@@ -168,9 +168,10 @@ variable = "SomeValue"
 
 The resulting `variable` will have no `__doc__` attribute.
 To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)
-and include all assignment statements immediately followed by a docstring.
+and include all assignment statements immediately followed by a docstring. This approach is not formally standardized,
+but followed by many tools, including Sphinx's autodoc extension in case you ever decide to migrate off pdoc.
 
-Something similar is done for instance variables as well, which are either type-annotated in the class
+Something similar is done for instance variables, which are either type-annotated in the class
 or defined in a class's `__init__`. Here is an example showing both conventions detected by pdoc:
 
 ```python
@@ -185,7 +186,7 @@ class GoldenRetriever(Dog):
 
 
 If you would like to distinguish an instance variable from a class variable,
-you should use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html#typing.ClassVar):
+you can use [`typing.ClassVar`](https://docs.python.org/3/library/typing.html#typing.ClassVar):
 
 ```python
 class GoldenRetriever(Dog):
