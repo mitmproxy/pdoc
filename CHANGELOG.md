@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Fix a bug where pdoc would crash after executing `TYPE_CHECKING` blocks.
+   ([#351](https://github.com/mitmproxy/pdoc/issues/351), [@Dliwk](https://github.com/Dliwk))
+
 # 2022-02-14: pdoc 10.0.0
 
  - Template improvements may require minor adjustments to custom templates. Users who do not use custom templates are

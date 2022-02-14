@@ -1,2 +1,3 @@
 <module type_checking_imports
-    <function def foo(a: Sequence[str], b: Dict[str, str]): ...>>
+    <function def foo(a: Sequence[str], b: Dict[str, str]): ...>
+    <var var: Sequence[int] = (1, 2, 3)>>

@@ -477,9 +477,10 @@ class Module(Namespace[types.ModuleType]):
 
         else:
             # Starting with Python 3.10, __annotations__ is created on demand,
-            # we access it here first so that we don't change obj.__dict__ while iterating over it.
-            _safe_getattr(self.obj, "__annotations__", {})
-            for name, obj in self.obj.__dict__.items():
+            # so we make a copy here as obj.__dict__ is changed while we iterate over it.
+            # Additionally, accessing self._documented_members may lead to the execution of TYPE_CHECKING blocks,
+            # which may also modify obj.__dict__. (https://github.com/mitmproxy/pdoc/issues/351)
+            for name, obj in list(self.obj.__dict__.items()):
                 # We already exclude everything here that is imported, only a TypeVar,
                 # or a variable without annotation and docstring.
                 # If one needs to document one of these things, __all__ is the correct way.

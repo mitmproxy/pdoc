@@ -12,3 +12,6 @@ if TYPE_CHECKING:
 
 def foo(a: Sequence[str], b: Dict[str, str]):
     pass
+
+
+var: Sequence[int] = (1, 2, 3)
