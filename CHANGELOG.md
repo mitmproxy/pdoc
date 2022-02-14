@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-02-14: pdoc 10.0.1
 
  - Fix a bug where pdoc would crash after executing `TYPE_CHECKING` blocks.
    ([#351](https://github.com/mitmproxy/pdoc/issues/351), [@Dliwk](https://github.com/Dliwk))
