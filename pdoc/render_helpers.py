@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import os
 import re
+import warnings
 from contextlib import contextmanager
-from typing import Collection, Mapping
+from typing import Collection, Iterable, Mapping
 from unittest.mock import patch
 
 import pygments.formatters.html
@@ -87,23 +88,45 @@ def to_markdown(docstring: str, module: pdoc.doc.Module, default_docformat: str)
     return docstrings.convert(docstring, docformat, module.source_file)
 
 
+def possible_sources(
+    all_modules: Collection[str], identifier: str
+) -> Iterable[tuple[str, str]]:
+    """
+    For a given identifier, return all possible sources where it could originate from.
+    For example, assume `examplepkg._internal.Foo` with all_modules=["examplepkg"].
+    This could be a Foo class in _internal.py, or a nested `class _internal: class Foo` in examplepkg.
+    We return both candidates as we don't know if _internal.py exists.
+    It may not be in all_modules because it's been excluded by `__all__`.
+    However, if `examplepkg._internal` is in all_modules we know that it can only be that option.
+    """
+    if identifier in all_modules:
+        yield identifier, ""
+        return
+
+    modulename = identifier
+    qualname = None
+    while modulename:
+        modulename, _, add = modulename.rpartition(".")
+        qualname = f"{add}.{qualname}" if qualname else add
+        yield modulename, qualname
+        if modulename in all_modules:
+            return
+    raise ValueError(f"Invalid identifier: {identifier}")
+
+
 def split_identifier(all_modules: Collection[str], fullname: str) -> tuple[str, str]:
     """
     Split an identifier into a `(modulename, qualname)` tuple. For example, `pdoc.render_helpers.split_identifier`
     would be split into `("pdoc.render_helpers","split_identifier")`. This is necessary to generate links to the
     correct module.
     """
-    if not fullname:
-        raise ValueError("Invalid identifier.")
-    if fullname in all_modules:
-        return fullname, ""
-    else:
-        parent, _, name = fullname.rpartition(".")
-        modulename, qualname = split_identifier(all_modules, parent)
-        if qualname:
-            return modulename, f"{qualname}.{name}"
-        else:
-            return modulename, name
+    warnings.warn(
+        "pdoc.render_helpers.split_identifier is deprecated and will be removed in a future release. "
+        "Use pdoc.render_helpers.possible_sources instead.",
+        DeprecationWarning,
+    )
+    *_, last = possible_sources(all_modules, fullname)
+    return last
 
 
 def _relative_link(current: list[str], target: list[str]) -> str:
@@ -127,6 +150,11 @@ def relative_link(current_module: str, target_module: str) -> str:
 
 
 def qualname_candidates(identifier: str, context_qualname: str) -> list[str]:
+    """
+    Given an identifier in a current namespace, return all possible qualnames in the current module.
+    For example, if we are in Foo's subclass Bar and `baz()` is the identifier,
+    return `Foo.Bar.baz()`, `Foo.baz()`, and `baz()`.
+    """
     end = len(context_qualname)
     ret = []
     while end > 0:
@@ -155,15 +183,39 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             if doc and context["is_public"](doc).strip():
                 return f'<a href="#{qualname}">{text}</a>'
 
-        # Find the parent module.
+        module = ""
+        qualname = ""
         try:
-            module, qualname = split_identifier(context["all_modules"], identifier)
+            # Check if the object we are interested in is imported and re-exposed in the current namespace.
+            for module, qualname in possible_sources(
+                context["all_modules"], identifier
+            ):
+                doc = mod.get(qualname)
+                if (
+                    doc
+                    and doc.taken_from == (module, qualname)
+                    and context["is_public"](doc).strip()
+                ):
+                    if text.endswith("()"):
+                        text = f"{doc.fullname}()"
+                    else:
+                        text = doc.fullname
+                    return f'<a href="#{qualname}">{text}</a>'
         except ValueError:
+            # possible_sources did not find a parent module.
             return text
         else:
-            if qualname:
-                qualname = f"#{qualname}"
-            return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{text}</a>'
+            # It's not, but we now know the parent module. Does the target exist?
+            doc = context["all_modules"][module].get(qualname)
+            target_exists_and_public = (
+                doc is not None and context["is_public"](doc).strip()
+            )
+            if target_exists_and_public:
+                if qualname:
+                    qualname = f"#{qualname}"
+                return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{text}</a>'
+            else:
+                return text
 
     return Markup(
         re.sub(
@@ -173,16 +225,13 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             \b
                  (?!\d)[a-zA-Z0-9_]+
             (?:\.(?!\d)[a-zA-Z0-9_]+)+
-            (?:\(\))?
-            \b
+            (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.
             (?!</a>)  # not an existing link
             (?![/#])  # heuristic: not part of a URL
-            (?!\(\))  # not followed by parentheses (which should be part of the capture)
 
-            | # Part 2: `foo` or `foo()`
+            | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.
             (?<=<code>)
                  (?!\d)[a-zA-Z0-9_]+
-            (?:\.(?!\d)[a-zA-Z0-9_]+)*
             (?:\(\))?
             (?=</code>(?!</a>))
             """,

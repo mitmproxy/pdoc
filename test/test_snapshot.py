@@ -143,6 +143,7 @@ snapshots = [
         },
         with_output_directory=True,
     ),
+    Snapshot("top_level_reimports", ["top_level_reimports"]),
     Snapshot("type_checking_imports"),
 ]
 

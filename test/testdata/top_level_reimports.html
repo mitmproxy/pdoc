@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc $VERSION"/>
-    <title>demopackage API documentation</title>
+    <title>top_level_reimports API documentation</title>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
     <style>/*! syntax-highlighting.css */pre{line-height:125%;}span.linenos{color:inherit; background-color:transparent; padding-left:5px; padding-right:20px;}.pdoc-code .hll{background-color:#ffffcc}.pdoc-code{background:#f8f8f8;}.pdoc-code .c{color:#3D7B7B; font-style:italic}.pdoc-code .err{border:1px solid #FF0000}.pdoc-code .k{color:#008000; font-weight:bold}.pdoc-code .o{color:#666666}.pdoc-code .ch{color:#3D7B7B; font-style:italic}.pdoc-code .cm{color:#3D7B7B; font-style:italic}.pdoc-code .cp{color:#9C6500}.pdoc-code .cpf{color:#3D7B7B; font-style:italic}.pdoc-code .c1{color:#3D7B7B; font-style:italic}.pdoc-code .cs{color:#3D7B7B; font-style:italic}.pdoc-code .gd{color:#A00000}.pdoc-code .ge{font-style:italic}.pdoc-code .gr{color:#E40000}.pdoc-code .gh{color:#000080; font-weight:bold}.pdoc-code .gi{color:#008400}.pdoc-code .go{color:#717171}.pdoc-code .gp{color:#000080; font-weight:bold}.pdoc-code .gs{font-weight:bold}.pdoc-code .gu{color:#800080; font-weight:bold}.pdoc-code .gt{color:#0044DD}.pdoc-code .kc{color:#008000; font-weight:bold}.pdoc-code .kd{color:#008000; font-weight:bold}.pdoc-code .kn{color:#008000; font-weight:bold}.pdoc-code .kp{color:#008000}.pdoc-code .kr{color:#008000; font-weight:bold}.pdoc-code .kt{color:#B00040}.pdoc-code .m{color:#666666}.pdoc-code .s{color:#BA2121}.pdoc-code .na{color:#687822}.pdoc-code .nb{color:#008000}.pdoc-code .nc{color:#0000FF; font-weight:bold}.pdoc-code .no{color:#880000}.pdoc-code .nd{color:#AA22FF}.pdoc-code .ni{color:#717171; font-weight:bold}.pdoc-code .ne{color:#CB3F38; font-weight:bold}.pdoc-code .nf{color:#0000FF}.pdoc-code .nl{color:#767600}.pdoc-code .nn{color:#0000FF; font-weight:bold}.pdoc-code .nt{color:#008000; font-weight:bold}.pdoc-code .nv{color:#19177C}.pdoc-code .ow{color:#AA22FF; font-weight:bold}.pdoc-code .w{color:#bbbbbb}.pdoc-code .mb{color:#666666}.pdoc-code .mf{color:#666666}.pdoc-code .mh{color:#666666}.pdoc-code .mi{color:#666666}.pdoc-code .mo{color:#666666}.pdoc-code .sa{color:#BA2121}.pdoc-code .sb{color:#BA2121}.pdoc-code .sc{color:#BA2121}.pdoc-code .dl{color:#BA2121}.pdoc-code .sd{color:#BA2121; font-style:italic}.pdoc-code .s2{color:#BA2121}.pdoc-code .se{color:#AA5D1F; font-weight:bold}.pdoc-code .sh{color:#BA2121}.pdoc-code .si{color:#A45A77; font-weight:bold}.pdoc-code .sx{color:#008000}.pdoc-code .sr{color:#A45A77}.pdoc-code .s1{color:#BA2121}.pdoc-code .ss{color:#19177C}.pdoc-code .bp{color:#008000}.pdoc-code .fm{color:#0000FF}.pdoc-code .vc{color:#19177C}.pdoc-code .vg{color:#19177C}.pdoc-code .vi{color:#19177C}.pdoc-code .vm{color:#19177C}.pdoc-code .il{color:#666666}</style>
@@ -18,57 +18,40 @@
         <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
         <div>
 
-            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
-                   pattern=".+" required>
 
 
-        <h2>Submodules</h2>
-        <ul>
-                <li><a href="demopackage/child_b.html">demopackage.child_b</a></li>
-                <li><a href="demopackage/child_c.html">demopackage.child_c</a></li>
-                <li><a href="demopackage/_child_e.html">demopackage._child_e</a></li>
-        </ul>
 
         <h2>API Documentation</h2>
             <ul class="memberlist">
             <li>
-                    <a class="class" href="#Test">Test</a>
+                    <a class="class" href="#Foo">Foo</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Test.__init__">Test</a>
+                                <a class="function" href="#Foo.__init__">Foo</a>
                         </li>
                         <li>
-                                <a class="function" href="#Test.foo">foo</a>
+                                <a class="class" href="#Foo.FooSub">Foo.FooSub</a>
+                                        <ul class="memberlist">
+                                    <li>
+                                            <a class="function" href="#Foo.FooSub.__init__">FooSub</a>
+                                    </li>
+                            </ul>
+
                         </li>
                 </ul>
 
             </li>
             <li>
-                    <a class="class" href="#B">B</a>
+                    <a class="class" href="#Bar">Bar</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#B.__init__">B</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#B.b_type">b_type</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#B.b">b</a>
+                                <a class="function" href="#Bar.__init__">Bar</a>
                         </li>
                 </ul>
 
             </li>
             <li>
-                    <a class="class" href="#C">C</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#C.__init__">C</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#C.c">c</a>
-                        </li>
-                </ul>
-
+                    <a class="function" href="#baz">baz</a>
             </li>
     </ul>
 
@@ -84,408 +67,160 @@
     <main class="pdoc">
             <section>
                     <h1 class="modulename">
-demopackage    </h1>
+top_level_reimports    </h1>
 
-                        <div class="docstring"><p>A test package</p>
+                        <div class="docstring"><p>Test that objects re-exposed from an internal module are properly interlinked if they appear on the same page.</p>
+
+<ul>
+<li><a href="#baz">top_level_reimports.baz</a></li>
+<li><a href="#baz">top_level_reimports.baz()</a></li>
+<li><code><a href="#baz">top_level_reimports.baz</a></code></li>
+<li><code><a href="#baz">top_level_reimports.baz()</a></code></li>
+</ul>
 </div>
 
                         <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;A test package&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Test that objects re-exposed from an internal module are properly interlinked if they appear on the same page.</span>
 
-<span class="kn">import</span> <span class="nn">demopackage2</span>
+<span class="sd"> - top_level_reimports._internal.baz</span>
+<span class="sd"> - top_level_reimports._internal.baz()</span>
+<span class="sd"> - `top_level_reimports._internal.baz`</span>
+<span class="sd"> - `top_level_reimports._internal.baz()`</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">._internal</span> <span class="kn">import</span> <span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="p">,</span> <span class="n">baz</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_child_e</span><span class="p">,</span> <span class="n">child_b</span>
-<span class="kn">from</span> <span class="nn">._child_d</span> <span class="kn">import</span> <span class="n">Test</span>
-<span class="kn">from</span> <span class="nn">.child_b</span> <span class="kn">import</span> <span class="n">B</span>
-<span class="kn">from</span> <span class="nn">.child_c</span> <span class="kn">import</span> <span class="n">C</span>
-
-<span class="k">if</span> <span class="n">demopackage2</span><span class="p">:</span>
-    <span class="k">pass</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Test&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;B&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;C&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;child_b&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;child_c&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;demopackage2&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;_child_e&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;child_excluded&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="s2">&quot;Bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">]</span>
 </pre></div>
 
         </details>
 
             </section>
-                <section id="Test">
+                <section id="Foo">
                                 <div class="attr class">
-        <a class="headerlink" href="#Test">#&nbsp;&nbsp</a>
+        <a class="headerlink" href="#Foo">#&nbsp;&nbsp</a>
 
         
         <span class="def">class</span>
-        <span class="name">Test</span>:
+        <span class="name">Foo</span>:
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The Test class from _child_d.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Do foo.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">FooSub</span><span class="p">:</span>
+        <span class="k">pass</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>The Test class from _child_d.</p>
-</div>
+    
 
-
-                            <div id="Test.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#Test.__init__">#&nbsp;&nbsp</a>
+                            <div id="Foo.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Foo.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Test</span><span class="signature">()</span>
+            <span class="name">Foo</span><span class="signature">()</span>
     </div>
 
     
-    
-
-                            </div>
-                            <div id="Test.foo" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#Test.foo">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">foo</span><span class="signature">(self, a: int)</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Do foo.&quot;&quot;&quot;</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>Do foo.</p>
-</div>
-
-
-                            </div>
-                </section>
-                <section id="B">
-                                <div class="attr class">
-        <a class="headerlink" href="#B">#&nbsp;&nbsp</a>
-
-        
-        <span class="def">class</span>
-        <span class="name">B</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;This class is defined in .child_b.&quot;&quot;&quot;</span>
-
-    <span class="n">b_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">B</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;we have a self-referential attribute here&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">1</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>This class is defined in .child_b.</p>
-</div>
-
-
-                            <div id="B.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#B.__init__">#&nbsp;&nbsp</a>
-
-        
-            <span class="name">B</span><span class="signature">()</span>
-    </div>
-
-    
-    
-
-                            </div>
-                            <div id="B.b_type" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#B.b_type">#&nbsp;&nbsp</a>
-
-        <span class="name">b_type</span><span class="annotation">: Type[<a href="#B">demopackage.B</a>]</span>
-    </div>
-
-    
-            <div class="docstring"><p>we have a self-referential attribute here</p>
-</div>
-
-
-                            </div>
-                            <div id="B.b" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#B.b">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">b</span><span class="signature">(self)</span>:
-    </div>
-
-            <details>
-            <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">1</span>
-</pre></div>
-
-        </details>
-
     
 
                             </div>
                 </section>
-                <section id="C">
+                <section id="Foo.FooSub">
                                 <div class="attr class">
-        <a class="headerlink" href="#C">#&nbsp;&nbsp</a>
+        <a class="headerlink" href="#Foo.FooSub">#&nbsp;&nbsp</a>
 
         
         <span class="def">class</span>
-        <span class="name">C</span><wbr>(<span class="base"><a href="#B">demopackage.B</a></span>):
+        <span class="name">Foo.FooSub</span>:
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">child_b</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This class is defined in .child_c and inherits from .child_b.B&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">class</span> <span class="nc">FooSub</span><span class="p">:</span>
+        <span class="k">pass</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>This class is defined in .child_c and inherits from .child_b.B</p>
-</div>
+    
 
-
-                            <div id="C.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#C.__init__">#&nbsp;&nbsp</a>
+                            <div id="Foo.FooSub.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Foo.FooSub.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">C</span><span class="signature">()</span>
+            <span class="name">Foo.FooSub</span><span class="signature">()</span>
     </div>
 
     
     
 
                             </div>
-                            <div id="C.c" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#C.c">#&nbsp;&nbsp</a>
+                </section>
+                <section id="Bar">
+                                <div class="attr class">
+        <a class="headerlink" href="#Bar">#&nbsp;&nbsp</a>
 
         
-            <span class="def">def</span>
-            <span class="name">c</span><span class="signature">(self)</span>:
+        <span class="def">class</span>
+        <span class="name">Bar</span><wbr>(<span class="base"><a href="#Foo">top_level_reimports.Foo</a></span>):
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
+    <span class="k">pass</span>
 </pre></div>
 
         </details>
 
+    
+
+                            <div id="Bar.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Bar.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Bar</span><span class="signature">()</span>
+    </div>
+
+    
     
 
                             </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="#B">B</a></dt>
-                                <dd id="C.b_type" class="variable"><a href="#B.b_type">b_type</a></dd>
-                <dd id="C.b" class="function"><a href="#B.b">b</a></dd>
+                                    <div><dt><a href="#Foo">Foo</a></dt>
+                                <dd id="Bar.FooSub" class="class"><a href="#Foo.FooSub">FooSub</a></dd>
 
             </div>
                                 </dl>
                             </div>
                 </section>
+                <section id="baz">
+                            <div class="attr function"><a class="headerlink" href="#baz">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">baz</span><span class="signature">(
+    f: <a href="#Foo">top_level_reimports.Foo</a>
+) -&gt; <a href="#Foo.FooSub">top_level_reimports.Foo.FooSub</a></span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Foo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Foo</span><span class="o">.</span><span class="n">FooSub</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+    
+
+                </section>
     </main>
-<script>
-    function escapeHTML(html) {
-        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
-    }
-
-    const originalContent = document.querySelector("main.pdoc");
-    let currentContent = originalContent;
-
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement("main");
-            elem.classList.add("pdoc");
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
-    }
-
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get("search");
-    }
-
-    const searchBox = document.querySelector(".pdoc input[type=search]");
-    searchBox.addEventListener("input", function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = "";
-            url.searchParams.set("search", searchBox.value);
-        } else {
-            url.searchParams.delete("search");
-        }
-        history.replaceState("", "", url.toString());
-        onInput();
-    });
-    window.addEventListener("popstate", onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement("script");
-                script.type = "text/javascript";
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = "search.js";
-                document.getElementsByTagName("head")[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error("Cannot fetch pdoc search index");
-            searchErr = "Cannot fetch search index.";
-        }
-        onInput();
-
-        document.querySelector("nav.pdoc").addEventListener("click", e => {
-            if (e.target.hash) {
-                searchBox.value = "";
-                searchBox.dispatchEvent(new Event("input"));
-            }
-        });
-    }
-
-    function onInput() {
-        setContent((() => {
-            const term = getSearchTerm();
-            if (!term) {
-                return null
-            }
-            if (searchErr) {
-                return `<h3>Error: ${searchErr}</h3>`
-            }
-            if (!search) {
-                return "<h3>Searching...</h3>"
-            }
-
-            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
-
-            const results = search(term);
-
-            let html;
-            if (results.length === 0) {
-                html = `No search results for '${escapeHTML(term)}'.`
-            } else {
-                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
-            }
-            for (let result of results.slice(0, 10)) {
-                let doc = result.doc;
-                let url = `${doc.modulename.replaceAll(".", "/")}.html`;
-                if (doc.qualname) {
-                    url += `#${doc.qualname}`;
-                }
-
-                let heading;
-                switch (result.doc.type) {
-                    case "function":
-                        heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">${doc.signature}:</span>`;
-                        break;
-                    case "class":
-                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
-                        if (doc.bases)
-                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
-                        heading += `:`;
-                        break;
-                    case "variable":
-                        heading = `<span class="name">${doc.fullname}</span>`;
-                        if (doc.annotation)
-                            heading += `<span class="annotation">${doc.annotation}</span>`;
-                        if (doc.default_value)
-                            heading += `<span class="default_value">${doc.default_value}</span>`;
-                        break;
-                    default:
-                        heading = `<span class="name">${doc.fullname}</span>`;
-                        break;
-                }
-                html += `
-                        <section class="search-result">
-                        <a href="${url}" class="attr ${doc.type}">${heading}</a>
-                        <div class="docstring">${doc.doc}</div>
-                        </section>
-                    `;
-
-            }
-            return html;
-        })());
-    }
-
-    if (getSearchTerm()) {
-        initialize();
-        searchBox.value = getSearchTerm();
-        onInput();
-    } else {
-        searchBox.addEventListener("focus", initialize, {once: true});
-    }
-
-    searchBox.addEventListener("keydown", e => {
-        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
-            let focused = currentContent.querySelector(".search-result.focused");
-            if (!focused) {
-                currentContent.querySelector(".search-result").classList.add("focused");
-            } else if (
-                e.key === "ArrowDown"
-                && focused.nextElementSibling
-                && focused.nextElementSibling.classList.contains("search-result")
-            ) {
-                focused.classList.remove("focused");
-                focused.nextElementSibling.classList.add("focused");
-                focused.nextElementSibling.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
-                });
-            } else if (
-                e.key === "ArrowUp"
-                && focused.previousElementSibling
-                && focused.previousElementSibling.classList.contains("search-result")
-            ) {
-                focused.classList.remove("focused");
-                focused.previousElementSibling.classList.add("focused");
-                focused.previousElementSibling.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
-                });
-            } else if (
-                e.key === "Enter"
-            ) {
-                focused.querySelector("a").click();
-            }
-        }
-    });
-</script></body>
+</body>
 </html>

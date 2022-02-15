@@ -7,6 +7,7 @@ import pytest
 
 from pdoc.render_helpers import (
     edit_url,
+    possible_sources,
     qualname_candidates,
     relative_link,
     to_html,
@@ -73,7 +74,21 @@ def test_edit_url(
     ],
 )
 def test_split_identifier(all_modules, fullname, result):
-    assert split_identifier(all_modules, fullname) == result
+    with pytest.warns(DeprecationWarning):
+        assert split_identifier(all_modules, fullname) == result
+
+
+@pytest.mark.parametrize(
+    "all_modules,fullname,result",
+    [
+        [["a"], "a.B", [("a", "B")]],
+        [["a", "a.b"], "a.b", [("a.b", "")]],
+        [["a"], "a", [("a", "")]],
+        [["a", "a.b"], "a.b.c.d", [("a.b.c", "d"), ("a.b", "c.d")]],
+    ],
+)
+def test_possible_sources(all_modules, fullname, result):
+    assert list(possible_sources(all_modules, fullname)) == result
 
 
 def test_markdown_toc():

@@ -1,0 +1,12 @@
+<module top_level_reimports  # Test that objects re…
+    <class top_level_reimports.Foo  # inherited from top_level_reimports._internal.Foo
+        <method def __init__(): ...  # inherited from top_level_reimports._internal.Foo.__init__>
+        <class top_level_reimports.Foo.FooSub  # inherited from top_level_reimports._internal.Foo.FooSub
+            <method def __init__(): ...  # inherited from top_level_reimports._internal.Foo.FooSub.__init__>>>
+    <class top_level_reimports.Bar  # inherited from top_level_reimports._internal.Bar
+        <method def __init__(): ...  # inherited from top_level_reimports._internal.Bar.__init__>
+        <class top_level_reimports.Bar.FooSub  # inherited from top_level_reimports._internal.Foo.FooSub
+            <method def __init__(): ...  # inherited from top_level_reimports._internal.Foo.FooSub.__init__>>>
+    <function def baz(
+        f: top_level_reimports._internal.Foo
+    ) -> top_level_reimports._internal.Foo.FooSub: ...  # inherited from top_level_reimports._internal.baz>>
