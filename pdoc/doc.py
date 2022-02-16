@@ -614,32 +614,37 @@ class Class(Namespace[type]):
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
 
-        # Do a dance similar to
-        # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
-        call = _safe_getattr(type(self.obj), "__call__", object.__call__)
-        if not isinstance(call, NonUserDefinedCallables):
-            # Does the metaclass define a custom __call__ method?
-            unsorted["__init__"] = call
-            if issubclass(self.obj, enum.Enum):
-                # Special case: do not show a constructor for enums. They are typically not constructed by users.
+        init_has_no_doc = unsorted.get("__init__", object.__init__).__doc__ in (
+            None,
+            object.__init__.__doc__,
+        )
+        if init_has_no_doc:
+            if inspect.isabstract(self.obj):
+                # Special case: We don't want to show constructors for abstract base classes unless
+                # they have a custom docstring.
+                del unsorted["__init__"]
+            elif issubclass(self.obj, enum.Enum):
+                # Special case: Do not show a constructor for enums. They are typically not constructed by users.
                 # The alternative would be showing __new__, as __call__ is too verbose.
                 del unsorted["__init__"]
-        else:
-            # Does our class define a custom __new__ method?
-            new = _safe_getattr(self.obj, "__new__", object.__new__)
-            if not isinstance(new, NonUserDefinedCallables):
-                # we only want to pick up __new__ if it has a non-default docstring.
-                prefer_init_over_new = new.__doc__ in (None, object.__new__.__doc__)
-                if not prefer_init_over_new:
-                    unsorted["__init__"] = new
-
-        if inspect.isabstract(self.obj) and _safe_getattr(
-            self.obj, "__init__", object.__init__
-        ).__doc__ in (None, object.__init__.__doc__):
-            # Special case: We don't want to show constructors for abstract base classes unless
-            # they have a custom docstring. If a docstring is present and display is still undesired,
-            # users need to override the is_public macro.
-            del unsorted["__init__"]
+            else:
+                # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to
+                # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
+                call = _safe_getattr(type(self.obj), "__call__", object.__call__)
+                if not isinstance(call, NonUserDefinedCallables):
+                    # Does the metaclass define a custom __call__ method?
+                    unsorted["__init__"] = call
+                else:
+                    # Does our class define a custom __new__ method?
+                    new = _safe_getattr(self.obj, "__new__", object.__new__)
+                    if not isinstance(new, NonUserDefinedCallables):
+                        # we only want to pick up __new__ if it has a non-default docstring.
+                        prefer_new_over_init = new.__doc__ not in (
+                            None,
+                            object.__new__.__doc__,
+                        )
+                        if prefer_new_over_init:
+                            unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:

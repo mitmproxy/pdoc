@@ -209,6 +209,15 @@
             <li>
                     <a class="function" href="#linkify_links">linkify_links</a>
             </li>
+            <li>
+                    <a class="class" href="#Issue352">Issue352</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Issue352.__init__">Issue352</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -536,6 +545,17 @@ misc    </h1>
 <span class="sd">    - [link in target](https://example.com/misc.linkify_links)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+
+<span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Meta.__call__&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">Issue352</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Meta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
     <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
     <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
@@ -561,6 +581,7 @@ misc    </h1>
     <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
     <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
     <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Issue352&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1742,6 +1763,47 @@ indents</p>
 </div>
 
 
+                </section>
+                <section id="Issue352">
+                                <div class="attr class">
+        <a class="headerlink" href="#Issue352">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">Issue352</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Issue352</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Meta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            <div id="Issue352.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Issue352.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Issue352</span><span class="signature">()</span>
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p><a href="#Issue352.__init__">Issue352.__init__</a> should be preferred over Meta.__call__.</p>
+</div>
+
+
+                            </div>
                 </section>
     </main>
 </body>

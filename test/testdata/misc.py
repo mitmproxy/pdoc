@@ -306,6 +306,17 @@ def linkify_links():
     - [link in target](https://example.com/misc.linkify_links)
     """
 
+
+class Meta(type):
+    def __call__(*args, **kwargs):
+        """Meta.__call__"""
+
+
+class Issue352(metaclass=Meta):
+    def __init__(self):
+        """Issue352.__init__ should be preferred over Meta.__call__."""
+
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -331,4 +342,5 @@ __all__ = [  # noqa
     "add_five",
     "add_six",
     "linkify_links",
+    "Issue352",
 ]

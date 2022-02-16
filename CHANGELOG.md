@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - When determining the docstring for a constructor, prefer `Class.__init__.__doc__` over `Metaclass.__call__.__doc__`
+   over `Class.__new__.__doc__`.
+   ([#352](https://github.com/mitmproxy/pdoc/issues/352), [@denised](https://github.com/denised))
  - Improve linking of classes that are re-exported in a common top-level namespace.
  - Make it more clear that Markdown ist the default docformat. ([@Dliwk](https://github.com/Dliwk))
 

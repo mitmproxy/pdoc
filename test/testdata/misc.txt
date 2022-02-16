@@ -62,4 +62,6 @@
     <method def add_four(b: int) -> int: ...  # This function adds t…>
     <method def add_five(b: int) -> int: ...  # This function adds f…>
     <method def add_six(b: int) -> int: ...  # This function adds s…>
-    <function def linkify_links(): ...  # This docstring conta…>>
+    <function def linkify_links(): ...  # This docstring conta…>
+    <class misc.Issue352
+        <method def __init__(self): ...  # Issue352.__init__ sh…>>>
