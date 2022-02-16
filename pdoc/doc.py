@@ -630,21 +630,24 @@ class Class(Namespace[type]):
             else:
                 # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to
                 # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
-                call = _safe_getattr(type(self.obj), "__call__", object.__call__)
-                if not isinstance(call, NonUserDefinedCallables):
-                    # Does the metaclass define a custom __call__ method?
+                call = _safe_getattr(type(self.obj), "__call__", None)
+                custom_call_with_custom_docstring = (
+                    call is not None
+                    and not isinstance(call, NonUserDefinedCallables)
+                    and call.__doc__ not in (None, object.__call__.__doc__)
+                )
+                if custom_call_with_custom_docstring:
                     unsorted["__init__"] = call
                 else:
                     # Does our class define a custom __new__ method?
-                    new = _safe_getattr(self.obj, "__new__", object.__new__)
-                    if not isinstance(new, NonUserDefinedCallables):
-                        # we only want to pick up __new__ if it has a non-default docstring.
-                        prefer_new_over_init = new.__doc__ not in (
-                            None,
-                            object.__new__.__doc__,
-                        )
-                        if prefer_new_over_init:
-                            unsorted["__init__"] = new
+                    new = _safe_getattr(self.obj, "__new__", None)
+                    custom_new_with_custom_docstring = (
+                        new is not None
+                        and not isinstance(new, NonUserDefinedCallables)
+                        and new.__doc__ not in (None, object.__new__.__doc__)
+                    )
+                    if custom_new_with_custom_docstring:
+                        unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
         for cls in self.obj.__mro__:

@@ -307,14 +307,23 @@ def linkify_links():
     """
 
 
-class Meta(type):
-    def __call__(*args, **kwargs):
+class Issue352aMeta(type):
+    def __call__(cls, *args, **kwargs):
         """Meta.__call__"""
 
 
-class Issue352(metaclass=Meta):
+class Issue352a(metaclass=Issue352aMeta):
     def __init__(self):
         """Issue352.__init__ should be preferred over Meta.__call__."""
+
+
+class Issue352bMeta(type):
+    def __call__(cls, *args, **kwargs):
+        pass
+
+
+class Issue352b(metaclass=Issue352bMeta):
+    """No docstrings for the constructor here."""
 
 
 __all__ = [  # noqa
@@ -342,5 +351,6 @@ __all__ = [  # noqa
     "add_five",
     "add_six",
     "linkify_links",
-    "Issue352",
+    "Issue352a",
+    "Issue352b",
 ]

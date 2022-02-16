@@ -210,10 +210,19 @@
                     <a class="function" href="#linkify_links">linkify_links</a>
             </li>
             <li>
-                    <a class="class" href="#Issue352">Issue352</a>
+                    <a class="class" href="#Issue352a">Issue352a</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Issue352.__init__">Issue352</a>
+                                <a class="function" href="#Issue352a.__init__">Issue352a</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Issue352b">Issue352b</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Issue352b.__init__">Issue352b</a>
                         </li>
                 </ul>
 
@@ -546,14 +555,23 @@ misc    </h1>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Issue352aMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Meta.__call__&quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">Issue352</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Meta</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Issue352a</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352aMeta</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">Issue352bMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">Issue352b</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352bMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
@@ -581,7 +599,8 @@ misc    </h1>
     <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
     <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
     <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Issue352&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Issue352a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Issue352b&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1764,18 +1783,18 @@ indents</p>
 
 
                 </section>
-                <section id="Issue352">
+                <section id="Issue352a">
                                 <div class="attr class">
-        <a class="headerlink" href="#Issue352">#&nbsp;&nbsp</a>
+        <a class="headerlink" href="#Issue352a">#&nbsp;&nbsp</a>
 
         
         <span class="def">class</span>
-        <span class="name">Issue352</span>:
+        <span class="name">Issue352a</span>:
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Issue352</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Meta</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Issue352a</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352aMeta</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
 </pre></div>
@@ -1784,11 +1803,11 @@ indents</p>
 
     
 
-                            <div id="Issue352.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#Issue352.__init__">#&nbsp;&nbsp</a>
+                            <div id="Issue352a.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Issue352a.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Issue352</span><span class="signature">()</span>
+            <span class="name">Issue352a</span><span class="signature">()</span>
     </div>
 
             <details>
@@ -1799,9 +1818,42 @@ indents</p>
 
         </details>
 
-            <div class="docstring"><p><a href="#Issue352.__init__">Issue352.__init__</a> should be preferred over Meta.__call__.</p>
+            <div class="docstring"><p>Issue352.__init__ should be preferred over Meta.__call__.</p>
 </div>
 
+
+                            </div>
+                </section>
+                <section id="Issue352b">
+                                <div class="attr class">
+        <a class="headerlink" href="#Issue352b">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">Issue352b</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Issue352b</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352bMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>No docstrings for the constructor here.</p>
+</div>
+
+
+                            <div id="Issue352b.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Issue352b.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Issue352b</span><span class="signature">()</span>
+    </div>
+
+    
+    
 
                             </div>
                 </section>
