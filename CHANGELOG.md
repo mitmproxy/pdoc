@@ -27,6 +27,8 @@
      [`index.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/index.html.jinja2)
      to cleanly extend `frame.html.jinja2` instead of patching `module.html.jinja2`. See
      [`examples/mkdocs`](https://github.com/mitmproxy/pdoc/tree/main/examples/mkdocs) for an updated example.
+     If you defined a custom `{% block nav %}` block, you need to remove the outermost `<nav>` element, which is 
+     now part of the frame around it.
    - Users who customized pdoc's CSS: CSS style definitions moved from `module.html.jinja2` into individual CSS files,
      namely
      [`theme.css`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/theme.css),
