@@ -7,6 +7,8 @@
    ([#352](https://github.com/mitmproxy/pdoc/issues/352), [@denised](https://github.com/denised))
  - Improve linking of classes that are re-exported in a common top-level namespace.
  - Make it more clear that Markdown ist the default docformat. ([@Dliwk](https://github.com/Dliwk))
+ - Fix compatiblity with code using `ctypes.util.find_library`.
+   ([#358](https://github.com/mitmproxy/pdoc/issues/358), [@bubalis](https://github.com/bubalis))
 
 # 2022-02-14: pdoc 10.0.1
 

@@ -13,6 +13,7 @@ import os
 import pkgutil
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import traceback
@@ -150,6 +151,35 @@ def parse_spec(spec: Path | str) -> str:
         return spec
 
 
+def _noop(*args, **kwargs):
+    pass
+
+
+class PdocDefusedPopen(subprocess.Popen):
+    if platform.system() == "Windows":  # pragma: no cover
+        _noop_exe = "echo.exe"
+    else:  # pragma: no cover
+        _noop_exe = "echo"
+
+    def __init__(self, *args, **kwargs):  # pragma: no cover
+        command_allowed = (
+            args
+            and args[0]
+            and args[0][0]
+            in (
+                # these invocations may all come from https://github.com/python/cpython/blob/main/Lib/ctypes/util.py,
+                # which we want to keep working.
+                "/sbin/ldconfig",
+                "ld",
+                shutil.which("gcc") or shutil.which("cc"),
+                shutil.which("objdump"),
+            )
+        )
+        if not command_allowed:
+            kwargs["executable"] = self._noop_exe
+        super().__init__(*args, **kwargs)
+
+
 @contextmanager
 def mock_some_common_side_effects():
     """
@@ -158,21 +188,8 @@ def mock_some_common_side_effects():
 
     Note that this function must not be used for security purposes, it's easily bypassable.
     """
-    if platform.system() == "Windows":  # pragma: no cover
-        noop_exe = "echo.exe"
-    else:  # pragma: no cover
-        noop_exe = "echo"
-
-    def noop(*args, **kwargs):
-        pass
-
-    class PdocDefusedPopen(subprocess.Popen):
-        def __init__(self, *args, **kwargs):  # pragma: no cover
-            kwargs["executable"] = noop_exe
-            super().__init__(*args, **kwargs)
-
     with patch("subprocess.Popen", new=PdocDefusedPopen), patch(
-        "os.startfile", new=noop, create=True
+        "os.startfile", new=_noop, create=True
     ), patch("sys.stdout", new=io.StringIO()), patch(
         "sys.stderr", new=io.StringIO()
     ), patch(
