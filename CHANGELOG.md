@@ -1,6 +1,6 @@
 # Release History
 
-# Unreleased: pdoc next
+# 2022-03-01: pdoc 10.0.2
 
  - When determining the docstring for a constructor, prefer `Class.__init__.__doc__` over `Metaclass.__call__.__doc__`
    over `Class.__new__.__doc__`.

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.1"/>
+    <meta name="generator" content="pdoc 10.0.2"/>
     <title>pdoc.doc API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -221,7 +221,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.1</footer>
+            <footer>pdoc 10.0.2</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -238,7 +238,7 @@
 
                         <div class="docstring"><p>This module defines pdoc's documentation objects. A documentation object corresponds to <em>something</em>
 in your Python code that has a docstring or type annotation. Typically, this only includes
-modules, classes, functions and methods. However, <code><a href="../pdoc.html">pdoc</a></code> adds support for extracting documentation
+modules, classes, functions and methods. However, <code>pdoc</code> adds support for extracting documentation
 from the abstract syntax tree, which means that variables (module, class or instance) are supported too.</p>
 
 <p>There are four main types of documentation objects:</p>
@@ -873,32 +873,40 @@ By convention, all attributes are read-only, although this is not enforced at ru
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
             <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
 
-        <span class="c1"># Do a dance similar to</span>
-        <span class="c1"># https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376</span>
-        <span class="n">call</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="s2">&quot;__call__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__call__</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">):</span>
-            <span class="c1"># Does the metaclass define a custom __call__ method?</span>
-            <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call</span>
-            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-                <span class="c1"># Special case: do not show a constructor for enums. They are typically not constructed by users.</span>
+        <span class="n">init_has_no_doc</span> <span class="o">=</span> <span class="n">unsorted</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__init__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">init_has_no_doc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isabstract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">):</span>
+                <span class="c1"># Special case: We don&#39;t want to show constructors for abstract base classes unless</span>
+                <span class="c1"># they have a custom docstring.</span>
+                <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+                <span class="c1"># Special case: Do not show a constructor for enums. They are typically not constructed by users.</span>
                 <span class="c1"># The alternative would be showing __new__, as __call__ is too verbose.</span>
                 <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Does our class define a custom __new__ method?</span>
-            <span class="n">new</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__new__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">):</span>
-                <span class="c1"># we only want to pick up __new__ if it has a non-default docstring.</span>
-                <span class="n">prefer_init_over_new</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">prefer_init_over_new</span><span class="p">:</span>
-                    <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
-
-        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isabstract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_safe_getattr</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__init__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-        <span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">):</span>
-            <span class="c1"># Special case: We don&#39;t want to show constructors for abstract base classes unless</span>
-            <span class="c1"># they have a custom docstring. If a docstring is present and display is still undesired,</span>
-            <span class="c1"># users need to override the is_public macro.</span>
-            <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Check if there&#39;s a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to</span>
+                <span class="c1"># https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376</span>
+                <span class="n">call</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="s2">&quot;__call__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">custom_call_with_custom_docstring</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">call</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__call__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">custom_call_with_custom_docstring</span><span class="p">:</span>
+                    <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Does our class define a custom __new__ method?</span>
+                    <span class="n">new</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__new__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">custom_new_with_custom_docstring</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">new</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">new</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">custom_new_with_custom_docstring</span><span class="p">:</span>
+                        <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
 
         <span class="nb">sorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
@@ -1551,7 +1559,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
     </div>
 
     
-            <div class="docstring"><p>The module that this object is in, for example <code><a href="">pdoc.doc</a></code>.</p>
+            <div class="docstring"><p>The module that this object is in, for example <code>pdoc.doc</code>.</p>
 </div>
 
 
@@ -2430,32 +2438,40 @@ module with the name <code>__init__.py</code>.</p>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
             <span class="n">unsorted</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
 
-        <span class="c1"># Do a dance similar to</span>
-        <span class="c1"># https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376</span>
-        <span class="n">call</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="s2">&quot;__call__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__call__</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">):</span>
-            <span class="c1"># Does the metaclass define a custom __call__ method?</span>
-            <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call</span>
-            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-                <span class="c1"># Special case: do not show a constructor for enums. They are typically not constructed by users.</span>
+        <span class="n">init_has_no_doc</span> <span class="o">=</span> <span class="n">unsorted</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__init__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">init_has_no_doc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isabstract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">):</span>
+                <span class="c1"># Special case: We don&#39;t want to show constructors for abstract base classes unless</span>
+                <span class="c1"># they have a custom docstring.</span>
+                <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+                <span class="c1"># Special case: Do not show a constructor for enums. They are typically not constructed by users.</span>
                 <span class="c1"># The alternative would be showing __new__, as __call__ is too verbose.</span>
                 <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Does our class define a custom __new__ method?</span>
-            <span class="n">new</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__new__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">):</span>
-                <span class="c1"># we only want to pick up __new__ if it has a non-default docstring.</span>
-                <span class="n">prefer_init_over_new</span> <span class="o">=</span> <span class="n">new</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">prefer_init_over_new</span><span class="p">:</span>
-                    <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
-
-        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isabstract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_safe_getattr</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__init__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span>
-        <span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">):</span>
-            <span class="c1"># Special case: We don&#39;t want to show constructors for abstract base classes unless</span>
-            <span class="c1"># they have a custom docstring. If a docstring is present and display is still undesired,</span>
-            <span class="c1"># users need to override the is_public macro.</span>
-            <span class="k">del</span> <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Check if there&#39;s a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to</span>
+                <span class="c1"># https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376</span>
+                <span class="n">call</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="s2">&quot;__call__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">custom_call_with_custom_docstring</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">call</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__call__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">custom_call_with_custom_docstring</span><span class="p">:</span>
+                    <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">call</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Does our class define a custom __new__ method?</span>
+                    <span class="n">new</span> <span class="o">=</span> <span class="n">_safe_getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__new__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">custom_new_with_custom_docstring</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">new</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">NonUserDefinedCallables</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">new</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">custom_new_with_custom_docstring</span><span class="p">:</span>
+                        <span class="n">unsorted</span><span class="p">[</span><span class="s2">&quot;__init__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
 
         <span class="nb">sorted</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>

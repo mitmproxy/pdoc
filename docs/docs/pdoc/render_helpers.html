@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.1"/>
+    <meta name="generator" content="pdoc 10.0.2"/>
     <title>pdoc.render_helpers API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -54,6 +54,9 @@
                     <a class="function" href="#to_markdown">to_markdown</a>
             </li>
             <li>
+                    <a class="function" href="#possible_sources">possible_sources</a>
+            </li>
+            <li>
                     <a class="function" href="#split_identifier">split_identifier</a>
             </li>
             <li>
@@ -98,7 +101,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.1</footer>
+            <footer>pdoc 10.0.2</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -120,8 +123,9 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span>
 <span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
 
 <span class="kn">import</span> <span class="nn">pygments.formatters.html</span>
@@ -205,23 +209,45 @@
     <span class="k">return</span> <span class="n">docstrings</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">docstring</span><span class="p">,</span> <span class="n">docformat</span><span class="p">,</span> <span class="n">module</span><span class="o">.</span><span class="n">source_file</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">possible_sources</span><span class="p">(</span>
+    <span class="n">all_modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a given identifier, return all possible sources where it could originate from.</span>
+<span class="sd">    For example, assume `examplepkg._internal.Foo` with all_modules=[&quot;examplepkg&quot;].</span>
+<span class="sd">    This could be a Foo class in _internal.py, or a nested `class _internal: class Foo` in examplepkg.</span>
+<span class="sd">    We return both candidates as we don&#39;t know if _internal.py exists.</span>
+<span class="sd">    It may not be in all_modules because it&#39;s been excluded by `__all__`.</span>
+<span class="sd">    However, if `examplepkg._internal` is in all_modules we know that it can only be that option.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">identifier</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span>
+
+    <span class="n">modulename</span> <span class="o">=</span> <span class="n">identifier</span>
+    <span class="n">qualname</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">modulename</span><span class="p">:</span>
+        <span class="n">modulename</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">add</span> <span class="o">=</span> <span class="n">modulename</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">add</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">qualname</span> <span class="k">else</span> <span class="n">add</span>
+        <span class="k">yield</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span>
+        <span class="k">if</span> <span class="n">modulename</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid identifier: </span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">split_identifier</span><span class="p">(</span><span class="n">all_modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">fullname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Split an identifier into a `(modulename, qualname)` tuple. For example, `pdoc.render_helpers.split_identifier`</span>
 <span class="sd">    would be split into `(&quot;pdoc.render_helpers&quot;,&quot;split_identifier&quot;)`. This is necessary to generate links to the</span>
 <span class="sd">    correct module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid identifier.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">fullname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">parent</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">fullname</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-        <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">split_identifier</span><span class="p">(</span><span class="n">all_modules</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">modulename</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">name</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;pdoc.render_helpers.split_identifier is deprecated and will be removed in a future release. &quot;</span>
+        <span class="s2">&quot;Use pdoc.render_helpers.possible_sources instead.&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">*</span><span class="n">_</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">possible_sources</span><span class="p">(</span><span class="n">all_modules</span><span class="p">,</span> <span class="n">fullname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">last</span>
 
 
 <span class="k">def</span> <span class="nf">_relative_link</span><span class="p">(</span><span class="n">current</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -245,6 +271,11 @@
 
 
 <span class="k">def</span> <span class="nf">qualname_candidates</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_qualname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an identifier in a current namespace, return all possible qualnames in the current module.</span>
+<span class="sd">    For example, if we are in Foo&#39;s subclass Bar and `baz()` is the identifier,</span>
+<span class="sd">    return `Foo.Bar.baz()`, `Foo.baz()`, and `baz()`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">context_qualname</span><span class="p">)</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">while</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -273,15 +304,39 @@
             <span class="k">if</span> <span class="n">doc</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
                 <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
 
-        <span class="c1"># Find the parent module.</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">qualname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">module</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">split_identifier</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">],</span> <span class="n">identifier</span><span class="p">)</span>
+            <span class="c1"># Check if the object we are interested in is imported and re-exposed in the current namespace.</span>
+            <span class="k">for</span> <span class="n">module</span><span class="p">,</span> <span class="n">qualname</span> <span class="ow">in</span> <span class="n">possible_sources</span><span class="p">(</span>
+                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">],</span> <span class="n">identifier</span>
+            <span class="p">):</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">doc</span>
+                    <span class="ow">and</span> <span class="n">doc</span><span class="o">.</span><span class="n">taken_from</span> <span class="o">==</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">qualname</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;()&quot;</span><span class="p">):</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">()&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">fullname</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># possible_sources did not find a parent module.</span>
             <span class="k">return</span> <span class="n">text</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
-                <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">relative_link</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span><span class="si">}{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
+            <span class="c1"># It&#39;s not, but we now know the parent module. Does the target exist?</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">][</span><span class="n">module</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+            <span class="n">target_exists_and_public</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">target_exists_and_public</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
+                    <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">relative_link</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span><span class="si">}{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">text</span>
 
     <span class="k">return</span> <span class="n">Markup</span><span class="p">(</span>
         <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
@@ -291,16 +346,13 @@
 <span class="sd">            \b</span>
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)+</span>
-<span class="sd">            (?:\(\))?</span>
-<span class="sd">            \b</span>
+<span class="sd">            (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.</span>
 <span class="sd">            (?!&lt;/a&gt;)  # not an existing link</span>
 <span class="sd">            (?![/#])  # heuristic: not part of a URL</span>
-<span class="sd">            (?!\(\))  # not followed by parentheses (which should be part of the capture)</span>
 
-<span class="sd">            | # Part 2: `foo` or `foo()`</span>
+<span class="sd">            | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.</span>
 <span class="sd">            (?&lt;=&lt;code&gt;)</span>
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
-<span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)*</span>
 <span class="sd">            (?:\(\))?</span>
 <span class="sd">            (?=&lt;/code&gt;(?!&lt;/a&gt;))</span>
 <span class="sd">            &quot;&quot;&quot;</span><span class="p">,</span>
@@ -589,6 +641,57 @@ Overwrite this to configure Markdown rendering.</p>
     
 
                 </section>
+                <section id="possible_sources">
+                            <div class="attr function"><a class="headerlink" href="#possible_sources">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">possible_sources</span><span class="signature">(
+    all_modules: Collection[str],
+    identifier: str
+) -&gt; Iterable[tuple[str, str]]</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">possible_sources</span><span class="p">(</span>
+    <span class="n">all_modules</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a given identifier, return all possible sources where it could originate from.</span>
+<span class="sd">    For example, assume `examplepkg._internal.Foo` with all_modules=[&quot;examplepkg&quot;].</span>
+<span class="sd">    This could be a Foo class in _internal.py, or a nested `class _internal: class Foo` in examplepkg.</span>
+<span class="sd">    We return both candidates as we don&#39;t know if _internal.py exists.</span>
+<span class="sd">    It may not be in all_modules because it&#39;s been excluded by `__all__`.</span>
+<span class="sd">    However, if `examplepkg._internal` is in all_modules we know that it can only be that option.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">identifier</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span>
+
+    <span class="n">modulename</span> <span class="o">=</span> <span class="n">identifier</span>
+    <span class="n">qualname</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">modulename</span><span class="p">:</span>
+        <span class="n">modulename</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">add</span> <span class="o">=</span> <span class="n">modulename</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">add</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">qualname</span> <span class="k">else</span> <span class="n">add</span>
+        <span class="k">yield</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span>
+        <span class="k">if</span> <span class="n">modulename</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid identifier: </span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>For a given identifier, return all possible sources where it could originate from.
+For example, assume <code>examplepkg._internal.Foo</code> with all_modules=["examplepkg"].
+This could be a Foo class in _internal.py, or a nested <code>class _internal: class Foo</code> in examplepkg.
+We return both candidates as we don't know if _internal.py exists.
+It may not be in all_modules because it's been excluded by <code>__all__</code>.
+However, if <code>examplepkg._internal</code> is in all_modules we know that it can only be that option.</p>
+</div>
+
+
+                </section>
                 <section id="split_identifier">
                             <div class="attr function"><a class="headerlink" href="#split_identifier">#&nbsp;&nbsp</a>
 
@@ -605,23 +708,19 @@ Overwrite this to configure Markdown rendering.</p>
 <span class="sd">    would be split into `(&quot;pdoc.render_helpers&quot;,&quot;split_identifier&quot;)`. This is necessary to generate links to the</span>
 <span class="sd">    correct module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">fullname</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid identifier.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">all_modules</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">fullname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">parent</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">fullname</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-        <span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">split_identifier</span><span class="p">(</span><span class="n">all_modules</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">modulename</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">modulename</span><span class="p">,</span> <span class="n">name</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;pdoc.render_helpers.split_identifier is deprecated and will be removed in a future release. &quot;</span>
+        <span class="s2">&quot;Use pdoc.render_helpers.possible_sources instead.&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">*</span><span class="n">_</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">possible_sources</span><span class="p">(</span><span class="n">all_modules</span><span class="p">,</span> <span class="n">fullname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">last</span>
 </pre></div>
 
         </details>
 
             <div class="docstring"><p>Split an identifier into a <code>(modulename, qualname)</code> tuple. For example, <code><a href="#split_identifier">pdoc.render_helpers.split_identifier</a></code>
-would be split into <code>("<a href="">pdoc.render_helpers</a>","split_identifier")</code>. This is necessary to generate links to the
+would be split into <code>("pdoc.render_helpers","split_identifier")</code>. This is necessary to generate links to the
 correct module.</p>
 </div>
 
@@ -667,6 +766,11 @@ correct module.</p>
             <details>
             <summary>View Source</summary>
             <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">qualname_candidates</span><span class="p">(</span><span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_qualname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an identifier in a current namespace, return all possible qualnames in the current module.</span>
+<span class="sd">    For example, if we are in Foo&#39;s subclass Bar and `baz()` is the identifier,</span>
+<span class="sd">    return `Foo.Bar.baz()`, `Foo.baz()`, and `baz()`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">context_qualname</span><span class="p">)</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">while</span> <span class="n">end</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -678,7 +782,11 @@ correct module.</p>
 
         </details>
 
-    
+            <div class="docstring"><p>Given an identifier in a current namespace, return all possible qualnames in the current module.
+For example, if we are in Foo's subclass Bar and <code>baz()</code> is the identifier,
+return <code>Foo.Bar.baz()</code>, <code>Foo.baz()</code>, and <code>baz()</code>.</p>
+</div>
+
 
                 </section>
                 <section id="linkify">
@@ -715,15 +823,39 @@ correct module.</p>
             <span class="k">if</span> <span class="n">doc</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
                 <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
 
-        <span class="c1"># Find the parent module.</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">qualname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">module</span><span class="p">,</span> <span class="n">qualname</span> <span class="o">=</span> <span class="n">split_identifier</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">],</span> <span class="n">identifier</span><span class="p">)</span>
+            <span class="c1"># Check if the object we are interested in is imported and re-exposed in the current namespace.</span>
+            <span class="k">for</span> <span class="n">module</span><span class="p">,</span> <span class="n">qualname</span> <span class="ow">in</span> <span class="n">possible_sources</span><span class="p">(</span>
+                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">],</span> <span class="n">identifier</span>
+            <span class="p">):</span>
+                <span class="n">doc</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">doc</span>
+                    <span class="ow">and</span> <span class="n">doc</span><span class="o">.</span><span class="n">taken_from</span> <span class="o">==</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">qualname</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;()&quot;</span><span class="p">):</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">fullname</span><span class="si">}</span><span class="s2">()&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">fullname</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># possible_sources did not find a parent module.</span>
             <span class="k">return</span> <span class="n">text</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
-                <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">relative_link</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span><span class="si">}{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
+            <span class="c1"># It&#39;s not, but we now know the parent module. Does the target exist?</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;all_modules&quot;</span><span class="p">][</span><span class="n">module</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+            <span class="n">target_exists_and_public</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;is_public&quot;</span><span class="p">](</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">target_exists_and_public</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">qualname</span><span class="p">:</span>
+                    <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">qualname</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">relative_link</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span><span class="si">}{</span><span class="n">qualname</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">text</span>
 
     <span class="k">return</span> <span class="n">Markup</span><span class="p">(</span>
         <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
@@ -733,16 +865,13 @@ correct module.</p>
 <span class="sd">            \b</span>
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
 <span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)+</span>
-<span class="sd">            (?:\(\))?</span>
-<span class="sd">            \b</span>
+<span class="sd">            (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.</span>
 <span class="sd">            (?!&lt;/a&gt;)  # not an existing link</span>
 <span class="sd">            (?![/#])  # heuristic: not part of a URL</span>
-<span class="sd">            (?!\(\))  # not followed by parentheses (which should be part of the capture)</span>
 
-<span class="sd">            | # Part 2: `foo` or `foo()`</span>
+<span class="sd">            | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.</span>
 <span class="sd">            (?&lt;=&lt;code&gt;)</span>
 <span class="sd">                 (?!\d)[a-zA-Z0-9_]+</span>
-<span class="sd">            (?:\.(?!\d)[a-zA-Z0-9_]+)*</span>
 <span class="sd">            (?:\(\))?</span>
 <span class="sd">            (?=&lt;/code&gt;(?!&lt;/a&gt;))</span>
 <span class="sd">            &quot;&quot;&quot;</span><span class="p">,</span>

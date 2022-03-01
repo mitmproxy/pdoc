@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.1"/>
+    <meta name="generator" content="pdoc 10.0.2"/>
     <title>pdoc.extract API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -39,6 +39,15 @@
                     <a class="function" href="#parse_spec">parse_spec</a>
             </li>
             <li>
+                    <a class="class" href="#PdocDefusedPopen">PdocDefusedPopen</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#PdocDefusedPopen.__init__">PdocDefusedPopen</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="function" href="#mock_some_common_side_effects">mock_some_common_side_effects</a>
             </li>
             <li>
@@ -59,7 +68,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.1</footer>
+            <footer>pdoc 10.0.2</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -96,6 +105,7 @@ and provides the rest of pdoc with some additional module metadata.</p>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
@@ -233,6 +243,35 @@ and provides the rest of pdoc with some additional module metadata.</p>
         <span class="k">return</span> <span class="n">spec</span>
 
 
+<span class="k">def</span> <span class="nf">_noop</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">PdocDefusedPopen</span><span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">_noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo.exe&quot;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">_noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">command_allowed</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">args</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">in</span> <span class="p">(</span>
+                <span class="c1"># these invocations may all come from https://github.com/python/cpython/blob/main/Lib/ctypes/util.py,</span>
+                <span class="c1"># which we want to keep working.</span>
+                <span class="s2">&quot;/sbin/ldconfig&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;gcc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;cc&quot;</span><span class="p">),</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;objdump&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">command_allowed</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_noop_exe</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">mock_some_common_side_effects</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -241,21 +280,8 @@ and provides the rest of pdoc with some additional module metadata.</p>
 
 <span class="sd">    Note that this function must not be used for security purposes, it&#39;s easily bypassable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo.exe&quot;</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo&quot;</span>
-
-    <span class="k">def</span> <span class="nf">noop</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">class</span> <span class="nc">PdocDefusedPopen</span><span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">):</span>
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noop_exe</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
     <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;subprocess.Popen&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">PdocDefusedPopen</span><span class="p">),</span> <span class="n">patch</span><span class="p">(</span>
-        <span class="s2">&quot;os.startfile&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">noop</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span>
+        <span class="s2">&quot;os.startfile&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">_noop</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">),</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;sys.stdout&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()),</span> <span class="n">patch</span><span class="p">(</span>
         <span class="s2">&quot;sys.stderr&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
     <span class="p">),</span> <span class="n">patch</span><span class="p">(</span>
@@ -569,6 +595,150 @@ If this side effect is undesired, pass a module name instead.</p>
 
 
                 </section>
+                <section id="PdocDefusedPopen">
+                                <div class="attr class">
+        <a class="headerlink" href="#PdocDefusedPopen">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">PdocDefusedPopen</span><wbr>(<span class="base">subprocess.Popen</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">PdocDefusedPopen</span><span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">_noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo.exe&quot;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">_noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">command_allowed</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">args</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">in</span> <span class="p">(</span>
+                <span class="c1"># these invocations may all come from https://github.com/python/cpython/blob/main/Lib/ctypes/util.py,</span>
+                <span class="c1"># which we want to keep working.</span>
+                <span class="s2">&quot;/sbin/ldconfig&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;gcc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;cc&quot;</span><span class="p">),</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;objdump&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">command_allowed</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_noop_exe</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Execute a child program in a new process.</p>
+
+<p>For a complete description of the arguments see the Python documentation.</p>
+
+<p>Arguments:
+  args: A string, or a sequence of program arguments.</p>
+
+<p>bufsize: supplied as the buffering argument to the open() function when
+      creating the stdin/stdout/stderr pipe file objects</p>
+
+<p>executable: A replacement program to execute.</p>
+
+<p>stdin, stdout and stderr: These specify the executed programs' standard
+      input, standard output and standard error file handles, respectively.</p>
+
+<p>preexec_fn: (POSIX only) An object to be called in the child process
+      just before the child is executed.</p>
+
+<p>close_fds: Controls closing or inheriting of file descriptors.</p>
+
+<p>shell: If true, the command will be executed through the shell.</p>
+
+<p>cwd: Sets the current directory before the child is executed.</p>
+
+<p>env: Defines the environment variables for the new process.</p>
+
+<p>text: If true, decode stdin, stdout and stderr using the given encoding
+      (if set) or the system default otherwise.</p>
+
+<p>universal_newlines: Alias of text, provided for backwards compatibility.</p>
+
+<p>startupinfo and creationflags (Windows only)</p>
+
+<p>restore_signals (POSIX only)</p>
+
+<p>start_new_session (POSIX only)</p>
+
+<p>group (POSIX only)</p>
+
+<p>extra_groups (POSIX only)</p>
+
+<p>user (POSIX only)</p>
+
+<p>umask (POSIX only)</p>
+
+<p>pass_fds (POSIX only)</p>
+
+<p>encoding and errors: Text mode encoding and error handling to use for
+      file objects stdin, stdout and stderr.</p>
+
+<p>Attributes:
+    stdin, stdout, stderr, pid, returncode</p>
+</div>
+
+
+                            <div id="PdocDefusedPopen.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#PdocDefusedPopen.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">PdocDefusedPopen</span><span class="signature">(*args, **kwargs)</span>
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">command_allowed</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">args</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">in</span> <span class="p">(</span>
+                <span class="c1"># these invocations may all come from https://github.com/python/cpython/blob/main/Lib/ctypes/util.py,</span>
+                <span class="c1"># which we want to keep working.</span>
+                <span class="s2">&quot;/sbin/ldconfig&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ld&quot;</span><span class="p">,</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;gcc&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;cc&quot;</span><span class="p">),</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;objdump&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">command_allowed</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_noop_exe</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Create new Popen instance.</p>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>subprocess.Popen</dt>
+                                <dd id="PdocDefusedPopen.universal_newlines" class="variable">universal_newlines</dd>
+                <dd id="PdocDefusedPopen.communicate" class="function">communicate</dd>
+                <dd id="PdocDefusedPopen.poll" class="function">poll</dd>
+                <dd id="PdocDefusedPopen.wait" class="function">wait</dd>
+                <dd id="PdocDefusedPopen.send_signal" class="function">send_signal</dd>
+                <dd id="PdocDefusedPopen.terminate" class="function">terminate</dd>
+                <dd id="PdocDefusedPopen.kill" class="function">kill</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
                 <section id="mock_some_common_side_effects">
                             <div class="attr function"><a class="headerlink" href="#mock_some_common_side_effects">#&nbsp;&nbsp</a>
 
@@ -588,21 +758,8 @@ If this side effect is undesired, pass a module name instead.</p>
 
 <span class="sd">    Note that this function must not be used for security purposes, it&#39;s easily bypassable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo.exe&quot;</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">noop_exe</span> <span class="o">=</span> <span class="s2">&quot;echo&quot;</span>
-
-    <span class="k">def</span> <span class="nf">noop</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">class</span> <span class="nc">PdocDefusedPopen</span><span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">):</span>
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noop_exe</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
     <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;subprocess.Popen&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">PdocDefusedPopen</span><span class="p">),</span> <span class="n">patch</span><span class="p">(</span>
-        <span class="s2">&quot;os.startfile&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">noop</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span>
+        <span class="s2">&quot;os.startfile&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">_noop</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">),</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;sys.stdout&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()),</span> <span class="n">patch</span><span class="p">(</span>
         <span class="s2">&quot;sys.stderr&quot;</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
     <span class="p">),</span> <span class="n">patch</span><span class="p">(</span>

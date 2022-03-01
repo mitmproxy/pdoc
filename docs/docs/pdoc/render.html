@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.1"/>
+    <meta name="generator" content="pdoc 10.0.2"/>
     <title>pdoc.render API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -56,7 +56,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.1</footer>
+            <footer>pdoc 10.0.2</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -105,7 +105,7 @@
 
 <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span>
     <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">favicon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">footer_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -274,7 +274,7 @@
             <span class="def">def</span>
             <span class="name">configure</span><span class="signature">(
     *,
-    docformat: Optional[Literal[&#39;google&#39;, &#39;numpy&#39;, &#39;restructuredtext&#39;]] = None,
+    docformat: Literal[&#39;markdown&#39;, &#39;google&#39;, &#39;numpy&#39;, &#39;restructuredtext&#39;] = &#39;markdown&#39;,
     edit_url_map: Optional[Mapping[str, str]] = None,
     favicon: str | None = None,
     footer_text: str = &#39;&#39;,
@@ -291,7 +291,7 @@
             <summary>View Source</summary>
             <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">configure</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">docformat</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="s2">&quot;restructuredtext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span>
     <span class="n">edit_url_map</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">favicon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">footer_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -362,7 +362,7 @@ pdoc prefers plain Markdown (the default), but also supports other formats.</li>
 <li><code>search</code> controls whether search functionality is enabled and a search index is built.</li>
 <li><code>show_source</code> controls whether a "View Source" button should be included in the output.</li>
 <li><code>template_directory</code> can be used to set an additional (preferred) directory
-for templates. You can find an example in the main documentation of <code><a href="../pdoc.html">pdoc</a></code>
+for templates. You can find an example in the main documentation of <code>pdoc</code>
 or in <code>examples/custom-template</code>.</li>
 </ul>
 </div>
@@ -419,7 +419,7 @@ or in <code>examples/custom-template</code>.</li>
 <li><code>all_modules</code> contains all modules that are rendered in this invocation.
 This is used to determine which identifiers should be linked and which should not.</li>
 <li>If <code>mtime</code> is given, include additional JavaScript on the page for live-reloading.
-This is only passed by <code><a href="web.html">pdoc.web</a></code>.</li>
+This is only passed by <code>pdoc.web</code>.</li>
 </ul>
 </div>
 
