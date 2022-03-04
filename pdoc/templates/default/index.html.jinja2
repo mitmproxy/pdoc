@@ -1,6 +1,8 @@
+{# this template is used to render the top-level index.html. #}
 {% if root_module_name %}
 {#
-If there is one shared parent module for all documented modules, redirect there immediately.
+If there is one common parent module for all documented modules, redirect there immediately.
+This makes a package's `__init__.py` the main entrypoint by default.
 A custom template could override this by setting root_module_name to false before `{% extend ... %}`.
 #}
 <!doctype html>

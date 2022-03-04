@@ -1,6 +1,8 @@
 /*
-In this CSS file, all selectors are scopoed with ".pdoc".
-This makes sure that the pdoc styling doesn't leak to the rest of the page.
+This CSS file contains all style definitions for documentation content.
+
+All selectors are scoped with ".pdoc".
+This makes sure that the pdoc styling doesn't leak to the rest of the page when pdoc is embedded.
 */
 
 .pdoc {

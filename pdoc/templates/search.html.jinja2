@@ -1,3 +1,4 @@
+{# This template implements pdoc's search functionality. It is also responsible for lazy-loading the search index.  #}
 {% set rootprefix = "../" * module.modulename.count(".") if module else "" %}
 <script>
     function escapeHTML(html) {

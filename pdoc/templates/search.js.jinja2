@@ -1,3 +1,7 @@
+{#
+This file contains the search index and is only loaded on demand (when the user focuses the search field).
+We use a JS file instead of JSON as this works with `file://`.
+#}
 window.pdocSearch = (function(){
     {% include "resources/elasticlunr.min.js" %}
 

@@ -1,3 +1,9 @@
+/*
+This CSS file contains all style definitions for the global page layout.
+
+When pdoc is embedded into other systems, it may be left out (or overwritten with an empty file) entirely.
+ */
+
 /* Responsive Layout */
 html, body {
     width: 100%;

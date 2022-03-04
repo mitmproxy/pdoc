@@ -1,3 +1,4 @@
+{# This templates implements live-reloading for pdoc's integrated webserver. #}
 <script>
     /* Periodically check with the pdoc server if there have been any changes. */
     let mtime_generated = {{ mtime | tojson }},
