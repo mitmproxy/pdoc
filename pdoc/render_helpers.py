@@ -206,7 +206,10 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             return text
         else:
             # It's not, but we now know the parent module. Does the target exist?
-            doc = context["all_modules"][module].get(qualname)
+            doc = context["all_modules"][module]
+            if qualname:
+                assert isinstance(doc, pdoc.doc.Module)
+                doc = doc.get(qualname)
             target_exists_and_public = (
                 doc is not None and context["is_public"](doc).strip()
             )

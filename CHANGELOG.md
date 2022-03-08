@@ -1,5 +1,10 @@
 # Release History
 
+# 2022-03-08: pdoc 10.0.3
+
+ - Fix linking of modules.
+   ([#360](https://github.com/mitmproxy/pdoc/issues/360), [@vlad-nn](https://github.com/vlad-nn))
+
 # 2022-03-01: pdoc 10.0.2
 
  - When determining the docstring for a constructor, prefer `Class.__init__.__doc__` over `Metaclass.__call__.__doc__`
