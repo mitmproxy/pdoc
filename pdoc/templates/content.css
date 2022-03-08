@@ -87,6 +87,10 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: 0;
 }
 
+.pdoc section {
+    margin-bottom: 1.5rem;
+}
+
 /* Page Heading */
 .pdoc .modulename {
     margin-top: 0;
