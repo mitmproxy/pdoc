@@ -484,13 +484,14 @@ class Module(Namespace[types.ModuleType]):
                 # We already exclude everything here that is imported, only a TypeVar,
                 # or a variable without annotation and docstring.
                 # If one needs to document one of these things, __all__ is the correct way.
-                if isinstance(obj, TypeVar):
-                    continue
                 obj_module = inspect.getmodule(obj)
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
                     obj_module, "__name__", None
                 )
-                if declared_in_this_module or name in self._documented_members:
+                include_in_docs = name in self._documented_members or (
+                    declared_in_this_module and not isinstance(obj, TypeVar)
+                )
+                if include_in_docs:
                     members[name] = obj
             for name in self._var_docstrings:
                 members.setdefault(name, empty)

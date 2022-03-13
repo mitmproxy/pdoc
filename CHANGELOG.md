@@ -1,5 +1,10 @@
 # Release History
 
+# Unreleased: pdoc next
+
+ - Include `typing.TypeVar` variables in documentation if they have an explicit docstring.
+   ([#361](https://github.com/mitmproxy/pdoc/issues/361), [@ktbarrett](https://github.com/ktbarrett))
+
 # 2022-03-08: pdoc 10.0.3
 
  - Fix linking of modules.
