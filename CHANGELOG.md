@@ -4,6 +4,9 @@
 
  - Include `typing.TypeVar` variables in documentation if they have an explicit docstring.
    ([#361](https://github.com/mitmproxy/pdoc/issues/361), [@ktbarrett](https://github.com/ktbarrett))
+ - Make sure that new-style type aliases like `dict[str,str]` are rendered like their old-style 
+   `typing.Dict[str,str]` equivalents.
+   ([#363](https://github.com/mitmproxy/pdoc/issues/363), [@hriebl](https://github.com/hriebl))
 
 # 2022-03-08: pdoc 10.0.3
 

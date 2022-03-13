@@ -34,6 +34,7 @@ from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import (
+    GenericAlias,
     NonUserDefinedCallables,
     empty,
     resolve_annotations,
@@ -265,7 +266,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 )
             elif inspect.isroutine(obj):
                 doc = Function(self.modulename, qualname, obj, taken_from)  # type: ignore
-            elif inspect.isclass(obj) and obj is not empty:
+            elif (
+                inspect.isclass(obj)
+                and obj is not empty
+                and not isinstance(obj, GenericAlias)
+            ):
+                # `dict[str,str]` is a GenericAlias instance. We want to render type aliases as variables though.
                 doc = Class(self.modulename, qualname, obj, taken_from)
             elif inspect.ismodule(obj):
                 if os.environ.get("PDOC_SUBMODULES"):  # pragma: no cover

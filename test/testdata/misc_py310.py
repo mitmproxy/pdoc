@@ -1,3 +1,5 @@
+from typing import Dict
+
 import demo_long
 
 # Testing a proper __module__, but no useful __qualname__ attribute.
@@ -11,3 +13,10 @@ def new_union(a: int | dict[str, "Foo"]) -> bool | None:
 
 class Foo:
     pass
+
+
+NewStyleDict = dict[str, str]
+"""New-style dict."""
+
+OldStyleDict = Dict[str, str]
+"""Old-style dict."""
