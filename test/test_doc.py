@@ -102,3 +102,10 @@ def test_raising_getdoc():
     x = Class(Foo.__module__, Foo.__qualname__, Foo, (Foo.__module__, Foo.__qualname__))
     with pytest.warns(UserWarning, match="inspect.getdoc(.+) raised an exception"):
         assert x.docstring == ""
+
+
+def test_module_members():
+    mod = extract.load_module(extract.parse_spec(here / "testdata" / "demo_long.py"))
+    m = Module(mod)
+
+    assert "_PrivateClass" not in m.members

@@ -228,3 +228,7 @@ class EnumDemo(enum.Enum):
     """I am green."""
     BLUE = enum.auto()
     """I am blue."""
+
+
+class _PrivateClass:
+    """This should not be documented."""

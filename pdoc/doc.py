@@ -494,9 +494,9 @@ class Module(Namespace[types.ModuleType]):
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
                     obj_module, "__name__", None
                 )
-                include_in_docs = name in self._documented_members or (
+                include_in_docs = not name.startswith("_") and (name in self._documented_members or (
                     declared_in_this_module and not isinstance(obj, TypeVar)
-                )
+                ))
                 if include_in_docs:
                     members[name] = obj
             for name in self._var_docstrings:
