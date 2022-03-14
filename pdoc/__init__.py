@@ -170,6 +170,8 @@ The resulting `variable` will have no `__doc__` attribute.
 To compensate, pdoc will read the abstract syntax tree (an abstract representation of the source code)
 and include all assignment statements immediately followed by a docstring. This approach is not formally standardized,
 but followed by many tools, including Sphinx's autodoc extension in case you ever decide to migrate off pdoc.
+Docstring detection is limited to the current module, docstrings for variables imported from other modules are not
+picked up.
 
 Something similar is done for instance variables, which are either type-annotated in the class
 or defined in a class's `__init__`. Here is an example showing both conventions detected by pdoc:
