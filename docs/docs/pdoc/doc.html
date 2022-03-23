@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.3"/>
+    <meta name="generator" content="pdoc 10.0.4"/>
     <title>pdoc.doc API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -221,7 +221,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.3</footer>
+            <footer>pdoc 10.0.4</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -293,6 +293,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 
 <span class="kn">from</span> <span class="nn">pdoc</span> <span class="kn">import</span> <span class="n">doc_ast</span><span class="p">,</span> <span class="n">extract</span>
 <span class="kn">from</span> <span class="nn">pdoc.doc_types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GenericAlias</span><span class="p">,</span>
     <span class="n">NonUserDefinedCallables</span><span class="p">,</span>
     <span class="n">empty</span><span class="p">,</span>
     <span class="n">resolve_annotations</span><span class="p">,</span>
@@ -488,7 +489,11 @@ By convention, all attributes are read-only, although this is not enforced at ru
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects. </span>
+<span class="sd">        </span>
+<span class="sd">        This mapping includes private members; they are only filtered out as part of the template logic.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">members</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_member_objects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -524,7 +529,12 @@ By convention, all attributes are read-only, although this is not enforced at ru
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isroutine</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-            <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="c1"># `dict[str,str]` is a GenericAlias instance. We want to render type aliases as variables though.</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PDOC_SUBMODULES&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
@@ -743,13 +753,14 @@ By convention, all attributes are read-only, although this is not enforced at ru
                 <span class="c1"># We already exclude everything here that is imported, only a TypeVar,</span>
                 <span class="c1"># or a variable without annotation and docstring.</span>
                 <span class="c1"># If one needs to document one of these things, __all__ is the correct way.</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">):</span>
-                    <span class="k">continue</span>
                 <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
                 <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
                     <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
+                <span class="n">include_in_docs</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span> <span class="ow">or</span> <span class="p">(</span>
+                    <span class="n">declared_in_this_module</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">include_in_docs</span><span class="p">:</span>
                     <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
                 <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
@@ -1762,7 +1773,11 @@ in a different module.</p>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">members</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;A mapping from all members to their documentation objects. </span>
+<span class="sd">        </span>
+<span class="sd">        This mapping includes private members; they are only filtered out as part of the template logic.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">members</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Doc</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_member_objects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">qualname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -1798,7 +1813,12 @@ in a different module.</p>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isroutine</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-            <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">empty</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericAlias</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="c1"># `dict[str,str]` is a GenericAlias instance. We want to render type aliases as variables though.</span>
                 <span class="n">doc</span> <span class="o">=</span> <span class="n">Class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modulename</span><span class="p">,</span> <span class="n">qualname</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">taken_from</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PDOC_SUBMODULES&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
@@ -1900,7 +1920,9 @@ in a different module.</p>
     </div>
 
     
-            <div class="docstring"><p>A mapping from all members to their documentation objects.</p>
+            <div class="docstring"><p>A mapping from all members to their documentation objects. </p>
+
+<p>This mapping includes private members; they are only filtered out as part of the template logic.</p>
 </div>
 
 
@@ -2135,13 +2157,14 @@ in a different module.</p>
                 <span class="c1"># We already exclude everything here that is imported, only a TypeVar,</span>
                 <span class="c1"># or a variable without annotation and docstring.</span>
                 <span class="c1"># If one needs to document one of these things, __all__ is the correct way.</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">):</span>
-                    <span class="k">continue</span>
                 <span class="n">obj_module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
                 <span class="n">declared_in_this_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">_safe_getattr</span><span class="p">(</span>
                     <span class="n">obj_module</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">declared_in_this_module</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span><span class="p">:</span>
+                <span class="n">include_in_docs</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_documented_members</span> <span class="ow">or</span> <span class="p">(</span>
+                    <span class="n">declared_in_this_module</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">include_in_docs</span><span class="p">:</span>
                     <span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var_docstrings</span><span class="p">:</span>
                 <span class="n">members</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>

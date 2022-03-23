@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="pdoc 10.0.3"/>
+    <meta name="generator" content="pdoc 10.0.4"/>
     <title>pdoc.markdown2 API documentation</title>
             <link rel="icon" href="/favicon.svg"/>
 
@@ -125,7 +125,7 @@
     </ul>
 
 
-            <footer>pdoc 10.0.3</footer>
+            <footer>pdoc 10.0.4</footer>
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
             built with <span class="visually-hidden">pdoc</span><img
@@ -180,7 +180,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
             <div class="pdoc-code codehilite"><pre><span></span><span class="c1"># fmt: off</span>
 <span class="c1"># flake8: noqa</span>
 <span class="c1"># type: ignore</span>
-<span class="c1"># Taken from here: https://github.com/mhils/python-markdown2/tree/37ebca573159c25c110c0a387453b10129ce1688</span>
+<span class="c1"># Taken from here: https://github.com/trentm/python-markdown2/tree/6269c1f5f5e812f85ffb8524b8bf10b615579abf</span>
 
 <span class="c1">#!/usr/bin/env python</span>
 <span class="c1"># Copyright (c) 2012 Trent Mick.</span>
@@ -281,7 +281,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 <span class="c1">#   not yet sure if there implications with this. Compare &#39;pydoc sre&#39;</span>
 <span class="c1">#   and &#39;perldoc perlre&#39;.</span>
 
-<span class="n">__version_info__</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">__version_info__</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">__version_info__</span><span class="p">))</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Trent Mick&quot;</span>
 
@@ -440,6 +440,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="bp">self</span><span class="o">.</span><span class="n">cli</span> <span class="o">=</span> <span class="n">cli</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span> <span class="o">=</span> <span class="n">g_escape_table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="s2">&quot;smarty-pants&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extras</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s1">&#39;&quot;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s2">&quot;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
@@ -700,7 +701,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 
             <span class="c1"># Multiline value</span>
             <span class="k">if</span> <span class="n">v</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">_dedent</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
             <span class="c1"># Empty value</span>
             <span class="k">elif</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
@@ -1170,7 +1171,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
             <span class="n">re</span><span class="o">.</span><span class="n">X</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">footnote_def_re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_extract_footnote_def_sub</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 
-    <span class="n">_hr_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[ ]{0,3}([-_*][ ]{0,2}){3,}$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">_hr_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[ ]{0,3}([-_*])[ ]{0,2}(\1[ ]{0,2}){2,}$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_run_block_gamut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="c1"># These are all the transformations that form block-level</span>
@@ -1243,7 +1244,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
     <span class="k">def</span> <span class="nf">_table_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
         <span class="n">trim_space_re</span> <span class="o">=</span> <span class="s1">&#39;^[ </span><span class="se">\t\n</span><span class="s1">]+|[ </span><span class="se">\t\n</span><span class="s1">]+$&#39;</span>
         <span class="n">trim_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||\|$&#39;</span>
-        <span class="n">split_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||(?&lt;!</span><span class="se">\\</span><span class="s1">)\|&#39;</span>
+        <span class="n">split_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||(?&lt;![\`</span><span class="se">\\</span><span class="s1">])\|&#39;</span>
         <span class="n">escape_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\|&#39;</span>
 
         <span class="n">head</span><span class="p">,</span> <span class="n">underline</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
@@ -1419,7 +1420,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 <span class="s2">            \s*/?&gt;</span>
 <span class="s2">            |</span>
 <span class="s2">            # auto-link (e.g., &lt;http://www.activestate.com/&gt;)</span>
-<span class="s2">            &lt;\w+[^&gt;]*&gt;</span>
+<span class="s2">            &lt;[\w~:/?#\[\]@!$&amp;&#39;\(\)*+,;%=\.\\-]+&gt;</span>
 <span class="s2">            |</span>
 <span class="s2">            &lt;!--.*?--&gt;      # comment</span>
 <span class="s2">            |</span>
@@ -1792,12 +1793,12 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="bp">self</span><span class="o">.</span><span class="n">_toc</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">level</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unescape_special_chars</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
 
     <span class="n">_h_re_base</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        (^(.+)[ \t]*\n(=+|-+)[ \t]*\n+)</span>
+<span class="s1">        (^(.+)[ \t]{0,99}\n(=+|-+)[ \t]*\n+)</span>
 <span class="s1">        |</span>
 <span class="s1">        (^(\#{1,6})  # \1 = string of #&#39;s</span>
 <span class="s1">        [ \t]</span><span class="si">%s</span><span class="s1"></span>
 <span class="s1">        (.+?)       # \2 = Header text</span>
-<span class="s1">        [ \t]*</span>
+<span class="s1">        [ \t]{0,99}</span>
 <span class="s1">        (?&lt;!\\)     # ensure not an escaped trailing &#39;#&#39;</span>
 <span class="s1">        \#*         # optional closing #&#39;s (not counted)</span>
 <span class="s1">        \n+</span>
@@ -2028,10 +2029,10 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
     <span class="k">def</span> <span class="nf">_code_block_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">is_fenced_code_block</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">lexer_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">is_fenced_code_block</span><span class="p">:</span>
-            <span class="n">lexer_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lexer_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">lexer_name</span><span class="p">:</span>
                 <span class="n">formatter_opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extras</span><span class="p">[</span><span class="s1">&#39;fenced-code-blocks&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">codeblock</span> <span class="o">=</span> <span class="n">codeblock</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># drop one trailing newline</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -2106,16 +2107,16 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 <span class="s1">            ((?=^[ ]{0,</span><span class="si">%d</span><span class="s1">}\S)|\Z)   # Lookahead for non-space at line-start, or end of doc</span>
 <span class="s1">            # Lookahead to make sure this block isn&#39;t already in a code block.</span>
 <span class="s1">            # Needed when syntax highlighting is being used.</span>
-<span class="s1">            (?![^&lt;]*\&lt;/code\&gt;)</span>
+<span class="s1">            (?!([^&lt;]|&lt;(/?)span)*\&lt;/code\&gt;)</span>
 <span class="s1">            &#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_width</span><span class="p">),</span>
             <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">code_block_re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code_block_sub</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 
     <span class="n">_fenced_code_block_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        (?:\n+|\A\n?)</span>
-<span class="s1">        ^```\s{0,99}([\w+-]+)?\s{0,99}\n  # opening fence, $1 = optional lang</span>
-<span class="s1">        (.*?)                             # $2 = code block content</span>
-<span class="s1">        ^```[ \t]*\n                      # closing fence</span>
+<span class="s1">        (?:\n+|\A\n?|(?&lt;=\n))</span>
+<span class="s1">        (^`{3,})\s{0,99}?([\w+-]+)?\s{0,99}?\n  # $1 = opening fence (captured for back-referencing), $2 = optional lang</span>
+<span class="s1">        (.*?)                             # $3 = code block content</span>
+<span class="s1">        \1[ \t]*\n                      # closing fence</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">X</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fenced_code_block_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
@@ -2189,7 +2190,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="k">for</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span> <span class="ow">in</span> <span class="n">replacements</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)</span>
         <span class="n">hashed</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashed</span>
         <span class="k">return</span> <span class="n">hashed</span>
 
     <span class="n">_strike_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;~~(?=\S)(.+?)(?&lt;=\S)~~&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
@@ -2519,7 +2520,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 
     <span class="k">def</span> <span class="nf">_unescape_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="c1"># Swap back in all the special characters we&#39;ve hidden.</span>
-        <span class="k">for</span> <span class="n">ch</span><span class="p">,</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">ch</span><span class="p">,</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">hash</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">text</span>
 
@@ -3194,6 +3195,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="bp">self</span><span class="o">.</span><span class="n">cli</span> <span class="o">=</span> <span class="n">cli</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span> <span class="o">=</span> <span class="n">g_escape_table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="s2">&quot;smarty-pants&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extras</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s1">&#39;&quot;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s2">&quot;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
@@ -3454,7 +3456,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 
             <span class="c1"># Multiline value</span>
             <span class="k">if</span> <span class="n">v</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot; &gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">_dedent</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
             <span class="c1"># Empty value</span>
             <span class="k">elif</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
@@ -3924,7 +3926,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
             <span class="n">re</span><span class="o">.</span><span class="n">X</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">footnote_def_re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_extract_footnote_def_sub</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 
-    <span class="n">_hr_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[ ]{0,3}([-_*][ ]{0,2}){3,}$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">_hr_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[ ]{0,3}([-_*])[ ]{0,2}(\1[ ]{0,2}){2,}$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_run_block_gamut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="c1"># These are all the transformations that form block-level</span>
@@ -3997,7 +3999,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
     <span class="k">def</span> <span class="nf">_table_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
         <span class="n">trim_space_re</span> <span class="o">=</span> <span class="s1">&#39;^[ </span><span class="se">\t\n</span><span class="s1">]+|[ </span><span class="se">\t\n</span><span class="s1">]+$&#39;</span>
         <span class="n">trim_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||\|$&#39;</span>
-        <span class="n">split_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||(?&lt;!</span><span class="se">\\</span><span class="s1">)\|&#39;</span>
+        <span class="n">split_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\||(?&lt;![\`</span><span class="se">\\</span><span class="s1">])\|&#39;</span>
         <span class="n">escape_bar_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">\|&#39;</span>
 
         <span class="n">head</span><span class="p">,</span> <span class="n">underline</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
@@ -4173,7 +4175,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 <span class="s2">            \s*/?&gt;</span>
 <span class="s2">            |</span>
 <span class="s2">            # auto-link (e.g., &lt;http://www.activestate.com/&gt;)</span>
-<span class="s2">            &lt;\w+[^&gt;]*&gt;</span>
+<span class="s2">            &lt;[\w~:/?#\[\]@!$&amp;&#39;\(\)*+,;%=\.\\-]+&gt;</span>
 <span class="s2">            |</span>
 <span class="s2">            &lt;!--.*?--&gt;      # comment</span>
 <span class="s2">            |</span>
@@ -4546,12 +4548,12 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="bp">self</span><span class="o">.</span><span class="n">_toc</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">level</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unescape_special_chars</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
 
     <span class="n">_h_re_base</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        (^(.+)[ \t]*\n(=+|-+)[ \t]*\n+)</span>
+<span class="s1">        (^(.+)[ \t]{0,99}\n(=+|-+)[ \t]*\n+)</span>
 <span class="s1">        |</span>
 <span class="s1">        (^(\#{1,6})  # \1 = string of #&#39;s</span>
 <span class="s1">        [ \t]</span><span class="si">%s</span><span class="s1"></span>
 <span class="s1">        (.+?)       # \2 = Header text</span>
-<span class="s1">        [ \t]*</span>
+<span class="s1">        [ \t]{0,99}</span>
 <span class="s1">        (?&lt;!\\)     # ensure not an escaped trailing &#39;#&#39;</span>
 <span class="s1">        \#*         # optional closing #&#39;s (not counted)</span>
 <span class="s1">        \n+</span>
@@ -4782,10 +4784,10 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
     <span class="k">def</span> <span class="nf">_code_block_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">is_fenced_code_block</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">lexer_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">is_fenced_code_block</span><span class="p">:</span>
-            <span class="n">lexer_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lexer_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">lexer_name</span><span class="p">:</span>
                 <span class="n">formatter_opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extras</span><span class="p">[</span><span class="s1">&#39;fenced-code-blocks&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">codeblock</span> <span class="o">=</span> <span class="n">codeblock</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># drop one trailing newline</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">codeblock</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -4860,16 +4862,16 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 <span class="s1">            ((?=^[ ]{0,</span><span class="si">%d</span><span class="s1">}\S)|\Z)   # Lookahead for non-space at line-start, or end of doc</span>
 <span class="s1">            # Lookahead to make sure this block isn&#39;t already in a code block.</span>
 <span class="s1">            # Needed when syntax highlighting is being used.</span>
-<span class="s1">            (?![^&lt;]*\&lt;/code\&gt;)</span>
+<span class="s1">            (?!([^&lt;]|&lt;(/?)span)*\&lt;/code\&gt;)</span>
 <span class="s1">            &#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_width</span><span class="p">),</span>
             <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">code_block_re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code_block_sub</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 
     <span class="n">_fenced_code_block_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        (?:\n+|\A\n?)</span>
-<span class="s1">        ^```\s{0,99}([\w+-]+)?\s{0,99}\n  # opening fence, $1 = optional lang</span>
-<span class="s1">        (.*?)                             # $2 = code block content</span>
-<span class="s1">        ^```[ \t]*\n                      # closing fence</span>
+<span class="s1">        (?:\n+|\A\n?|(?&lt;=\n))</span>
+<span class="s1">        (^`{3,})\s{0,99}?([\w+-]+)?\s{0,99}?\n  # $1 = opening fence (captured for back-referencing), $2 = optional lang</span>
+<span class="s1">        (.*?)                             # $3 = code block content</span>
+<span class="s1">        \1[ \t]*\n                      # closing fence</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">X</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fenced_code_block_sub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
@@ -4943,7 +4945,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="k">for</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span> <span class="ow">in</span> <span class="n">replacements</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)</span>
         <span class="n">hashed</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span><span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashed</span>
         <span class="k">return</span> <span class="n">hashed</span>
 
     <span class="n">_strike_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;~~(?=\S)(.+?)(?&lt;=\S)~~&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
@@ -5273,7 +5275,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
 
     <span class="k">def</span> <span class="nf">_unescape_special_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="c1"># Swap back in all the special characters we&#39;ve hidden.</span>
-        <span class="k">for</span> <span class="n">ch</span><span class="p">,</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">ch</span><span class="p">,</span> <span class="nb">hash</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">hash</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">text</span>
 
@@ -5353,6 +5355,7 @@ number of extras (e.g., code syntax coloring, footnotes) as described on
         <span class="bp">self</span><span class="o">.</span><span class="n">cli</span> <span class="o">=</span> <span class="n">cli</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span> <span class="o">=</span> <span class="n">g_escape_table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_code_table</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="s2">&quot;smarty-pants&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extras</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s1">&#39;&quot;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_escape_table</span><span class="p">[</span><span class="s2">&quot;&#39;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_hash_text</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
