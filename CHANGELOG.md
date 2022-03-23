@@ -7,6 +7,8 @@
  - Make sure that new-style type aliases like `dict[str,str]` are rendered like their old-style 
    `typing.Dict[str,str]` equivalents.
    ([#363](https://github.com/mitmproxy/pdoc/issues/363), [@hriebl](https://github.com/hriebl))
+ - Fix a bug in markdown2 where code snippets interfere with latex expressions
+   ([#340](https://github.com/mitmproxy/pdoc/issues/340), [@Crozzers](https://github.com/Crozzers))
 
 # 2022-03-08: pdoc 10.0.3
 
