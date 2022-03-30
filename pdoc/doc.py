@@ -230,8 +230,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
 
     @cached_property
     def members(self) -> dict[str, Doc]:
-        """A mapping from all members to their documentation objects. 
-        
+        """A mapping from all members to their documentation objects.
+
         This mapping includes private members; they are only filtered out as part of the template logic.
 
         """

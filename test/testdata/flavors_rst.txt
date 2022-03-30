@@ -12,5 +12,8 @@
     <function def footnote1(): ...  # Cite the relevant li…>
     <function def footnote2(): ...  # Autonumbered footnot…>
     <function def footnote3(): ...  # Auto-symbol footnote…>
-    <function def footnote4(): ...  # There is not footnot…>
-    <function def include(): ...  # Included from anothe…>>
+    <function def footnote4(): ...  # There is no footnote…>
+    <function def include(): ...  # Included from anothe…>
+    <function def fields(foo: list[str] = None, bar: bool = True) -> list[str]: ...  # This method has fiel…>
+    <function def fields_invalid(foo: list[str] = None) -> list[str]: ...  # This method has inva…>
+    <function def fields_exception(): ...  # :raises RuntimeError…>>

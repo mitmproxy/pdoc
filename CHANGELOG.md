@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - Add support for reStructuredText field lists: `:param foo: text`.
+   ([#275](https://github.com/mitmproxy/pdoc/issues/275), [@mhils](https://github.com/mhils))
 
 # 2022-03-23: pdoc 10.0.4
 
