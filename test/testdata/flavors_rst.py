@@ -113,7 +113,7 @@ def footnote3():
 
 def footnote4():
     """
-    There is not footnote for this reference [#]_.
+    There is no footnote for this reference [#]_.
     """
 
 
@@ -122,4 +122,43 @@ def include():
     Included from another file:
 
     .. include:: flavors_rst_include/include.rst
+    """
+
+
+def fields(foo: str = None, bar: bool = True) -> str:
+    """This method has field descriptions.
+
+    :param foo: A string,
+        defaults to None
+    :type foo: string, optional
+    :param bar: Another
+     boolean.
+    :return: Another string,
+        or maybe `None`.
+    :rtype: A string.
+    """
+
+
+def fields_text_after_param(foo):
+    """This method has text after the `:param` fields.
+
+    :param foo: Some text.
+
+    Here's some more text.
+    """
+
+
+def fields_invalid(foo: str = None) -> str:
+    """This method has invalid `:param` definitions.
+
+    :param: What is this for?
+
+    :unknown: This is an unknown field name.
+    """
+
+
+def fields_exception():
+    """
+    :raises RuntimeError: Some multi-line
+        exception description.
     """

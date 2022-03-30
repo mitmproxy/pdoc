@@ -56,6 +56,18 @@
             <li>
                     <a class="function" href="#include">include</a>
             </li>
+            <li>
+                    <a class="function" href="#fields">fields</a>
+            </li>
+            <li>
+                    <a class="function" href="#fields_text_after_param">fields_text_after_param</a>
+            </li>
+            <li>
+                    <a class="function" href="#fields_invalid">fields_invalid</a>
+            </li>
+            <li>
+                    <a class="function" href="#fields_exception">fields_exception</a>
+            </li>
     </ul>
 
 
@@ -190,7 +202,7 @@ flavors_rst    </h1>
 
 <span class="k">def</span> <span class="nf">footnote4</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    There is not footnote for this reference [#]_.</span>
+<span class="sd">    There is no footnote for this reference [#]_.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -199,6 +211,45 @@ flavors_rst    </h1>
 <span class="sd">    Included from another file:</span>
 
 <span class="sd">    .. include:: flavors_rst_include/include.rst</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
+
+<span class="sd">    :param foo: A string,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type foo: string, optional</span>
+<span class="sd">    :param bar: Another</span>
+<span class="sd">     boolean.</span>
+<span class="sd">    :return: Another string,</span>
+<span class="sd">        or maybe `None`.</span>
+<span class="sd">    :rtype: A string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+
+<span class="sd">    :param foo: Some text.</span>
+
+<span class="sd">    Here&#39;s some more text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
+
+<span class="sd">    :param: What is this for?</span>
+
+<span class="sd">    :unknown: This is an unknown field name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :raises RuntimeError: Some multi-line</span>
+<span class="sd">        exception description.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -574,13 +625,13 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
             <summary>View Source</summary>
             <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">footnote4</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    There is not footnote for this reference [#]_.</span>
+<span class="sd">    There is no footnote for this reference [#]_.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>There is not footnote for this reference [#]_.</p>
+            <div class="docstring"><p>There is no footnote for this reference [#]_.</p>
 </div>
 
 
@@ -612,6 +663,150 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 <p>World!</p>
 
 <p>\( 42 \)</p>
+</div>
+
+
+                </section>
+                <section id="fields">
+                            <div class="attr function"><a class="headerlink" href="#fields">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fields</span><span class="signature">(foo: str = None, bar: bool = True) -&gt; str</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
+
+<span class="sd">    :param foo: A string,</span>
+<span class="sd">        defaults to None</span>
+<span class="sd">    :type foo: string, optional</span>
+<span class="sd">    :param bar: Another</span>
+<span class="sd">     boolean.</span>
+<span class="sd">    :return: Another string,</span>
+<span class="sd">        or maybe `None`.</span>
+<span class="sd">    :rtype: A string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method has field descriptions.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>foo</strong>:  A string,
+defaults to None</li>
+<li><strong>bar</strong>:  Another
+boolean.</li>
+</ul>
+
+<h6 id="returns">Returns</h6>
+
+<blockquote>
+  <p>Another string,
+      or maybe <code>None</code>.</p>
+</blockquote>
+</div>
+
+
+                </section>
+                <section id="fields_text_after_param">
+                            <div class="attr function"><a class="headerlink" href="#fields_text_after_param">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fields_text_after_param</span><span class="signature">(foo)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+
+<span class="sd">    :param foo: Some text.</span>
+
+<span class="sd">    Here&#39;s some more text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method has text after the <code>:param</code> fields.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>foo</strong>:  Some text.</li>
+</ul>
+
+<p>Here's some more text.</p>
+</div>
+
+
+                </section>
+                <section id="fields_invalid">
+                            <div class="attr function"><a class="headerlink" href="#fields_invalid">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fields_invalid</span><span class="signature">(foo: str = None) -&gt; str</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
+
+<span class="sd">    :param: What is this for?</span>
+
+<span class="sd">    :unknown: This is an unknown field name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method has invalid <code>:param</code> definitions.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li>What is this for?</li>
+</ul>
+
+<p>:unknown: This is an unknown field name.</p>
+</div>
+
+
+                </section>
+                <section id="fields_exception">
+                            <div class="attr function"><a class="headerlink" href="#fields_exception">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fields_exception</span><span class="signature">()</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :raises RuntimeError: Some multi-line</span>
+<span class="sd">        exception description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><h6 id="raises">Raises</h6>
+
+<ul>
+<li><strong>RuntimeError</strong>:  Some multi-line
+exception description.</li>
+</ul>
 </div>
 
 

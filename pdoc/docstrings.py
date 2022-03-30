@@ -150,11 +150,11 @@ def numpy(docstring: str) -> str:
             "Warns",
             "Attributes",
         ):
-            contents += f"###### {heading}\n" f"{_numpy_parameters(content)}"
+            contents += f"###### {heading}\n{_numpy_parameters(content)}"
         elif heading == "See Also":
-            contents += f"###### {heading}\n" f"{_numpy_seealso(content)}"
+            contents += f"###### {heading}\n{_numpy_seealso(content)}"
         else:
-            contents += f"###### {heading}\n" f"{dedent(content)}"
+            contents += f"###### {heading}\n{dedent(content)}"
         contents += tail
     return contents
 
@@ -218,6 +218,8 @@ def rst(contents: str, source_file: Path | None) -> str:
     contents = re.sub(r":math:`(.+?)`", r"\\\\( \1 \\\\)", contents)
 
     contents = _rst_footnotes(contents)
+
+    contents = _rst_fields(contents)
 
     return contents
 
@@ -359,6 +361,63 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             )*)$
         """,
         _rst_admonition,
+        contents,
+        flags=re.MULTILINE | re.VERBOSE,
+    )
+
+
+def _rst_fields(contents: str) -> str:
+    """
+    Convert reStructuredText fields to Markdown.
+    <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#rst-field-lists>
+    """
+
+    _has_parameter_section = False
+    _has_raises_section = False
+
+    def _rst_field(m: re.Match[str]) -> str:
+        type = m["type"]
+        body = m["body"]
+
+        if m["name"]:
+            name = f"**{m['name'].strip()}**: "
+        else:
+            name = ""
+
+        if type == "param":
+            nonlocal _has_parameter_section
+            text = f" - {name}{body}"
+            if not _has_parameter_section:
+                _has_parameter_section = True
+                text = "\n###### Parameters\n" + text
+            return text
+        elif type == "type":
+            return ""  # we expect users to use modern type annotations.
+        elif type == "return":
+            body = indent(body, "> ", lambda line: True)
+            return f"\n###### Returns\n{body}"
+        elif type == "rtype":
+            return ""  # we expect users to use modern type annotations.
+        elif type == "raises":
+            nonlocal _has_raises_section
+            text = f" - {name}{body}"
+            if not _has_raises_section:
+                _has_raises_section = True
+                text = "\n###### Raises\n" + text
+            return text
+        else:  # pragma: no cover
+            raise AssertionError("unreachable")
+
+    field = "param|type|return|rtype|raises"
+    return re.sub(
+        rf"""
+            ^:(?P<type>{field})(?:[ ]+(?P<name>.+))?:
+            (?P<body>.*(
+                (?:\n[ ]*)*  # maybe some empty lines followed by
+                [ ]+.+       # lines with indentation
+            )*(?:\n|$))
+        """,
+        _rst_field,
         contents,
         flags=re.MULTILINE | re.VERBOSE,
     )

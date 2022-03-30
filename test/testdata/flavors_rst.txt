@@ -12,5 +12,9 @@
     <function def footnote1(): ...  # Cite the relevant li…>
     <function def footnote2(): ...  # Autonumbered footnot…>
     <function def footnote3(): ...  # Auto-symbol footnote…>
-    <function def footnote4(): ...  # There is not footnot…>
-    <function def include(): ...  # Included from anothe…>>
+    <function def footnote4(): ...  # There is no footnote…>
+    <function def include(): ...  # Included from anothe…>
+    <function def fields(foo: str = None, bar: bool = True) -> str: ...  # This method has fiel…>
+    <function def fields_text_after_param(foo): ...  # This method has text…>
+    <function def fields_invalid(foo: str = None) -> str: ...  # This method has inva…>
+    <function def fields_exception(): ...  # :raises RuntimeError…>>
