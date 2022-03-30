@@ -405,8 +405,8 @@ def _rst_fields(contents: str) -> str:
                 _has_raises_section = True
                 text = "\n###### Raises\n" + text
             return text
-        else:
-            return m[0]
+        else:  # pragma: no cover
+            raise AssertionError("unreachable")
 
     field = "param|type|return|rtype|raises"
     return re.sub(
