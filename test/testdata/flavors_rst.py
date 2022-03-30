@@ -125,21 +125,21 @@ def include():
     """
 
 
-def fields(foo: list[str] = None, bar: bool = True) -> list[str]:
+def fields(foo: str = None, bar: bool = True) -> str:
     """This method has field descriptions.
 
-    :param foo: A list of strings,
+    :param foo: A string,
         defaults to None
-    :type foo: list, optional
+    :type foo: string, optional
     :param bar: Another
      boolean.
-    :return: Another list of strs,
+    :return: Another string,
         or maybe `None`.
-    :rtype: A list of strings.
+    :rtype: A string.
     """
 
 
-def fields_invalid(foo: list[str] = None) -> list[str]:
+def fields_invalid(foo: str = None) -> str:
     """This method has invalid `:param` definitions.
 
     :param: What is this for?

@@ -211,21 +211,21 @@ flavors_rst    </h1>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
 
-<span class="sd">    :param foo: A list of strings,</span>
+<span class="sd">    :param foo: A string,</span>
 <span class="sd">        defaults to None</span>
-<span class="sd">    :type foo: list, optional</span>
+<span class="sd">    :type foo: string, optional</span>
 <span class="sd">    :param bar: Another</span>
 <span class="sd">     boolean.</span>
-<span class="sd">    :return: Another list of strs,</span>
+<span class="sd">    :return: Another string,</span>
 <span class="sd">        or maybe `None`.</span>
-<span class="sd">    :rtype: A list of strings.</span>
+<span class="sd">    :rtype: A string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
 
 <span class="sd">    :param: What is this for?</span>
@@ -658,22 +658,22 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 
         
             <span class="def">def</span>
-            <span class="name">fields</span><span class="signature">(foo: list[str] = None, bar: bool = True) -&gt; list[str]</span>:
+            <span class="name">fields</span><span class="signature">(foo: str = None, bar: bool = True) -&gt; str</span>:
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
 
-<span class="sd">    :param foo: A list of strings,</span>
+<span class="sd">    :param foo: A string,</span>
 <span class="sd">        defaults to None</span>
-<span class="sd">    :type foo: list, optional</span>
+<span class="sd">    :type foo: string, optional</span>
 <span class="sd">    :param bar: Another</span>
 <span class="sd">     boolean.</span>
-<span class="sd">    :return: Another list of strs,</span>
+<span class="sd">    :return: Another string,</span>
 <span class="sd">        or maybe `None`.</span>
-<span class="sd">    :rtype: A list of strings.</span>
+<span class="sd">    :rtype: A string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -684,7 +684,7 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 <h6 id="parameters">Parameters</h6>
 
 <ul>
-<li><strong>foo</strong>: A list of strings,
+<li><strong>foo</strong>: A string,
 defaults to None</li>
 <li><strong>bar</strong>: Another
 boolean.</li>
@@ -693,7 +693,7 @@ boolean.</li>
 <h6 id="returns">Returns</h6>
 
 <blockquote>
-  <p>Another list of strs,
+  <p>Another string,
       or maybe <code>None</code>.</p>
 </blockquote>
 </div>
@@ -705,12 +705,12 @@ boolean.</li>
 
         
             <span class="def">def</span>
-            <span class="name">fields_invalid</span><span class="signature">(foo: list[str] = None) -&gt; list[str]</span>:
+            <span class="name">fields_invalid</span><span class="signature">(foo: str = None) -&gt; str</span>:
     </div>
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
 
 <span class="sd">    :param: What is this for?</span>
