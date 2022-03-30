@@ -377,7 +377,7 @@ def _rst_fields(contents: str) -> str:
 
     def _rst_field(m: re.Match[str]) -> str:
         type = m["type"]
-        body = m["body"].strip()
+        body = m["body"]
 
         if m["name"]:
             name = f"**{m['name'].strip()}**: "
@@ -386,7 +386,7 @@ def _rst_fields(contents: str) -> str:
 
         if type == "param":
             nonlocal _has_parameter_section
-            text = f" - {name}{body}\n"
+            text = f" - {name}{body}"
             if not _has_parameter_section:
                 _has_parameter_section = True
                 text = "\n###### Parameters\n" + text
@@ -400,7 +400,7 @@ def _rst_fields(contents: str) -> str:
             return ""  # we expect users to use modern type annotations.
         elif type == "raises":
             nonlocal _has_raises_section
-            text = f" - {name}{body}\n"
+            text = f" - {name}{body}"
             if not _has_raises_section:
                 _has_raises_section = True
                 text = "\n###### Raises\n" + text
@@ -413,9 +413,8 @@ def _rst_fields(contents: str) -> str:
         rf"""
             ^:(?P<type>{field})(?:[ ]+(?P<name>.+))?:
             (?P<body>.*(
-                \n      # empty lines
-                |       # or
-                [ ]+.+  # lines with indentation
+                (?:\n[ ]*)*  # maybe some empty lines followed by
+                [ ]+.+       # lines with indentation
             )*(?:\n|$))
         """,
         _rst_field,

@@ -139,10 +139,21 @@ def fields(foo: str = None, bar: bool = True) -> str:
     """
 
 
+def fields_text_after_param(foo):
+    """This method has text after the `:param` fields.
+
+    :param foo: Some text.
+
+    Here's some more text.
+    """
+
+
 def fields_invalid(foo: str = None) -> str:
     """This method has invalid `:param` definitions.
 
     :param: What is this for?
+
+    :unknown: This is an unknown field name.
     """
 
 

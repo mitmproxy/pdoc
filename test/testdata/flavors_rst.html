@@ -60,6 +60,9 @@
                     <a class="function" href="#fields">fields</a>
             </li>
             <li>
+                    <a class="function" href="#fields_text_after_param">fields_text_after_param</a>
+            </li>
+            <li>
                     <a class="function" href="#fields_invalid">fields_invalid</a>
             </li>
             <li>
@@ -225,10 +228,21 @@ flavors_rst    </h1>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
+<span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+
+<span class="sd">    :param foo: Some text.</span>
+
+<span class="sd">    Here&#39;s some more text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
 <span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
 
 <span class="sd">    :param: What is this for?</span>
+
+<span class="sd">    :unknown: This is an unknown field name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -684,9 +698,9 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 <h6 id="parameters">Parameters</h6>
 
 <ul>
-<li><strong>foo</strong>: A string,
+<li><strong>foo</strong>:  A string,
 defaults to None</li>
-<li><strong>bar</strong>: Another
+<li><strong>bar</strong>:  Another
 boolean.</li>
 </ul>
 
@@ -696,6 +710,40 @@ boolean.</li>
   <p>Another string,
       or maybe <code>None</code>.</p>
 </blockquote>
+</div>
+
+
+                </section>
+                <section id="fields_text_after_param">
+                            <div class="attr function"><a class="headerlink" href="#fields_text_after_param">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">fields_text_after_param</span><span class="signature">(foo)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+
+<span class="sd">    :param foo: Some text.</span>
+
+<span class="sd">    Here&#39;s some more text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>This method has text after the <code>:param</code> fields.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<ul>
+<li><strong>foo</strong>:  Some text.</li>
+</ul>
+
+<p>Here's some more text.</p>
 </div>
 
 
@@ -714,6 +762,8 @@ boolean.</li>
     <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
 
 <span class="sd">    :param: What is this for?</span>
+
+<span class="sd">    :unknown: This is an unknown field name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
@@ -726,6 +776,8 @@ boolean.</li>
 <ul>
 <li>What is this for?</li>
 </ul>
+
+<p>:unknown: This is an unknown field name.</p>
 </div>
 
 
@@ -752,7 +804,7 @@ boolean.</li>
             <div class="docstring"><h6 id="raises">Raises</h6>
 
 <ul>
-<li><strong>RuntimeError</strong>: Some multi-line
+<li><strong>RuntimeError</strong>:  Some multi-line
 exception description.</li>
 </ul>
 </div>
