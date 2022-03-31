@@ -34,13 +34,10 @@ jobs:
         include:
           - os: windows-latest
             py: 3.10.2
-            coverage: --cov-fail-under=100
           - os: macos-latest
             py: 3.10.2
-            coverage: --cov-fail-under=100
           - os: ubuntu-latest
             py: 3.10.2
-            coverage: --cov-fail-under=100
           - os: ubuntu-latest
             py: 3.9.9
           - os: ubuntu-latest
@@ -55,7 +52,7 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - run: pip install tox
-      - run: tox -e py -- -vvv ${{ matrix.coverage }}
+      - run: tox -e py -- -vvv ${{ contains(['3.7.12','3.8.12','3.9.9'], matrix.py) && '' || '--cov-fail-under=100' }}
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
