@@ -55,7 +55,7 @@ jobs:
       - run: tox -e py -- -vvv --cov-fail-under=100
         if: startsWith('3.10', matrix.py)
       - run: tox -e py -- -vvv
-        if: !startsWith('3.10', matrix.py)
+        if: ! startsWith('3.10', matrix.py)
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
