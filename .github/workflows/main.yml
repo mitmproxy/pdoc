@@ -53,10 +53,8 @@ jobs:
           python-version: ${{ matrix.py }}
       - run: pip install tox
       - run: tox -e py -- -vvv
-      - uses: codecov/codecov-action@a1ed4b322b4b38cb846afb5a0ebfa17086917d27
-        with:
-          file: ./coverage.xml
-          name: ${{ matrix.os }}
+      - run: python -m coverage report --fail-under=100
+        if: matrix.py == '3.10.2'
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
