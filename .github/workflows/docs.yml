@@ -1,4 +1,4 @@
-name: pdoc
+name: website
 
 on:
   push:
