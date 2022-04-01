@@ -1,0 +1,38 @@
+name: pdoc
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+
+      - run: pip install -e .  # pip install pdoc for third-party projects.
+      - run: docs/make.py  # build step (invoke pdoc)
+
+      - run: tar --directory docs/ -hcf artifact.tar .
+      - uses: actions/upload-artifact@main
+        with:
+          name: github-pages
+          path: ./artifact.tar
+
+  deploy:
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v1

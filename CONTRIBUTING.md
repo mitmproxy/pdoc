@@ -58,7 +58,6 @@ you can perform the following steps to ship a release:
    - `tox` is passing without errors.
 2. Bump the version in [`pdoc/__init__.py`](pdoc/__init__.py).
 3. Update [`CHANGELOG.md`](./CHANGELOG.md).
-4. Re-render the website: `docs/make.py`
-5. Commit the changes and tag them.
+4. Commit the changes and tag them.
    - Convention: Tag name is `v` + version number, e.g. `v1.0.1`.
-6. Manually confirm the CI deploy step on GitHub.
+5. Manually confirm the CI deploy step on GitHub.

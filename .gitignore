@@ -16,3 +16,4 @@ tmp
 coverage.xml
 .render/
 .hypothesis/
+docs/docs/
