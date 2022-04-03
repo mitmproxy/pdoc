@@ -1,35 +1,40 @@
 name: website
 
+# limit page builds to the main branch only.
 on:
   push:
     branches:
       - main
 
+# security: restrict permissions for CI jobs.
 permissions:
   contents: read
 
 jobs:
+  # Build the documentation and upload the static HTML files as an artifact.
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
 
-      - run: pip install -e .  # pip install pdoc for third-party projects.
-      - run: docs/make.py  # build step (invoke pdoc)
+      - run: pip install -e .  # install your project and all dependencies.
+      - run: docs/make.py      # build step (invoke pdoc)
 
       - run: tar --directory docs/ -hcf artifact.tar .
-      - uses: actions/upload-artifact@main
+      - uses: actions/upload-artifact@v3
         with:
           name: github-pages
           path: ./artifact.tar
-
+  
+  # Deploy the artifact to GitHub pages.
+  # This is a separate job so that only actions/deploy-pages has the necessary permissions.
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
-    runs-on: ubuntu-latest
-    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
