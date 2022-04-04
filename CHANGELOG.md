@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - Improve display of reStructuredText admonitions.
+   ([#372](https://github.com/mitmproxy/pdoc/issues/372), [@mhils](https://github.com/mhils))
  - Add support for reStructuredText field lists: `:param foo: text`.
    ([#275](https://github.com/mitmproxy/pdoc/issues/275), [@mhils](https://github.com/mhils))
 

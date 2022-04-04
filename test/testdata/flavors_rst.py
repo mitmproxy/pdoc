@@ -26,6 +26,14 @@ def admonitions():
     .. warning::
        This function is not suitable for sending spam e-mails.
 
+    .. danger::
+       This function is not suitable for sending **spam** e-mails.
+
+    .. warning::  Be Careful!
+       This warning has both a title and content.
+
+    .. warning::  This warning has a title only.
+
     .. versionadded:: 2.5
        The *spam* parameter.
 

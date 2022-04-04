@@ -328,10 +328,17 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"
-        if type == "note":
-            text = val or "Note"
-        elif type == "warning":
-            text = val or "Warning"
+        if type in ("note", "warning", "danger"):
+            if val:
+                heading = f"{ind}###### {val}\n"
+            else:
+                heading = ""
+            return (
+                f'{ind}<div class="pdoc-alert pdoc-alert-{type}" markdown="1">\n'
+                f"{heading}"
+                f"{indent(contents, ind)}\n"
+                f"{ind}</div>\n"
+            )
         elif type == "versionadded":
             text = f"New in version {val}"
         elif type == "versionchanged":
@@ -348,9 +355,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
 
         return text
 
-    admonition = (
-        "note|warning|versionadded|versionchanged|deprecated|seealso|math|include"
-    )
+    admonition = "note|warning|danger|versionadded|versionchanged|deprecated|seealso|math|include"
     return re.sub(
         rf"""
             ^(?P<indent>[ ]*)\.\.[ ]+(?P<type>{admonition})::(?P<val>.*)
