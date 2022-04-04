@@ -44,6 +44,7 @@ markdown_extensions = {
     "fenced-code-blocks": {"cssclass": formatter.cssclass},
     "footnotes": None,
     "header-ids": None,
+    "markdown-in-html": None,
     "pyshell": None,
     "strike": None,
     "tables": None,
