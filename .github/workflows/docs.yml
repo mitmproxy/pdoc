@@ -1,6 +1,6 @@
 name: website
 
-# limit page builds to the main branch only.
+# build the documentation whenever there are new commits on main
 on:
   push:
     branches:
@@ -18,8 +18,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
 
-      - run: pip install -e .  # install your project and all dependencies.
-      - run: docs/make.py      # build step (invoke pdoc)
+      # ADJUST THIS: install all dependencies (including pdoc)
+      - run: pip install -e .
+      # ADJUST THIS: build your documentation into docs/.
+      - run: docs/make.py  
+      # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
 
       - run: tar --directory docs/ -hcf artifact.tar .
       - uses: actions/upload-artifact@v3
