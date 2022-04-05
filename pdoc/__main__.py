@@ -76,7 +76,7 @@ renderopts.add_argument(
     "--favicon",
     type=str,
     metavar="URL",
-    help="Add a favicon at a non-default location.",
+    help="Specify a custom favicon URL.",
 )
 renderopts.add_argument(
     "--footer-text",
@@ -100,7 +100,7 @@ renderopts.add_argument(
     "--math",
     action=BooleanOptionalAction,
     default=False,
-    help="Include MathJax to enable math formula rendering.",
+    help="Include MathJax from a CDN to enable math formula rendering.",
 )
 renderopts.add_argument(
     "--search",

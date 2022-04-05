@@ -2,6 +2,14 @@
 
 # Unreleased: pdoc next
 
+ - pdoc now picks up reStructuredText syntax in docstrings by default. We still prefer plain Markdown, 
+   but this change makes it possible to seamlessly include directives like `.. include:: README.md` or admonitions, 
+   which have no Markdown equivalent. reStructuredText processing can be disabled by explicitly setting the docstring 
+   format to Markdown.
+   ([#373](https://github.com/mitmproxy/pdoc/issues/373), [@mhils](https://github.com/mhils))
+ - pdoc's documentation has been revised, it now also includes [a simple recipe for using pdoc with GitHub Pages
+   ](https://pdoc.dev/docs/pdoc.html#deploying-to-github-pages). 
+   ([#373](https://github.com/mitmproxy/pdoc/issues/373), [@mhils](https://github.com/mhils))
  - Improve display of reStructuredText admonitions.
    ([#372](https://github.com/mitmproxy/pdoc/issues/372), [@mhils](https://github.com/mhils))
  - Add support for reStructuredText field lists: `:param foo: text`.

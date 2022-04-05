@@ -1,50 +1,33 @@
 r'''
-
 # What is pdoc?
 
 pdoc auto-generates API documentation that follows your project's Python module hierarchy.
-It can be used as a command-line application as well as a library.
 
-*pdoc the command-line application* can be used to render a project's
-documentation as static HTML files. It also includes a live-reloading
-web server to preview changes.
+pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do it well.
 
-*pdoc the library* provides types and functions for accessing the public
-documentation of a Python module. This includes modules, functions,
-classes and variables.
+ - Easy setup, no configuration necessary.
+ - Documentation is plain Markdown.
+ - First-class support for type annotations.
+ - Builtin web server with live reloading.
+ - Customizable HTML templates.
+ - Understands numpydoc and Google-style docstrings.
 
-# How does pdoc work?
+# Quickstart
 
-In a nutshell, pdoc takes a Python module name as input, imports it, creates a `pdoc.doc.Module` object
-that extracts all docstrings, and passes it to the HTML template for rendering.
-
-This implies a few things:
-
- - Your documentation lives right by your code, not in extra files.
- - The structure of the generated documentation matches that of your Python package:
-   There is a direct mapping from say `mypackage/helpers.py` to `mypackage/helpers.html`.
-   As such, pdoc works best with small projects and projects that have a well-defined hierarchy.
-
-# Example: `shelter.py`
-
-For this example, we have some code to keep track of the dogs in our local animal shelter.
-Here's our current code:
+As an example, we want to generate API documentation for `demo.py`.
+Our demo module already includes a bunch of docstrings:
 
 ```python
 """
-This module deals with all animals. So far, only dogs are implemented.
-
-# TODO
-
- - Add the rest of the animals.
-
+A small `pdoc` example.
 """
 
 class Dog:
+    """🐕"""
     name: str
-    """The name of this dog. May contain non-ASCII characters."""
+    """The name of our dog."""
     friends: list["Dog"]
-    """Friends this dog has made."""
+    """The friends of our dog."""
 
     def __init__(self, name: str):
         """Make a Dog without any friends (yet)."""
@@ -53,42 +36,46 @@ class Dog:
 
     def bark(self, loud: bool = True):
         """*woof*"""
-
 ```
 
-The docstrings we've added aren't pdoc-specific, we just use modern Python 3 conventions.
-pdoc will later take your module, class, function and variable docstrings and render them
-into a standalone HTML document.
-
-Additionally, all docstrings are interpreted as Markdown.
-For example, the todo list in the example will be rendered with bullet points in your documentation.
-
-
-## Invoking pdoc
-
-Let's run pdoc on this module to see what we get:
+We can invoke pdoc to take our docstrings and render them into a standalone HTML document:
 
 ```shell
-pdoc ./shelter.py
+pdoc ./demo.py  # or: pdoc my_module_name
 ```
 
-This opens a browser with our module documentation. If we edit `shelter.py` now,
-the page will reload automatically. Once we are happy with our changes, we can export our documentation
-to HTML files:
+This opens a browser with our module documentation. Here's a copy of what you should see:
+
+<iframe style="
+    width: 100%;
+    height: 250px;
+    border: solid gray 1px;
+    display: block;
+    margin: 1rem auto;
+    border-radius: 5px;"
+    title="rendered demo.py documentation"
+    src="https://pdoc.dev/docs/demo-standalone.html"></iframe>
+
+If you look closely, you'll notice that docstrings are interpreted as Markdown.
+For example, \`pdoc\` is rendered as `pdoc﻿`. Additionally, identifiers such as the type annotation
+for `Dog.friends` are automatically linked.
+
+If we edit `demo.py` now, the page will reload automatically.
+Once we are happy with everything, we can export the documentation to an HTML file:
 
 ```shell
-pdoc -o ./docs ./shelter.py
+pdoc ./demo.py -o ./docs
 ```
 
-This will create an HTML file at `docs/shelter.html` which contains our module documentation.
+This will create an HTML file at `docs/demo.html` which contains our module documentation. 🎉
 
-## Configuring pdoc
+## Customizing pdoc
 
-We can configure some parts of pdoc's output via command line flags.
+We can optionally configure pdoc's output via command line flags.
 For example, we can add a project logo to the documentation:
 
 ```shell
-pdoc --logo "https://placedog.net/300?random" ./shelter.py
+pdoc ./demo.py --logo "https://placedog.net/300?random"
 ```
 
 To get a list of all available rendering options, run:
@@ -97,38 +84,22 @@ To get a list of all available rendering options, run:
 pdoc --help
 ```
 
-Library users can call `pdoc.render.configure` to configure rendering.
+If you need more advanced customization options, see [*How can I edit pdoc's HTML template?*](#edit-pdocs-html-template).
 
 
-## Editing pdoc's HTML template
+## Deploying to GitHub Pages
 
-For more advanced customization, we can edit pdoc's
-[default HTML template](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2),
-which uses the
-[Jinja2](https://jinja.palletsprojects.com/) templating language.
+*In this example we'll deploy pdoc's documentation to GitHub Pages. Of course, you can distribute
+the generated documentation however you want! pdoc's job is to "just" produce self-contained HTML files for you.*
 
-Let's assume you want to replace the logo with a custom button. We first find the right location in the template by searching
-for "logo", which shows us that the logo is defined in a Jinja2 block named `nav_title`.
-We now extend the default template by creating a file titled `module.html.jinja2` in the current directory
- with the following contents:
+A very simple way to host your API documentation is to set up a continuous integration job which
+pushes your documentation to GitHub Pages. This keeps your docs updated automatically.
 
-```html+jinja
-{% extends "default/module.html.jinja2" %}
-{% block nav_title %}
-<button>Donate dog food</button>
-{% endblock %}
-```
+ 1. Enable GitHub Actions and GitHub Pages in your project's settings.
+ 2. Copy pdoc's GitHub Actions workflow into your own repository and adjust it to how you build your docs:
+    [`.github/workflows/docs.yml`](https://github.com/mitmproxy/pdoc/blob/main/.github/workflows/docs.yml)
 
-We then specify our custom template directory when invoking pdoc...
-
-```shell
-pdoc -t . ./shelter.py
-```
-
-...and the updated documentation – with button – renders! 🎉
-
-See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
-for more examples.
+That's it – no need to fiddle with any secrets or set up any `gh-pages` branches. 🥳
 
 # How can I ... ?
 
@@ -217,7 +188,7 @@ In general, we recommend keeping these conventions:
   to not document the dunder method specifically, but to add some usage examples in the class documentation.
 
 As a last resort, you can override pdoc's behavior with a custom module template (see
-[*Editing pdoc's HTML template*](#editing-pdocs-html-template)).
+[*How can I edit pdoc's HTML template?*](#edit-pdocs-html-template)).
 You can find an example at
 [`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2).
 
@@ -256,29 +227,78 @@ but also useful to the consumers of your source code.
 
 ## ...use numpydoc or Google docstrings?
 
-While pdoc prefers docstrings that are plain Markdown,
-it also understands numpydoc and Google-style docstrings,
-including a limited subset of reStructuredText (as used by Sphinx).
+While pdoc prefers docstrings that are plain Markdown, it also understands numpydoc and Google-style docstrings.
 If your documentation follows one of these styles, you can:
 
 1. Run `pdoc --docformat ...` to enable a particular docstring flavor globally, or
-2. Add `__docformat__ = "google"` at the top-level of the module you are documenting.
-   The following values are supported: `google`, `numpy`, and `restructuredtext`.
-   `google` and `numpy` are both treated as a superset of `restructuredtext`.
+2. Add `__docformat__ = "..."` at the top-level of the module you are documenting.
 
-pdoc does not implement the full reStructuredText specification and does not plan on doing so.
-Adding additional syntax elements is usually easy.
-If you feel that pdoc doesn't parse a docstring element properly, please amend
-`pdoc.docstrings` and send us a pull request!
+The following values are supported:
+
+- `markdown`: Process Markdown syntax only.
+- `restructuredtext`: Process reStructuredText elements, then Markdown (default setting).
+- `google`: Process reStructuredText elements, then Google-style syntax, then Markdown.
+- `numpy`: Process reStructuredText elements, then Numpydoc syntax, then Markdown.
+
+pdoc only interprets a subset of the reStructuredText specification.
+Adding additional syntax elements is usually easy. If you feel that pdoc doesn't parse a docstring element properly,
+please amend `pdoc.docstrings` and send us a pull request!
+
 
 ## ...render math formulas?
 
 Run `pdoc --math`, and pdoc will render formulas in your docstrings. See
 [`math_demo`](https://pdoc.dev/docs/math/math_demo.html) for details.
 
+
 ## ...add my project's logo?
 
 See [*Configuring pdoc*](#configuring-pdoc).
+
+
+## ...include Markdown files?
+
+You can include external Markdown files in your documentation by using reStructuredText's
+`.. include::` directive. For example, a common pattern is to include your project's README in your top-level `__init__.py` like this:
+
+```python
+"""
+.. include:: ../README.md
+"""
+```
+
+Since version 11, pdoc processes such reStructuredText elements by default.
+
+
+## ...edit pdoc's HTML template?
+
+For more advanced customization, we can edit pdoc's
+[default HTML template](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2),
+which uses the
+[Jinja2](https://jinja.palletsprojects.com/) templating language.
+
+Let's assume you want to replace the logo with a custom button. We first find the right location in the template by searching
+for "logo", which shows us that the logo is defined in a Jinja2 block named `nav_title`.
+We now extend the default template by creating a file titled `module.html.jinja2` in the current directory
+ with the following contents:
+
+```html+jinja
+{% extends "default/module.html.jinja2" %}
+{% block nav_title %}
+<button>Donate dog food</button>
+{% endblock %}
+```
+
+We then specify our custom template directory when invoking pdoc...
+
+```shell
+pdoc -t . ./demo.py
+```
+
+...and the updated documentation – with button – renders! 🎉
+
+See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
+for more examples.
 
 ## ...pass arguments to the Jinja2 template?
 
@@ -287,24 +307,6 @@ you can use system environment variables.
 For example,
 [`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2)
 shows how to include a version number in the rendered HTML.
-
-## ...include Markdown files?
-
-You can include external Markdown files in your documentation by using reStructuredText's
-`.. include::` directive. For example, you can include your README in `__init__.py` like this:
-
-```python
-"""
-.. include:: README.md
-"""
-__docformat__ = "restructuredtext"
-```
-
-Make sure that you either specify `__docformat__`
-or pass `--docformat`. pdoc processes plain Markdown by default,
-`.. include::` is only evaluated for [`google`, `numpy`, or `restructuredtext`
-docstrings](#use-numpydoc-or-google-docstrings).
-
 
 
 ## ...integrate pdoc into other systems?
@@ -315,7 +317,7 @@ This makes it possible to integrate pdoc with almost every CMS or static site ge
 The only limitation is that you need to retain pdoc's directory structure
 if you would like to link between modules.
 
-To do so, [create a custom `frame.html.jinja2` template](#editing-pdocs-html-template) which only emits CSS and the main
+To do so, [create a custom `frame.html.jinja2` template](#edit-pdocs-html-template) which only emits CSS and the main
 page contents instead of a full standalone HTML document:
 ```html+jinja
 {% block content %}{% endblock %}
@@ -337,6 +339,7 @@ This should be enough to produce HTML files that can be embedded into other page
 All CSS selectors are prefixed with `.pdoc` so that pdoc's page style does not interfere with the rest of your website.
 
 You can find a full example for mkdocs in [`examples/mkdocs`](https://github.com/mitmproxy/pdoc/tree/main/examples/mkdocs/).
+
 
 # Docstring Inheritance
 
@@ -364,21 +367,29 @@ defined in `Dog.bark`. If pdoc generates documentation for the above
 code, then it will automatically attach the docstring for `Dog.bark` to
 `GoldenRetriever.bark` if it does not have a docstring.
 
+
 # Limitations
 
-**Markdown and PDF Output**
+  - **Scope:** pdoc main use case is API documentation.
+    If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
+  - **Dynamic analysis:** pdoc makes heavy use of dynamic analysis to extract docstrings.
+    This means your Python modules will be executed/imported when pdoc runs.
+  - **HTML Output:** pdoc only supports HTML as an output format. If you want to use pdoc with a static site
+    generator that only accepts Markdown, that may work nonetheless – take a look at
+    [integrating pdoc into other systems](https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems).
 
-pdoc currently only supports HTML as an output format.
-We would be happy to accept contributions for Markdown and PDF.
 
 # Using pdoc as a library
 
-pdoc provides the high-level `pdoc.pdoc()` interface shown below, but it is also possible to create `pdoc.doc.Module`
-objects directly to modify them before rendering.
+pdoc provides the high-level `pdoc.pdoc()` interface explained below. This makes it possible to do custom adjustments
+to your Python code before pdoc is used.
+
+It is also possible to create `pdoc.doc.Module` objects directly and modify them before rendering.
 You can find an example in [`examples/library-usage`](https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage).
 '''
 from __future__ import annotations
 
+__docformat__ = "markdown"  # explicitly disable rST processing in the examples above.
 __version__ = "10.0.4"  # this is read from setup.py
 
 import traceback

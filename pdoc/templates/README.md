@@ -1,7 +1,7 @@
 # 📑 pdoc templates
 
 This directory contains pdoc's default templates, which you can extend in your own template directory. See
-[the documentation](https://pdoc.dev/docs/pdoc.html#editing-pdocs-html-template) for an example.
+[the documentation](https://pdoc.dev/docs/pdoc.html#edit-pdocs-html-template) for an example.
 
 For customization, the most important files are:
 
