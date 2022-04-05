@@ -12,7 +12,8 @@ import http.server
 import traceback
 import warnings
 import webbrowser
-from collections.abc import Iterable, Iterator, Mapping
+from collections.abc import Iterable, Iterator
+from typing import Mapping
 
 from pdoc import doc, extract, render
 from pdoc._compat import cache, removesuffix
