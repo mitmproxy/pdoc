@@ -167,15 +167,23 @@ nav.pdoc ul {
     padding-left: 0;
 }
 
-nav.pdoc li {
-    display: block;
-    margin: 0;
-    padding: .2rem 0 .2rem var(--indent);
-    transition: all 100ms;
+nav.pdoc > div > ul {
+    /* undo padding here so that links span entire width */
+    margin-left: calc(0px - var(--pad));
 }
 
-nav.pdoc > div > ul > li {
-    padding-left: 0;
+nav.pdoc li a {
+    /* re-add padding (+indent) here */
+    padding: .2rem 0 .2rem calc(var(--pad) + var(--indent));
+}
+
+nav.pdoc > div > ul > li > a {
+    /* no padding for top-level */
+    padding-left: var(--pad);
+}
+
+nav.pdoc li {
+    transition: all 100ms;
 }
 
 nav.pdoc li:hover {
