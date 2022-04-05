@@ -19,9 +19,9 @@ import sys
 import traceback
 import types
 import warnings
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Callable, Iterable, Iterator, Sequence
 from unittest.mock import patch
 
 import pdoc

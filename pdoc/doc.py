@@ -28,9 +28,10 @@ import traceback
 import types
 import warnings
 from abc import ABCMeta, abstractmethod
+from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, ClassVar, Generic, TypeVar, Union
+from typing import Any, ClassVar, Generic, TypeVar, Union
 
 from pdoc import doc_ast, extract
 from pdoc.doc_types import (

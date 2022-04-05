@@ -9,9 +9,10 @@ import ast
 import inspect
 import types
 import warnings
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from itertools import tee, zip_longest
-from typing import Any, Iterable, Iterator, TypeVar, overload
+from typing import Any, TypeVar, overload
 
 from ._compat import ast_unparse, cache
 

@@ -4,7 +4,7 @@ import os
 import re
 import warnings
 from contextlib import contextmanager
-from typing import Collection, Iterable, Mapping
+from collections.abc import Collection, Iterable, Mapping
 from unittest.mock import patch
 
 import pygments.formatters.html
