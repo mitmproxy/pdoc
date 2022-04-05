@@ -124,7 +124,9 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: 0;
 }
 
-.pdoc section {
+.pdoc > section:not(:first-of-type) {
+    /* this margin should collapse with docstring margin,
+       but not for the module docstr which is followed by view_source. */
     margin-bottom: 1.5rem;
 }
 
@@ -178,13 +180,13 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     outline: 0;
 }
 
+.pdoc > section:first-of-type details > summary {
+    top: -20px;
+}
+
 /* Docstrings */
 .pdoc .docstring {
     margin-bottom: 1.5rem;
-}
-
-.pdoc > section:first-of-type > .docstring {
-    margin-bottom: 2.5rem;
 }
 
 .pdoc .docstring .pdoc-code {

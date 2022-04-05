@@ -113,7 +113,7 @@ body {
 
 /* Nav */
 nav.pdoc {
-    --pad: 1.75rem;
+    --pad: clamp(0.5rem, 2vw, 1.75rem);
     --indent: 1.5rem;
     background-color: var(--accent);
     border-right: 1px solid var(--accent2);
