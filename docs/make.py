@@ -32,6 +32,13 @@ if __name__ == "__main__":
     if (here / "docs").is_dir():
         shutil.rmtree(here / "docs")
 
+    # Render standalone demo (without any configuration)
+    pdoc.pdoc(
+        demo,
+        output_directory=here / "docs",
+    )
+    (here / "docs" / "demo.html").rename(here / "docs" / "demo-standalone.html")
+
     # Render main docs
     pdoc.render.configure(
         edit_url_map={
@@ -72,6 +79,6 @@ if __name__ == "__main__":
         for file in here.glob("**/*.html"):
             if file.name.startswith("_"):
                 continue
-            filename = str(file.relative_to(here)).replace("index.html", "")
+            filename = str(file.relative_to(here).as_posix()).replace("index.html", "")
             f.write(f"""\n<url><loc>https://pdoc.dev/{filename}</loc></url>""")
         f.write("""\n</urlset>""")

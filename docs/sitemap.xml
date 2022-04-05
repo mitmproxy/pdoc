@@ -3,6 +3,7 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url><loc>https://pdoc.dev/</loc></url>
+<url><loc>https://pdoc.dev/docs/demo-standalone.html</loc></url>
 <url><loc>https://pdoc.dev/docs/demo.html</loc></url>
 <url><loc>https://pdoc.dev/docs/demo_long.html</loc></url>
 <url><loc>https://pdoc.dev/docs/</loc></url>
