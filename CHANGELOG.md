@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+# 2022-04-06: pdoc 11.0.0
+
  - pdoc now picks up reStructuredText syntax in docstrings by default. We still prefer plain Markdown, 
    but this change makes it possible to seamlessly include directives like `.. include:: README.md` or admonitions, 
    which have no Markdown equivalent. reStructuredText processing can be disabled by explicitly setting the docstring 
