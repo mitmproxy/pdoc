@@ -44,7 +44,7 @@
         <h2>Submodules</h2>
         <ul>
             {% for submodule in module.submodules if is_public(submodule) | trim %}
-                <li>{{ submodule.taken_from | link }}</li>
+                <li>{{ submodule.taken_from | link(text=submodule.name) }}</li>
             {% endfor %}
         </ul>
     {% endif %}
