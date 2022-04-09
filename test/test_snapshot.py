@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -168,6 +169,12 @@ def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
 
 
 if __name__ == "__main__":
+    if not shutil.which("nodejs") and not shutil.which("node"):
+        print(
+            "Snapshots include precompiled search indices, "
+            "but this system does not have Node.js installed to render them. Aborting."
+        )
+        sys.exit(1)
     os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
