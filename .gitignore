@@ -17,3 +17,5 @@ coverage.xml
 .render/
 .hypothesis/
 docs/docs/
+docs/index.html
+docs/sitemap.xml
