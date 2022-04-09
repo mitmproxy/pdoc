@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Fix catastrophic backtracking in a markdown2 regex that processes pyshell examples.
+   ([#376](https://github.com/mitmproxy/pdoc/issues/376), [@Andrew-Sheridan](https://github.com/Andrew-Sheridan) and [@mhils](https://github.com/mhils))
+
 # 2022-04-06: pdoc 11.0.0
 
  - pdoc now picks up reStructuredText syntax in docstrings by default. We still prefer plain Markdown, 
