@@ -10,21 +10,21 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: TrueBrain/actions-flake8@9a43ff1b2c7b96f3edffc48a49973ce3de116ba1
   lint-local:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
       - run: pip install tox
       - run: tox -e flake8
   mypy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
       - run: pip install tox
       - run: tox -e mypy
   test:
@@ -33,22 +33,21 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.10.2
+            py: 3.10.4
           - os: macos-latest
-            py: 3.10.2
+            py: 3.10.4
           - os: ubuntu-latest
-            py: 3.10.2
+            py: 3.10.4
           - os: ubuntu-latest
-            py: 3.9.9
+            py: 3.9.12
           - os: ubuntu-latest
             py: 3.8.12
           - os: ubuntu-latest
             py: 3.7.12
     runs-on: ${{ matrix.os }}
     steps:
-      - run: printenv
-      - uses: actions/checkout@v1
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.py }}
       - run: pip install tox
@@ -67,10 +66,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [mypy, test]
     steps:
-      - run: printenv
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - run: sudo apt-get update
       - run: sudo apt-get install -y twine python3-wheel
-      - run: python3 setup.py bdist_wheel
+      - run: python3 setup.py sdist bdist_wheel
       - run: twine check dist/*
       - run: twine upload dist/*
