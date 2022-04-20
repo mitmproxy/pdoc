@@ -253,7 +253,7 @@ Run `pdoc --math`, and pdoc will render formulas in your docstrings. See
 
 ## ...add my project's logo?
 
-See [*Configuring pdoc*](#configuring-pdoc).
+See [*Customizing pdoc*](#customizing-pdoc).
 
 
 ## ...include Markdown files?
