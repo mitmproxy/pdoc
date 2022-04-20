@@ -304,6 +304,7 @@ def linkify_links():
     - [`linkify_links()`](https://example.com/)
     - [misc.linkify_links()](https://example.com/)
     - [link in target](https://example.com/misc.linkify_links)
+    - [explicit linking](#AbstractClass.foo)
     """
 
 
