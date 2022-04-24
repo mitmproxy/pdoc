@@ -3,7 +3,7 @@ coverage==6.3.2
 distlib==0.3.4
 filelock==3.6.0
 flake8==4.0.1
-hypothesis==6.41.0
+hypothesis==6.45.0
 iniconfig==1.1.1
 Jinja2==3.1.1
 MarkupSafe==2.1.1
@@ -12,14 +12,14 @@ mypy==0.942
 mypy-extensions==0.4.3
 packaging==21.3
 pip==22.0.4
-platformdirs==2.5.1
+platformdirs==2.5.2
 pluggy==1.0.0
 py==1.11.0
 pycodestyle==2.8.0
 pyflakes==2.4.0
-Pygments==2.11.2
-pyparsing==3.0.7
-pytest==7.1.1
+Pygments==2.12.0
+pyparsing==3.0.8
+pytest==7.1.2
 pytest-cov==3.0.0
 pytest-timeout==2.1.0
 setuptools==58.1.0
@@ -27,6 +27,6 @@ six==1.16.0
 sortedcontainers==2.4.0
 toml==0.10.2
 tomli==2.0.1
-tox==3.24.5
-typing_extensions==4.1.1
-virtualenv==20.14.0
+tox==3.25.0
+typing_extensions==4.2.0
+virtualenv==20.14.1
