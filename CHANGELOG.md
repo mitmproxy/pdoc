@@ -2,13 +2,15 @@
 
 # Unreleased: pdoc next
 
+ - Display line numbers when viewing source code.
+   ([#328](https://github.com/mitmproxy/pdoc/issues/328), [@mhils](https://github.com/mhils))
  - Fix catastrophic backtracking in a markdown2 regex that processes pyshell examples.
    ([#376](https://github.com/mitmproxy/pdoc/issues/376), [@Andrew-Sheridan](https://github.com/Andrew-Sheridan) and [@mhils](https://github.com/mhils))
  - pdoc now uses the submodule name in the rendered sidebar, rather than the full import path. 
    ([#374](https://github.com/mitmproxy/pdoc/issues/374), [@jacksund](https://github.com/jacksund))
  - Fix a bug where explicit links were rendered incorrectly.
    ([#382](https://github.com/mitmproxy/pdoc/issues/382), [@mhils](https://github.com/mhils))
- - Fix compatibility with pygments 2.12.
+ - Fix compatibility with Pygments 2.12.
    ([#384](https://github.com/mitmproxy/pdoc/issues/384), [@mhils](https://github.com/mhils))
 
 # 2022-04-06: pdoc 11.0.0

@@ -273,7 +273,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% if show_source and doc.source %}
         <details>
             <summary>View Source</summary>
-            {{ doc.source | highlight }}
+            {{ doc | highlight }}
         </details>
     {% endif %}
 {% enddefaultmacro %}

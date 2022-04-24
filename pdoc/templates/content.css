@@ -200,15 +200,25 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 .pdoc h3:target,
 .pdoc h4:target,
 .pdoc h5:target,
-.pdoc h6:target {
+.pdoc h6:target,
+.pdoc .pdoc-code > pre > span:target {
     background-color: var(--active);
     box-shadow: -1rem 0 0 0 var(--active);
+}
+
+.pdoc .pdoc-code > pre > span:target {
+    /* make the highlighted line full width so that the background extends */
+    display: block;
 }
 
 .pdoc div:target > .attr,
 .pdoc section:target > .attr,
 .pdoc dd:target > a {
     background-color: var(--active);
+}
+
+.pdoc * {
+    scroll-margin: 2rem;
 }
 
 .pdoc .attr:hover {
