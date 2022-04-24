@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+# 2022-04-24: pdoc 11.1.0
+
  - Display line numbers when viewing source code.
    ([#328](https://github.com/mitmproxy/pdoc/issues/328), [@mhils](https://github.com/mhils))
  - Fix catastrophic backtracking in a markdown2 regex that processes pyshell examples.
