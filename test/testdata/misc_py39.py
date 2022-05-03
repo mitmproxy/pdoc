@@ -22,7 +22,12 @@ class NamedTupleExample(NamedTuple):
 # Testing some edge cases in our inlined implementation of ForwardRef._evaluate in _eval_type.
 class Foo(TypedDict):
     a: Optional[int]
+    """First attribute."""
 
 
 class Bar(Foo, total=False):
+    """A TypedDict subclass. TypedDict botches the MRO, so things aren't perfect here."""
     b: int
+    """Second attribute."""
+    c: str
+    # undocumented attribute

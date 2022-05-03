@@ -327,6 +327,15 @@ class Issue352b(metaclass=Issue352bMeta):
     """No docstrings for the constructor here."""
 
 
+class CustomCallMeta(type):
+    def __call__(cls, *args, **kwargs):
+        """Custom docstring in metaclass.`__call__`"""
+
+
+class CustomCall(metaclass=CustomCallMeta):
+    """A class where the constructor is defined by its metaclass."""
+
+
 __all__ = [  # noqa
     "Issue226",
     "var_with_default_obj",
@@ -354,4 +363,5 @@ __all__ = [  # noqa
     "linkify_links",
     "Issue352a",
     "Issue352b",
+    "CustomCall",
 ]

@@ -545,6 +545,15 @@ class Class(Namespace[type]):
         return f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}{_children(self)}>"
 
     @cached_property
+    def docstring(self) -> str:
+        doc = Doc.docstring.__get__(self)  # type: ignore
+        if doc == dict.__doc__:
+            # Don't display default docstring for dict subclasses (primarily TypedDict).
+            return ""
+        else:
+            return doc
+
+    @cached_property
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
         for cls in self.obj.__mro__:
@@ -603,6 +612,7 @@ class Class(Namespace[type]):
         try:
             return self._declarations[member_name]
         except KeyError:  # pragma: no cover
+            # TypedDict botches __mro__ and may need special casing here.
             warnings.warn(
                 f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
             )
@@ -638,6 +648,9 @@ class Class(Namespace[type]):
             elif issubclass(self.obj, enum.Enum):
                 # Special case: Do not show a constructor for enums. They are typically not constructed by users.
                 # The alternative would be showing __new__, as __call__ is too verbose.
+                del unsorted["__init__"]
+            elif issubclass(self.obj, dict):
+                # Special case: Do not show a constructor for dict subclasses.
                 del unsorted["__init__"]
             else:
                 # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to

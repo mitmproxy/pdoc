@@ -60,7 +60,7 @@ renderopts.add_argument(
     default="restructuredtext",
     choices=("markdown", "google", "numpy", "restructuredtext"),
     help="The default docstring format. For non-Markdown formats, pdoc will first convert matching syntax elements to "
-         "Markdown and then process everything as Markdown.",
+    "Markdown and then process everything as Markdown.",
 )
 renderopts.add_argument(
     "-e",

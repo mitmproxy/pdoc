@@ -2,6 +2,10 @@
 
 # Unreleased: pdoc next
 
+ - Improve rendering of `typing.TypedDict` subclasses.
+   ([#389](https://github.com/mitmproxy/pdoc/issues/389), [@mhils](https://github.com/mhils))
+
+
 # 2022-04-24: pdoc 11.1.0
 
  - Display line numbers when viewing source code.
