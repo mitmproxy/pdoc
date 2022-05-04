@@ -1,0 +1,11 @@
+<module type_stub  # This module has an a…
+    <function def func(x: str, y: Any, z: Iterable[str]) -> int: ...  # A simple function.>
+    <var var: list[str] = []  # A simple variable.>
+    <class type_stub.Class
+        <method def __init__(): ...>
+        <var attr: int = 42  # An attribute>
+        <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        <class type_stub.Class.Subclass
+            <method def __init__(): ...>
+            <var attr: str = '42'  # An attribute>
+            <method def meth(self, y: bool) -> bool: ...  # A simple method.>>>>
