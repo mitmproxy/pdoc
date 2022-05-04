@@ -336,7 +336,36 @@ class CustomCall(metaclass=CustomCallMeta):
     """A class where the constructor is defined by its metaclass."""
 
 
-__all__ = [  # noqa
+class Headings:
+    """
+    # Heading 1
+
+    Here is some text.
+
+    ## Heading 2
+
+    Here is some text.
+
+    ### Heading 3
+
+    Here is some text.
+
+    #### Heading 4
+
+    Here is some text.
+
+    ##### Heading 5
+
+    Here is some text.
+
+    ###### Heading 6
+
+    Here is some text.
+
+    """
+
+
+__all__ = [
     "Issue226",
     "var_with_default_obj",
     "var_with_default_func",
@@ -364,4 +393,5 @@ __all__ = [  # noqa
     "Issue352a",
     "Issue352b",
     "CustomCall",
+    "Headings",
 ]

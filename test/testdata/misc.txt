@@ -68,4 +68,8 @@
     <class misc.Issue352b  # No docstrings for th…
         <method def __init__(): ...>>
     <class misc.CustomCall  # A class where the co…
-        <method def __init__(cls, *args, **kwargs): ...  # Custom docstring in …>>>
+        <method def __init__(cls, *args, **kwargs): ...  # Custom docstring in …>>
+    <class misc.Headings  # # Heading 1
+
+    Here is…
+        <method def __init__(): ...>>>
