@@ -16,6 +16,7 @@ from pdoc.render_helpers import (
     DefaultMacroExtension,
     defuse_unsafe_reprs,
     edit_url,
+    format_signature,
     highlight,
     link,
     linkify,
@@ -181,6 +182,7 @@ You can modify this object to add custom filters and globals.
 env.filters["to_markdown"] = to_markdown_with_context
 env.filters["to_html"] = to_html
 env.filters["highlight"] = highlight
+env.filters["format_signature"] = format_signature
 env.filters["linkify"] = linkify
 env.filters["link"] = link
 env.filters["minify_css"] = minify_css

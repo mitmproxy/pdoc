@@ -171,36 +171,44 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     color: var(--pdoc-background);
 }
 
-/* View Source */
-.pdoc details {
-    /*
-     stay on top of .attr even if it is filtered, see
-     https://stackoverflow.com/questions/25764404/why-does-stacking-order-change-on-webkit-filter-hover
-     */
-    filter: opacity(1);
+.view-source-toggle-state,
+.view-source-toggle-state ~ .pdoc-code {
+    display: none;
+}
+.view-source-toggle-state:checked ~ .pdoc-code {
+    display: block;
 }
 
-.pdoc details:not([open]) {
-    height: 0;
-}
-
-.pdoc details > summary {
-    position: absolute;
-    top: -35px;
-    right: 0;
+.view-source-button {
+    display: inline-block;
+    float: right;
     font-size: .75rem;
+    line-height: 1.5rem;
     color: var(--muted);
-    padding: 0 .7em;
-    user-select: none;
+    padding: 0 .4rem 0 1.3rem;
     cursor: pointer;
+    /* odd hack to reduce space between "bullet" and text */
+    text-indent: -4px;
 }
-
-.pdoc details > summary:focus {
-    outline: 0;
+.view-source-button > span {
+    visibility: hidden;
 }
-
-.pdoc > section.module-info details > summary {
-    top: -20px;
+.module-info .view-source-button {
+    float: right;
+    margin-top: -1.7rem;
+    margin-right: 0.4rem;
+}
+.view-source-button::before {
+    /* somewhat awkward recreation of a <summary> element. ideally we'd just use `display: inline list-item`, but
+     that does not work in Chrome (yet), see https://crbug.com/995106. */
+    position: absolute;
+    content: "View Source";
+    display: list-item;
+    list-style-type: disclosure-closed;
+}
+.view-source-toggle-state:checked ~ .attr .view-source-button::before,
+.view-source-toggle-state:checked ~ .view-source-button::before {
+    list-style-type: disclosure-open;
 }
 
 /* Docstrings */
@@ -249,38 +257,41 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 }
 
 /* Header link */
+.pdoc section, .pdoc .classattr {
+    position: relative;
+}
+
 .pdoc .headerlink {
+    --width: clamp(1rem, 3vw, 2rem);
     position: absolute;
-    width: 0;
-    margin-left: -1.5rem;
-    line-height: 1.4rem;
-    font-size: 1.5rem;
-    font-weight: normal;
+    top: 0;
+    left: calc(0rem - var(--width));
     transition: all 100ms ease-in-out;
     opacity: 0;
-    user-select: none;
+}
+.pdoc .headerlink::before {
+    content: "#";
+    display: block;
+    text-align: center;
+    width: var(--width);
+    height: 2.3rem;
+    line-height: 2.3rem;
+    font-size: 1.5rem;
 }
 
-.pdoc .attr > .headerlink {
-    margin-left: -2.5rem;
-}
-
-.pdoc *:hover > .headerlink,
-.pdoc *:target > .attr > .headerlink {
+.pdoc .attr:hover ~ .headerlink,
+.pdoc *:target > .headerlink,
+.pdoc .headerlink:hover {
     opacity: 1;
 }
 
 /* Attributes */
 .pdoc .attr {
     display: block;
-    color: var(--text);
     margin: .5rem 0 .5rem;
-    /*
-    lots of padding on the right to accomodate the view source button.
-    This is not ideal, but probably good enough for now.
-    */
-    padding: .4rem 5rem .4rem 1rem;
+    padding: .4rem .4rem .4rem 1rem;
     background-color: var(--accent);
+    overflow-x: auto;
 }
 
 .pdoc .classattr {
@@ -298,7 +309,18 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 }
 
 .pdoc .signature {
-    white-space: pre-wrap;
+    /* override pygments background color */
+    background-color: transparent;
+}
+
+.pdoc .param, .pdoc .return-annotation {
+    white-space: pre;
+}
+.pdoc .signature.multiline .param {
+    display: block;
+}
+.pdoc .signature.condensed .param {
+    display:inline-block;
 }
 
 .pdoc .annotation {

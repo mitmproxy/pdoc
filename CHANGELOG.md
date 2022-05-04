@@ -2,6 +2,18 @@
 
 # Unreleased: pdoc next
 
+ - Improve rendering of function signatures. Annotations are now syntax-highlighted! ✨
+ - Change the implementation of *View Source* to not use an HTML `<details>` element. Recent versions
+   of Chrome started to auto-expand source code blocks on search, which made it difficult to search in docstrings.
+ - The aforementioned template improvements may require minor adjustments to custom templates. 
+   Users who do not use custom templates are unaffected.
+   - Users who customized the `view_source` macro: 
+     This macro has been split into three smaller macros, please check 
+     [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2).
+     This change was necessary to make sure that the button does not overflow function signatures.
+   - Users who customized the `member`, `class`, `function`, `submodule` or `variable` macros:
+     Common parts have been combined in the `member` macro, please check 
+     [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2).
  - Fix: Hide the nav menu checkbox in Firefox.  
 
 # 2022-05-04: pdoc 11.2.0

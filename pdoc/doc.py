@@ -1014,14 +1014,15 @@ class _PrettySignature(inspect.Signature):
     for complex signatures.
     """
 
-    def __str__(self):
+    MULTILINE_CUTOFF = 70
+
+    def _params(self) -> list[str]:
         # redeclared here to keep code snipped below as-is.
         _POSITIONAL_ONLY = inspect.Parameter.POSITIONAL_ONLY
         _VAR_POSITIONAL = inspect.Parameter.VAR_POSITIONAL
         _KEYWORD_ONLY = inspect.Parameter.KEYWORD_ONLY
-        _empty = empty
 
-        # https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3123
+        # https://github.com/python/cpython/blob/799f8489d418b7f9207d333eac38214931bd7dcc/Lib/inspect.py#L3083-L3117
         # Change: added re.sub() to formatted = ....
         # ✂ start ✂
         result = []
@@ -1059,18 +1060,28 @@ class _PrettySignature(inspect.Signature):
             # There were only positional-only parameters, hence the
             # flag was not reset to 'False'
             result.append("/")
-
-        rendered = "({})".format(", ".join(result))
-
-        if self.return_annotation is not _empty:
-            anno = formatannotation(self.return_annotation)
-            rendered += " -> {}".format(anno)
         # ✂ end ✂
 
-        if len(rendered) > 70:
+        return result
+
+    def _return_annotation_str(self) -> str:
+        if self.return_annotation is not empty:
+            return formatannotation(self.return_annotation)
+        else:
+            return ""
+
+    def __str__(self):
+        result = self._params()
+        return_annot = self._return_annotation_str()
+
+        total_len = sum(len(x) + 2 for x in result) + len(return_annot)
+
+        if total_len > self.MULTILINE_CUTOFF:
             rendered = "(\n    " + ",\n    ".join(result) + "\n)"
-            if self.return_annotation is not _empty:
-                rendered += f" -> {formatannotation(self.return_annotation)}"
+        else:
+            rendered = "({})".format(", ".join(result))
+        if return_annot:
+            rendered += f" -> {return_annot}"
 
         return rendered
 

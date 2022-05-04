@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import os
 import re
 import warnings
@@ -30,6 +31,7 @@ lexer = pygments.lexers.python.PythonLexer()
 The pygments lexer used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments lexing.
 """
+
 formatter = pygments.formatters.html.HtmlFormatter(
     cssclass="pdoc-code codehilite",
     linenos="inline",
@@ -37,9 +39,15 @@ formatter = pygments.formatters.html.HtmlFormatter(
 )
 """
 The pygments formatter used for pdoc.render_helpers.highlight. 
-Overwrite this to configure pygments highlighting.
+Overwrite this to configure pygments highlighting of code blocks.
 
 The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
+"""
+
+signature_formatter = pygments.formatters.html.HtmlFormatter(nowrap=True)
+"""
+The pygments formatter used for pdoc.render_helpers.format_signature. 
+Overwrite this to configure pygments highlighting of signatures.
 """
 
 markdown_extensions = {
@@ -75,6 +83,49 @@ def highlight(doc: pdoc.doc.Doc) -> str:
     formatter.linespans = doc.qualname or "L"
     formatter.linenostart = doc.source_lines[0] if doc.source_lines else 1
     return Markup(pygments.highlight(doc.source, lexer, formatter))
+
+
+def format_signature(sig: inspect.Signature, colon: bool) -> str:
+    """Format and highlight a function signature using pygments. Returns HTML."""
+    # First get a list with all params as strings.
+    result = pdoc.doc._PrettySignature._params(sig)  # type: ignore
+    return_annot = pdoc.doc._PrettySignature._return_annotation_str(sig)  # type: ignore
+
+    multiline = (
+        sum(len(x) + 2 for x in result) + len(return_annot)
+        > pdoc.doc._PrettySignature.MULTILINE_CUTOFF
+    )
+
+    # Next, individually highlight each parameter using pygments and wrap it in a span.param.
+    # This later allows us to properly control line breaks.
+    pretty_result = []
+    for i, param in enumerate(result):
+        pretty = pygments.highlight(param, lexer, signature_formatter).strip()
+        if multiline:
+            pretty = f"""<span class="param">\t{pretty},</span>"""
+        else:
+            pretty = f"""<span class="param">{pretty}, </span>"""
+        pretty_result.append(pretty)
+
+    # remove last comma.
+    if pretty_result:
+        pretty_result[-1] = pretty_result[-1].rpartition(",")[0] + "</span>"
+
+    # Add return annotation.
+    rendered = "(%s)" % "".join(pretty_result)
+    if return_annot:
+        anno = pygments.highlight(return_annot, lexer, signature_formatter).strip()
+        rendered = (
+            rendered[:-1]
+            + f'<span class="return-annotation">) -> {anno}{":" if colon else ""}</span>'
+        )
+
+    if multiline:
+        rendered = f'<span class="signature pdoc-code multiline">{rendered}</span>'
+    else:
+        rendered = f'<span class="signature pdoc-code condensed">{rendered}</span>'
+
+    return Markup(rendered)
 
 
 @cache
