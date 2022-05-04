@@ -41,12 +41,18 @@
             <li>
                     <a class="class" href="#Foo">Foo</a>
                             <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#Foo.a">a</a>
+                        </li>
                 </ul>
 
             </li>
             <li>
                     <a class="class" href="#Bar">Bar</a>
                             <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#Bar.b">b</a>
+                        </li>
                 </ul>
 
             </li>
@@ -95,10 +101,15 @@ misc_py39    </h1>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="c1"># Testing some edge cases in our inlined implementation of ForwardRef._evaluate in _eval_type.</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="sd">&quot;&quot;&quot;A TypedDict subclass. TypedDict botches the MRO, so things aren&#39;t perfect here.&quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="c1"># undocumented attribute</span>
 </span></pre></div>
 
         </details>
@@ -191,28 +202,30 @@ misc_py39    </h1>
             <summary>View Source</summary>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-23"><a href="#Foo-23"><span class="linenos">23</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
 </span><span id="Foo-24"><a href="#Foo-24"><span class="linenos">24</span></a>    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</span><span id="Foo-25"><a href="#Foo-25"><span class="linenos">25</span></a>    <span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
 </span></pre></div>
 
         </details>
 
-            <div class="docstring"><p>dict() -> new empty dictionary
-dict(mapping) -> new dictionary initialized from a mapping object's
-    (key, value) pairs
-dict(iterable) -> new dictionary initialized as if via:
-    d = {}
-    for k, v in iterable:
-        d[k] = v
-dict(**kwargs) -> new dictionary initialized with the name=value pairs
-    in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+    
+
+                            <div id="Foo.a" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Foo.a">#&nbsp;&nbsp</a>
+
+        <span class="name">a</span><span class="annotation">: Optional[int]</span>
+    </div>
+
+    
+            <div class="docstring"><p>First attribute.</p>
 </div>
 
 
+                            </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt>builtins.dict</dt>
-                                <dd id="Foo.__init__" class="class">dict</dd>
-                <dd id="Foo.get" class="function">get</dd>
+                                <dd id="Foo.get" class="function">get</dd>
                 <dd id="Foo.setdefault" class="function">setdefault</dd>
                 <dd id="Foo.pop" class="function">pop</dd>
                 <dd id="Foo.popitem" class="function">popitem</dd>
@@ -239,30 +252,37 @@ dict(**kwargs) -> new dictionary initialized with the name=value pairs
 
             <details>
             <summary>View Source</summary>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-27"><a href="#Bar-27"><span class="linenos">27</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="Bar-28"><a href="#Bar-28"><span class="linenos">28</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-28"><a href="#Bar-28"><span class="linenos">28</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="Bar-29"><a href="#Bar-29"><span class="linenos">29</span></a>    <span class="sd">&quot;&quot;&quot;A TypedDict subclass. TypedDict botches the MRO, so things aren&#39;t perfect here.&quot;&quot;&quot;</span>
+</span><span id="Bar-30"><a href="#Bar-30"><span class="linenos">30</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Bar-31"><a href="#Bar-31"><span class="linenos">31</span></a>    <span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="Bar-32"><a href="#Bar-32"><span class="linenos">32</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="Bar-33"><a href="#Bar-33"><span class="linenos">33</span></a>    <span class="c1"># undocumented attribute</span>
 </span></pre></div>
 
         </details>
 
-            <div class="docstring"><p>dict() -> new empty dictionary
-dict(mapping) -> new dictionary initialized from a mapping object's
-    (key, value) pairs
-dict(iterable) -> new dictionary initialized as if via:
-    d = {}
-    for k, v in iterable:
-        d[k] = v
-dict(**kwargs) -> new dictionary initialized with the name=value pairs
-    in the keyword argument list.  For example:  dict(one=1, two=2)</p>
+            <div class="docstring"><p>A TypedDict subclass. TypedDict botches the MRO, so things aren't perfect here.</p>
 </div>
 
 
+                            <div id="Bar.b" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Bar.b">#&nbsp;&nbsp</a>
+
+        <span class="name">b</span><span class="annotation">: int</span>
+    </div>
+
+    
+            <div class="docstring"><p>Second attribute.</p>
+</div>
+
+
+                            </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt>builtins.dict</dt>
-                                <dd id="Bar.__init__" class="class">dict</dd>
-                <dd id="Bar.get" class="function">get</dd>
+                                <dd id="Bar.get" class="function">get</dd>
                 <dd id="Bar.setdefault" class="function">setdefault</dd>
                 <dd id="Bar.pop" class="function">pop</dd>
                 <dd id="Bar.popitem" class="function">popitem</dd>

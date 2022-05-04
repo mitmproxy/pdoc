@@ -215,14 +215,14 @@ class Namespace(Doc[T], metaclass=ABCMeta):
     def _var_docstrings(self) -> dict[str, str]:
         """A mapping from some member variable names to their docstrings."""
 
-    @abstractmethod
-    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
-        """The location this member was taken from. If unknown, (modulename, qualname) is returned."""
-
     @cached_property
     @abstractmethod
     def _var_annotations(self) -> dict[str, Any]:
         """A mapping from some member variable names to their type annotations."""
+
+    @abstractmethod
+    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        """The location this member was taken from. If unknown, (modulename, qualname) is returned."""
 
     @cached_property
     @abstractmethod
@@ -394,6 +394,14 @@ class Module(Namespace[types.ModuleType]):
     def _var_docstrings(self) -> dict[str, str]:
         return doc_ast.walk_tree(self.obj).docstrings
 
+    @cached_property
+    def _var_annotations(self) -> dict[str, Any]:
+        annotations = doc_ast.walk_tree(self.obj).annotations.copy()
+        for k, v in _safe_getattr(self.obj, "__annotations__", {}).items():
+            annotations[k] = v
+
+        return resolve_annotations(annotations, self.obj, self.fullname)
+
     def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
         if obj is empty:
             return self.modulename, f"{self.qualname}.{member_name}".lstrip(".")
@@ -409,14 +417,6 @@ class Module(Namespace[types.ModuleType]):
             return (mod or self.modulename), f"{self.qualname}.{member_name}".lstrip(
                 "."
             )
-
-    @cached_property
-    def _var_annotations(self) -> dict[str, Any]:
-        annotations = doc_ast.walk_tree(self.obj).annotations.copy()
-        for k, v in _safe_getattr(self.obj, "__annotations__", {}).items():
-            annotations[k] = v
-
-        return resolve_annotations(annotations, self.obj, self.fullname)
 
     @cached_property
     def own_members(self) -> list[Doc]:
@@ -545,37 +545,21 @@ class Class(Namespace[type]):
         return f"<{_decorators(self)}class {self.modulename}.{self.qualname}{_docstr(self)}{_children(self)}>"
 
     @cached_property
+    def docstring(self) -> str:
+        doc = Doc.docstring.__get__(self)  # type: ignore
+        if doc == dict.__doc__:
+            # Don't display default docstring for dict subclasses (primarily TypedDict).
+            return ""
+        else:
+            return doc
+
+    @cached_property
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
         for cls in self.obj.__mro__:
             for name, docstr in doc_ast.walk_tree(cls).docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
-
-    @cached_property
-    def _declarations(self) -> dict[str, tuple[str, str]]:
-        decls: dict[str, tuple[str, str]] = {}
-        for cls in self.obj.__mro__:
-            treeinfo = doc_ast.walk_tree(cls)
-            for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
-                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
-            for name in cls.__dict__:
-                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
-        if decls.get("__init__", None) == ("builtins", "object.__init__"):
-            decls["__init__"] = (
-                self.obj.__module__,
-                f"{self.obj.__qualname__}.__init__",
-            )
-        return decls
-
-    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
-        try:
-            return self._declarations[member_name]
-        except KeyError:  # pragma: no cover
-            warnings.warn(
-                f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
-            )
-            return self.modulename, f"{self.qualname}.{member_name}"
 
     @cached_property
     def _var_annotations(self) -> dict[str, type]:
@@ -609,6 +593,32 @@ class Class(Namespace[type]):
         return {k: v[1] for k, v in annotations.items()}
 
     @cached_property
+    def _declarations(self) -> dict[str, tuple[str, str]]:
+        decls: dict[str, tuple[str, str]] = {}
+        for cls in self.obj.__mro__:
+            treeinfo = doc_ast.walk_tree(cls)
+            for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
+                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
+            for name in cls.__dict__:
+                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
+        if decls.get("__init__", None) == ("builtins", "object.__init__"):
+            decls["__init__"] = (
+                self.obj.__module__,
+                f"{self.obj.__qualname__}.__init__",
+            )
+        return decls
+
+    def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
+        try:
+            return self._declarations[member_name]
+        except KeyError:  # pragma: no cover
+            # TypedDict botches __mro__ and may need special casing here.
+            warnings.warn(
+                f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
+            )
+            return self.modulename, f"{self.qualname}.{member_name}"
+
+    @cached_property
     def own_members(self) -> list[Doc]:
         members = self._members_by_origin.get((self.modulename, self.qualname), [])
         if self.taken_from != (self.modulename, self.qualname):
@@ -638,6 +648,9 @@ class Class(Namespace[type]):
             elif issubclass(self.obj, enum.Enum):
                 # Special case: Do not show a constructor for enums. They are typically not constructed by users.
                 # The alternative would be showing __new__, as __call__ is too verbose.
+                del unsorted["__init__"]
+            elif issubclass(self.obj, dict):
+                # Special case: Do not show a constructor for dict subclasses.
                 del unsorted["__init__"]
             else:
                 # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to

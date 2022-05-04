@@ -227,6 +227,15 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#CustomCall">CustomCall</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#CustomCall.__init__">CustomCall</a>
+                        </li>
+                </ul>
+
+            </li>
     </ul>
 
 
@@ -575,34 +584,44 @@ misc    </h1>
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>    <span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
 </span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>
 </span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>
-</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
-</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>    <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="s2">&quot;var_with_default_func&quot;</span><span class="p">,</span>
-</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>    <span class="s2">&quot;func_with_defaults&quot;</span><span class="p">,</span>
-</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>    <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
-</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
-</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
-</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a>    <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>    <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
-</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>    <span class="s2">&quot;CustomException&quot;</span><span class="p">,</span>
-</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>    <span class="s2">&quot;_Private&quot;</span><span class="p">,</span>
-</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>    <span class="s2">&quot;LambdaAttr&quot;</span><span class="p">,</span>
-</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>    <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>    <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
-</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>    <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
-</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>    <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
-</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>    <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
-</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>    <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
-</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>    <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
-</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>    <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
-</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
-</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>    <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
-</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>    <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
-</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>    <span class="s2">&quot;Issue352a&quot;</span><span class="p">,</span>
-</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>    <span class="s2">&quot;Issue352b&quot;</span><span class="p">,</span>
-</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="p">]</span>
+</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a><span class="k">class</span> <span class="nc">CustomCallMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>        <span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="k">class</span> <span class="nc">CustomCall</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">CustomCallMeta</span><span class="p">):</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>    <span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
+</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>
+</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># noqa</span>
+</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>    <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
+</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>    <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>    <span class="s2">&quot;var_with_default_func&quot;</span><span class="p">,</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>    <span class="s2">&quot;func_with_defaults&quot;</span><span class="p">,</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>    <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
+</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>    <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>    <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
+</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>    <span class="s2">&quot;CustomException&quot;</span><span class="p">,</span>
+</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>    <span class="s2">&quot;_Private&quot;</span><span class="p">,</span>
+</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>    <span class="s2">&quot;LambdaAttr&quot;</span><span class="p">,</span>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>    <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>    <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>    <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>    <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
+</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>    <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
+</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>    <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
+</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>    <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>    <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
+</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>    <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>    <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
+</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>    <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
+</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>    <span class="s2">&quot;Issue352a&quot;</span><span class="p">,</span>
+</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>    <span class="s2">&quot;Issue352b&quot;</span><span class="p">,</span>
+</span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>    <span class="s2">&quot;CustomCall&quot;</span><span class="p">,</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="p">]</span>
 </span></pre></div>
 
         </details>
@@ -1857,6 +1876,48 @@ indents</p>
 
     
     
+
+                            </div>
+                </section>
+                <section id="CustomCall">
+                                <div class="attr class">
+        <a class="headerlink" href="#CustomCall">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">CustomCall</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CustomCall-335"><a href="#CustomCall-335"><span class="linenos">335</span></a><span class="k">class</span> <span class="nc">CustomCall</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">CustomCallMeta</span><span class="p">):</span>
+</span><span id="CustomCall-336"><a href="#CustomCall-336"><span class="linenos">336</span></a>    <span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
+</span></pre></div>
+
+        </details>
+
+            <div class="docstring"><p>A class where the constructor is defined by its metaclass.</p>
+</div>
+
+
+                            <div id="CustomCall.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#CustomCall.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">CustomCall</span><span class="signature">(*args, **kwargs)</span>
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CustomCall.__init__-331"><a href="#CustomCall.__init__-331"><span class="linenos">331</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="CustomCall.__init__-332"><a href="#CustomCall.__init__-332"><span class="linenos">332</span></a>        <span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
+</span></pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Custom docstring in metaclass.<code>__call__</code></p>
+</div>
+
 
                             </div>
                 </section>
