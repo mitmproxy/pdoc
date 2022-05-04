@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+
+# 2022-05-04: pdoc 11.2.0
+
  - pdoc now picks up type annotations from `.pyi` stub files (PEP-561).
    This greatly improves support for native modules where no Python source code is available,
    for example when using PyO3.
