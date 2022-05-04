@@ -33,7 +33,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, ClassVar, Generic, TypeVar, Union
 
-from pdoc import doc_ast, extract
+from pdoc import doc_ast, doc_pyi, extract
 from pdoc.doc_types import (
     GenericAlias,
     NonUserDefinedCallables,
@@ -304,6 +304,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             if self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
             members[doc.name] = doc
+
+        if isinstance(self, Module):
+            # quirk: doc_pyi expects .members to be set already
+            self.members = members  # type: ignore
+            doc_pyi.include_typeinfo_from_stub_files(self)
+
         return members
 
     @cached_property
