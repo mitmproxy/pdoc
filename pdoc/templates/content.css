@@ -79,6 +79,25 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: .2em 0;
 }
 
+.pdoc > section:not(.module-info) h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.pdoc > section:not(.module-info) h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+.pdoc > section:not(.module-info) h3 {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+.pdoc > section:not(.module-info) h4 {
+    font-size: 1.2rem;
+}
+.pdoc > section:not(.module-info) h5 {
+    font-size: 1.1rem;
+}
+
 .pdoc a {
     text-decoration: none;
     color: var(--link);
@@ -124,7 +143,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: 0;
 }
 
-.pdoc > section:not(:first-of-type) {
+.pdoc > section:not(.module-info) {
     /* this margin should collapse with docstring margin,
        but not for the module docstr which is followed by view_source. */
     margin-bottom: 1.5rem;
@@ -180,7 +199,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     outline: 0;
 }
 
-.pdoc > section:first-of-type details > summary {
+.pdoc > section.module-info details > summary {
     top: -20px;
 }
 

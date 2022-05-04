@@ -6,6 +6,8 @@
    This greatly improves support for native modules where no Python source code is available,
    for example when using PyO3.
    ([#390](https://github.com/mitmproxy/pdoc/issues/390), [@mhils](https://github.com/mhils))
+ - Template Style Improvements: The size of headings within docstrings has been reduced.
+   ([#383](https://github.com/mitmproxy/pdoc/issues/383), [@jacksund](https://github.com/jacksund) and [@mhils](https://github.com/mhils))
  - Improve rendering of `typing.TypedDict` subclasses.
    ([#389](https://github.com/mitmproxy/pdoc/issues/389), [@mhils](https://github.com/mhils))
 
