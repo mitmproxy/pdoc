@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Fix: Hide the nav menu checkbox in Firefox.  
 
 # 2022-05-04: pdoc 11.2.0
 

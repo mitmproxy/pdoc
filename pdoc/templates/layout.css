@@ -109,6 +109,8 @@ body {
     */
     position: absolute;
     height: 0;
+    /* height:0 isn't enough in Firefox, so we hide it extra well */
+    opacity: 0;
 }
 
 /* Nav */
