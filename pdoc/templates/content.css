@@ -208,6 +208,10 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     margin-bottom: 1.5rem;
 }
 
+.pdoc section:not(.module-info) .docstring {
+    margin-left: clamp(0rem, 5vw - 2rem, 1rem);
+}
+
 .pdoc .docstring .pdoc-code {
     margin-left: 1em;
     margin-right: 1em;
