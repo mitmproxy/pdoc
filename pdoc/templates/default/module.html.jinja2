@@ -87,7 +87,9 @@
                 {% endblock %}
                 {{ module_name() }}
                 {{ docstring(module) }}
-                {{ view_source(module) }}
+                {{ view_source_state(module) }}
+                {{ view_source_button(module) }}
+                {{ view_source_code(module) }}
             </section>
         {% endblock %}
         {% block module_contents %}
@@ -152,52 +154,45 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         <div class="decorator">{{ d }}</div>
     {% endfor %}
 {% enddefaultmacro %}
-{% defaultmacro headerlink(doc) -%}
-    <a class="headerlink" href="#{{ doc.qualname or doc.name }}">#&nbsp;&nbsp</a>
-{% enddefaultmacro %}
 {% defaultmacro function(fn) -%}
-    <div class="attr function">{{ headerlink(fn) }}
-        {{ decorators(fn) }}
-        {% if fn.name == "__init__" %}
-            <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
-            {#- no space -#}
-            <span class="signature">{{ fn.signature_without_self | escape | linkify }}</span>
-        {% else %}
-            <span class="def">{{ fn.funcdef }}</span>
-            <span class="name">{{ fn.name }}</span>
-            {#- no space -#}
-            <span class="signature">{{ fn.signature | escape | linkify }}</span>:
-        {% endif %}
-    </div>
+    {{ decorators(fn) }}
+    {% if fn.name == "__init__" %}
+        <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
+        {{- fn.signature_without_self | format_signature(colon=False) | linkify }}
+    {% else %}
+        <span class="def">{{ fn.funcdef }}</span>
+        <span class="name">{{ fn.name }}</span>
+        {{- fn.signature | format_signature(colon=True) | linkify }}
+    {% endif %}
 {% enddefaultmacro %}
-{% defaultmacro variable(var) %}
-    <div class="attr variable">{{ headerlink(var) }}
-        <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
-    </div>
+{% defaultmacro variable(var) -%}
+    <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
 {% enddefaultmacro %}
-{% defaultmacro submodule(mod) %}
-    <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ mod.taken_from | link }}</span></div>
+{% defaultmacro submodule(mod) -%}
+    <span class="name">{{ mod.taken_from | link }}</span>
 {% enddefaultmacro %}
-{% defaultmacro class(cls) %}
-    <div class="attr class">
-        {{ headerlink(cls) }}
-        {{ decorators(cls) }}
-        <span class="def">class</span>
-        <span class="name">{{ cls.qualname }}</span>
-        {{- bases(cls) -}}:
-    </div>
+{% defaultmacro class(cls) -%}
+    {{ decorators(cls) }}
+    <span class="def">class</span>
+    <span class="name">{{ cls.qualname }}</span>
+    {{- bases(cls) -}}:
 {% enddefaultmacro %}
 {% defaultmacro member(doc) %}
-    {% if doc.type == "class" %}
-        {{ class(doc) }}
-    {% elif doc.type == "function" %}
-        {{ function(doc) }}
-    {% elif doc.type == "module" %}
-        {{ submodule(doc) }}
-    {% else %}
-        {{ variable(doc) }}
-    {% endif %}
-    {{ view_source(doc) }}
+    {{- view_source_state(doc) -}}
+    <div class="attr {{ doc.type }}">
+        {% if doc.type == "class" %}
+            {{ class(doc) }}
+        {% elif doc.type == "function" %}
+            {{ function(doc) }}
+        {% elif doc.type == "module" %}
+            {{ submodule(doc) }}
+        {% else %}
+            {{ variable(doc) }}
+        {% endif %}
+        {{ view_source_button(doc) }}
+    </div>
+    <a class="headerlink" href="#{{ doc.qualname or doc.name }}"></a>
+    {{ view_source_code(doc) }}
     {{ docstring(doc) }}
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
@@ -269,12 +264,19 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% endfor %}
 {% enddefaultmacro %}
 {# fmt: on #}
-{% defaultmacro view_source(doc) %}
+{% defaultmacro view_source_state(doc) %}
     {% if show_source and doc.source %}
-        <details>
-            <summary>View Source</summary>
-            {{ doc | highlight }}
-        </details>
+        <input id="{{ doc.qualname or doc.name }}-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+    {% endif %}
+{% enddefaultmacro %}
+{% defaultmacro view_source_button(doc) %}
+    {% if show_source and doc.source %}
+        <label class="view-source-button" for="{{ doc.qualname or doc.name }}-view-source"><span>View Source</span></label>
+    {% endif %}
+{% enddefaultmacro %}
+{% defaultmacro view_source_code(doc) %}
+    {% if show_source and doc.source %}
+        {{ doc | highlight }}
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro module_name() %}
