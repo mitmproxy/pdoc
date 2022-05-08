@@ -1,6 +1,6 @@
 -   id: pdoc
     name: pdoc
-    description: 'pdoc: Auto-generate API documentation for Python projects'
+    description: 'Auto generating documentation with pdoc'
     entry: pdoc
     language: python
     language_version: python3
