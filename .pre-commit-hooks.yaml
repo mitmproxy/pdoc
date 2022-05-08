@@ -5,4 +5,6 @@
     language: python
     language_version: python3
     require_serial: true
+    pass_filenames: false
     types: [python]
+  # args: [MODULE_NAME, -o, docs]
