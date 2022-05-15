@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+# 2022-05-15: pdoc 12.0.0
+
  - Improve rendering of function signatures. Annotations are now syntax-highlighted! ✨
  - Change the implementation of *View Source* to not use an HTML `<details>` element. Recent versions
    of Chrome started to auto-expand source code blocks on search, which made it difficult to search in docstrings.
