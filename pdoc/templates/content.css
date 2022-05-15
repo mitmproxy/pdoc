@@ -188,15 +188,16 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: 0 .4rem 0 1.3rem;
     cursor: pointer;
     /* odd hack to reduce space between "bullet" and text */
-    text-indent: -4px;
+    text-indent: -2px;
 }
 .view-source-button > span {
     visibility: hidden;
 }
 .module-info .view-source-button {
-    float: right;
-    margin-top: -1.7rem;
-    margin-right: 0.4rem;
+    float: none;
+    display: flex;
+    justify-content: flex-end;
+    margin: -1.2rem .4rem -.2rem 0;
 }
 .view-source-button::before {
     /* somewhat awkward recreation of a <summary> element. ideally we'd just use `display: inline list-item`, but
