@@ -5,6 +5,7 @@
  - Improve rendering of function signatures. Annotations are now syntax-highlighted! ✨
  - Change the implementation of *View Source* to not use an HTML `<details>` element. Recent versions
    of Chrome started to auto-expand source code blocks on search, which made it difficult to search in docstrings.
+ - Line numbers now start at 1, not at 0.
  - The aforementioned template improvements may require minor adjustments to custom templates. 
    Users who do not use custom templates are unaffected.
    - Users who customized the `view_source` macro: 
