@@ -8,8 +8,9 @@ from collections.abc import Collection, Iterable, Mapping
 from contextlib import contextmanager
 from unittest.mock import patch
 
-import pygments.formatters.html
-import pygments.lexers.python
+from pygments import lexers
+from pygments import formatters
+
 from jinja2 import ext, nodes
 
 try:
@@ -26,13 +27,13 @@ import pdoc.markdown2
 from . import docstrings
 from ._compat import cache, removesuffix
 
-lexer = pygments.lexers.python.PythonLexer()
+lexer = lexers.python.PythonLexer()
 """
 The pygments lexer used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments lexing.
 """
 
-formatter = pygments.formatters.html.HtmlFormatter(
+formatter = formatters.html.HtmlFormatter(
     cssclass="pdoc-code codehilite",
     linenos="inline",
     anchorlinenos=True,
@@ -44,7 +45,7 @@ Overwrite this to configure pygments highlighting of code blocks.
 The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
 """
 
-signature_formatter = pygments.formatters.html.HtmlFormatter(nowrap=True)
+signature_formatter = formatters.html.HtmlFormatter(nowrap=True)
 """
 The pygments formatter used for pdoc.render_helpers.format_signature. 
 Overwrite this to configure pygments highlighting of signatures.
