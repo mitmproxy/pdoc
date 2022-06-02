@@ -149,6 +149,9 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="function" href="#admonitions">admonitions</a>
+            </li>
     </ul>
 
 
@@ -423,6 +426,27 @@ which will also show up in the navigation.</p>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">    ```</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">       Body text</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">    ```</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="sd">    .. note::</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">       Hi there!</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">    .. danger::</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1256,6 +1280,68 @@ but you can override it by providing your own (like here!).</p>
             </div>
                                 </dl>
                             </div>
+                </section>
+                <section id="admonitions">
+                            <input id="admonitions-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">admonitions</span><span class="signature pdoc-code condensed">()</span>
+
+                <label class="view-source-button" for="admonitions-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#admonitions"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="admonitions-234"><a href="#admonitions-234"><span class="linenos">234</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="admonitions-235"><a href="#admonitions-235"><span class="linenos">235</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="admonitions-236"><a href="#admonitions-236"><span class="linenos">236</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
+</span><span id="admonitions-237"><a href="#admonitions-237"><span class="linenos">237</span></a>
+</span><span id="admonitions-238"><a href="#admonitions-238"><span class="linenos">238</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-239"><a href="#admonitions-239"><span class="linenos">239</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="admonitions-240"><a href="#admonitions-240"><span class="linenos">240</span></a><span class="sd">       Body text</span>
+</span><span id="admonitions-241"><a href="#admonitions-241"><span class="linenos">241</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-242"><a href="#admonitions-242"><span class="linenos">242</span></a>
+</span><span id="admonitions-243"><a href="#admonitions-243"><span class="linenos">243</span></a><span class="sd">    .. note::</span>
+</span><span id="admonitions-244"><a href="#admonitions-244"><span class="linenos">244</span></a><span class="sd">       Hi there!</span>
+</span><span id="admonitions-245"><a href="#admonitions-245"><span class="linenos">245</span></a>
+</span><span id="admonitions-246"><a href="#admonitions-246"><span class="linenos">246</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="admonitions-247"><a href="#admonitions-247"><span class="linenos">247</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="admonitions-248"><a href="#admonitions-248"><span class="linenos">248</span></a>
+</span><span id="admonitions-249"><a href="#admonitions-249"><span class="linenos">249</span></a><span class="sd">    .. danger::</span>
+</span><span id="admonitions-250"><a href="#admonitions-250"><span class="linenos">250</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="admonitions-251"><a href="#admonitions-251"><span class="linenos">251</span></a>
+</span><span id="admonitions-252"><a href="#admonitions-252"><span class="linenos">252</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>pdoc also supports basic reStructuredText admonitions:</p>
+
+<pre><code>.. note/warning/danger:: Optional title
+   Body text
+</code></pre>
+
+<div class="pdoc-alert pdoc-alert-note">
+
+<p>Hi there!</p>
+
+</div>
+
+<div class="pdoc-alert pdoc-alert-warning">
+
+<h6 id="be-careful">Be Careful!</h6>
+
+<p>This warning has both a title and content.</p>
+
+</div>
+
+<div class="pdoc-alert pdoc-alert-danger">
+
+<p>Danger ahead.</p>
+
+</div>
+</div>
+
+
                 </section>
     </main>
 </body>

@@ -228,3 +228,24 @@ class EnumDemo(enum.Enum):
     """I am green."""
     BLUE = enum.auto()
     """I am blue."""
+
+
+def admonitions():
+    """
+    pdoc also supports basic reStructuredText admonitions:
+
+    ```
+    .. note/warning/danger:: Optional title
+       Body text
+    ```
+
+    .. note::
+       Hi there!
+
+    .. warning:: Be Careful!
+       This warning has both a title and content.
+
+    .. danger::
+       Danger ahead.
+
+    """
