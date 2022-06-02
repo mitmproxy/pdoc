@@ -72,4 +72,5 @@
     <class misc.Headings  # # Heading 1
 
     Here is…
-        <method def __init__(): ...>>>
+        <method def __init__(): ...>>
+    <function def repr_not_syntax_highlightable(x=°): ...  # The default value fo…>>

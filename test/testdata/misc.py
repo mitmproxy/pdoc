@@ -365,6 +365,15 @@ class Headings:
     """
 
 
+class CustomRepr:
+    def __repr__(self):
+        return "°"
+
+
+def repr_not_syntax_highlightable(x=CustomRepr()):
+    """The default value for x fails to highlight with pygments."""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -394,4 +403,5 @@ __all__ = [
     "Issue352b",
     "CustomCall",
     "Headings",
+    "repr_not_syntax_highlightable",
 ]

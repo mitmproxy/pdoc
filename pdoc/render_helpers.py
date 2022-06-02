@@ -8,8 +8,8 @@ from collections.abc import Collection, Iterable, Mapping
 from contextlib import contextmanager
 from unittest.mock import patch
 
-import pygments.formatters.html
-import pygments.lexers.python
+import pygments.formatters
+import pygments.lexers
 from jinja2 import ext, nodes
 
 try:
@@ -26,13 +26,13 @@ import pdoc.markdown2
 from . import docstrings
 from ._compat import cache, removesuffix
 
-lexer = pygments.lexers.python.PythonLexer()
+lexer = pygments.lexers.PythonLexer()
 """
 The pygments lexer used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments lexing.
 """
 
-formatter = pygments.formatters.html.HtmlFormatter(
+formatter = pygments.formatters.HtmlFormatter(
     cssclass="pdoc-code codehilite",
     linenos="inline",
     anchorlinenos=True,
@@ -44,7 +44,7 @@ Overwrite this to configure pygments highlighting of code blocks.
 The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
 """
 
-signature_formatter = pygments.formatters.html.HtmlFormatter(nowrap=True)
+signature_formatter = pygments.formatters.HtmlFormatter(nowrap=True)
 """
 The pygments formatter used for pdoc.render_helpers.format_signature. 
 Overwrite this to configure pygments highlighting of signatures.
@@ -96,11 +96,19 @@ def format_signature(sig: inspect.Signature, colon: bool) -> str:
         > pdoc.doc._PrettySignature.MULTILINE_CUTOFF
     )
 
+    def _try_highlight(code: str) -> str:
+        """Try to highlight a piece of code using pygments, but return the input as-is if pygments detects errors."""
+        pretty = pygments.highlight(code, lexer, signature_formatter).strip()
+        if '<span class="err">' not in pretty:
+            return pretty
+        else:
+            return code
+
     # Next, individually highlight each parameter using pygments and wrap it in a span.param.
     # This later allows us to properly control line breaks.
     pretty_result = []
     for i, param in enumerate(result):
-        pretty = pygments.highlight(param, lexer, signature_formatter).strip()
+        pretty = _try_highlight(param)
         if multiline:
             pretty = f"""<span class="param">\t{pretty},</span>"""
         else:
@@ -114,7 +122,7 @@ def format_signature(sig: inspect.Signature, colon: bool) -> str:
     # Add return annotation.
     rendered = "(%s)" % "".join(pretty_result)
     if return_annot:
-        anno = pygments.highlight(return_annot, lexer, signature_formatter).strip()
+        anno = _try_highlight(return_annot)
         rendered = (
             rendered[:-1]
             + f'<span class="return-annotation">) -> {anno}{":" if colon else ""}</span>'
