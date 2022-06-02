@@ -473,9 +473,12 @@ class Module(Namespace[types.ModuleType]):
     def _member_objects(self) -> dict[str, Any]:
         members = {}
 
-        all = _safe_getattr(self.obj, "__all__", False)
-        if all:
-            for name in all:
+        all_: list[str] | None = _safe_getattr(self.obj, "__all__", None)
+        if all_ is not None:
+            for name in all_:
+                if not isinstance(name, str):
+                    # Gracefully handle the case where objects are directly specified in __all__.
+                    name = _safe_getattr(name, "__name__", str(name))
                 if name in self.obj.__dict__:
                     val = self.obj.__dict__[name]
                 elif name in self._var_annotations:

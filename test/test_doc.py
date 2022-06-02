@@ -1,3 +1,5 @@
+import types
+
 import builtins
 import dataclasses
 import sys
@@ -52,6 +54,18 @@ def test_all_with_import_err():
         match="Found 'err' in test.import_err.__all__, but it does not resolve: Error importing test.import_err",
     ):
         assert m.members
+
+
+def test_all_with_objects_instead_of_strings():
+    class Foo:
+        pass
+
+    mod = types.ModuleType("mod")
+    mod.__dict__["Foo"] = Foo
+    mod.__dict__["__all__"] = [Foo]  # should be ["Foo"]
+
+    m = Module(mod)
+    assert m.members
 
 
 def test_var_with_raising_repr():
