@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Fix linking of some function return annotations.
  - Refine rendering of function signatures. Syntax errors are now handled more gracefully.
 
 # 2022-05-15: pdoc 12.0.0

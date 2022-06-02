@@ -249,6 +249,9 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
     def linkify_repl(m: re.Match):
         text = m.group(0)
         identifier = removesuffix(text, "()")
+        identifier = identifier.replace(
+            '</span><span class="o">.</span><span class="n">', "."
+        )
 
         # Check if this is a local reference within this module?
         mod: pdoc.doc.Module = context["module"]
@@ -300,8 +303,15 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
             \b
-                 (?!\d)[a-zA-Z0-9_]+
-            (?:\.(?!\d)[a-zA-Z0-9_]+)+
+            
+            # First part of the identifier (e.g. "foo")    
+            (?!\d)[a-zA-Z0-9_]+
+            # Rest of the identifier (e.g. ".bar")
+            (?:
+                # A single dot or a dot surrounded with pygments highlighting.
+                (?:\.|</span><span\ class="o">\.</span><span\ class="n">)
+                (?!\d)[a-zA-Z0-9_]+
+            )+
             (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.
             (?!</a>)  # not an existing link
             (?![/#])  # heuristic: not part of a URL
