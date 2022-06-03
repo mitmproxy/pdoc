@@ -34,27 +34,35 @@ jobs:
         include:
           - os: windows-latest
             py: 3.10.4
+            cov: true
           - os: macos-latest
             py: 3.10.4
+            cov: true
           - os: ubuntu-latest
             py: 3.10.4
+            cov: true
           - os: ubuntu-latest
             py: 3.9.12
+            cov: false
           - os: ubuntu-latest
             py: 3.8.12
+            cov: false
           - os: ubuntu-latest
             py: 3.7.12
+            cov: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.py }}
       - run: pip install tox
       - run: tox -e py -- -vvv --cov-fail-under=100
-        if: matrix.py == '3.10.2'
+        if: ${{ matrix.cov }}
       - run: tox -e py -- -vvv
-        if: matrix.py != '3.10.2'
+        if: ${{ !matrix.cov }}
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
