@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+# 2022-06-03: pdoc 12.0.1
+
  - Fix linking of some function return annotations.
  - Refine rendering of function signatures. Syntax errors are now handled more gracefully.
  - Gracefully handle the case when users specify objects instead of strings in `__all__`.
