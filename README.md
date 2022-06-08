@@ -41,7 +41,7 @@ or check our [hosted copy of the documentation](https://pdoc.dev/docs/pdoc.html)
 pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do it well.  
 
 
-* Documentation is plain Markdown.
+* Documentation is plain Markdown<a href="#markdown-note"><sup>[1]</sup></a>.
 * First-class support for type annotations and all other modern Python 3 features.
 * Builtin web server with live reloading.
 * Customizable HTML templates.
@@ -58,6 +58,9 @@ Under the hood...
   
 If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
 
+* * *
+
+<small><a id="markdown-note"><sup>1</sup></a> `pdoc` supports the original [Markdown 1.0.1 spec](https://daringfireball.net/projects/markdown/) with some extras</small>
 
 ## Contributing
 
