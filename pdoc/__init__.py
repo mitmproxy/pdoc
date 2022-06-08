@@ -422,7 +422,7 @@ configuration. As such it does not support [CommonMark][],
 [GitHub-Flavored Markdown][] or other variants. Supporting multiple
 specifications of Markdown adds complexity, requires maintaining
 different feature sets, and introduces additional processor
-dependencies of varying levels quality or support.
+dependencies of varying levels of quality or support.
 
 By contrast `markdown2` is an actively maintained, stable processor
 written pure in Python. Its extensions allow for more useful
