@@ -56,6 +56,7 @@ markdown_extensions = {
     "fenced-code-blocks": {"cssclass": formatter.cssclass},
     "footnotes": None,
     "header-ids": None,
+    "link-patterns": None,
     "markdown-in-html": None,
     "pyshell": None,
     "strike": None,
@@ -66,6 +67,27 @@ markdown_extensions = {
 """
 The default extensions loaded for `markdown2`.
 Overwrite this to configure Markdown rendering.
+"""
+markdown_link_patterns = [
+    (
+        re.compile(
+            r"""
+            \b
+            (
+                (?:https?://|(?<!//)www\.)    # prefix - https:// or www.
+                \w[\w_\-]*(?:\.\w[\w_\-]*)*   # host
+                [^<>\s"']*                    # rest of url
+                (?<![?!.,:*_~);])             # exclude trailing punctuation
+                (?=[?!.,:*_~);]?(?:[<\s]|$))  # make sure that we're not followed by " or ', i.e. we're outside of href="...".
+            )
+        """,
+            re.X,
+        ),
+        r"\1",
+    )
+]
+"""
+Link pattern used for markdown2's [`link-patterns` extra](https://github.com/trentm/python-markdown2/wiki/link-patterns).
 """
 
 
@@ -144,7 +166,11 @@ def to_html(docstring: str) -> str:
     # careful: markdown2 returns a subclass of str with an extra
     # .toc_html attribute. don't further process the result,
     # otherwise this attribute will be lost.
-    return pdoc.markdown2.markdown(docstring, extras=markdown_extensions)  # type: ignore
+    return pdoc.markdown2.markdown(  # type: ignore
+        docstring,
+        extras=markdown_extensions,
+        link_patterns=markdown_link_patterns,
+    )
 
 
 @pass_context

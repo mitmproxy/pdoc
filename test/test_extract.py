@@ -10,16 +10,13 @@ here = Path(__file__).parent
 
 def test_walk_specs():
     assert walk_specs(["dataclasses"]) == ["dataclasses"]
-    assert (
-        walk_specs(
-            [
-                here / "testdata" / "demopackage",
-                "!demopackage",
-                "demopackage.child_b",
-            ]
-        )
-        == ["demopackage.child_b"]
-    )
+    assert walk_specs(
+        [
+            here / "testdata" / "demopackage",
+            "!demopackage",
+            "demopackage.child_b",
+        ]
+    ) == ["demopackage.child_b"]
 
     assert walk_specs(["demopackage", "!demopackage.child_excluded"]) == [
         "demopackage",
