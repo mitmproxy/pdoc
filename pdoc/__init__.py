@@ -416,21 +416,22 @@ with the following extras/extensions enabled:
 [markdown-in-html]: https://github.com/trentm/python-markdown2/wiki/markdown-in-html
 [pyshell]: https://github.com/trentm/python-markdown2/wiki/pyshell
 [tables]: https://github.com/trentm/python-markdown2/wiki/tables
-[GitHub-Flavored Markdown]: http://github.github.com/github-flavored-markdown/
-[PHP-Markdown Extra]: https://michelf.ca/projects/php-markdown/extra/#table
 
 pdoc's philosophy is to be simple, robust and not require any
-configuration. As such it does not support [CommonMark](https://spec.commonmark.org/current/),
-[GitHub-Flavoured Markdown](https://github.github.com/gfm/) or other
-variants. Supporting multiple specifications of Markdown adds
-complexity, requires maintaining different feature sets, and
-introduces additional processor dependencies of varying levels quality
-or support.
+configuration. As such it does not support [CommonMark][],
+[GitHub-Flavored Markdown][] or other variants. Supporting multiple
+specifications of Markdown adds complexity, requires maintaining
+different feature sets, and introduces additional processor
+dependencies of varying levels quality or support.
 
 By contrast `markdown2` is an actively maintained, stable processor
 written pure in Python. Its extensions allow for more useful
 enhancements to the original "Markdown core" without the
 aforementioned burdens.
+
+[GitHub-Flavored Markdown]: https://github.github.com/gfm/
+[CommonMark]: https://spec.commonmark.org/current/
+[PHP-Markdown Extra]: https://michelf.ca/projects/php-markdown/extra/#table
 
 # Using pdoc as a library
 
