@@ -58,7 +58,7 @@ Under the hood...
   
 If you have substantially more complex documentation needs, we recommend using [Sphinx](https://www.sphinx-doc.org/)!
 
-[^1]: `pdoc` supports the original [Markdown 1.0.1 spec](https://daringfireball.net/projects/markdown/) with some extras.
+[^1]: `pdoc` supports the original [Markdown 1.0.1 spec](https://daringfireball.net/projects/markdown/) with some extras. See the [Markdown support](https://pdoc.dev/docs/pdoc.html#markdown-support) section of the docs.
 
 ## Contributing
 
