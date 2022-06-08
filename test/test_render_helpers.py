@@ -103,14 +103,35 @@ def test_markdown_toc():
 @pytest.mark.parametrize(
     "md,html",
     [
-        ("https://example.com/", '<p><a href="https://example.com/">https://example.com/</a></p>\n'),
-        ('<https://example.com>', '<p><a href="https://example.com">https://example.com</a></p>\n'),
-        ('<a href="https://example.com">link</a>', '<p><a href="https://example.com">link</a></p>\n'),
-        ('[link](https://example.com)', '<p><a href="https://example.com">link</a></p>\n'),
-        ('See the [Python home page ](https://www.python.org) for info.', '<p>See the <a href="https://www.python.org">Python home page </a> for info.</p>\n'),
-        ('See https://www.python.org.', '<p>See <a href="https://www.python.org">https://www.python.org</a>.</p>\n'),
-        ('See **https://www.python.org**.', '<p>See <strong>https://www.python.org</strong>.</p>\n'),
-    ]
+        (
+            "https://example.com/",
+            '<p><a href="https://example.com/">https://example.com/</a></p>\n',
+        ),
+        (
+            "<https://example.com>",
+            '<p><a href="https://example.com">https://example.com</a></p>\n',
+        ),
+        (
+            '<a href="https://example.com">link</a>',
+            '<p><a href="https://example.com">link</a></p>\n',
+        ),
+        (
+            "[link](https://example.com)",
+            '<p><a href="https://example.com">link</a></p>\n',
+        ),
+        (
+            "See the [Python home page ](https://www.python.org) for info.",
+            '<p>See the <a href="https://www.python.org">Python home page </a> for info.</p>\n',
+        ),
+        (
+            "See https://www.python.org.",
+            '<p>See <a href="https://www.python.org">https://www.python.org</a>.</p>\n',
+        ),
+        (
+            "See **https://www.python.org**.",
+            "<p>See <strong>https://www.python.org</strong>.</p>\n",
+        ),
+    ],
 )
 def test_markdown_autolink(md, html):
     assert to_html(md) == html

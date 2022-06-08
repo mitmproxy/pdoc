@@ -68,9 +68,10 @@ markdown_extensions = {
 The default extensions loaded for `markdown2`.
 Overwrite this to configure Markdown rendering.
 """
-markdown_link_patterns = [(
-    re.compile(
-        r"""
+markdown_link_patterns = [
+    (
+        re.compile(
+            r"""
             \b
             (
                 (?:https?://|(?<!//)www\.)    # prefix - https:// or www.
@@ -80,9 +81,11 @@ markdown_link_patterns = [(
                 (?=[?!.,:*_~);]?(?:[<\s]|$))  # make sure that we're not followed by " or ', i.e. we're outside of href="...".
             )
         """,
-        re.X
-    ), r"\1"
-)]
+            re.X,
+        ),
+        r"\1",
+    )
+]
 """
 Link pattern used for markdown2's [`link-patterns` extra](https://github.com/trentm/python-markdown2/wiki/link-patterns).
 """
@@ -163,11 +166,11 @@ def to_html(docstring: str) -> str:
     # careful: markdown2 returns a subclass of str with an extra
     # .toc_html attribute. don't further process the result,
     # otherwise this attribute will be lost.
-    return pdoc.markdown2.markdown(
+    return pdoc.markdown2.markdown(  # type: ignore
         docstring,
         extras=markdown_extensions,
         link_patterns=markdown_link_patterns,
-    )  # type: ignore
+    )
 
 
 @pass_context
