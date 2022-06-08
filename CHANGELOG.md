@@ -2,8 +2,11 @@
 
 # Unreleased: pdoc next
 
+
  - Extend auto-linking of URLs in Markdown.
    ([#401](https://github.com/mitmproxy/pdoc/issues/401), [@mhils](https://github.com/mhils))
+ - Mention which implementation of Markdown is supported, with what extras enabled
+   ([#403](https://github.com/mitmproxy/pdoc/issues/403), [@f3ndot](https://github.com/f3ndot))
 
 # 2022-06-03: pdoc 12.0.1
 

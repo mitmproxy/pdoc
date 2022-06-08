@@ -6,7 +6,7 @@ pdoc auto-generates API documentation that follows your project's Python module 
 pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do it well.
 
  - Easy setup, no configuration necessary.
- - Documentation is plain Markdown.
+ - Documentation is plain [Markdown](#markdown-support).
  - First-class support for type annotations.
  - Builtin web server with live reloading.
  - Customizable HTML templates.
@@ -378,6 +378,59 @@ code, then it will automatically attach the docstring for `Dog.bark` to
     generator that only accepts Markdown, that may work nonetheless – take a look at
     [integrating pdoc into other systems](https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems).
 
+
+# Markdown support
+
+There are many versions or *"flavors"* of Markdown out there. pdoc
+supports the original [Markdown 1.0.1 spec](https://daringfireball.net/projects/markdown/)
+as implemented by [`markdown2`](https://github.com/trentm/python-markdown2)
+with the following extras/extensions enabled:
+
+  - **[code-friendly][]:** Disable `_` and `__` for `em` and `strong`.
+  - **[cuddled-lists][]:** Allow lists to be cuddled to the preceding
+    paragraph.
+  - **[fenced-code-blocks][]:** Allows a code block to not have to be
+    indented by fencing it with '```' on a line before and after.
+    Based on [GitHub-Flavored Markdown][] with support for syntax highlighting.
+  - **[footnotes][]:** Support footnotes as in use on daringfireball.net
+    and implemented in other Markdown processors.
+  - **[header-ids][]:** Adds "id" attributes to headers. The id value
+    is a slug of the header text.
+  - **[markdown-in-html][]:** Allow the use of `markdown="1"` in a
+    block HTML tag to have markdown processing be done on its contents.
+    Similar to [PHP-Markdown Extra][] but with some limitations.
+  - **[pyshell][]:** Treats unindented Python interactive shell
+    sessions as `<code>` blocks. 
+  - **`strike`:** Parse `~~strikethrough~~` formatting.
+  - **[tables][]:** Tables using the same format as [GitHub-Flavored Markdown][] and
+    [PHP-Markdown Extra][].
+  - **`task_list`:** Allows GitHub-style task lists (i.e. check boxes)
+  - **`toc`:** The returned HTML string gets a new "toc_html"
+    attribute which is a Table of Contents for the document.
+
+[code-friendly]: https://github.com/trentm/python-markdown2/wiki/code-friendly
+[cuddled-lists]: https://github.com/trentm/python-markdown2/wiki/cuddled-lists
+[fenced-code-blocks]: https://github.com/trentm/python-markdown2/wiki/fenced-code-blocks
+[footnotes]: https://github.com/trentm/python-markdown2/wiki/footnotes
+[header-ids]: https://github.com/trentm/python-markdown2/wiki/header-ids
+[markdown-in-html]: https://github.com/trentm/python-markdown2/wiki/markdown-in-html
+[pyshell]: https://github.com/trentm/python-markdown2/wiki/pyshell
+[tables]: https://github.com/trentm/python-markdown2/wiki/tables
+[GitHub-Flavored Markdown]: http://github.github.com/github-flavored-markdown/
+[PHP-Markdown Extra]: https://michelf.ca/projects/php-markdown/extra/#table
+
+pdoc's philosophy is to be simple, robust and not require any
+configuration. As such it does not support [CommonMark](https://spec.commonmark.org/current/),
+[GitHub-Flavoured Markdown](https://github.github.com/gfm/) or other
+variants. Supporting multiple specifications of Markdown adds
+complexity, requires maintaining different feature sets, and
+introduces additional processor dependencies of varying levels quality
+or support.
+
+By contrast `markdown2` is an actively maintained, stable processor
+written pure in Python. Its extensions allow for more useful
+enhancements to the original "Markdown core" without the
+aforementioned burdens.
 
 # Using pdoc as a library
 
