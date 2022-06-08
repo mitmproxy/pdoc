@@ -253,6 +253,10 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     scroll-margin: 2rem;
 }
 
+.pdoc .pdoc-code .linenos {
+    user-select: none;
+}
+
 .pdoc .attr:hover {
     filter: contrast(0.95);
 }
