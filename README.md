@@ -41,7 +41,7 @@ or check our [hosted copy of the documentation](https://pdoc.dev/docs/pdoc.html)
 pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do it well.  
 
 
-* Documentation is plain Markdown.
+* Documentation is plain [Markdown](https://pdoc.dev/docs/pdoc.html#markdown-support).
 * First-class support for type annotations and all other modern Python 3 features.
 * Builtin web server with live reloading.
 * Customizable HTML templates.

@@ -50,6 +50,7 @@ The pygments formatter used for pdoc.render_helpers.format_signature.
 Overwrite this to configure pygments highlighting of signatures.
 """
 
+# Keep in sync with the documentation in pdoc/__init__.py!
 markdown_extensions = {
     "code-friendly": None,
     "cuddled-lists": None,
