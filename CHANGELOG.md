@@ -2,11 +2,12 @@
 
 # Unreleased: pdoc next
 
-
  - Extend auto-linking of URLs in Markdown.
    ([#401](https://github.com/mitmproxy/pdoc/issues/401), [@mhils](https://github.com/mhils))
  - Mention which implementation of Markdown is supported, with what extras enabled
    ([#403](https://github.com/mitmproxy/pdoc/issues/403), [@f3ndot](https://github.com/f3ndot))
+ - Fix a bug where function signatures had weird line breaks.
+   ([#404](https://github.com/mitmproxy/pdoc/issues/404), [@mhils](https://github.com/mhils))
  - Exclude line numbers from text selection.
    ([#405](https://github.com/mitmproxy/pdoc/issues/405), [@mhils](https://github.com/mhils))
 

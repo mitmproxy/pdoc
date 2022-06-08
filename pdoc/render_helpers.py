@@ -275,17 +275,17 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
     def linkify_repl(m: re.Match):
         text = m.group(0)
-        identifier = removesuffix(text, "()")
-        identifier = identifier.replace(
+        plain_text = text.replace(
             '</span><span class="o">.</span><span class="n">', "."
         )
+        identifier = removesuffix(plain_text, "()")
 
         # Check if this is a local reference within this module?
         mod: pdoc.doc.Module = context["module"]
         for qualname in qualname_candidates(identifier, namespace):
             doc = mod.get(qualname)
             if doc and context["is_public"](doc).strip():
-                return f'<a href="#{qualname}">{text}</a>'
+                return f'<a href="#{qualname}">{plain_text}</a>'
 
         module = ""
         qualname = ""
@@ -300,11 +300,11 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                     and doc.taken_from == (module, qualname)
                     and context["is_public"](doc).strip()
                 ):
-                    if text.endswith("()"):
-                        text = f"{doc.fullname}()"
+                    if plain_text.endswith("()"):
+                        plain_text = f"{doc.fullname}()"
                     else:
-                        text = doc.fullname
-                    return f'<a href="#{qualname}">{text}</a>'
+                        plain_text = doc.fullname
+                    return f'<a href="#{qualname}">{plain_text}</a>'
         except ValueError:
             # possible_sources did not find a parent module.
             return text
@@ -320,7 +320,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             if target_exists_and_public:
                 if qualname:
                     qualname = f"#{qualname}"
-                return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{text}</a>'
+                return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{plain_text}</a>'
             else:
                 return text
 
