@@ -367,7 +367,7 @@ class Headings:
 
 class CustomRepr:
     def __repr__(self):
-        return "°"
+        return "°<script>alert(1)</script>"
 
 
 def repr_not_syntax_highlightable(x=CustomRepr()):

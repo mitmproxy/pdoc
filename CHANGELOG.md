@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Apply syntax highlighting to search results as well. ([@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.0.2
 

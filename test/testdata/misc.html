@@ -638,7 +638,7 @@ misc    </h1>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="k">class</span> <span class="nc">CustomRepr</span><span class="p">:</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>        <span class="k">return</span> <span class="s2">&quot;°&quot;</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>        <span class="k">return</span> <span class="s2">&quot;°&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a><span class="k">def</span> <span class="nf">repr_not_syntax_highlightable</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">CustomRepr</span><span class="p">()):</span>
@@ -744,7 +744,7 @@ misc    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">var_with_default_func</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">var_with_default_func</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="var_with_default_func-view-source"><span>View Source</span></label>
 
@@ -765,7 +765,7 @@ misc    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">func_with_defaults</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">a</span><span class="o">=&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span>, </span><span class="param"><span class="n">b</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">default_func</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">func_with_defaults</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">a</span><span class="o">=&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span>, </span><span class="param"><span class="n">b</span><span class="o">=&lt;</span><span class="n">function</span> <span class="n">default_func</span><span class="o">&gt;</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="func_with_defaults-view-source"><span>View Source</span></label>
 
@@ -851,7 +851,7 @@ misc    </h1>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span>)</span>
+        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="ClassmethodLink.bar-view-source"><span>View Source</span></label>
 
@@ -1032,7 +1032,7 @@ For example, a generic mapping type might be defined as::</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Child.foo-view-source"><span>View Source</span></label>
 
@@ -1054,7 +1054,7 @@ For example, a generic mapping type might be defined as::</p>
                     <div class="decorator">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span>)</span>
+        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">cls</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Child.bar-view-source"><span>View Source</span></label>
 
@@ -1077,7 +1077,7 @@ For example, a generic mapping type might be defined as::</p>
                     <div class="decorator">@staticmethod</div>
 
         <span class="def">def</span>
-        <span class="name">baz</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">baz</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Child.baz-view-source"><span>View Source</span></label>
 
@@ -1252,7 +1252,7 @@ For example, a generic mapping type might be defined as::</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">attr</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span></span>)</span>
+        <span class="name">attr</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="LambdaAttr.attr-view-source"><span>View Source</span></label>
 
@@ -1271,7 +1271,7 @@ For example, a generic mapping type might be defined as::</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">foo</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="foo-view-source"><span>View Source</span></label>
 
@@ -1292,7 +1292,7 @@ For example, a generic mapping type might be defined as::</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">bar</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="bar-view-source"><span>View Source</span></label>
 
@@ -1315,7 +1315,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">baz</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">baz</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="baz-view-source"><span>View Source</span></label>
 
@@ -1338,7 +1338,7 @@ indent</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">qux</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">qux</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="qux-view-source"><span>View Source</span></label>
 
@@ -1440,7 +1440,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.foo-view-source"><span>View Source</span></label>
 
@@ -1461,7 +1461,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">bar</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.bar-view-source"><span>View Source</span></label>
 
@@ -1484,7 +1484,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">baz</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">baz</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.baz-view-source"><span>View Source</span></label>
 
@@ -1507,7 +1507,7 @@ indent</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">qux</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">qux</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.qux-view-source"><span>View Source</span></label>
 
@@ -1533,7 +1533,7 @@ indents</p>
                     <div class="decorator">@lru_cache()</div>
 
         <span class="def">def</span>
-        <span class="name">foo_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">foo_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.foo_decorated-view-source"><span>View Source</span></label>
 
@@ -1556,7 +1556,7 @@ indents</p>
                     <div class="decorator">@lru_cache()</div>
 
         <span class="def">def</span>
-        <span class="name">foo_commented</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">foo_commented</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.foo_commented-view-source"><span>View Source</span></label>
 
@@ -1580,7 +1580,7 @@ indents</p>
                     <div class="decorator">@lru_cache()</div>
 
         <span class="def">def</span>
-        <span class="name">bar_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">bar_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.bar_decorated-view-source"><span>View Source</span></label>
 
@@ -1605,7 +1605,7 @@ indents</p>
                     <div class="decorator">@lru_cache()</div>
 
         <span class="def">def</span>
-        <span class="name">baz_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">baz_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.baz_decorated-view-source"><span>View Source</span></label>
 
@@ -1630,7 +1630,7 @@ indent</p>
                     <div class="decorator">@lru_cache()</div>
 
         <span class="def">def</span>
-        <span class="name">qux_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">qux_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.qux_decorated-view-source"><span>View Source</span></label>
 
@@ -1657,7 +1657,7 @@ indents</p>
                     <div class="decorator">@lru_cache(maxsize=42)</div>
 
         <span class="def">def</span>
-        <span class="name">quux_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">quux_decorated</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Indented.quux_decorated-view-source"><span>View Source</span></label>
 
@@ -1682,7 +1682,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">fun_with_protected_decorator</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">fun_with_protected_decorator</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="fun_with_protected_decorator-view-source"><span>View Source</span></label>
 
@@ -1703,7 +1703,7 @@ indents</p>
                     <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">unhashable</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">unknown</span></span>)</span>
+        <span class="name">unhashable</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">unknown</span></span><span class="return-annotation">):</span></span>
 
         
     </div>
@@ -1741,7 +1741,7 @@ indents</p>
                     <div class="decorator">@abc.abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="AbstractClass.foo-view-source"><span>View Source</span></label>
 
@@ -1828,7 +1828,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">linkify_links</span><span class="signature pdoc-code condensed">()</span>
+        <span class="name">linkify_links</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="linkify_links-view-source"><span>View Source</span></label>
 
@@ -2061,7 +2061,7 @@ indents</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">repr_not_syntax_highlightable</span><span class="signature pdoc-code condensed">(<span class="param">x=°</span>)</span>
+        <span class="name">repr_not_syntax_highlightable</span><span class="signature pdoc-code condensed">(<span class="param">x=°&lt;script&gt;alert(1)&lt;/script&gt;</span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="repr_not_syntax_highlightable-view-source"><span>View Source</span></label>
 

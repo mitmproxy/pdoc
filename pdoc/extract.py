@@ -155,7 +155,9 @@ def _noop(*args, **kwargs):
     pass
 
 
-class PdocDefusedPopen(subprocess.Popen):
+class _PdocDefusedPopen(subprocess.Popen):
+    """A small wrapper around subprocess.Popen that converts most executions into no-ops."""
+
     if platform.system() == "Windows":  # pragma: no cover
         _noop_exe = "echo.exe"
     else:  # pragma: no cover
@@ -188,7 +190,7 @@ def mock_some_common_side_effects():
 
     Note that this function must not be used for security purposes, it's easily bypassable.
     """
-    with patch("subprocess.Popen", new=PdocDefusedPopen), patch(
+    with patch("subprocess.Popen", new=_PdocDefusedPopen), patch(
         "os.startfile", new=_noop, create=True
     ), patch("sys.stdout", new=io.StringIO()), patch(
         "sys.stderr", new=io.StringIO()

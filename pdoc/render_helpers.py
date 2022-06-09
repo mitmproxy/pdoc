@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import html
+
 import inspect
 import os
 import re
@@ -125,7 +127,7 @@ def format_signature(sig: inspect.Signature, colon: bool) -> str:
         if '<span class="err">' not in pretty:
             return pretty
         else:
-            return code
+            return html.escape(code)
 
     # Next, individually highlight each parameter using pygments and wrap it in a span.param.
     # This later allows us to properly control line breaks.
@@ -143,13 +145,15 @@ def format_signature(sig: inspect.Signature, colon: bool) -> str:
         pretty_result[-1] = pretty_result[-1].rpartition(",")[0] + "</span>"
 
     # Add return annotation.
-    rendered = "(%s)" % "".join(pretty_result)
+    anno = ")"
     if return_annot:
-        anno = _try_highlight(return_annot)
-        rendered = (
-            rendered[:-1]
-            + f'<span class="return-annotation">) -> {anno}{":" if colon else ""}</span>'
-        )
+        anno += f" -> {_try_highlight(return_annot)}"
+    if colon:
+        anno += ":"
+    if return_annot or colon:
+        anno = f'<span class="return-annotation">{anno}</span>'
+
+    rendered = "(" + "".join(pretty_result) + anno
 
     if multiline:
         rendered = f'<span class="signature pdoc-code multiline">{rendered}</span>'

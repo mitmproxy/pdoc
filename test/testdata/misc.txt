@@ -73,4 +73,4 @@
 
     Here is…
         <method def __init__(): ...>>
-    <function def repr_not_syntax_highlightable(x=°): ...  # The default value fo…>>
+    <function def repr_not_syntax_highlightable(x=°<script>alert(1)</script>): ...  # The default value fo…>>

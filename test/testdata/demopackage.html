@@ -159,7 +159,7 @@ demopackage    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">a</span><span class="p">:</span> <span class="nb">int</span></span>)</span>
+        <span class="name">foo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">a</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Test.foo-view-source"><span>View Source</span></label>
 
@@ -232,7 +232,7 @@ demopackage    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">b</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">b</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="B.b-view-source"><span>View Source</span></label>
 
@@ -286,7 +286,7 @@ demopackage    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">c</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span>)</span>
+        <span class="name">c</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="C.c-view-source"><span>View Source</span></label>
 
@@ -414,7 +414,11 @@ demopackage    </h1>
                 let heading;
                 switch (result.doc.type) {
                     case "function":
-                        heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">${doc.signature}:</span>`;
+                        if (doc.fullname.endsWith(".__init__")) {
+                            heading = `<span class="name">${doc.fullname.replace(/\.__init__$/, "")}</span>${doc.signature}`;
+                        } else {
+                            heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span>${doc.signature}`;
+                        }
                         break;
                     case "class":
                         heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
