@@ -130,6 +130,7 @@ the docstring should come on the line immediately following `class
 the file. These docstrings are what you see for each module, class,
 function and method listed in the documentation produced by pdoc.
 
+
 ## ...document variables?
 
 Python itself [does not attach docstrings to
@@ -172,6 +173,7 @@ class GoldenRetriever(Dog):
     """Full Name (different for each instance)"""
 ```
 
+
 ## ...control what is documented?
 
 The public interface of a module is determined through one of two
@@ -209,6 +211,7 @@ pdoc foo !foo.bar
 Likewise, `pdoc pdoc !pdoc.` would document the pdoc module itself, but none of its submodules. Patterns are always
 matched on the final module name, even if modules are passed as file paths.
 
+
 ## ...link to other identifiers?
 
 In your documentation, you can link to other identifiers by enclosing them in backticks:
@@ -221,12 +224,14 @@ pdoc will link all identifiers that are rendered in the current run.
 This means that you need to run `pdoc module_a module_b` to have interlinking between module_a and module_b.
 If you run `pdoc module_a` followed by `pdoc module_b`, there will be no cross-linking between the two modules.
 
+
 ## ...change the item order?
 
 By default, documentation items are sorted in order of (first) appearance in the source code.
 This means that if you want to move a particular function to the beginning of your documentation,
 you need to move it there in your source code. This is not only useful to the readers of your documentation,
 but also useful to the consumers of your source code.
+
 
 ## ...use numpydoc or Google docstrings?
 
@@ -273,6 +278,17 @@ You can include external Markdown files in your documentation by using reStructu
 Since version 11, pdoc processes such reStructuredText elements by default.
 
 
+## ...add a title page?
+
+The landing page for your documentation is your project's top-level `<modulename>/__init__.py` file.
+Adding a module-level docstring here is a great way to introduce users to your project.
+For example, the documentation you are reading right now is sourced from
+[`pdoc/__init__.py`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/__init__.py).
+You can also include your title page from a [Markdown file](#include-markdown-files).
+
+If you have multiple top-level modules, a custom title page requires modifying the `index.html.jinja2` template.
+You can find an example in [#410](https://github.com/mitmproxy/pdoc/issues/410).
+
 ## ...edit pdoc's HTML template?
 
 For more advanced customization, we can edit pdoc's
@@ -302,6 +318,7 @@ pdoc -t . ./demo.py
 
 See [`examples/`](https://github.com/mitmproxy/pdoc/tree/main/examples/)
 for more examples.
+
 
 ## ...pass arguments to the Jinja2 template?
 
