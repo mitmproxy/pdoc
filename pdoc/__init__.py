@@ -96,7 +96,10 @@ A very simple way to host your API documentation is to set up a continuous integ
 pushes your documentation to GitHub Pages. This keeps your docs updated automatically.
 
  1. Enable GitHub Actions and GitHub Pages in your project's settings.
- 2. Copy pdoc's GitHub Actions workflow into your own repository and adjust it to how you build your docs:
+ 2. Disable the default `pages-build-deployment` workflow for your project. Go to *Settings -> Actions ->
+    General* and select *Allow ..., and select non-..., actions and reusable workflows*.
+    Enable *Allow actions created by GitHub* and list all non-GitHub actions that you use in other workflows.
+ 3. Copy pdoc's GitHub Actions workflow into your own repository and adjust it to how you build your docs:
     [`.github/workflows/docs.yml`](https://github.com/mitmproxy/pdoc/blob/main/.github/workflows/docs.yml)
 
 That's it – no need to fiddle with any secrets or set up any `gh-pages` branches. 🥳
