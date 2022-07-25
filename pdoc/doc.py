@@ -246,7 +246,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             is_property = (
                 isinstance(obj, (property, cached_property))
                 or
-                # Python 3.9: @classmethod @property is now allowed.
+                # Python 3.9 - 3.10: @classmethod @property is allowed.
                 is_classmethod
                 and isinstance(obj.__func__, (property, cached_property))
             )
@@ -839,7 +839,15 @@ class Function(Doc[types.FunctionType]):
             cls = sys.modules.get(_safe_getattr(self.obj, "__module__", None), None)
             for name in _safe_getattr(self.obj, "__qualname__", "").split(".")[:-1]:
                 cls = _safe_getattr(cls, name, None)
-            doc = _safe_getdoc(_safe_getattr(cls, self.name, None))
+
+            unbound = _safe_getattr(cls, "__dict__", {}).get(self.name)
+            is_classmethod_property = isinstance(unbound, classmethod) and isinstance(
+                unbound.__func__, (property, cached_property)
+            )
+            if not is_classmethod_property:
+                # We choke on @classmethod @property, but that's okay because it's been deprecated with Python 3.11.
+                # Directly accessing them would give us the return value, which has the wrong docstring.
+                doc = _safe_getdoc(_safe_getattr(cls, self.name, None))
 
         if doc == object.__init__.__doc__:
             # inspect.getdoc(Foo.__init__) returns the docstring, for object.__init__ if left undefined...
