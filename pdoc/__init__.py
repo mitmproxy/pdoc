@@ -95,10 +95,8 @@ the generated documentation however you want! pdoc's job is to "just" produce se
 A very simple way to host your API documentation is to set up a continuous integration job which
 pushes your documentation to GitHub Pages. This keeps your docs updated automatically.
 
- 1. Enable GitHub Actions and GitHub Pages in your project's settings.
- 2. Disable the default `pages-build-deployment` workflow for your project. Go to *Settings -> Actions ->
-    General* and select *Allow ..., and select non-..., actions and reusable workflows*.
-    Enable *Allow actions created by GitHub* and list all non-GitHub actions that you use in other workflows.
+ 1. Enable GitHub Actions and GitHub Pages in your project's settings.  
+    In the GitHub Pages settings, select GitHub Actions as your build and deployment source.
  3. Copy pdoc's GitHub Actions workflow into your own repository and adjust it to how you build your docs:
     [`.github/workflows/docs.yml`](https://github.com/mitmproxy/pdoc/blob/main/.github/workflows/docs.yml)
 
