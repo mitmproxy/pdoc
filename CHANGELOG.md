@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Make sure that docstrings are picked up for functions that have been
+   turned into non-function objects by decorators.
+   ([#416](https://github.com/mitmproxy/pdoc/issues/416), [@jeamland](https://github.com/jeamland))
  - Update vendored copy of markdown2.
    ([#421](https://github.com/mitmproxy/pdoc/issues/421), [@mhils](https://github.com/mhils))
  - Apply syntax highlighting to search results as well. ([@mhils](https://github.com/mhils))

@@ -110,6 +110,11 @@ def _walk_tree(
             and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
+        elif isinstance(a, ast.FunctionDef) and a.body:
+            first = a.body[0]
+            if isinstance(first, ast.Expr) and isinstance(first.value, ast.Str):
+                docstrings[a.name] = inspect.cleandoc(first.value.s).strip()
+            continue
         else:
             continue
         if (

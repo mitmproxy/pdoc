@@ -109,7 +109,6 @@ class Base:
         """qux"""
         return
 
-    # This is not supported by inspect.getdoc yet.
     @cached_property
     def quux(self):
         """quux"""
@@ -374,6 +373,18 @@ def repr_not_syntax_highlightable(x=CustomRepr()):
     """The default value for x fails to highlight with pygments."""
 
 
+class ClassDecorator:
+    "This is a class that wraps a function. It will be documented correctly."
+    def __init__(self, f):
+        self.f = f
+
+
+@ClassDecorator
+def another_decorated_function(arg: str) -> str:
+    "This is another decorated function. It will not be documented correctly."
+    pass
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -404,4 +415,6 @@ __all__ = [
     "CustomCall",
     "Headings",
     "repr_not_syntax_highlightable",
+    "ClassDecorator",
+    "another_decorated_function",
 ]
