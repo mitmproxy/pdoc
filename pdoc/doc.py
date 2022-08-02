@@ -630,6 +630,15 @@ class Class(Namespace[type]):
 
     @cached_property
     def own_members(self) -> list[Doc]:
+        """A list of all own (i.e. non-inherited) members.
+
+        .. note::
+            The `__init__` method of an abstract class will not be included in 
+            the list returned by `own_members` if it does not have a docstring. 
+            See https://github.com/mitmproxy/pdoc/issues/273. This can cause 
+            unexpected results in some edge cases. See 
+            https://github.com/mitmproxy/pdoc/issues/422 for more details.
+        """
         members = self._members_by_origin.get((self.modulename, self.qualname), [])
         if self.taken_from != (self.modulename, self.qualname):
             # .taken_from may be != (self.modulename, self.qualname), for example when
