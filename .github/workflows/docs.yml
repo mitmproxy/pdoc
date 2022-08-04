@@ -24,15 +24,15 @@ jobs:
       # ADJUST THIS: install all dependencies (including pdoc)
       - run: pip install -e .
       # ADJUST THIS: build your documentation into docs/.
-      - run: docs/make.py  
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
+      # If you use a custom build script, make sure that it has the right permissions:
+      #    git update-index --chmod=+x path/to/make.py
+      - run: docs/make.py
 
-      - run: tar --directory docs/ -hcf artifact.tar .
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-pages-artifact@v1
         with:
-          name: github-pages
-          path: ./artifact.tar
-  
+          path: docs/
+
   # Deploy the artifact to GitHub pages.
   # This is a separate job so that only actions/deploy-pages has the necessary permissions.
   deploy:
