@@ -6,7 +6,8 @@ from pdoc import pdoc, render
 
 here = Path(__file__).parent
 out = here / "docs" / "api"
-shutil.rmtree(out)
+if out.exists():
+    shutil.rmtree(out)
 
 # Render parts of pdoc's documentation into docs/api...
 render.configure(template_directory=here / "pdoc-template")
