@@ -9,6 +9,8 @@
    ([#421](https://github.com/mitmproxy/pdoc/issues/421), [@mhils](https://github.com/mhils))
  - Apply syntax highlighting to search results as well. ([@mhils](https://github.com/mhils))
  - Fix display of `@classmethod @property` instances without docstrings. ([@mhils](https://github.com/mhils))
+ - Add support for `@functools.singledispatchmethod`. 
+   ([#428](https://github.com/mitmproxy/pdoc/issues/428), [@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.0.2
 

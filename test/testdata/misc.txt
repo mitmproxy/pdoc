@@ -76,4 +76,8 @@
     <function def repr_not_syntax_highlightable(x=°<script>alert(1)</script>): ...  # The default value fo…>
     <class misc.ClassDecorator  # This is a class that…
         <method def __init__(self, f): ...>>
-    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>>
+    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>
+    <class misc.SingleDispatchMethodExample
+        <method def __init__(): ...>
+        <@singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
+        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>>>

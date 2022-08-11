@@ -18,6 +18,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 from __future__ import annotations
 
 import enum
+import functools
 import inspect
 import os
 import pkgutil
@@ -811,6 +812,8 @@ class Function(Doc[types.FunctionType]):
         unwrapped: types.FunctionType
         if isinstance(func, (classmethod, staticmethod)):
             unwrapped = func.__func__  # type: ignore
+        elif isinstance(func, functools.singledispatchmethod):
+            unwrapped = func.func  # type: ignore
         else:
             unwrapped = func
         super().__init__(modulename, qualname, unwrapped, taken_from)
