@@ -52,15 +52,14 @@ def test_api(tmp_path):
         with pytest.warns(UserWarning, match="Cannot find spec"):
             pdoc(here / "notfound.py")
 
-    with pytest.raises(RuntimeError, match="Unable to import any modules."):
-        with pytest.warns(UserWarning, match="Error importing"):
-            pdoc(here / "testdata" / "import_err_simple.py")
+    with pytest.raises(RuntimeError, match="Error importing"):
+        pdoc(here / "testdata" / "import_err_simple.py")
 
     # temporarily insert syntax error - we don't leave it permanently to not confuse mypy, flake8 and black.
     f = here / "syntax_err" / "syntax_err.py"
     f.write_bytes(b"class")
     try:
-        with pytest.warns(UserWarning, match="Error importing"):
+        with pytest.raises(RuntimeError, match="Error importing"):
             pdoc(here / "syntax_err", output_directory=tmp_path)
     finally:
         f.write_bytes(b"# syntax error will be inserted by test here\n")

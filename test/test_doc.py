@@ -116,3 +116,16 @@ def test_raising_getdoc():
     x = Class(Foo.__module__, Foo.__qualname__, Foo, (Foo.__module__, Foo.__qualname__))
     with pytest.warns(UserWarning, match="inspect.getdoc(.+) raised an exception"):
         assert x.docstring == ""
+
+
+def test_raising_submodules():
+    f = here / "syntax_err" / "syntax_err.py"
+    f.write_bytes(b"class")
+
+    try:
+        extract.parse_spec(f.parent)
+        m = Module.from_name("test.syntax_err")
+        with pytest.warns(UserWarning, match="Error importing"):
+            assert m.submodules
+    finally:
+        f.write_bytes(b"# syntax error will be inserted by test here\n")

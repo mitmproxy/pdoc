@@ -452,8 +452,6 @@ from __future__ import annotations
 __docformat__ = "markdown"  # explicitly disable rST processing in the examples above.
 __version__ = "12.0.2"  # this is read from setup.py
 
-import traceback
-import warnings
 from pathlib import Path
 from typing import overload
 
@@ -503,13 +501,7 @@ def pdoc(
 
     all_modules: dict[str, doc.Module] = {}
     for module_name in extract.walk_specs(modules):
-        try:
-            all_modules[module_name] = doc.Module.from_name(module_name)
-        except RuntimeError:
-            warnings.warn(f"Error importing {module_name}:\n{traceback.format_exc()}")
-
-    if not all_modules:
-        raise RuntimeError("Unable to import any modules.")
+        all_modules[module_name] = doc.Module.from_name(module_name)
 
     for module in all_modules.values():
         if format == "html":

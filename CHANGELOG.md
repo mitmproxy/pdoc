@@ -11,6 +11,8 @@
  - Fix display of `@classmethod @property` instances without docstrings. ([@mhils](https://github.com/mhils))
  - Add support for `@functools.singledispatchmethod`. 
    ([#428](https://github.com/mitmproxy/pdoc/issues/428), [@mhils](https://github.com/mhils))
+ - pdoc now terminates if a module cannot be imported instead of raising a warning.
+   ([#407](https://github.com/mitmproxy/pdoc/issues/407), [@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.0.2
 
