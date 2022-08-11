@@ -30,4 +30,8 @@
         <method def update(unknown): ...  # inherited from builtins.dict.update, D.update([E, ]**F) -…>
         <method def fromkeys(type, iterable, value=None, /): ...  # inherited from builtins.dict.fromkeys, Create a new diction…>
         <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
-        <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>>>
+        <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>>
+    <class misc_py39.SingleDispatchMethodExample
+        <method def __init__(): ...>
+        <@functools.singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
+        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>>>
