@@ -18,7 +18,6 @@ By convention, all attributes are read-only, although this is not enforced at ru
 from __future__ import annotations
 
 import enum
-import functools
 import inspect
 import os
 import pkgutil
@@ -43,7 +42,7 @@ from pdoc.doc_types import (
     safe_eval_type,
 )
 
-from ._compat import cache, cached_property, formatannotation, get_origin
+from ._compat import cache, cached_property, formatannotation, get_origin, singledispatchmethod
 
 
 def _include_fullname_in_traceback(f):
@@ -812,7 +811,7 @@ class Function(Doc[types.FunctionType]):
         unwrapped: types.FunctionType
         if isinstance(func, (classmethod, staticmethod)):
             unwrapped = func.__func__  # type: ignore
-        elif isinstance(func, functools.singledispatchmethod):
+        elif isinstance(func, singledispatchmethod):
             unwrapped = func.func  # type: ignore
         else:
             unwrapped = func

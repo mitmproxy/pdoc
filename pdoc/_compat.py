@@ -136,6 +136,12 @@ if (3, 9) <= sys.version_info < (3, 9, 8) or (3, 10) <= sys.version_info < (3, 1
 else:
     from inspect import formatannotation
 
+if sys.version_info >= (3, 8):
+    from functools import singledispatchmethod
+else:  # pragma: no cover
+    class singledispatchmethod:
+        pass  # pragma: no cover
+
 if True:
     # https://github.com/python/cpython/pull/27672
     from argparse import Action
@@ -191,5 +197,6 @@ __all__ = [
     "get_origin",
     "Literal",
     "formatannotation",
+    "singledispatchmethod",
     "BooleanOptionalAction",
 ]
