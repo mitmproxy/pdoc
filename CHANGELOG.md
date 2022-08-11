@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+# 2022-06-08: pdoc 12.1.0
+
  - Add compatibility with Python 3.11
    ([#394](https://github.com/mitmproxy/pdoc/issues/394), [@mhils](https://github.com/mhils))
  - Make sure that docstrings are picked up for functions that have been
@@ -14,6 +16,9 @@
  - Add support for `@functools.singledispatchmethod`. 
    ([#428](https://github.com/mitmproxy/pdoc/issues/428), [@mhils](https://github.com/mhils))
  - pdoc now terminates if a module cannot be imported instead of raising a warning.
+   You may need to preemptively
+   [exclude submodules](https://pdoc.dev/docs/pdoc.html#exclude-submodules-from-being-documented)
+   that fail to import anyway.
    ([#407](https://github.com/mitmproxy/pdoc/issues/407), [@mhils](https://github.com/mhils))
  - Fix compatibility with GitPython.
    ([#430](https://github.com/mitmproxy/pdoc/issues/430), [@mhils](https://github.com/mhils))
