@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - Add compatibility with Python 3.11
+   ([#394](https://github.com/mitmproxy/pdoc/issues/394), [@mhils](https://github.com/mhils))
  - Make sure that docstrings are picked up for functions that have been
    turned into non-function objects by decorators.
    ([#416](https://github.com/mitmproxy/pdoc/issues/416), [@jeamland](https://github.com/jeamland))
@@ -13,6 +15,8 @@
    ([#428](https://github.com/mitmproxy/pdoc/issues/428), [@mhils](https://github.com/mhils))
  - pdoc now terminates if a module cannot be imported instead of raising a warning.
    ([#407](https://github.com/mitmproxy/pdoc/issues/407), [@mhils](https://github.com/mhils))
+ - Fix compatibility with GitPython.
+   ([#430](https://github.com/mitmproxy/pdoc/issues/430), [@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.0.2
 

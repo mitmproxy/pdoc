@@ -175,6 +175,8 @@ class _PdocDefusedPopen(subprocess.Popen):
                 "ld",
                 shutil.which("gcc") or shutil.which("cc"),
                 shutil.which("objdump"),
+                # https://github.com/mitmproxy/pdoc/issues/430: GitPython invokes git commands, which is also fine.
+                "git",
             )
         )
         if not command_allowed:
