@@ -32,6 +32,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: ubuntu-latest
+            py: 3.11.0-beta - 3.11.0
           - os: windows-latest
             py: 3.10.4
             args: --cov-fail-under=100

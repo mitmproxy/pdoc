@@ -232,6 +232,9 @@ class ExampleError(Exception):
         self.msg = msg
         self.code = code
 
+    def add_note(self, note: str):
+        """This method is present on Python 3.11+ and manually added here so that snapshots are consistent."""
+
 
 class ExampleClass(object):
     """The summary line for a class docstring should fit on one line.

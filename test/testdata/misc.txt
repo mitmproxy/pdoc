@@ -23,10 +23,6 @@
         <var quux  # quux>
         <var quuux: int = 42  # quuux>>
     <var only_annotated: int>
-    <class misc.CustomException  # custom exception typ…
-        <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
-        <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <var args  # inherited from builtins.BaseException.args>>
     <class misc.LambdaAttr
         <method def __init__(): ...>
         <method def attr(x): ...>>
@@ -76,8 +72,4 @@
     <function def repr_not_syntax_highlightable(x=°<script>alert(1)</script>): ...  # The default value fo…>
     <class misc.ClassDecorator  # This is a class that…
         <method def __init__(self, f): ...>>
-    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>
-    <class misc.SingleDispatchMethodExample
-        <method def __init__(): ...>
-        <@singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
-        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>>>
+    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>>
