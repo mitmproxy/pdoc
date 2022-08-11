@@ -25,6 +25,9 @@ def test_smoke(module):
     except pdoc.extract.AnyException:
         pass
     else:
-        # noinspection PyTypeChecker
-        pdoc.pdoc(module, format="repr")
-        pdoc.pdoc(module, format="html")
+        try:
+            # noinspection PyTypeChecker
+            pdoc.pdoc(module, format="repr")
+            pdoc.pdoc(module, format="html")
+        except RuntimeError as e:
+            assert "Error importing" in str(e)
