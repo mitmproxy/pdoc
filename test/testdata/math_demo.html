@@ -73,17 +73,21 @@ math_demo    </h1>
 <p>Note that docstrings work like regular strings, so backslashes are treated as escape characters.
 You can either escape a backslash with a second backslash:</p>
 
-<div class="pdoc-code codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;docstring with $\\frac{x}{y}$.&quot;&quot;&quot;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <p>or prefix your docstring with an "r" so that you have a
 <a href="https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals">raw string</a>
 where backslashes are not processed:</p>
 
-<div class="pdoc-code codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;raw docstring with $\frac{x}{y}$.&quot;&quot;&quot;</span>
-</code></pre></div>
+</code></pre>
+</div>
 
 <h1 id="advanced-usage">Advanced Usage</h1>
 
