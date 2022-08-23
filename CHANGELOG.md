@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Update vendored copy of markdown2.
+   ([#429](https://github.com/mitmproxy/pdoc/issues/429), [@mhils](https://github.com/mhils))
+
 # 2022-06-08: pdoc 12.1.0
 
  - Add compatibility with Python 3.11
