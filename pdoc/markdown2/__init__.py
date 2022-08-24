@@ -1,7 +1,7 @@
 # fmt: off
 # flake8: noqa
 # type: ignore
-# Taken from here: https://github.com/trentm/python-markdown2/blob/821359d750be1a051b8ac5741d00aae8143d3157
+# Taken from here: https://github.com/trentm/python-markdown2/blob/ac5e7b956e9b8bc952039bfecb158ef1ddd7d422
 
 #!/usr/bin/env python
 # Copyright (c) 2012 Trent Mick.
@@ -1722,18 +1722,11 @@ class Markdown(object):
     def _list_sub(self, match):
         lst = match.group(1)
         lst_type = match.group(3) in self._marker_ul_chars and "ul" or "ol"
-
-        if lst_type == 'ol' and match.group(3) != '1.':
-            # if list doesn't start at 1 then set the ol start attribute
-            lst_opts = ' start="%s"' % match.group(3)[:-1]
-        else:
-            lst_opts = ''
-
         result = self._process_list_items(lst)
         if self.list_level:
-            return "<%s%s>\n%s</%s>\n" % (lst_type, lst_opts, result, lst_type)
+            return "<%s>\n%s</%s>\n" % (lst_type, result, lst_type)
         else:
-            return "<%s%s>\n%s</%s>\n\n" % (lst_type, lst_opts, result, lst_type)
+            return "<%s>\n%s</%s>\n\n" % (lst_type, result, lst_type)
 
     def _do_lists(self, text):
         # Form HTML ordered (numbered) and unordered (bulleted) lists.
