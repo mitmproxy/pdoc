@@ -456,14 +456,12 @@ from pathlib import Path
 from typing import overload
 
 from pdoc import doc, extract, render
-from pdoc._compat import Literal
 
 
 @overload
 def pdoc(
     *modules: Path | str,
     output_directory: None = None,
-    format: Literal["html"] = "html",
 ) -> str:
     pass
 
@@ -472,7 +470,6 @@ def pdoc(
 def pdoc(
     *modules: Path | str,
     output_directory: Path,
-    format: Literal["html"] = "html",
 ) -> None:
     pass
 
@@ -480,7 +477,6 @@ def pdoc(
 def pdoc(
     *modules: Path | str,
     output_directory: Path | None = None,
-    format: Literal["html"] = "html",
 ) -> str | None:
     """
     Render the documentation for a list of modules.
@@ -492,23 +488,12 @@ def pdoc(
 
     Rendering options can be configured by calling `pdoc.render.configure` in advance.
     """
-    if format not in ("html", "markdown", "repr"):
-        raise ValueError(f"Invalid rendering format {format!r}.")
-    if format == "markdown":  # pragma: no cover
-        raise NotImplementedError(
-            "Markdown support is currently unimplemented, but PRs are welcome!"
-        )
-
     all_modules: dict[str, doc.Module] = {}
     for module_name in extract.walk_specs(modules):
         all_modules[module_name] = doc.Module.from_name(module_name)
 
     for module in all_modules.values():
-        if format == "html":
-            out = render.html_module(module, all_modules)
-        else:
-            out = render.repr_module(module)
-
+        out = render.html_module(module, all_modules)
         if not output_directory:
             return out
         else:
@@ -517,13 +502,13 @@ def pdoc(
             outfile.write_bytes(out.encode())
 
     assert output_directory
-    if format == "html":
-        index = render.html_index(all_modules)
-        if index:
-            (output_directory / "index.html").write_bytes(index.encode())
 
-        search = render.search_index(all_modules)
-        if search:
-            (output_directory / "search.js").write_bytes(search.encode())
+    index = render.html_index(all_modules)
+    if index:
+        (output_directory / "index.html").write_bytes(index.encode())
+
+    search = render.search_index(all_modules)
+    if search:
+        (output_directory / "search.js").write_bytes(search.encode())
 
     return None

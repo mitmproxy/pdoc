@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - Remove `format` argument from `pdoc.pdoc()`. For the forseeable future, pdoc will only support HTML export.
+   ([#308](https://github.com/mitmproxy/pdoc/issues/308), [@mhils](https://github.com/mhils))
  - Update vendored copy of markdown2.
    ([#429](https://github.com/mitmproxy/pdoc/issues/429), [@mhils](https://github.com/mhils))
 
