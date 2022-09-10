@@ -208,7 +208,7 @@ class DataDemo:
     a: int
     """Again, we can document individual properties with docstrings."""
     a2: Sequence[str]
-    # This property has a type annotation but is not documented, so it does not show up.
+    # This property has a type annotation but is not documented.
     b: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""
 

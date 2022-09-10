@@ -15,6 +15,7 @@ class NamedTupleExample(NamedTuple):
     """
     An example for a typing.NamedTuple.
     """
+
     name: str
     """Name of our example tuple."""
     id: int = 3
@@ -28,6 +29,7 @@ class Foo(TypedDict):
 
 class Bar(Foo, total=False):
     """A TypedDict subclass. TypedDict botches the MRO, so things aren't perfect here."""
+
     b: int
     """Second attribute."""
     c: str

@@ -59,6 +59,11 @@ This …
         <method def __init__(self, a: int, a2: Sequence[str], b: bool = True): ...>
         <var a: int  # Again, we can docume…>
         <var b: bool = True  # This property is ass…>>
+    <@dataclass class demo_long.DataDemoExtended
+        <method def __init__(self, a: int, a2: Sequence[str], b: bool = True, c: str = '42'): ...>
+        <var c: str = '42'  # A new attribute.>
+        <var a: int  # inherited from demo_long.DataDemo.a, Again, we can docume…>
+        <var b: bool = True  # inherited from demo_long.DataDemo.b, This property is ass…>>
     <class demo_long.EnumDemo  # This is an example o…
         <var RED = <EnumDemo.RED: 1>  # I am the red.>
         <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>

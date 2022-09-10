@@ -14,7 +14,10 @@ here = Path(__file__).parent
 
 if __name__ == "__main__":
     demo = here / ".." / "test" / "testdata" / "demo.py"
-    env = Environment(loader=FileSystemLoader([here, here / ".." / "pdoc" / "templates"]), autoescape=True)
+    env = Environment(
+        loader=FileSystemLoader([here, here / ".." / "pdoc" / "templates"]),
+        autoescape=True,
+    )
 
     lexer = pygments.lexers.python.PythonLexer()
     formatter = pygments.formatters.html.HtmlFormatter(style="friendly")
@@ -22,11 +25,13 @@ if __name__ == "__main__":
     example_html = Markup(pygments.highlight(demo.read_text("utf8"), lexer, formatter))
 
     (here / "index.html").write_bytes(
-        env.get_template("index.html.jinja2").render(
+        env.get_template("index.html.jinja2")
+        .render(
             example_html=example_html,
             pygments_css=pygments_css,
-            __version__=pdoc.__version__
-        ).encode()
+            __version__=pdoc.__version__,
+        )
+        .encode()
     )
 
     if (here / "docs").is_dir():
@@ -49,7 +54,7 @@ if __name__ == "__main__":
         favicon="/favicon.svg",
         logo="/logo.svg",
         logo_link="https://pdoc.dev",
-        footer_text=f"pdoc {pdoc.__version__}"
+        footer_text=f"pdoc {pdoc.__version__}",
     )
 
     pdoc.pdoc(
@@ -64,18 +69,31 @@ if __name__ == "__main__":
     pdoc.pdoc(demo, output_directory=here / "docs" / "dark-mode")
 
     # Render math example
-    pdoc.render.configure(math=True, logo="/logo.svg", logo_link="https://pdoc.dev",
-                          edit_url_map={"math_demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/math_demo"})
-    pdoc.pdoc(here / ".." / "test" / "testdata" / "math_demo.py", output_directory=here / "docs" / "math")
+    pdoc.render.configure(
+        math=True,
+        logo="/logo.svg",
+        logo_link="https://pdoc.dev",
+        edit_url_map={
+            "math_demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/math_demo"
+        },
+    )
+    pdoc.pdoc(
+        here / ".." / "test" / "testdata" / "math_demo.py",
+        output_directory=here / "docs" / "math",
+    )
 
     # Add sitemap.xml
     with (here / "sitemap.xml").open("w", newline="\n") as f:
-        f.write(textwrap.dedent("""
+        f.write(
+            textwrap.dedent(
+                """
         <?xml version="1.0" encoding="utf-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-        """).strip())
+        """
+            ).strip()
+        )
         for file in here.glob("**/*.html"):
             if file.name.startswith("_"):
                 continue

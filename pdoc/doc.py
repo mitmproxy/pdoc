@@ -43,7 +43,13 @@ from pdoc.doc_types import (
     safe_eval_type,
 )
 
-from ._compat import cache, cached_property, formatannotation, get_origin, singledispatchmethod
+from ._compat import (
+    cache,
+    cached_property,
+    formatannotation,
+    get_origin,
+    singledispatchmethod,
+)
 
 
 def _include_fullname_in_traceback(f):
@@ -563,7 +569,9 @@ class Class(Namespace[type]):
         is_dataclass_with_default_docstring = (
             dataclasses.is_dataclass(self.obj)
             # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
-            and doc == self.obj.__name__ + str(inspect.signature(self.obj)).replace(' -> None', '')
+            and doc
+            == self.obj.__name__
+            + str(inspect.signature(self.obj)).replace(" -> None", "")
         )
         if is_dataclass_with_default_docstring:
             return ""
