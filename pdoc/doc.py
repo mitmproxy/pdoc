@@ -17,6 +17,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 """
 from __future__ import annotations
 
+import dataclasses
 import enum
 import inspect
 import os
@@ -559,8 +560,14 @@ class Class(Namespace[type]):
         if doc == dict.__doc__:
             # Don't display default docstring for dict subclasses (primarily TypedDict).
             return ""
-        else:
-            return doc
+        is_dataclass_with_default_docstring = (
+            dataclasses.is_dataclass(self.obj)
+            # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
+            and doc == self.obj.__name__ + str(inspect.signature(self.obj)).replace(' -> None', '')
+        )
+        if is_dataclass_with_default_docstring:
+            return ""
+        return doc
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:

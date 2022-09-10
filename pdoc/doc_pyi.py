@@ -90,6 +90,7 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
 
 
 def include_typeinfo_from_stub_files(module: doc.Module) -> None:
+    """Patch the provided module with type information from a matching .pyi file."""
     # Check if module is a stub module itself - we don't want to recurse!
     module_file = str(
         doc._safe_getattr(sys.modules.get(module.modulename), "__file__", "")

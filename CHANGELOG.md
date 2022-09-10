@@ -8,6 +8,8 @@
    ([#429](https://github.com/mitmproxy/pdoc/issues/429), [@mhils](https://github.com/mhils))
  - Fix "View Source" button when a function has the same name as the module it is in.
    ([#431](https://github.com/mitmproxy/pdoc/issues/431), [@mhils](https://github.com/mhils))
+ - Improve display of dataclasses.
+   ([#411](https://github.com/mitmproxy/pdoc/issues/411), [@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.1.0
 
