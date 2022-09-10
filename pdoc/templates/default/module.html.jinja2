@@ -266,12 +266,12 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {# fmt: on #}
 {% defaultmacro view_source_state(doc) %}
     {% if show_source and doc.source %}
-        <input id="{{ doc.qualname or doc.name }}-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+        <input id="{{ doc.qualname or "mod-" + doc.name }}-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro view_source_button(doc) %}
     {% if show_source and doc.source %}
-        <label class="view-source-button" for="{{ doc.qualname or doc.name }}-view-source"><span>View Source</span></label>
+        <label class="view-source-button" for="{{ doc.qualname or "mod-" + doc.name }}-view-source"><span>View Source</span></label>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro view_source_code(doc) %}
