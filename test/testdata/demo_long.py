@@ -209,6 +209,10 @@ class DataDemo:
     """Again, we can document individual properties with docstrings."""
     a2: Sequence[str]
     # This property has a type annotation but is not documented.
+    a3 = "a3"
+    # This property has a default value but is not documented.
+    a4: str = "a4"
+    # This property has a type annotation and a default value but is not documented.
     b: bool = field(repr=False, default=True)
     """This property is assigned to `dataclasses.field()`, which works just as well."""
 

@@ -659,6 +659,8 @@ class Class(Namespace[type]):
                 unsorted.setdefault(name, obj)
         for name in self._var_docstrings:
             unsorted.setdefault(name, empty)
+        for name in self._var_annotations:
+            unsorted.setdefault(name, empty)
 
         init_has_no_doc = unsorted.get("__init__", object.__init__).__doc__ in (
             None,

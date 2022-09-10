@@ -224,24 +224,22 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {#
     This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
     Returning no text is interpreted as false, returning any other text is iterpreted as true.
-    Implementing this as a macro makes it very easy to override with a custom template.
+    Implementing this as a macro makes it very easy to override with a custom template, see
+    https://github.com/mitmproxy/pdoc/tree/main/examples/custom-template.
     #}
-    {% if doc.type == "module" and doc.fullname not in all_modules %}
-        {# Don't document modules that were manually excluded from the documentation #}
-        {# https://github.com/mitmproxy/pdoc/issues/334 #}
-    {% elif not doc.name.startswith("_") %}
-        {# members not starting with an underscore are considered public by default #}
+    {% if doc.name == "__init__" %}
+        {# show all constructors #}
         true
-    {% elif doc.name == "__init__" %}
-        {# the constructor is our special case which we also treat as public #}
-        true
+    {% elif doc.name == "__doc__" %}
+        {# We don't want to document __doc__ itself, https://github.com/mitmproxy/pdoc/issues/235 #}
+    {% elif doc.type == "module" and doc.fullname not in all_modules %}
+        {# Skip modules that were manually excluded, https://github.com/mitmproxy/pdoc/issues/334 #}
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
-        {% if doc.name != "__doc__" %}
-            {# ... but sometimes we have __doc__ in __all__, which we want to exclude for pdoc's purposes. #}
-            {# https://github.com/mitmproxy/pdoc/issues/235 #}
-            true
-        {% endif %}
+        true
+    {% elif not doc.name.startswith("_") and (doc.type != "variable" or doc.docstring) %}
+        {# members not starting with an underscore are considered public by default #}
+        true
     {% endif %}
 {% enddefaultmacro %}
 {# fmt: off #}

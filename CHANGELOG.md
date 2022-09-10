@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+ - Make documentation of variables more consistent. Variables with a default value
+   and no docstring are now hidden, matching the behavior of variables with a type annotation only.
+   ([#411](https://github.com/mitmproxy/pdoc/issues/411), [@mhils](https://github.com/mhils))
  - Remove `format` argument from `pdoc.pdoc()`. For the forseeable future, pdoc will only support HTML export.
    ([#308](https://github.com/mitmproxy/pdoc/issues/308), [@mhils](https://github.com/mhils))
  - Update vendored copy of markdown2.
