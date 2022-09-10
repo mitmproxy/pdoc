@@ -1,5 +1,1 @@
-# render_options.html
-<module render_options  # Testing some render …>
-# math_demo.html
-<module math_demo  # This is a small demo…
-    <function def binom_coef(n: int, k: int) -> int: ...  # Return the number of…>>
+(skipped)

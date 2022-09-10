@@ -3,6 +3,11 @@
 This is an example showing how to use pdoc with [mkdocs](https://www.mkdocs.org).
 Run `./make.py` to generate the API documentation and then `mkdocs serve` to view this website!
 
+## Alternatives
+
+[mkdocstrings](https://mkdocstrings.github.io/) is a great alternative to pdoc if you are in the mkdocs ecosystem
+anyways.
+
 ## Implementation
 
 The main trick is that we define a custom `frame.html.jinja2` template to

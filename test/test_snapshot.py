@@ -46,36 +46,34 @@ class Snapshot:
         pdoc.render.configure(**self.render_options)
         pdoc.render.env.globals["__version__"] = "$VERSION"
         if self.with_output_directory:
+            if format == "repr":
+                return "(skipped)"
             with tempfile.TemporaryDirectory() as tmpdirname:
                 tmpdir = Path(tmpdirname)
                 # noinspection PyTypeChecker
-                pdoc.pdoc(*self.specs, format=format, output_directory=Path(tmpdir))  # type: ignore
+                pdoc.pdoc(*self.specs, output_directory=Path(tmpdir))  # type: ignore
 
-                if format == "html":
-                    rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
-                else:
-                    rendered = ""
+                rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
                 for f in sorted(tmpdir.glob("**/*"), reverse=True):
                     if not f.is_file():
                         continue
-                    if format == "html":
-                        rendered += (
-                            f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
-                            + '<iframe srcdoc="\n'
-                            + f.read_text("utf8")
-                            .replace("&", "&amp;")
-                            .replace('"', "&quot;")
-                            + '\n"></iframe>\n\n'
-                        )
-                    else:
-                        rendered += (
-                            f"# {f.relative_to(tmpdir).as_posix()}\n"
-                            f"{f.read_text('utf8')}\n"
-                        )
+                    rendered += (
+                        f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
+                        + '<iframe srcdoc="\n'
+                        + f.read_text("utf8")
+                        .replace("&", "&amp;")
+                        .replace('"', "&quot;")
+                        + '\n"></iframe>\n\n'
+                    )
 
         else:
-            # noinspection PyTypeChecker
-            rendered = pdoc.pdoc(*self.specs, format=format)  # type: ignore
+            if format == "repr":
+                mod_name = pdoc.extract.walk_specs(self.specs)[0]
+                mod = pdoc.doc.Module.from_name(mod_name)
+                with pdoc.extract.mock_some_common_side_effects():
+                    rendered = pdoc.render.repr_module(mod)
+            else:
+                rendered = pdoc.pdoc(*self.specs)
         pdoc.render.configure()
         pdoc.render.env.globals["__version__"] = pdoc.__version__
         return rendered
