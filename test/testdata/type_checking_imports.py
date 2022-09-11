@@ -11,7 +11,8 @@ if TYPE_CHECKING:
 
 
 def foo(a: Sequence[str], b: Dict[str, str]):
-    pass
+    """A method with TYPE_CHECKING type annotations."""
 
 
 var: Sequence[int] = (1, 2, 3)
+"""A variable with TYPE_CHECKING type annotations."""

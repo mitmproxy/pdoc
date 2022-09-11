@@ -56,9 +56,27 @@ This …
         <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>>
     <var CONST_B = 'yes'  # A constant without t…>
     <@dataclass class demo_long.DataDemo  # This is an example f…
-        <method def __init__(self, a: int, a2: Sequence[str], b: bool = True): ...>
+        <method def __init__(self, a: int, a2: Sequence[str], a4: str = 'a4', b: bool = True): ...>
         <var a: int  # Again, we can docume…>
+        <var a2: Sequence[str]>
+        <var a3 = 'a3'>
+        <var a4: str = 'a4'>
         <var b: bool = True  # This property is ass…>>
+    <@dataclass class demo_long.DataDemoExtended
+        <method def __init__(
+            self,
+            a: int,
+            a2: Sequence[str],
+            a4: str = 'a4',
+            b: bool = True,
+            c: str = '42'
+        ): ...>
+        <var c: str = '42'  # A new attribute.>
+        <var a: int  # inherited from demo_long.DataDemo.a, Again, we can docume…>
+        <var a2: Sequence[str]  # inherited from demo_long.DataDemo.a2>
+        <var a3 = 'a3'  # inherited from demo_long.DataDemo.a3>
+        <var a4: str = 'a4'  # inherited from demo_long.DataDemo.a4>
+        <var b: bool = True  # inherited from demo_long.DataDemo.b, This property is ass…>>
     <class demo_long.EnumDemo  # This is an example o…
         <var RED = <EnumDemo.RED: 1>  # I am the red.>
         <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>

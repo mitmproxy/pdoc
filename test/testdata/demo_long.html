@@ -135,6 +135,18 @@
 
             </li>
             <li>
+                    <a class="class" href="#DataDemoExtended">DataDemoExtended</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#DataDemoExtended.__init__">DataDemoExtended</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#DataDemoExtended.c">c</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#EnumDemo">EnumDemo</a>
                             <ul class="memberlist">
                         <li>
@@ -402,54 +414,62 @@ which will also show up in the navigation.</p>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">    This is an example for a dataclass.</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    but you can override it by providing your own (like here!).</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">    This is an example of an Enum.</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="nd">@dataclass</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">    This is an example of an Enum.</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">    ```</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">       Body text</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">    ```</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="sd">    .. note::</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">       Hi there!</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">    .. warning:: Be Careful!</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">       This warning has both a title and content.</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">    .. danger::</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">       Danger ahead.</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">    ```</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">       Body text</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">    ```</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">    .. note::</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">       Hi there!</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">    .. danger::</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1141,24 +1161,24 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 </span><span id="DataDemo-202"><a href="#DataDemo-202"><span class="linenos">202</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
 </span><span id="DataDemo-203"><a href="#DataDemo-203"><span class="linenos">203</span></a>    <span class="sd">&quot;&quot;&quot;</span>
 </span><span id="DataDemo-204"><a href="#DataDemo-204"><span class="linenos">204</span></a><span class="sd">    This is an example for a dataclass.</span>
-</span><span id="DataDemo-205"><a href="#DataDemo-205"><span class="linenos">205</span></a><span class="sd">    Dataclasses generate a relatively pointless docstring by default,</span>
-</span><span id="DataDemo-206"><a href="#DataDemo-206"><span class="linenos">206</span></a><span class="sd">    but you can override it by providing your own (like here!).</span>
-</span><span id="DataDemo-207"><a href="#DataDemo-207"><span class="linenos">207</span></a>
-</span><span id="DataDemo-208"><a href="#DataDemo-208"><span class="linenos">208</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
-</span><span id="DataDemo-209"><a href="#DataDemo-209"><span class="linenos">209</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="DataDemo-210"><a href="#DataDemo-210"><span class="linenos">210</span></a>
-</span><span id="DataDemo-211"><a href="#DataDemo-211"><span class="linenos">211</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="DataDemo-212"><a href="#DataDemo-212"><span class="linenos">212</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
-</span><span id="DataDemo-213"><a href="#DataDemo-213"><span class="linenos">213</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="DataDemo-214"><a href="#DataDemo-214"><span class="linenos">214</span></a>    <span class="c1"># This property has a type annotation but is not documented, so it does not show up.</span>
-</span><span id="DataDemo-215"><a href="#DataDemo-215"><span class="linenos">215</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DataDemo-216"><a href="#DataDemo-216"><span class="linenos">216</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+</span><span id="DataDemo-205"><a href="#DataDemo-205"><span class="linenos">205</span></a>
+</span><span id="DataDemo-206"><a href="#DataDemo-206"><span class="linenos">206</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
+</span><span id="DataDemo-207"><a href="#DataDemo-207"><span class="linenos">207</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="DataDemo-208"><a href="#DataDemo-208"><span class="linenos">208</span></a>
+</span><span id="DataDemo-209"><a href="#DataDemo-209"><span class="linenos">209</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="DataDemo-210"><a href="#DataDemo-210"><span class="linenos">210</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
+</span><span id="DataDemo-211"><a href="#DataDemo-211"><span class="linenos">211</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="DataDemo-212"><a href="#DataDemo-212"><span class="linenos">212</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
+</span><span id="DataDemo-213"><a href="#DataDemo-213"><span class="linenos">213</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
+</span><span id="DataDemo-214"><a href="#DataDemo-214"><span class="linenos">214</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
+</span><span id="DataDemo-215"><a href="#DataDemo-215"><span class="linenos">215</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
+</span><span id="DataDemo-216"><a href="#DataDemo-216"><span class="linenos">216</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
+</span><span id="DataDemo-217"><a href="#DataDemo-217"><span class="linenos">217</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DataDemo-218"><a href="#DataDemo-218"><span class="linenos">218</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This is an example for a dataclass.
-Dataclasses generate a relatively pointless docstring by default,
-but you can override it by providing your own (like here!).</p>
+            <div class="docstring"><p>This is an example for a dataclass.</p>
 
 <p>As usual, you can link to individual properties: <code><a href="#DataDemo.a">DataDemo.a</a></code>.</p>
 </div>
@@ -1167,7 +1187,7 @@ but you can override it by providing your own (like here!).</p>
                             <div id="DataDemo.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">DataDemo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">a</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>, </span><span class="param"><span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">DataDemo</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">a</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>, </span><span class="param"><span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;a4&#39;</span>, </span><span class="param"><span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -1203,6 +1223,63 @@ but you can override it by providing your own (like here!).</p>
 
                             </div>
                 </section>
+                <section id="DataDemoExtended">
+                            <input id="DataDemoExtended-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator">@dataclass</div>
+
+    <span class="def">class</span>
+    <span class="name">DataDemoExtended</span><wbr>(<span class="base"><a href="#DataDemo">DataDemo</a></span>):
+
+                <label class="view-source-button" for="DataDemoExtended-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#DataDemoExtended"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemoExtended-221"><a href="#DataDemoExtended-221"><span class="linenos">221</span></a><span class="nd">@dataclass</span>
+</span><span id="DataDemoExtended-222"><a href="#DataDemoExtended-222"><span class="linenos">222</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
+</span><span id="DataDemoExtended-223"><a href="#DataDemoExtended-223"><span class="linenos">223</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
+</span><span id="DataDemoExtended-224"><a href="#DataDemoExtended-224"><span class="linenos">224</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+    
+
+                            <div id="DataDemoExtended.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">DataDemoExtended</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">a</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>,</span><span class="param">	<span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;a4&#39;</span>,</span><span class="param">	<span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;42&#39;</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DataDemoExtended.__init__"></a>
+    
+    
+
+                            </div>
+                            <div id="DataDemoExtended.c" class="classattr">
+                                <div class="attr variable">
+            <span class="name">c</span><span class="annotation">: str</span><span class="default_value"> = &#39;42&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DataDemoExtended.c"></a>
+    
+            <div class="docstring"><p>A new attribute.</p>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#DataDemo">DataDemo</a></dt>
+                                <dd id="DataDemoExtended.a" class="variable"><a href="#DataDemo.a">a</a></dd>
+                <dd id="DataDemoExtended.b" class="variable"><a href="#DataDemo.b">b</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
                 <section id="EnumDemo">
                             <input id="EnumDemo-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -1214,19 +1291,19 @@ but you can override it by providing your own (like here!).</p>
 
     </div>
     <a class="headerlink" href="#EnumDemo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo-219"><a href="#EnumDemo-219"><span class="linenos">219</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="EnumDemo-220"><a href="#EnumDemo-220"><span class="linenos">220</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-221"><a href="#EnumDemo-221"><span class="linenos">221</span></a><span class="sd">    This is an example of an Enum.</span>
-</span><span id="EnumDemo-222"><a href="#EnumDemo-222"><span class="linenos">222</span></a>
-</span><span id="EnumDemo-223"><a href="#EnumDemo-223"><span class="linenos">223</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
-</span><span id="EnumDemo-224"><a href="#EnumDemo-224"><span class="linenos">224</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="EnumDemo-225"><a href="#EnumDemo-225"><span class="linenos">225</span></a>
-</span><span id="EnumDemo-226"><a href="#EnumDemo-226"><span class="linenos">226</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="EnumDemo-227"><a href="#EnumDemo-227"><span class="linenos">227</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-228"><a href="#EnumDemo-228"><span class="linenos">228</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="EnumDemo-229"><a href="#EnumDemo-229"><span class="linenos">229</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-230"><a href="#EnumDemo-230"><span class="linenos">230</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
-</span><span id="EnumDemo-231"><a href="#EnumDemo-231"><span class="linenos">231</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo-227"><a href="#EnumDemo-227"><span class="linenos">227</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="EnumDemo-228"><a href="#EnumDemo-228"><span class="linenos">228</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-229"><a href="#EnumDemo-229"><span class="linenos">229</span></a><span class="sd">    This is an example of an Enum.</span>
+</span><span id="EnumDemo-230"><a href="#EnumDemo-230"><span class="linenos">230</span></a>
+</span><span id="EnumDemo-231"><a href="#EnumDemo-231"><span class="linenos">231</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+</span><span id="EnumDemo-232"><a href="#EnumDemo-232"><span class="linenos">232</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="EnumDemo-233"><a href="#EnumDemo-233"><span class="linenos">233</span></a>
+</span><span id="EnumDemo-234"><a href="#EnumDemo-234"><span class="linenos">234</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="EnumDemo-235"><a href="#EnumDemo-235"><span class="linenos">235</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-236"><a href="#EnumDemo-236"><span class="linenos">236</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="EnumDemo-237"><a href="#EnumDemo-237"><span class="linenos">237</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-238"><a href="#EnumDemo-238"><span class="linenos">238</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="EnumDemo-239"><a href="#EnumDemo-239"><span class="linenos">239</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1297,25 +1374,25 @@ but you can override it by providing your own (like here!).</p>
 
     </div>
     <a class="headerlink" href="#admonitions"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="admonitions-234"><a href="#admonitions-234"><span class="linenos">234</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
-</span><span id="admonitions-235"><a href="#admonitions-235"><span class="linenos">235</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="admonitions-236"><a href="#admonitions-236"><span class="linenos">236</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
-</span><span id="admonitions-237"><a href="#admonitions-237"><span class="linenos">237</span></a>
-</span><span id="admonitions-238"><a href="#admonitions-238"><span class="linenos">238</span></a><span class="sd">    ```</span>
-</span><span id="admonitions-239"><a href="#admonitions-239"><span class="linenos">239</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
-</span><span id="admonitions-240"><a href="#admonitions-240"><span class="linenos">240</span></a><span class="sd">       Body text</span>
-</span><span id="admonitions-241"><a href="#admonitions-241"><span class="linenos">241</span></a><span class="sd">    ```</span>
-</span><span id="admonitions-242"><a href="#admonitions-242"><span class="linenos">242</span></a>
-</span><span id="admonitions-243"><a href="#admonitions-243"><span class="linenos">243</span></a><span class="sd">    .. note::</span>
-</span><span id="admonitions-244"><a href="#admonitions-244"><span class="linenos">244</span></a><span class="sd">       Hi there!</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="admonitions-242"><a href="#admonitions-242"><span class="linenos">242</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="admonitions-243"><a href="#admonitions-243"><span class="linenos">243</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="admonitions-244"><a href="#admonitions-244"><span class="linenos">244</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
 </span><span id="admonitions-245"><a href="#admonitions-245"><span class="linenos">245</span></a>
-</span><span id="admonitions-246"><a href="#admonitions-246"><span class="linenos">246</span></a><span class="sd">    .. warning:: Be Careful!</span>
-</span><span id="admonitions-247"><a href="#admonitions-247"><span class="linenos">247</span></a><span class="sd">       This warning has both a title and content.</span>
-</span><span id="admonitions-248"><a href="#admonitions-248"><span class="linenos">248</span></a>
-</span><span id="admonitions-249"><a href="#admonitions-249"><span class="linenos">249</span></a><span class="sd">    .. danger::</span>
-</span><span id="admonitions-250"><a href="#admonitions-250"><span class="linenos">250</span></a><span class="sd">       Danger ahead.</span>
-</span><span id="admonitions-251"><a href="#admonitions-251"><span class="linenos">251</span></a>
-</span><span id="admonitions-252"><a href="#admonitions-252"><span class="linenos">252</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="admonitions-246"><a href="#admonitions-246"><span class="linenos">246</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-247"><a href="#admonitions-247"><span class="linenos">247</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="admonitions-248"><a href="#admonitions-248"><span class="linenos">248</span></a><span class="sd">       Body text</span>
+</span><span id="admonitions-249"><a href="#admonitions-249"><span class="linenos">249</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-250"><a href="#admonitions-250"><span class="linenos">250</span></a>
+</span><span id="admonitions-251"><a href="#admonitions-251"><span class="linenos">251</span></a><span class="sd">    .. note::</span>
+</span><span id="admonitions-252"><a href="#admonitions-252"><span class="linenos">252</span></a><span class="sd">       Hi there!</span>
+</span><span id="admonitions-253"><a href="#admonitions-253"><span class="linenos">253</span></a>
+</span><span id="admonitions-254"><a href="#admonitions-254"><span class="linenos">254</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="admonitions-255"><a href="#admonitions-255"><span class="linenos">255</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="admonitions-256"><a href="#admonitions-256"><span class="linenos">256</span></a>
+</span><span id="admonitions-257"><a href="#admonitions-257"><span class="linenos">257</span></a><span class="sd">    .. danger::</span>
+</span><span id="admonitions-258"><a href="#admonitions-258"><span class="linenos">258</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="admonitions-259"><a href="#admonitions-259"><span class="linenos">259</span></a>
+</span><span id="admonitions-260"><a href="#admonitions-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

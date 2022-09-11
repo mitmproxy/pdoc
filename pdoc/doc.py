@@ -17,6 +17,7 @@ By convention, all attributes are read-only, although this is not enforced at ru
 """
 from __future__ import annotations
 
+import dataclasses
 import enum
 import inspect
 import os
@@ -42,7 +43,13 @@ from pdoc.doc_types import (
     safe_eval_type,
 )
 
-from ._compat import cache, cached_property, formatannotation, get_origin, singledispatchmethod
+from ._compat import (
+    cache,
+    cached_property,
+    formatannotation,
+    get_origin,
+    singledispatchmethod,
+)
 
 
 def _include_fullname_in_traceback(f):
@@ -559,8 +566,16 @@ class Class(Namespace[type]):
         if doc == dict.__doc__:
             # Don't display default docstring for dict subclasses (primarily TypedDict).
             return ""
-        else:
-            return doc
+        is_dataclass_with_default_docstring = (
+            dataclasses.is_dataclass(self.obj)
+            # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
+            and doc
+            == self.obj.__name__
+            + str(inspect.signature(self.obj)).replace(" -> None", "")
+        )
+        if is_dataclass_with_default_docstring:
+            return ""
+        return doc
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
@@ -643,6 +658,8 @@ class Class(Namespace[type]):
             for name, obj in cls.__dict__.items():
                 unsorted.setdefault(name, obj)
         for name in self._var_docstrings:
+            unsorted.setdefault(name, empty)
+        for name in self._var_annotations:
             unsorted.setdefault(name, empty)
 
         init_has_no_doc = unsorted.get("__init__", object.__init__).__doc__ in (

@@ -28,6 +28,7 @@ class Issue226:
 
 # Testing function and object default values
 
+
 def default_func():
     pass
 
@@ -40,10 +41,7 @@ var_with_default_func = default_func
 """this just renders like a normal function"""
 
 
-def func_with_defaults(
-    a=default_obj,
-    b=default_func
-):
+def func_with_defaults(a=default_obj, b=default_func):
     """this shouldn't render object or function addresses"""
     pass
 
@@ -84,6 +82,7 @@ class NonGenericChild(GenericParent[str]):
 
 
 # Testing docstring inheritance
+
 
 class Base:
     def __init__(self):
