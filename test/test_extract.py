@@ -45,6 +45,16 @@ def test_walk_specs():
     ):
         assert walk_specs(["dataclasses", "dataclasses"]) == ["dataclasses"]
 
+    assert walk_specs([here / "mod_with_main"]) == [
+        "test.mod_with_main",
+        "test.mod_with_main.foo",
+    ]
+    assert walk_specs([here / "mod_with_main", here / "mod_with_main/__main__.py"]) == [
+        "test.mod_with_main",
+        "test.mod_with_main.foo",
+        "test.mod_with_main.__main__",
+    ]
+
 
 def test_parse_spec(monkeypatch):
     p = sys.path
