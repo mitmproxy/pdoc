@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+
+# 2022-09-20: pdoc 12.2.0
+
  - Make documentation of variables more consistent. Variables with a default value
    and no docstring are now hidden, matching the behavior of variables with a type annotation only.
    ([#411](https://github.com/mitmproxy/pdoc/issues/411), [@mhils](https://github.com/mhils))
