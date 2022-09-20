@@ -13,6 +13,9 @@
    ([#431](https://github.com/mitmproxy/pdoc/issues/431), [@mhils](https://github.com/mhils))
  - Improve display of dataclasses.
    ([#411](https://github.com/mitmproxy/pdoc/issues/411), [@mhils](https://github.com/mhils))
+ - Do not execute or document `__main__.py` files. `__main__` submodules can still be documented
+   by explicitly passing them when invoking pdoc.
+   ([#438](https://github.com/mitmproxy/pdoc/issues/438), [@mhils](https://github.com/mhils))
 
 # 2022-06-08: pdoc 12.1.0
 

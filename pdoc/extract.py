@@ -19,7 +19,7 @@ import sys
 import traceback
 import types
 import warnings
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
@@ -221,13 +221,8 @@ but we don't want to catch a user's KeyboardInterrupt.
 """
 
 
-def _all_submodules(modulename: str) -> bool:
-    return True
-
-
 def walk_packages2(
     modules: Iterable[pkgutil.ModuleInfo],
-    module_filter: Callable[[str], bool] = _all_submodules,
 ) -> Iterator[pkgutil.ModuleInfo]:
     """
     For a given list of modules, recursively yield their names and all their submodules' names.
@@ -243,10 +238,6 @@ def walk_packages2(
         m[p] = True
 
     for mod in modules:
-        # is __all__ defined and the module not in __all__?
-        if not module_filter(mod.name.rpartition(".")[2]):
-            continue
-
         yield mod
 
         if mod.ispkg:
@@ -257,15 +248,21 @@ def walk_packages2(
                 continue
 
             mod_all = getattr(module, "__all__", None)
-            if mod_all is not None:
-                filt = mod_all.__contains__
-            else:
-                filt = _all_submodules
-
             # don't traverse path items we've seen before
             path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
 
-            yield from walk_packages2(pkgutil.iter_modules(path, f"{mod.name}."), filt)
+            submodules = []
+            for submodule in pkgutil.iter_modules(path, f"{mod.name}."):
+                name = submodule.name.rpartition(".")[2]
+                if name == "__main__":
+                    continue  # https://github.com/mitmproxy/pdoc/issues/438
+                if (
+                    mod_all is None
+                    or name in mod_all
+                ):
+                    submodules.append(submodule)
+
+            yield from walk_packages2(submodules)
 
 
 def module_mtime(modulename: str) -> float | None:
