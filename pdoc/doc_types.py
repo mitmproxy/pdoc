@@ -56,6 +56,7 @@ NonUserDefinedCallables = (
 def resolve_annotations(
     annotations: dict[str, Any],
     module: ModuleType | None,
+    localns: dict[str, Any] | None,
     fullname: str,
 ) -> dict[str, Any]:
     """
@@ -64,18 +65,19 @@ def resolve_annotations(
 
     Returns: A dictionary with the evaluated types.
     """
-    ns = getattr(module, "__dict__", {})
+    globalns = getattr(module, "__dict__", {})
 
     resolved = {}
     for name, value in annotations.items():
-        resolved[name] = safe_eval_type(value, ns, module, f"{fullname}.{name}")
+        resolved[name] = safe_eval_type(value, globalns, localns, module, f"{fullname}.{name}")
 
     return resolved
 
 
 def safe_eval_type(
     t: Any,
-    globalns,
+    globalns: dict[str, Any],
+    localns: dict[str, Any] | None,
     module: types.ModuleType | None,
     fullname: str,
 ) -> Any:
@@ -89,7 +91,7 @@ def safe_eval_type(
     If that still fails, a warning is emitted and `t` is returned as-is.
     """
     try:
-        return _eval_type(t, globalns, None)
+        return _eval_type(t, globalns, localns)
     except AttributeError as e:
         err = str(e)
         _, obj, _, attr, _ = err.split("'")
@@ -139,7 +141,7 @@ def safe_eval_type(
             f"Error parsing type annotation {t} for {fullname}. Import of {mod} failed: {err}"
         )
         return t
-    return safe_eval_type(t, {mod: val, **globalns}, module, fullname)
+    return safe_eval_type(t, {mod: val, **globalns}, localns, module, fullname)
 
 
 def _eval_type(t, globalns, localns, recursive_guard=frozenset()):

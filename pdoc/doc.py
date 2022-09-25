@@ -413,7 +413,7 @@ class Module(Namespace[types.ModuleType]):
         for k, v in _safe_getattr(self.obj, "__annotations__", {}).items():
             annotations[k] = v
 
-        return resolve_annotations(annotations, self.obj, self.fullname)
+        return resolve_annotations(annotations, self.obj, None, self.fullname)
 
     def _taken_from(self, member_name: str, obj: Any) -> tuple[str, str]:
         if obj is empty:
@@ -609,8 +609,9 @@ class Class(Namespace[type]):
                 if attr not in annotations
                 or annotations[attr][0] is not unresolved_annotation
             }
+            localns = _safe_getattr(cls, "__dict__", None)
             for attr, t in resolve_annotations(
-                new_annotations, inspect.getmodule(cls), cls_fullname
+                new_annotations, inspect.getmodule(cls), localns, cls_fullname
             ).items():
                 annotations[attr] = (new_annotations[attr], t)
 
@@ -932,17 +933,23 @@ class Function(Doc[types.FunctionType]):
             )
         mod = inspect.getmodule(self.obj)
         globalns = _safe_getattr(mod, "__dict__", {})
+        localns = globalns
+        for parent_cls_name in self.qualname.split(".")[:-1]:
+            parent_cls = localns.get(parent_cls_name, object)
+            localns = _safe_getattr(parent_cls, "__dict__", None)
+            if localns is None:
+                break  # pragma: no cover
 
         if self.name == "__init__":
             sig = sig.replace(return_annotation=empty)
         else:
             sig = sig.replace(
                 return_annotation=safe_eval_type(
-                    sig.return_annotation, globalns, mod, self.fullname
+                    sig.return_annotation, globalns, localns, mod, self.fullname
                 )
             )
         for p in sig.parameters.values():
-            p._annotation = safe_eval_type(p.annotation, globalns, mod, self.fullname)  # type: ignore
+            p._annotation = safe_eval_type(p.annotation, globalns, localns, mod, self.fullname)  # type: ignore
         return sig
 
     @cached_property

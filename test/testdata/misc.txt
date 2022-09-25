@@ -72,4 +72,8 @@
     <function def repr_not_syntax_highlightable(x=°<script>alert(1)</script>): ...  # The default value fo…>
     <class misc.ClassDecorator  # This is a class that…
         <method def __init__(self, f): ...>>
-    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>>
+    <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>
+    <class misc.SubclassRef
+        <method def __init__(self, x: misc.SubclassRef.SubClass): ...>
+        <class misc.SubclassRef.SubClass
+            <method def __init__(): ...>>>>
