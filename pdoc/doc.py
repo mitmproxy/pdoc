@@ -938,7 +938,7 @@ class Function(Doc[types.FunctionType]):
             parent_cls = localns.get(parent_cls_name, object)
             localns = _safe_getattr(parent_cls, "__dict__", None)
             if localns is None:
-                break
+                break  # pragma: no cover
 
         if self.name == "__init__":
             sig = sig.replace(return_annotation=empty)
