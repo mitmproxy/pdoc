@@ -2,6 +2,8 @@
 
 # Unreleased: pdoc next
 
+ - Fix handling of type annotations in nested classes.
+   ([#440](https://github.com/mitmproxy/pdoc/issues/440), [@mhils](https://github.com/mhils))
 
 # 2022-09-20: pdoc 12.2.0
 

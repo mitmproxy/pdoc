@@ -13,7 +13,7 @@ from pdoc.doc_types import safe_eval_type
 )
 def test_eval_fail(typestr):
     with pytest.warns(UserWarning, match="Error parsing type annotation"):
-        assert safe_eval_type(typestr, {}, types.ModuleType("a"), "a") == typestr
+        assert safe_eval_type(typestr, {}, None, types.ModuleType("a"), "a") == typestr
 
 
 def test_eval_fail2(monkeypatch):
@@ -23,7 +23,7 @@ def test_eval_fail2(monkeypatch):
         lambda _: "import typing\nif typing.TYPE_CHECKING:\n\traise RuntimeError()",
     )
     with pytest.warns(UserWarning, match="Failed to run TYPE_CHECKING code"):
-        assert safe_eval_type("xyz", {}, types.ModuleType("a"), "a") == "xyz"
+        assert safe_eval_type("xyz", {}, None, types.ModuleType("a"), "a") == "xyz"
 
 
 def test_eval_fail3(monkeypatch):
@@ -37,7 +37,7 @@ def test_eval_fail3(monkeypatch):
         match="Error parsing type annotation .+ after evaluating TYPE_CHECKING blocks",
     ):
         assert (
-            safe_eval_type("FooFn[int]", {"typing": typing}, types.ModuleType("a"), "a")
+            safe_eval_type("FooFn[int]", {"typing": typing}, None, types.ModuleType("a"), "a")
             == "FooFn[int]"
         )
 
@@ -50,4 +50,4 @@ def test_eval_union_types_on_old_python(monkeypatch):
         r"with an older Python release.",
     ):
         # str never implements `|`, so we can use that to trigger the error on newer versions.
-        safe_eval_type('"foo" | "bar"', {}, None, "example")
+        safe_eval_type('"foo" | "bar"', {}, None, None, "example")

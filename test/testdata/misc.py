@@ -377,6 +377,14 @@ def another_decorated_function(arg: str) -> str:
     pass
 
 
+class SubclassRef:
+    class SubClass:
+        pass
+
+    def __init__(self, x: "SubClass"):
+        self.x = x
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -408,4 +416,5 @@ __all__ = [
     "repr_not_syntax_highlightable",
     "ClassDecorator",
     "another_decorated_function",
+    "SubclassRef",
 ]
