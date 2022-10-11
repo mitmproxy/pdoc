@@ -5,16 +5,15 @@ This makes it possible to add type hints for native modules such as modules writ
 """
 from __future__ import annotations
 
-from unittest import mock
-
 import sys
 import traceback
 import types
 import warnings
 from pathlib import Path
+from unittest import mock
 
-from pdoc import doc
 from ._compat import cache
+from pdoc import doc
 
 
 @cache
@@ -85,7 +84,7 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
     else:
         warnings.warn(
             f"Error processing type stub for {target_doc.fullname}: "
-            f"Stub is a {stub_doc.type}, but target is a {target_doc.type}."
+            f"Stub is a {stub_doc.kind}, but target is a {target_doc.kind}."
         )
 
 

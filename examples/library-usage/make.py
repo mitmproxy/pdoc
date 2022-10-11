@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import foo
+
 import pdoc
 
 if __name__ == "__main__":

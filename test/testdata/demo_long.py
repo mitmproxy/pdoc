@@ -25,9 +25,17 @@ from __future__ import annotations
 import abc
 import enum
 import os
-from dataclasses import dataclass, field
-from pdoc._compat import cached_property, cache
-from typing import Sequence, TypeVar, Union, ClassVar, Optional, List
+from dataclasses import dataclass
+from dataclasses import field
+from typing import ClassVar
+from typing import List
+from typing import Optional
+from typing import Sequence
+from typing import TypeVar
+from typing import Union
+
+from pdoc._compat import cache
+from pdoc._compat import cached_property
 
 FOO_CONSTANT: int = 42
 """
@@ -125,7 +133,7 @@ class Foo:
         """This is what a `@classmethod` looks like."""
         return 24
 
-    @classmethod
+    @classmethod  # type: ignore
     @property
     def a_class_property(cls) -> int:
         """This is what a `@classmethod @property` looks like."""

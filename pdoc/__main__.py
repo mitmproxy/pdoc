@@ -7,7 +7,6 @@ import sys
 import warnings
 from pathlib import Path
 
-import pdoc
 import pdoc.doc
 import pdoc.extract
 import pdoc.render

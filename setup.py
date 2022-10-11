@@ -1,7 +1,8 @@
 import re
 from pathlib import Path
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 here = Path(__file__).parent
 
@@ -59,13 +60,18 @@ setup(
     ],
     extras_require={
         "dev": [
+            "autoflake",
+            "black",
             "flake8",
             "hypothesis",
             "mypy",
             "pytest",
             "pytest-cov",
             "pytest-timeout",
+            "pyupgrade",
+            "reorder_python_imports",
             "tox",
+            "yesqa",
         ]
     },
 )

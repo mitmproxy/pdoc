@@ -9,12 +9,17 @@ import ast
 import inspect
 import types
 import warnings
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable
+from collections.abc import Iterator
 from dataclasses import dataclass
-from itertools import tee, zip_longest
-from typing import Any, TypeVar, overload
+from itertools import tee
+from itertools import zip_longest
+from typing import Any
+from typing import overload
+from typing import TypeVar
 
-from ._compat import ast_unparse, cache
+from ._compat import ast_unparse
+from ._compat import cache
 
 
 def get_source(obj: Any) -> str:

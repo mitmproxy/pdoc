@@ -1,18 +1,20 @@
 from __future__ import annotations
 
 import html
-
 import inspect
 import os
 import re
 import warnings
-from collections.abc import Collection, Iterable, Mapping
+from collections.abc import Collection
+from collections.abc import Iterable
+from collections.abc import Mapping
 from contextlib import contextmanager
 from unittest.mock import patch
 
 import pygments.formatters
 import pygments.lexers
-from jinja2 import ext, nodes
+from jinja2 import ext
+from jinja2 import nodes
 
 try:
     # Jinja2 >= 3.0

@@ -5,18 +5,21 @@ We want to keep the number of dependencies as small as possible,
 so we are content with the builtin `http.server` module.
 It is a bit unergonomic compared to let's say flask, but good enough for our purposes.
 """
-
 from __future__ import annotations
 
 import http.server
 import traceback
 import warnings
 import webbrowser
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable
+from collections.abc import Iterator
 from typing import Mapping
 
-from pdoc import doc, extract, render
-from pdoc._compat import cache, removesuffix
+from pdoc import doc
+from pdoc import extract
+from pdoc import render
+from pdoc._compat import cache
+from pdoc._compat import removesuffix
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
@@ -90,7 +93,6 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
 
     def log_request(self, code: int | str = ..., size: int | str = ...) -> None:
         """Override logging to disable it."""
-        pass
 
 
 class DocServer(http.server.HTTPServer):

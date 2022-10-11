@@ -16,7 +16,8 @@ import inspect
 import re
 import warnings
 from pathlib import Path
-from textwrap import dedent, indent
+from textwrap import dedent
+from textwrap import indent
 
 from ._compat import cache
 

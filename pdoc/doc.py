@@ -28,28 +28,30 @@ import textwrap
 import traceback
 import types
 import warnings
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
+from abc import abstractmethod
 from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Any, ClassVar, Generic, TypeVar, Union
+from typing import Any
+from typing import ClassVar
+from typing import Generic
+from typing import TypeVar
+from typing import Union
 
-from pdoc import doc_ast, doc_pyi, extract
-from pdoc.doc_types import (
-    GenericAlias,
-    NonUserDefinedCallables,
-    empty,
-    resolve_annotations,
-    safe_eval_type,
-)
-
-from ._compat import (
-    cache,
-    cached_property,
-    formatannotation,
-    get_origin,
-    singledispatchmethod,
-)
+from ._compat import cache
+from ._compat import cached_property
+from ._compat import formatannotation
+from ._compat import get_origin
+from ._compat import singledispatchmethod
+from pdoc import doc_ast
+from pdoc import doc_pyi
+from pdoc import extract
+from pdoc.doc_types import empty
+from pdoc.doc_types import GenericAlias
+from pdoc.doc_types import NonUserDefinedCallables
+from pdoc.doc_types import resolve_annotations
+from pdoc.doc_types import safe_eval_type
 
 
 def _include_fullname_in_traceback(f):
@@ -108,6 +110,19 @@ class Doc(Generic[T]):
     In the context of a module, this points to the location it was imported from,
     in the context of classes, this points to the class an attribute is inherited from.
     """
+
+    kind: ClassVar[str]
+    """
+    The type of the doc object, either `"module"`, `"class"`, `"function"`, or `"variable"`.
+    """
+
+    @property
+    def type(self) -> str:  # pragma: no cover
+        warnings.warn(
+            "pdoc.doc.Doc.type is deprecated. Use pdoc.doc.Doc.kind instead.",
+            DeprecationWarning,
+        )
+        return self.kind
 
     def __init__(
         self, modulename: str, qualname: str, obj: T, taken_from: tuple[str, str]
@@ -183,20 +198,6 @@ class Doc(Generic[T]):
         in a different module.
         """
         return (self.modulename, self.qualname) != self.taken_from
-
-    @classmethod
-    @property
-    def type(cls) -> str:
-        """
-        The type of the doc object, either `"module"`, `"class"`, `"function"`, or `"variable"`.
-        """
-        return cls.__name__.lower()
-
-    if sys.version_info < (3, 9):  # pragma: no cover
-        # no @classmethod @property in 3.8
-        @property
-        def type(self) -> str:  # noqa
-            return self.__class__.__name__.lower()
 
     def __lt__(self, other):
         assert isinstance(other, Doc)
@@ -381,6 +382,8 @@ class Module(Namespace[types.ModuleType]):
         """
         super().__init__(module.__name__, "", module, (module.__name__, ""))
 
+    kind = "module"
+
     @classmethod
     @cache
     def from_name(cls, name: str) -> Module:
@@ -554,6 +557,8 @@ class Class(Namespace[type]):
     """
     Representation of a class's documentation.
     """
+
+    kind = "class"
 
     @cache
     @_include_fullname_in_traceback
@@ -812,6 +817,8 @@ class Function(Doc[types.FunctionType]):
     supports `@classmethod`s or `@staticmethod`s.
     """
 
+    kind = "function"
+
     wrapped: WrappedFunction
     """The original wrapped function (e.g., `staticmethod(func)`)"""
 
@@ -967,6 +974,8 @@ class Variable(Doc[None]):
     """
     Representation of a variable's documentation. This includes module, class and instance variables.
     """
+
+    kind = "variable"
 
     default_value: Any | empty  # technically Any includes empty, but this conveys intent.
     """

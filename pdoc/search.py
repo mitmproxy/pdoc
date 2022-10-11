@@ -39,16 +39,18 @@ If you wish to disable the search functionality, you can pass `--no-search` when
 from __future__ import annotations
 
 import html
-
 import json
 import shutil
 import subprocess
 import textwrap
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
+from collections.abc import Mapping
 from pathlib import Path
 
 import pdoc.doc
-from pdoc.render_helpers import to_html, to_markdown, format_signature
+from pdoc.render_helpers import format_signature
+from pdoc.render_helpers import to_html
+from pdoc.render_helpers import to_markdown
 
 
 def make_index(
@@ -70,7 +72,7 @@ def make_index(
                 "fullname": doc.fullname,
                 "modulename": doc.modulename,
                 "qualname": doc.qualname,
-                "type": doc.type,
+                "kind": doc.kind,
                 "doc": to_html(to_markdown(doc.docstring, module, default_docformat)),
                 **kwargs,
             }

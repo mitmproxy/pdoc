@@ -1,8 +1,10 @@
-import pytest
 import types
 from pathlib import Path
 
-from pdoc import doc, doc_pyi
+import pytest
+
+from pdoc import doc
+from pdoc import doc_pyi
 
 here = Path(__file__).parent.absolute()
 

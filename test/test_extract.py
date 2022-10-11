@@ -1,9 +1,13 @@
 import importlib
-import pytest
 import sys
 from pathlib import Path
 
-from pdoc.extract import invalidate_caches, module_mtime, parse_spec, walk_specs
+import pytest
+
+from pdoc.extract import invalidate_caches
+from pdoc.extract import module_mtime
+from pdoc.extract import parse_spec
+from pdoc.extract import walk_specs
 
 here = Path(__file__).parent
 

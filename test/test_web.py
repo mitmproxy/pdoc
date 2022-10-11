@@ -5,7 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from pdoc.web import DocServer, DocHandler
+from pdoc.web import DocHandler
+from pdoc.web import DocServer
 
 
 here = Path(__file__).parent

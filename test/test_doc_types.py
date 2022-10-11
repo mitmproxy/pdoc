@@ -1,8 +1,8 @@
+import sys
+import types
 import typing
 
 import pytest
-import sys
-import types
 
 from pdoc import doc_ast
 from pdoc.doc_types import safe_eval_type
@@ -37,7 +37,9 @@ def test_eval_fail3(monkeypatch):
         match="Error parsing type annotation .+ after evaluating TYPE_CHECKING blocks",
     ):
         assert (
-            safe_eval_type("FooFn[int]", {"typing": typing}, None, types.ModuleType("a"), "a")
+            safe_eval_type(
+                "FooFn[int]", {"typing": typing}, None, types.ModuleType("a"), "a"
+            )
             == "FooFn[int]"
         )
 

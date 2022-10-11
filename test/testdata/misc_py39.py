@@ -2,8 +2,12 @@
 Testing features that either are 3.9+ only or render slightly different on 3.9.
 """
 from __future__ import annotations
+
 import functools
-from typing import NamedTuple, Optional, TypedDict, Union
+from typing import NamedTuple
+from typing import Optional
+from typing import TypedDict
+from typing import Union
 
 
 # Testing a typing.NamedTuple

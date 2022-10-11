@@ -1,8 +1,11 @@
-import pytest
 import types
 
+import pytest
+
 from pdoc import doc_ast
-from pdoc.doc_ast import _dedent, _parse, type_checking_sections
+from pdoc.doc_ast import _dedent
+from pdoc.doc_ast import _parse
+from pdoc.doc_ast import type_checking_sections
 
 
 def test_dedent():
