@@ -84,7 +84,7 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
     else:
         warnings.warn(
             f"Error processing type stub for {target_doc.fullname}: "
-            f"Stub is a {stub_doc.type}, but target is a {target_doc.type}."
+            f"Stub is a {stub_doc.kind}, but target is a {target_doc.kind}."
         )
 
 

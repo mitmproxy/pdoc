@@ -346,7 +346,7 @@ which will also show up in the navigation.</p>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="mi">24</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="nd">@classmethod</span>  <span class="c1"># type: ignore</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="nd">@property</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>
@@ -637,7 +637,7 @@ as well as a keyword-only arguments (*).</p>
 </span><span id="Foo-134"><a href="#Foo-134"><span class="linenos">134</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
 </span><span id="Foo-135"><a href="#Foo-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="mi">24</span>
 </span><span id="Foo-136"><a href="#Foo-136"><span class="linenos">136</span></a>
-</span><span id="Foo-137"><a href="#Foo-137"><span class="linenos">137</span></a>    <span class="nd">@classmethod</span>
+</span><span id="Foo-137"><a href="#Foo-137"><span class="linenos">137</span></a>    <span class="nd">@classmethod</span>  <span class="c1"># type: ignore</span>
 </span><span id="Foo-138"><a href="#Foo-138"><span class="linenos">138</span></a>    <span class="nd">@property</span>
 </span><span id="Foo-139"><a href="#Foo-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="Foo-140"><a href="#Foo-140"><span class="linenos">140</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>

@@ -96,8 +96,8 @@
             {% for m in module.flattened_own_members if is_public(m) | trim %}
                 <section id="{{ m.qualname or m.name }}">
                     {{ member(m) }}
-                    {% if m.type == "class" %}
-                        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
+                    {% if m.kind == "class" %}
+                        {% for m in m.own_members if m.kind != "class" and is_public(m) | trim %}
                             <div id="{{ m.qualname }}" class="classattr">
                                 {{ member(m) }}
                             </div>
@@ -179,12 +179,12 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 {% defaultmacro member(doc) %}
     {{- view_source_state(doc) -}}
-    <div class="attr {{ doc.type }}">
-        {% if doc.type == "class" %}
+    <div class="attr {{ doc.kind }}">
+        {% if doc.kind == "class" %}
             {{ class(doc) }}
-        {% elif doc.type == "function" %}
+        {% elif doc.kind == "function" %}
             {{ function(doc) }}
-        {% elif doc.type == "module" %}
+        {% elif doc.kind == "module" %}
             {{ submodule(doc) }}
         {% else %}
             {{ variable(doc) }}
@@ -204,17 +204,17 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     <ul class="memberlist">
         {% for m in members if is_public(m) | trim %}
             <li>
-                {% if m.type == "class" %}
+                {% if m.kind == "class" %}
                     <a class="class" href="#{{ m.qualname }}">{{ m.qualname }}</a>
                     {% if m.own_members %}
                         {{ nav_members(m.own_members) | indent(12) }}
                     {% endif %}
-                {% elif m.type == "module" %}
+                {% elif m.kind == "module" %}
                     <a class="module" href="#{{ m.name }}">{{ m.name }}</a>
                 {% elif m.name == "__init__" %}
                     <a class="function" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
                 {% else %}
-                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+                    <a class="{{ m.kind }}" href="#{{ m.qualname }}">{{ m.name }}</a>
                 {% endif %}
             </li>
         {% endfor %}
@@ -232,12 +232,12 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         true
     {% elif doc.name == "__doc__" %}
         {# We don't want to document __doc__ itself, https://github.com/mitmproxy/pdoc/issues/235 #}
-    {% elif doc.type == "module" and doc.fullname not in all_modules %}
+    {% elif doc.kind == "module" and doc.fullname not in all_modules %}
         {# Skip modules that were manually excluded, https://github.com/mitmproxy/pdoc/issues/334 #}
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
-    {% elif not doc.name.startswith("_") and (doc.type != "variable" or doc.docstring) %}
+    {% elif not doc.name.startswith("_") and (doc.kind != "variable" or doc.docstring) %}
         {# members not starting with an underscore are considered public by default #}
         true
     {% endif %}
@@ -248,7 +248,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         {% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
         {% set member_html %}
             {% for m in members if is_public(m) | trim %}
-                <dd id="{{ m.qualname }}" class="{{ m.type }}">
+                <dd id="{{ m.qualname }}" class="{{ m.kind }}">
                     {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
                 </dd>
             {% endfor %}

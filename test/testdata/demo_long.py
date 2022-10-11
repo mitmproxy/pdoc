@@ -133,7 +133,7 @@ class Foo:
         """This is what a `@classmethod` looks like."""
         return 24
 
-    @classmethod
+    @classmethod  # type: ignore
     @property
     def a_class_property(cls) -> int:
         """This is what a `@classmethod @property` looks like."""

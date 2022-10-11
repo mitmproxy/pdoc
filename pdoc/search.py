@@ -72,7 +72,7 @@ def make_index(
                 "fullname": doc.fullname,
                 "modulename": doc.modulename,
                 "qualname": doc.qualname,
-                "type": doc.type,
+                "kind": doc.kind,
                 "doc": to_html(to_markdown(doc.docstring, module, default_docformat)),
                 **kwargs,
             }
