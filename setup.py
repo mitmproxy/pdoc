@@ -59,13 +59,18 @@ setup(
     ],
     extras_require={
         "dev": [
+            "autoflake",
+            "black",
             "flake8",
             "hypothesis",
             "mypy",
             "pytest",
             "pytest-cov",
             "pytest-timeout",
+            "pyupgrade",
+            "reorder_python_imports",
             "tox",
+            "yesqa",
         ]
     },
 )
