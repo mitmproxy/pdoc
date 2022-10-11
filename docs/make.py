@@ -5,7 +5,8 @@ from pathlib import Path
 
 import pygments.formatters.html
 import pygments.lexers.python
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 from markupsafe import Markup
 
 import pdoc.render

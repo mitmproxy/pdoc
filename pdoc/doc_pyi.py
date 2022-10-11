@@ -5,16 +5,15 @@ This makes it possible to add type hints for native modules such as modules writ
 """
 from __future__ import annotations
 
-from unittest import mock
-
 import sys
 import traceback
 import types
 import warnings
 from pathlib import Path
+from unittest import mock
 
-from pdoc import doc
 from ._compat import cache
+from pdoc import doc
 
 
 @cache

@@ -2,7 +2,8 @@
 import shutil
 from pathlib import Path
 
-from pdoc import pdoc, render
+from pdoc import pdoc
+from pdoc import render
 
 here = Path(__file__).parent
 out = here / "docs" / "api"

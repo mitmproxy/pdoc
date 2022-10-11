@@ -238,238 +238,246 @@ which will also show up in the navigation.</p>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">import</span> <span class="nn">abc</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">import</span> <span class="nn">enum</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">import</span> <span class="nn">os</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">cache</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="n">FOO_CONSTANT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">A happy constant. ✨  </span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">pdoc documents constants with their type annotation and default value.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="n">FOO_SINGLETON</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">This variable is annotated with a type only, but not assigned to a value.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">We also haven&#39;t defined the associated type (`Foo`) yet, </span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">so the type annotation in the code in the source code is actually a string literal:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">```python</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">FOO_SINGLETON: &quot;Foo&quot;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">```</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">Similar to mypy, pdoc resolves</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">[string forward references](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#class-name-forward-references)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">automatically.</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="n">NO_DOCSTRING</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="c1"># this variable has a type annotation but not docstring, so it does not show up.</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cache</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">from</span> <span class="nn">pdoc._compat</span> <span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="n">FOO_CONSTANT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">A happy constant. ✨  </span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">pdoc documents constants with their type annotation and default value.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="n">FOO_SINGLETON</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">This variable is annotated with a type only, but not assigned to a value.</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">We also haven&#39;t defined the associated type (`Foo`) yet, </span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">so the type annotation in the code in the source code is actually a string literal:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">```python</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">FOO_SINGLETON: &quot;Foo&quot;</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">```</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    This is a basic module-level function.</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">Similar to mypy, pdoc resolves</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">[string forward references](https://mypy.readthedocs.io/en/stable/kinds_of_types.html#class-name-forward-references)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">automatically.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="n">NO_DOCSTRING</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="c1"># this variable has a type annotation but not docstring, so it does not show up.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    This is a basic module-level function.</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    This is a function with a fairly complex signature,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">    as well as a keyword-only arguments (*).</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">    Functions in the current scope can be referenced without prefix: `a_regular_function()`.</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    This is a function with a fairly complex signature,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">    as well as a keyword-only arguments (*).</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>    <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="nd">@property</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="k">def</span> <span class="nf">a_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@property` attribute. pdoc will display it as a variable.&quot;&quot;&quot;</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">def</span> <span class="nf">a_cached_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@functools.cached_property` attribute. pdoc will display it as a variable as well.&quot;&quot;&quot;</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="nd">@cache</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="k">return</span> <span class="mi">24</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="nd">@property</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="mi">24</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute defined on this subclass.&quot;&quot;&quot;</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">        (but not in the navigation).</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    Functions in the current scope can be referenced without prefix: `a_regular_function()`.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="nd">@property</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">def</span> <span class="nf">a_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@property` attribute. pdoc will display it as a variable.&quot;&quot;&quot;</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="k">def</span> <span class="nf">a_cached_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@functools.cached_property` attribute. pdoc will display it as a variable as well.&quot;&quot;&quot;</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="nd">@cache</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="mi">24</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="nd">@property</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="k">return</span> <span class="mi">24</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute defined on this subclass.&quot;&quot;&quot;</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        (but not in the navigation).</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">i_am_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">    This is an example of an async function.</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    - Knock, knock</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">    - An async function</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">    - Who&#39;s there?</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="nd">@cache</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    This is an example of decorated function. Decorators are included in the documentation as well.</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">    This is often useful when documenting web APIs, for example.</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">i_am_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    This is an example of an async function.</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">    - Knock, knock</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    - An async function</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">    - Who&#39;s there?</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="k">return</span> <span class="n">n</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">    Default values are generally rendered using repr(),</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>    <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="nd">@cache</span>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="sd">    This is an example of decorated function. Decorators are included in the documentation as well.</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">    This is often useful when documenting web APIs, for example.</span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>        <span class="k">return</span> <span class="n">n</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>    <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="n">CONST_B</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">&quot;&quot;&quot;A constant without type annotation&quot;&quot;&quot;</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">    Default values are generally rendered using repr(),</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="n">CONST_NO_DOC</span> <span class="o">=</span> <span class="s2">&quot;SHOULD NOT APPEAR&quot;</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="nd">@dataclass</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">    This is an example for a dataclass.</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="n">CONST_B</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">&quot;&quot;&quot;A constant without type annotation&quot;&quot;&quot;</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="n">CONST_NO_DOC</span> <span class="o">=</span> <span class="s2">&quot;SHOULD NOT APPEAR&quot;</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="nd">@dataclass</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">    This is an example of an Enum.</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="nd">@dataclass</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">    This is an example for a dataclass.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="nd">@dataclass</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="sd">    This is an example of an Enum.</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">    ```</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">       Body text</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">    ```</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">    .. note::</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">       Hi there!</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">    .. warning:: Be Careful!</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">       This warning has both a title and content.</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">    .. danger::</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">       Danger ahead.</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">    ```</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">       Body text</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">    ```</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">    .. note::</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">       Hi there!</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="sd">    .. danger::</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -523,13 +531,13 @@ automatically.</p>
 
     </div>
     <a class="headerlink" href="#a_simple_function"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="a_simple_function-58"><a href="#a_simple_function-58"><span class="linenos">58</span></a><span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="a_simple_function-59"><a href="#a_simple_function-59"><span class="linenos">59</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="a_simple_function-60"><a href="#a_simple_function-60"><span class="linenos">60</span></a><span class="sd">    This is a basic module-level function.</span>
-</span><span id="a_simple_function-61"><a href="#a_simple_function-61"><span class="linenos">61</span></a>
-</span><span id="a_simple_function-62"><a href="#a_simple_function-62"><span class="linenos">62</span></a><span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
-</span><span id="a_simple_function-63"><a href="#a_simple_function-63"><span class="linenos">63</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="a_simple_function-64"><a href="#a_simple_function-64"><span class="linenos">64</span></a>    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="a_simple_function-66"><a href="#a_simple_function-66"><span class="linenos">66</span></a><span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="a_simple_function-67"><a href="#a_simple_function-67"><span class="linenos">67</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="a_simple_function-68"><a href="#a_simple_function-68"><span class="linenos">68</span></a><span class="sd">    This is a basic module-level function.</span>
+</span><span id="a_simple_function-69"><a href="#a_simple_function-69"><span class="linenos">69</span></a>
+</span><span id="a_simple_function-70"><a href="#a_simple_function-70"><span class="linenos">70</span></a><span class="sd">    For a more complex example, take a look at `a_complex_function`!</span>
+</span><span id="a_simple_function-71"><a href="#a_simple_function-71"><span class="linenos">71</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="a_simple_function-72"><a href="#a_simple_function-72"><span class="linenos">72</span></a>    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -551,15 +559,15 @@ automatically.</p>
 
     </div>
     <a class="headerlink" href="#a_complex_function"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="a_complex_function-70"><a href="#a_complex_function-70"><span class="linenos">70</span></a><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
-</span><span id="a_complex_function-71"><a href="#a_complex_function-71"><span class="linenos">71</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="a_complex_function-72"><a href="#a_complex_function-72"><span class="linenos">72</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-</span><span id="a_complex_function-73"><a href="#a_complex_function-73"><span class="linenos">73</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="a_complex_function-74"><a href="#a_complex_function-74"><span class="linenos">74</span></a><span class="sd">    This is a function with a fairly complex signature,</span>
-</span><span id="a_complex_function-75"><a href="#a_complex_function-75"><span class="linenos">75</span></a><span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
-</span><span id="a_complex_function-76"><a href="#a_complex_function-76"><span class="linenos">76</span></a><span class="sd">    as well as a keyword-only arguments (*).</span>
-</span><span id="a_complex_function-77"><a href="#a_complex_function-77"><span class="linenos">77</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="a_complex_function-78"><a href="#a_complex_function-78"><span class="linenos">78</span></a>    <span class="k">return</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="a_complex_function-78"><a href="#a_complex_function-78"><span class="linenos">78</span></a><span class="k">def</span> <span class="nf">a_complex_function</span><span class="p">(</span>
+</span><span id="a_complex_function-79"><a href="#a_complex_function-79"><span class="linenos">79</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="a_complex_function-80"><a href="#a_complex_function-80"><span class="linenos">80</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+</span><span id="a_complex_function-81"><a href="#a_complex_function-81"><span class="linenos">81</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="a_complex_function-82"><a href="#a_complex_function-82"><span class="linenos">82</span></a><span class="sd">    This is a function with a fairly complex signature,</span>
+</span><span id="a_complex_function-83"><a href="#a_complex_function-83"><span class="linenos">83</span></a><span class="sd">    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),</span>
+</span><span id="a_complex_function-84"><a href="#a_complex_function-84"><span class="linenos">84</span></a><span class="sd">    as well as a keyword-only arguments (*).</span>
+</span><span id="a_complex_function-85"><a href="#a_complex_function-85"><span class="linenos">85</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="a_complex_function-86"><a href="#a_complex_function-86"><span class="linenos">86</span></a>    <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -581,64 +589,64 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-81"><a href="#Foo-81"><span class="linenos"> 81</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
-</span><span id="Foo-82"><a href="#Foo-82"><span class="linenos"> 82</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Foo-83"><a href="#Foo-83"><span class="linenos"> 83</span></a><span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
-</span><span id="Foo-84"><a href="#Foo-84"><span class="linenos"> 84</span></a>
-</span><span id="Foo-85"><a href="#Foo-85"><span class="linenos"> 85</span></a><span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
-</span><span id="Foo-86"><a href="#Foo-86"><span class="linenos"> 86</span></a>
-</span><span id="Foo-87"><a href="#Foo-87"><span class="linenos"> 87</span></a><span class="sd">    Functions in the current scope can be referenced without prefix: `a_regular_function()`.</span>
-</span><span id="Foo-88"><a href="#Foo-88"><span class="linenos"> 88</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Foo-89"><a href="#Foo-89"><span class="linenos"> 89</span></a>
-</span><span id="Foo-90"><a href="#Foo-90"><span class="linenos"> 90</span></a>    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
-</span><span id="Foo-91"><a href="#Foo-91"><span class="linenos"> 91</span></a>    <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-89"><a href="#Foo-89"><span class="linenos"> 89</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span id="Foo-90"><a href="#Foo-90"><span class="linenos"> 90</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Foo-91"><a href="#Foo-91"><span class="linenos"> 91</span></a><span class="sd">    `Foo` is a basic class without any parent classes (except for the implicit `object` class).</span>
 </span><span id="Foo-92"><a href="#Foo-92"><span class="linenos"> 92</span></a>
-</span><span id="Foo-93"><a href="#Foo-93"><span class="linenos"> 93</span></a>    <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
-</span><span id="Foo-94"><a href="#Foo-94"><span class="linenos"> 94</span></a>    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
-</span><span id="Foo-95"><a href="#Foo-95"><span class="linenos"> 95</span></a>
-</span><span id="Foo-96"><a href="#Foo-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Foo-97"><a href="#Foo-97"><span class="linenos"> 97</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Foo-98"><a href="#Foo-98"><span class="linenos"> 98</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
-</span><span id="Foo-99"><a href="#Foo-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="Foo-100"><a href="#Foo-100"><span class="linenos">100</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
-</span><span id="Foo-101"><a href="#Foo-101"><span class="linenos">101</span></a>
-</span><span id="Foo-102"><a href="#Foo-102"><span class="linenos">102</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="Foo-103"><a href="#Foo-103"><span class="linenos">103</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
-</span><span id="Foo-104"><a href="#Foo-104"><span class="linenos">104</span></a>
-</span><span id="Foo-105"><a href="#Foo-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
-</span><span id="Foo-106"><a href="#Foo-106"><span class="linenos">106</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
-</span><span id="Foo-107"><a href="#Foo-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="Foo-108"><a href="#Foo-108"><span class="linenos">108</span></a>
-</span><span id="Foo-109"><a href="#Foo-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
-</span><span id="Foo-110"><a href="#Foo-110"><span class="linenos">110</span></a>    <span class="k">def</span> <span class="nf">a_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Foo-111"><a href="#Foo-111"><span class="linenos">111</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@property` attribute. pdoc will display it as a variable.&quot;&quot;&quot;</span>
-</span><span id="Foo-112"><a href="#Foo-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="Foo-113"><a href="#Foo-113"><span class="linenos">113</span></a>
-</span><span id="Foo-114"><a href="#Foo-114"><span class="linenos">114</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Foo-115"><a href="#Foo-115"><span class="linenos">115</span></a>    <span class="k">def</span> <span class="nf">a_cached_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Foo-116"><a href="#Foo-116"><span class="linenos">116</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@functools.cached_property` attribute. pdoc will display it as a variable as well.&quot;&quot;&quot;</span>
-</span><span id="Foo-117"><a href="#Foo-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="Foo-118"><a href="#Foo-118"><span class="linenos">118</span></a>
-</span><span id="Foo-119"><a href="#Foo-119"><span class="linenos">119</span></a>    <span class="nd">@cache</span>
-</span><span id="Foo-120"><a href="#Foo-120"><span class="linenos">120</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Foo-121"><a href="#Foo-121"><span class="linenos">121</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
-</span><span id="Foo-122"><a href="#Foo-122"><span class="linenos">122</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
-</span><span id="Foo-123"><a href="#Foo-123"><span class="linenos">123</span></a>
-</span><span id="Foo-124"><a href="#Foo-124"><span class="linenos">124</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Foo-125"><a href="#Foo-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Foo-126"><a href="#Foo-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="Foo-127"><a href="#Foo-127"><span class="linenos">127</span></a>        <span class="k">return</span> <span class="mi">24</span>
-</span><span id="Foo-128"><a href="#Foo-128"><span class="linenos">128</span></a>
-</span><span id="Foo-129"><a href="#Foo-129"><span class="linenos">129</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Foo-130"><a href="#Foo-130"><span class="linenos">130</span></a>    <span class="nd">@property</span>
-</span><span id="Foo-131"><a href="#Foo-131"><span class="linenos">131</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Foo-132"><a href="#Foo-132"><span class="linenos">132</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>
-</span><span id="Foo-133"><a href="#Foo-133"><span class="linenos">133</span></a>        <span class="k">return</span> <span class="mi">24</span>
-</span><span id="Foo-134"><a href="#Foo-134"><span class="linenos">134</span></a>
-</span><span id="Foo-135"><a href="#Foo-135"><span class="linenos">135</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Foo-136"><a href="#Foo-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
-</span><span id="Foo-137"><a href="#Foo-137"><span class="linenos">137</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="Foo-138"><a href="#Foo-138"><span class="linenos">138</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+</span><span id="Foo-93"><a href="#Foo-93"><span class="linenos"> 93</span></a><span class="sd">    You will see in the definition of `Bar` that docstrings are inherited by default.</span>
+</span><span id="Foo-94"><a href="#Foo-94"><span class="linenos"> 94</span></a>
+</span><span id="Foo-95"><a href="#Foo-95"><span class="linenos"> 95</span></a><span class="sd">    Functions in the current scope can be referenced without prefix: `a_regular_function()`.</span>
+</span><span id="Foo-96"><a href="#Foo-96"><span class="linenos"> 96</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Foo-97"><a href="#Foo-97"><span class="linenos"> 97</span></a>
+</span><span id="Foo-98"><a href="#Foo-98"><span class="linenos"> 98</span></a>    <span class="n">an_attribute</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]]</span>
+</span><span id="Foo-99"><a href="#Foo-99"><span class="linenos"> 99</span></a>    <span class="sd">&quot;&quot;&quot;A regular attribute with type annotations&quot;&quot;&quot;</span>
+</span><span id="Foo-100"><a href="#Foo-100"><span class="linenos">100</span></a>
+</span><span id="Foo-101"><a href="#Foo-101"><span class="linenos">101</span></a>    <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
+</span><span id="Foo-102"><a href="#Foo-102"><span class="linenos">102</span></a>    <span class="sd">&quot;&quot;&quot;An attribute with a ClassVar annotation.&quot;&quot;&quot;</span>
+</span><span id="Foo-103"><a href="#Foo-103"><span class="linenos">103</span></a>
+</span><span id="Foo-104"><a href="#Foo-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Foo-105"><a href="#Foo-105"><span class="linenos">105</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Foo-106"><a href="#Foo-106"><span class="linenos">106</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
+</span><span id="Foo-107"><a href="#Foo-107"><span class="linenos">107</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="Foo-108"><a href="#Foo-108"><span class="linenos">108</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+</span><span id="Foo-109"><a href="#Foo-109"><span class="linenos">109</span></a>
+</span><span id="Foo-110"><a href="#Foo-110"><span class="linenos">110</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="Foo-111"><a href="#Foo-111"><span class="linenos">111</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
+</span><span id="Foo-112"><a href="#Foo-112"><span class="linenos">112</span></a>
+</span><span id="Foo-113"><a href="#Foo-113"><span class="linenos">113</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
+</span><span id="Foo-114"><a href="#Foo-114"><span class="linenos">114</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
+</span><span id="Foo-115"><a href="#Foo-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Foo-116"><a href="#Foo-116"><span class="linenos">116</span></a>
+</span><span id="Foo-117"><a href="#Foo-117"><span class="linenos">117</span></a>    <span class="nd">@property</span>
+</span><span id="Foo-118"><a href="#Foo-118"><span class="linenos">118</span></a>    <span class="k">def</span> <span class="nf">a_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Foo-119"><a href="#Foo-119"><span class="linenos">119</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@property` attribute. pdoc will display it as a variable.&quot;&quot;&quot;</span>
+</span><span id="Foo-120"><a href="#Foo-120"><span class="linenos">120</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="Foo-121"><a href="#Foo-121"><span class="linenos">121</span></a>
+</span><span id="Foo-122"><a href="#Foo-122"><span class="linenos">122</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Foo-123"><a href="#Foo-123"><span class="linenos">123</span></a>    <span class="k">def</span> <span class="nf">a_cached_property</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Foo-124"><a href="#Foo-124"><span class="linenos">124</span></a>        <span class="sd">&quot;&quot;&quot;This is a `@functools.cached_property` attribute. pdoc will display it as a variable as well.&quot;&quot;&quot;</span>
+</span><span id="Foo-125"><a href="#Foo-125"><span class="linenos">125</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="Foo-126"><a href="#Foo-126"><span class="linenos">126</span></a>
+</span><span id="Foo-127"><a href="#Foo-127"><span class="linenos">127</span></a>    <span class="nd">@cache</span>
+</span><span id="Foo-128"><a href="#Foo-128"><span class="linenos">128</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Foo-129"><a href="#Foo-129"><span class="linenos">129</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
+</span><span id="Foo-130"><a href="#Foo-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+</span><span id="Foo-131"><a href="#Foo-131"><span class="linenos">131</span></a>
+</span><span id="Foo-132"><a href="#Foo-132"><span class="linenos">132</span></a>    <span class="nd">@classmethod</span>
+</span><span id="Foo-133"><a href="#Foo-133"><span class="linenos">133</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Foo-134"><a href="#Foo-134"><span class="linenos">134</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="Foo-135"><a href="#Foo-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="mi">24</span>
+</span><span id="Foo-136"><a href="#Foo-136"><span class="linenos">136</span></a>
+</span><span id="Foo-137"><a href="#Foo-137"><span class="linenos">137</span></a>    <span class="nd">@classmethod</span>
+</span><span id="Foo-138"><a href="#Foo-138"><span class="linenos">138</span></a>    <span class="nd">@property</span>
+</span><span id="Foo-139"><a href="#Foo-139"><span class="linenos">139</span></a>    <span class="k">def</span> <span class="nf">a_class_property</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Foo-140"><a href="#Foo-140"><span class="linenos">140</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod @property` looks like.&quot;&quot;&quot;</span>
+</span><span id="Foo-141"><a href="#Foo-141"><span class="linenos">141</span></a>        <span class="k">return</span> <span class="mi">24</span>
+</span><span id="Foo-142"><a href="#Foo-142"><span class="linenos">142</span></a>
+</span><span id="Foo-143"><a href="#Foo-143"><span class="linenos">143</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Foo-144"><a href="#Foo-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
+</span><span id="Foo-145"><a href="#Foo-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="Foo-146"><a href="#Foo-146"><span class="linenos">146</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -660,14 +668,14 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.__init__-96"><a href="#Foo.__init__-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Foo.__init__-97"><a href="#Foo.__init__-97"><span class="linenos"> 97</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Foo.__init__-98"><a href="#Foo.__init__-98"><span class="linenos"> 98</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
-</span><span id="Foo.__init__-99"><a href="#Foo.__init__-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="Foo.__init__-100"><a href="#Foo.__init__-100"><span class="linenos">100</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
-</span><span id="Foo.__init__-101"><a href="#Foo.__init__-101"><span class="linenos">101</span></a>
-</span><span id="Foo.__init__-102"><a href="#Foo.__init__-102"><span class="linenos">102</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="Foo.__init__-103"><a href="#Foo.__init__-103"><span class="linenos">103</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.__init__-104"><a href="#Foo.__init__-104"><span class="linenos">104</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Foo.__init__-105"><a href="#Foo.__init__-105"><span class="linenos">105</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Foo.__init__-106"><a href="#Foo.__init__-106"><span class="linenos">106</span></a><span class="sd">        The constructor is currently always listed first as this feels most natural.&quot;&quot;&quot;</span>
+</span><span id="Foo.__init__-107"><a href="#Foo.__init__-107"><span class="linenos">107</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a_constructor_only_attribute</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="Foo.__init__-108"><a href="#Foo.__init__-108"><span class="linenos">108</span></a>        <span class="sd">&quot;&quot;&quot;This attribute is defined in the constructor only, but still picked up by pdoc&#39;s AST traversal.&quot;&quot;&quot;</span>
+</span><span id="Foo.__init__-109"><a href="#Foo.__init__-109"><span class="linenos">109</span></a>
+</span><span id="Foo.__init__-110"><a href="#Foo.__init__-110"><span class="linenos">110</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">undocumented_constructor_attribute</span> <span class="o">=</span> <span class="mi">42</span>
+</span><span id="Foo.__init__-111"><a href="#Foo.__init__-111"><span class="linenos">111</span></a>        <span class="n">a_complex_function</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -726,9 +734,9 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo.a_regular_function"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_regular_function-105"><a href="#Foo.a_regular_function-105"><span class="linenos">105</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
-</span><span id="Foo.a_regular_function-106"><a href="#Foo.a_regular_function-106"><span class="linenos">106</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
-</span><span id="Foo.a_regular_function-107"><a href="#Foo.a_regular_function-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_regular_function-113"><a href="#Foo.a_regular_function-113"><span class="linenos">113</span></a>    <span class="k">def</span> <span class="nf">a_regular_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Foo&quot;</span><span class="p">:</span>
+</span><span id="Foo.a_regular_function-114"><a href="#Foo.a_regular_function-114"><span class="linenos">114</span></a>        <span class="sd">&quot;&quot;&quot;This is a regular method, returning the object itself.&quot;&quot;&quot;</span>
+</span><span id="Foo.a_regular_function-115"><a href="#Foo.a_regular_function-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
@@ -775,10 +783,10 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo.a_cached_function"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_cached_function-119"><a href="#Foo.a_cached_function-119"><span class="linenos">119</span></a>    <span class="nd">@cache</span>
-</span><span id="Foo.a_cached_function-120"><a href="#Foo.a_cached_function-120"><span class="linenos">120</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Foo.a_cached_function-121"><a href="#Foo.a_cached_function-121"><span class="linenos">121</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
-</span><span id="Foo.a_cached_function-122"><a href="#Foo.a_cached_function-122"><span class="linenos">122</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_cached_function-127"><a href="#Foo.a_cached_function-127"><span class="linenos">127</span></a>    <span class="nd">@cache</span>
+</span><span id="Foo.a_cached_function-128"><a href="#Foo.a_cached_function-128"><span class="linenos">128</span></a>    <span class="k">def</span> <span class="nf">a_cached_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Foo.a_cached_function-129"><a href="#Foo.a_cached_function-129"><span class="linenos">129</span></a>        <span class="sd">&quot;&quot;&quot;This is method with `@cache` decoration.&quot;&quot;&quot;</span>
+</span><span id="Foo.a_cached_function-130"><a href="#Foo.a_cached_function-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="s2">&quot;true foo&quot;</span>
 </span></pre></div>
 
 
@@ -799,10 +807,10 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo.a_class_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_class_method-124"><a href="#Foo.a_class_method-124"><span class="linenos">124</span></a>    <span class="nd">@classmethod</span>
-</span><span id="Foo.a_class_method-125"><a href="#Foo.a_class_method-125"><span class="linenos">125</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="Foo.a_class_method-126"><a href="#Foo.a_class_method-126"><span class="linenos">126</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="Foo.a_class_method-127"><a href="#Foo.a_class_method-127"><span class="linenos">127</span></a>        <span class="k">return</span> <span class="mi">24</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_class_method-132"><a href="#Foo.a_class_method-132"><span class="linenos">132</span></a>    <span class="nd">@classmethod</span>
+</span><span id="Foo.a_class_method-133"><a href="#Foo.a_class_method-133"><span class="linenos">133</span></a>    <span class="k">def</span> <span class="nf">a_class_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="Foo.a_class_method-134"><a href="#Foo.a_class_method-134"><span class="linenos">134</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@classmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="Foo.a_class_method-135"><a href="#Foo.a_class_method-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="mi">24</span>
 </span></pre></div>
 
 
@@ -836,10 +844,10 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Foo.a_static_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_static_method-135"><a href="#Foo.a_static_method-135"><span class="linenos">135</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="Foo.a_static_method-136"><a href="#Foo.a_static_method-136"><span class="linenos">136</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
-</span><span id="Foo.a_static_method-137"><a href="#Foo.a_static_method-137"><span class="linenos">137</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
-</span><span id="Foo.a_static_method-138"><a href="#Foo.a_static_method-138"><span class="linenos">138</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_static_method-143"><a href="#Foo.a_static_method-143"><span class="linenos">143</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="Foo.a_static_method-144"><a href="#Foo.a_static_method-144"><span class="linenos">144</span></a>    <span class="k">def</span> <span class="nf">a_static_method</span><span class="p">():</span>
+</span><span id="Foo.a_static_method-145"><a href="#Foo.a_static_method-145"><span class="linenos">145</span></a>        <span class="sd">&quot;&quot;&quot;This is what a `@staticmethod` looks like.&quot;&quot;&quot;</span>
+</span><span id="Foo.a_static_method-146"><a href="#Foo.a_static_method-146"><span class="linenos">146</span></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -860,25 +868,25 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Bar"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-141"><a href="#Bar-141"><span class="linenos">141</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
-</span><span id="Bar-142"><a href="#Bar-142"><span class="linenos">142</span></a>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="Bar-143"><a href="#Bar-143"><span class="linenos">143</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute defined on this subclass.&quot;&quot;&quot;</span>
-</span><span id="Bar-144"><a href="#Bar-144"><span class="linenos">144</span></a>
-</span><span id="Bar-145"><a href="#Bar-145"><span class="linenos">145</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
-</span><span id="Bar-146"><a href="#Bar-146"><span class="linenos">146</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bar-147"><a href="#Bar-147"><span class="linenos">147</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
-</span><span id="Bar-148"><a href="#Bar-148"><span class="linenos">148</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
-</span><span id="Bar-149"><a href="#Bar-149"><span class="linenos">149</span></a><span class="sd">        (but not in the navigation).</span>
-</span><span id="Bar-150"><a href="#Bar-150"><span class="linenos">150</span></a>
-</span><span id="Bar-151"><a href="#Bar-151"><span class="linenos">151</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
-</span><span id="Bar-152"><a href="#Bar-152"><span class="linenos">152</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
-</span><span id="Bar-153"><a href="#Bar-153"><span class="linenos">153</span></a>
-</span><span id="Bar-154"><a href="#Bar-154"><span class="linenos">154</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
-</span><span id="Bar-155"><a href="#Bar-155"><span class="linenos">155</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bar-156"><a href="#Bar-156"><span class="linenos">156</span></a>
-</span><span id="Bar-157"><a href="#Bar-157"><span class="linenos">157</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Bar-158"><a href="#Bar-158"><span class="linenos">158</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
-</span><span id="Bar-159"><a href="#Bar-159"><span class="linenos">159</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-149"><a href="#Bar-149"><span class="linenos">149</span></a><span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
+</span><span id="Bar-150"><a href="#Bar-150"><span class="linenos">150</span></a>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="Bar-151"><a href="#Bar-151"><span class="linenos">151</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute defined on this subclass.&quot;&quot;&quot;</span>
+</span><span id="Bar-152"><a href="#Bar-152"><span class="linenos">152</span></a>
+</span><span id="Bar-153"><a href="#Bar-153"><span class="linenos">153</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
+</span><span id="Bar-154"><a href="#Bar-154"><span class="linenos">154</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bar-155"><a href="#Bar-155"><span class="linenos">155</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
+</span><span id="Bar-156"><a href="#Bar-156"><span class="linenos">156</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
+</span><span id="Bar-157"><a href="#Bar-157"><span class="linenos">157</span></a><span class="sd">        (but not in the navigation).</span>
+</span><span id="Bar-158"><a href="#Bar-158"><span class="linenos">158</span></a>
+</span><span id="Bar-159"><a href="#Bar-159"><span class="linenos">159</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
+</span><span id="Bar-160"><a href="#Bar-160"><span class="linenos">160</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
+</span><span id="Bar-161"><a href="#Bar-161"><span class="linenos">161</span></a>
+</span><span id="Bar-162"><a href="#Bar-162"><span class="linenos">162</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
+</span><span id="Bar-163"><a href="#Bar-163"><span class="linenos">163</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bar-164"><a href="#Bar-164"><span class="linenos">164</span></a>
+</span><span id="Bar-165"><a href="#Bar-165"><span class="linenos">165</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Bar-166"><a href="#Bar-166"><span class="linenos">166</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
+</span><span id="Bar-167"><a href="#Bar-167"><span class="linenos">167</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -934,21 +942,21 @@ as well as a keyword-only arguments (*).</p>
 
     </div>
     <a class="headerlink" href="#Bar.Baz"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar.Baz-145"><a href="#Bar.Baz-145"><span class="linenos">145</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
-</span><span id="Bar.Baz-146"><a href="#Bar.Baz-146"><span class="linenos">146</span></a>        <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Bar.Baz-147"><a href="#Bar.Baz-147"><span class="linenos">147</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
-</span><span id="Bar.Baz-148"><a href="#Bar.Baz-148"><span class="linenos">148</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
-</span><span id="Bar.Baz-149"><a href="#Bar.Baz-149"><span class="linenos">149</span></a><span class="sd">        (but not in the navigation).</span>
-</span><span id="Bar.Baz-150"><a href="#Bar.Baz-150"><span class="linenos">150</span></a>
-</span><span id="Bar.Baz-151"><a href="#Bar.Baz-151"><span class="linenos">151</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
-</span><span id="Bar.Baz-152"><a href="#Bar.Baz-152"><span class="linenos">152</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
-</span><span id="Bar.Baz-153"><a href="#Bar.Baz-153"><span class="linenos">153</span></a>
-</span><span id="Bar.Baz-154"><a href="#Bar.Baz-154"><span class="linenos">154</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
-</span><span id="Bar.Baz-155"><a href="#Bar.Baz-155"><span class="linenos">155</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Bar.Baz-156"><a href="#Bar.Baz-156"><span class="linenos">156</span></a>
-</span><span id="Bar.Baz-157"><a href="#Bar.Baz-157"><span class="linenos">157</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Bar.Baz-158"><a href="#Bar.Baz-158"><span class="linenos">158</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
-</span><span id="Bar.Baz-159"><a href="#Bar.Baz-159"><span class="linenos">159</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar.Baz-153"><a href="#Bar.Baz-153"><span class="linenos">153</span></a>    <span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
+</span><span id="Bar.Baz-154"><a href="#Bar.Baz-154"><span class="linenos">154</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Bar.Baz-155"><a href="#Bar.Baz-155"><span class="linenos">155</span></a><span class="sd">        This class is an attribute of `Bar`.</span>
+</span><span id="Bar.Baz-156"><a href="#Bar.Baz-156"><span class="linenos">156</span></a><span class="sd">        To not create overwhelmingly complex trees, pdoc flattens the class hierarchy in the documentation</span>
+</span><span id="Bar.Baz-157"><a href="#Bar.Baz-157"><span class="linenos">157</span></a><span class="sd">        (but not in the navigation).</span>
+</span><span id="Bar.Baz-158"><a href="#Bar.Baz-158"><span class="linenos">158</span></a>
+</span><span id="Bar.Baz-159"><a href="#Bar.Baz-159"><span class="linenos">159</span></a><span class="sd">        It should be noted that inner classes are a pattern you most often want to avoid in Python.</span>
+</span><span id="Bar.Baz-160"><a href="#Bar.Baz-160"><span class="linenos">160</span></a><span class="sd">        Think about moving stuff in a new package instead!</span>
+</span><span id="Bar.Baz-161"><a href="#Bar.Baz-161"><span class="linenos">161</span></a>
+</span><span id="Bar.Baz-162"><a href="#Bar.Baz-162"><span class="linenos">162</span></a><span class="sd">        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).</span>
+</span><span id="Bar.Baz-163"><a href="#Bar.Baz-163"><span class="linenos">163</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Bar.Baz-164"><a href="#Bar.Baz-164"><span class="linenos">164</span></a>
+</span><span id="Bar.Baz-165"><a href="#Bar.Baz-165"><span class="linenos">165</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Bar.Baz-166"><a href="#Bar.Baz-166"><span class="linenos">166</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
+</span><span id="Bar.Baz-167"><a href="#Bar.Baz-167"><span class="linenos">167</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -986,9 +994,9 @@ Think about moving stuff in a new package instead!</p>
 
     </div>
     <a class="headerlink" href="#Bar.Baz.wat"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar.Baz.wat-157"><a href="#Bar.Baz.wat-157"><span class="linenos">157</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Bar.Baz.wat-158"><a href="#Bar.Baz.wat-158"><span class="linenos">158</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
-</span><span id="Bar.Baz.wat-159"><a href="#Bar.Baz.wat-159"><span class="linenos">159</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar.Baz.wat-165"><a href="#Bar.Baz.wat-165"><span class="linenos">165</span></a>        <span class="k">def</span> <span class="nf">wat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Bar.Baz.wat-166"><a href="#Bar.Baz.wat-166"><span class="linenos">166</span></a>            <span class="sd">&quot;&quot;&quot;A regular method. Above, you see what happens if a class has no constructor defined and</span>
+</span><span id="Bar.Baz.wat-167"><a href="#Bar.Baz.wat-167"><span class="linenos">167</span></a><span class="sd">            no constructor docstring.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1010,14 +1018,14 @@ no constructor docstring.</p>
 
     </div>
     <a class="headerlink" href="#i_am_async"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="i_am_async-162"><a href="#i_am_async-162"><span class="linenos">162</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">i_am_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="i_am_async-163"><a href="#i_am_async-163"><span class="linenos">163</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="i_am_async-164"><a href="#i_am_async-164"><span class="linenos">164</span></a><span class="sd">    This is an example of an async function.</span>
-</span><span id="i_am_async-165"><a href="#i_am_async-165"><span class="linenos">165</span></a>
-</span><span id="i_am_async-166"><a href="#i_am_async-166"><span class="linenos">166</span></a><span class="sd">    - Knock, knock</span>
-</span><span id="i_am_async-167"><a href="#i_am_async-167"><span class="linenos">167</span></a><span class="sd">    - An async function</span>
-</span><span id="i_am_async-168"><a href="#i_am_async-168"><span class="linenos">168</span></a><span class="sd">    - Who&#39;s there?</span>
-</span><span id="i_am_async-169"><a href="#i_am_async-169"><span class="linenos">169</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="i_am_async-170"><a href="#i_am_async-170"><span class="linenos">170</span></a><span class="k">async</span> <span class="k">def</span> <span class="nf">i_am_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="i_am_async-171"><a href="#i_am_async-171"><span class="linenos">171</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="i_am_async-172"><a href="#i_am_async-172"><span class="linenos">172</span></a><span class="sd">    This is an example of an async function.</span>
+</span><span id="i_am_async-173"><a href="#i_am_async-173"><span class="linenos">173</span></a>
+</span><span id="i_am_async-174"><a href="#i_am_async-174"><span class="linenos">174</span></a><span class="sd">    - Knock, knock</span>
+</span><span id="i_am_async-175"><a href="#i_am_async-175"><span class="linenos">175</span></a><span class="sd">    - An async function</span>
+</span><span id="i_am_async-176"><a href="#i_am_async-176"><span class="linenos">176</span></a><span class="sd">    - Who&#39;s there?</span>
+</span><span id="i_am_async-177"><a href="#i_am_async-177"><span class="linenos">177</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1044,15 +1052,15 @@ no constructor docstring.</p>
 
     </div>
     <a class="headerlink" href="#fib"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fib-172"><a href="#fib-172"><span class="linenos">172</span></a><span class="nd">@cache</span>
-</span><span id="fib-173"><a href="#fib-173"><span class="linenos">173</span></a><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-</span><span id="fib-174"><a href="#fib-174"><span class="linenos">174</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="fib-175"><a href="#fib-175"><span class="linenos">175</span></a><span class="sd">    This is an example of decorated function. Decorators are included in the documentation as well.</span>
-</span><span id="fib-176"><a href="#fib-176"><span class="linenos">176</span></a><span class="sd">    This is often useful when documenting web APIs, for example.</span>
-</span><span id="fib-177"><a href="#fib-177"><span class="linenos">177</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="fib-178"><a href="#fib-178"><span class="linenos">178</span></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-</span><span id="fib-179"><a href="#fib-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="n">n</span>
-</span><span id="fib-180"><a href="#fib-180"><span class="linenos">180</span></a>    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fib-180"><a href="#fib-180"><span class="linenos">180</span></a><span class="nd">@cache</span>
+</span><span id="fib-181"><a href="#fib-181"><span class="linenos">181</span></a><span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span><span id="fib-182"><a href="#fib-182"><span class="linenos">182</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="fib-183"><a href="#fib-183"><span class="linenos">183</span></a><span class="sd">    This is an example of decorated function. Decorators are included in the documentation as well.</span>
+</span><span id="fib-184"><a href="#fib-184"><span class="linenos">184</span></a><span class="sd">    This is often useful when documenting web APIs, for example.</span>
+</span><span id="fib-185"><a href="#fib-185"><span class="linenos">185</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="fib-186"><a href="#fib-186"><span class="linenos">186</span></a>    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+</span><span id="fib-187"><a href="#fib-187"><span class="linenos">187</span></a>        <span class="k">return</span> <span class="n">n</span>
+</span><span id="fib-188"><a href="#fib-188"><span class="linenos">188</span></a>    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1073,12 +1081,12 @@ This is often useful when documenting web APIs, for example.</p>
 
     </div>
     <a class="headerlink" href="#security"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="security-183"><a href="#security-183"><span class="linenos">183</span></a><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
-</span><span id="security-184"><a href="#security-184"><span class="linenos">184</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="security-185"><a href="#security-185"><span class="linenos">185</span></a><span class="sd">    Default values are generally rendered using repr(),</span>
-</span><span id="security-186"><a href="#security-186"><span class="linenos">186</span></a><span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
-</span><span id="security-187"><a href="#security-187"><span class="linenos">187</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="security-188"><a href="#security-188"><span class="linenos">188</span></a>    <span class="k">return</span> <span class="kc">False</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="security-191"><a href="#security-191"><span class="linenos">191</span></a><span class="k">def</span> <span class="nf">security</span><span class="p">(</span><span class="n">test</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">):</span>
+</span><span id="security-192"><a href="#security-192"><span class="linenos">192</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="security-193"><a href="#security-193"><span class="linenos">193</span></a><span class="sd">    Default values are generally rendered using repr(),</span>
+</span><span id="security-194"><a href="#security-194"><span class="linenos">194</span></a><span class="sd">    but some special cases -- like os.environ -- are overridden to avoid leaking sensitive data.</span>
+</span><span id="security-195"><a href="#security-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="security-196"><a href="#security-196"><span class="linenos">196</span></a>    <span class="k">return</span> <span class="kc">False</span>
 </span></pre></div>
 
 
@@ -1099,8 +1107,8 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
     </div>
     <a class="headerlink" href="#DoubleInherit"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DoubleInherit-191"><a href="#DoubleInherit-191"><span class="linenos">191</span></a><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="DoubleInherit-192"><a href="#DoubleInherit-192"><span class="linenos">192</span></a>    <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DoubleInherit-199"><a href="#DoubleInherit-199"><span class="linenos">199</span></a><span class="k">class</span> <span class="nc">DoubleInherit</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">Bar</span><span class="o">.</span><span class="n">Baz</span><span class="p">,</span> <span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="DoubleInherit-200"><a href="#DoubleInherit-200"><span class="linenos">200</span></a>    <span class="sd">&quot;&quot;&quot;This is an example of a class that inherits from multiple parent classes.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1157,24 +1165,24 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
     </div>
     <a class="headerlink" href="#DataDemo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo-201"><a href="#DataDemo-201"><span class="linenos">201</span></a><span class="nd">@dataclass</span>
-</span><span id="DataDemo-202"><a href="#DataDemo-202"><span class="linenos">202</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
-</span><span id="DataDemo-203"><a href="#DataDemo-203"><span class="linenos">203</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DataDemo-204"><a href="#DataDemo-204"><span class="linenos">204</span></a><span class="sd">    This is an example for a dataclass.</span>
-</span><span id="DataDemo-205"><a href="#DataDemo-205"><span class="linenos">205</span></a>
-</span><span id="DataDemo-206"><a href="#DataDemo-206"><span class="linenos">206</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
-</span><span id="DataDemo-207"><a href="#DataDemo-207"><span class="linenos">207</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="DataDemo-208"><a href="#DataDemo-208"><span class="linenos">208</span></a>
-</span><span id="DataDemo-209"><a href="#DataDemo-209"><span class="linenos">209</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="DataDemo-210"><a href="#DataDemo-210"><span class="linenos">210</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
-</span><span id="DataDemo-211"><a href="#DataDemo-211"><span class="linenos">211</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-</span><span id="DataDemo-212"><a href="#DataDemo-212"><span class="linenos">212</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
-</span><span id="DataDemo-213"><a href="#DataDemo-213"><span class="linenos">213</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
-</span><span id="DataDemo-214"><a href="#DataDemo-214"><span class="linenos">214</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
-</span><span id="DataDemo-215"><a href="#DataDemo-215"><span class="linenos">215</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
-</span><span id="DataDemo-216"><a href="#DataDemo-216"><span class="linenos">216</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
-</span><span id="DataDemo-217"><a href="#DataDemo-217"><span class="linenos">217</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DataDemo-218"><a href="#DataDemo-218"><span class="linenos">218</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo-209"><a href="#DataDemo-209"><span class="linenos">209</span></a><span class="nd">@dataclass</span>
+</span><span id="DataDemo-210"><a href="#DataDemo-210"><span class="linenos">210</span></a><span class="k">class</span> <span class="nc">DataDemo</span><span class="p">:</span>
+</span><span id="DataDemo-211"><a href="#DataDemo-211"><span class="linenos">211</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DataDemo-212"><a href="#DataDemo-212"><span class="linenos">212</span></a><span class="sd">    This is an example for a dataclass.</span>
+</span><span id="DataDemo-213"><a href="#DataDemo-213"><span class="linenos">213</span></a>
+</span><span id="DataDemo-214"><a href="#DataDemo-214"><span class="linenos">214</span></a><span class="sd">    As usual, you can link to individual properties: `DataDemo.a`.</span>
+</span><span id="DataDemo-215"><a href="#DataDemo-215"><span class="linenos">215</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="DataDemo-216"><a href="#DataDemo-216"><span class="linenos">216</span></a>
+</span><span id="DataDemo-217"><a href="#DataDemo-217"><span class="linenos">217</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="DataDemo-218"><a href="#DataDemo-218"><span class="linenos">218</span></a>    <span class="sd">&quot;&quot;&quot;Again, we can document individual properties with docstrings.&quot;&quot;&quot;</span>
+</span><span id="DataDemo-219"><a href="#DataDemo-219"><span class="linenos">219</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="DataDemo-220"><a href="#DataDemo-220"><span class="linenos">220</span></a>    <span class="c1"># This property has a type annotation but is not documented.</span>
+</span><span id="DataDemo-221"><a href="#DataDemo-221"><span class="linenos">221</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
+</span><span id="DataDemo-222"><a href="#DataDemo-222"><span class="linenos">222</span></a>    <span class="c1"># This property has a default value but is not documented.</span>
+</span><span id="DataDemo-223"><a href="#DataDemo-223"><span class="linenos">223</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
+</span><span id="DataDemo-224"><a href="#DataDemo-224"><span class="linenos">224</span></a>    <span class="c1"># This property has a type annotation and a default value but is not documented.</span>
+</span><span id="DataDemo-225"><a href="#DataDemo-225"><span class="linenos">225</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DataDemo-226"><a href="#DataDemo-226"><span class="linenos">226</span></a>    <span class="sd">&quot;&quot;&quot;This property is assigned to `dataclasses.field()`, which works just as well.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1235,10 +1243,10 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
     </div>
     <a class="headerlink" href="#DataDemoExtended"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemoExtended-221"><a href="#DataDemoExtended-221"><span class="linenos">221</span></a><span class="nd">@dataclass</span>
-</span><span id="DataDemoExtended-222"><a href="#DataDemoExtended-222"><span class="linenos">222</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
-</span><span id="DataDemoExtended-223"><a href="#DataDemoExtended-223"><span class="linenos">223</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
-</span><span id="DataDemoExtended-224"><a href="#DataDemoExtended-224"><span class="linenos">224</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemoExtended-229"><a href="#DataDemoExtended-229"><span class="linenos">229</span></a><span class="nd">@dataclass</span>
+</span><span id="DataDemoExtended-230"><a href="#DataDemoExtended-230"><span class="linenos">230</span></a><span class="k">class</span> <span class="nc">DataDemoExtended</span><span class="p">(</span><span class="n">DataDemo</span><span class="p">):</span>
+</span><span id="DataDemoExtended-231"><a href="#DataDemoExtended-231"><span class="linenos">231</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
+</span><span id="DataDemoExtended-232"><a href="#DataDemoExtended-232"><span class="linenos">232</span></a>    <span class="sd">&quot;&quot;&quot;A new attribute.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1291,19 +1299,19 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
     </div>
     <a class="headerlink" href="#EnumDemo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo-227"><a href="#EnumDemo-227"><span class="linenos">227</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="EnumDemo-228"><a href="#EnumDemo-228"><span class="linenos">228</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-229"><a href="#EnumDemo-229"><span class="linenos">229</span></a><span class="sd">    This is an example of an Enum.</span>
-</span><span id="EnumDemo-230"><a href="#EnumDemo-230"><span class="linenos">230</span></a>
-</span><span id="EnumDemo-231"><a href="#EnumDemo-231"><span class="linenos">231</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
-</span><span id="EnumDemo-232"><a href="#EnumDemo-232"><span class="linenos">232</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="EnumDemo-233"><a href="#EnumDemo-233"><span class="linenos">233</span></a>
-</span><span id="EnumDemo-234"><a href="#EnumDemo-234"><span class="linenos">234</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="EnumDemo-235"><a href="#EnumDemo-235"><span class="linenos">235</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-236"><a href="#EnumDemo-236"><span class="linenos">236</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="EnumDemo-237"><a href="#EnumDemo-237"><span class="linenos">237</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
-</span><span id="EnumDemo-238"><a href="#EnumDemo-238"><span class="linenos">238</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
-</span><span id="EnumDemo-239"><a href="#EnumDemo-239"><span class="linenos">239</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo-235"><a href="#EnumDemo-235"><span class="linenos">235</span></a><span class="k">class</span> <span class="nc">EnumDemo</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="EnumDemo-236"><a href="#EnumDemo-236"><span class="linenos">236</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-237"><a href="#EnumDemo-237"><span class="linenos">237</span></a><span class="sd">    This is an example of an Enum.</span>
+</span><span id="EnumDemo-238"><a href="#EnumDemo-238"><span class="linenos">238</span></a>
+</span><span id="EnumDemo-239"><a href="#EnumDemo-239"><span class="linenos">239</span></a><span class="sd">    As usual, you can link to individual properties: `GREEN`.</span>
+</span><span id="EnumDemo-240"><a href="#EnumDemo-240"><span class="linenos">240</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="EnumDemo-241"><a href="#EnumDemo-241"><span class="linenos">241</span></a>
+</span><span id="EnumDemo-242"><a href="#EnumDemo-242"><span class="linenos">242</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="EnumDemo-243"><a href="#EnumDemo-243"><span class="linenos">243</span></a>    <span class="sd">&quot;&quot;&quot;I am the red.&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-244"><a href="#EnumDemo-244"><span class="linenos">244</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="EnumDemo-245"><a href="#EnumDemo-245"><span class="linenos">245</span></a>    <span class="sd">&quot;&quot;&quot;I am green.&quot;&quot;&quot;</span>
+</span><span id="EnumDemo-246"><a href="#EnumDemo-246"><span class="linenos">246</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="EnumDemo-247"><a href="#EnumDemo-247"><span class="linenos">247</span></a>    <span class="sd">&quot;&quot;&quot;I am blue.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1374,25 +1382,25 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
     </div>
     <a class="headerlink" href="#admonitions"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="admonitions-242"><a href="#admonitions-242"><span class="linenos">242</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
-</span><span id="admonitions-243"><a href="#admonitions-243"><span class="linenos">243</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="admonitions-244"><a href="#admonitions-244"><span class="linenos">244</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
-</span><span id="admonitions-245"><a href="#admonitions-245"><span class="linenos">245</span></a>
-</span><span id="admonitions-246"><a href="#admonitions-246"><span class="linenos">246</span></a><span class="sd">    ```</span>
-</span><span id="admonitions-247"><a href="#admonitions-247"><span class="linenos">247</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
-</span><span id="admonitions-248"><a href="#admonitions-248"><span class="linenos">248</span></a><span class="sd">       Body text</span>
-</span><span id="admonitions-249"><a href="#admonitions-249"><span class="linenos">249</span></a><span class="sd">    ```</span>
-</span><span id="admonitions-250"><a href="#admonitions-250"><span class="linenos">250</span></a>
-</span><span id="admonitions-251"><a href="#admonitions-251"><span class="linenos">251</span></a><span class="sd">    .. note::</span>
-</span><span id="admonitions-252"><a href="#admonitions-252"><span class="linenos">252</span></a><span class="sd">       Hi there!</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="admonitions-250"><a href="#admonitions-250"><span class="linenos">250</span></a><span class="k">def</span> <span class="nf">admonitions</span><span class="p">():</span>
+</span><span id="admonitions-251"><a href="#admonitions-251"><span class="linenos">251</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="admonitions-252"><a href="#admonitions-252"><span class="linenos">252</span></a><span class="sd">    pdoc also supports basic reStructuredText admonitions:</span>
 </span><span id="admonitions-253"><a href="#admonitions-253"><span class="linenos">253</span></a>
-</span><span id="admonitions-254"><a href="#admonitions-254"><span class="linenos">254</span></a><span class="sd">    .. warning:: Be Careful!</span>
-</span><span id="admonitions-255"><a href="#admonitions-255"><span class="linenos">255</span></a><span class="sd">       This warning has both a title and content.</span>
-</span><span id="admonitions-256"><a href="#admonitions-256"><span class="linenos">256</span></a>
-</span><span id="admonitions-257"><a href="#admonitions-257"><span class="linenos">257</span></a><span class="sd">    .. danger::</span>
-</span><span id="admonitions-258"><a href="#admonitions-258"><span class="linenos">258</span></a><span class="sd">       Danger ahead.</span>
-</span><span id="admonitions-259"><a href="#admonitions-259"><span class="linenos">259</span></a>
-</span><span id="admonitions-260"><a href="#admonitions-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="admonitions-254"><a href="#admonitions-254"><span class="linenos">254</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-255"><a href="#admonitions-255"><span class="linenos">255</span></a><span class="sd">    .. note/warning/danger:: Optional title</span>
+</span><span id="admonitions-256"><a href="#admonitions-256"><span class="linenos">256</span></a><span class="sd">       Body text</span>
+</span><span id="admonitions-257"><a href="#admonitions-257"><span class="linenos">257</span></a><span class="sd">    ```</span>
+</span><span id="admonitions-258"><a href="#admonitions-258"><span class="linenos">258</span></a>
+</span><span id="admonitions-259"><a href="#admonitions-259"><span class="linenos">259</span></a><span class="sd">    .. note::</span>
+</span><span id="admonitions-260"><a href="#admonitions-260"><span class="linenos">260</span></a><span class="sd">       Hi there!</span>
+</span><span id="admonitions-261"><a href="#admonitions-261"><span class="linenos">261</span></a>
+</span><span id="admonitions-262"><a href="#admonitions-262"><span class="linenos">262</span></a><span class="sd">    .. warning:: Be Careful!</span>
+</span><span id="admonitions-263"><a href="#admonitions-263"><span class="linenos">263</span></a><span class="sd">       This warning has both a title and content.</span>
+</span><span id="admonitions-264"><a href="#admonitions-264"><span class="linenos">264</span></a>
+</span><span id="admonitions-265"><a href="#admonitions-265"><span class="linenos">265</span></a><span class="sd">    .. danger::</span>
+</span><span id="admonitions-266"><a href="#admonitions-266"><span class="linenos">266</span></a><span class="sd">       Danger ahead.</span>
+</span><span id="admonitions-267"><a href="#admonitions-267"><span class="linenos">267</span></a>
+</span><span id="admonitions-268"><a href="#admonitions-268"><span class="linenos">268</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

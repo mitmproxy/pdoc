@@ -4,28 +4,29 @@ import os
 import types
 import warnings
 from pathlib import Path
-from typing import cast, Mapping
+from typing import cast
+from typing import Mapping
 
 import jinja2
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 
 import pdoc.doc
 import pdoc.docstrings
 from pdoc._compat import Literal
-from pdoc.render_helpers import (
-    DefaultMacroExtension,
-    defuse_unsafe_reprs,
-    edit_url,
-    format_signature,
-    highlight,
-    link,
-    linkify,
-    minify_css,
-    root_module_name,
-    to_html,
-    to_markdown_with_context,
-)
-from pdoc.search import make_index, precompile_index
+from pdoc.render_helpers import DefaultMacroExtension
+from pdoc.render_helpers import defuse_unsafe_reprs
+from pdoc.render_helpers import edit_url
+from pdoc.render_helpers import format_signature
+from pdoc.render_helpers import highlight
+from pdoc.render_helpers import link
+from pdoc.render_helpers import linkify
+from pdoc.render_helpers import minify_css
+from pdoc.render_helpers import root_module_name
+from pdoc.render_helpers import to_html
+from pdoc.render_helpers import to_markdown_with_context
+from pdoc.search import make_index
+from pdoc.search import precompile_index
 
 
 def configure(

@@ -5,7 +5,6 @@ and provides the rest of pdoc with some additional module metadata.
 """
 from __future__ import annotations
 
-import importlib
 import importlib.util
 import io
 import linecache
@@ -19,12 +18,13 @@ import sys
 import traceback
 import types
 import warnings
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterable
+from collections.abc import Iterator
+from collections.abc import Sequence
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
-import pdoc
 import pdoc.doc_ast
 import pdoc.docstrings
 
@@ -256,10 +256,7 @@ def walk_packages2(
                 name = submodule.name.rpartition(".")[2]
                 if name == "__main__":
                     continue  # https://github.com/mitmproxy/pdoc/issues/438
-                if (
-                    mod_all is None
-                    or name in mod_all
-                ):
+                if mod_all is None or name in mod_all:
                     submodules.append(submodule)
 
             yield from walk_packages2(submodules)

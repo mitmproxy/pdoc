@@ -6,11 +6,9 @@ import shutil
 import sys
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 import pytest
 
-import pdoc
 import pdoc.render
 
 here = Path(__file__).parent.absolute()
@@ -28,8 +26,8 @@ class Snapshot:
     def __init__(
         self,
         id: str,
-        filenames: Optional[list[str]] = None,
-        render_options: Optional[dict] = None,
+        filenames: list[str] | None = None,
+        render_options: dict | None = None,
         with_output_directory: bool = False,
         min_version: tuple[int, int] = (3, 7),
     ):

@@ -1,11 +1,13 @@
 import warnings
+from pathlib import Path
+from unittest.mock import call
+from unittest.mock import patch
 
 import pytest
-from pathlib import Path
-from unittest.mock import call, patch
 
 from pdoc import pdoc
-from pdoc.__main__ import cli, _nicer_showwarning
+from pdoc.__main__ import _nicer_showwarning
+from pdoc.__main__ import cli
 
 here = Path(__file__).parent
 

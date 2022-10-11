@@ -14,12 +14,17 @@ import sys
 import types
 import typing
 import warnings
-from types import BuiltinFunctionType, ModuleType
-from typing import Any, TYPE_CHECKING
+from types import BuiltinFunctionType
+from types import ModuleType
 from typing import _GenericAlias  # type: ignore
+from typing import Any
+from typing import TYPE_CHECKING
 
 from . import extract
-from ._compat import GenericAlias, Literal, UnionType, get_origin
+from ._compat import GenericAlias
+from ._compat import get_origin
+from ._compat import Literal
+from ._compat import UnionType
 from .doc_ast import type_checking_sections
 
 if TYPE_CHECKING:
@@ -69,7 +74,9 @@ def resolve_annotations(
 
     resolved = {}
     for name, value in annotations.items():
-        resolved[name] = safe_eval_type(value, globalns, localns, module, f"{fullname}.{name}")
+        resolved[name] = safe_eval_type(
+            value, globalns, localns, module, f"{fullname}.{name}"
+        )
 
     return resolved
 

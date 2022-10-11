@@ -1,18 +1,15 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Optional
 
 import pytest
 
-from pdoc.render_helpers import (
-    edit_url,
-    possible_sources,
-    qualname_candidates,
-    relative_link,
-    to_html,
-    split_identifier,
-)
+from pdoc.render_helpers import edit_url
+from pdoc.render_helpers import possible_sources
+from pdoc.render_helpers import qualname_candidates
+from pdoc.render_helpers import relative_link
+from pdoc.render_helpers import split_identifier
+from pdoc.render_helpers import to_html
 
 
 @pytest.mark.parametrize(
@@ -61,7 +58,7 @@ def test_qualname_candidates(context, candidates):
     ],
 )
 def test_edit_url(
-    modulename: str, is_package: bool, mapping: Mapping[str, str], result: Optional[str]
+    modulename: str, is_package: bool, mapping: Mapping[str, str], result: str | None
 ):
     assert edit_url(modulename, is_package, mapping) == result
 
