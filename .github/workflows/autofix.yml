@@ -11,23 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11.0-beta - 3.11.99
+
       - run: pip install -r requirements-dev.txt
-      
+
       - run: black .
-      
+
       - run: autoflake --in-place --remove-all-unused-imports -r .
-      
+
       - run: |
          shopt -s globstar
          pyupgrade --exit-zero-even-if-changed --py37-plus **/*.py
-         
+
       - run: |
          shopt -s globstar
          reorder-python-imports --exit-zero-even-if-changed --py37-plus **/*.py
-         
+
       - run: |
          shopt -s globstar
          yesqa **/*.py || true
-         
+
+      - run: git checkout test/testdata/ pdoc/markdown2/
+      - run: test/test_snapshot.py
+
       - uses: autofix-ci/action@b101d576be6781832e923ea51e56391066802d4d
