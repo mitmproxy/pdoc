@@ -1,0 +1,33 @@
+name: autofix.ci
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - run: pip install -r requirements-dev.txt
+      
+      - run: black .
+      
+      - run: autoflake --in-place --remove-all-unused-imports -r .
+      
+      - run: |
+         shopt -s globstar
+         pyupgrade --exit-zero-even-if-changed --py37-plus **/*.py
+         
+      - run: |
+         shopt -s globstar
+         reorder-python-imports --exit-zero-even-if-changed --py37-plus **/*.py
+         
+      - run: |
+         shopt -s globstar
+         yesqa **/*.py || true
+         
+      - uses: autofix-ci/action@b101d576be6781832e923ea51e56391066802d4d
