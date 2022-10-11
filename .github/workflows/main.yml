@@ -18,6 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version-file: .github/python-version.txt
       - run: pip install tox
       - run: tox -e flake8
   mypy:
@@ -25,6 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version-file: .github/python-version.txt
       - run: pip install tox
       - run: tox -e mypy
   test:
