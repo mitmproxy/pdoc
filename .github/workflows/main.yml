@@ -36,23 +36,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            py: 3.11.0-beta - 3.11.0
           - os: windows-latest
-            py: 3.10.4
+            py: 3.11.0
             args: --cov-fail-under=100
           - os: macos-latest
-            py: 3.10.4
+            py: 3.11.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.10.4
+            py: 3.11.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.9.12
+            py: 3.10.8
           - os: ubuntu-latest
-            py: 3.8.12
+            py: 3.9.15
           - os: ubuntu-latest
-            py: 3.7.12
+            py: 3.8.14
+          - os: ubuntu-latest
+            py: 3.7.15
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
