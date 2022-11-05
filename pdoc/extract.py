@@ -185,7 +185,7 @@ class _PdocDefusedPopen(subprocess.Popen):
                 warnings.warn(
                     f"Suppressed execution of {args[0]!r} during import. "
                     f"Set PDOC_ALLOW_EXEC=1 as an environment variable to allow subprocess execution.",
-                    stacklevel=2
+                    stacklevel=2,
                 )
             kwargs["executable"] = self._noop_exe
         super().__init__(*args, **kwargs)
