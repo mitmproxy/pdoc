@@ -2,6 +2,9 @@
 
 # Unreleased: pdoc next
 
+
+# 2022-11-05: pdoc 12.2.1
+
  - Fix handling of type annotations in nested classes.
    ([#440](https://github.com/mitmproxy/pdoc/issues/440), [@mhils](https://github.com/mhils))
  - `Doc.type` is now `Doc.kind` to avoid confusion with `builtins.type`.
