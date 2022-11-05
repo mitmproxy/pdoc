@@ -179,7 +179,14 @@ class _PdocDefusedPopen(subprocess.Popen):
                 "git",
             )
         )
-        if not command_allowed:
+        if not command_allowed and os.environ.get("PDOC_ALLOW_EXEC", "") == "":
+            # sys.stderr is patched, so we need to unpatch it for printing a warning.
+            with patch("sys.stderr", new=sys.__stderr__):
+                warnings.warn(
+                    f"Suppressed execution of {args[0]!r} during import. "
+                    f"Set PDOC_ALLOW_EXEC=1 as an environment variable to allow subprocess execution.",
+                    stacklevel=2,
+                )
             kwargs["executable"] = self._noop_exe
         super().__init__(*args, **kwargs)
 
