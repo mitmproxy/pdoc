@@ -2,6 +2,8 @@
 
 ## Unreleased: pdoc next
 
+ - Fix a bug in parsing Google-style docstrings with extraneous whitespace.
+   ([#459](https://github.com/mitmproxy/pdoc/pull/459), @vsajip, @mhils)
 
 ## 2022-11-10: pdoc 12.2.2
 
