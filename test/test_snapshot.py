@@ -176,13 +176,13 @@ if __name__ == "__main__":
     os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
+        if len(sys.argv) > 1 and snapshot.id not in sys.argv:
+            continue
         if sys.version_info < snapshot.min_version:
             print(
                 f"Skipping {snapshot} as it requires a more recent version of Python."
             )
             skipped_some = True
-            continue
-        if len(sys.argv) > 1 and snapshot.id not in sys.argv:
             continue
         for format in ["html", "repr"]:
             print(f"Rendering {snapshot} to {format}...")
