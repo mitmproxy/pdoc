@@ -117,7 +117,7 @@ flavors_google    </h1>
 Style Guide</a>. Docstrings may extend over multiple lines. Sections are created
 with a section header and a colon followed by a block of indented text.</p>
 
-<h6 id="example">Example</h6>
+<h6 id="example">Example:</h6>
 
 <blockquote>
   <p>Examples can be given using either the <code>Example</code> or <code>Examples</code>
@@ -131,7 +131,7 @@ with a section header and a colon followed by a block of indented text.</p>
 <p>Section breaks are created by resuming unindented text. Section breaks
 are also implicitly created anytime a new section starts.</p>
 
-<h6 id="attributes">Attributes</h6>
+<h6 id="attributes">Attributes:</h6>
 
 <ul>
 <li><p><strong>module_level_variable1 (int):</strong>  Module level variables may be documented in
@@ -143,7 +143,7 @@ one convention to document module level variables and be consistent
 with it.</p></li>
 </ul>
 
-<h6 id="todo">Todo</h6>
+<h6 id="todo">Todo:</h6>
 
 <blockquote>
   <ul>
@@ -644,14 +644,14 @@ on the first line, separated by a colon.</p>
 return types are annotated according to <a href="https://www.python.org/dev/peps/pep-0484/">PEP 484</a>, they do not need to be
 included in the docstring:</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>param1 (int):</strong>  The first parameter.</li>
 <li><strong>param2 (str):</strong>  The second parameter.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>bool: The return value. True for success, False otherwise.</p>
@@ -687,14 +687,14 @@ included in the docstring:</p>
 
             <div class="docstring"><p>Example function with PEP 484 type annotations.</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>param1:</strong>  The first parameter.</li>
 <li><strong>param2:</strong>  The second parameter.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>The return value. True for success, False otherwise.</p>
@@ -788,7 +788,7 @@ they should be listed as <code>*args</code> and <code>**kwargs</code>.</p>
     descriptions.
 </code></pre>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>param1 (int):</strong>  The first parameter.</li>
@@ -798,7 +798,7 @@ Second line of description should be indented.</li>
 <li><strong>**kwargs:</strong>  Arbitrary keyword arguments.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>bool: True if successful, False otherwise.</p>
@@ -819,7 +819,7 @@ Second line of description should be indented.</li>
 </code></pre>
 </blockquote>
 
-<h6 id="raises">Raises</h6>
+<h6 id="raises">Raises:</h6>
 
 <ul>
 <li><strong>AttributeError:</strong>  The <code>Raises</code> section is a list of all exceptions
@@ -865,19 +865,19 @@ that are relevant to the interface.</li>
 
             <div class="docstring"><p>Generators have a <code>Yields</code> section instead of a <code>Returns</code> section.</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>n (int):</strong>  The upper limit of the range to generate, from 0 to <code>n</code> - 1.</li>
 </ul>
 
-<h6 id="yields">Yields</h6>
+<h6 id="yields">Yields:</h6>
 
 <blockquote>
   <p>int: The next number in the range of 0 to <code>n</code> - 1.</p>
 </blockquote>
 
-<h6 id="examples">Examples</h6>
+<h6 id="examples">Examples:</h6>
 
 <blockquote>
   <p>Examples should be written in doctest format, and should illustrate how
@@ -943,20 +943,20 @@ docstring, or as a docstring on the __init__ method itself.</p>
 <p>Either form is acceptable, but the two should not be mixed. Choose one
 convention to document the __init__ method and be consistent with it.</p>
 
-<h6 id="note">Note</h6>
+<h6 id="note">Note:</h6>
 
 <blockquote>
   <p>Do not include the <code>self</code> parameter in the <code>Args</code> section.</p>
 </blockquote>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>msg (str):</strong>  Human readable string describing the exception.</li>
 <li><strong>code (<code>int</code>, optional):</strong>  Error code.</li>
 </ul>
 
-<h6 id="attributes">Attributes</h6>
+<h6 id="attributes">Attributes:</h6>
 
 <ul>
 <li><strong>msg (str):</strong>  Human readable string describing the exception.</li>
@@ -1156,7 +1156,7 @@ inline with the attribute's declaration (see __init__ method below).</p>
 <p>Properties created with the <code>@property</code> decorator should be documented
 in the property's getter method.</p>
 
-<h6 id="attributes">Attributes</h6>
+<h6 id="attributes">Attributes:</h6>
 
 <ul>
 <li><strong>attr1 (str):</strong>  Description of <code>attr1</code>.</li>
@@ -1214,13 +1214,13 @@ docstring, or as a docstring on the __init__ method itself.</p>
 <p>Either form is acceptable, but the two should not be mixed. Choose one
 convention to document the __init__ method and be consistent with it.</p>
 
-<h6 id="note">Note</h6>
+<h6 id="note">Note:</h6>
 
 <blockquote>
   <p>Do not include the <code>self</code> parameter in the <code>Args</code> section.</p>
 </blockquote>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>param1 (str):</strong>  Description of <code>param1</code>.</li>
@@ -1306,20 +1306,20 @@ mentioned here.</p>
 
             <div class="docstring"><p>Class methods are similar to regular functions.</p>
 
-<h6 id="note">Note</h6>
+<h6 id="note">Note:</h6>
 
 <blockquote>
   <p>Do not include the <code>self</code> parameter in the <code>Args</code> section.</p>
 </blockquote>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>param1:</strong>  The first parameter.</li>
 <li><strong>param2:</strong>  The second parameter.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>True if successful, False otherwise.</p>
@@ -1380,7 +1380,7 @@ mentioned here.</p>
 <p>Retrieves rows pertaining to the given keys from the Table instance
 represented by table_handle.  String keys will be UTF-8 encoded.</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>table_handle:</strong>  An open smalltable.Table instance.</li>
@@ -1390,7 +1390,7 @@ row to fetch.  String keys will be UTF-8 encoded.</li>
 rows with values set for all keys will be returned.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>A dict mapping keys to the corresponding table row data
@@ -1406,7 +1406,7 @@ rows with values set for all keys will be returned.</li>
   table (and require_all_keys must have been False).</p>
 </blockquote>
 
-<h6 id="raises">Raises</h6>
+<h6 id="raises">Raises:</h6>
 
 <ul>
 <li><strong>IOError:</strong>  An error occurred accessing the smalltable.</li>
@@ -1469,7 +1469,7 @@ rows with values set for all keys will be returned.</li>
 <p>Retrieves rows pertaining to the given keys from the Table instance
 represented by table_handle.  String keys will be UTF-8 encoded.</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong>table_handle:</strong>  An open smalltable.Table instance.</li>
@@ -1479,7 +1479,7 @@ fetch.  String keys will be UTF-8 encoded.</li>
 for all keys will be returned.</li>
 </ul>
 
-<h6 id="returns">Returns</h6>
+<h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p>A dict mapping keys to the corresponding table row data
@@ -1495,7 +1495,7 @@ for all keys will be returned.</li>
   table (and require_all_keys must have been False).</p>
 </blockquote>
 
-<h6 id="raises">Raises</h6>
+<h6 id="raises">Raises:</h6>
 
 <ul>
 <li><strong>IOError:</strong>  An error occurred accessing the smalltable.</li>
@@ -1541,7 +1541,7 @@ for all keys will be returned.</li>
 <p>Longer class information....
 Longer class information....</p>
 
-<h6 id="attributes">Attributes</h6>
+<h6 id="attributes">Attributes:</h6>
 
 <ul>
 <li><strong>likes_spam:</strong>  A boolean indicating if we like SPAM or not.</li>
@@ -1620,7 +1620,7 @@ Longer class information....</p>
 
             <div class="docstring"><p>In this example, there is no colon after the argument and an empty section.</p>
 
-<h6 id="args">Args</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li>test
@@ -1660,7 +1660,7 @@ there is a colon missing in the previous line</li>
 
             <div class="docstring"><p>Test case for <a href="https://github.com/mitmproxy/pdoc/issues/264">https://github.com/mitmproxy/pdoc/issues/264</a>.</p>
 
-<h6 id="example">Example</h6>
+<h6 id="example">Example:</h6>
 
 <blockquote>
   <div class="pdoc-code codehilite">
