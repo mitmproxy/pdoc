@@ -3,6 +3,7 @@
 ## Unreleased: pdoc next
 
  - Fix a CSS issue for overflowing math equations.
+   ([#456](https://github.com/mitmproxy/pdoc/pull/456), @mhils)
 
 ## 2022-11-05: pdoc 12.2.1
 
