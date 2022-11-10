@@ -79,7 +79,9 @@ def _google_section(m: re.Match[str]) -> str:
     else:
         contents = indent(contents, "> ", lambda line: True)
 
-    return f"\n###### {name}\n{contents}\n"
+    if name == 'Args': name = 'Arguments'
+
+    return f"\n###### {name}:\n{contents}\n"
 
 
 def _indented_list(contents: str) -> list[str]:
