@@ -63,7 +63,7 @@ GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
 
 def _google_section(m: re.Match[str]) -> str:
     name = m.group("name")
-    contents = dedent(m.group("contents"))
+    contents = dedent(m.group("contents")).lstrip()
     if name in GOOGLE_LIST_SECTIONS:
         items = _indented_list(contents)
         contents = ""

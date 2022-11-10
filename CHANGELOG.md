@@ -1,9 +1,19 @@
 # Release History
 
-# Unreleased: pdoc next
+## Unreleased: pdoc next
 
+ - Fix a bug in parsing Google-style docstrings with extraneous whitespace.
+   ([#459](https://github.com/mitmproxy/pdoc/pull/459), @vsajip, @mhils)
 
-# 2022-11-05: pdoc 12.2.1
+## 2022-11-10: pdoc 12.2.2
+
+ - Fix a CSS issue for overflowing math equations.
+   ([#456](https://github.com/mitmproxy/pdoc/pull/456), @mhils)
+ - Fix a regression from poc 12.2: Enum members are now always documented 
+   even if they do not have a docstring.
+   ([#457](https://github.com/mitmproxy/pdoc/pull/457), @mhils)
+
+## 2022-11-05: pdoc 12.2.1
 
  - Fix handling of type annotations in nested classes.
    ([#440](https://github.com/mitmproxy/pdoc/issues/440), [@mhils](https://github.com/mhils))
@@ -12,7 +22,7 @@
    modules that cannot be imported without executing subprocesses.
    ([#450](https://github.com/mitmproxy/pdoc/issues/450), [@mhils](https://github.com/mhils))
 
-# 2022-09-20: pdoc 12.2.0
+## 2022-09-20: pdoc 12.2.0
 
  - Make documentation of variables more consistent. Variables with a default value
    and no docstring are now hidden, matching the behavior of variables with a type annotation only.
@@ -29,7 +39,7 @@
    by explicitly passing them when invoking pdoc.
    ([#438](https://github.com/mitmproxy/pdoc/issues/438), [@mhils](https://github.com/mhils))
 
-# 2022-06-08: pdoc 12.1.0
+## 2022-06-08: pdoc 12.1.0
 
  - Add compatibility with Python 3.11
    ([#394](https://github.com/mitmproxy/pdoc/issues/394), [@mhils](https://github.com/mhils))
@@ -50,7 +60,7 @@
  - Fix compatibility with GitPython.
    ([#430](https://github.com/mitmproxy/pdoc/issues/430), [@mhils](https://github.com/mhils))
 
-# 2022-06-08: pdoc 12.0.2
+## 2022-06-08: pdoc 12.0.2
 
  - Extend auto-linking of URLs in Markdown.
    ([#401](https://github.com/mitmproxy/pdoc/issues/401), [@mhils](https://github.com/mhils))
@@ -61,13 +71,13 @@
  - Exclude line numbers from text selection.
    ([#405](https://github.com/mitmproxy/pdoc/issues/405), [@mhils](https://github.com/mhils))
 
-# 2022-06-03: pdoc 12.0.1
+## 2022-06-03: pdoc 12.0.1
 
  - Fix linking of some function return annotations.
  - Refine rendering of function signatures. Syntax errors are now handled more gracefully.
  - Gracefully handle the case when users specify objects instead of strings in `__all__`.
 
-# 2022-05-15: pdoc 12.0.0
+## 2022-05-15: pdoc 12.0.0
 
  - Improve rendering of function signatures. Annotations are now syntax-highlighted! ✨
  - Change the implementation of *View Source* to not use an HTML `<details>` element. Recent versions
@@ -84,7 +94,7 @@
      [`module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/pdoc/templates/default/module.html.jinja2).
  - Fix: Hide the nav menu checkbox in Firefox.  
 
-# 2022-05-04: pdoc 11.2.0
+## 2022-05-04: pdoc 11.2.0
 
  - pdoc now picks up type annotations from `.pyi` stub files (PEP-561).
    This greatly improves support for native modules where no Python source code is available,
@@ -96,7 +106,7 @@
  - Improve rendering of `typing.TypedDict` subclasses.
    ([#389](https://github.com/mitmproxy/pdoc/issues/389), [@mhils](https://github.com/mhils))
 
-# 2022-04-24: pdoc 11.1.0
+## 2022-04-24: pdoc 11.1.0
 
  - Display line numbers when viewing source code.
    ([#328](https://github.com/mitmproxy/pdoc/issues/328), [@mhils](https://github.com/mhils))
@@ -109,7 +119,7 @@
  - Fix compatibility with Pygments 2.12.
    ([#384](https://github.com/mitmproxy/pdoc/issues/384), [@mhils](https://github.com/mhils))
 
-# 2022-04-06: pdoc 11.0.0
+## 2022-04-06: pdoc 11.0.0
 
  - pdoc now picks up reStructuredText syntax in docstrings by default. We still prefer plain Markdown, 
    but this change makes it possible to seamlessly include directives like `.. include:: README.md` or admonitions, 
@@ -124,7 +134,7 @@
  - Add support for reStructuredText field lists: `:param foo: text`.
    ([#275](https://github.com/mitmproxy/pdoc/issues/275), [@mhils](https://github.com/mhils))
 
-# 2022-03-23: pdoc 10.0.4
+## 2022-03-23: pdoc 10.0.4
 
  - Include `typing.TypeVar` variables in documentation if they have an explicit docstring.
    ([#361](https://github.com/mitmproxy/pdoc/issues/361), [@ktbarrett](https://github.com/ktbarrett))
@@ -134,12 +144,12 @@
  - Fix a bug in markdown2 where code snippets interfere with latex expressions
    ([#340](https://github.com/mitmproxy/pdoc/issues/340), [@Crozzers](https://github.com/Crozzers))
 
-# 2022-03-08: pdoc 10.0.3
+## 2022-03-08: pdoc 10.0.3
 
  - Fix linking of modules.
    ([#360](https://github.com/mitmproxy/pdoc/issues/360), [@vlad-nn](https://github.com/vlad-nn))
 
-# 2022-03-01: pdoc 10.0.2
+## 2022-03-01: pdoc 10.0.2
 
  - When determining the docstring for a constructor, prefer `Class.__init__.__doc__` over `Metaclass.__call__.__doc__`
    over `Class.__new__.__doc__`.
@@ -149,14 +159,14 @@
  - Fix compatiblity with code using `ctypes.util.find_library`.
    ([#358](https://github.com/mitmproxy/pdoc/issues/358), [@bubalis](https://github.com/bubalis))
 
-# 2022-02-14: pdoc 10.0.1
+## 2022-02-14: pdoc 10.0.1
 
  - Fix a bug where pdoc would crash after executing `TYPE_CHECKING` blocks.
    ([#351](https://github.com/mitmproxy/pdoc/issues/351), [@Dliwk](https://github.com/Dliwk))
  - Add ability to specify custom CSS rules in `custom.css`.
    The migration instructions in the 10.0.0 changelog entry have been updated accordingly.
 
-# 2022-02-14: pdoc 10.0.0
+## 2022-02-14: pdoc 10.0.0
 
  - Template improvements may require minor adjustments to custom templates. Users who do not use custom templates are
    unaffected. ([#346](https://github.com/mitmproxy/pdoc/issues/346))
@@ -199,7 +209,7 @@
  - Improve overly greedy linking of identifiers ([#342](https://github.com/mitmproxy/pdoc/issues/342))
  - Include `py.typed` file in wheel distributions.
 
-# 2022-01-26: pdoc 9.0.1
+## 2022-01-26: pdoc 9.0.1
 
  - Emit a deprecation warning if custom templates attempt to include assets that were removed from or moved within pdoc.
  - Improve representation of default values.
@@ -208,7 +218,7 @@
  - On mobile devices, restrict the width of the search bar
    to avoid overflowing into the menu button.
 
-# 2022-01-24: pdoc 9.0.0
+## 2022-01-24: pdoc 9.0.0
 
  - **Breaking:** For projects that only document a single module (and its submodules),
    the module index has been removed. `index.html` now redirects to the top-level module instead.
@@ -229,7 +239,7 @@
    at the front of `sys.path`.
  - Improve evaluation of type annotations.
 
-# 2022-01-14: pdoc 8.3.0
+## 2022-01-14: pdoc 8.3.0
 
  - The search functionality now also covers function parameters,
    annotated types, default values, and base classes.
@@ -240,34 +250,34 @@
    For example, `pdoc foo !foo.bar` documents `foo` and all submodules of `foo` except `foo.bar`.
  - Only display headings up to a depth of 2 in the table of contents for module docstrings.
 
-# 2022-01-05: pdoc 8.2.0
+## 2022-01-05: pdoc 8.2.0
 
  - Improve rendering of warnings emitted by pdoc.
  - Improve search quality by disabling the word stemmer.
  - Fix a bug where the search bar on the index page did not work if only a single module was documented.
  - Add a warning when multiple modules with the same name are added from different paths.
 
-# 2021-12-28: pdoc 8.1.0
+## 2021-12-28: pdoc 8.1.0
 
  - Add CSS styling for Markdown tables. (@sitic)
  - Prefer epydoc-style docstrings after variable assignments 
    over the variable's `__doc__`.
  - Improve error message on search index compilation failures.
 
-# 2021-10-29: pdoc 8.0.1
+## 2021-10-29: pdoc 8.0.1
 
  - Fix an edge case where class annotations were not evaluated properly.
  - Improve error messages for invalid type hints.
  - Fix module index when using pdoc's web server.
 
-# 2021-09-19: pdoc 8.0.0
+## 2021-09-19: pdoc 8.0.0
 
  - `search.json` -> `search.js`: Most of pdoc's search-related JavaScript code is now
    only fetched on demand, which improves page size and performance.
  - pdoc's search now works from `file://` pages.
  - Improve display of (extension module) data descriptors.
 
-# 2021-08-18: pdoc 7.4.0
+## 2021-08-18: pdoc 7.4.0
 
  - Display error webpage for template errors.
  - When processing type hints, detect imports in 
@@ -275,11 +285,11 @@
    blocks.
  - Add `--no-search` to disable search functionality.
 
-# 2021-08-09: pdoc 7.3.1
+## 2021-08-09: pdoc 7.3.1
 
  - Fix a bug where an empty footer was incorrectly emitted by the template.
 
-# 2021-08-09: pdoc 7.3.0
+## 2021-08-09: pdoc 7.3.0
 
  - Full compatibility with Python 3.10.
  - Many template customizations are now directly available as command line switches, for example:
@@ -288,7 +298,7 @@
     - `--no-show-source`
     - `--footer-text`
 
-# 2021-07-28: pdoc 7.2.0
+## 2021-07-28: pdoc 7.2.0
 
  - Don't include variables/attributes that only have a type annotation but no value and no docstring.
    If one wants to document a variable, a docstring should be added.
@@ -298,12 +308,12 @@
  - Fix formatting of Google docstrings that have multiple colons.
  - Fix a crash when importing a module from within its directory.
 
-# 2021-06-11: pdoc 7.1.1
+## 2021-06-11: pdoc 7.1.1
 
  - Do not show constructors for abstract base classes unless they have a custom docstring.
  - Fix math example to render formulae in search results.
 
-# 2021-06-03: pdoc 7.1.0
+## 2021-06-03: pdoc 7.1.0
 
  - Invoking `pdoc` without any arguments now asks the user to specify module name
    instead of starting pdoc with all available modules. The previous implementation 
@@ -313,22 +323,22 @@
  - Add `pdoc.doc.Doc.source_lines` to access where in a file an object is defined.
  - Fix a crash when importing `asyncio` on Windows on Python 3.7. 
 
-# 2021-05-30: pdoc 7.0.3
+## 2021-05-30: pdoc 7.0.3
 
  - Do not show a search bar on the module page if only one module is documented.
    If the entire documentation is contained on a single HTML page, the browser's search functionality is just as good.
    Users can piggyback on their preexisting knowledge about the search semantics in this case.
 
-# 2021-05-27: pdoc 7.0.2
+## 2021-05-27: pdoc 7.0.2
 
  - Fix section indentation in Google-style docstrings.
 
-# 2021-05-21: pdoc 7.0.1
+## 2021-05-21: pdoc 7.0.1
 
  - Fix compatibility with older Jinja2 versions.
  - Fix basic compatibility with Python 3.10b1.
 
-# 2021-05-12: pdoc 7.0.0
+## 2021-05-12: pdoc 7.0.0
 
  - Add search functionality.
    pdoc now has a search bar which allows users to quickly
@@ -339,27 +349,27 @@
  - Do not fail if `inspect.getdoc()` raises.
  - Fix compatibility with Jinja2 3.0.0.
 
-# 2021-04-30: pdoc 6.6.0
+## 2021-04-30: pdoc 6.6.0
 
  - Jinja2 templates can now access system environment variables,
    for example to pass version information.
 
-# 2021-04-29: pdoc 6.5.0
+## 2021-04-29: pdoc 6.5.0
 
  - Add support for `.. include::` directives to include external Markdown files.
  - Add word break points for long module and class names. (@jstriebel)
 
-# 2021-04-21: pdoc 6.4.4
+## 2021-04-21: pdoc 6.4.4
 
  - Fix a crash when `inspect.signature` returns incomplete source code.
  - Fix a crash when inspecting unhashable functions.
 
-# 2021-04-11: pdoc 6.4.3
+## 2021-04-11: pdoc 6.4.3
 
  - Fix a bug when dedenting multi-line decorators.
  - Make it easier to change the logo on the module index page.
 
-# 2021-03-28: pdoc 6.4.2
+## 2021-03-28: pdoc 6.4.2
 
  - Minor rendering improvements for enums and typing.NamedTuples.
  - pdoc now emits a warning when directory names conflict with modules
@@ -367,7 +377,7 @@
  - If a class is publicly reimported in the current module, pdoc now links to
    the reimported instance instead of the source location.
 
-# 2021-03-19: pdoc 6.4.1
+## 2021-03-19: pdoc 6.4.1
 
  - Private function decorators (those starting with "\_")
    are now hidden by default. (@zmoon)
@@ -376,7 +386,7 @@
  - `__doc__` is now not rendered as a variable, even if included in `__all__`.
  - Submodules are now internally assigned a qualname, which fixes broken anchor links.
 
-# 2021-03-10: pdoc 6.4.0
+## 2021-03-10: pdoc 6.4.0
 
  - Functions in the current scope can now be referenced without specifying
    the full qualified name. For example, one can use `bar()` instead of 
@@ -384,38 +394,38 @@
  - Numpydoc: *See Also* sections are now parsed properly.
  - reStructuredText: Add support for footnotes and fix minor bugs.
 
-# 2021-02-24: pdoc 6.3.2
+## 2021-02-24: pdoc 6.3.2
 
  - Bugfix: Docstrings for data descriptors are now captured properly.
  - Add an example for math formula rendering.
 
-# 2021-02-15: pdoc 6.3.1
+## 2021-02-15: pdoc 6.3.1
 
  - Cosmetic improvements in default value rendering:
    object and function memory addresses are now stripped.
  - Accessibility Improvements
 
-# 2021-02-14: pdoc 6.3.0
+## 2021-02-14: pdoc 6.3.0
 
  - Respect `__all__` when collecting submodules.
  - Correct wrong links in module index (@fweisser)
  - Emit more detailed error messages on import failure.
 
-# 2021-02-12: pdoc 6.2.0
+## 2021-02-12: pdoc 6.2.0
 
  - Improvement: Add syntax highlighting in ">>>" code block examples.
  - Bugfix: Module-level comments are not properly live-reloaded.
 
-# 2021-02-12 pdoc 6.1.1
+## 2021-02-12 pdoc 6.1.1
 
  - Bugfix: Don't eat underscores in numpy/Google-style docstrings.
  - Bugfix: Fix rendering of typing.NamedTuple.
 
-# 2021-02-07 pdoc 6.1.0
+## 2021-02-07 pdoc 6.1.0
 
  - Add compatibility for Python 3.7
 
-# 2021-02-07 pdoc 6.0.0
+## 2021-02-07 pdoc 6.0.0
 
  - Add dark mode theme (@Arkelis)
    pdoc's color scheme can now be customized with CSS variables.
@@ -423,7 +433,7 @@
  - Docs: Add an example how to integrate pdoc with mkdocs.
  - Bugfix: pdoc now retains custom rendering configuration when it renders itself with live-reload.
 
-# 2021-02-05 pdoc 5.0.0
+## 2021-02-05 pdoc 5.0.0
 
  - Make it easier to embed pdoc into other systems:
    See <https://pdoc.dev/docs/pdoc.html#integrate-pdoc-into-other-systems> for details.
@@ -436,7 +446,7 @@
  - Bugfix: Functions decorated with `@classmethod` now also inherit their docstring.
  - Bugfix: The "View Source" marker is now properly displayed in Firefox.
 
-# 2021-02-01 pdoc 4.0.0
+## 2021-02-01 pdoc 4.0.0
 
  - Improve how inherited members are detected.
    `Doc.declared_at` is superseded by `Doc.taken_from`,
@@ -446,11 +456,11 @@
  - Smaller favicon, improved CSS minification
  - Improve error message if module is not found.
 
-# 2021-01-26 pdoc 3.0.1
+## 2021-01-26 pdoc 3.0.1
 
  - Fix usage of `--docformat`.
 
-# 2021-01-24 pdoc 3.0.0
+## 2021-01-24 pdoc 3.0.0
 
  - Add support for alternative docstring flavors.
    Flavors can be enabled globally using `--docformat` or on a per-module
@@ -463,18 +473,18 @@
  - Live-reloading is now more robust.
  - Improvements to the default theme.
 
-# 2021-01-22: pdoc 2.0.0
+## 2021-01-22: pdoc 2.0.0
 
  - Make it possible to selectively include private or exclude public members in templates.  
    This comes with a breaking change: `pdoc.doc.Namespace.members` now includes private members.
  - Enhancement: Keep page position when live-reloading.
  - Enhancement: Don't show common server connection errors in the console.
 
-# 2021-01-20: pdoc 1.1.0
+## 2021-01-20: pdoc 1.1.0
 
  - pdoc now respects `__all__` when listing submodules.
 
-# 2021-01-19: pdoc 1.0.1
+## 2021-01-19: pdoc 1.0.1
 
  - Test CI processes by shipping a quick patch release.
  - Bugfix: Don't crash on lambdas as class attributes.
@@ -482,7 +492,7 @@
  - Bugfix: Don't crash pdoc if a user's custom __getattr__ implementation is crashing.
  - Bugfix: use `inspect.unwrap` instead of unwrapping manually.
 
-# 2021-01-19: pdoc 1.0.0
+## 2021-01-19: pdoc 1.0.0
 
 This release features a major rewrite of pdoc, dropping compatibility
 with Python 2 and focusing on modern Python 3 only.
@@ -502,12 +512,12 @@ with Python 2 and focusing on modern Python 3 only.
 pdoc is now maintained by [@mhils](https://github.com/mhils) and the rest of the mitmproxy team.
 
 
-# pdoc 0.3.2
+## pdoc 0.3.2
 
   - Bugfix release.
 
 
-# pdoc 0.3.1
+## pdoc 0.3.1
 
   - Source code is extracted from __wrapped__ if it exists, and then
     falls back to inspect.getsourcelines. This reverses the behavior
@@ -517,73 +527,73 @@ pdoc is now maintained by [@mhils](https://github.com/mhils) and the rest of the
   - Get rid of tabs that sneaked in from #17.
   - Fix pep8 violations.
 
-# pdoc 0.3.0
+## pdoc 0.3.0
 
   - Major HTML face lift. Kudos to @knadh!
     (PR: https://github.com/mitmproxy/pdoc/pull/17)
 
-# pdoc 0.2.4
+## pdoc 0.2.4
 
   - Fixed bug in HTTP server that was referencing a non-existent
     variable.
 
-# pdoc 0.2.3
+## pdoc 0.2.3
 
   - Fixed #10 (the --template-dir flag now works).
 
-# pdoc 0.2.2
+## pdoc 0.2.2
 
   - Fixes #7 by ignoring module loaders that lack a 'path' attribute.
 
-# pdoc 0.2.1
+## pdoc 0.2.1
 
   - Fixes #5 by trying to find source for decorated functions.
     (@austin1howard)
 
-# pdoc 0.2.0
+## pdoc 0.2.0
 
   - Fix issue #2 by making pdoc a package instead of a module.
     The templates are now included as package_data, which seems
     to be more portable (its final location is more predictable).
 
-# pdoc 0.1.8
+## pdoc 0.1.8
 
   - pdoc now interprets `__pdoc__[key] = None` as an explicit way
     to hide `key` from the public interface of its module.
 
-# pdoc 0.1.7
+## pdoc 0.1.7
 
   - Removed __new__ from the public interface. I think __init__
     is sufficient.
 
-# pdoc 0.1.6
+## pdoc 0.1.6
 
   - Fixed bug #1.
 
-# pdoc 0.1.5
+## pdoc 0.1.5
 
   - Fixed a bug with an improper use of getattr.
   - Made pdoc aware of __slots__. (Every identifier in __slots__
     is automatically interpreted as an instance variable.)
 
-# pdoc 0.1.4
+## pdoc 0.1.4
 
   - Fixed bug where getargspec wasn't being used in Python 2.x.
 
-# pdoc 0.1.3
+## pdoc 0.1.3
 
   - Avoid a FQDN lookup.
 
-# pdoc 0.1.2
+## pdoc 0.1.2
 
   - A few doco touchups.
   - Fixed a bug in Py3K. Use getfullargspec when available.
 
-# pdoc 0.1.1
+## pdoc 0.1.1
 
   - Documentation touch ups.
   - Removed unused command line flags.
 
-# pdoc 0.1.0
+## pdoc 0.1.0
 
 First public release.
