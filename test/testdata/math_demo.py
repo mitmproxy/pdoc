@@ -46,11 +46,11 @@ def binom_coef(n: int, k: int) -> int:
 def long_formula():
     r"""
     $$
-        \Delta = 
-        \Delta_\text{this} + 
-        \Delta_\text{is} + 
-        \Delta_\text{a} + 
-        \Delta_\text{very} + 
+        \Delta =
+        \Delta_\text{this} +
+        \Delta_\text{is} +
+        \Delta_\text{a} +
+        \Delta_\text{very} +
         \Delta_\text{long} +
         \Delta_\text{formula} +
         \Delta_\text{that} +
