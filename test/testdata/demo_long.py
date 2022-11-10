@@ -243,7 +243,6 @@ class EnumDemo(enum.Enum):
     GREEN = 2
     """I am green."""
     BLUE = enum.auto()
-    """I am blue."""
 
 
 def admonitions():

@@ -1031,6 +1031,14 @@ class Variable(Doc[None]):
             return False
 
     @cached_property
+    def is_enum_member(self) -> bool:
+        """`True` if the variable is an enum member, `False` otherwise."""
+        if isinstance(self.default_value, enum.Enum):
+            return True
+        else:
+            return False
+
+    @cached_property
     def default_value_str(self) -> str:
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
