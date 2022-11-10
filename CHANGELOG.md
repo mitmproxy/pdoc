@@ -2,6 +2,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2022-11-10: pdoc 12.2.2
+
  - Fix a CSS issue for overflowing math equations.
    ([#456](https://github.com/mitmproxy/pdoc/pull/456), @mhils)
  - Fix a regression from poc 12.2: Enum members are now always documented 
