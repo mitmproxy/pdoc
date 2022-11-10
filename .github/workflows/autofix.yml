@@ -40,4 +40,6 @@ jobs:
       - run: git checkout test/testdata/ pdoc/markdown2/
       - run: test/test_snapshot.py
 
+      - uses: mhils/add-pr-ref-in-changelog@main
+
       - uses: autofix-ci/action@b101d576be6781832e923ea51e56391066802d4d
