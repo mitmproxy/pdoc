@@ -104,9 +104,10 @@ def _indented_list(contents: str) -> list[str]:
     ]
     """
     # we expect this to be through cleandoc() already.
-    assert not contents.startswith(" ")
-    assert not contents.startswith("\n")
-    assert "\t" not in contents
+    errmsg = f"Problem with docstring contents:\n{contents}"
+    assert not contents.startswith(" "), errmsg
+    assert not contents.startswith("\n"), errmsg
+    assert "\t" not in contents, errmsg
 
     ret: list[str] = []
     for line in contents.splitlines(keepends=True):
