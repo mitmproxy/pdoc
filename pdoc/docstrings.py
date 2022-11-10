@@ -79,7 +79,8 @@ def _google_section(m: re.Match[str]) -> str:
     else:
         contents = indent(contents, "> ", lambda line: True)
 
-    if name == 'Args': name = 'Arguments'
+    if name == 'Args':
+        name = 'Arguments'
 
     return f"\n###### {name}:\n{contents}\n"
 

@@ -78,9 +78,9 @@ This …
         <var a4: str = 'a4'  # inherited from demo_long.DataDemo.a4>
         <var b: bool = True  # inherited from demo_long.DataDemo.b, This property is ass…>>
     <class demo_long.EnumDemo  # This is an example o…
-        <var RED = <EnumDemo.RED: 1>  # I am the red.>
-        <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>
-        <var BLUE = <EnumDemo.BLUE: 3>  # I am blue.>
+        <var RED  # I am the red.>
+        <var GREEN  # I am green.>
+        <var BLUE  # I am blue.>
         <var name  # inherited from enum.Enum.name, The name of the Enum…>
         <var value  # inherited from enum.Enum.value, The value of the Enu…>>
     <function def admonitions(): ...  # pdoc also supports b…>>
