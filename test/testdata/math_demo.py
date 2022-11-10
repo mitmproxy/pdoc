@@ -41,3 +41,25 @@ def binom_coef(n: int, k: int) -> int:
     Evaluates to $n! / (k! * (n - k)!)$ when $k <= n$ and evaluates to zero when $k > n$.
     """
     return math.comb(n, k)
+
+
+def long_formula():
+    r"""
+    $$
+        \Delta = 
+        \Delta_\text{this} + 
+        \Delta_\text{is} + 
+        \Delta_\text{a} + 
+        \Delta_\text{very} + 
+        \Delta_\text{long} +
+        \Delta_\text{formula} +
+        \Delta_\text{that} +
+        \Delta_\text{does} +
+        \Delta_\text{not} +
+        \Delta_\text{fully} +
+        \Delta_\text{fit} +
+        \Delta_\text{on} +
+        \Delta_\text{the} +
+        \Delta_\text{screen}
+    $$
+    """

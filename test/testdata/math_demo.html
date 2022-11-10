@@ -28,7 +28,12 @@
             {childList: true}
         );
     })
-</script></head>
+</script>
+<style>
+    mjx-container {
+        overflow-x: auto;
+    }
+</style></head>
 <body>
     <nav class="pdoc">
         <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
@@ -49,6 +54,9 @@
             <ul class="memberlist">
             <li>
                     <a class="function" href="#binom_coef">binom_coef</a>
+            </li>
+            <li>
+                    <a class="function" href="#long_formula">long_formula</a>
             </li>
     </ul>
 
@@ -146,6 +154,28 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    Evaluates to $n! / (k! * (n - k)!)$ when $k &lt;= n$ and evaluates to zero when $k &gt; n$.</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="k">def</span> <span class="nf">long_formula</span><span class="p">():</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    $$</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        \Delta =</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        \Delta_\text{this} +</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        \Delta_\text{is} +</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        \Delta_\text{a} +</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        \Delta_\text{very} +</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        \Delta_\text{long} +</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        \Delta_\text{formula} +</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        \Delta_\text{that} +</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        \Delta_\text{does} +</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        \Delta_\text{not} +</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        \Delta_\text{fully} +</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        \Delta_\text{fit} +</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        \Delta_\text{on} +</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        \Delta_\text{the} +</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        \Delta_\text{screen}</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    $$</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -174,6 +204,61 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
             <div class="docstring"><p>Return the number of ways to choose $k$ items from $n$ items without repetition and without order.</p>
 
 <p>Evaluates to $n! / (k! * (n - k)!)$ when $k &lt;= n$ and evaluates to zero when $k &gt; n$.</p>
+</div>
+
+
+                </section>
+                <section id="long_formula">
+                            <input id="long_formula-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">long_formula</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="long_formula-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#long_formula"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="long_formula-47"><a href="#long_formula-47"><span class="linenos">47</span></a><span class="k">def</span> <span class="nf">long_formula</span><span class="p">():</span>
+</span><span id="long_formula-48"><a href="#long_formula-48"><span class="linenos">48</span></a>    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="long_formula-49"><a href="#long_formula-49"><span class="linenos">49</span></a><span class="sd">    $$</span>
+</span><span id="long_formula-50"><a href="#long_formula-50"><span class="linenos">50</span></a><span class="sd">        \Delta =</span>
+</span><span id="long_formula-51"><a href="#long_formula-51"><span class="linenos">51</span></a><span class="sd">        \Delta_\text{this} +</span>
+</span><span id="long_formula-52"><a href="#long_formula-52"><span class="linenos">52</span></a><span class="sd">        \Delta_\text{is} +</span>
+</span><span id="long_formula-53"><a href="#long_formula-53"><span class="linenos">53</span></a><span class="sd">        \Delta_\text{a} +</span>
+</span><span id="long_formula-54"><a href="#long_formula-54"><span class="linenos">54</span></a><span class="sd">        \Delta_\text{very} +</span>
+</span><span id="long_formula-55"><a href="#long_formula-55"><span class="linenos">55</span></a><span class="sd">        \Delta_\text{long} +</span>
+</span><span id="long_formula-56"><a href="#long_formula-56"><span class="linenos">56</span></a><span class="sd">        \Delta_\text{formula} +</span>
+</span><span id="long_formula-57"><a href="#long_formula-57"><span class="linenos">57</span></a><span class="sd">        \Delta_\text{that} +</span>
+</span><span id="long_formula-58"><a href="#long_formula-58"><span class="linenos">58</span></a><span class="sd">        \Delta_\text{does} +</span>
+</span><span id="long_formula-59"><a href="#long_formula-59"><span class="linenos">59</span></a><span class="sd">        \Delta_\text{not} +</span>
+</span><span id="long_formula-60"><a href="#long_formula-60"><span class="linenos">60</span></a><span class="sd">        \Delta_\text{fully} +</span>
+</span><span id="long_formula-61"><a href="#long_formula-61"><span class="linenos">61</span></a><span class="sd">        \Delta_\text{fit} +</span>
+</span><span id="long_formula-62"><a href="#long_formula-62"><span class="linenos">62</span></a><span class="sd">        \Delta_\text{on} +</span>
+</span><span id="long_formula-63"><a href="#long_formula-63"><span class="linenos">63</span></a><span class="sd">        \Delta_\text{the} +</span>
+</span><span id="long_formula-64"><a href="#long_formula-64"><span class="linenos">64</span></a><span class="sd">        \Delta_\text{screen}</span>
+</span><span id="long_formula-65"><a href="#long_formula-65"><span class="linenos">65</span></a><span class="sd">    $$</span>
+</span><span id="long_formula-66"><a href="#long_formula-66"><span class="linenos">66</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>$$
+    \Delta =
+    \Delta_\text{this} +
+    \Delta_\text{is} +
+    \Delta_\text{a} +
+    \Delta_\text{very} +
+    \Delta_\text{long} +
+    \Delta_\text{formula} +
+    \Delta_\text{that} +
+    \Delta_\text{does} +
+    \Delta_\text{not} +
+    \Delta_\text{fully} +
+    \Delta_\text{fit} +
+    \Delta_\text{on} +
+    \Delta_\text{the} +
+    \Delta_\text{screen}
+$$</p>
 </div>
 
 

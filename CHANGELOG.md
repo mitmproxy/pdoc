@@ -2,6 +2,7 @@
 
 # Unreleased: pdoc next
 
+ - Fix a CSS issue for overflowing math equations.
 
 # 2022-11-05: pdoc 12.2.1
 
