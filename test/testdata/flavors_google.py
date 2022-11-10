@@ -427,3 +427,14 @@ def example_code():
         tmp2 = a()
         ```
     """
+
+
+def newline_after_args(test: str):
+    """
+    Test case for https://github.com/mitmproxy/pdoc/pull/458.
+
+    Args:
+
+      test
+        there is unexpected whitespace before test.
+    """
