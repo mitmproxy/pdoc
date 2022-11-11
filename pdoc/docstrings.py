@@ -12,7 +12,10 @@ accompanied by matching snapshot tests in `test/testdata/`.
 """
 from __future__ import annotations
 
+import base64
 import inspect
+import mimetypes
+import os
 import re
 import warnings
 from pathlib import Path
@@ -38,7 +41,30 @@ def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
     if "numpy" in docformat:
         docstring = numpy(docstring)
 
+    if source_file is not None and os.environ.get("PDOC_EMBED_IMAGES") != "0":
+        docstring = embed_images(docstring, source_file)
+
     return docstring
+
+
+def embed_images(docstring: str, source_file: Path) -> str:
+    def embed_local_image(m: re.Match) -> str:
+        image_path = source_file.parent / m["href"]
+        try:
+            image_data = image_path.read_bytes()
+            image_mime = mimetypes.guess_type(image_path)[0]
+        except Exception:
+            return m[0]
+        else:
+            data = base64.b64encode(image_data).decode()
+            return f"![{m['alt']}](data:{image_mime};base64,{data})"
+
+    return re.sub(
+        r"!\[\s*(?P<alt>.*?)\s*]\(\s*(?P<href>.+?)\s*\)",
+        embed_local_image,
+        docstring,
+    )
+    # TODO: Could probably do more here, e.g. support rST or raw HTML replacements.
 
 
 def google(docstring: str) -> str:

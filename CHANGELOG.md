@@ -2,6 +2,8 @@
 
 ## Unreleased: pdoc next
 
+ - Docstrings can now include local images which will be embedded into the page, e.g. `![image](./image.png)`.
+   ([#282](https://github.com/mitmproxy/pdoc/issues/282), @mhils)
  - Fix a bug in parsing Google-style docstrings with extraneous whitespace.
    ([#459](https://github.com/mitmproxy/pdoc/pull/459), @vsajip, @mhils)
  - `pdoc.doc.Doc.members` now includes variables without type annotation and docstring.
