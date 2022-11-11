@@ -245,6 +245,18 @@ class EnumDemo(enum.Enum):
     BLUE = enum.auto()
 
 
+def embed_image():
+    """
+    This docstring includes an embedded image:
+
+    ```
+    ![pdoc logo](../docs/logo.png)
+    ```
+
+    ![pdoc logo](../../docs/logo.png)
+    """
+
+
 def admonitions():
     """
     pdoc also supports basic reStructuredText admonitions:
