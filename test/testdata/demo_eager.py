@@ -5,8 +5,8 @@ from typing import Union
 
 
 def foo(x: Literal["r", "w"]) -> Union[str, int]:
-    pass
+    raise NotImplementedError
 
 
 def bar(x: list["int"], /) -> List["int"]:
-    pass
+    raise NotImplementedError

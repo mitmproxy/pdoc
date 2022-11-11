@@ -86,6 +86,7 @@ def function_with_pep484_type_annotations(param1: int, param2: str) -> bool:
         The return value. True for success, False otherwise.
 
     """
+    raise NotImplementedError
 
 
 def module_level_function(param1, param2=None, *args, **kwargs):
@@ -344,6 +345,7 @@ def fetch_smalltable_rows(table_handle: Any,
     Raises:
         IOError: An error occurred accessing the smalltable.
     """
+    raise NotImplementedError
 
 
 def fetch_smalltable_rows2(table_handle: Any,
@@ -381,6 +383,7 @@ def fetch_smalltable_rows2(table_handle: Any,
     Raises:
       IOError: An error occurred accessing the smalltable.
     """
+    raise NotImplementedError
 
 
 class SampleClass:

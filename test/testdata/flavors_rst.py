@@ -133,7 +133,7 @@ def include():
     """
 
 
-def fields(foo: str = None, bar: bool = True) -> str:
+def fields(foo: str = "foo", bar: bool = True) -> str:
     """This method has field descriptions.
 
     :param foo: A string,
@@ -145,6 +145,7 @@ def fields(foo: str = None, bar: bool = True) -> str:
         or maybe `None`.
     :rtype: A string.
     """
+    raise NotImplementedError
 
 
 def fields_text_after_param(foo):
@@ -156,13 +157,14 @@ def fields_text_after_param(foo):
     """
 
 
-def fields_invalid(foo: str = None) -> str:
+def fields_invalid(foo: str = "foo") -> str:
     """This method has invalid `:param` definitions.
 
     :param: What is this for?
 
     :unknown: This is an unknown field name.
     """
+    raise NotImplementedError
 
 
 def fields_exception():
