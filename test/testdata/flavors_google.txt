@@ -1,4 +1,5 @@
 <module flavors_google  # Example Google style…
+    <var module_level_variable1 = 12345>
     <var module_level_variable2 = 98765  # int: Module level va…>
     <function def function_with_types_in_docstring(param1, param2): ...  # Example function wit…>
     <function def function_with_pep484_type_annotations(param1: int, param2: str) -> bool: ...  # Example function wit…>
@@ -6,11 +7,17 @@
     <function def example_generator(n): ...  # Generators have a ``…>
     <class flavors_google.ExampleError  # Exceptions are docum…
         <method def __init__(self, msg, code): ...>
+        <var msg>
+        <var code>
         <method def add_note(self, note: str): ...  # This method is prese…>
         <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
         <var args  # inherited from builtins.BaseException.args>>
     <class flavors_google.ExampleClass  # The summary line for…
         <method def __init__(self, param1, param2, param3): ...  # Example of docstring…>
+        <var attr1>
+        <var attr2>
+        <var attr3>
+        <var attr4>
         <var attr5  # str: Docstring *afte…>
         <var readonly_property  # str: Properties shou…>
         <var readwrite_property  # :obj:`list` of :obj:…>
@@ -27,6 +34,8 @@
     ) -> Mapping[bytes, Tuple[str]]: ...  # Fetches rows from a …>
     <class flavors_google.SampleClass  # Summary of class her…
         <method def __init__(self, likes_spam=False): ...  # Inits SampleClass wi…>
+        <var likes_spam>
+        <var eggs>
         <method def public_method(self): ...  # Performs operation b…>>
     <function def invalid_format(test): ...  # In this example, the…>
     <function def example_code(): ...  # Test case for https:…>

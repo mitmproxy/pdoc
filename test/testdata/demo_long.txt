@@ -4,6 +4,7 @@ This …
     <var FOO_CONSTANT: int = 42  # A happy constant. ✨ …>
     <var FOO_SINGLETON: demo_long.Foo  # This variable is ann…>
     <function def a_simple_function(a: str) -> str: ...  # This is a basic modu…>
+    <var T = ~T>
     <function def a_complex_function(
         a: str,
         b: Union[demo_long.Foo, str],
@@ -15,6 +16,7 @@ This …
         <var an_attribute: Union[str, List[int]]  # A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # An attribute with a …>
         <var a_constructor_only_attribute: int  # This attribute is de…>
+        <var undocumented_constructor_attribute>
         <method def a_regular_function(self) -> demo_long.Foo: ...  # This is a regular me…>
         <var a_property: str  # This is a `@property…>
         <var a_cached_property: str  # This is a `@functool…>
@@ -31,6 +33,7 @@ This …
         <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
+        <var undocumented_constructor_attribute  # inherited from demo_long.Foo.undocumented_constructor_attribute>
         <method def a_regular_function(self) -> demo_long.Foo: ...  # inherited from demo_long.Foo.a_regular_function, This is a regular me…>
         <var a_property: str  # inherited from demo_long.Foo.a_property, This is a `@property…>
         <var a_cached_property: str  # inherited from demo_long.Foo.a_cached_property, This is a `@functool…>
@@ -46,6 +49,7 @@ This …
         <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
+        <var undocumented_constructor_attribute  # inherited from demo_long.Foo.undocumented_constructor_attribute>
         <method def a_regular_function(self) -> demo_long.Foo: ...  # inherited from demo_long.Foo.a_regular_function, This is a regular me…>
         <var a_property: str  # inherited from demo_long.Foo.a_property, This is a `@property…>
         <var a_cached_property: str  # inherited from demo_long.Foo.a_cached_property, This is a `@functool…>
@@ -55,6 +59,7 @@ This …
         <@staticmethod static def a_static_method(): ...  # inherited from demo_long.Foo.a_static_method, This is what a `@sta…>
         <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>>
     <var CONST_B = 'yes'  # A constant without t…>
+    <var CONST_NO_DOC = 'SHOULD NOT APPEAR'>
     <@dataclass class demo_long.DataDemo  # This is an example f…
         <method def __init__(self, a: int, a2: Sequence[str], a4: str = 'a4', b: bool = True): ...>
         <var a: int  # Again, we can docume…>
