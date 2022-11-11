@@ -20,6 +20,7 @@ from typing import TypeVar
 
 from ._compat import ast_unparse
 from ._compat import cache
+import pdoc
 
 
 def get_source(obj: Any) -> str:
@@ -115,6 +116,9 @@ def _walk_tree(
             and isinstance(a.targets[0], ast.Name)
         ):
             name = a.targets[0].id
+            # Make sure that all assignments are picked up, even is there is
+            # no annotation or docstring.
+            annotations.setdefault(name, pdoc.doc_types.empty)
         elif isinstance(a, ast.FunctionDef) and a.body:
             first = a.body[0]
             if isinstance(first, ast.Expr) and isinstance(first.value, ast.Str):
