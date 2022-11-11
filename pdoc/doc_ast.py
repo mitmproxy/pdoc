@@ -18,9 +18,9 @@ from typing import Any
 from typing import overload
 from typing import TypeVar
 
+import pdoc
 from ._compat import ast_unparse
 from ._compat import cache
-import pdoc
 
 
 def get_source(obj: Any) -> str:
