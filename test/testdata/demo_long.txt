@@ -88,4 +88,5 @@ This …
         <var BLUE = <EnumDemo.BLUE: 3>>
         <var name  # inherited from enum.Enum.name, The name of the Enum…>
         <var value  # inherited from enum.Enum.value, The value of the Enu…>>
+    <function def embed_image(): ...  # This docstring inclu…>
     <function def admonitions(): ...  # pdoc also supports b…>>
