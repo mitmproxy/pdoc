@@ -100,14 +100,14 @@ class Foo:
     a_class_attribute: ClassVar[str] = "lots of foo!"
     """An attribute with a ClassVar annotation."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         The constructor is currently always listed first as this feels most natural."""
         self.a_constructor_only_attribute: int = 42
         """This attribute is defined in the constructor only, but still picked up by pdoc's AST traversal."""
 
         self.undocumented_constructor_attribute = 42
-        a_complex_function()
+        a_complex_function("a", "Foo")
 
     def a_regular_function(self) -> "Foo":
         """This is a regular method, returning the object itself."""
@@ -174,6 +174,7 @@ async def i_am_async(self) -> int:
     - An async function
     - Who's there?
     """
+    raise NotImplementedError
 
 
 @cache

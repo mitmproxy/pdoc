@@ -366,15 +366,15 @@ def repr_not_syntax_highlightable(x=CustomRepr()):
 
 
 class ClassDecorator:
-    "This is a class that wraps a function. It will be documented correctly."
+    """This is a class that wraps a function. It will be documented correctly."""
     def __init__(self, f):
         self.f = f
 
 
 @ClassDecorator
 def another_decorated_function(arg: str) -> str:
-    "This is another decorated function. It will not be documented correctly."
-    pass
+    """This is another decorated function. It will not be documented correctly."""
+    raise NotImplementedError
 
 
 class SubclassRef:

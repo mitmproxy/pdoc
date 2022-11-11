@@ -8,4 +8,4 @@ class Bar(Foo):
 
 
 def baz(f: Foo) -> Foo.FooSub:
-    pass
+    raise NotImplementedError

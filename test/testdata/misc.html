@@ -661,15 +661,15 @@ misc    </h1>
 </span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
-</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>    <span class="s2">&quot;This is a class that wraps a function. It will be documented correctly.&quot;</span>
+</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>    <span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
 </span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a><span class="nd">@ClassDecorator</span>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="k">def</span> <span class="nf">another_decorated_function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="s2">&quot;This is another decorated function. It will not be documented correctly.&quot;</span>
-</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>    <span class="k">pass</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="sd">&quot;&quot;&quot;This is another decorated function. It will not be documented correctly.&quot;&quot;&quot;</span>
+</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="k">class</span> <span class="nc">SubclassRef</span><span class="p">:</span>
@@ -2094,7 +2094,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#ClassDecorator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ClassDecorator-369"><a href="#ClassDecorator-369"><span class="linenos">369</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
-</span><span id="ClassDecorator-370"><a href="#ClassDecorator-370"><span class="linenos">370</span></a>    <span class="s2">&quot;This is a class that wraps a function. It will be documented correctly.&quot;</span>
+</span><span id="ClassDecorator-370"><a href="#ClassDecorator-370"><span class="linenos">370</span></a>    <span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
 </span><span id="ClassDecorator-371"><a href="#ClassDecorator-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 </span><span id="ClassDecorator-372"><a href="#ClassDecorator-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
 </span></pre></div>

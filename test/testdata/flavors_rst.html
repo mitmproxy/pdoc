@@ -224,7 +224,7 @@ flavors_rst    </h1>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">    :param foo: A string,</span>
@@ -236,31 +236,33 @@ flavors_rst    </h1>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        or maybe `None`.</span>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    :rtype: A string.</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    :param foo: Some text.</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    Here&#39;s some more text.</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    :param foo: Some text.</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">    Here&#39;s some more text.</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    :param: What is this for?</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">    :unknown: This is an unknown field name.</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">    :raises RuntimeError: Some multi-line</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        exception description.</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">    :param: What is this for?</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    :unknown: This is an unknown field name.</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    :raises RuntimeError: Some multi-line</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        exception description.</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -715,13 +717,13 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">fields</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>, </span><span class="param"><span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+        <span class="name">fields</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span>, </span><span class="param"><span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
 
                 <label class="view-source-button" for="fields-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#fields"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fields-137"><a href="#fields-137"><span class="linenos">137</span></a><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fields-137"><a href="#fields-137"><span class="linenos">137</span></a><span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="fields-138"><a href="#fields-138"><span class="linenos">138</span></a>    <span class="sd">&quot;&quot;&quot;This method has field descriptions.</span>
 </span><span id="fields-139"><a href="#fields-139"><span class="linenos">139</span></a>
 </span><span id="fields-140"><a href="#fields-140"><span class="linenos">140</span></a><span class="sd">    :param foo: A string,</span>
@@ -733,6 +735,7 @@ possible, like this: <sup class="footnote-ref" id="fnref-fn-1"><a href="#fn-fn-1
 </span><span id="fields-146"><a href="#fields-146"><span class="linenos">146</span></a><span class="sd">        or maybe `None`.</span>
 </span><span id="fields-147"><a href="#fields-147"><span class="linenos">147</span></a><span class="sd">    :rtype: A string.</span>
 </span><span id="fields-148"><a href="#fields-148"><span class="linenos">148</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="fields-149"><a href="#fields-149"><span class="linenos">149</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -768,13 +771,13 @@ boolean.</li>
 
     </div>
     <a class="headerlink" href="#fields_text_after_param"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_text_after_param-151"><a href="#fields_text_after_param-151"><span class="linenos">151</span></a><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
-</span><span id="fields_text_after_param-152"><a href="#fields_text_after_param-152"><span class="linenos">152</span></a>    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
-</span><span id="fields_text_after_param-153"><a href="#fields_text_after_param-153"><span class="linenos">153</span></a>
-</span><span id="fields_text_after_param-154"><a href="#fields_text_after_param-154"><span class="linenos">154</span></a><span class="sd">    :param foo: Some text.</span>
-</span><span id="fields_text_after_param-155"><a href="#fields_text_after_param-155"><span class="linenos">155</span></a>
-</span><span id="fields_text_after_param-156"><a href="#fields_text_after_param-156"><span class="linenos">156</span></a><span class="sd">    Here&#39;s some more text.</span>
-</span><span id="fields_text_after_param-157"><a href="#fields_text_after_param-157"><span class="linenos">157</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_text_after_param-152"><a href="#fields_text_after_param-152"><span class="linenos">152</span></a><span class="k">def</span> <span class="nf">fields_text_after_param</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+</span><span id="fields_text_after_param-153"><a href="#fields_text_after_param-153"><span class="linenos">153</span></a>    <span class="sd">&quot;&quot;&quot;This method has text after the `:param` fields.</span>
+</span><span id="fields_text_after_param-154"><a href="#fields_text_after_param-154"><span class="linenos">154</span></a>
+</span><span id="fields_text_after_param-155"><a href="#fields_text_after_param-155"><span class="linenos">155</span></a><span class="sd">    :param foo: Some text.</span>
+</span><span id="fields_text_after_param-156"><a href="#fields_text_after_param-156"><span class="linenos">156</span></a>
+</span><span id="fields_text_after_param-157"><a href="#fields_text_after_param-157"><span class="linenos">157</span></a><span class="sd">    Here&#39;s some more text.</span>
+</span><span id="fields_text_after_param-158"><a href="#fields_text_after_param-158"><span class="linenos">158</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -796,19 +799,20 @@ boolean.</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">fields_invalid</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
+        <span class="name">fields_invalid</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span></span><span class="return-annotation">) -> <span class="nb">str</span>:</span></span>
 
                 <label class="view-source-button" for="fields_invalid-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#fields_invalid"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_invalid-160"><a href="#fields_invalid-160"><span class="linenos">160</span></a><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="fields_invalid-161"><a href="#fields_invalid-161"><span class="linenos">161</span></a>    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
-</span><span id="fields_invalid-162"><a href="#fields_invalid-162"><span class="linenos">162</span></a>
-</span><span id="fields_invalid-163"><a href="#fields_invalid-163"><span class="linenos">163</span></a><span class="sd">    :param: What is this for?</span>
-</span><span id="fields_invalid-164"><a href="#fields_invalid-164"><span class="linenos">164</span></a>
-</span><span id="fields_invalid-165"><a href="#fields_invalid-165"><span class="linenos">165</span></a><span class="sd">    :unknown: This is an unknown field name.</span>
-</span><span id="fields_invalid-166"><a href="#fields_invalid-166"><span class="linenos">166</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_invalid-161"><a href="#fields_invalid-161"><span class="linenos">161</span></a><span class="k">def</span> <span class="nf">fields_invalid</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="fields_invalid-162"><a href="#fields_invalid-162"><span class="linenos">162</span></a>    <span class="sd">&quot;&quot;&quot;This method has invalid `:param` definitions.</span>
+</span><span id="fields_invalid-163"><a href="#fields_invalid-163"><span class="linenos">163</span></a>
+</span><span id="fields_invalid-164"><a href="#fields_invalid-164"><span class="linenos">164</span></a><span class="sd">    :param: What is this for?</span>
+</span><span id="fields_invalid-165"><a href="#fields_invalid-165"><span class="linenos">165</span></a>
+</span><span id="fields_invalid-166"><a href="#fields_invalid-166"><span class="linenos">166</span></a><span class="sd">    :unknown: This is an unknown field name.</span>
+</span><span id="fields_invalid-167"><a href="#fields_invalid-167"><span class="linenos">167</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="fields_invalid-168"><a href="#fields_invalid-168"><span class="linenos">168</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -836,11 +840,11 @@ boolean.</li>
 
     </div>
     <a class="headerlink" href="#fields_exception"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_exception-169"><a href="#fields_exception-169"><span class="linenos">169</span></a><span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
-</span><span id="fields_exception-170"><a href="#fields_exception-170"><span class="linenos">170</span></a>    <span class="sd">&quot;&quot;&quot;</span>
-</span><span id="fields_exception-171"><a href="#fields_exception-171"><span class="linenos">171</span></a><span class="sd">    :raises RuntimeError: Some multi-line</span>
-</span><span id="fields_exception-172"><a href="#fields_exception-172"><span class="linenos">172</span></a><span class="sd">        exception description.</span>
-</span><span id="fields_exception-173"><a href="#fields_exception-173"><span class="linenos">173</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fields_exception-171"><a href="#fields_exception-171"><span class="linenos">171</span></a><span class="k">def</span> <span class="nf">fields_exception</span><span class="p">():</span>
+</span><span id="fields_exception-172"><a href="#fields_exception-172"><span class="linenos">172</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="fields_exception-173"><a href="#fields_exception-173"><span class="linenos">173</span></a><span class="sd">    :raises RuntimeError: Some multi-line</span>
+</span><span id="fields_exception-174"><a href="#fields_exception-174"><span class="linenos">174</span></a><span class="sd">        exception description.</span>
+</span><span id="fields_exception-175"><a href="#fields_exception-175"><span class="linenos">175</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

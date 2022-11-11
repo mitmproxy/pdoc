@@ -148,7 +148,7 @@ miscargs.add_argument(
 )
 
 
-def cli(args: list[str] = None) -> None:
+def cli(args: list[str] | None = None) -> None:
     """Command-line entry point"""
     opts = parser.parse_args(args)
     if getattr(opts, "version", False):
