@@ -247,7 +247,8 @@ def rst(contents: str, source_file: Path | None) -> str:
     # Code References: :obj:`foo` -> `foo`
     contents = re.sub(
         r"(:py)?:(mod|func|data|const|class|meth|attr|exc|obj):`([^`]+)`",
-        replacer, contents
+        replacer,
+        contents,
     )
 
     # Math: :math:`foo` -> \\( foo \\)
