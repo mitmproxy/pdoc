@@ -9,6 +9,8 @@
  - `pdoc.doc.Doc.members` now includes variables without type annotation and docstring.
    They continue to not be documented in the default HTML template.
    ([#107](https://github.com/mitmproxy/pdoc/issues/107), @mhils)
+ - Improve the conversion of ReST to Markdown for function and method references.
+   ([#463](https://github.com/mitmproxy/pdoc/pull/463), @vsajip)
 
 ## 2022-11-10: pdoc 12.2.2
 
