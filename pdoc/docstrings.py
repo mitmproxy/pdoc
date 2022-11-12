@@ -237,9 +237,17 @@ def rst(contents: str, source_file: Path | None) -> str:
     contents = _rst_admonitions(contents, source_file)
     contents = _rst_links(contents)
 
+    def replacer(m):
+        _, kind, name = m.groups()
+        if kind in ("meth", "func"):
+            return f"`{name}()`"
+        else:
+            return f"`{name}`"
+
     # Code References: :obj:`foo` -> `foo`
     contents = re.sub(
-        r"(:py)?:(mod|func|data|const|class|meth|attr|exc|obj):", "", contents
+        r"(:py)?:(mod|func|data|const|class|meth|attr|exc|obj):`([^`]+)`",
+        replacer, contents
     )
 
     # Math: :math:`foo` -> \\( foo \\)
