@@ -385,6 +385,14 @@ class SubclassRef:
         self.x = x
 
 
+class ClassAsAttribute:
+    static_attr_to_class = ClassDecorator
+    """this is a static attribute that point to a Class (not an instance)"""
+
+    static_attr_to_instance = ClassDecorator(None)
+    """this is a static attribute that point to an instance"""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -417,4 +425,5 @@ __all__ = [
     "ClassDecorator",
     "another_decorated_function",
     "SubclassRef",
+    "ClassAsAttribute",
 ]

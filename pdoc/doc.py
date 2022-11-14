@@ -283,6 +283,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 inspect.isclass(obj)
                 and obj is not empty
                 and not isinstance(obj, GenericAlias)
+                and obj.__qualname__.rpartition(".")[2] == qualname.rpartition(".")[2]
             ):
                 # `dict[str,str]` is a GenericAlias instance. We want to render type aliases as variables though.
                 doc = Class(self.modulename, qualname, obj, taken_from)

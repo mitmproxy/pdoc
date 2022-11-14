@@ -11,6 +11,8 @@
    ([#107](https://github.com/mitmproxy/pdoc/issues/107), @mhils)
  - Improve the conversion of reStructuredText to Markdown for function and method references.
    ([#463](https://github.com/mitmproxy/pdoc/pull/463), @vsajip)
+ - Static class attributes that point to a class are now rendered as variables, not as separate classes.
+   ([#465](https://github.com/mitmproxy/pdoc/pull/465), @mhils)
 
 ## 2022-11-10: pdoc 12.2.2
 
