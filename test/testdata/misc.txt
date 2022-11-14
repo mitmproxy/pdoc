@@ -78,4 +78,8 @@
         <method def __init__(self, x: misc.SubclassRef.SubClass): ...>
         <class misc.SubclassRef.SubClass
             <method def __init__(): ...>>
-        <var x>>>
+        <var x>>
+    <class misc.ClassAsAttribute
+        <method def __init__(): ...>
+        <var static_attr_to_class = <class 'misc.ClassDecorator'>  # this is a static att…>
+        <var static_attr_to_instance = <misc.ClassDecorator object>  # this is a static att…>>>
