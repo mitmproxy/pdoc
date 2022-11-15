@@ -439,6 +439,9 @@ In addition, the following extra syntax elements are enabled:
 [GitHub-Flavored Markdown]: https://github.github.com/gfm/
 [PHP-Markdown Extra]: https://michelf.ca/projects/php-markdown/extra/#table
 
+It is possible (but not recommended) to use another Markdown library with pdoc.
+See [#401](https://github.com/mitmproxy/pdoc/issues/401#issuecomment-1148661829) for details.
+
 # Using pdoc as a library
 
 pdoc provides the high-level `pdoc.pdoc()` interface explained below. This makes it possible to do custom adjustments
