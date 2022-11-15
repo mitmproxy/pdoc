@@ -4,6 +4,10 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+
+## 2022-11-15: pdoc 12.3.0
+
  - Docstrings can now include local images which will be embedded into the page, e.g. `![image](./image.png)`.
    ([#282](https://github.com/mitmproxy/pdoc/issues/282), @mhils)
  - Fix a bug in parsing Google-style docstrings with extraneous whitespace.
