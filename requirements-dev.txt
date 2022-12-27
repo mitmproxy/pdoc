@@ -32,7 +32,7 @@ pytest-cov==4.0.0
 pytest-timeout==2.1.0
 pyupgrade==3.2.2
 reorder-python-imports==3.9.0
-setuptools==47.1.0
+setuptools==65.5.1
 six==1.16.0
 sortedcontainers==2.4.0
 tokenize-rt==5.0.0
