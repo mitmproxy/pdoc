@@ -62,7 +62,7 @@ jobs:
       - name: Install setuptools from PyPI
         uses: install-pinned/setuptools@a3794bc223f37de1a371a34b64836a8c0c4f3167  # 65.6.3
       - name: Install wheel from PyPI
-        uses: install-pinned/wheel@898673260e6f8eb95e3602c6a08907ca13670387  # 0.38.4
+        uses: install-pinned/wheel@53c86096b91671b8bb138a78a963c1e88295a5a3  # 0.38.4
 
       - run: sudo unshare --net -- $(which python) -m build --no-isolation
       - uses: actions/upload-artifact@v3
