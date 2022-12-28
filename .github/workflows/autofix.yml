@@ -26,4 +26,4 @@ jobs:
 
       - uses: mhils/add-pr-ref-in-changelog@main
 
-      - uses: autofix-ci/action@b101d576be6781832e923ea51e56391066802d4d
+      - uses: autofix-ci/action@8bc06253bec489732e5f9c52884c7cace15c0160
