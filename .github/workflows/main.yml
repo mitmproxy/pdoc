@@ -6,31 +6,16 @@ permissions:
   contents: read
 
 jobs:
-  lint-pr:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: TrueBrain/actions-flake8@9a43ff1b2c7b96f3edffc48a49973ce3de116ba1
-  lint-local:
-    if: github.event_name == 'push'
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version-file: .github/python-version.txt
-      - run: pip install tox
-      - run: tox -e flake8
-  mypy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version-file: .github/python-version.txt
-      - run: pip install tox
-      - run: tox -e mypy
+      - name: Install tox from PyPI
+        uses: install-pinned/tox@1bef451c18dcd629082d73fd4d7f57fdaa64ccf5  # 4.0.18
+      - run: tox -e lint
   test:
     strategy:
       fail-fast: false
@@ -61,8 +46,29 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.py }}
-      - run: pip install tox
+      - name: Install tox from PyPI
+        uses: install-pinned/tox@1bef451c18dcd629082d73fd4d7f57fdaa64ccf5  # 4.0.18
       - run: tox -e py -- -vvv ${{ matrix.args }}
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version-file: .github/python-version.txt
+      - name: Install build from PyPI
+        uses: install-pinned/build@7dc86bac5c289186da40e9ef255981d74ba7db4b  # 0.9.0
+      - name: Install setuptools from PyPI
+        uses: install-pinned/setuptools@a3794bc223f37de1a371a34b64836a8c0c4f3167  # 65.6.3
+      - name: Install wheel from PyPI
+        uses: install-pinned/wheel@898673260e6f8eb95e3602c6a08907ca13670387  # 0.38.4
+
+      - run: sudo unshare --net -- $(which python) -m build --no-isolation
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
 
   deploy:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
@@ -72,11 +78,25 @@ jobs:
       TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
       TWINE_REPOSITORY: ${{ secrets.TWINE_REPOSITORY }}
     runs-on: ubuntu-latest
-    needs: [mypy, test]
+    needs: [lint, test, build]
     steps:
-      - uses: actions/checkout@v3
       - run: sudo apt-get update
-      - run: sudo apt-get install -y twine python3-wheel
-      - run: python3 setup.py sdist bdist_wheel
+      - run: sudo apt-get install -y twine
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
       - run: twine check dist/*
       - run: twine upload dist/*
+
+  check:
+    if: always()
+    runs-on: ubuntu-latest
+    needs:
+    - lint
+    - test
+    - build
+    steps:
+    - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe  # v1.2.2
+      with:
+        jobs: ${{ toJSON(needs) }}

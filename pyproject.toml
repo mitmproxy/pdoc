@@ -1,0 +1,121 @@
+[project]
+name = "pdoc"
+description = "API Documentation for Python Projects"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text="Unlicense" }
+authors = [{name = "Maximilian Hils", email = "pdoc@maximilianhils.com"}]
+dynamic = ["version"]
+
+dependencies = [
+    "Jinja2 >= 2.11.0",
+    "pygments >= 2.12.0",
+    "MarkupSafe",
+    "astunparse; python_version<'3.9'",
+]
+
+classifiers = [
+    "Topic :: Documentation",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Utilities",
+    "License :: Public Domain",
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://pdoc.dev"
+Source = "https://github.com/mitmproxy/pdoc/"
+Documentation = "https://pdoc.dev/docs/pdoc.html"
+Issues = "https://github.com/mitmproxy/pdoc/issues"
+
+[project.scripts]
+pdoc = "pdoc.__main__:cli"
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "ruff",
+    "black",
+    "mypy",
+    "types-pygments",
+    "pytest",
+    "pytest-cov",
+    "pytest-timeout",
+    "hypothesis",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "pdoc.__version__"}
+
+[tool.coverage.run]
+branch = false
+omit = [
+    "pdoc/markdown2/*",
+]
+
+# continue exclude: https://github.com/nedbat/coveragepy/issues/198
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "@overload",
+    "if TYPE_CHECKING:",
+    "pass",
+    "continue",
+]
+
+[tool.pytest.ini_options]
+testpaths = "test"
+addopts = "-p no:xdist"
+timeout = 120
+markers = [
+    "slow: marks tests as slow.",
+]
+
+[tool.black]
+extend-exclude = "test/testdata/demo.py"
+
+[[tool.mypy.overrides]]
+module = "pytest.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "demopackage2"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 140
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = lint, py
+skipsdist = True
+toxworkdir = {env:TOX_WORK_DIR:.tox}
+
+[testenv]
+deps =
+    -r requirements-dev.txt
+    -e .
+commands =
+    pdoc --version
+    pytest --cov=pdoc --cov-report term-missing {posargs:-m "not slow"}
+
+[testenv:lint]
+commands =
+    ruff . {posargs}
+    mypy pdoc test {posargs}
+"""
