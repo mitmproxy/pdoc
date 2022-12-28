@@ -14,7 +14,7 @@ jobs:
         with:
           python-version-file: .github/python-version.txt
       - name: Install tox from PyPI
-        uses: install-pinned/tox@1bef451c18dcd629082d73fd4d7f57fdaa64ccf5  # 4.0.18
+        uses: install-pinned/tox@7a96e52d193b411b9ccd672dfab034dd92771f02  # 4.0.18
       - run: tox -e lint
   test:
     strategy:
@@ -47,7 +47,7 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
       - name: Install tox from PyPI
-        uses: install-pinned/tox@1bef451c18dcd629082d73fd4d7f57fdaa64ccf5  # 4.0.18
+        uses: install-pinned/tox@7a96e52d193b411b9ccd672dfab034dd92771f02  # 4.0.18
       - run: tox -e py -- -vvv ${{ matrix.args }}
 
   build:
