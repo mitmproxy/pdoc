@@ -16,26 +16,10 @@ jobs:
           python-version-file: .github/python-version.txt
 
       - run: pip install -r requirements-dev.txt
-      - run: pip install -e .
+      - run: pip install --no-deps -e .
 
+      - run: ruff --fix-only .
       - run: black .
-
-      - name: Run pyupgrade
-        run: |
-         shopt -s globstar
-         pyupgrade --exit-zero-even-if-changed --py37-plus **/*.py
-
-      - name: Run reorder-python-imports
-        run: |
-         shopt -s globstar
-         reorder-python-imports --exit-zero-even-if-changed --py37-plus **/*.py
-
-      - name: Run yesqa
-        run: |
-         shopt -s globstar
-         yesqa **/*.py || true
-
-      - run: autoflake --in-place --remove-all-unused-imports -r .
 
       - run: git checkout test/testdata/ pdoc/markdown2/
       - run: test/test_snapshot.py
