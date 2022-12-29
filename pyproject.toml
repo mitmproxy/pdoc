@@ -57,6 +57,9 @@ dev = [
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+py-modules = []
+
 [tool.setuptools.dynamic]
 version = {attr = "pdoc.__version__"}
 
