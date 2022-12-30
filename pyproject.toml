@@ -60,6 +60,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.dynamic]
 version = {attr = "pdoc.__version__"}
 
+[tool.setuptools.packages.find]
+include = ["pdoc*"]
+
 [tool.coverage.run]
 branch = false
 omit = [

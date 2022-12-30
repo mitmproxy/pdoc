@@ -4,7 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
-
+ - Switch from `setup.py` to `pyproject.toml` for pdoc itself. Please file an issue if that causes any problems. 
+   ([#474](https://github.com/mitmproxy/pdoc/issues/474), @mhils)
 
 ## 2022-11-15: pdoc 12.3.0
 
