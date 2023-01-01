@@ -75,7 +75,7 @@ ruff==0.0.205
     # via pdoc (pyproject.toml)
 sortedcontainers==2.4.0
     # via hypothesis
-tox==4.0.18
+tox==4.1.2
     # via pdoc (pyproject.toml)
 types-docutils==0.19.1.1
     # via types-pygments
