@@ -441,3 +441,14 @@ def newline_after_args(test: str):
       test
         there is unexpected whitespace before test.
     """
+
+
+def alternative_section_names(test: str):
+    """
+    In this example, we check whether alternative section names aliased to
+    'Args' are handled properly.
+
+    Parameters:
+        test: the test string
+    """
+

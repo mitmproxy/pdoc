@@ -39,4 +39,5 @@
         <method def public_method(self): ...  # Performs operation b…>>
     <function def invalid_format(test): ...  # In this example, the…>
     <function def example_code(): ...  # Test case for https:…>
-    <function def newline_after_args(test: str): ...  # Test case for https:…>>
+    <function def newline_after_args(test: str): ...  # Test case for https:…>
+    <function def alternative_section_names(test: str): ...  # In this example, we …>>

@@ -85,11 +85,25 @@ def google(docstring: str) -> str:
 
 
 GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
+"""Section headers listed in the official Google docstring style guide."""
+
+GOOGLE_LIST_SECTION_ALIASES = {
+    "Parameters": "Args",
+    "Params": "Args"
+}
+"""Alternative section headers that are not listed in the official Google
+docstring style guide but that we recognize as sections containing lists
+nevertheless.
+"""
 
 
 def _google_section(m: re.Match[str]) -> str:
     name = m.group("name")
     contents = dedent(m.group("contents")).lstrip()
+
+    if name in GOOGLE_LIST_SECTION_ALIASES:
+        name = GOOGLE_LIST_SECTION_ALIASES[name]
+
     if name in GOOGLE_LIST_SECTIONS:
         items = _indented_list(contents)
         contents = ""
