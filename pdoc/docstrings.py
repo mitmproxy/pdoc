@@ -87,10 +87,7 @@ def google(docstring: str) -> str:
 GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes"]
 """Section headers listed in the official Google docstring style guide."""
 
-GOOGLE_LIST_SECTION_ALIASES = {
-    "Parameters": "Args",
-    "Params": "Args"
-}
+GOOGLE_LIST_SECTION_ALIASES = {"Parameters": "Args", "Params": "Args"}
 """Alternative section headers that are not listed in the official Google
 docstring style guide but that we recognize as sections containing lists
 nevertheless.
