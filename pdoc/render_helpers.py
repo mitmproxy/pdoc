@@ -370,9 +370,9 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> st
 
     # Check if the object we are interested is also imported and re-exposed in the current namespace.
     # https://github.com/mitmproxy/pdoc/issues/490: We need to do this for every level, not just the tail.
-    doc = mod
+    doc: pdoc.doc.Doc | None = mod
     for part in qualname.split("."):
-        doc = doc.get(part)
+        doc = doc.get(part) if isinstance(doc, pdoc.doc.Namespace) else None
         if not (
             doc
             and doc.taken_from[0] == modulename
