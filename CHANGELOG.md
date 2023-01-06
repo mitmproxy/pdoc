@@ -7,6 +7,9 @@
  - Switch from `setup.py` to `pyproject.toml` for pdoc itself. Please file an issue if that causes any problems. 
    ([#474](https://github.com/mitmproxy/pdoc/issues/474), @mhils)
 
+ - "Parameters", "Params" and "Arguments" are now also accepted as headings for
+   argument lists in Google-style docstrings.
+
 ## 2022-11-15: pdoc 12.3.0
 
  - Docstrings can now include local images which will be embedded into the page, e.g. `![image](./image.png)`.
