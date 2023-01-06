@@ -92,7 +92,8 @@ GOOGLE_LIST_SECTION_ALIASES = {
     "Params": "Args",
     "Arguments": "Args",
 }
-"""Alternative section headers that are not listed in the official Google
+"""
+Alternative section headers that are not listed in the official Google
 docstring style guide but that we recognize as sections containing lists
 nevertheless.
 """
