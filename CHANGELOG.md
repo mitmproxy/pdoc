@@ -6,7 +6,8 @@
 
  - Switch from `setup.py` to `pyproject.toml` for pdoc itself. Please file an issue if that causes any problems. 
    ([#474](https://github.com/mitmproxy/pdoc/issues/474), @mhils)
- - Fix broken links for inherited methods if both parent and subclass have the same name. 
+ - Fix broken links for inherited methods if both parent and subclass have the same name.
+   ([#493](https://github.com/mitmproxy/pdoc/pull/493), @mhils) 
 
 ## 2022-11-15: pdoc 12.3.0
 
