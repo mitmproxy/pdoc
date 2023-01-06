@@ -82,4 +82,18 @@
     <class misc.ClassAsAttribute
         <method def __init__(): ...>
         <var static_attr_to_class = <class 'misc.ClassDecorator'>  # this is a static att…>
-        <var static_attr_to_instance = <misc.ClassDecorator object>  # this is a static att…>>>
+        <var static_attr_to_instance = <misc.ClassDecorator object>  # this is a static att…>>
+    <class misc.scheduler  # Test for broken link…
+        <method def __init__(
+            self,
+            timefunc=<built-in function monotonic>,
+            delayfunc=<built-in function sleep>
+        ): ...  # inherited from sched.scheduler.__init__, Initialize a new ins…>
+        <var timefunc  # inherited from sched.scheduler.timefunc>
+        <var delayfunc  # inherited from sched.scheduler.delayfunc>
+        <method def enterabs(self, time, priority, action, argument=(), kwargs=<object object>): ...  # inherited from sched.scheduler.enterabs, Enter a new event in…>
+        <method def enter(self, delay, priority, action, argument=(), kwargs=<object object>): ...  # inherited from sched.scheduler.enter, A variant that speci…>
+        <method def cancel(self, event): ...  # inherited from sched.scheduler.cancel, Remove an event from…>
+        <method def empty(self): ...  # inherited from sched.scheduler.empty, Check whether the qu…>
+        <method def run(self, blocking=True): ...  # inherited from sched.scheduler.run, Execute events until…>
+        <var queue  # inherited from sched.scheduler.queue, An ordered list of u…>>>

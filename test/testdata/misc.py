@@ -1,4 +1,5 @@
 import abc
+import sched
 from functools import lru_cache
 from typing import Generic
 from typing import TypeVar
@@ -393,6 +394,10 @@ class ClassAsAttribute:
     """this is a static attribute that point to an instance"""
 
 
+class scheduler(sched.scheduler):
+    """Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490"""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -426,4 +431,5 @@ __all__ = [
     "another_decorated_function",
     "SubclassRef",
     "ClassAsAttribute",
+    "scheduler",
 ]
