@@ -369,8 +369,18 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> st
     modulename, qualname = spec
 
     # Check if the object we are interested is also imported and re-exposed in the current namespace.
-    doc = mod.get(qualname)
-    if doc and doc.taken_from == spec and context["is_public"](doc).strip():
+    # https://github.com/mitmproxy/pdoc/issues/490: We need to do this for every level, not just the tail.
+    doc = mod
+    for part in qualname.split("."):
+        doc = doc.get(part)
+        if not (
+            doc
+            and doc.taken_from[0] == modulename
+            and context["is_public"](doc).strip()
+        ):
+            break
+    else:
+        # everything down to the tail is imported and re-exposed.
         if text:
             text = text.replace(f"{modulename}.", f"{mod.modulename}.")
         modulename = mod.modulename
