@@ -67,27 +67,15 @@ jobs:
       - run: sudo unshare --net -- $(which python) -m build --no-isolation
       - uses: actions/upload-artifact@v3
         with:
-          name: dist
+          name: wheels
           path: dist/
 
   deploy:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-    environment: deploy
-    env:
-      TWINE_USERNAME: __token__
-      TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-      TWINE_REPOSITORY: ${{ secrets.TWINE_REPOSITORY }}
-    runs-on: ubuntu-latest
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@main
     needs: [lint, test, build]
-    steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y twine
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist/
-      - run: twine check dist/*
-      - run: twine upload dist/*
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    secrets:
+      password: ${{ secrets.TWINE_PASSWORD }}
 
   check:
     if: always()
