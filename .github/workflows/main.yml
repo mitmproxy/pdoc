@@ -1,4 +1,4 @@
-name: continuous integration
+name: ci
 
 on: [ push, pull_request ]
 
@@ -7,15 +7,10 @@ permissions:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version-file: .github/python-version.txt
-      - name: Install tox from PyPI
-        uses: install-pinned/tox@952fc3745065aff6bad482017c5a81eda47d00f0  # 4.0.18
-      - run: tox -e lint
+    uses: mhils/workflows/.github/workflows/python-tox.yml@main
+    with:
+      cmd: tox -e lint -- -v ${{ matrix.args }}
+
   test:
     strategy:
       fail-fast: false
@@ -38,53 +33,28 @@ jobs:
             py: 3.8.14
           - os: ubuntu-latest
             py: 3.7.15
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.py }}
-      - name: Install tox from PyPI
-        uses: install-pinned/tox@952fc3745065aff6bad482017c5a81eda47d00f0  # 4.0.18
-      - run: tox -e py -- -vvv ${{ matrix.args }}
+    uses: mhils/workflows/.github/workflows/python-tox.yml@main
+    with:
+      cmd: tox -e py -- -v ${{ matrix.args }}
+      os: ${{ matrix.os }}
+      python-version: ${{ matrix.py }}
 
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version-file: .github/python-version.txt
-      - name: Install build from PyPI
-        uses: install-pinned/build@80d41abb0995d6d957a562f30fc70c39fca61b6f  # 0.9.0
-      - name: Install setuptools from PyPI
-        uses: install-pinned/setuptools@0d74f5e9d09987231503f9b1c8e6c918e1c45fb8  # 65.6.3
-      - name: Install wheel from PyPI
-        uses: install-pinned/wheel@53c86096b91671b8bb138a78a963c1e88295a5a3  # 0.38.4
-
-      - run: sudo unshare --net -- $(which python) -m build --no-isolation
-      - uses: actions/upload-artifact@v3
-        with:
-          name: wheels
-          path: dist/
-
-  deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@main
-    needs: [lint, test, build]
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-    secrets:
-      password: ${{ secrets.TWINE_PASSWORD }}
+    uses: mhils/workflows/.github/workflows/python-build.yml@main
 
   check:
     if: always()
-    runs-on: ubuntu-latest
     needs:
     - lint
     - test
     - build
-    steps:
-    - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe  # v1.2.2
-      with:
-        jobs: ${{ toJSON(needs) }}
+    uses: mhils/workflows/.github/workflows/alls-green.yml@main
+    with:
+      jobs: ${{ toJSON(needs) }}
+
+  deploy:
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@main
+    needs: check
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    secrets:
+      password: ${{ secrets.TWINE_PASSWORD }}
