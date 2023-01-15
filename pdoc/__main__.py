@@ -221,7 +221,7 @@ def get_dev_version() -> str:
 
     here = Path(__file__).parent
 
-    try:
+    try:  # pragma: no cover
         # Check that we're in the pdoc repository:
         # 60665024af9af2cda4229e91b4d15f2359a4a3dd is the first pdoc commit.
         subprocess.run(
