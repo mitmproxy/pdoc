@@ -32,7 +32,7 @@ iniconfig==1.1.1
     # via pytest
 jinja2==3.1.2
     # via pdoc (pyproject.toml)
-markupsafe==2.1.1
+markupsafe==2.1.2
     # via
     #   jinja2
     #   pdoc (pyproject.toml)
