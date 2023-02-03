@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Add a workaround to support inherited TypedDicts.
+   ([#504](https://github.com/mitmproxy/pdoc/issues/504), @mhils)
+
 ## 2023-01-06: pdoc 12.3.1
 
  - Switch from `setup.py` to `pyproject.toml` for pdoc itself. Please file an issue if that causes any problems. 

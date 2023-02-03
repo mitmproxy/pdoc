@@ -586,7 +586,7 @@ class Class(Namespace[type]):
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
-        for cls in self.obj.__mro__:
+        for cls in self._mro:
             for name, docstr in doc_ast.walk_tree(cls).docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
@@ -599,7 +599,7 @@ class Class(Namespace[type]):
         annotations: dict[
             str, tuple[Any, type]
         ] = {}  # attribute -> (annotation_unresolved, annotation_resolved)
-        for cls in reversed(self.obj.__mro__):
+        for cls in reversed(self._mro):
             cls_annotations = doc_ast.walk_tree(cls).annotations.copy()
             dynamic_annotations = _safe_getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
@@ -624,9 +624,20 @@ class Class(Namespace[type]):
         return {k: v[1] for k, v in annotations.items()}
 
     @cached_property
+    def _mro(self) -> tuple[type, ...]:
+        orig_bases = getattr(self.obj, "__orig_bases__", None)
+        if orig_bases and orig_bases[-1].__name__ == "TypedDict":
+            # TypedDicts have a botched __mro__.
+            # However, if the subclasses also specify TypedDict as a base class, we can use __orig_bases__
+            # https://github.com/sphinx-doc/sphinx/pull/10806
+            return (self.obj, *orig_bases)
+        else:
+            return self.obj.__mro__
+
+    @cached_property
     def _declarations(self) -> dict[str, tuple[str, str]]:
         decls: dict[str, tuple[str, str]] = {}
-        for cls in self.obj.__mro__:
+        for cls in self._mro:
             treeinfo = doc_ast.walk_tree(cls)
             for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
                 decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
@@ -644,6 +655,7 @@ class Class(Namespace[type]):
             return self._declarations[member_name]
         except KeyError:  # pragma: no cover
             # TypedDict botches __mro__ and may need special casing here.
+            # One workaround is to also specify TypedDict as a base class, see pdoc.doc.Class._mro.
             warnings.warn(
                 f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
             )
@@ -661,7 +673,7 @@ class Class(Namespace[type]):
     @cached_property
     def _member_objects(self) -> dict[str, Any]:
         unsorted: dict[str, Any] = {}
-        for cls in self.obj.__mro__:
+        for cls in self._mro:
             for name, obj in cls.__dict__.items():
                 unsorted.setdefault(name, obj)
         for name in self._var_docstrings:
@@ -684,7 +696,7 @@ class Class(Namespace[type]):
                 del unsorted["__init__"]
             elif issubclass(self.obj, dict):
                 # Special case: Do not show a constructor for dict subclasses.
-                del unsorted["__init__"]
+                unsorted.pop("__init__", None)  # TypedDict subclasses may not have __init__.
             else:
                 # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to
                 # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376
@@ -708,7 +720,7 @@ class Class(Namespace[type]):
                         unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
-        for cls in self.obj.__mro__:
+        for cls in self._mro:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
         return sorted

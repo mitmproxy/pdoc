@@ -40,6 +40,19 @@ class Bar(Foo, total=False):
     # undocumented attribute
 
 
+class BarWorkaround(Foo, TypedDict, total=False):
+    """
+    A TypedDict subclass with the workaround to also inherit from TypedDict.
+
+    See https://github.com/sphinx-doc/sphinx/pull/10806.
+    """
+
+    b: int
+    """Second attribute."""
+    c: str
+    # undocumented attribute
+
+
 class SingleDispatchMethodExample:
     @functools.singledispatchmethod
     def fancymethod(self, str_or_int: Union[str, int]):
