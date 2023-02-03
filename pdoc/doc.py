@@ -1194,6 +1194,7 @@ def _children(doc: Namespace) -> str:
         if not x.name.startswith("_") or x.name == "__init__"
     )
     if children:
+        children += "\n"
         children = f"\n{textwrap.indent(children, '    ')}"
     return children
 
