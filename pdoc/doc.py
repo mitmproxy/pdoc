@@ -630,7 +630,7 @@ class Class(Namespace[type]):
             # TypedDicts have a botched __mro__.
             # However, if the subclasses also specify TypedDict as a base class, we can use __orig_bases__
             # https://github.com/sphinx-doc/sphinx/pull/10806
-            return (self.obj, *orig_bases)
+            return (self.obj, *orig_bases[:-1])
         else:
             return self.obj.__mro__
 

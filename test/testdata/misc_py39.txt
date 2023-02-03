@@ -6,9 +6,7 @@
         <method def index(self, value, start=0, stop=9223372036854775807, /): ...  # inherited from builtins.tuple.index, Return first index o…>
         <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>>
     <class misc_py39.Foo
-        <var a: Optional[int]  # First attribute.>
-        <var ns  # inherited from typing.TypedDict.ns>
-        <var module  # inherited from typing.TypedDict.module>>
+        <var a: Optional[int]  # First attribute.>>
     <class misc_py39.Bar  # A TypedDict subclass…
         <var b: int  # Second attribute.>
         <var c: str>
@@ -27,9 +25,7 @@
     <class misc_py39.BarWorkaround  # A TypedDict subclass…
         <var b: int  # Second attribute.>
         <var c: str>
-        <var a: Optional[int]  # inherited from misc_py39.Foo.a, First attribute.>
-        <var ns  # inherited from typing.TypedDict.ns>
-        <var module  # inherited from typing.TypedDict.module>>
+        <var a: Optional[int]  # inherited from misc_py39.Foo.a, First attribute.>>
     <class misc_py39.SingleDispatchMethodExample
         <method def __init__(): ...>
         <@functools.singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
