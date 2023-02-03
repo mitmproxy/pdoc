@@ -625,8 +625,8 @@ class Class(Namespace[type]):
 
     @cached_property
     def _mro(self) -> tuple[type, ...]:
-        orig_bases = getattr(self.obj, "__orig_bases__", None)
-        if orig_bases and orig_bases[-1].__name__ == "TypedDict":
+        orig_bases = _safe_getattr(self.obj, "__orig_bases__", None)
+        if orig_bases and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict":
             # TypedDicts have a botched __mro__.
             # However, if the subclasses also specify TypedDict as a base class, we can use __orig_bases__
             # https://github.com/sphinx-doc/sphinx/pull/10806
