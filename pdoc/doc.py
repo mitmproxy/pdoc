@@ -626,7 +626,10 @@ class Class(Namespace[type]):
     @cached_property
     def _mro(self) -> tuple[type, ...]:
         orig_bases = _safe_getattr(self.obj, "__orig_bases__", None)
-        if orig_bases and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict":
+        if (
+            orig_bases
+            and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict"
+        ):
             # TypedDicts have a botched __mro__.
             # However, if the subclasses also specify TypedDict as a base class, we can use __orig_bases__
             # https://github.com/sphinx-doc/sphinx/pull/10806
@@ -696,7 +699,9 @@ class Class(Namespace[type]):
                 del unsorted["__init__"]
             elif issubclass(self.obj, dict):
                 # Special case: Do not show a constructor for dict subclasses.
-                unsorted.pop("__init__", None)  # TypedDict subclasses may not have __init__.
+                unsorted.pop(
+                    "__init__", None
+                )  # TypedDict subclasses may not have __init__.
             else:
                 # Check if there's a helpful Metaclass.__call__ or Class.__new__. This dance is very similar to
                 # https://github.com/python/cpython/blob/9feae41c4f04ca27fd2c865807a5caeb50bf4fc4/Lib/inspect.py#L2359-L2376

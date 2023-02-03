@@ -46,7 +46,6 @@ def walk_specs(specs: Sequence[Path | str]) -> list[str]:
     """
     all_modules: dict[str, None] = {}
     for spec in specs:
-
         if isinstance(spec, str) and spec.startswith("!"):
             ignore_pattern = re.compile(spec[1:])
             all_modules = {
