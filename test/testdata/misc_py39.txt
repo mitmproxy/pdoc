@@ -4,9 +4,11 @@
         <var name: str  # Name of our example …>
         <var id: int  # Alias for field numb…>
         <method def index(self, value, start=0, stop=9223372036854775807, /): ...  # inherited from builtins.tuple.index, Return first index o…>
-        <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>>
+        <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>
+    >
     <class misc_py39.Foo
-        <var a: Optional[int]  # First attribute.>>
+        <var a: Optional[int]  # First attribute.>
+    >
     <class misc_py39.Bar  # A TypedDict subclass…
         <var b: int  # Second attribute.>
         <var c: str>
@@ -21,12 +23,16 @@
         <method def fromkeys(type, iterable, value=None, /): ...  # inherited from builtins.dict.fromkeys, Create a new diction…>
         <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
         <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>
-        <var a: Optional[int]>>
+        <var a: Optional[int]>
+    >
     <class misc_py39.BarWorkaround  # A TypedDict subclass…
         <var b: int  # Second attribute.>
         <var c: str>
-        <var a: Optional[int]  # inherited from misc_py39.Foo.a, First attribute.>>
+        <var a: Optional[int]  # inherited from misc_py39.Foo.a, First attribute.>
+    >
     <class misc_py39.SingleDispatchMethodExample
         <method def __init__(): ...>
         <@functools.singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
-        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>>>
+        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>
+    >
+>

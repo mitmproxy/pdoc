@@ -23,13 +23,15 @@ This …
         <@cache method def a_cached_function(self) -> str: ...  # This is method with …>
         <@classmethod class def a_class_method(cls) -> int: ...  # This is what a `@cla…>
         <var a_class_property: int  # This is what a `@cla…>
-        <@staticmethod static def a_static_method(): ...  # This is what a `@sta…>>
+        <@staticmethod static def a_static_method(): ...  # This is what a `@sta…>
+    >
     <class demo_long.Bar  # `Foo` is a basic cla…
         <method def __init__(self): ...  # inherited from demo_long.Foo.__init__, The constructor is c…>
         <var bar: str  # A new attribute defi…>
         <class demo_long.Bar.Baz  # This class is an att…
             <method def __init__(): ...>
-            <method def wat(self): ...  # A regular method. Ab…>>
+            <method def wat(self): ...  # A regular method. Ab…>
+        >
         <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
@@ -40,7 +42,8 @@ This …
         <@cache method def a_cached_function(self) -> str: ...  # inherited from demo_long.Foo.a_cached_function, This is method with …>
         <@classmethod class def a_class_method(cls) -> int: ...  # inherited from demo_long.Foo.a_class_method, This is what a `@cla…>
         <var a_class_property: int  # inherited from demo_long.Foo.a_class_property, This is what a `@cla…>
-        <@staticmethod static def a_static_method(): ...  # inherited from demo_long.Foo.a_static_method, This is what a `@sta…>>
+        <@staticmethod static def a_static_method(): ...  # inherited from demo_long.Foo.a_static_method, This is what a `@sta…>
+    >
     <function async def i_am_async(self) -> int: ...  # This is an example o…>
     <@cache function def fib(n): ...  # This is an example o…>
     <function def security(test=os.environ): ...  # Default values are g…>
@@ -57,7 +60,8 @@ This …
         <@classmethod class def a_class_method(cls) -> int: ...  # inherited from demo_long.Foo.a_class_method, This is what a `@cla…>
         <var a_class_property: int  # inherited from demo_long.Foo.a_class_property, This is what a `@cla…>
         <@staticmethod static def a_static_method(): ...  # inherited from demo_long.Foo.a_static_method, This is what a `@sta…>
-        <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>>
+        <method def wat(self): ...  # inherited from demo_long.Bar.Baz.wat, A regular method. Ab…>
+    >
     <var CONST_B = 'yes'  # A constant without t…>
     <var CONST_NO_DOC = 'SHOULD NOT APPEAR'>
     <@dataclass class demo_long.DataDemo  # This is an example f…
@@ -66,7 +70,8 @@ This …
         <var a2: Sequence[str]>
         <var a3 = 'a3'>
         <var a4: str = 'a4'>
-        <var b: bool = True  # This property is ass…>>
+        <var b: bool = True  # This property is ass…>
+    >
     <@dataclass class demo_long.DataDemoExtended
         <method def __init__(
             self,
@@ -81,12 +86,15 @@ This …
         <var a2: Sequence[str]  # inherited from demo_long.DataDemo.a2>
         <var a3 = 'a3'  # inherited from demo_long.DataDemo.a3>
         <var a4: str = 'a4'  # inherited from demo_long.DataDemo.a4>
-        <var b: bool = True  # inherited from demo_long.DataDemo.b, This property is ass…>>
+        <var b: bool = True  # inherited from demo_long.DataDemo.b, This property is ass…>
+    >
     <class demo_long.EnumDemo  # This is an example o…
         <var RED = <EnumDemo.RED: 1>  # I am the red.>
         <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>
         <var BLUE = <EnumDemo.BLUE: 3>>
         <var name  # inherited from enum.Enum.name, The name of the Enum…>
-        <var value  # inherited from enum.Enum.value, The value of the Enu…>>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>
+    >
     <function def embed_image(): ...  # This docstring inclu…>
-    <function def admonitions(): ...  # pdoc also supports b…>>
+    <function def admonitions(): ...  # pdoc also supports b…>
+>

@@ -11,7 +11,8 @@
         <var code>
         <method def add_note(self, note: str): ...  # This method is prese…>
         <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <var args  # inherited from builtins.BaseException.args>>
+        <var args  # inherited from builtins.BaseException.args>
+    >
     <class flavors_numpy.ExampleClass  # The summary line for…
         <method def __init__(self, param1, param2, param3): ...  # Example of docstring…>
         <var attr1>
@@ -21,6 +22,8 @@
         <var attr5  # str: Docstring *afte…>
         <var readonly_property  # str: Properties shou…>
         <var readwrite_property  # :obj:`list` of :obj:…>
-        <method def example_method(self, param1, param2): ...  # Class methods are si…>>
+        <method def example_method(self, param1, param2): ...  # Class methods are si…>
+    >
     <function def foo(var1, var2, *args, long_var_name='hi', **kwargs): ...  # Summarize the functi…>
-    <function def invalid_format(test): ...  # In this example, the…>>
+    <function def invalid_format(test): ...  # In this example, the…>
+>

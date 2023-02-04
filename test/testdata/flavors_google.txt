@@ -11,7 +11,8 @@
         <var code>
         <method def add_note(self, note: str): ...  # This method is prese…>
         <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <var args  # inherited from builtins.BaseException.args>>
+        <var args  # inherited from builtins.BaseException.args>
+    >
     <class flavors_google.ExampleClass  # The summary line for…
         <method def __init__(self, param1, param2, param3): ...  # Example of docstring…>
         <var attr1>
@@ -21,7 +22,8 @@
         <var attr5  # str: Docstring *afte…>
         <var readonly_property  # str: Properties shou…>
         <var readwrite_property  # :obj:`list` of :obj:…>
-        <method def example_method(self, param1, param2): ...  # Class methods are si…>>
+        <method def example_method(self, param1, param2): ...  # Class methods are si…>
+    >
     <function def fetch_smalltable_rows(
         table_handle: Any,
         keys: Sequence[str],
@@ -36,8 +38,10 @@
         <method def __init__(self, likes_spam=False): ...  # Inits SampleClass wi…>
         <var likes_spam>
         <var eggs>
-        <method def public_method(self): ...  # Performs operation b…>>
+        <method def public_method(self): ...  # Performs operation b…>
+    >
     <function def invalid_format(test): ...  # In this example, the…>
     <function def example_code(): ...  # Test case for https:…>
     <function def newline_after_args(test: str): ...  # Test case for https:…>
-    <function def alternative_section_names(test: str): ...  # In this example, we …>>
+    <function def alternative_section_names(test: str): ...  # In this example, we …>
+>

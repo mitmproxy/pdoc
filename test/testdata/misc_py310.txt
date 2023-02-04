@@ -1,6 +1,8 @@
 <module misc_py310
     <function def new_union(a: int | dict[str, misc_py310.Foo]) -> bool | None: ...  # Testing Python 3.10'…>
     <class misc_py310.Foo
-        <method def __init__(): ...>>
+        <method def __init__(): ...>
+    >
     <var NewStyleDict = dict[str, str]  # inherited from builtins.dict, New-style dict.>
-    <var OldStyleDict = typing.Dict[str, str]  # inherited from typing.Dict, Old-style dict.>>
+    <var OldStyleDict = typing.Dict[str, str]  # inherited from typing.Dict, Old-style dict.>
+>
