@@ -450,7 +450,7 @@ def defuse_unsafe_reprs():
     For example, `os.environ`'s default `__repr__` implementation exposes all
     local secrets.
     """
-    with (patch.object(os._Environ, "__repr__", lambda self: "os.environ")):
+    with patch.object(os._Environ, "__repr__", lambda self: "os.environ"):
         yield
 
 

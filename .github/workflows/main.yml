@@ -38,7 +38,7 @@ jobs:
             py: 3.7.15
     uses: mhils/workflows/.github/workflows/python-tox.yml@main
     with:
-      cmd: tox -e py -- -v ${{ matrix.args }}
+      cmd: tox -e py -- -vvv ${{ matrix.args }}
       os: ${{ matrix.os }}
       python-version: ${{ matrix.py }}
 

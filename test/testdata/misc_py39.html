@@ -57,6 +57,15 @@
 
             </li>
             <li>
+                    <a class="class" href="#BarWorkaround">BarWorkaround</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#BarWorkaround.b">b</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#SingleDispatchMethodExample">SingleDispatchMethodExample</a>
                             <ul class="memberlist">
                         <li>
@@ -136,30 +145,43 @@ misc_py39    </h1>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="c1"># undocumented attribute</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="k">class</span> <span class="nc">SingleDispatchMethodExample</span><span class="p">:</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="k">class</span> <span class="nc">BarWorkaround</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    A TypedDict subclass with the workaround to also inherit from TypedDict.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">    See https://github.com/sphinx-doc/sphinx/pull/10806.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="c1"># undocumented attribute</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span> <span class="nf">_fancymethod_handle_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int_to_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles int (not shown in doc).</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        :param int_to_handle: int which will be handled</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">int_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">int_to_handle</span><span class="si">:</span><span class="s2">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="k">class</span> <span class="nc">SingleDispatchMethodExample</span><span class="p">:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="k">def</span> <span class="nf">_fancymethod_handle_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int_to_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles int (not shown in doc).</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">        :param int_to_handle: int which will be handled</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">int_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">int_to_handle</span><span class="si">:</span><span class="s2">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -273,25 +295,6 @@ misc_py39    </h1>
 
 
                             </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>builtins.dict</dt>
-                                <dd id="Foo.get" class="function">get</dd>
-                <dd id="Foo.setdefault" class="function">setdefault</dd>
-                <dd id="Foo.pop" class="function">pop</dd>
-                <dd id="Foo.popitem" class="function">popitem</dd>
-                <dd id="Foo.keys" class="function">keys</dd>
-                <dd id="Foo.items" class="function">items</dd>
-                <dd id="Foo.values" class="function">values</dd>
-                <dd id="Foo.update" class="function">update</dd>
-                <dd id="Foo.fromkeys" class="function">fromkeys</dd>
-                <dd id="Foo.clear" class="function">clear</dd>
-                <dd id="Foo.copy" class="function">copy</dd>
-
-            </div>
-                                </dl>
-                            </div>
                 </section>
                 <section id="Bar">
                             <input id="Bar-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -351,6 +354,60 @@ misc_py39    </h1>
                                 </dl>
                             </div>
                 </section>
+                <section id="BarWorkaround">
+                            <input id="BarWorkaround-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">BarWorkaround</span><wbr>(<span class="base"><a href="#Foo">Foo</a></span>, <span class="base">typing.TypedDict</span>):
+
+                <label class="view-source-button" for="BarWorkaround-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#BarWorkaround"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BarWorkaround-44"><a href="#BarWorkaround-44"><span class="linenos">44</span></a><span class="k">class</span> <span class="nc">BarWorkaround</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="BarWorkaround-45"><a href="#BarWorkaround-45"><span class="linenos">45</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BarWorkaround-46"><a href="#BarWorkaround-46"><span class="linenos">46</span></a><span class="sd">    A TypedDict subclass with the workaround to also inherit from TypedDict.</span>
+</span><span id="BarWorkaround-47"><a href="#BarWorkaround-47"><span class="linenos">47</span></a>
+</span><span id="BarWorkaround-48"><a href="#BarWorkaround-48"><span class="linenos">48</span></a><span class="sd">    See https://github.com/sphinx-doc/sphinx/pull/10806.</span>
+</span><span id="BarWorkaround-49"><a href="#BarWorkaround-49"><span class="linenos">49</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="BarWorkaround-50"><a href="#BarWorkaround-50"><span class="linenos">50</span></a>
+</span><span id="BarWorkaround-51"><a href="#BarWorkaround-51"><span class="linenos">51</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="BarWorkaround-52"><a href="#BarWorkaround-52"><span class="linenos">52</span></a>    <span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="BarWorkaround-53"><a href="#BarWorkaround-53"><span class="linenos">53</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="BarWorkaround-54"><a href="#BarWorkaround-54"><span class="linenos">54</span></a>    <span class="c1"># undocumented attribute</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A TypedDict subclass with the workaround to also inherit from TypedDict.</p>
+
+<p>See <a href="https://github.com/sphinx-doc/sphinx/pull/10806">https://github.com/sphinx-doc/sphinx/pull/10806</a>.</p>
+</div>
+
+
+                            <div id="BarWorkaround.b" class="classattr">
+                                <div class="attr variable">
+            <span class="name">b</span><span class="annotation">: int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#BarWorkaround.b"></a>
+    
+            <div class="docstring"><p>Second attribute.</p>
+</div>
+
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#Foo">Foo</a></dt>
+                                <dd id="BarWorkaround.a" class="variable"><a href="#Foo.a">a</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
                 <section id="SingleDispatchMethodExample">
                             <input id="SingleDispatchMethodExample-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -362,30 +419,30 @@ misc_py39    </h1>
 
     </div>
     <a class="headerlink" href="#SingleDispatchMethodExample"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample-44"><a href="#SingleDispatchMethodExample-44"><span class="linenos">44</span></a><span class="k">class</span> <span class="nc">SingleDispatchMethodExample</span><span class="p">:</span>
-</span><span id="SingleDispatchMethodExample-45"><a href="#SingleDispatchMethodExample-45"><span class="linenos">45</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
-</span><span id="SingleDispatchMethodExample-46"><a href="#SingleDispatchMethodExample-46"><span class="linenos">46</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-</span><span id="SingleDispatchMethodExample-47"><a href="#SingleDispatchMethodExample-47"><span class="linenos">47</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
-</span><span id="SingleDispatchMethodExample-48"><a href="#SingleDispatchMethodExample-48"><span class="linenos">48</span></a>
-</span><span id="SingleDispatchMethodExample-49"><a href="#SingleDispatchMethodExample-49"><span class="linenos">49</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
-</span><span id="SingleDispatchMethodExample-50"><a href="#SingleDispatchMethodExample-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SingleDispatchMethodExample-51"><a href="#SingleDispatchMethodExample-51"><span class="linenos">51</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
-</span><span id="SingleDispatchMethodExample-52"><a href="#SingleDispatchMethodExample-52"><span class="linenos">52</span></a>
-</span><span id="SingleDispatchMethodExample-53"><a href="#SingleDispatchMethodExample-53"><span class="linenos">53</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
-</span><span id="SingleDispatchMethodExample-54"><a href="#SingleDispatchMethodExample-54"><span class="linenos">54</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="SingleDispatchMethodExample-55"><a href="#SingleDispatchMethodExample-55"><span class="linenos">55</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
-</span><span id="SingleDispatchMethodExample-56"><a href="#SingleDispatchMethodExample-56"><span class="linenos">56</span></a>
-</span><span id="SingleDispatchMethodExample-57"><a href="#SingleDispatchMethodExample-57"><span class="linenos">57</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
-</span><span id="SingleDispatchMethodExample-58"><a href="#SingleDispatchMethodExample-58"><span class="linenos">58</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SingleDispatchMethodExample-59"><a href="#SingleDispatchMethodExample-59"><span class="linenos">59</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="SingleDispatchMethodExample-60"><a href="#SingleDispatchMethodExample-60"><span class="linenos">60</span></a>
-</span><span id="SingleDispatchMethodExample-61"><a href="#SingleDispatchMethodExample-61"><span class="linenos">61</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
-</span><span id="SingleDispatchMethodExample-62"><a href="#SingleDispatchMethodExample-62"><span class="linenos">62</span></a>    <span class="k">def</span> <span class="nf">_fancymethod_handle_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int_to_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="SingleDispatchMethodExample-63"><a href="#SingleDispatchMethodExample-63"><span class="linenos">63</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles int (not shown in doc).</span>
-</span><span id="SingleDispatchMethodExample-64"><a href="#SingleDispatchMethodExample-64"><span class="linenos">64</span></a>
-</span><span id="SingleDispatchMethodExample-65"><a href="#SingleDispatchMethodExample-65"><span class="linenos">65</span></a><span class="sd">        :param int_to_handle: int which will be handled</span>
-</span><span id="SingleDispatchMethodExample-66"><a href="#SingleDispatchMethodExample-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SingleDispatchMethodExample-67"><a href="#SingleDispatchMethodExample-67"><span class="linenos">67</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">int_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">int_to_handle</span><span class="si">:</span><span class="s2">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample-57"><a href="#SingleDispatchMethodExample-57"><span class="linenos">57</span></a><span class="k">class</span> <span class="nc">SingleDispatchMethodExample</span><span class="p">:</span>
+</span><span id="SingleDispatchMethodExample-58"><a href="#SingleDispatchMethodExample-58"><span class="linenos">58</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
+</span><span id="SingleDispatchMethodExample-59"><a href="#SingleDispatchMethodExample-59"><span class="linenos">59</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+</span><span id="SingleDispatchMethodExample-60"><a href="#SingleDispatchMethodExample-60"><span class="linenos">60</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
+</span><span id="SingleDispatchMethodExample-61"><a href="#SingleDispatchMethodExample-61"><span class="linenos">61</span></a>
+</span><span id="SingleDispatchMethodExample-62"><a href="#SingleDispatchMethodExample-62"><span class="linenos">62</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
+</span><span id="SingleDispatchMethodExample-63"><a href="#SingleDispatchMethodExample-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SingleDispatchMethodExample-64"><a href="#SingleDispatchMethodExample-64"><span class="linenos">64</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
+</span><span id="SingleDispatchMethodExample-65"><a href="#SingleDispatchMethodExample-65"><span class="linenos">65</span></a>
+</span><span id="SingleDispatchMethodExample-66"><a href="#SingleDispatchMethodExample-66"><span class="linenos">66</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
+</span><span id="SingleDispatchMethodExample-67"><a href="#SingleDispatchMethodExample-67"><span class="linenos">67</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="SingleDispatchMethodExample-68"><a href="#SingleDispatchMethodExample-68"><span class="linenos">68</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
+</span><span id="SingleDispatchMethodExample-69"><a href="#SingleDispatchMethodExample-69"><span class="linenos">69</span></a>
+</span><span id="SingleDispatchMethodExample-70"><a href="#SingleDispatchMethodExample-70"><span class="linenos">70</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
+</span><span id="SingleDispatchMethodExample-71"><a href="#SingleDispatchMethodExample-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SingleDispatchMethodExample-72"><a href="#SingleDispatchMethodExample-72"><span class="linenos">72</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="SingleDispatchMethodExample-73"><a href="#SingleDispatchMethodExample-73"><span class="linenos">73</span></a>
+</span><span id="SingleDispatchMethodExample-74"><a href="#SingleDispatchMethodExample-74"><span class="linenos">74</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
+</span><span id="SingleDispatchMethodExample-75"><a href="#SingleDispatchMethodExample-75"><span class="linenos">75</span></a>    <span class="k">def</span> <span class="nf">_fancymethod_handle_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">int_to_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="SingleDispatchMethodExample-76"><a href="#SingleDispatchMethodExample-76"><span class="linenos">76</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles int (not shown in doc).</span>
+</span><span id="SingleDispatchMethodExample-77"><a href="#SingleDispatchMethodExample-77"><span class="linenos">77</span></a>
+</span><span id="SingleDispatchMethodExample-78"><a href="#SingleDispatchMethodExample-78"><span class="linenos">78</span></a><span class="sd">        :param int_to_handle: int which will be handled</span>
+</span><span id="SingleDispatchMethodExample-79"><a href="#SingleDispatchMethodExample-79"><span class="linenos">79</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SingleDispatchMethodExample-80"><a href="#SingleDispatchMethodExample-80"><span class="linenos">80</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">int_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">int_to_handle</span><span class="si">:</span><span class="s2">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -415,13 +472,13 @@ misc_py39    </h1>
 
     </div>
     <a class="headerlink" href="#SingleDispatchMethodExample.fancymethod"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample.fancymethod-45"><a href="#SingleDispatchMethodExample.fancymethod-45"><span class="linenos">45</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
-</span><span id="SingleDispatchMethodExample.fancymethod-46"><a href="#SingleDispatchMethodExample.fancymethod-46"><span class="linenos">46</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
-</span><span id="SingleDispatchMethodExample.fancymethod-47"><a href="#SingleDispatchMethodExample.fancymethod-47"><span class="linenos">47</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
-</span><span id="SingleDispatchMethodExample.fancymethod-48"><a href="#SingleDispatchMethodExample.fancymethod-48"><span class="linenos">48</span></a>
-</span><span id="SingleDispatchMethodExample.fancymethod-49"><a href="#SingleDispatchMethodExample.fancymethod-49"><span class="linenos">49</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
-</span><span id="SingleDispatchMethodExample.fancymethod-50"><a href="#SingleDispatchMethodExample.fancymethod-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SingleDispatchMethodExample.fancymethod-51"><a href="#SingleDispatchMethodExample.fancymethod-51"><span class="linenos">51</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample.fancymethod-58"><a href="#SingleDispatchMethodExample.fancymethod-58"><span class="linenos">58</span></a>    <span class="nd">@functools</span><span class="o">.</span><span class="n">singledispatchmethod</span>
+</span><span id="SingleDispatchMethodExample.fancymethod-59"><a href="#SingleDispatchMethodExample.fancymethod-59"><span class="linenos">59</span></a>    <span class="k">def</span> <span class="nf">fancymethod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_or_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+</span><span id="SingleDispatchMethodExample.fancymethod-60"><a href="#SingleDispatchMethodExample.fancymethod-60"><span class="linenos">60</span></a>        <span class="sd">&quot;&quot;&quot;A fancy method which is capable of handling either `str` or `int`.</span>
+</span><span id="SingleDispatchMethodExample.fancymethod-61"><a href="#SingleDispatchMethodExample.fancymethod-61"><span class="linenos">61</span></a>
+</span><span id="SingleDispatchMethodExample.fancymethod-62"><a href="#SingleDispatchMethodExample.fancymethod-62"><span class="linenos">62</span></a><span class="sd">        :param str_or_int: string or integer to handle</span>
+</span><span id="SingleDispatchMethodExample.fancymethod-63"><a href="#SingleDispatchMethodExample.fancymethod-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SingleDispatchMethodExample.fancymethod-64"><a href="#SingleDispatchMethodExample.fancymethod-64"><span class="linenos">64</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_or_int</span><span class="p">)</span><span class="si">=}</span><span class="s2"> not implemented!&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -448,13 +505,13 @@ misc_py39    </h1>
 
     </div>
     <a class="headerlink" href="#SingleDispatchMethodExample.fancymethod_handle_str"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample.fancymethod_handle_str-53"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-53"><span class="linenos">53</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-54"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-54"><span class="linenos">54</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-55"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-55"><span class="linenos">55</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-56"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-56"><span class="linenos">56</span></a>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-57"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-57"><span class="linenos">57</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-58"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-58"><span class="linenos">58</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-59"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-59"><span class="linenos">59</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SingleDispatchMethodExample.fancymethod_handle_str-66"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-66"><span class="linenos">66</span></a>    <span class="nd">@fancymethod</span><span class="o">.</span><span class="n">register</span>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-67"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-67"><span class="linenos">67</span></a>    <span class="k">def</span> <span class="nf">fancymethod_handle_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">str_to_handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-68"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-68"><span class="linenos">68</span></a>        <span class="sd">&quot;&quot;&quot;Fancy method handles a string.</span>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-69"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-69"><span class="linenos">69</span></a>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-70"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-70"><span class="linenos">70</span></a><span class="sd">        :param str_to_handle: string which will be handled</span>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-71"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SingleDispatchMethodExample.fancymethod_handle_str-72"><a href="#SingleDispatchMethodExample.fancymethod_handle_str-72"><span class="linenos">72</span></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">str_to_handle</span><span class="p">)</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">str_to_handle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
