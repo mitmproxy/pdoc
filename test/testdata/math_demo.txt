@@ -2,4 +2,5 @@
     <function def binom_coef(n: int, k: int) -> int: ...  # Return the number of…>
     <function def long_formula(): ...  # $$
         \Delta =
-        …>>
+        …>
+>

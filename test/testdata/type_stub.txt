@@ -8,4 +8,7 @@
         <class type_stub.Class.Subclass
             <method def __init__(): ...>
             <var attr: str = '42'  # An attribute>
-            <method def meth(self, y: bool) -> bool: ...  # A simple method.>>>>
+            <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        >
+    >
+>
