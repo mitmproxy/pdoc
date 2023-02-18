@@ -83,7 +83,7 @@ You can either escape a backslash with a second backslash:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;docstring with $\\frac{x}{y}$.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;docstring with $\\frac{x}{y}$.&quot;&quot;&quot;</span>
 </code></pre>
 </div>
 
@@ -93,7 +93,7 @@ where backslashes are not processed:</p>
 
 <div class="pdoc-code codehilite">
 <pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;raw docstring with $\frac{x}{y}$.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;raw docstring with $\frac{x}{y}$.&quot;&quot;&quot;</span>
 </code></pre>
 </div>
 
@@ -148,7 +148,7 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="k">def</span> <span class="nf">binom_coef</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    Return the number of ways to choose $k$ items from $n$ items without repetition and without order.</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    Evaluates to $n! / (k! * (n - k)!)$ when $k &lt;= n$ and evaluates to zero when $k &gt; n$.</span>
@@ -157,7 +157,7 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="k">def</span> <span class="nf">long_formula</span><span class="p">():</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    $$</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        \Delta =</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        \Delta_\text{this} +</span>
@@ -192,7 +192,7 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
     </div>
     <a class="headerlink" href="#binom_coef"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="binom_coef-38"><a href="#binom_coef-38"><span class="linenos">38</span></a><span class="k">def</span> <span class="nf">binom_coef</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="binom_coef-39"><a href="#binom_coef-39"><span class="linenos">39</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="binom_coef-39"><a href="#binom_coef-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="binom_coef-40"><a href="#binom_coef-40"><span class="linenos">40</span></a><span class="sd">    Return the number of ways to choose $k$ items from $n$ items without repetition and without order.</span>
 </span><span id="binom_coef-41"><a href="#binom_coef-41"><span class="linenos">41</span></a>
 </span><span id="binom_coef-42"><a href="#binom_coef-42"><span class="linenos">42</span></a><span class="sd">    Evaluates to $n! / (k! * (n - k)!)$ when $k &lt;= n$ and evaluates to zero when $k &gt; n$.</span>
@@ -220,7 +220,7 @@ You can create a <code>math.html.jinja2</code> file in your pdoc template direct
     </div>
     <a class="headerlink" href="#long_formula"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="long_formula-47"><a href="#long_formula-47"><span class="linenos">47</span></a><span class="k">def</span> <span class="nf">long_formula</span><span class="p">():</span>
-</span><span id="long_formula-48"><a href="#long_formula-48"><span class="linenos">48</span></a>    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="long_formula-48"><a href="#long_formula-48"><span class="linenos">48</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="long_formula-49"><a href="#long_formula-49"><span class="linenos">49</span></a><span class="sd">    $$</span>
 </span><span id="long_formula-50"><a href="#long_formula-50"><span class="linenos">50</span></a><span class="sd">        \Delta =</span>
 </span><span id="long_formula-51"><a href="#long_formula-51"><span class="linenos">51</span></a><span class="sd">        \Delta_\text{this} +</span>

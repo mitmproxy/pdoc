@@ -340,7 +340,7 @@ misc    </h1>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="k">class</span> <span class="nc">Issue226</span><span class="p">:</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="nd">@Descriptor</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>        <span class="sd">&quot;&quot;&quot;This is the size&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the size&quot;&quot;&quot;</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="c1"># Testing function and object default values</span>
@@ -359,13 +359,13 @@ misc    </h1>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">default_obj</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">default_func</span><span class="p">):</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>    <span class="k">pass</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="c1"># Testing classmethod links in code</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="k">class</span> <span class="nc">ClassmethodLink</span><span class="p">:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">    You can either do</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">    &gt;&gt;&gt; ClassmethodLink.bar()</span>
@@ -403,35 +403,35 @@ misc    </h1>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="sd">&quot;&quot;&quot;init&quot;&quot;&quot;</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;init&quot;&quot;&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="sd">&quot;&quot;&quot;foo&quot;&quot;&quot;</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;foo&quot;&quot;&quot;</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">pass</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="sd">&quot;&quot;&quot;bar&quot;&quot;&quot;</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;bar&quot;&quot;&quot;</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="k">pass</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="nd">@staticmethod</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="sd">&quot;&quot;&quot;baz&quot;&quot;&quot;</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;baz&quot;&quot;&quot;</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">pass</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="nd">@property</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="sd">&quot;&quot;&quot;qux&quot;&quot;&quot;</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;qux&quot;&quot;&quot;</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span> <span class="nf">quux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="sd">&quot;&quot;&quot;quux&quot;&quot;&quot;</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;quux&quot;&quot;&quot;</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="k">return</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="n">quuux</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="sd">&quot;&quot;&quot;quuux&quot;&quot;&quot;</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;quuux&quot;&quot;&quot;</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
@@ -469,12 +469,12 @@ misc    </h1>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="k">class</span> <span class="nc">_Private</span><span class="p">:</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">pass</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">def</span> <span class="nf">_do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="sd">&quot;&quot;&quot;private method&quot;&quot;&quot;</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;private method&quot;&quot;&quot;</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="c1"># Testing a class attribute that is a lambda (which generates quirky sources)</span>
@@ -490,21 +490,21 @@ misc    </h1>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>    <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    indent&quot;&quot;&quot;</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="k">def</span> <span class="nf">qux</span><span class="p">():</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">    two</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">    indents</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -512,44 +512,44 @@ misc    </h1>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="k">class</span> <span class="nc">Indented</span><span class="p">:</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        two</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">        indents</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>    <span class="c1"># comment</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>    <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">        two</span>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">        indents</span>
 </span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -558,7 +558,7 @@ misc    </h1>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="p">)</span>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="k">def</span> <span class="nf">_protected_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -567,7 +567,7 @@ misc    </h1>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="nd">@_protected_decorator</span>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="k">def</span> <span class="nf">fun_with_protected_decorator</span><span class="p">():</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
 </span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="k">class</span> <span class="nc">UnhashableDataDescriptor</span><span class="p">:</span>
@@ -580,7 +580,7 @@ misc    </h1>
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="k">class</span> <span class="nc">AbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>    <span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
 </span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>        <span class="k">pass</span>
@@ -590,7 +590,7 @@ misc    </h1>
 </span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>
 </span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="k">def</span> <span class="nf">make_adder</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 </span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="k">return</span> <span class="n">add_func</span>
 </span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>
@@ -604,7 +604,7 @@ misc    </h1>
 </span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>
 </span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="c1"># Adapted from https://github.com/mitmproxy/pdoc/issues/335</span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a><span class="k">def</span> <span class="nf">linkify_links</span><span class="p">():</span>
-</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a><span class="sd">    This docstring contains links that are also identifiers:</span>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">    - [`linkify_links`](https://example.com/)</span>
@@ -618,12 +618,12 @@ misc    </h1>
 </span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>
 </span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a><span class="k">class</span> <span class="nc">Issue352aMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 </span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>        <span class="sd">&quot;&quot;&quot;Meta.__call__&quot;&quot;&quot;</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Meta.__call__&quot;&quot;&quot;</span>
 </span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>
 </span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a><span class="k">class</span> <span class="nc">Issue352a</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352aMeta</span><span class="p">):</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a><span class="k">class</span> <span class="nc">Issue352bMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
@@ -632,20 +632,20 @@ misc    </h1>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>
 </span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="k">class</span> <span class="nc">Issue352b</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352bMeta</span><span class="p">):</span>
-</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>    <span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>
 </span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="k">class</span> <span class="nc">CustomCallMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>        <span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
+</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
 </span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a>
 </span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>
 </span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="k">class</span> <span class="nc">CustomCall</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">CustomCallMeta</span><span class="p">):</span>
-</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>    <span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
+</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>
 </span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
 </span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a><span class="k">class</span> <span class="nc">Headings</span><span class="p">:</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="sd">    # Heading 1</span>
 </span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>
 </span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="sd">    Here is some text.</span>
@@ -679,18 +679,18 @@ misc    </h1>
 </span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>
 </span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a><span class="k">def</span> <span class="nf">repr_not_syntax_highlightable</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">CustomRepr</span><span class="p">()):</span>
-</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>    <span class="sd">&quot;&quot;&quot;The default value for x fails to highlight with pygments.&quot;&quot;&quot;</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The default value for x fails to highlight with pygments.&quot;&quot;&quot;</span>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
 </span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>
 </span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="nd">@ClassDecorator</span>
 </span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a><span class="k">def</span> <span class="nf">another_decorated_function</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>    <span class="sd">&quot;&quot;&quot;This is another decorated function. It will not be documented correctly.&quot;&quot;&quot;</span>
+</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is another decorated function. It will not be documented correctly.&quot;&quot;&quot;</span>
 </span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>
 </span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>
@@ -704,14 +704,14 @@ misc    </h1>
 </span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>
 </span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a><span class="k">class</span> <span class="nc">ClassAsAttribute</span><span class="p">:</span>
 </span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>    <span class="n">static_attr_to_class</span> <span class="o">=</span> <span class="n">ClassDecorator</span>
-</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>    <span class="sd">&quot;&quot;&quot;this is a static attribute that point to a Class (not an instance)&quot;&quot;&quot;</span>
+</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this is a static attribute that point to a Class (not an instance)&quot;&quot;&quot;</span>
 </span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a>
 </span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a>    <span class="n">static_attr_to_instance</span> <span class="o">=</span> <span class="n">ClassDecorator</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a>    <span class="sd">&quot;&quot;&quot;this is a static attribute that point to an instance&quot;&quot;&quot;</span>
+</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this is a static attribute that point to an instance&quot;&quot;&quot;</span>
 </span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a>
 </span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a>
 </span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a><span class="k">class</span> <span class="nc">scheduler</span><span class="p">(</span><span class="n">sched</span><span class="o">.</span><span class="n">scheduler</span><span class="p">):</span>
-</span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a>    <span class="sd">&quot;&quot;&quot;Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490&quot;&quot;&quot;</span>
+</span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490&quot;&quot;&quot;</span>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>
 </span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -767,7 +767,7 @@ misc    </h1>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Issue226-25"><a href="#Issue226-25"><span class="linenos">25</span></a><span class="k">class</span> <span class="nc">Issue226</span><span class="p">:</span>
 </span><span id="Issue226-26"><a href="#Issue226-26"><span class="linenos">26</span></a>    <span class="nd">@Descriptor</span>
 </span><span id="Issue226-27"><a href="#Issue226-27"><span class="linenos">27</span></a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Issue226-28"><a href="#Issue226-28"><span class="linenos">28</span></a>        <span class="sd">&quot;&quot;&quot;This is the size&quot;&quot;&quot;</span>
+</span><span id="Issue226-28"><a href="#Issue226-28"><span class="linenos">28</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This is the size&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -800,13 +800,19 @@ misc    </h1>
                             </div>
                 </section>
                 <section id="var_with_default_obj">
-                    <div class="attr variable">
-            <span class="name">var_with_default_obj</span><span class="default_value"> = &lt;object object&gt;</span>
-
+                            <input id="var_with_default_obj-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">var_with_default_obj</span>
         
+
+                <label class="view-source-button" for="var_with_default_obj-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#var_with_default_obj"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="var_with_default_obj-1"><a href="#var_with_default_obj-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>this shouldn't render the object address</p>
 </div>
 
@@ -845,7 +851,7 @@ misc    </h1>
     </div>
     <a class="headerlink" href="#func_with_defaults"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="func_with_defaults-46"><a href="#func_with_defaults-46"><span class="linenos">46</span></a><span class="k">def</span> <span class="nf">func_with_defaults</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">default_obj</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">default_func</span><span class="p">):</span>
-</span><span id="func_with_defaults-47"><a href="#func_with_defaults-47"><span class="linenos">47</span></a>    <span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
+</span><span id="func_with_defaults-47"><a href="#func_with_defaults-47"><span class="linenos">47</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this shouldn&#39;t render object or function addresses&quot;&quot;&quot;</span>
 </span><span id="func_with_defaults-48"><a href="#func_with_defaults-48"><span class="linenos">48</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
@@ -867,7 +873,7 @@ misc    </h1>
     </div>
     <a class="headerlink" href="#ClassmethodLink"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ClassmethodLink-52"><a href="#ClassmethodLink-52"><span class="linenos">52</span></a><span class="k">class</span> <span class="nc">ClassmethodLink</span><span class="p">:</span>
-</span><span id="ClassmethodLink-53"><a href="#ClassmethodLink-53"><span class="linenos">53</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="ClassmethodLink-53"><a href="#ClassmethodLink-53"><span class="linenos">53</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="ClassmethodLink-54"><a href="#ClassmethodLink-54"><span class="linenos">54</span></a><span class="sd">    You can either do</span>
 </span><span id="ClassmethodLink-55"><a href="#ClassmethodLink-55"><span class="linenos">55</span></a>
 </span><span id="ClassmethodLink-56"><a href="#ClassmethodLink-56"><span class="linenos">56</span></a><span class="sd">    &gt;&gt;&gt; ClassmethodLink.bar()</span>
@@ -1195,13 +1201,19 @@ For example, a generic mapping type might be defined as::</p>
 
                             </div>
                             <div id="Child.quuux" class="classattr">
-                                <div class="attr variable">
-            <span class="name">quuux</span><span class="annotation">: int</span><span class="default_value"> = 42</span>
-
+                                        <input id="Child.quuux-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">quuux</span><span class="annotation">: int</span>
         
+
+                <label class="view-source-button" for="Child.quuux-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#Child.quuux"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Child.quuux-1"><a href="#Child.quuux-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="mi">42</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>quuux</p>
 </div>
 
@@ -1231,12 +1243,12 @@ For example, a generic mapping type might be defined as::</p>
     </div>
     <a class="headerlink" href="#_Private"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="_Private-156"><a href="#_Private-156"><span class="linenos">156</span></a><span class="k">class</span> <span class="nc">_Private</span><span class="p">:</span>
-</span><span id="_Private-157"><a href="#_Private-157"><span class="linenos">157</span></a>    <span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
+</span><span id="_Private-157"><a href="#_Private-157"><span class="linenos">157</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;private class&quot;&quot;&quot;</span>
 </span><span id="_Private-158"><a href="#_Private-158"><span class="linenos">158</span></a>
 </span><span id="_Private-159"><a href="#_Private-159"><span class="linenos">159</span></a>    <span class="k">pass</span>
 </span><span id="_Private-160"><a href="#_Private-160"><span class="linenos">160</span></a>
 </span><span id="_Private-161"><a href="#_Private-161"><span class="linenos">161</span></a>    <span class="k">def</span> <span class="nf">_do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="_Private-162"><a href="#_Private-162"><span class="linenos">162</span></a>        <span class="sd">&quot;&quot;&quot;private method&quot;&quot;&quot;</span>
+</span><span id="_Private-162"><a href="#_Private-162"><span class="linenos">162</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;private method&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1319,7 +1331,7 @@ For example, a generic mapping type might be defined as::</p>
     </div>
     <a class="headerlink" href="#foo"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="foo-177"><a href="#foo-177"><span class="linenos">177</span></a><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-</span><span id="foo-178"><a href="#foo-178"><span class="linenos">178</span></a>    <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="foo-178"><a href="#foo-178"><span class="linenos">178</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1340,7 +1352,7 @@ For example, a generic mapping type might be defined as::</p>
     </div>
     <a class="headerlink" href="#bar"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="bar-181"><a href="#bar-181"><span class="linenos">181</span></a><span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
-</span><span id="bar-182"><a href="#bar-182"><span class="linenos">182</span></a>    <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="bar-182"><a href="#bar-182"><span class="linenos">182</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="bar-183"><a href="#bar-183"><span class="linenos">183</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1363,7 +1375,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#baz"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="baz-186"><a href="#baz-186"><span class="linenos">186</span></a><span class="k">def</span> <span class="nf">baz</span><span class="p">():</span>
-</span><span id="baz-187"><a href="#baz-187"><span class="linenos">187</span></a>    <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="baz-187"><a href="#baz-187"><span class="linenos">187</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="baz-188"><a href="#baz-188"><span class="linenos">188</span></a><span class="sd">    indent&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1386,7 +1398,7 @@ indent</p>
     </div>
     <a class="headerlink" href="#qux"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="qux-191"><a href="#qux-191"><span class="linenos">191</span></a><span class="k">def</span> <span class="nf">qux</span><span class="p">():</span>
-</span><span id="qux-192"><a href="#qux-192"><span class="linenos">192</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="qux-192"><a href="#qux-192"><span class="linenos">192</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="qux-193"><a href="#qux-193"><span class="linenos">193</span></a><span class="sd">    two</span>
 </span><span id="qux-194"><a href="#qux-194"><span class="linenos">194</span></a><span class="sd">    indents</span>
 </span><span id="qux-195"><a href="#qux-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -1412,44 +1424,44 @@ indents</p>
     <a class="headerlink" href="#Indented"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented-198"><a href="#Indented-198"><span class="linenos">198</span></a><span class="k">class</span> <span class="nc">Indented</span><span class="p">:</span>
 </span><span id="Indented-199"><a href="#Indented-199"><span class="linenos">199</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-200"><a href="#Indented-200"><span class="linenos">200</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented-200"><a href="#Indented-200"><span class="linenos">200</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="Indented-201"><a href="#Indented-201"><span class="linenos">201</span></a>
 </span><span id="Indented-202"><a href="#Indented-202"><span class="linenos">202</span></a>    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-203"><a href="#Indented-203"><span class="linenos">203</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="Indented-203"><a href="#Indented-203"><span class="linenos">203</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="Indented-204"><a href="#Indented-204"><span class="linenos">204</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span><span id="Indented-205"><a href="#Indented-205"><span class="linenos">205</span></a>
 </span><span id="Indented-206"><a href="#Indented-206"><span class="linenos">206</span></a>    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-207"><a href="#Indented-207"><span class="linenos">207</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="Indented-207"><a href="#Indented-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="Indented-208"><a href="#Indented-208"><span class="linenos">208</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span><span id="Indented-209"><a href="#Indented-209"><span class="linenos">209</span></a>
 </span><span id="Indented-210"><a href="#Indented-210"><span class="linenos">210</span></a>    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-211"><a href="#Indented-211"><span class="linenos">211</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Indented-211"><a href="#Indented-211"><span class="linenos">211</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Indented-212"><a href="#Indented-212"><span class="linenos">212</span></a><span class="sd">        two</span>
 </span><span id="Indented-213"><a href="#Indented-213"><span class="linenos">213</span></a><span class="sd">        indents</span>
 </span><span id="Indented-214"><a href="#Indented-214"><span class="linenos">214</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Indented-215"><a href="#Indented-215"><span class="linenos">215</span></a>
 </span><span id="Indented-216"><a href="#Indented-216"><span class="linenos">216</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented-217"><a href="#Indented-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-218"><a href="#Indented-218"><span class="linenos">218</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented-218"><a href="#Indented-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="Indented-219"><a href="#Indented-219"><span class="linenos">219</span></a>
 </span><span id="Indented-220"><a href="#Indented-220"><span class="linenos">220</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented-221"><a href="#Indented-221"><span class="linenos">221</span></a>    <span class="c1"># comment</span>
 </span><span id="Indented-222"><a href="#Indented-222"><span class="linenos">222</span></a>    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-223"><a href="#Indented-223"><span class="linenos">223</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented-223"><a href="#Indented-223"><span class="linenos">223</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span><span id="Indented-224"><a href="#Indented-224"><span class="linenos">224</span></a>
 </span><span id="Indented-225"><a href="#Indented-225"><span class="linenos">225</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented-226"><a href="#Indented-226"><span class="linenos">226</span></a>    <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-227"><a href="#Indented-227"><span class="linenos">227</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="Indented-227"><a href="#Indented-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="Indented-228"><a href="#Indented-228"><span class="linenos">228</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span><span id="Indented-229"><a href="#Indented-229"><span class="linenos">229</span></a>
 </span><span id="Indented-230"><a href="#Indented-230"><span class="linenos">230</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented-231"><a href="#Indented-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-232"><a href="#Indented-232"><span class="linenos">232</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="Indented-232"><a href="#Indented-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="Indented-233"><a href="#Indented-233"><span class="linenos">233</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span><span id="Indented-234"><a href="#Indented-234"><span class="linenos">234</span></a>
 </span><span id="Indented-235"><a href="#Indented-235"><span class="linenos">235</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented-236"><a href="#Indented-236"><span class="linenos">236</span></a>    <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-237"><a href="#Indented-237"><span class="linenos">237</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Indented-237"><a href="#Indented-237"><span class="linenos">237</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Indented-238"><a href="#Indented-238"><span class="linenos">238</span></a><span class="sd">        two</span>
 </span><span id="Indented-239"><a href="#Indented-239"><span class="linenos">239</span></a><span class="sd">        indents</span>
 </span><span id="Indented-240"><a href="#Indented-240"><span class="linenos">240</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1458,7 +1470,7 @@ indents</p>
 </span><span id="Indented-243"><a href="#Indented-243"><span class="linenos">243</span></a>        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
 </span><span id="Indented-244"><a href="#Indented-244"><span class="linenos">244</span></a>    <span class="p">)</span>
 </span><span id="Indented-245"><a href="#Indented-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented-246"><a href="#Indented-246"><span class="linenos">246</span></a>        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
+</span><span id="Indented-246"><a href="#Indented-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1488,7 +1500,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Indented.foo"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.foo-199"><a href="#Indented.foo-199"><span class="linenos">199</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.foo-200"><a href="#Indented.foo-200"><span class="linenos">200</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented.foo-200"><a href="#Indented.foo-200"><span class="linenos">200</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1509,7 +1521,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Indented.bar"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.bar-202"><a href="#Indented.bar-202"><span class="linenos">202</span></a>    <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.bar-203"><a href="#Indented.bar-203"><span class="linenos">203</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="Indented.bar-203"><a href="#Indented.bar-203"><span class="linenos">203</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="Indented.bar-204"><a href="#Indented.bar-204"><span class="linenos">204</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1532,7 +1544,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Indented.baz"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.baz-206"><a href="#Indented.baz-206"><span class="linenos">206</span></a>    <span class="k">def</span> <span class="nf">baz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.baz-207"><a href="#Indented.baz-207"><span class="linenos">207</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="Indented.baz-207"><a href="#Indented.baz-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="Indented.baz-208"><a href="#Indented.baz-208"><span class="linenos">208</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1555,7 +1567,7 @@ indent</p>
     </div>
     <a class="headerlink" href="#Indented.qux"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.qux-210"><a href="#Indented.qux-210"><span class="linenos">210</span></a>    <span class="k">def</span> <span class="nf">qux</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.qux-211"><a href="#Indented.qux-211"><span class="linenos">211</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Indented.qux-211"><a href="#Indented.qux-211"><span class="linenos">211</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Indented.qux-212"><a href="#Indented.qux-212"><span class="linenos">212</span></a><span class="sd">        two</span>
 </span><span id="Indented.qux-213"><a href="#Indented.qux-213"><span class="linenos">213</span></a><span class="sd">        indents</span>
 </span><span id="Indented.qux-214"><a href="#Indented.qux-214"><span class="linenos">214</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1582,7 +1594,7 @@ indents</p>
     <a class="headerlink" href="#Indented.foo_decorated"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.foo_decorated-216"><a href="#Indented.foo_decorated-216"><span class="linenos">216</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented.foo_decorated-217"><a href="#Indented.foo_decorated-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="nf">foo_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.foo_decorated-218"><a href="#Indented.foo_decorated-218"><span class="linenos">218</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented.foo_decorated-218"><a href="#Indented.foo_decorated-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1606,7 +1618,7 @@ indents</p>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.foo_commented-220"><a href="#Indented.foo_commented-220"><span class="linenos">220</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented.foo_commented-221"><a href="#Indented.foo_commented-221"><span class="linenos">221</span></a>    <span class="c1"># comment</span>
 </span><span id="Indented.foo_commented-222"><a href="#Indented.foo_commented-222"><span class="linenos">222</span></a>    <span class="k">def</span> <span class="nf">foo_commented</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.foo_commented-223"><a href="#Indented.foo_commented-223"><span class="linenos">223</span></a>        <span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
+</span><span id="Indented.foo_commented-223"><a href="#Indented.foo_commented-223"><span class="linenos">223</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1629,7 +1641,7 @@ indents</p>
     <a class="headerlink" href="#Indented.bar_decorated"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.bar_decorated-225"><a href="#Indented.bar_decorated-225"><span class="linenos">225</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented.bar_decorated-226"><a href="#Indented.bar_decorated-226"><span class="linenos">226</span></a>    <span class="k">def</span> <span class="nf">bar_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.bar_decorated-227"><a href="#Indented.bar_decorated-227"><span class="linenos">227</span></a>        <span class="sd">&quot;&quot;&quot;no</span>
+</span><span id="Indented.bar_decorated-227"><a href="#Indented.bar_decorated-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;no</span>
 </span><span id="Indented.bar_decorated-228"><a href="#Indented.bar_decorated-228"><span class="linenos">228</span></a><span class="sd">indents&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1654,7 +1666,7 @@ indents</p>
     <a class="headerlink" href="#Indented.baz_decorated"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.baz_decorated-230"><a href="#Indented.baz_decorated-230"><span class="linenos">230</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented.baz_decorated-231"><a href="#Indented.baz_decorated-231"><span class="linenos">231</span></a>    <span class="k">def</span> <span class="nf">baz_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.baz_decorated-232"><a href="#Indented.baz_decorated-232"><span class="linenos">232</span></a>        <span class="sd">&quot;&quot;&quot;one</span>
+</span><span id="Indented.baz_decorated-232"><a href="#Indented.baz_decorated-232"><span class="linenos">232</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;one</span>
 </span><span id="Indented.baz_decorated-233"><a href="#Indented.baz_decorated-233"><span class="linenos">233</span></a><span class="sd">        indent&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1679,7 +1691,7 @@ indent</p>
     <a class="headerlink" href="#Indented.qux_decorated"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Indented.qux_decorated-235"><a href="#Indented.qux_decorated-235"><span class="linenos">235</span></a>    <span class="nd">@lru_cache</span><span class="p">()</span>
 </span><span id="Indented.qux_decorated-236"><a href="#Indented.qux_decorated-236"><span class="linenos">236</span></a>    <span class="k">def</span> <span class="nf">qux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.qux_decorated-237"><a href="#Indented.qux_decorated-237"><span class="linenos">237</span></a>        <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Indented.qux_decorated-237"><a href="#Indented.qux_decorated-237"><span class="linenos">237</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Indented.qux_decorated-238"><a href="#Indented.qux_decorated-238"><span class="linenos">238</span></a><span class="sd">        two</span>
 </span><span id="Indented.qux_decorated-239"><a href="#Indented.qux_decorated-239"><span class="linenos">239</span></a><span class="sd">        indents</span>
 </span><span id="Indented.qux_decorated-240"><a href="#Indented.qux_decorated-240"><span class="linenos">240</span></a><span class="sd">        &quot;&quot;&quot;</span>
@@ -1708,7 +1720,7 @@ indents</p>
 </span><span id="Indented.quux_decorated-243"><a href="#Indented.quux_decorated-243"><span class="linenos">243</span></a>        <span class="n">maxsize</span><span class="o">=</span><span class="mi">42</span>
 </span><span id="Indented.quux_decorated-244"><a href="#Indented.quux_decorated-244"><span class="linenos">244</span></a>    <span class="p">)</span>
 </span><span id="Indented.quux_decorated-245"><a href="#Indented.quux_decorated-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">quux_decorated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Indented.quux_decorated-246"><a href="#Indented.quux_decorated-246"><span class="linenos">246</span></a>        <span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
+</span><span id="Indented.quux_decorated-246"><a href="#Indented.quux_decorated-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;multi-line decorator, https://github.com/mitmproxy/pdoc/issues/246&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1731,7 +1743,7 @@ indents</p>
     <a class="headerlink" href="#fun_with_protected_decorator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="fun_with_protected_decorator-253"><a href="#fun_with_protected_decorator-253"><span class="linenos">253</span></a><span class="nd">@_protected_decorator</span>
 </span><span id="fun_with_protected_decorator-254"><a href="#fun_with_protected_decorator-254"><span class="linenos">254</span></a><span class="k">def</span> <span class="nf">fun_with_protected_decorator</span><span class="p">():</span>
-</span><span id="fun_with_protected_decorator-255"><a href="#fun_with_protected_decorator-255"><span class="linenos">255</span></a>    <span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
+</span><span id="fun_with_protected_decorator-255"><a href="#fun_with_protected_decorator-255"><span class="linenos">255</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This function has a protected decorator (name starting with a single `_`).&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1765,7 +1777,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#AbstractClass"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="AbstractClass-267"><a href="#AbstractClass-267"><span class="linenos">267</span></a><span class="k">class</span> <span class="nc">AbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-</span><span id="AbstractClass-268"><a href="#AbstractClass-268"><span class="linenos">268</span></a>    <span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
+</span><span id="AbstractClass-268"><a href="#AbstractClass-268"><span class="linenos">268</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class shouldn&#39;t show a constructor as it&#39;s abstract.&quot;&quot;&quot;</span>
 </span><span id="AbstractClass-269"><a href="#AbstractClass-269"><span class="linenos">269</span></a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
 </span><span id="AbstractClass-270"><a href="#AbstractClass-270"><span class="linenos">270</span></a>    <span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="AbstractClass-271"><a href="#AbstractClass-271"><span class="linenos">271</span></a>        <span class="k">pass</span>
@@ -1810,7 +1822,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#add_four"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="add_four-277"><a href="#add_four-277"><span class="linenos">277</span></a>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="add_four-278"><a href="#add_four-278"><span class="linenos">278</span></a>        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+</span><span id="add_four-278"><a href="#add_four-278"><span class="linenos">278</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
 </span><span id="add_four-279"><a href="#add_four-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </span></pre></div>
 
@@ -1832,7 +1844,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#add_five"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="add_five-277"><a href="#add_five-277"><span class="linenos">277</span></a>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="add_five-278"><a href="#add_five-278"><span class="linenos">278</span></a>        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+</span><span id="add_five-278"><a href="#add_five-278"><span class="linenos">278</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
 </span><span id="add_five-279"><a href="#add_five-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </span></pre></div>
 
@@ -1854,7 +1866,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#add_six"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="add_six-277"><a href="#add_six-277"><span class="linenos">277</span></a>    <span class="k">def</span> <span class="nf">add_func</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="add_six-278"><a href="#add_six-278"><span class="linenos">278</span></a>        <span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
+</span><span id="add_six-278"><a href="#add_six-278"><span class="linenos">278</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This function adds two numbers.&quot;&quot;&quot;</span>
 </span><span id="add_six-279"><a href="#add_six-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </span></pre></div>
 
@@ -1876,7 +1888,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#linkify_links"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="linkify_links-291"><a href="#linkify_links-291"><span class="linenos">291</span></a><span class="k">def</span> <span class="nf">linkify_links</span><span class="p">():</span>
-</span><span id="linkify_links-292"><a href="#linkify_links-292"><span class="linenos">292</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="linkify_links-292"><a href="#linkify_links-292"><span class="linenos">292</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="linkify_links-293"><a href="#linkify_links-293"><span class="linenos">293</span></a><span class="sd">    This docstring contains links that are also identifiers:</span>
 </span><span id="linkify_links-294"><a href="#linkify_links-294"><span class="linenos">294</span></a>
 </span><span id="linkify_links-295"><a href="#linkify_links-295"><span class="linenos">295</span></a><span class="sd">    - [`linkify_links`](https://example.com/)</span>
@@ -1916,7 +1928,7 @@ indents</p>
     <a class="headerlink" href="#Issue352a"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Issue352a-309"><a href="#Issue352a-309"><span class="linenos">309</span></a><span class="k">class</span> <span class="nc">Issue352a</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352aMeta</span><span class="p">):</span>
 </span><span id="Issue352a-310"><a href="#Issue352a-310"><span class="linenos">310</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Issue352a-311"><a href="#Issue352a-311"><span class="linenos">311</span></a>        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+</span><span id="Issue352a-311"><a href="#Issue352a-311"><span class="linenos">311</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1933,7 +1945,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Issue352a.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Issue352a.__init__-310"><a href="#Issue352a.__init__-310"><span class="linenos">310</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Issue352a.__init__-311"><a href="#Issue352a.__init__-311"><span class="linenos">311</span></a>        <span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
+</span><span id="Issue352a.__init__-311"><a href="#Issue352a.__init__-311"><span class="linenos">311</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Issue352.__init__ should be preferred over Meta.__call__.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1955,7 +1967,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Issue352b"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Issue352b-319"><a href="#Issue352b-319"><span class="linenos">319</span></a><span class="k">class</span> <span class="nc">Issue352b</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Issue352bMeta</span><span class="p">):</span>
-</span><span id="Issue352b-320"><a href="#Issue352b-320"><span class="linenos">320</span></a>    <span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
+</span><span id="Issue352b-320"><a href="#Issue352b-320"><span class="linenos">320</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;No docstrings for the constructor here.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1988,7 +2000,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#CustomCall"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="CustomCall-328"><a href="#CustomCall-328"><span class="linenos">328</span></a><span class="k">class</span> <span class="nc">CustomCall</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">CustomCallMeta</span><span class="p">):</span>
-</span><span id="CustomCall-329"><a href="#CustomCall-329"><span class="linenos">329</span></a>    <span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
+</span><span id="CustomCall-329"><a href="#CustomCall-329"><span class="linenos">329</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A class where the constructor is defined by its metaclass.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -2007,7 +2019,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#CustomCall.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="CustomCall.__init__-324"><a href="#CustomCall.__init__-324"><span class="linenos">324</span></a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="CustomCall.__init__-325"><a href="#CustomCall.__init__-325"><span class="linenos">325</span></a>        <span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
+</span><span id="CustomCall.__init__-325"><a href="#CustomCall.__init__-325"><span class="linenos">325</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Custom docstring in metaclass.`__call__`&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -2029,7 +2041,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#Headings"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Headings-332"><a href="#Headings-332"><span class="linenos">332</span></a><span class="k">class</span> <span class="nc">Headings</span><span class="p">:</span>
-</span><span id="Headings-333"><a href="#Headings-333"><span class="linenos">333</span></a>    <span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Headings-333"><a href="#Headings-333"><span class="linenos">333</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Headings-334"><a href="#Headings-334"><span class="linenos">334</span></a><span class="sd">    # Heading 1</span>
 </span><span id="Headings-335"><a href="#Headings-335"><span class="linenos">335</span></a>
 </span><span id="Headings-336"><a href="#Headings-336"><span class="linenos">336</span></a><span class="sd">    Here is some text.</span>
@@ -2109,7 +2121,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#repr_not_syntax_highlightable"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="repr_not_syntax_highlightable-366"><a href="#repr_not_syntax_highlightable-366"><span class="linenos">366</span></a><span class="k">def</span> <span class="nf">repr_not_syntax_highlightable</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">CustomRepr</span><span class="p">()):</span>
-</span><span id="repr_not_syntax_highlightable-367"><a href="#repr_not_syntax_highlightable-367"><span class="linenos">367</span></a>    <span class="sd">&quot;&quot;&quot;The default value for x fails to highlight with pygments.&quot;&quot;&quot;</span>
+</span><span id="repr_not_syntax_highlightable-367"><a href="#repr_not_syntax_highlightable-367"><span class="linenos">367</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The default value for x fails to highlight with pygments.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -2130,7 +2142,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#ClassDecorator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ClassDecorator-370"><a href="#ClassDecorator-370"><span class="linenos">370</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
-</span><span id="ClassDecorator-371"><a href="#ClassDecorator-371"><span class="linenos">371</span></a>    <span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
+</span><span id="ClassDecorator-371"><a href="#ClassDecorator-371"><span class="linenos">371</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
 </span><span id="ClassDecorator-372"><a href="#ClassDecorator-372"><span class="linenos">372</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
 </span><span id="ClassDecorator-373"><a href="#ClassDecorator-373"><span class="linenos">373</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
 </span></pre></div>
@@ -2160,13 +2172,19 @@ indents</p>
                             </div>
                 </section>
                 <section id="another_decorated_function">
-                    <div class="attr variable">
-            <span class="name">another_decorated_function</span><span class="default_value"> = &lt;<a href="#ClassDecorator">misc.ClassDecorator</a> object&gt;</span>
-
+                            <input id="another_decorated_function-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">another_decorated_function</span>
         
+
+                <label class="view-source-button" for="another_decorated_function-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#another_decorated_function"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="another_decorated_function-1"><a href="#another_decorated_function-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="o">&lt;</span><span class="n">misc</span><span class="o">.</span><span class="n">ClassDecorator</span> <span class="nb">object</span><span class="o">&gt;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>This is another decorated function. It will not be documented correctly.</p>
 </div>
 
@@ -2257,10 +2275,10 @@ indents</p>
     <a class="headerlink" href="#ClassAsAttribute"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ClassAsAttribute-390"><a href="#ClassAsAttribute-390"><span class="linenos">390</span></a><span class="k">class</span> <span class="nc">ClassAsAttribute</span><span class="p">:</span>
 </span><span id="ClassAsAttribute-391"><a href="#ClassAsAttribute-391"><span class="linenos">391</span></a>    <span class="n">static_attr_to_class</span> <span class="o">=</span> <span class="n">ClassDecorator</span>
-</span><span id="ClassAsAttribute-392"><a href="#ClassAsAttribute-392"><span class="linenos">392</span></a>    <span class="sd">&quot;&quot;&quot;this is a static attribute that point to a Class (not an instance)&quot;&quot;&quot;</span>
+</span><span id="ClassAsAttribute-392"><a href="#ClassAsAttribute-392"><span class="linenos">392</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this is a static attribute that point to a Class (not an instance)&quot;&quot;&quot;</span>
 </span><span id="ClassAsAttribute-393"><a href="#ClassAsAttribute-393"><span class="linenos">393</span></a>
 </span><span id="ClassAsAttribute-394"><a href="#ClassAsAttribute-394"><span class="linenos">394</span></a>    <span class="n">static_attr_to_instance</span> <span class="o">=</span> <span class="n">ClassDecorator</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-</span><span id="ClassAsAttribute-395"><a href="#ClassAsAttribute-395"><span class="linenos">395</span></a>    <span class="sd">&quot;&quot;&quot;this is a static attribute that point to an instance&quot;&quot;&quot;</span>
+</span><span id="ClassAsAttribute-395"><a href="#ClassAsAttribute-395"><span class="linenos">395</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;this is a static attribute that point to an instance&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -2279,26 +2297,38 @@ indents</p>
 
                             </div>
                             <div id="ClassAsAttribute.static_attr_to_class" class="classattr">
-                                <div class="attr variable">
-            <span class="name">static_attr_to_class</span><span class="default_value"> = &lt;class &#39;<a href="#ClassDecorator">misc.ClassDecorator</a>&#39;&gt;</span>
-
+                                        <input id="ClassAsAttribute.static_attr_to_class-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">static_attr_to_class</span>
         
+
+                <label class="view-source-button" for="ClassAsAttribute.static_attr_to_class-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#ClassAsAttribute.static_attr_to_class"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ClassAsAttribute.static_attr_to_class-1"><a href="#ClassAsAttribute.static_attr_to_class-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">misc</span><span class="o">.</span><span class="n">ClassDecorator</span><span class="s1">&#39;&gt;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>this is a static attribute that point to a Class (not an instance)</p>
 </div>
 
 
                             </div>
                             <div id="ClassAsAttribute.static_attr_to_instance" class="classattr">
-                                <div class="attr variable">
-            <span class="name">static_attr_to_instance</span><span class="default_value"> = &lt;<a href="#ClassDecorator">misc.ClassDecorator</a> object&gt;</span>
-
+                                        <input id="ClassAsAttribute.static_attr_to_instance-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">static_attr_to_instance</span>
         
+
+                <label class="view-source-button" for="ClassAsAttribute.static_attr_to_instance-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#ClassAsAttribute.static_attr_to_instance"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ClassAsAttribute.static_attr_to_instance-1"><a href="#ClassAsAttribute.static_attr_to_instance-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="o">&lt;</span><span class="n">misc</span><span class="o">.</span><span class="n">ClassDecorator</span> <span class="nb">object</span><span class="o">&gt;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>this is a static attribute that point to an instance</p>
 </div>
 
@@ -2317,7 +2347,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#scheduler"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="scheduler-398"><a href="#scheduler-398"><span class="linenos">398</span></a><span class="k">class</span> <span class="nc">scheduler</span><span class="p">(</span><span class="n">sched</span><span class="o">.</span><span class="n">scheduler</span><span class="p">):</span>
-</span><span id="scheduler-399"><a href="#scheduler-399"><span class="linenos">399</span></a>    <span class="sd">&quot;&quot;&quot;Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490&quot;&quot;&quot;</span>
+</span><span id="scheduler-399"><a href="#scheduler-399"><span class="linenos">399</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490&quot;&quot;&quot;</span>
 </span></pre></div>
 
 

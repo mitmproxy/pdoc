@@ -66,7 +66,7 @@ misc_py310    </h1>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">def</span> <span class="nf">new_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Foo&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
@@ -94,7 +94,7 @@ misc_py310    </h1>
     </div>
     <a class="headerlink" href="#new_union"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="new_union-5"><a href="#new_union-5"><span class="linenos">5</span></a><span class="k">def</span> <span class="nf">new_union</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Foo&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="new_union-6"><a href="#new_union-6"><span class="linenos">6</span></a>    <span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span>
+</span><span id="new_union-6"><a href="#new_union-6"><span class="linenos">6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Testing Python 3.10&#39;s new type union syntax.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -135,26 +135,38 @@ misc_py310    </h1>
                             </div>
                 </section>
                 <section id="NewStyleDict">
-                    <div class="attr variable">
-            <span class="name">NewStyleDict</span><span class="default_value"> = dict[str, str]</span>
-
+                            <input id="NewStyleDict-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">NewStyleDict</span>
         
+
+                <label class="view-source-button" for="NewStyleDict-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#NewStyleDict"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NewStyleDict-1"><a href="#NewStyleDict-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>New-style dict.</p>
 </div>
 
 
                 </section>
                 <section id="OldStyleDict">
-                    <div class="attr variable">
-            <span class="name">OldStyleDict</span><span class="default_value"> = typing.Dict[str, str]</span>
-
+                            <input id="OldStyleDict-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">OldStyleDict</span>
         
+
+                <label class="view-source-button" for="OldStyleDict-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#OldStyleDict"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="OldStyleDict-1"><a href="#OldStyleDict-1"><span class="linenos">1</span></a> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>Old-style dict.</p>
 </div>
 
