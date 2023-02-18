@@ -87,15 +87,15 @@ class Doc(Generic[T]):
     qualname: str
     """
     The qualified identifier name for this object. For example, if we have the following code:
-    
+
     ```python
     class Foo:
         def bar(self):
             pass
     ```
-    
+
     The qualname of `Foo`'s `bar` method is `Foo.bar`. The qualname of the `Foo` class is just `Foo`.
-    
+
     See <https://www.python.org/dev/peps/pep-3155/> for details.
     """
 
@@ -998,7 +998,7 @@ class Variable(Doc[None]):
     default_value: Any | empty  # technically Any includes empty, but this conveys intent.
     """
     The variable's default value.
-    
+
     In some cases, no default value is known. This may either be because a variable is only defined in the constructor,
     or it is only declared with a type annotation without assignment (`foo: int`).
     To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.
@@ -1007,7 +1007,7 @@ class Variable(Doc[None]):
     annotation: type | empty
     """
     The variable's type annotation.
-    
+
     If there is no type annotation, `pdoc.doc_types.empty` is used as a placeholder.
     """
 
@@ -1070,6 +1070,14 @@ class Variable(Doc[None]):
                 )
             except Exception:
                 return " = <unable to get value representation>"
+
+    @cached_property
+    def source(self) -> str:
+        """
+        Returns the "source" for a variable. This is the same as
+        `default_value_str`, i.e. the variable's default (RHS) value.
+        """
+        return self.default_value_str
 
     @cached_property
     def annotation_str(self) -> str:
