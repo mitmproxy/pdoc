@@ -51,6 +51,7 @@ dev = [
     "pytest-cov",
     "pytest-timeout",
     "hypothesis",
+    "pygments >= 2.14.0",
 ]
 
 [build-system]
