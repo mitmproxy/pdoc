@@ -82,7 +82,9 @@ def test_var_with_raising_repr():
         annotation=empty,
         default_value=Raising(),
     )
-    with pytest.warns(match=r"repr\(module\.var\) raised an exception \(RuntimeError\(\)\)"):
+    with pytest.warns(
+        match=r"repr\(module\.var\) raised an exception \(RuntimeError\(\)\)"
+    ):
         assert not v.default_value_str
 
 
