@@ -227,8 +227,8 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     Implementing this as a macro makes it very easy to override with a custom template, see
     https://github.com/mitmproxy/pdoc/tree/main/examples/custom-template.
     #}
-    {% if doc.name == "__init__" %}
-        {# show all constructors #}
+    {% if doc.name == "__init__" and (doc.signature_without_self.parameters or doc.docstring) %}
+        {# show constructors that have a docstring or at least one extra argument #}
         true
     {% elif doc.name == "__doc__" %}
         {# We don't want to document __doc__ itself, https://github.com/mitmproxy/pdoc/issues/235 #}

@@ -4,6 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - pdoc now skips constructors if they neither have a docstring nor any parameters. This improves display
+   of classes that are not meant to be instantiated manually, for example when using PyO3.
  - Add a workaround to support inherited TypedDicts.
    ([#504](https://github.com/mitmproxy/pdoc/issues/504), @mhils)
  - `Variable.default_value_str` does not include the ` = ` prefix anymore. It will now emit a warning and return
