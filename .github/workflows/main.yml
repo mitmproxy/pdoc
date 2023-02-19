@@ -20,20 +20,20 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.11.0
+            py: 3.11.2
             args: --cov-fail-under=100
           - os: macos-latest
-            py: 3.11.0
+            py: 3.11.2
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.11.0
+            py: 3.11.2
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.10.8
+            py: 3.10.10
           - os: ubuntu-latest
-            py: 3.9.15
+            py: 3.9.16
           - os: ubuntu-latest
-            py: 3.8.14
+            py: 3.8.16
           - os: ubuntu-latest
             py: 3.7.15
     uses: mhils/workflows/.github/workflows/python-tox.yml@main
