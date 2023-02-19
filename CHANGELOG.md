@@ -9,6 +9,7 @@
    ([#510](https://github.com/mitmproxy/pdoc/pull/510), @mhils)
  - Automatically fold a variable's default value if it exceeds 100 characters.
    Feedback on this cutoff is welcome!
+   ([#511](https://github.com/mitmproxy/pdoc/pull/511), @mhils)
  - Add a workaround to support inherited TypedDicts.
    ([#504](https://github.com/mitmproxy/pdoc/issues/504), @mhils)
  - `Variable.default_value_str` does not include the ` = ` prefix anymore. It will now emit a warning and return
