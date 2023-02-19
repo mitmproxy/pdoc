@@ -5,6 +5,8 @@ import os
 import shutil
 import sys
 import tempfile
+import warnings
+from contextlib import ExitStack
 from pathlib import Path
 
 import pytest
@@ -22,6 +24,7 @@ class Snapshot:
     render_options: dict
     with_output_directory: bool
     min_version: tuple[int, int]
+    warnings: list[str]
 
     def __init__(
         self,
@@ -30,50 +33,56 @@ class Snapshot:
         render_options: dict | None = None,
         with_output_directory: bool = False,
         min_version: tuple[int, int] = (3, 7),
+        warnings: list[str] | None = None,
     ):
         self.id = id
         self.specs = filenames or [f"{id}.py"]
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
         self.min_version = min_version
+        self.warnings = warnings or []
 
     def __repr__(self):
         return f"Snapshot({self.id})"
 
     def make(self, format: str) -> str:
-        pdoc.render.configure(**self.render_options)
-        pdoc.render.env.globals["__version__"] = "$VERSION"
-        if self.with_output_directory:
-            if format == "repr":
-                return "(skipped)"
-            with tempfile.TemporaryDirectory() as tmpdirname:
-                tmpdir = Path(tmpdirname)
-                # noinspection PyTypeChecker
-                pdoc.pdoc(*self.specs, output_directory=Path(tmpdir))  # type: ignore
+        with ExitStack() as stack:
+            if format != "repr":
+                for w in self.warnings:
+                    stack.enter_context(pytest.warns(match=w))
+            pdoc.render.configure(**self.render_options)
+            pdoc.render.env.globals["__version__"] = "$VERSION"
+            if self.with_output_directory:
+                if format == "repr":
+                    return "(skipped)"
+                with tempfile.TemporaryDirectory() as tmpdirname:
+                    tmpdir = Path(tmpdirname)
+                    # noinspection PyTypeChecker
+                    pdoc.pdoc(*self.specs, output_directory=Path(tmpdir))  # type: ignore
 
-                rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
-                for f in sorted(tmpdir.glob("**/*"), reverse=True):
-                    if not f.is_file():
-                        continue
-                    rendered += (
-                        f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
-                        + '<iframe srcdoc="\n'
-                        + f.read_text("utf8")
-                        .replace("&", "&amp;")
-                        .replace('"', "&quot;")
-                        + '\n"></iframe>\n\n'
-                    )
+                    rendered = "<style>iframe {width: 100%; min-height: 50vh}</style>\n"
+                    for f in sorted(tmpdir.glob("**/*"), reverse=True):
+                        if not f.is_file():
+                            continue
+                        rendered += (
+                            f"<h3>{f.relative_to(tmpdir).as_posix()}</h3>\n"
+                            + '<iframe srcdoc="\n'
+                            + f.read_text("utf8")
+                            .replace("&", "&amp;")
+                            .replace('"', "&quot;")
+                            + '\n"></iframe>\n\n'
+                        )
 
-        else:
-            if format == "repr":
-                mod_name = pdoc.extract.walk_specs(self.specs)[0]
-                mod = pdoc.doc.Module.from_name(mod_name)
-                with pdoc.extract.mock_some_common_side_effects():
-                    rendered = pdoc.render.repr_module(mod)
             else:
-                rendered = pdoc.pdoc(*self.specs)
-        pdoc.render.configure()
-        pdoc.render.env.globals["__version__"] = pdoc.__version__
+                if format == "repr":
+                    mod_name = pdoc.extract.walk_specs(self.specs)[0]
+                    mod = pdoc.doc.Module.from_name(mod_name)
+                    with pdoc.extract.mock_some_common_side_effects():
+                        rendered = pdoc.render.repr_module(mod)
+                else:
+                    rendered = pdoc.pdoc(*self.specs)
+            pdoc.render.configure()
+            pdoc.render.env.globals["__version__"] = pdoc.__version__
         return rendered
 
     def outfile(self, format: str) -> Path:
@@ -124,7 +133,11 @@ snapshots = [
         with_output_directory=True,
     ),
     Snapshot("misc"),
-    Snapshot("misc_py39", min_version=(3, 9)),
+    Snapshot(
+        "misc_py39",
+        min_version=(3, 9),
+        warnings=[r"Cannot determine where misc_py39\.Bar\.a is taken from"],
+    ),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("misc_py311", min_version=(3, 11)),
     Snapshot("math_demo", render_options={"math": True}),
@@ -167,6 +180,7 @@ def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
 
 
 if __name__ == "__main__":
+    warnings.simplefilter("error")
     if not shutil.which("nodejs") and not shutil.which("node"):
         print(
             "Snapshots include precompiled search indices, "
