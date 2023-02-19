@@ -140,8 +140,13 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro default_value(var) -%}
-    {%- if var.default_value_str -%}
-        <span class="default_value"> = {{ var.default_value_str | escape | linkify }}</span>
+    {%- if var.default_value_str %}
+        =
+        {% if var.default_value_str | length > 100 -%}
+            <input id="{{ var.qualname }}-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+            <label class="view-value-button pdoc-button" for="{{ var.qualname }}-view-value"></label>
+        {%- endif -%}
+        <span class="default_value">{{ var.default_value_str | escape | linkify }}</span>
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro annotation(var) %}
