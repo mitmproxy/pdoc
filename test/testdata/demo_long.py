@@ -158,7 +158,7 @@ class Bar(Foo):
         It should be noted that inner classes are a pattern you most often want to avoid in Python.
         Think about moving stuff in a new package instead!
 
-        Below, you see what happens if a class has no constructor defined (and hence no constructor docstring).
+        This class has no __init__ method defined, so pdoc will not show a constructor.
         """
 
         def wat(self):
