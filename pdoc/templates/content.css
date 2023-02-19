@@ -16,6 +16,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 }
 
 .pdoc .pdoc-button {
+    cursor: pointer;
     display: inline-block;
     border: solid black 1px;
     border-radius: 2px;
@@ -330,6 +331,33 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 
 .pdoc .annotation {
     color: var(--annotation);
+}
+
+/* Show/Hide buttons for long default values */
+.pdoc .view-value-toggle-state,
+.pdoc .view-value-toggle-state ~ .default_value {
+    display: none;
+}
+.pdoc .view-value-toggle-state:checked ~ .default_value {
+    display: inherit;
+}
+.pdoc .view-value-button {
+    font-size: .5rem;
+    vertical-align: middle;
+    border-style: dashed;
+    margin-top: -0.1rem;
+}
+.pdoc .view-value-button:hover {
+    background: white;
+}
+.pdoc .view-value-button::before {
+    content: "show";
+    text-align: center;
+    width: 2.2em;
+    display: inline-block;
+}
+.pdoc .view-value-toggle-state:checked ~ .view-value-button::before {
+    content: "hide";
 }
 
 /* Inherited Members */
