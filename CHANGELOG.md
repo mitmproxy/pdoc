@@ -6,6 +6,8 @@
 
  - Add a workaround to support inherited TypedDicts.
    ([#504](https://github.com/mitmproxy/pdoc/issues/504), @mhils)
+ - `Variable.default_value_str` does not include the ` = ` prefix anymore. It will now emit a warning and return
+   an empty string if `repr(value)` crashes.
 
 ## 2023-01-06: pdoc 12.3.1
 

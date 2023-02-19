@@ -1038,7 +1038,11 @@ class Variable(Doc[None]):
     @cache
     @_include_fullname_in_traceback
     def __repr__(self):
-        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{self.default_value_str}{_docstr(self)}>'
+        if self.default_value_str:
+            default = f" = {self.default_value_str}"
+        else:
+            default = ""
+        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{default}{_docstr(self)}>'
 
     @cached_property
     def is_classvar(self) -> bool:
@@ -1061,15 +1065,15 @@ class Variable(Doc[None]):
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
             return ""
-        else:
-            try:
-                return re.sub(
-                    r" at 0x[0-9a-fA-F]+(?=>)",
-                    "",
-                    f" = {repr(self.default_value)}",
-                )
-            except Exception:
-                return " = <unable to get value representation>"
+
+        try:
+            pretty = repr(self.default_value)
+        except Exception as e:
+            warnings.warn(f"repr({self.fullname}) raised an exception ({e!r})")
+            return ""
+
+        pretty = re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", pretty)
+        return pretty
 
     @cached_property
     def annotation_str(self) -> str:
