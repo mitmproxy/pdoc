@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+## 2023-02-19: pdoc 13.0.0
+
  - pdoc now skips constructors if they neither have a docstring nor any parameters. This improves display
    of classes that are not meant to be instantiated manually, for example when using PyO3.
    ([#510](https://github.com/mitmproxy/pdoc/pull/510), @mhils)
