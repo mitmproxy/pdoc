@@ -4,8 +4,8 @@ import os
 import types
 import warnings
 from pathlib import Path
-from typing import cast
 from typing import Mapping
+from typing import cast
 
 import jinja2
 from jinja2 import Environment
@@ -13,6 +13,7 @@ from jinja2 import FileSystemLoader
 
 import pdoc.doc
 import pdoc.docstrings
+from pdoc._compat import Literal
 from pdoc.render_helpers import DefaultMacroExtension
 from pdoc.render_helpers import defuse_unsafe_reprs
 from pdoc.render_helpers import edit_url
@@ -27,18 +28,11 @@ from pdoc.render_helpers import to_markdown_with_context
 from pdoc.search import make_index
 from pdoc.search import precompile_index
 
-try:
-    from typing import Literal
-except ImportError:  # pragma: no cover
-    # Python < 3.8 - we cannot use pdoc._compat because ruff does not like it.
-    class Literal:  # type: ignore
-        pass
-
 
 def configure(
     *,
     docformat: Literal[
-        "markdown", "google", "numpy", "restructuredtext"
+        "markdown", "google", "numpy", "restructuredtext"  # noqa: F821
     ] = "restructuredtext",
     edit_url_map: Mapping[str, str] | None = None,
     favicon: str | None = None,
