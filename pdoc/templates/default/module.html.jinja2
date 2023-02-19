@@ -141,7 +141,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 {% defaultmacro default_value(var) -%}
     {%- if var.default_value_str -%}
-        <span class="default_value">{{ var.default_value_str | escape | linkify }}</span>
+        <span class="default_value"> = {{ var.default_value_str | escape | linkify }}</span>
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro annotation(var) %}

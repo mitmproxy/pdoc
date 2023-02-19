@@ -82,7 +82,8 @@ def test_var_with_raising_repr():
         annotation=empty,
         default_value=Raising(),
     )
-    assert v.default_value_str == " = <unable to get value representation>"
+    with pytest.warns(match=r"repr\(module\.var\) raised an exception \(RuntimeError\(\)\)"):
+        assert not v.default_value_str
 
 
 def test_class_with_raising_getattr():
