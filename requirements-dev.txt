@@ -84,7 +84,7 @@ types-docutils==0.19.1.4
     #   types-setuptools
 types-pygments==2.14.0.3
     # via pdoc (pyproject.toml)
-types-setuptools==67.3.0.1
+types-setuptools==67.4.0.3
     # via types-pygments
 typing-extensions==4.5.0
     # via mypy
