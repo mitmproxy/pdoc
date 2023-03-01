@@ -78,7 +78,7 @@ sortedcontainers==2.4.0
     # via hypothesis
 tox==4.4.5
     # via pdoc (pyproject.toml)
-types-docutils==0.19.1.4
+types-docutils==0.19.1.6
     # via
     #   types-pygments
     #   types-setuptools
