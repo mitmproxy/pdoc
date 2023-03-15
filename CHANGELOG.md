@@ -4,6 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Add additional Jinja2 blocks to allow a more fine-grained customization of the menu.
+   ([#521](https://github.com/mitmproxy/pdoc/pull/521), @mikkelakromann)
 
 ## 2023-02-19: pdoc 13.0.0
 
