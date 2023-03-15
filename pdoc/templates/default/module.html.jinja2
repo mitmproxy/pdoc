@@ -34,25 +34,31 @@
         {% endif %}
     {% endblock %}
 
-    {% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
-    {% if index %}
-        <h2>Contents</h2>
-        {{ index | safe }}
-    {% endif %}
+    {% block nav_index %}
+        {% set index = module.docstring | to_markdown | to_html | attr("toc_html") %}
+        {% if index %}
+            <h2>Contents</h2>
+            {{ index | safe }}
+        {% endif %}
+    {% endblock %}
 
-    {% if module.submodules %}
-        <h2>Submodules</h2>
-        <ul>
-            {% for submodule in module.submodules if is_public(submodule) | trim %}
-                <li>{{ submodule.taken_from | link(text=submodule.name) }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% block nav_submodule %}
+        {% if module.submodules %}
+            <h2>Submodules</h2>
+            <ul>
+                {% for submodule in module.submodules if is_public(submodule) | trim %}
+                    <li>{{ submodule.taken_from | link(text=submodule.name) }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endblock %}
 
-    {% if module.members %}
-        <h2>API Documentation</h2>
-        {{ nav_members(module.members.values()) }}
-    {% endif %}
+    {% block nav_module %}
+        {% if module.members %}
+            <h2>API Documentation</h2>
+            {{ nav_members(module.members.values()) }}
+        {% endif %}
+    {% endblock %}
 
     {% block nav_footer %}
         {% if footer_text %}
