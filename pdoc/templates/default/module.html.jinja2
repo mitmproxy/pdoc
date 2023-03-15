@@ -42,7 +42,7 @@
         {% endif %}
     {% endblock %}
 
-    {% block nav_submodule %}
+    {% block nav_submodules %}
         {% if module.submodules %}
             <h2>Submodules</h2>
             <ul>
@@ -53,7 +53,7 @@
         {% endif %}
     {% endblock %}
 
-    {% block nav_module %}
+    {% block nav_members %}
         {% if module.members %}
             <h2>API Documentation</h2>
             {{ nav_members(module.members.values()) }}
