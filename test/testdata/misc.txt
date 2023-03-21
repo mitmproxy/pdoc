@@ -114,4 +114,7 @@
         <method def run(self, blocking=True): ...  # inherited from sched.scheduler.run, Execute events until…>
         <var queue  # inherited from sched.scheduler.queue, An ordered list of u…>
     >
+    <class misc.__init__  # https://github.com/m…
+        <method def __init__(): ...>
+    >
 >

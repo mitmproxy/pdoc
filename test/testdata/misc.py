@@ -398,6 +398,10 @@ class scheduler(sched.scheduler):
     """Test for broken links for inherited methods, https://github.com/mitmproxy/pdoc/issues/490"""
 
 
+class __init__:
+    """https://github.com/mitmproxy/pdoc/issues/519"""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -432,4 +436,5 @@ __all__ = [
     "SubclassRef",
     "ClassAsAttribute",
     "scheduler",
+    "__init__",
 ]
