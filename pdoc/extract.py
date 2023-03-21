@@ -130,6 +130,8 @@ def parse_spec(spec: Path | str) -> str:
                 )
 
     if isinstance(spec, Path):
+        if spec.name == "__init__.py":
+            spec = spec.parent
         if (spec.parent / "__init__.py").exists():
             return parse_spec(spec.resolve().parent) + f".{spec.stem}"
         parent_dir = str(spec.parent)
