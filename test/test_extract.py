@@ -82,8 +82,7 @@ def test_parse_spec(monkeypatch):
     sys.path = p
 
     assert (
-        parse_spec(here / "testdata" / "demopackage" / "__init__.py")
-        == "demopackage"
+        parse_spec(here / "testdata" / "demopackage" / "__init__.py") == "demopackage"
     )
     assert str(here / "testdata") in sys.path
     sys.path = p
