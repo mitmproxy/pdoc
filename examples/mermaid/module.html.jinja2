@@ -1,0 +1,38 @@
+{#
+We want to extend the default template instead of defining everything ourselves.
+#}
+{% extends "default/module.html.jinja2" %}
+
+{#
+The Mermaid library needs to be added so it can convert the generated HTML tags
+into their corresponding diagrams. We can include it in the <head> block.
+
+`defer` in the <script> tag tells the browser
+to delay execution until the page is fully constructed, which ensures Mermaid
+renders every diagram available.
+
+The MurationObserver waits for Mermaid to render the diagrams before making them
+visible. This step isn't strictly necessary but prevents the raw fence block
+from being visible on the page before Mermaid gets a chance to hide it.
+#}
+{% block head %}
+    <script type="module" defer>
+        import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+
+        let observer = new MutationObserver((mutations) => {
+            for (let mutation of mutations) {
+                mutation.target.style.visibility = "visible";
+            }
+        });
+        document.querySelectorAll("pre.mermaid-pre div.mermaid").forEach((item) => {
+            observer.observe(item, {
+                attributes: true,
+                attributeFilter: ["data-processed"],
+            });
+        });
+
+        mermaid.initialize({
+            startOnLoad: true,
+        });
+    </script>
+{% endblock %}

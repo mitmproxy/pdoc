@@ -63,6 +63,7 @@ markdown_extensions = {
     "header-ids": None,
     "link-patterns": None,
     "markdown-in-html": None,
+    "mermaid": None,
     "pyshell": None,
     "strike": None,
     "tables": None,

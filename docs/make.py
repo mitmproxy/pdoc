@@ -83,6 +83,13 @@ if __name__ == "__main__":
         output_directory=here / "docs" / "math",
     )
 
+    # Render mermaid example
+    pdoc.render.configure(template_directory=here / ".." / "examples" / "mermaid")
+    pdoc.pdoc(
+        here / ".." / "test" / "testdata" / "mermaid_demo.py",
+        output_directory=here / "docs" / "mermaid"
+    )
+
     # Add sitemap.xml
     with (here / "sitemap.xml").open("w", newline="\n") as f:
         f.write(

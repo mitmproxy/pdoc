@@ -276,6 +276,21 @@ You can include external Markdown files in your documentation by using reStructu
 Since version 11, pdoc processes such reStructuredText elements by default.
 
 
+## ...render Mermaid diagrams?
+
+pdoc supports rendering Mermaid diagrams included in Markdown files by default. Diagrams can be specified using fence blocks similarly to GitHub's Markdown syntax:
+
+````markdown
+```mermaid
+flowchart LR
+    Start --> Stop
+```
+````
+
+The actual Mermaid JavaScript library used for rendering your diagrams is not included in your documentation by default. To include it and enable rendering, you must use [a custom HTML template](#edit-pdocs-html-template). You can find an example of how to do that at
+[`examples/mermaid/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/mermaid/module.html.jinja2).
+
+
 ## ...add a title page?
 
 The landing page for your documentation is your project's top-level `<modulename>/__init__.py` file.
@@ -418,6 +433,7 @@ In addition, the following extra syntax elements are enabled:
   - **[markdown-in-html][]:** Allow the use of `markdown="1"` in a
     block HTML tag to have markdown processing be done on its contents.
     Similar to [PHP-Markdown Extra][] but with some limitations.
+  - **[mermaid][]:** Allows rendering Mermaid diagrams from included Markdown files using <code>```mermaid</code> fence blocks.
   - **[pyshell][]:** Treats unindented Python interactive shell
     sessions as `<code>` blocks.
   - **strike:** Parse `~~strikethrough~~` formatting.
@@ -434,6 +450,7 @@ In addition, the following extra syntax elements are enabled:
 [footnotes]: https://github.com/trentm/python-markdown2/wiki/footnotes
 [header-ids]: https://github.com/trentm/python-markdown2/wiki/header-ids
 [markdown-in-html]: https://github.com/trentm/python-markdown2/wiki/markdown-in-html
+[mermaid]: https://github.com/trentm/python-markdown2/wiki/mermaid
 [pyshell]: https://github.com/trentm/python-markdown2/wiki/pyshell
 [tables]: https://github.com/trentm/python-markdown2/wiki/tables
 [GitHub-Flavored Markdown]: https://github.github.com/gfm/
