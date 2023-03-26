@@ -1,4 +1,4 @@
-/* By default we want to hide the Mermaid fence block. */
+/* By default we want to hide the Mermaid fence blocks. */
 
 .mermaid-pre {
   visibility: hidden;

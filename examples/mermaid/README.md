@@ -13,5 +13,7 @@ flowchart LR
 ```
 ````
 
-A custom template is also required in order to include the Mermaid rendering code correctly. See [Using a Custom Template](../custom-template) for more information on customizing the generated
+A custom template is also required in order to include the Mermaid rendering code correctly.
+
+See [Using a Custom Template](../custom-template) for more information on customizing the generated
 HTML in general.

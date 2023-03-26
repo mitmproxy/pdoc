@@ -7,13 +7,12 @@ We want to extend the default template instead of defining everything ourselves.
 The Mermaid library needs to be added so it can convert the generated HTML tags
 into their corresponding diagrams. We can include it in the <head> block.
 
-`defer` in the <script> tag tells the browser
-to delay execution until the page is fully constructed, which ensures Mermaid
-renders every diagram available.
+`defer` in the <script> tag tells the browser to delay execution until the page
+is fully constructed, which ensures Mermaid correctly renders every diagram available.
 
 The MurationObserver waits for Mermaid to render the diagrams before making them
-visible. This step isn't strictly necessary but prevents the raw fence block
-from being visible on the page before Mermaid gets a chance to hide it.
+visible. This step isn't strictly necessary but prevents the raw fence blocks
+from being visible on the page before Mermaid gets a chance to hide them.
 #}
 {% block head %}
     <script type="module" defer>
