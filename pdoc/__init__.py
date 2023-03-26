@@ -278,7 +278,8 @@ Since version 11, pdoc processes such reStructuredText elements by default.
 
 ## ...render Mermaid diagrams?
 
-pdoc supports rendering Mermaid diagrams included in Markdown files by default. Diagrams can be specified using fence blocks similarly to GitHub's Markdown syntax:
+pdoc supports rendering Mermaid diagrams included in Markdown files by default.
+Diagrams can be specified using fence blocks similarly toGitHub's Markdown syntax:
 
 ````markdown
 ```mermaid
@@ -287,7 +288,8 @@ flowchart LR
 ```
 ````
 
-The actual Mermaid JavaScript library used for rendering your diagrams is not included in your documentation by default. To include it and enable rendering, you must use [a custom HTML template](#edit-pdocs-html-template). You can find an example of how to do that at
+The actual Mermaid JavaScript library used for rendering your diagrams is not included in your documentation by default.
+To include it and enable rendering, you must use [a custom HTML template](#edit-pdocs-html-template). You can find an example in
 [`examples/mermaid/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/mermaid/module.html.jinja2).
 
 

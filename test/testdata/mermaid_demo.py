@@ -15,15 +15,11 @@ classDiagram
 ```
 """
 
-from typing import List, TypeVar
-
-TPet = TypeVar("TPet", bound="Pet")
-"""Generic Pet type"""
 
 class Pet:
     name: str
     """The name of our pet."""
-    friends: List[TPet]
+    friends: list["Pet"]
     """The friends of our pet."""
 
     def __init__(self, name: str):
