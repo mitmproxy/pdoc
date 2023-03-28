@@ -40,6 +40,7 @@ def configure(
     logo: str | None = None,
     logo_link: str | None = None,
     math: bool = False,
+    mermaid: bool = False,
     search: bool = True,
     show_source: bool = True,
     template_directory: Path | None = None,
@@ -61,6 +62,7 @@ def configure(
     - `logo` is an optional URL to the project's logo image
     - `logo_link` is an optional URL the logo should point to
     - `math` enables math rendering by including MathJax into the rendered documentation.
+    - `mermaid` enables diagram rendering by including Mermaid.js into the rendered documentation.
     - `search` controls whether search functionality is enabled and a search index is built.
     - `show_source` controls whether a "View Source" button should be included in the output.
     - `template_directory` can be used to set an additional (preferred) directory
@@ -75,6 +77,7 @@ def configure(
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
     env.globals["math"] = math
+    env.globals["mermaid"] = mermaid
     env.globals["show_source"] = show_source
     env.globals["favicon"] = favicon
     env.globals["logo"] = logo

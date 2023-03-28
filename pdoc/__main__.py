@@ -97,6 +97,12 @@ renderopts.add_argument(
     help="Include MathJax from a CDN to enable math formula rendering.",
 )
 renderopts.add_argument(
+    "--mermaid",
+    action=BooleanOptionalAction,
+    default=False,
+    help="Include Mermaid.js from a CDN to enable Mermaid diagram rendering.",
+)
+renderopts.add_argument(
     "--search",
     action=BooleanOptionalAction,
     default=True,
@@ -176,6 +182,7 @@ def cli(args: list[str] | None = None) -> None:
         logo=opts.logo,
         logo_link=opts.logo_link,
         math=opts.math,
+        mermaid=opts.mermaid,
         search=opts.search,
         show_source=opts.show_source,
         template_directory=opts.template_directory,

@@ -257,6 +257,12 @@ Run `pdoc --math`, and pdoc will render formulas in your docstrings. See
 [`math_demo`](https://pdoc.dev/docs/math/math_demo.html) for details.
 
 
+## ...render Mermaid diagrams?
+
+Run `pdoc --mermaid`, and pdoc will render mermaid diagrams in your docstrings. See
+[`mermaid_demo`](https://pdoc.dev/docs/mermaid/mermaid_demo.html) for details.
+
+
 ## ...add my project's logo?
 
 See [*Customizing pdoc*](#customizing-pdoc).
@@ -418,6 +424,7 @@ In addition, the following extra syntax elements are enabled:
   - **[markdown-in-html][]:** Allow the use of `markdown="1"` in a
     block HTML tag to have markdown processing be done on its contents.
     Similar to [PHP-Markdown Extra][] but with some limitations.
+  - **[mermaid][]:** Allows rendering Mermaid diagrams from included Markdown files using <code>```mermaid</code> fence blocks.
   - **[pyshell][]:** Treats unindented Python interactive shell
     sessions as `<code>` blocks.
   - **strike:** Parse `~~strikethrough~~` formatting.
@@ -434,6 +441,7 @@ In addition, the following extra syntax elements are enabled:
 [footnotes]: https://github.com/trentm/python-markdown2/wiki/footnotes
 [header-ids]: https://github.com/trentm/python-markdown2/wiki/header-ids
 [markdown-in-html]: https://github.com/trentm/python-markdown2/wiki/markdown-in-html
+[mermaid]: https://github.com/trentm/python-markdown2/wiki/mermaid
 [pyshell]: https://github.com/trentm/python-markdown2/wiki/pyshell
 [tables]: https://github.com/trentm/python-markdown2/wiki/tables
 [GitHub-Flavored Markdown]: https://github.github.com/gfm/
