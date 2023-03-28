@@ -1,0 +1,13 @@
+<module mermaid_demo  # A small `pdoc` examp…
+    <class mermaid_demo.Pet
+        <method def __init__(self, name: str): ...  # Make a Pet without a…>
+        <var name: str  # The name of our pet.…>
+        <var friends: list[mermaid_demo.Pet]  # The friends of our p…>
+    >
+    <class mermaid_demo.Dog  # 🐕
+        <method def __init__(self, name: str): ...  # inherited from mermaid_demo.Pet.__init__, Make a Pet without a…>
+        <method def bark(self, loud: bool = True): ...  # *woof*>
+        <var name: str  # inherited from mermaid_demo.Pet.name, The name of our pet.…>
+        <var friends: list[mermaid_demo.Pet]  # inherited from mermaid_demo.Pet.friends, The friends of our p…>
+    >
+>

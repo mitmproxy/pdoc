@@ -84,7 +84,14 @@ if __name__ == "__main__":
     )
 
     # Render mermaid example
-    pdoc.render.configure(template_directory=here / ".." / "examples" / "mermaid")
+    pdoc.render.configure(
+        mermaid=True,
+        logo="/logo.svg",
+        logo_link="https://pdoc.dev",
+        edit_url_map={
+            "math_demo": "https://github.com/mitmproxy/pdoc/blob/main/test/testdata/mermaid_demo"
+        },
+    )
     pdoc.pdoc(
         here / ".." / "test" / "testdata" / "mermaid_demo.py",
         output_directory=here / "docs" / "mermaid",

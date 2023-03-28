@@ -257,6 +257,12 @@ Run `pdoc --math`, and pdoc will render formulas in your docstrings. See
 [`math_demo`](https://pdoc.dev/docs/math/math_demo.html) for details.
 
 
+## ...render Mermaid diagrams?
+
+Run `pdoc --mermaid`, and pdoc will render mermaid diagrams in your docstrings. See
+[`mermaid_demo`](https://pdoc.dev/docs/mermaid/mermaid_demo.html) for details.
+
+
 ## ...add my project's logo?
 
 See [*Customizing pdoc*](#customizing-pdoc).
@@ -274,23 +280,6 @@ You can include external Markdown files in your documentation by using reStructu
 ```
 
 Since version 11, pdoc processes such reStructuredText elements by default.
-
-
-## ...render Mermaid diagrams?
-
-pdoc supports rendering Mermaid diagrams included in Markdown files by default.
-Diagrams can be specified using fence blocks similarly toGitHub's Markdown syntax:
-
-````markdown
-```mermaid
-flowchart LR
-    Start --> Stop
-```
-````
-
-The actual Mermaid JavaScript library used for rendering your diagrams is not included in your documentation by default.
-To include it and enable rendering, you must use [a custom HTML template](#edit-pdocs-html-template). You can find an example in
-[`examples/mermaid/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/mermaid/module.html.jinja2).
 
 
 ## ...add a title page?
