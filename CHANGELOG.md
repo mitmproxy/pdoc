@@ -4,14 +4,20 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+## 2023-03-31: pdoc 13.1.0
+
  - Add support for rendering [Mermaid diagrams](https://mermaid.js.org/) by passing `--mermaid`.
    ([#525](https://github.com/mitmproxy/pdoc/pull/525), @thearchitector, @mhils)
+ - Add rudimentary support for `typing_extensions.Literal` on Python 3.7.
+   ([#527](https://github.com/mitmproxy/pdoc/pull/527), @mhils)
+
+## 2023-03-21: pdoc 13.0.1
+
  - Add additional Jinja2 blocks to allow a more fine-grained customization of the menu.
    ([#521](https://github.com/mitmproxy/pdoc/pull/521), @mikkelakromann)
  - Fix a crash in pdoc 13.0.0 when `__init__.py` is passed as a file to pdoc.
    ([#522](https://github.com/mitmproxy/pdoc/pull/522), @mhils)
- - Add rudimentary support for `typing_extensions.Literal` on Python 3.7.
-   ([#527](https://github.com/mitmproxy/pdoc/pull/527), @mhils)
 
 ## 2023-02-19: pdoc 13.0.0
 
