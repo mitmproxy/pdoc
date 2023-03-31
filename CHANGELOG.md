@@ -10,6 +10,7 @@
    ([#521](https://github.com/mitmproxy/pdoc/pull/521), @mikkelakromann)
  - Fix a crash in pdoc 13.0.0 when `__init__.py` is passed as a file to pdoc.
    ([#522](https://github.com/mitmproxy/pdoc/pull/522), @mhils)
+ - Add rudimentary support for `typing_extensions.Literal` on Python 3.7.
 
 ## 2023-02-19: pdoc 13.0.0
 

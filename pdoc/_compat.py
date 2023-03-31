@@ -109,8 +109,11 @@ else:  # pragma: no cover
 
     # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
 
-    class Literal:
-        pass
+    try:
+        from typing_extensions import Literal
+    except ImportError:
+        class Literal:
+            pass
 
     # get_origin is adapted from
     # https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/typing.py#L1474-L1515
