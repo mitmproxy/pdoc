@@ -1,7 +1,7 @@
 # fmt: off
 # flake8: noqa
 # type: ignore
-# Taken from here: https://github.com/trentm/python-markdown2/blob/f456341fde46e0a492d0bc0e2ee39957d4fb770d/lib/markdown2.py
+# Taken from here: https://github.com/trentm/python-markdown2/blob/bce3f18ed86a19b418c8114a712bb6fee790c4c2/lib/markdown2.py
 
 #!/usr/bin/env python
 # Copyright (c) 2012 Trent Mick.
@@ -61,7 +61,7 @@ see <https://github.com/trentm/python-markdown2/wiki/Extras> for details):
   highlighting when using fenced-code-blocks and highlightjs.
 * html-classes: Takes a dict mapping html tag names (lowercase) to a
   string to use for a "class" tag attribute. Currently only supports "img",
-  "table", "pre", "code", "ul" and "ol" tags. Add an issue if you require
+  "table", "thead", "pre", "code", "ul" and "ol" tags. Add an issue if you require
   this for other tags.
 * link-patterns: Auto-link given regex patterns in text (e.g. bug number
   references, revision number references).
@@ -104,18 +104,18 @@ see <https://github.com/trentm/python-markdown2/wiki/Extras> for details):
 #   not yet sure if there implications with this. Compare 'pydoc sre'
 #   and 'perldoc perlre'.
 
-__version_info__ = (2, 4, 8)
+__version_info__ = (2, 4, 9)
 __version__ = '.'.join(map(str, __version_info__))
 __author__ = "Trent Mick"
 
-import sys
-import re
-import logging
-from hashlib import sha256
-import optparse
-from random import random, randint
+import argparse
 import codecs
+import logging
+import re
+import sys
 from collections import defaultdict
+from hashlib import sha256
+from random import randint, random
 
 # ---- globals
 
@@ -1144,7 +1144,7 @@ class Markdown(object):
                 align_from_col_idx[col_idx] = ' style="text-align:right;"'
 
         # thead
-        hlines = ['<table%s>' % self._html_class_str_from_tag('table'), '<thead>', '<tr>']
+        hlines = ['<table%s>' % self._html_class_str_from_tag('table'), '<thead%s>' % self._html_class_str_from_tag('thead'), '<tr>']
         cols = [re.sub(escape_bar_re, '|', cell.strip()) for cell in re.split(split_bar_re, re.sub(trim_bar_re, "", re.sub(trim_space_re, "", head)))]
         for col_idx, col in enumerate(cols):
             hlines.append('  <th%s>%s</th>' % (
@@ -1220,7 +1220,7 @@ class Markdown(object):
         add_hline('<table%s>' % self._html_class_str_from_tag('table'))
         # Check if first cell of first row is a header cell. If so, assume the whole row is a header row.
         if rows and rows[0] and re.match(r"^\s*~", rows[0][0]):
-            add_hline('<thead>', 1)
+            add_hline('<thead%s>' % self._html_class_str_from_tag('thead'), 1)
             add_hline('<tr>', 2)
             for cell in rows[0]:
                 add_hline("<th>{}</th>".format(format_cell(cell)), 3)
@@ -2246,7 +2246,7 @@ class Markdown(object):
     def _do_underline(self, text):
         text = self._underline_re.sub(r"<u>\1</u>", text)
         return text
-    
+
     _tg_spoiler_re = re.compile(r"\|\|\s?(.+?)\s?\|\|", re.S)
     def _do_tg_spoiler(self, text):
         text = self._tg_spoiler_re.sub(r"<tg-spoiler>\1</tg-spoiler>", text)
@@ -2538,6 +2538,9 @@ class Markdown(object):
         for regex, repl in self.link_patterns:
             replacements = []
             for match in regex.finditer(text):
+                if any(self._match_overlaps_substr(text, match, h) for h in link_from_hash):
+                    continue
+
                 if hasattr(repl, "__call__"):
                     href = repl(match)
                 else:
@@ -2614,12 +2617,17 @@ class Markdown(object):
             re.findall(r'^[ \t]*', line)[0] if line else None
             for line in text.splitlines()
         ]
+        whitespace_not_empty = [i for i in whitespace if i is not None]
+
+        # if no whitespace detected (ie: no lines in code block, issue #505)
+        if not whitespace_not_empty:
+            return '', text
 
         # get minimum common whitespace
-        outdent = min(i for i in whitespace if i is not None)
+        outdent = min(whitespace_not_empty)
         # adjust min common ws to be within bounds
         if min_outdent is not None:
-            outdent = min([i for i in whitespace if i is not None and i >= min_outdent] or [min_outdent])
+            outdent = min([i for i in whitespace_not_empty if i >= min_outdent] or [min_outdent])
         if max_outdent is not None:
             outdent = min(outdent, max_outdent)
 
@@ -2641,6 +2649,19 @@ class Markdown(object):
             (indent + line if line.strip() or include_empty_lines else '')
             for line in text.splitlines(True)
         )
+
+    @staticmethod
+    def _match_overlaps_substr(text, match, substr):
+        '''
+        Checks if a regex match overlaps with a substring in the given text.
+        '''
+        for instance in re.finditer(re.escape(substr), text):
+            start, end = instance.span()
+            if start <= match.start() <= end:
+                return True
+            if start <= match.end() <= end:
+                return True
+        return False
 
 
 class MarkdownWithExtras(Markdown):
@@ -2961,8 +2982,8 @@ def _html_escape_url(attr, safe_mode=False):
 
 # ---- mainline
 
-class _NoReflowFormatter(optparse.IndentedHelpFormatter):
-    """An optparse formatter that does NOT reflow the description."""
+class _NoReflowFormatter(argparse.RawDescriptionHelpFormatter):
+    """An argparse formatter that does NOT reflow the description."""
     def format_description(self, description):
         return description or ""
 
@@ -2978,38 +2999,45 @@ def main(argv=None):
     if not logging.root.handlers:
         logging.basicConfig()
 
-    usage = "usage: %prog [PATHS...]"
-    version = "%prog "+__version__
-    parser = optparse.OptionParser(prog="markdown2", usage=usage,
-        version=version, description=cmdln_desc,
-        formatter=_NoReflowFormatter())
-    parser.add_option("-v", "--verbose", dest="log_level",
+    parser = argparse.ArgumentParser(
+        prog="markdown2", description=cmdln_desc, usage='%(prog)s [PATHS...]',
+        formatter_class=_NoReflowFormatter
+    )
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s {version}'.format(version=__version__))
+    parser.add_argument('paths', nargs='*',
+                        help=(
+                            'optional list of files to convert.'
+                            'If none are given, stdin will be used'
+                        ))
+    parser.add_argument("-v", "--verbose", dest="log_level",
                       action="store_const", const=logging.DEBUG,
                       help="more verbose output")
-    parser.add_option("--encoding",
+    parser.add_argument("--encoding",
                       help="specify encoding of text content")
-    parser.add_option("--html4tags", action="store_true", default=False,
+    parser.add_argument("--html4tags", action="store_true", default=False,
                       help="use HTML 4 style for empty element tags")
-    parser.add_option("-s", "--safe", metavar="MODE", dest="safe_mode",
+    parser.add_argument("-s", "--safe", metavar="MODE", dest="safe_mode",
                       help="sanitize literal HTML: 'escape' escapes "
                            "HTML meta chars, 'replace' replaces with an "
                            "[HTML_REMOVED] note")
-    parser.add_option("-x", "--extras", action="append",
+    parser.add_argument("-x", "--extras", action="append",
                       help="Turn on specific extra features (not part of "
                            "the core Markdown spec). See above.")
-    parser.add_option("--use-file-vars",
+    parser.add_argument("--use-file-vars",
                       help="Look for and use Emacs-style 'markdown-extras' "
                            "file var to turn on extras. See "
                            "<https://github.com/trentm/python-markdown2/wiki/Extras>")
-    parser.add_option("--link-patterns-file",
+    parser.add_argument("--link-patterns-file",
                       help="path to a link pattern file")
-    parser.add_option("--self-test", action="store_true",
+    parser.add_argument("--self-test", action="store_true",
                       help="run internal self-tests (some doctests)")
-    parser.add_option("--compare", action="store_true",
+    parser.add_argument("--compare", action="store_true",
                       help="run against Markdown.pl as well (for testing)")
     parser.set_defaults(log_level=logging.INFO, compare=False,
                         encoding="utf-8", safe_mode=None, use_file_vars=False)
-    opts, paths = parser.parse_args()
+    opts = parser.parse_args()
+    paths = opts.paths
     log.setLevel(opts.log_level)
 
     if opts.self_test:
@@ -3051,7 +3079,7 @@ def main(argv=None):
     else:
         link_patterns = None
 
-    from os.path import join, dirname, abspath, exists
+    from os.path import abspath, dirname, exists, join
     markdown_pl = join(dirname(dirname(abspath(__file__))), "test",
                        "Markdown.pl")
     if not paths:
@@ -3064,7 +3092,7 @@ def main(argv=None):
             text = fp.read()
             fp.close()
         if opts.compare:
-            from subprocess import Popen, PIPE
+            from subprocess import PIPE, Popen
             print("==== Markdown.pl ====")
             p = Popen('perl %s' % markdown_pl, shell=True, stdin=PIPE, stdout=PIPE, close_fds=True)
             p.stdin.write(text.encode('utf-8'))

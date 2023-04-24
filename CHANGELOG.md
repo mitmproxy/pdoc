@@ -6,6 +6,8 @@
 
  - Fix rendering of dynamically modified docstrings.
    ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
+ - Updated bundled markdown2 version to fix a bug with empty code blocks.
+   ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
  - `pdoc.doc_ast.AstInfo` now has separate `func_docstrings` and `var_docstrings` attributes 
    instead of one combined one.
    ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
