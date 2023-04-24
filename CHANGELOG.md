@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+## 2023-04-24: pdoc 13.1.1
+
  - Fix rendering of dynamically modified docstrings.
    ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
  - Updated bundled markdown2 version to fix a bug with empty code blocks.
