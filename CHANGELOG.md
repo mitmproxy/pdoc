@@ -4,6 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - `pdoc.doc_ast.AstInfo` now has separate `func_docstrings` and `var_docstrings` attributes 
+   instead of one combined one.
 
 ## 2023-03-31: pdoc 13.1.0
 
