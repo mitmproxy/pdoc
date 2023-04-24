@@ -85,8 +85,10 @@ def unparse(tree: ast.AST):
 class AstInfo:
     """The information extracted from walking the syntax tree."""
 
-    docstrings: dict[str, str]
+    var_docstrings: dict[str, str]
     """A qualname -> docstring mapping."""
+    func_docstrings: dict[str, str]
+    """A qualname -> docstring mapping for functions."""
     annotations: dict[str, str]
     """A qualname -> annotation mapping.
     
@@ -104,7 +106,8 @@ def walk_tree(obj: types.ModuleType | type) -> AstInfo:
 def _walk_tree(
     tree: ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef,
 ) -> AstInfo:
-    docstrings = {}
+    var_docstrings = {}
+    func_docstrings = {}
     annotations = {}
     for a, b in _pairwise_longest(_nodes(tree)):
         if isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple:
@@ -122,7 +125,7 @@ def _walk_tree(
         elif isinstance(a, ast.FunctionDef) and a.body:
             first = a.body[0]
             if isinstance(first, ast.Expr) and isinstance(first.value, ast.Str):
-                docstrings[a.name] = inspect.cleandoc(first.value.s).strip()
+                func_docstrings[a.name] = inspect.cleandoc(first.value.s).strip()
             continue
         else:
             continue
@@ -131,14 +134,15 @@ def _walk_tree(
             and isinstance(b.value, ast.Constant)
             and isinstance(b.value.value, str)
         ):
-            docstrings[name] = inspect.cleandoc(b.value.value).strip()
+            var_docstrings[name] = inspect.cleandoc(b.value.value).strip()
         elif isinstance(b, ast.Expr) and isinstance(
             b.value, ast.Str
         ):  # pragma: no cover
             # Python <= 3.7
-            docstrings[name] = inspect.cleandoc(b.value.s).strip()
+            var_docstrings[name] = inspect.cleandoc(b.value.s).strip()
     return AstInfo(
-        docstrings,
+        var_docstrings,
+        func_docstrings,
         annotations,
     )
 

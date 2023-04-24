@@ -225,6 +225,11 @@ class Namespace(Doc[T], metaclass=ABCMeta):
 
     @cached_property
     @abstractmethod
+    def _func_docstrings(self) -> dict[str, str]:
+        """A mapping from some member function names to their raw (not processed by any @decorators) docstrings."""
+
+    @cached_property
+    @abstractmethod
     def _var_annotations(self) -> dict[str, Any]:
         """A mapping from some member variable names to their type annotations."""
 
@@ -312,6 +317,8 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 )
             if self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
+            if self._func_docstrings.get(name):
+                doc.docstring = self._func_docstrings[name]
             members[doc.name] = doc
 
         if isinstance(self, Module):
@@ -409,7 +416,11 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
-        return doc_ast.walk_tree(self.obj).docstrings
+        return doc_ast.walk_tree(self.obj).var_docstrings
+
+    @cached_property
+    def _func_docstrings(self) -> dict[str, str]:
+        return doc_ast.walk_tree(self.obj).func_docstrings
 
     @cached_property
     def _var_annotations(self) -> dict[str, Any]:
@@ -478,7 +489,11 @@ class Module(Namespace[types.ModuleType]):
 
     @cached_property
     def _documented_members(self) -> set[str]:
-        return self._var_docstrings.keys() | self._var_annotations.keys()
+        return (
+            self._var_docstrings.keys()
+            | self._func_docstrings.keys()
+            | self._var_annotations.keys()
+        )
 
     @cached_property
     def _member_objects(self) -> dict[str, Any]:
@@ -525,6 +540,8 @@ class Module(Namespace[types.ModuleType]):
                 if include_in_docs:
                     members[name] = obj
             for name in self._var_docstrings:
+                members.setdefault(name, empty)
+            for name in self._func_docstrings:
                 members.setdefault(name, empty)
 
             members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
@@ -587,7 +604,15 @@ class Class(Namespace[type]):
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
         for cls in self._mro:
-            for name, docstr in doc_ast.walk_tree(cls).docstrings.items():
+            for name, docstr in doc_ast.walk_tree(cls).var_docstrings.items():
+                docstrings.setdefault(name, docstr)
+        return docstrings
+
+    @cached_property
+    def _func_docstrings(self) -> dict[str, str]:
+        docstrings: dict[str, str] = {}
+        for cls in self._mro:
+            for name, docstr in doc_ast.walk_tree(cls).func_docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
 
@@ -642,7 +667,11 @@ class Class(Namespace[type]):
         decls: dict[str, tuple[str, str]] = {}
         for cls in self._mro:
             treeinfo = doc_ast.walk_tree(cls)
-            for name in treeinfo.docstrings.keys() | treeinfo.annotations.keys():
+            for name in (
+                treeinfo.var_docstrings.keys()
+                | treeinfo.func_docstrings.keys()
+                | treeinfo.annotations.keys()
+            ):
                 decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
             for name in cls.__dict__:
                 decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
