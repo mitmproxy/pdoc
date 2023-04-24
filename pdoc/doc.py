@@ -317,7 +317,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 )
             if self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
-            if self._func_docstrings.get(name):
+            if self._func_docstrings.get(name) and not doc.docstring:
                 doc.docstring = self._func_docstrings[name]
             members[doc.name] = doc
 

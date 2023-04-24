@@ -117,4 +117,8 @@
     <class misc.__init__  # https://github.com/m…
         <method def __init__(): ...>
     >
+    <function def dynamically_modify_docstring1(): ...  # https://github.com/m…>
+    <function def dynamically_modify_docstring2(): ...  # https://github.com/m…>
+    <@_docstring_modifier function def dynamically_modify_docstring3(): ...  # https://github.com/m…>
+    <@_docstring_modifier function def dynamically_modify_docstring4(): ...  # https://github.com/m…>
 >

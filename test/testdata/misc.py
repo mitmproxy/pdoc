@@ -402,6 +402,33 @@ class __init__:
     """https://github.com/mitmproxy/pdoc/issues/519"""
 
 
+def dynamically_modify_docstring1():
+    """this should **not** be the docstring."""
+
+
+def dynamically_modify_docstring2():
+    pass
+
+
+dynamically_modify_docstring1.__doc__ = "https://github.com/mitmproxy/pdoc/issues/536"
+dynamically_modify_docstring2.__doc__ = "https://github.com/mitmproxy/pdoc/issues/536"
+
+
+def _docstring_modifier(fn):
+    fn.__doc__ = "https://github.com/mitmproxy/pdoc/issues/536"
+    return fn
+
+
+@_docstring_modifier
+def dynamically_modify_docstring3():
+    """This should **not** be the docstring."""
+
+
+@_docstring_modifier
+def dynamically_modify_docstring4():
+    pass
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -437,4 +464,8 @@ __all__ = [
     "ClassAsAttribute",
     "scheduler",
     "__init__",
+    "dynamically_modify_docstring1",
+    "dynamically_modify_docstring2",
+    "dynamically_modify_docstring3",
+    "dynamically_modify_docstring4",
 ]

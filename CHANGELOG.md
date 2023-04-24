@@ -4,8 +4,11 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Fix rendering of dynamically modified docstrings.
+   ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
  - `pdoc.doc_ast.AstInfo` now has separate `func_docstrings` and `var_docstrings` attributes 
    instead of one combined one.
+   ([#537](https://github.com/mitmproxy/pdoc/pull/537), @mhils)
 
 ## 2023-03-31: pdoc 13.1.0
 
