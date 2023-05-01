@@ -63,7 +63,7 @@ pygments==2.14.0
     # via pdoc (pyproject.toml)
 pyproject-api==1.5.0
     # via tox
-pytest==7.2.1
+pytest==7.3.1
     # via
     #   pdoc (pyproject.toml)
     #   pytest-cov
