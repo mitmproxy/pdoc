@@ -393,7 +393,9 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
                 f"{indent(contents, ind)}\n"
                 f"{ind}</div>\n"
             )
-        elif type == "versionadded":
+        if type == "code-block":
+            return f"{ind}```{val}\n{contents}\n```\n"
+        if type == "versionadded":
             text = f"New in version {val}"
         elif type == "versionchanged":
             text = f"Changed in version {val}"
@@ -409,7 +411,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
 
         return text
 
-    admonition = "note|warning|danger|versionadded|versionchanged|deprecated|seealso|math|include"
+    admonition = "note|warning|danger|versionadded|versionchanged|deprecated|seealso|math|include|code-block"
     return re.sub(
         rf"""
             ^(?P<indent>[ ]*)\.\.[ ]+(?P<type>{admonition})::(?P<val>.*)
