@@ -212,10 +212,10 @@ def possible_sources(
         yield identifier, ""
         return
 
-    if len(set(s.partition('.')[0] for s in all_modules)) == 1:
-        pkgname = next(iter(all_modules)).partition('.')[0]
+    if len(set(s.partition(".")[0] for s in all_modules)) == 1:
+        pkgname = next(iter(all_modules)).partition(".")[0]
         if not identifier.startswith(pkgname):
-            identifier = f'{pkgname}.{identifier}'
+            identifier = f"{pkgname}.{identifier}"
 
     modulename = identifier
     qualname = None
