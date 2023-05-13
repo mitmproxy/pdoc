@@ -159,6 +159,7 @@ snapshots = [
         },
         with_output_directory=True,
     ),
+    Snapshot("single_module_links", ["single_module_links"]),
     Snapshot("top_level_reimports", ["top_level_reimports"]),
     Snapshot("type_checking_imports"),
     Snapshot("type_stub", min_version=(3, 10)),
