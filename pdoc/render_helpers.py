@@ -43,7 +43,7 @@ formatter = pygments.formatters.HtmlFormatter(
     anchorlinenos=True,
 )
 """
-The pygments formatter used for pdoc.render_helpers.highlight. 
+The pygments formatter used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments highlighting of code blocks.
 
 The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
@@ -51,7 +51,7 @@ The usage of the `.codehilite` CSS selector in custom templates is deprecated si
 
 signature_formatter = pygments.formatters.HtmlFormatter(nowrap=True)
 """
-The pygments formatter used for pdoc.render_helpers.format_signature. 
+The pygments formatter used for pdoc.render_helpers.format_signature.
 Overwrite this to configure pygments highlighting of signatures.
 """
 
@@ -212,6 +212,11 @@ def possible_sources(
         yield identifier, ""
         return
 
+    if len(set(s.partition('.')[0] for s in all_modules)) == 1:
+        pkgname = next(iter(all_modules)).partition('.')[0]
+        if not identifier.startswith(pkgname):
+            identifier = f'{pkgname}.{identifier}'
+
     modulename = identifier
     qualname = None
     while modulename:
@@ -338,8 +343,8 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
             \b
-            
-            # First part of the identifier (e.g. "foo")    
+
+            # First part of the identifier (e.g. "foo")
             (?!\d)[a-zA-Z0-9_]+
             # Rest of the identifier (e.g. ".bar")
             (?:
