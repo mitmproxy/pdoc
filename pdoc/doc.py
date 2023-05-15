@@ -87,15 +87,15 @@ class Doc(Generic[T]):
     qualname: str
     """
     The qualified identifier name for this object. For example, if we have the following code:
-    
+
     ```python
     class Foo:
         def bar(self):
             pass
     ```
-    
+
     The qualname of `Foo`'s `bar` method is `Foo.bar`. The qualname of the `Foo` class is just `Foo`.
-    
+
     See <https://www.python.org/dev/peps/pep-3155/> for details.
     """
 
@@ -305,6 +305,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     annotation=self._var_annotations.get(name, empty),
                     default_value=empty,
                     taken_from=taken_from,
+                    classvar=False,
                 )
             else:
                 doc = Variable(
@@ -314,6 +315,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     annotation=self._var_annotations.get(name, empty),
                     default_value=obj,
                     taken_from=taken_from,
+                    classvar=True,
                 )
             if self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
@@ -1027,7 +1029,7 @@ class Variable(Doc[None]):
     default_value: Any | empty  # technically Any includes empty, but this conveys intent.
     """
     The variable's default value.
-    
+
     In some cases, no default value is known. This may either be because a variable is only defined in the constructor,
     or it is only declared with a type annotation without assignment (`foo: int`).
     To distinguish this case from a default value of `None`, `pdoc.doc_types.empty` is used as a placeholder.
@@ -1036,8 +1038,13 @@ class Variable(Doc[None]):
     annotation: type | empty
     """
     The variable's type annotation.
-    
+
     If there is no type annotation, `pdoc.doc_types.empty` is used as a placeholder.
+    """
+
+    classvar: bool
+    """
+    Whether the variable was defined as a class variable or as an instance variable.
     """
 
     def __init__(
@@ -1049,6 +1056,7 @@ class Variable(Doc[None]):
         docstring: str,
         annotation: type | empty = empty,
         default_value: Any | empty = empty,
+        classvar: bool = False,
     ):
         """
         Construct a variable doc object.
@@ -1063,6 +1071,7 @@ class Variable(Doc[None]):
         self.docstring = inspect.cleandoc(docstring)
         self.annotation = annotation
         self.default_value = default_value
+        self.classvar = classvar
 
     @cache
     @_include_fullname_in_traceback
@@ -1076,10 +1085,7 @@ class Variable(Doc[None]):
     @cached_property
     def is_classvar(self) -> bool:
         """`True` if the variable is a class variable, `False` otherwise."""
-        if get_origin(self.annotation) is ClassVar:
-            return True
-        else:
-            return False
+        return self.classvar
 
     @cached_property
     def is_enum_member(self) -> bool:
