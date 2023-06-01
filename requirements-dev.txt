@@ -4,7 +4,7 @@
 #
 #    pip-compile --all-extras --allow-unsafe --output-file=requirements-dev.txt --resolver=backtracking pyproject.toml
 #
-attrs==22.2.0
+attrs==23.1.0
     # via
     #   hypothesis
     #   pytest
