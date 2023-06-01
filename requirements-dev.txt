@@ -10,7 +10,7 @@ attrs==23.1.0
     #   pytest
 black==23.3.0
     # via pdoc (pyproject.toml)
-cachetools==5.3.0
+cachetools==5.3.1
     # via tox
 chardet==5.1.0
     # via tox
