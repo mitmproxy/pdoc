@@ -59,7 +59,7 @@ pluggy==1.0.0
     # via
     #   pytest
     #   tox
-pygments==2.14.0
+pygments==2.15.1
     # via pdoc (pyproject.toml)
 pyproject-api==1.5.0
     # via tox
