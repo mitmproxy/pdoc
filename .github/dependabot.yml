@@ -6,5 +6,6 @@ updates:
       interval: "monthly"
   - package-ecosystem: pip
     directory: "/"
+    open-pull-requests-limit: 9
     schedule:
       interval: "monthly"
