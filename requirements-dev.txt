@@ -82,7 +82,7 @@ types-docutils==0.20.0.1
     # via
     #   types-pygments
     #   types-setuptools
-types-pygments==2.14.0.5
+types-pygments==2.15.0.1
     # via pdoc (pyproject.toml)
 types-setuptools==67.8.0.0
     # via types-pygments
