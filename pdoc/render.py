@@ -13,7 +13,7 @@ from jinja2 import FileSystemLoader
 
 import pdoc.doc
 import pdoc.docstrings
-from pdoc._compat import Literal
+from typing import Literal
 from pdoc.render_helpers import DefaultMacroExtension
 from pdoc.render_helpers import defuse_unsafe_reprs
 from pdoc.render_helpers import edit_url

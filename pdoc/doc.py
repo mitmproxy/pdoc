@@ -42,7 +42,7 @@ from typing import Union
 from ._compat import cache
 from ._compat import cached_property
 from ._compat import formatannotation
-from ._compat import get_origin
+from typing import get_origin
 from ._compat import singledispatchmethod
 from pdoc import doc_ast
 from pdoc import doc_pyi

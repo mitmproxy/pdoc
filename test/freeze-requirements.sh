@@ -3,7 +3,7 @@ set -ex
 cd -- "$(dirname -- "$0")"
 
 rm -rf freeze-venv
-python3.7 -m venv freeze-venv
+python3.8 -m venv freeze-venv
 freeze-venv/bin/python -m pip install -U pip
 freeze-venv/bin/pip install -e ..[dev]
 freeze-venv/bin/pip freeze --all --exclude-editable > ../requirements-dev.txt

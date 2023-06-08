@@ -22,8 +22,8 @@ from typing import TYPE_CHECKING
 
 from . import extract
 from ._compat import GenericAlias
-from ._compat import get_origin
-from ._compat import Literal
+from typing import get_origin
+from typing import Literal
 from ._compat import UnionType
 from .doc_ast import type_checking_sections
 

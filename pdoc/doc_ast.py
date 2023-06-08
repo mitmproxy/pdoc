@@ -135,11 +135,6 @@ def _walk_tree(
             and isinstance(b.value.value, str)
         ):
             var_docstrings[name] = inspect.cleandoc(b.value.value).strip()
-        elif isinstance(b, ast.Expr) and isinstance(
-            b.value, ast.Str
-        ):  # pragma: no cover
-            # Python <= 3.7
-            var_docstrings[name] = inspect.cleandoc(b.value.s).strip()
     return AstInfo(
         var_docstrings,
         func_docstrings,
@@ -339,19 +334,13 @@ def _init_nodes(tree: ast.FunctionDef) -> Iterator[ast.AST]:
             yield ast.Assign(
                 [ast.Name(a.targets[0].attr)],
                 value=a.value,
-                # not available on Python 3.7
-                type_comment=getattr(a, "type_comment", None),
+                type_comment=a.type_comment,
             )
         elif (
             isinstance(a, ast.Expr)
             and isinstance(a.value, ast.Constant)
             and isinstance(a.value.value, str)
         ):
-            yield a
-        elif isinstance(a, ast.Expr) and isinstance(
-            a.value, ast.Str
-        ):  # pragma: no cover
-            # Python <= 3.7
             yield a
         else:
             yield ast.Pass()
