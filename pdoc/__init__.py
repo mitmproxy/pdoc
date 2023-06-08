@@ -466,7 +466,9 @@ __version__ = "13.1.1"  # this is read from setup.py
 from pathlib import Path
 from typing import overload
 
-from pdoc import doc, extract, render
+from pdoc import doc
+from pdoc import extract
+from pdoc import render
 
 
 @overload

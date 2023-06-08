@@ -1,13 +1,12 @@
 import io
+from pathlib import Path
 import socket
 import threading
-from pathlib import Path
 
 import pytest
 
 from pdoc.web import DocHandler
 from pdoc.web import DocServer
-
 
 here = Path(__file__).parent
 

@@ -12,18 +12,18 @@ import inspect
 import operator
 import sys
 import types
-import typing
-import warnings
 from types import BuiltinFunctionType
 from types import ModuleType
-from typing import _GenericAlias  # type: ignore
-from typing import Any
+import typing
 from typing import TYPE_CHECKING
+from typing import Any
+from typing import Literal
+from typing import _GenericAlias  # type: ignore
+from typing import get_origin
+import warnings
 
 from . import extract
 from ._compat import GenericAlias
-from typing import get_origin
-from typing import Literal
 from ._compat import UnionType
 from .doc_ast import type_checking_sections
 

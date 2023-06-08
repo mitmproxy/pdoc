@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import shutil
 import textwrap
-from pathlib import Path
 
-import pygments.formatters.html
-import pygments.lexers.python
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from markupsafe import Markup
+import pygments.formatters.html
+import pygments.lexers.python
 
 import pdoc.render
 

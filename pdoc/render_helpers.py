@@ -1,20 +1,20 @@
 from __future__ import annotations
 
-import html
-import inspect
-import os
-import re
-import warnings
 from collections.abc import Collection
 from collections.abc import Iterable
 from collections.abc import Mapping
 from contextlib import contextmanager
+import html
+import inspect
+import os
+import re
 from unittest.mock import patch
+import warnings
 
-import pygments.formatters
-import pygments.lexers
 from jinja2 import ext
 from jinja2 import nodes
+import pygments.formatters
+import pygments.lexers
 
 try:
     # Jinja2 >= 3.0
@@ -28,7 +28,8 @@ from markupsafe import Markup
 import pdoc.markdown2
 
 from . import docstrings
-from ._compat import cache, removesuffix
+from ._compat import cache
+from ._compat import removesuffix
 
 lexer = pygments.lexers.PythonLexer()
 """

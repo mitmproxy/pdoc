@@ -1,7 +1,7 @@
-import warnings
 from pathlib import Path
 from unittest.mock import call
 from unittest.mock import patch
+import warnings
 
 import pytest
 

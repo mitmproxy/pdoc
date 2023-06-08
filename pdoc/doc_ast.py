@@ -6,19 +6,20 @@ Parsing the AST is done to extract docstrings, type annotations, and variable de
 from __future__ import annotations
 
 import ast
-import inspect
-import types
-import warnings
 from collections.abc import Iterable
 from collections.abc import Iterator
 from dataclasses import dataclass
+import inspect
 from itertools import tee
 from itertools import zip_longest
+import types
 from typing import Any
-from typing import overload
 from typing import TypeVar
+from typing import overload
+import warnings
 
 import pdoc
+
 from ._compat import ast_unparse
 from ._compat import cache
 

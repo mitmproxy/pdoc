@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from contextlib import ExitStack
 import os
+from pathlib import Path
 import shutil
 import sys
 import tempfile
 import warnings
-from contextlib import ExitStack
-from pathlib import Path
 
 import pytest
 
