@@ -101,6 +101,11 @@ ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 140
+select = ["E", "F", "I"]
+
+[tool.ruff.isort]
+force-single-line = true
+force-sort-within-sections = true
 
 [tool.tox]
 legacy_tox_ini = """
