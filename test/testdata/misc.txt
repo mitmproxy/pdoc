@@ -12,10 +12,10 @@
         <method def __init__(): ...>
         <@classmethod class def bar(cls): ...>
     >
-    <class misc.GenericParent  # Abstract base class …
+    <class misc.GenericParent  # GenericParent
         <method def __init__(): ...>
     >
-    <class misc.NonGenericChild  # Abstract base class …
+    <class misc.NonGenericChild  # NonGenericChild
         <method def __init__(): ...>
     >
     <class misc.Child
@@ -121,4 +121,17 @@
     <function def dynamically_modify_docstring2(): ...  # https://github.com/m…>
     <@_docstring_modifier function def dynamically_modify_docstring3(): ...  # https://github.com/m…>
     <@_docstring_modifier function def dynamically_modify_docstring4(): ...  # https://github.com/m…>
+    <class misc.MyDict
+        <method def get(self, key, default=None, /): ...  # inherited from builtins.dict.get, Return the value for…>
+        <method def setdefault(self, key, default=None, /): ...  # inherited from builtins.dict.setdefault, Insert key with a va…>
+        <method def pop(unknown): ...  # inherited from builtins.dict.pop, D.pop(k[,d]) -> v, r…>
+        <method def popitem(self, /): ...  # inherited from builtins.dict.popitem, Remove and return a …>
+        <method def keys(unknown): ...  # inherited from builtins.dict.keys, D.keys() -> a set-li…>
+        <method def items(unknown): ...  # inherited from builtins.dict.items, D.items() -> a set-l…>
+        <method def values(unknown): ...  # inherited from builtins.dict.values, D.values() -> an obj…>
+        <method def update(unknown): ...  # inherited from builtins.dict.update, D.update([E, ]**F) -…>
+        <method def fromkeys(type, iterable, value=None, /): ...  # inherited from builtins.dict.fromkeys, Create a new diction…>
+        <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
+        <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>
+    >
 >

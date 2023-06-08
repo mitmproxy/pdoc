@@ -692,7 +692,7 @@ class Class(Namespace[type]):
         try:
             return self._declarations[member_name]
         except KeyError:  # pragma: no cover
-            # TypedDict botches __mro__ and may need special casing here.
+            # TypedDict botches __mro__ on Python <3.12 and may need special casing here.
             # One workaround is to also specify TypedDict as a base class, see pdoc.doc.Class._bases.
             warnings.warn(
                 f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
