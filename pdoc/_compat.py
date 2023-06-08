@@ -145,7 +145,9 @@ else:  # pragma: no cover
     class singledispatchmethod:
         pass  # pragma: no cover
 
-if True:
+if sys.version_info >= (3, 9):
+    from argparse import BooleanOptionalAction
+else:  # pragma: no cover
     # https://github.com/python/cpython/pull/27672
     from argparse import Action
 
