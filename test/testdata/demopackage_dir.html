@@ -95,68 +95,15 @@ window.pdocSearch = (function(){
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -222,6 +169,67 @@ window.pdocSearch = (function(){
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
@@ -346,68 +354,15 @@ demopackage2    </h1>
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -473,6 +428,67 @@ demopackage2    </h1>
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
@@ -811,68 +827,15 @@ demopackage    </h1>
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -938,6 +901,67 @@ demopackage    </h1>
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
@@ -1130,68 +1154,15 @@ demopackage    </h1>
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;../search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -1257,6 +1228,67 @@ demopackage    </h1>
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;../search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
@@ -1463,68 +1495,15 @@ demopackage    </h1>
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;../search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -1590,6 +1569,67 @@ demopackage    </h1>
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;../search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
@@ -1708,68 +1748,15 @@ demopackage    </h1>
     const originalContent = document.querySelector(&quot;main.pdoc&quot;);
     let currentContent = originalContent;
 
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement(&quot;main&quot;);
-            elem.classList.add(&quot;pdoc&quot;);
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
+    function smooth(func) {
+        var timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() { func(...args); }, 300);
+        };
     }
 
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
-    }
-
-    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
-    searchBox.addEventListener(&quot;input&quot;, function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = &quot;&quot;;
-            url.searchParams.set(&quot;search&quot;, searchBox.value);
-        } else {
-            url.searchParams.delete(&quot;search&quot;);
-        }
-        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
-        onInput();
-    });
-    window.addEventListener(&quot;popstate&quot;, onInput);
-
-
-    let search, searchErr;
-
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement(&quot;script&quot;);
-                script.type = &quot;text/javascript&quot;;
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = &quot;../search.js&quot;;
-                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error(&quot;Cannot fetch pdoc search index&quot;);
-            searchErr = &quot;Cannot fetch search index.&quot;;
-        }
-        onInput();
-
-        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
-            if (e.target.hash) {
-                searchBox.value = &quot;&quot;;
-                searchBox.dispatchEvent(new Event(&quot;input&quot;));
-            }
-        });
-    }
-
-    function onInput() {
+    const onInput = smooth(function () {
         setContent((() => {
             const term = getSearchTerm();
             if (!term) {
@@ -1835,6 +1822,67 @@ demopackage    </h1>
             }
             return html;
         })());
+    });
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement(&quot;main&quot;);
+            elem.classList.add(&quot;pdoc&quot;);
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get(&quot;search&quot;);
+    }
+
+    const searchBox = document.querySelector(&quot;.pdoc input[type=search]&quot;);
+    searchBox.addEventListener(&quot;input&quot;, function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = &quot;&quot;;
+            url.searchParams.set(&quot;search&quot;, searchBox.value);
+        } else {
+            url.searchParams.delete(&quot;search&quot;);
+        }
+        history.replaceState(&quot;&quot;, &quot;&quot;, url.toString());
+        onInput();
+    });
+    window.addEventListener(&quot;popstate&quot;, onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement(&quot;script&quot;);
+                script.type = &quot;text/javascript&quot;;
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = &quot;../search.js&quot;;
+                document.getElementsByTagName(&quot;head&quot;)[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error(&quot;Cannot fetch pdoc search index&quot;);
+            searchErr = &quot;Cannot fetch search index.&quot;;
+        }
+        onInput();
+
+        document.querySelector(&quot;nav.pdoc&quot;).addEventListener(&quot;click&quot;, e => {
+            if (e.target.hash) {
+                searchBox.value = &quot;&quot;;
+                searchBox.dispatchEvent(new Event(&quot;input&quot;));
+            }
+        });
     }
 
     if (getSearchTerm()) {
