@@ -136,10 +136,13 @@ snapshots = [
     Snapshot(
         "misc_py39",
         min_version=(3, 9),
-        warnings=[r"Cannot determine where misc_py39\.Bar\.a is taken from"],
     ),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("misc_py311", min_version=(3, 11)),
+    Snapshot(
+        "misc_py312",
+        min_version=(3, 12),
+    ),
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot("mermaid_demo", render_options={"mermaid": True}, min_version=(3, 9)),
     Snapshot(

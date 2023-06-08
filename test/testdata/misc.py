@@ -74,11 +74,11 @@ T = TypeVar("T")
 
 
 class GenericParent(Generic[T]):
-    pass
+    """GenericParent"""
 
 
 class NonGenericChild(GenericParent[str]):
-    pass
+    """NonGenericChild"""
 
 
 # Testing docstring inheritance
@@ -428,6 +428,10 @@ def dynamically_modify_docstring4():
     pass
 
 
+class MyDict(dict):
+    pass
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -467,4 +471,5 @@ __all__ = [
     "dynamically_modify_docstring2",
     "dynamically_modify_docstring3",
     "dynamically_modify_docstring4",
+    "MyDict",
 ]

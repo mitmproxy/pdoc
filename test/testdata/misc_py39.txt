@@ -1,35 +1,4 @@
 <module misc_py39  # Testing features tha…
-    <class misc_py39.NamedTupleExample  # An example for a typ…
-        <method def __init__(_cls, name: str, id: int = 3): ...  # Create new instance …>
-        <var name: str  # Name of our example …>
-        <var id: int  # Alias for field numb…>
-        <method def index(self, value, start=0, stop=9223372036854775807, /): ...  # inherited from builtins.tuple.index, Return first index o…>
-        <method def count(self, value, /): ...  # inherited from builtins.tuple.count, Return number of occ…>
-    >
-    <class misc_py39.Foo
-        <var a: Optional[int]  # First attribute.>
-    >
-    <class misc_py39.Bar  # A TypedDict subclass…
-        <var b: int  # Second attribute.>
-        <var c: str>
-        <method def get(self, key, default=None, /): ...  # inherited from builtins.dict.get, Return the value for…>
-        <method def setdefault(self, key, default=None, /): ...  # inherited from builtins.dict.setdefault, Insert key with a va…>
-        <method def pop(unknown): ...  # inherited from builtins.dict.pop, D.pop(k[,d]) -> v, r…>
-        <method def popitem(self, /): ...  # inherited from builtins.dict.popitem, Remove and return a …>
-        <method def keys(unknown): ...  # inherited from builtins.dict.keys, D.keys() -> a set-li…>
-        <method def items(unknown): ...  # inherited from builtins.dict.items, D.items() -> a set-l…>
-        <method def values(unknown): ...  # inherited from builtins.dict.values, D.values() -> an obj…>
-        <method def update(unknown): ...  # inherited from builtins.dict.update, D.update([E, ]**F) -…>
-        <method def fromkeys(type, iterable, value=None, /): ...  # inherited from builtins.dict.fromkeys, Create a new diction…>
-        <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
-        <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>
-        <var a: Optional[int]>
-    >
-    <class misc_py39.BarWorkaround  # A TypedDict subclass…
-        <var b: int  # Second attribute.>
-        <var c: str>
-        <var a: Optional[int]  # inherited from misc_py39.Foo.a, First attribute.>
-    >
     <class misc_py39.SingleDispatchMethodExample
         <method def __init__(): ...>
         <@functools.singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>

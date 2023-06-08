@@ -451,4 +451,3 @@ def alternative_section_names(test: str):
     Parameters:
         test: the test string
     """
-

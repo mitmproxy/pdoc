@@ -4,6 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Add support for Python 3.12.
+   ([#570](https://github.com/mitmproxy/pdoc/pull/570), @mhils)
  - Remove support for Python 3.7, which has reached end-of-life on 2023-06-27.
    ([#569](https://github.com/mitmproxy/pdoc/pull/569), @mhils)
 
