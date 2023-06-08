@@ -7,7 +7,7 @@ Test that objects re-exposed from an internal module are properly interlinked if
  - `top_level_reimports._internal.baz()`
 """
 from ._internal import Bar
-from ._internal import baz
 from ._internal import Foo
+from ._internal import baz
 
 __all__ = ["Foo", "Bar", "baz"]

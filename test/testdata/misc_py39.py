@@ -9,7 +9,6 @@ from typing import Optional
 from typing import TypedDict
 from typing import Union
 
-
 # Testing a typing.NamedTuple
 # we do not care very much about collections.namedtuple,
 # the typing version is superior for documentation and a drop-in replacement.
