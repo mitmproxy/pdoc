@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import shutil
 from pathlib import Path
+import shutil
 
 from pdoc import pdoc
 from pdoc import render

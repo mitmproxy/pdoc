@@ -102,28 +102,6 @@ else:  # pragma: no cover
         __class_getitem__ = classmethod(GenericAlias)
     # ✂ end ✂
 
-if sys.version_info >= (3, 8):
-    from typing import Literal, get_origin
-else:  # pragma: no cover
-    from typing import Generic
-
-    # There is no Literal on 3.7, so we just make one up. It should not be used anyways!
-
-    try:
-        from typing_extensions import Literal
-    except ImportError:
-        class Literal:
-            pass
-
-    # get_origin is adapted from
-    # https://github.com/python/cpython/blob/863eb7170b3017399fb2b786a1e3feb6457e54c2/Lib/typing.py#L1474-L1515
-    # with Annotations removed (not present in 3.7)
-    def get_origin(tp):  # type: ignore
-        if isinstance(tp, GenericAlias):
-            return tp.__origin__
-        if tp is Generic:
-            return Generic
-        return None
 
 if (3, 9) <= sys.version_info < (3, 9, 8) or (3, 10) <= sys.version_info < (3, 10, 1):  # pragma: no cover
     import inspect
@@ -199,8 +177,6 @@ __all__ = [
     "UnionType",
     "removesuffix",
     "cached_property",
-    "get_origin",
-    "Literal",
     "formatannotation",
     "singledispatchmethod",
     "BooleanOptionalAction",

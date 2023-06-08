@@ -7,13 +7,13 @@ It is a bit unergonomic compared to let's say flask, but good enough for our pur
 """
 from __future__ import annotations
 
-import http.server
-import traceback
-import warnings
-import webbrowser
 from collections.abc import Iterable
 from collections.abc import Iterator
+import http.server
+import traceback
 from typing import Mapping
+import warnings
+import webbrowser
 
 from pdoc import doc
 from pdoc import extract

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import os
-import types
-import warnings
 from pathlib import Path
+import types
+from typing import Literal
 from typing import Mapping
 from typing import cast
+import warnings
 
 import jinja2
 from jinja2 import Environment
@@ -13,7 +14,6 @@ from jinja2 import FileSystemLoader
 
 import pdoc.doc
 import pdoc.docstrings
-from pdoc._compat import Literal
 from pdoc.render_helpers import DefaultMacroExtension
 from pdoc.render_helpers import defuse_unsafe_reprs
 from pdoc.render_helpers import edit_url

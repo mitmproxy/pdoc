@@ -5,10 +5,15 @@ and provides the rest of pdoc with some additional module metadata.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
+from collections.abc import Iterator
+from collections.abc import Sequence
+from contextlib import contextmanager
 import importlib.util
 import io
 import linecache
 import os
+from pathlib import Path
 import pkgutil
 import platform
 import re
@@ -17,13 +22,8 @@ import subprocess
 import sys
 import traceback
 import types
-import warnings
-from collections.abc import Iterable
-from collections.abc import Iterator
-from collections.abc import Sequence
-from contextlib import contextmanager
-from pathlib import Path
 from unittest.mock import patch
+import warnings
 
 import pdoc.doc_ast
 import pdoc.docstrings

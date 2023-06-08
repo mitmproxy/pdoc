@@ -38,14 +38,14 @@ If you wish to disable the search functionality, you can pass `--no-search` when
 """
 from __future__ import annotations
 
+from collections.abc import Callable
+from collections.abc import Mapping
 import html
 import json
+from pathlib import Path
 import shutil
 import subprocess
 import textwrap
-from collections.abc import Callable
-from collections.abc import Mapping
-from pathlib import Path
 
 import pdoc.doc
 from pdoc.render_helpers import format_signature

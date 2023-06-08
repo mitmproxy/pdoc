@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 import platform
 import subprocess
 import sys
 import warnings
-from pathlib import Path
 
+from pdoc._compat import BooleanOptionalAction
 import pdoc.doc
 import pdoc.extract
 import pdoc.render
 import pdoc.web
-from pdoc._compat import BooleanOptionalAction
 
 if sys.stdout.isatty():  # pragma: no cover
     red = "\x1b[31m"

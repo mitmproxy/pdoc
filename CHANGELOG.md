@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Remove support for Python 3.7, which has reached end-of-life on 2023-06-27.
+   ([#569](https://github.com/mitmproxy/pdoc/pull/569), @mhils)
+
 
 ## 2023-04-24: pdoc 13.1.1
 

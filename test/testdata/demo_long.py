@@ -23,10 +23,10 @@ which will also show up in the navigation.
 from __future__ import annotations
 
 import abc
-import enum
-import os
 from dataclasses import dataclass
 from dataclasses import field
+import enum
+import os
 from typing import ClassVar
 from typing import List
 from typing import Optional

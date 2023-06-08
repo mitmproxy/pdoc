@@ -1,4 +1,5 @@
-from typing import Any, Iterable
+from typing import Any
+from typing import Iterable
 
 def func(x: str, y: Any, z: "Iterable[str]") -> int: ...
 

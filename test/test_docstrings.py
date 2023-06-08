@@ -1,9 +1,8 @@
-import pytest
 from hypothesis import given
 from hypothesis.strategies import text
+import pytest
 
 from pdoc import docstrings
-
 
 # The important tests are in test_snapshot.py (and, by extension, testdata/)
 # only some fuzzing here.
