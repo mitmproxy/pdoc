@@ -652,17 +652,21 @@ class Class(Namespace[type]):
     @cached_property
     def _bases(self) -> tuple[type, ...]:
         orig_bases = _safe_getattr(self.obj, "__orig_bases__", ())
-        if (
+        old_python_typeddict_workaround = (
             sys.version_info < (3, 12)
             and orig_bases
             and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict"
-        ):  # pragma: no cover
+        )
+        if old_python_typeddict_workaround:  # pragma: no cover
             # TypedDicts on Python <3.12 have a botched __mro__. We need to fix it.
             return (self.obj, *orig_bases[:-1])
 
         # __mro__ and __orig_bases__ differ between Python versions and special cases like TypedDict/NamedTuple.
         # This here is a pragmatic approximation of what we want.
-        return (*orig_bases, *self.obj.__mro__)
+        return (
+            *(base for base in orig_bases if isinstance(base, type)),
+            *self.obj.__mro__,
+        )
 
     @cached_property
     def _declarations(self) -> dict[str, tuple[str, str]]:
