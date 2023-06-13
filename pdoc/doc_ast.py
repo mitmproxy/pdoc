@@ -125,8 +125,12 @@ def _walk_tree(
             annotations.setdefault(name, pdoc.doc_types.empty)
         elif isinstance(a, ast.FunctionDef) and a.body:
             first = a.body[0]
-            if isinstance(first, ast.Expr) and isinstance(first.value, ast.Str):
-                func_docstrings[a.name] = inspect.cleandoc(first.value.s).strip()
+            if (
+                isinstance(first, ast.Expr)
+                and isinstance(first.value, ast.Constant)
+                and isinstance(first.value.value, str)
+            ):
+                func_docstrings[a.name] = inspect.cleandoc(first.value.value).strip()
             continue
         else:
             continue

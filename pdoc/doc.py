@@ -604,7 +604,7 @@ class Class(Namespace[type]):
     @cached_property
     def _var_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
-        for cls in self._mro:
+        for cls in self._bases:
             for name, docstr in doc_ast.walk_tree(cls).var_docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
@@ -612,7 +612,7 @@ class Class(Namespace[type]):
     @cached_property
     def _func_docstrings(self) -> dict[str, str]:
         docstrings: dict[str, str] = {}
-        for cls in self._mro:
+        for cls in self._bases:
             for name, docstr in doc_ast.walk_tree(cls).func_docstrings.items():
                 docstrings.setdefault(name, docstr)
         return docstrings
@@ -625,7 +625,7 @@ class Class(Namespace[type]):
         annotations: dict[
             str, tuple[Any, type]
         ] = {}  # attribute -> (annotation_unresolved, annotation_resolved)
-        for cls in reversed(self._mro):
+        for cls in reversed(self._bases):
             cls_annotations = doc_ast.walk_tree(cls).annotations.copy()
             dynamic_annotations = _safe_getattr(cls, "__annotations__", None)
             if isinstance(dynamic_annotations, dict):
@@ -650,23 +650,28 @@ class Class(Namespace[type]):
         return {k: v[1] for k, v in annotations.items()}
 
     @cached_property
-    def _mro(self) -> tuple[type, ...]:
-        orig_bases = _safe_getattr(self.obj, "__orig_bases__", None)
-        if (
-            orig_bases
+    def _bases(self) -> tuple[type, ...]:
+        orig_bases = _safe_getattr(self.obj, "__orig_bases__", ())
+        old_python_typeddict_workaround = (
+            sys.version_info < (3, 12)
+            and orig_bases
             and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict"
-        ):
-            # TypedDicts have a botched __mro__.
-            # However, if the subclasses also specify TypedDict as a base class, we can use __orig_bases__
-            # https://github.com/sphinx-doc/sphinx/pull/10806
+        )
+        if old_python_typeddict_workaround:  # pragma: no cover
+            # TypedDicts on Python <3.12 have a botched __mro__. We need to fix it.
             return (self.obj, *orig_bases[:-1])
-        else:
-            return self.obj.__mro__
+
+        # __mro__ and __orig_bases__ differ between Python versions and special cases like TypedDict/NamedTuple.
+        # This here is a pragmatic approximation of what we want.
+        return (
+            *(base for base in orig_bases if isinstance(base, type)),
+            *self.obj.__mro__,
+        )
 
     @cached_property
     def _declarations(self) -> dict[str, tuple[str, str]]:
         decls: dict[str, tuple[str, str]] = {}
-        for cls in self._mro:
+        for cls in self._bases:
             treeinfo = doc_ast.walk_tree(cls)
             for name in (
                 treeinfo.var_docstrings.keys()
@@ -688,7 +693,7 @@ class Class(Namespace[type]):
             return self._declarations[member_name]
         except KeyError:  # pragma: no cover
             # TypedDict botches __mro__ and may need special casing here.
-            # One workaround is to also specify TypedDict as a base class, see pdoc.doc.Class._mro.
+            # One workaround is to also specify TypedDict as a base class, see pdoc.doc.Class._bases.
             warnings.warn(
                 f"Cannot determine where {self.fullname}.{member_name} is taken from, assuming current file."
             )
@@ -706,7 +711,7 @@ class Class(Namespace[type]):
     @cached_property
     def _member_objects(self) -> dict[str, Any]:
         unsorted: dict[str, Any] = {}
-        for cls in self._mro:
+        for cls in self._bases:
             for name, obj in cls.__dict__.items():
                 unsorted.setdefault(name, obj)
         for name in self._var_docstrings:
@@ -755,7 +760,7 @@ class Class(Namespace[type]):
                         unsorted["__init__"] = new
 
         sorted: dict[str, Any] = {}
-        for cls in self._mro:
+        for cls in self._bases:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
         return sorted
