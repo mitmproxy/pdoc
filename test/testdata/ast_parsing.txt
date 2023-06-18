@@ -1,6 +1,4 @@
 <module ast_parsing
-    <var T = ~T>
-    <function def first(l: list[~T]) -> ~T: ...>
     <class ast_parsing.Foo
         <method def __init__(self): ...>
         <var no_docstring>
