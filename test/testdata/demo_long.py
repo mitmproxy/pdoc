@@ -59,7 +59,7 @@ automatically.
 """
 
 NO_DOCSTRING: int
-# this variable has a type annotation but not docstring, so it does not show up.
+# this variable has a type annotation but not docstring.
 
 
 def a_simple_function(a: str) -> str:

@@ -674,8 +674,8 @@ misc    </h1>
 </span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>
 </span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
 </span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_func</span> <span class="o">=</span> <span class="n">func</span>
 </span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>
 </span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>
 </span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a><span class="nd">@ClassDecorator</span>
@@ -689,7 +689,7 @@ misc    </h1>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>        <span class="k">pass</span>
 </span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>
 </span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;SubClass&quot;</span><span class="p">):</span>
-</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>
 </span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>
 </span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a><span class="k">class</span> <span class="nc">ClassAsAttribute</span><span class="p">:</span>
@@ -2022,8 +2022,8 @@ indents</p>
     <a class="headerlink" href="#ClassDecorator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ClassDecorator-369"><a href="#ClassDecorator-369"><span class="linenos">369</span></a><span class="k">class</span> <span class="nc">ClassDecorator</span><span class="p">:</span>
 </span><span id="ClassDecorator-370"><a href="#ClassDecorator-370"><span class="linenos">370</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is a class that wraps a function. It will be documented correctly.&quot;&quot;&quot;</span>
-</span><span id="ClassDecorator-371"><a href="#ClassDecorator-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-</span><span id="ClassDecorator-372"><a href="#ClassDecorator-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+</span><span id="ClassDecorator-371"><a href="#ClassDecorator-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+</span><span id="ClassDecorator-372"><a href="#ClassDecorator-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_func</span> <span class="o">=</span> <span class="n">func</span>
 </span></pre></div>
 
 
@@ -2035,14 +2035,14 @@ indents</p>
                                         <input id="ClassDecorator.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">ClassDecorator</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">f</span></span>)</span>
+        <span class="name">ClassDecorator</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">func</span></span>)</span>
 
                 <label class="view-source-button" for="ClassDecorator.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#ClassDecorator.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ClassDecorator.__init__-371"><a href="#ClassDecorator.__init__-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-</span><span id="ClassDecorator.__init__-372"><a href="#ClassDecorator.__init__-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ClassDecorator.__init__-371"><a href="#ClassDecorator.__init__-371"><span class="linenos">371</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+</span><span id="ClassDecorator.__init__-372"><a href="#ClassDecorator.__init__-372"><span class="linenos">372</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_func</span> <span class="o">=</span> <span class="n">func</span>
 </span></pre></div>
 
 
@@ -2080,7 +2080,7 @@ indents</p>
 </span><span id="SubclassRef-383"><a href="#SubclassRef-383"><span class="linenos">383</span></a>        <span class="k">pass</span>
 </span><span id="SubclassRef-384"><a href="#SubclassRef-384"><span class="linenos">384</span></a>
 </span><span id="SubclassRef-385"><a href="#SubclassRef-385"><span class="linenos">385</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;SubClass&quot;</span><span class="p">):</span>
-</span><span id="SubclassRef-386"><a href="#SubclassRef-386"><span class="linenos">386</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span id="SubclassRef-386"><a href="#SubclassRef-386"><span class="linenos">386</span></a>        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -2097,7 +2097,7 @@ indents</p>
     </div>
     <a class="headerlink" href="#SubclassRef.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SubclassRef.__init__-385"><a href="#SubclassRef.__init__-385"><span class="linenos">385</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;SubClass&quot;</span><span class="p">):</span>
-</span><span id="SubclassRef.__init__-386"><a href="#SubclassRef.__init__-386"><span class="linenos">386</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span id="SubclassRef.__init__-386"><a href="#SubclassRef.__init__-386"><span class="linenos">386</span></a>        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -2200,6 +2200,8 @@ indents</p>
                                 <dl>
                                     <div><dt>sched.scheduler</dt>
                                 <dd id="scheduler.__init__" class="function">scheduler</dd>
+                <dd id="scheduler.timefunc" class="variable">timefunc</dd>
+                <dd id="scheduler.delayfunc" class="variable">delayfunc</dd>
                 <dd id="scheduler.enterabs" class="function">enterabs</dd>
                 <dd id="scheduler.enter" class="function">enter</dd>
                 <dd id="scheduler.cancel" class="function">cancel</dd>

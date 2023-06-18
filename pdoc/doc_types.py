@@ -33,7 +33,7 @@ if TYPE_CHECKING:
         pass
 
 
-empty = inspect.Signature.empty  # type: ignore  # noqa
+empty: type = inspect.Signature.empty  # type: ignore  # noqa
 """
 A "special" object signaling the absence of a type annotation. 
 This is useful to distinguish it from an actual annotation with `None`.

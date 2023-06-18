@@ -13,6 +13,7 @@ import inspect
 from itertools import tee
 from itertools import zip_longest
 import types
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypeVar
 from typing import overload
@@ -22,6 +23,9 @@ import pdoc
 
 from ._compat import ast_unparse
 from ._compat import cache
+
+if TYPE_CHECKING:
+    import pdoc.doc_types
 
 
 def get_source(obj: Any) -> str:
@@ -90,7 +94,7 @@ class AstInfo:
     """A qualname -> docstring mapping."""
     func_docstrings: dict[str, str]
     """A qualname -> docstring mapping for functions."""
-    annotations: dict[str, str]
+    annotations: dict[str, str | type[pdoc.doc_types.empty]]
     """A qualname -> annotation mapping.
     
     Annotations are not evaluated by this module and only returned as strings."""

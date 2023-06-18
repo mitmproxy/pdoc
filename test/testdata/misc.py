@@ -367,8 +367,8 @@ def repr_not_syntax_highlightable(x=CustomRepr()):
 
 class ClassDecorator:
     """This is a class that wraps a function. It will be documented correctly."""
-    def __init__(self, f):
-        self.f = f
+    def __init__(self, func):
+        self._func = func
 
 
 @ClassDecorator
@@ -382,7 +382,7 @@ class SubclassRef:
         pass
 
     def __init__(self, x: "SubClass"):
-        self.x = x
+        print(x)
 
 
 class ClassAsAttribute:
