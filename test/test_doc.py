@@ -46,7 +46,9 @@ def test_attrs():
     assert c.staticmethods
     assert c.methods
 
-    v = m.members["EnumDemo"]
+    e = m.members["EnumDemo"]
+    assert isinstance(e, Class)
+    v = e.members["RED"]
     assert isinstance(v, Variable)
     assert v.is_enum_member
 
