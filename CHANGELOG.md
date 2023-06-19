@@ -5,8 +5,10 @@
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
  - Functions, classes and variables can now be hidden from documentation by adding `@private` to their docstring.
+   ([#578](https://github.com/mitmproxy/pdoc/pull/578), @mhils)
  - pdoc can now be configured to skip classes/functions/variables without docstrings by passing
    `--no-include-undocumented`.
+   ([#578](https://github.com/mitmproxy/pdoc/pull/578), @mhils)
  - pdoc now documents variables by default, even if they have no docstring or type annotation.
    Please make yourself heard in [#574](https://github.com/mitmproxy/pdoc/issues/574) if that
    introduces significant issues for your use case.
