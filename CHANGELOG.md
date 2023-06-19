@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+## 2023-06-19: pdoc 14.0.0
+
  - Functions, classes and variables can now be hidden from documentation by adding `@private` to their docstring.
    ([#578](https://github.com/mitmproxy/pdoc/pull/578), @mhils)
  - pdoc can now be configured to skip classes/functions/variables without docstrings by passing
