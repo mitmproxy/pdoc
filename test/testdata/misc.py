@@ -432,6 +432,11 @@ class MyDict(dict):
     pass
 
 
+class DocstringFromNew:
+    def __new__(cls, *args, **kwargs):
+        """This is a class with a docstring inferred from `__new__`."""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -472,4 +477,5 @@ __all__ = [
     "dynamically_modify_docstring3",
     "dynamically_modify_docstring4",
     "MyDict",
+    "DocstringFromNew",
 ]

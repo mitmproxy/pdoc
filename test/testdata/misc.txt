@@ -132,4 +132,7 @@
         <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
         <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>
     >
+    <class misc.DocstringFromNew
+        <method def __init__(cls, *args, **kwargs): ...  # This is a class with…>
+    >
 >
