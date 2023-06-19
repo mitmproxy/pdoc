@@ -238,7 +238,11 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     Implementing this as a macro makes it very easy to override with a custom template, see
     https://github.com/mitmproxy/pdoc/tree/main/examples/custom-template.
     #}
-    {% if doc.name == "__init__" and (doc.docstring or (doc.kind == "function" and doc.signature_without_self.parameters)) %}
+    {% if not include_undocumented and not doc.docstring %}
+        {# hide members that are undocumented if include_undocumented has been toggled off. #}
+    {% elif doc.docstring and "@private" in doc.docstring %}
+        {# hide members explicitly marked as @private #}
+    {% elif doc.name == "__init__" and (doc.docstring or (doc.kind == "function" and doc.signature_without_self.parameters)) %}
         {# show constructors that have a docstring or at least one extra argument #}
         true
     {% elif doc.name == "__doc__" %}

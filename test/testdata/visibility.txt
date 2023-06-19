@@ -1,0 +1,6 @@
+<module visibility  # Example where no chi…
+    <class visibility.Undocumented
+        <method def __init__(): ...>
+    >
+    <function def my_func(): ...  # This is a public met…>
+>

@@ -34,6 +34,7 @@ def configure(
     docformat: Literal[
         "markdown", "google", "numpy", "restructuredtext"  # noqa: F821
     ] = "restructuredtext",
+    include_undocumented: bool = True,
     edit_url_map: Mapping[str, str] | None = None,
     favicon: str | None = None,
     footer_text: str = "",
@@ -50,6 +51,7 @@ def configure(
 
     - `docformat` is the docstring flavor in use.
       pdoc prefers plain Markdown (the default), but also supports other formats.
+    - `include_undocumented` controls whether members without a docstring are included in the output.
     - `edit_url_map` is a mapping from module names to URL prefixes. For example,
 
         ```json
@@ -74,8 +76,9 @@ def configure(
         searchpath = [template_directory] + searchpath
     env.loader = FileSystemLoader(searchpath)
 
-    env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["docformat"] = docformat
+    env.globals["include_undocumented"] = include_undocumented
+    env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["math"] = math
     env.globals["mermaid"] = mermaid
     env.globals["show_source"] = show_source
