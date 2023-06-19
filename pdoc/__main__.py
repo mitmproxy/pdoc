@@ -56,6 +56,12 @@ renderopts.add_argument(
     "Markdown and then process everything as Markdown.",
 )
 renderopts.add_argument(
+    "--include-undocumented",
+    action=BooleanOptionalAction,
+    default=True,
+    help="Show classes/functions/variables that do not have a docstring.",
+)
+renderopts.add_argument(
     "-e",
     "--edit-url",
     action="append",
@@ -176,6 +182,7 @@ def cli(args: list[str] | None = None) -> None:
 
     pdoc.render.configure(
         docformat=opts.docformat,
+        include_undocumented=opts.include_undocumented,
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         favicon=opts.favicon,
         footer_text=opts.footer_text,
