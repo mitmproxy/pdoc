@@ -3,6 +3,7 @@
 This …
     <var FOO_CONSTANT: int = 42  # A happy constant. ✨ …>
     <var FOO_SINGLETON: demo_long.Foo  # This variable is ann…>
+    <var NO_DOCSTRING: int>
     <function def a_simple_function(a: str) -> str: ...  # This is a basic modu…>
     <var T = ~T>
     <function def a_complex_function(

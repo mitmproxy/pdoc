@@ -367,8 +367,8 @@ def repr_not_syntax_highlightable(x=CustomRepr()):
 
 class ClassDecorator:
     """This is a class that wraps a function. It will be documented correctly."""
-    def __init__(self, f):
-        self.f = f
+    def __init__(self, func):
+        self._func = func
 
 
 @ClassDecorator
@@ -382,7 +382,7 @@ class SubclassRef:
         pass
 
     def __init__(self, x: "SubClass"):
-        self.x = x
+        print(x)
 
 
 class ClassAsAttribute:
@@ -432,6 +432,11 @@ class MyDict(dict):
     pass
 
 
+class DocstringFromNew:
+    def __new__(cls, *args, **kwargs):
+        """This is a class with a docstring inferred from `__new__`."""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -472,4 +477,5 @@ __all__ = [
     "dynamically_modify_docstring3",
     "dynamically_modify_docstring4",
     "MyDict",
+    "DocstringFromNew",
 ]

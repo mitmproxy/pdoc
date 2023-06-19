@@ -10,5 +10,6 @@
             <var attr: str = '42'  # An attribute>
             <method def meth(self, y: bool) -> bool: ...  # A simple method.>
         >
+        <method def no_type_annotation(self, z): ...  # A method not present…>
     >
 >

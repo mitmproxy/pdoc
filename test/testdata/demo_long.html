@@ -36,6 +36,9 @@
                     <a class="variable" href="#FOO_SINGLETON">FOO_SINGLETON</a>
             </li>
             <li>
+                    <a class="variable" href="#NO_DOCSTRING">NO_DOCSTRING</a>
+            </li>
+            <li>
                     <a class="function" href="#a_simple_function">a_simple_function</a>
             </li>
             <li>
@@ -55,6 +58,9 @@
                         </li>
                         <li>
                                 <a class="variable" href="#Foo.a_constructor_only_attribute">a_constructor_only_attribute</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Foo.undocumented_constructor_attribute">undocumented_constructor_attribute</a>
                         </li>
                         <li>
                                 <a class="function" href="#Foo.a_regular_function">a_regular_function</a>
@@ -117,6 +123,9 @@
                     <a class="variable" href="#CONST_B">CONST_B</a>
             </li>
             <li>
+                    <a class="variable" href="#CONST_NO_DOC">CONST_NO_DOC</a>
+            </li>
+            <li>
                     <a class="class" href="#DataDemo">DataDemo</a>
                             <ul class="memberlist">
                         <li>
@@ -124,6 +133,15 @@
                         </li>
                         <li>
                                 <a class="variable" href="#DataDemo.a">a</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#DataDemo.a2">a2</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#DataDemo.a3">a3</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#DataDemo.a4">a4</a>
                         </li>
                         <li>
                                 <a class="variable" href="#DataDemo.b">b</a>
@@ -272,7 +290,7 @@ which will also show up in the navigation.</p>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="n">NO_DOCSTRING</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="c1"># this variable has a type annotation but not docstring, so it does not show up.</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="c1"># this variable has a type annotation but not docstring.</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="k">def</span> <span class="nf">a_simple_function</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -533,6 +551,17 @@ automatically.</p>
 
 
                 </section>
+                <section id="NO_DOCSTRING">
+                    <div class="attr variable">
+            <span class="name">NO_DOCSTRING</span><span class="annotation">: int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#NO_DOCSTRING"></a>
+    
+    
+
+                </section>
                 <section id="a_simple_function">
                             <input id="a_simple_function-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -737,6 +766,17 @@ as well as a keyword-only arguments (*).</p>
 
 
                             </div>
+                            <div id="Foo.undocumented_constructor_attribute" class="classattr">
+                                <div class="attr variable">
+            <span class="name">undocumented_constructor_attribute</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Foo.undocumented_constructor_attribute"></a>
+    
+    
+
+                            </div>
                             <div id="Foo.a_regular_function" class="classattr">
                                         <input id="Foo.a_regular_function-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -933,6 +973,7 @@ as well as a keyword-only arguments (*).</p>
                 <dd id="Bar.an_attribute" class="variable"><a href="#Foo.an_attribute">an_attribute</a></dd>
                 <dd id="Bar.a_class_attribute" class="variable"><a href="#Foo.a_class_attribute">a_class_attribute</a></dd>
                 <dd id="Bar.a_constructor_only_attribute" class="variable"><a href="#Foo.a_constructor_only_attribute">a_constructor_only_attribute</a></dd>
+                <dd id="Bar.undocumented_constructor_attribute" class="variable"><a href="#Foo.undocumented_constructor_attribute">undocumented_constructor_attribute</a></dd>
                 <dd id="Bar.a_regular_function" class="function"><a href="#Foo.a_regular_function">a_regular_function</a></dd>
                 <dd id="Bar.a_property" class="variable"><a href="#Foo.a_property">a_property</a></dd>
                 <dd id="Bar.a_cached_property" class="variable"><a href="#Foo.a_cached_property">a_cached_property</a></dd>
@@ -1127,6 +1168,7 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
                 <dd id="DoubleInherit.an_attribute" class="variable"><a href="#Foo.an_attribute">an_attribute</a></dd>
                 <dd id="DoubleInherit.a_class_attribute" class="variable"><a href="#Foo.a_class_attribute">a_class_attribute</a></dd>
                 <dd id="DoubleInherit.a_constructor_only_attribute" class="variable"><a href="#Foo.a_constructor_only_attribute">a_constructor_only_attribute</a></dd>
+                <dd id="DoubleInherit.undocumented_constructor_attribute" class="variable"><a href="#Foo.undocumented_constructor_attribute">undocumented_constructor_attribute</a></dd>
                 <dd id="DoubleInherit.a_regular_function" class="function"><a href="#Foo.a_regular_function">a_regular_function</a></dd>
                 <dd id="DoubleInherit.a_property" class="variable"><a href="#Foo.a_property">a_property</a></dd>
                 <dd id="DoubleInherit.a_cached_property" class="variable"><a href="#Foo.a_cached_property">a_cached_property</a></dd>
@@ -1155,6 +1197,18 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
             <div class="docstring"><p>A constant without type annotation</p>
 </div>
 
+
+                </section>
+                <section id="CONST_NO_DOC">
+                    <div class="attr variable">
+            <span class="name">CONST_NO_DOC</span>        =
+<span class="default_value">&#39;SHOULD NOT APPEAR&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#CONST_NO_DOC"></a>
+    
+    
 
                 </section>
                 <section id="DataDemo">
@@ -1219,6 +1273,41 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
             <div class="docstring"><p>Again, we can document individual properties with docstrings.</p>
 </div>
 
+
+                            </div>
+                            <div id="DataDemo.a2" class="classattr">
+                                <div class="attr variable">
+            <span class="name">a2</span><span class="annotation">: Sequence[str]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DataDemo.a2"></a>
+    
+    
+
+                            </div>
+                            <div id="DataDemo.a3" class="classattr">
+                                <div class="attr variable">
+            <span class="name">a3</span>        =
+<span class="default_value">&#39;a3&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DataDemo.a3"></a>
+    
+    
+
+                            </div>
+                            <div id="DataDemo.a4" class="classattr">
+                                <div class="attr variable">
+            <span class="name">a4</span><span class="annotation">: str</span>        =
+<span class="default_value">&#39;a4&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#DataDemo.a4"></a>
+    
+    
 
                             </div>
                             <div id="DataDemo.b" class="classattr">
@@ -1288,6 +1377,9 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
                                 <dl>
                                     <div><dt><a href="#DataDemo">DataDemo</a></dt>
                                 <dd id="DataDemoExtended.a" class="variable"><a href="#DataDemo.a">a</a></dd>
+                <dd id="DataDemoExtended.a2" class="variable"><a href="#DataDemo.a2">a2</a></dd>
+                <dd id="DataDemoExtended.a3" class="variable"><a href="#DataDemo.a3">a3</a></dd>
+                <dd id="DataDemoExtended.a4" class="variable"><a href="#DataDemo.a4">a4</a></dd>
                 <dd id="DataDemoExtended.b" class="variable"><a href="#DataDemo.b">b</a></dd>
 
             </div>

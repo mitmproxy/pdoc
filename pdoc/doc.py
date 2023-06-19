@@ -489,7 +489,7 @@ class Module(Namespace[types.ModuleType]):
         return submodules
 
     @cached_property
-    def _documented_members(self) -> set[str]:
+    def _ast_keys(self) -> set[str]:
         return (
             self._var_docstrings.keys()
             | self._func_docstrings.keys()
@@ -525,24 +525,21 @@ class Module(Namespace[types.ModuleType]):
         else:
             # Starting with Python 3.10, __annotations__ is created on demand,
             # so we make a copy here as obj.__dict__ is changed while we iterate over it.
-            # Additionally, accessing self._documented_members may lead to the execution of TYPE_CHECKING blocks,
+            # Additionally, accessing self._ast_keys may lead to the execution of TYPE_CHECKING blocks,
             # which may also modify obj.__dict__. (https://github.com/mitmproxy/pdoc/issues/351)
             for name, obj in list(self.obj.__dict__.items()):
-                # We already exclude everything here that is imported, only a TypeVar,
-                # or a variable without annotation and docstring.
-                # If one needs to document one of these things, __all__ is the correct way.
+                # We already exclude everything here that is imported.
                 obj_module = inspect.getmodule(obj)
                 declared_in_this_module = self.obj.__name__ == _safe_getattr(
                     obj_module, "__name__", None
                 )
-                include_in_docs = name in self._documented_members or (
-                    declared_in_this_module and not isinstance(obj, TypeVar)
-                )
+                include_in_docs = declared_in_this_module or name in self._ast_keys
                 if include_in_docs:
                     members[name] = obj
+
             for name in self._var_docstrings:
                 members.setdefault(name, empty)
-            for name in self._func_docstrings:
+            for name in self._var_annotations:
                 members.setdefault(name, empty)
 
             members, notfound = doc_ast.sort_by_source(self.obj, {}, members)
@@ -1083,6 +1080,14 @@ class Variable(Doc[None]):
     def is_classvar(self) -> bool:
         """`True` if the variable is a class variable, `False` otherwise."""
         if get_origin(self.annotation) is ClassVar:
+            return True
+        else:
+            return False
+
+    @cached_property
+    def is_typevar(self) -> bool:
+        """`True` if the variable is a `typing.TypeVar`, `False` otherwise."""
+        if isinstance(self.default_value, TypeVar):
             return True
         else:
             return False

@@ -24,3 +24,6 @@ class Class:
 
         def meth(self, y):
             """A simple method."""
+
+    def no_type_annotation(self, z):
+        """A method not present in the .pyi file."""

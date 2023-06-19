@@ -46,6 +46,16 @@ def test_attrs():
     assert c.staticmethods
     assert c.methods
 
+    e = m.members["EnumDemo"]
+    assert isinstance(e, Class)
+    v = e.members["RED"]
+    assert isinstance(v, Variable)
+    assert v.is_enum_member
+
+    c = m.members["FOO_CONSTANT"]
+    assert isinstance(c, Variable)
+    assert not c.is_enum_member
+
 
 def test_all_with_import_err():
     mod = extract.load_module(extract.parse_spec(here / "import_err"))

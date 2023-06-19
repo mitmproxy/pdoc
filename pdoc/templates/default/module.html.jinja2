@@ -243,12 +243,14 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         true
     {% elif doc.name == "__doc__" %}
         {# We don't want to document __doc__ itself, https://github.com/mitmproxy/pdoc/issues/235 #}
+    {% elif doc.kind == "variable" and doc.is_typevar and not doc.docstring %}
+        {# do not document TypeVars, that only clutters the docs. #}
     {% elif doc.kind == "module" and doc.fullname not in all_modules %}
         {# Skip modules that were manually excluded, https://github.com/mitmproxy/pdoc/issues/334 #}
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
-    {% elif not doc.name.startswith("_") and (doc.kind != "variable" or doc.is_enum_member or doc.docstring) %}
+    {% elif not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
         true
     {% endif %}

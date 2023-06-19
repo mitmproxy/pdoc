@@ -83,8 +83,7 @@
     >
     <function def repr_not_syntax_highlightable(x=°<script>alert(1)</script>): ...  # The default value fo…>
     <class misc.ClassDecorator  # This is a class that…
-        <method def __init__(self, f): ...>
-        <var f>
+        <method def __init__(self, func): ...>
     >
     <var another_decorated_function = <misc.ClassDecorator object>  # This is another deco…>
     <class misc.SubclassRef
@@ -92,7 +91,6 @@
         <class misc.SubclassRef.SubClass
             <method def __init__(): ...>
         >
-        <var x>
     >
     <class misc.ClassAsAttribute
         <method def __init__(): ...>
@@ -133,5 +131,8 @@
         <method def fromkeys(type, iterable, value=None, /): ...  # inherited from builtins.dict.fromkeys, Create a new diction…>
         <method def clear(unknown): ...  # inherited from builtins.dict.clear, D.clear() -> None.  …>
         <method def copy(unknown): ...  # inherited from builtins.dict.copy, D.copy() -> a shallo…>
+    >
+    <class misc.DocstringFromNew
+        <method def __init__(cls, *args, **kwargs): ...  # This is a class with…>
     >
 >
