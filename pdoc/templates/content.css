@@ -128,7 +128,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: .2em .4em;
     margin: 0;
     font-size: 85%;
-    background-color: var(--code);
+    background-color: var(--accent);
     border-radius: 6px;
 }
 
