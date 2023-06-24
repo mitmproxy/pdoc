@@ -212,10 +212,13 @@ def possible_sources(
         yield identifier, ""
         return
 
-    if len(set(s.partition(".")[0] for s in all_modules)) == 1:
+    # handle relative identifiers
+    if identifier.startswith("."):
         pkgname = next(iter(all_modules)).partition(".")[0]
-        if not identifier.startswith(pkgname):
-            identifier = f"{pkgname}.{identifier}"
+        # check that all modules reside within the same top-level module
+        if all(s.startswith(pkgname + ".") or s == pkgname for s in all_modules):
+            if not identifier.startswith(pkgname):
+                identifier = f"{pkgname}{identifier}"
 
     modulename = identifier
     qualname = None
@@ -342,7 +345,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
-            \b
+            (?:\.|\b)
 
             # First part of the identifier (e.g. "foo")
             (?!\d)[a-zA-Z0-9_]+
