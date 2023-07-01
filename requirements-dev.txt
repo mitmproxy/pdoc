@@ -86,7 +86,7 @@ types-pygments==2.15.0.1
     # via pdoc (pyproject.toml)
 types-setuptools==68.0.0.0
     # via types-pygments
-typing-extensions==4.6.2
+typing-extensions==4.7.0
     # via mypy
 virtualenv==20.23.1
     # via tox
