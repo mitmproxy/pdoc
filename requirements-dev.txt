@@ -72,7 +72,7 @@ pytest-cov==4.1.0
     # via pdoc (pyproject.toml)
 pytest-timeout==2.1.0
     # via pdoc (pyproject.toml)
-ruff==0.0.270
+ruff==0.0.275
     # via pdoc (pyproject.toml)
 sortedcontainers==2.4.0
     # via hypothesis
