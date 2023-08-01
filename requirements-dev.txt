@@ -26,7 +26,7 @@ filelock==3.12.2
     # via
     #   tox
     #   virtualenv
-hypothesis==6.80.0
+hypothesis==6.82.0
     # via pdoc (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
