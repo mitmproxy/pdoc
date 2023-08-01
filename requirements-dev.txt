@@ -20,7 +20,7 @@ colorama==0.4.6
     # via tox
 coverage[toml]==7.2.7
     # via pytest-cov
-distlib==0.3.6
+distlib==0.3.7
     # via virtualenv
 filelock==3.12.2
     # via
