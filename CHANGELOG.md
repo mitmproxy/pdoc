@@ -4,6 +4,8 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Fix horizontal scroll navigation z-index issue.
+   ([#616](https://github.com/mitmproxy/pdoc/pull/616), @Domi04151309)
 
 ## 2023-06-19: pdoc 14.0.0
 

@@ -124,7 +124,8 @@ nav.pdoc {
     padding: 0 0 0 var(--pad);
     overflow-wrap: anywhere;
     scrollbar-width: thin; /* Scrollbar width on Firefox */
-    scrollbar-color: var(--accent2) transparent /* Scrollbar color on Firefox */
+    scrollbar-color: var(--accent2) transparent; /* Scrollbar color on Firefox */
+    z-index: 1
 }
 
 nav.pdoc::-webkit-scrollbar {
