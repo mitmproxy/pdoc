@@ -1,10 +1,9 @@
 import abc
+from functools import cached_property
 from functools import lru_cache
 import sched
 from typing import Generic
 from typing import TypeVar
-
-from pdoc._compat import cached_property
 
 # https://github.com/mitmproxy/pdoc/issues/226
 
