@@ -73,13 +73,6 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
     elif isinstance(target_doc, doc.Variable) and isinstance(stub_doc, doc.Variable):
         target_doc.annotation = stub_doc.annotation
     elif isinstance(target_doc, doc.Namespace) and isinstance(stub_doc, doc.Namespace):
-        # pdoc currently does not include variables without docstring in .members (not ideal),
-        # so the regular patching won't work. We manually copy over type annotations instead.
-        for k, v in stub_doc._var_annotations.items():
-            var = target_doc.members.get(k, None)
-            if isinstance(var, doc.Variable):
-                var.annotation = v
-
         for m in target_doc.members.values():
             _patch_doc(m, stub_mod)
     else:
