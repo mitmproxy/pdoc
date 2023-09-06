@@ -4,6 +4,7 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - pdoc now also picks up docstrings from `.pyi` stub files.
  - Fix horizontal scroll navigation z-index issue.
    ([#616](https://github.com/mitmproxy/pdoc/pull/616), @Domi04151309)
 
