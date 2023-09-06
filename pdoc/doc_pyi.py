@@ -70,9 +70,12 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
     if isinstance(target_doc, doc.Function) and isinstance(stub_doc, doc.Function):
         target_doc.signature = stub_doc.signature
         target_doc.funcdef = stub_doc.funcdef
+        target_doc.docstring = stub_doc.docstring or target_doc.docstring
     elif isinstance(target_doc, doc.Variable) and isinstance(stub_doc, doc.Variable):
         target_doc.annotation = stub_doc.annotation
+        target_doc.docstring = stub_doc.docstring or target_doc.docstring
     elif isinstance(target_doc, doc.Namespace) and isinstance(stub_doc, doc.Namespace):
+        target_doc.docstring = stub_doc.docstring or target_doc.docstring
         for m in target_doc.members.values():
             _patch_doc(m, stub_mod)
     else:
