@@ -10,7 +10,7 @@
    one can now also refer to `.helpers.foo` within the `mypackage` module, or `..helpers.foo` in a submodule.
    ([#544](https://github.com/mitmproxy/pdoc/pull/544), @Crozzers)
  - Function signatures will now display "Foo" instead "demo.Foo" if the function is in the same module.
-   ([#544](https://github.com/mitmproxy/pdoc/pull/544), @Crozzers)
+   ([#544](https://github.com/mitmproxy/pdoc/pull/544), @mhils)
  - pdoc now also picks up docstrings from `.pyi` stub files.
    ([#619](https://github.com/mitmproxy/pdoc/pull/619), @mhils)
  - Fix horizontal scroll navigation z-index issue.

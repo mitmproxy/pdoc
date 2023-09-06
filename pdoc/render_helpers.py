@@ -289,6 +289,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
         identifier = removesuffix(plain_text, "()")
         mod: pdoc.doc.Module = context["module"]
 
+        # Check if this is a relative reference?
         if identifier.startswith("."):
             parent_module = mod.modulename
             while identifier.startswith(".."):
