@@ -212,14 +212,6 @@ def possible_sources(
         yield identifier, ""
         return
 
-    # handle relative identifiers
-    if identifier.startswith("."):
-        pkgname = next(iter(all_modules)).partition(".")[0]
-        # check that all modules reside within the same top-level module
-        if all(s.startswith(pkgname + ".") or s == pkgname for s in all_modules):
-            if not identifier.startswith(pkgname):
-                identifier = f"{pkgname}{identifier}"
-
     modulename = identifier
     qualname = None
     while modulename:
@@ -295,13 +287,20 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             '</span><span class="o">.</span><span class="n">', "."
         )
         identifier = removesuffix(plain_text, "()")
-
-        # Check if this is a local reference within this module?
         mod: pdoc.doc.Module = context["module"]
-        for qualname in qualname_candidates(identifier, namespace):
-            doc = mod.get(qualname)
-            if doc and context["is_public"](doc).strip():
-                return f'<a href="#{qualname}">{plain_text}</a>'
+
+        if identifier.startswith("."):
+            parent_module = mod.modulename
+            while identifier.startswith(".."):
+                identifier = identifier[1:]
+                parent_module = parent_module.rpartition(".")[0]
+            identifier = parent_module + identifier
+        else:
+            # Check if this is a local reference within this module?
+            for qualname in qualname_candidates(identifier, namespace):
+                doc = mod.get(qualname)
+                if doc and context["is_public"](doc).strip():
+                    return f'<a href="#{qualname}">{plain_text}</a>'
 
         module = ""
         qualname = ""
@@ -317,9 +316,9 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                     and context["is_public"](doc).strip()
                 ):
                     if plain_text.endswith("()"):
-                        plain_text = f"{doc.fullname}()"
+                        plain_text = f"{doc.qualname}()"
                     else:
-                        plain_text = doc.fullname
+                        plain_text = doc.qualname
                     return f'<a href="#{qualname}">{plain_text}</a>'
         except ValueError:
             # possible_sources did not find a parent module.
@@ -345,7 +344,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
-            (?:\.|\b)
+            (?:\.+|\b)
 
             # First part of the identifier (e.g. "foo")
             (?!\d)[a-zA-Z0-9_]+
@@ -361,6 +360,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
             | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.
             (?<=<code>)
+                 \.*
                  (?!\d)[a-zA-Z0-9_]+
             (?:\(\))?
             (?=</code>(?!</a>))

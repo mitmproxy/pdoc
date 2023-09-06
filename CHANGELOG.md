@@ -6,6 +6,9 @@
 
  - Add compatibility with Python 3.12
    ([#620](https://github.com/mitmproxy/pdoc/pull/620), @mhils)
+ - Add support for relative links. Instead of explicitly referring to `mypackage.helpers.foo`,
+   one can now also refer to `.helpers.foo` within the `mypackage` module, or `..helpers.foo` in a submodule.
+ - Function signatures will now display "Foo" instead "demo.Foo" if the function is in the same module.
  - pdoc now also picks up docstrings from `.pyi` stub files.
    ([#619](https://github.com/mitmproxy/pdoc/pull/619), @mhils)
  - Fix horizontal scroll navigation z-index issue.
