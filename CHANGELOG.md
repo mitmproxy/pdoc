@@ -4,8 +4,14 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+ - Add compatibility with Python 3.12
+   ([#620](https://github.com/mitmproxy/pdoc/pull/620), @mhils)
+ - pdoc now also picks up docstrings from `.pyi` stub files.
+   ([#619](https://github.com/mitmproxy/pdoc/pull/619), @mhils)
  - Fix horizontal scroll navigation z-index issue.
    ([#616](https://github.com/mitmproxy/pdoc/pull/616), @Domi04151309)
+ - Be more strict about parsing URLs in pdoc's web server.
+   ([#617](https://github.com/mitmproxy/pdoc/pull/617), @mhils)
 
 ## 2023-06-19: pdoc 14.0.0
 

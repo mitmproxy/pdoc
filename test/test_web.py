@@ -91,3 +91,9 @@ def test_get_module_mtime():
 
 def test_get_unknown():
     assert b"404 Not Found" in handle_request(b"GET /unknown HTTP/1.1\r\n\r\n")
+
+
+def test_get_not_normalized():
+    assert b"Not Found: Please normalize all module separators" in handle_request(
+        b"GET /module.submodule HTTP/1.1\r\n\r\n"
+    )

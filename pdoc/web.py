@@ -40,7 +40,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
         except ConnectionError:  # pragma: no cover
             pass
 
-    def handle_request(self) -> str | None:
+    def handle_request(self) -> str:
         """Actually handle a request. Called by `do_HEAD` and `do_GET`."""
         path = self.path.split("?", 1)[0]
 
@@ -51,6 +51,13 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             self.send_header("content-type", "application/javascript")
             self.end_headers()
             return self.server.render_search_index()
+        elif "." in removesuffix(path, ".html"):
+            # See https://github.com/mitmproxy/pdoc/issues/615: All module separators should be normalized to "/".
+            # We could redirect here, but that would create the impression of a working link, which will fall apart
+            # when pdoc prerenders to static HTML. So we rather fail early.
+            self.send_response(404)
+            self.end_headers()
+            return "Not Found: Please normalize all module separators to '/'."
         else:
             module_name = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
             if module_name not in self.server.all_modules:
