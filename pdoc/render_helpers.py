@@ -334,8 +334,13 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                 doc is not None and context["is_public"](doc).strip()
             )
             if target_exists_and_public:
+                assert doc is not None  # mypy
                 if qualname:
                     qualname = f"#{qualname}"
+                if plain_text.endswith("()"):
+                    plain_text = f"{doc.fullname}()"
+                else:
+                    plain_text = doc.fullname
                 return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{plain_text}</a>'
             else:
                 return text
