@@ -1,6 +1,6 @@
 <module type_stub  # This module has an a…
     <function def func(x: str, y: Any, z: Iterable[str]) -> int: ...  # A simple function.>
-    <var var: list[str] = []  # A simple variable.>
+    <var var: list[str] = []  # Docstring override f…>
     <class type_stub.Class
         <method def __init__(): ...>
         <var attr: int = 42  # An attribute>
