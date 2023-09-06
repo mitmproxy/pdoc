@@ -7,6 +7,7 @@
  - Fix horizontal scroll navigation z-index issue.
    ([#616](https://github.com/mitmproxy/pdoc/pull/616), @Domi04151309)
  - Be more strict about parsing URLs in pdoc's web server.
+   ([#617](https://github.com/mitmproxy/pdoc/pull/617), @mhils)
 
 ## 2023-06-19: pdoc 14.0.0
 
