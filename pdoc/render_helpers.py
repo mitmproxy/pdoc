@@ -291,7 +291,12 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
         # Check if this is a relative reference?
         if identifier.startswith("."):
-            parent_module = mod.modulename
+            if mod.is_package:
+                # If we are in __init__.py, we want `.foo` to refer to a child module.
+                parent_module = mod.modulename
+            else:
+                # If we are in a leaf module, we want `.foo` to refer to the adjacent module.
+                parent_module = mod.modulename.rpartition(".")[0]
             while identifier.startswith(".."):
                 identifier = identifier[1:]
                 parent_module = parent_module.rpartition(".")[0]
@@ -350,10 +355,11 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
-            (?:\.+|\b)
-
-            # First part of the identifier (e.g. "foo")
-            (?!\d)[a-zA-Z0-9_]+
+            # First part of the identifier (e.g. "foo") - this is optional for relative references.
+            (?:
+                \b
+                (?!\d)[a-zA-Z0-9_]+
+            )?
             # Rest of the identifier (e.g. ".bar")
             (?:
                 # A single dot or a dot surrounded with pygments highlighting.
