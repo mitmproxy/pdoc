@@ -359,11 +359,13 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             (?:
                 \b
                 (?!\d)[a-zA-Z0-9_]+
-            )?
+                |
+                \.*  # We may also start with multiple dots.
+            )
             # Rest of the identifier (e.g. ".bar" or "..bar")
             (?:
-                # One or two dots or a dot surrounded with pygments highlighting.
-                (?:\.{1,2}|</span><span\ class="o">\.</span><span\ class="n">)
+                # A single dot or a dot surrounded with pygments highlighting.
+                (?:\.|</span><span\ class="o">\.</span><span\ class="n">)
                 (?!\d)[a-zA-Z0-9_]+
             )+
             (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.
@@ -372,7 +374,6 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
             | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.
             (?<=<code>)
-                 \.*
                  (?!\d)[a-zA-Z0-9_]+
             (?:\(\))?
             (?=</code>(?!</a>))
