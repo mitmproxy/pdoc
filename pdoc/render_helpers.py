@@ -291,12 +291,16 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
 
         # Check if this is a relative reference?
         if identifier.startswith("."):
-            if mod.is_package:
+            taken_from_mod = mod
+            if namespace and (ns := mod.get(namespace)):
+                # Imported from somewhere else, so the relative reference should be from the original module.
+                taken_from_mod = context["all_modules"].get(ns.taken_from[0], mod)
+            if taken_from_mod.is_package:
                 # If we are in __init__.py, we want `.foo` to refer to a child module.
-                parent_module = mod.modulename
+                parent_module = taken_from_mod.modulename
             else:
                 # If we are in a leaf module, we want `.foo` to refer to the adjacent module.
-                parent_module = mod.modulename.rpartition(".")[0]
+                parent_module = taken_from_mod.modulename.rpartition(".")[0]
             while identifier.startswith(".."):
                 identifier = identifier[1:]
                 parent_module = parent_module.rpartition(".")[0]
