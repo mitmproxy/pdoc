@@ -360,10 +360,10 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                 \b
                 (?!\d)[a-zA-Z0-9_]+
             )?
-            # Rest of the identifier (e.g. ".bar")
+            # Rest of the identifier (e.g. ".bar" or "..bar")
             (?:
-                # A single dot or a dot surrounded with pygments highlighting.
-                (?:\.|</span><span\ class="o">\.</span><span\ class="n">)
+                # One or two dots or a dot surrounded with pygments highlighting.
+                (?:\.{1,2}|</span><span\ class="o">\.</span><span\ class="n">)
                 (?!\d)[a-zA-Z0-9_]+
             )+
             (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.
