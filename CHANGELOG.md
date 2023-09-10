@@ -4,6 +4,9 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+
+## 2023-09-10: pdoc 14.1.0
+
  - Add compatibility with Python 3.12
    ([#620](https://github.com/mitmproxy/pdoc/pull/620), @mhils)
  - Add support for relative links. Instead of explicitly referring to `mypackage.helpers.foo`,
