@@ -5,7 +5,7 @@ import typing
 
 
 class B:
-    """This class is defined in .child_b."""
+    """This class is defined in .child_b. It has a B.b method."""
 
     b_type: typing.Type[B]
     """we have a self-referential attribute here"""

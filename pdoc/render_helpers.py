@@ -43,7 +43,7 @@ formatter = pygments.formatters.HtmlFormatter(
     anchorlinenos=True,
 )
 """
-The pygments formatter used for pdoc.render_helpers.highlight. 
+The pygments formatter used for pdoc.render_helpers.highlight.
 Overwrite this to configure pygments highlighting of code blocks.
 
 The usage of the `.codehilite` CSS selector in custom templates is deprecated since pdoc 10, use `.pdoc-code` instead.
@@ -51,7 +51,7 @@ The usage of the `.codehilite` CSS selector in custom templates is deprecated si
 
 signature_formatter = pygments.formatters.HtmlFormatter(nowrap=True)
 """
-The pygments formatter used for pdoc.render_helpers.format_signature. 
+The pygments formatter used for pdoc.render_helpers.format_signature.
 Overwrite this to configure pygments highlighting of signatures.
 """
 
@@ -287,13 +287,30 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             '</span><span class="o">.</span><span class="n">', "."
         )
         identifier = removesuffix(plain_text, "()")
-
-        # Check if this is a local reference within this module?
         mod: pdoc.doc.Module = context["module"]
-        for qualname in qualname_candidates(identifier, namespace):
-            doc = mod.get(qualname)
-            if doc and context["is_public"](doc).strip():
-                return f'<a href="#{qualname}">{plain_text}</a>'
+
+        # Check if this is a relative reference?
+        if identifier.startswith("."):
+            taken_from_mod = mod
+            if namespace and (ns := mod.get(namespace)):
+                # Imported from somewhere else, so the relative reference should be from the original module.
+                taken_from_mod = context["all_modules"].get(ns.taken_from[0], mod)
+            if taken_from_mod.is_package:
+                # If we are in __init__.py, we want `.foo` to refer to a child module.
+                parent_module = taken_from_mod.modulename
+            else:
+                # If we are in a leaf module, we want `.foo` to refer to the adjacent module.
+                parent_module = taken_from_mod.modulename.rpartition(".")[0]
+            while identifier.startswith(".."):
+                identifier = identifier[1:]
+                parent_module = parent_module.rpartition(".")[0]
+            identifier = parent_module + identifier
+        else:
+            # Check if this is a local reference within this module?
+            for qualname in qualname_candidates(identifier, namespace):
+                doc = mod.get(qualname)
+                if doc and context["is_public"](doc).strip():
+                    return f'<a href="#{qualname}">{plain_text}</a>'
 
         module = ""
         qualname = ""
@@ -309,9 +326,9 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                     and context["is_public"](doc).strip()
                 ):
                     if plain_text.endswith("()"):
-                        plain_text = f"{doc.fullname}()"
+                        plain_text = f"{doc.qualname}()"
                     else:
-                        plain_text = doc.fullname
+                        plain_text = doc.qualname
                     return f'<a href="#{qualname}">{plain_text}</a>'
         except ValueError:
             # possible_sources did not find a parent module.
@@ -326,8 +343,13 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                 doc is not None and context["is_public"](doc).strip()
             )
             if target_exists_and_public:
+                assert doc is not None  # mypy
                 if qualname:
                     qualname = f"#{qualname}"
+                if plain_text.endswith("()"):
+                    plain_text = f"{doc.fullname}()"
+                else:
+                    plain_text = doc.fullname
                 return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{plain_text}</a>'
             else:
                 return text
@@ -337,11 +359,14 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&])  # heuristic: not part of a URL
-            \b
-            
-            # First part of the identifier (e.g. "foo")    
-            (?!\d)[a-zA-Z0-9_]+
-            # Rest of the identifier (e.g. ".bar")
+            # First part of the identifier (e.g. "foo") - this is optional for relative references.
+            (?:
+                \b
+                (?!\d)[a-zA-Z0-9_]+
+                |
+                \.*  # We may also start with multiple dots.
+            )
+            # Rest of the identifier (e.g. ".bar" or "..bar")
             (?:
                 # A single dot or a dot surrounded with pygments highlighting.
                 (?:\.|</span><span\ class="o">\.</span><span\ class="n">)

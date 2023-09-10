@@ -27,6 +27,7 @@
                     <li><a href="demopackage/child_b.html">child_b</a></li>
                     <li><a href="demopackage/child_c.html">child_c</a></li>
                     <li><a href="demopackage/_child_e.html">_child_e</a></li>
+                    <li><a href="demopackage/subpackage.html">subpackage</a></li>
             </ul>
 
             <h2>API Documentation</h2>
@@ -77,14 +78,14 @@
                     <h1 class="modulename">
 demopackage    </h1>
 
-                        <div class="docstring"><p>A test package</p>
+                        <div class="docstring"><p>A test package with a sub-package at <code><a href="demopackage/subpackage.html">demopackage.subpackage</a></code>.</p>
 </div>
 
                         <input id="mod-demopackage-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-demopackage-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;A test package&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;A test package with a sub-package at `.subpackage`.&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">import</span> <span class="nn">demopackage2</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_child_e</span>
@@ -105,7 +106,8 @@ demopackage    </h1>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="s2">&quot;demopackage2&quot;</span><span class="p">,</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="s2">&quot;_child_e&quot;</span><span class="p">,</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="s2">&quot;child_excluded&quot;</span><span class="p">,</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="p">]</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="s2">&quot;subpackage&quot;</span><span class="p">,</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -167,7 +169,7 @@ demopackage    </h1>
     </div>
     <a class="headerlink" href="#B"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="B-8"><a href="#B-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">B</span><span class="p">:</span>
-</span><span id="B-9"><a href="#B-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in .child_b.&quot;&quot;&quot;</span>
+</span><span id="B-9"><a href="#B-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in .child_b. It has a B.b method.&quot;&quot;&quot;</span>
 </span><span id="B-10"><a href="#B-10"><span class="linenos">10</span></a>
 </span><span id="B-11"><a href="#B-11"><span class="linenos">11</span></a>    <span class="n">b_type</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">B</span><span class="p">]</span>
 </span><span id="B-12"><a href="#B-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;we have a self-referential attribute here&quot;&quot;&quot;</span>
@@ -177,13 +179,13 @@ demopackage    </h1>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This class is defined in .child_b.</p>
+            <div class="docstring"><p>This class is defined in <a href="demopackage/child_b.html">demopackage.child_b</a>. It has a <a href="#B.b">B.b</a> method.</p>
 </div>
 
 
                             <div id="B.b_type" class="classattr">
                                 <div class="attr variable">
-            <span class="name">b_type</span><span class="annotation">: Type[<a href="#B">demopackage.B</a>]</span>
+            <span class="name">b_type</span><span class="annotation">: Type[<a href="#B">B</a>]</span>
 
         
     </div>
@@ -233,7 +235,7 @@ demopackage    </h1>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This class is defined in .child_c and inherits from .child_b.B</p>
+            <div class="docstring"><p>This class is defined in <a href="demopackage/child_c.html">demopackage.child_c</a> and inherits from <a href="#B">B</a></p>
 </div>
 
 

@@ -1,4 +1,4 @@
-"""A test package"""
+"""A test package with a sub-package at `.subpackage`."""
 import demopackage2
 
 from . import _child_e
@@ -19,4 +19,5 @@ __all__ = [
     "demopackage2",
     "_child_e",
     "child_excluded",
+    "subpackage",
 ]

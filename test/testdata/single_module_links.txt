@@ -1,0 +1,3 @@
+<module single_module_links
+    <function def abc(): ...  # Test that submodules…>
+>
