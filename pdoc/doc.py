@@ -1106,6 +1106,23 @@ class Variable(Doc[None]):
         if self.default_value is empty:
             return ""
 
+        # This is not perfect, but a solid attempt at preventing accidental leakage of secrets.
+        # If you have input on how to improve the heuristic, please send a pull request!
+        value_taken_from_env_var = (
+            isinstance(self.default_value, str)
+            and len(self.default_value) >= 8
+            and self.default_value in _environ_lookup()
+        )
+        if value_taken_from_env_var and not os.environ.get("PDOC_DISPLAY_ENV_VARS", ""):
+            env_var = "$" + _environ_lookup()[self.default_value]
+            warnings.warn(
+                f"The default value of {self.fullname} matches the {env_var} environment variable. "
+                f"To prevent accidental leakage of secrets, the default value is not displayed. "
+                f"Disable this behavior by setting PDOC_DISPLAY_ENV_VARS=1 as an environment variable.",
+                RuntimeWarning
+            )
+            return env_var
+
         try:
             pretty = repr(self.default_value)
         except Exception as e:
@@ -1122,6 +1139,17 @@ class Variable(Doc[None]):
             return f": {formatannotation(self.annotation)}"
         else:
             return ""
+
+
+@cache
+def _environ_lookup():
+    """
+    A reverse lookup of os.environ. This is a cached function so that it is evaluated lazily.
+    """
+    return {
+        value: key
+        for key, value in os.environ.items()
+    }
 
 
 class _PrettySignature(inspect.Signature):
