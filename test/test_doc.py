@@ -11,6 +11,7 @@ from pdoc import extract
 from pdoc.doc import Class
 from pdoc.doc import Module
 from pdoc.doc import Variable
+from pdoc.doc import _environ_lookup
 from pdoc.doc_types import empty
 
 here = Path(__file__).parent
@@ -143,3 +144,34 @@ def test_raising_submodules():
             assert m.submodules
     finally:
         f.write_bytes(b"# syntax error will be inserted by test here\n")
+
+
+def test_default_value_masks_env_vars(monkeypatch):
+    monkeypatch.setenv("SUPER_SECRET_TOKEN", "correct horse battery staple")
+    monkeypatch.setenv("VERSION_NUMBER", "42.0.1")
+    _environ_lookup.cache_clear()
+    try:
+        v1 = Variable(
+            "module",
+            "var",
+            taken_from=("module", "var"),
+            docstring="",
+            annotation=empty,
+            default_value="correct horse battery staple",
+        )
+        with pytest.warns(
+            match=r"The default value of module.var matches the \$SUPER_SECRET_TOKEN environment variable."
+        ):
+            assert v1.default_value_str == "$SUPER_SECRET_TOKEN"
+
+        v2 = Variable(
+            "module",
+            "version",
+            taken_from=("module", "version"),
+            docstring="",
+            annotation=empty,
+            default_value="42.0.1",
+        )
+        assert v2.default_value_str == "'42.0.1'"
+    finally:
+        _environ_lookup.cache_clear()
