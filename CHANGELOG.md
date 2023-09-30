@@ -5,6 +5,7 @@
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
  - Add support for `code-block` ReST directives
+   ([#624](https://github.com/mitmproxy/pdoc/pull/624), @JCGoran)
  - If a variable's value meets certain entropy criteria and matches an environment variable value,
    pdoc will now emit a warning and display the variable's name as a placeholder instead.
    This heuristic is meant to prevent accidental leakage of environment secrets and can be disabled by setting
