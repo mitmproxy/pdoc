@@ -8,7 +8,7 @@ attrs==23.1.0
     # via
     #   hypothesis
     #   pytest
-black==23.7.0
+black==23.9.1
     # via pdoc (pyproject.toml)
 cachetools==5.3.1
     # via tox
@@ -18,15 +18,15 @@ click==8.1.7
     # via black
 colorama==0.4.6
     # via tox
-coverage[toml]==7.3.0
+coverage[toml]==7.3.1
     # via pytest-cov
 distlib==0.3.7
     # via virtualenv
-filelock==3.12.3
+filelock==3.12.4
     # via
     #   tox
     #   virtualenv
-hypothesis==6.83.0
+hypothesis==6.87.1
     # via pdoc (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
@@ -63,7 +63,7 @@ pygments==2.16.1
     # via pdoc (pyproject.toml)
 pyproject-api==1.6.1
     # via tox
-pytest==7.4.0
+pytest==7.4.2
     # via
     #   pdoc (pyproject.toml)
     #   pytest-cov
@@ -72,11 +72,11 @@ pytest-cov==4.1.0
     # via pdoc (pyproject.toml)
 pytest-timeout==2.1.0
     # via pdoc (pyproject.toml)
-ruff==0.0.286
+ruff==0.0.291
     # via pdoc (pyproject.toml)
 sortedcontainers==2.4.0
     # via hypothesis
-tox==4.11.0
+tox==4.11.3
     # via pdoc (pyproject.toml)
 types-docutils==0.20.0.3
     # via
@@ -84,9 +84,9 @@ types-docutils==0.20.0.3
     #   types-setuptools
 types-pygments==2.16.0.0
     # via pdoc (pyproject.toml)
-types-setuptools==68.1.0.1
+types-setuptools==68.2.0.0
     # via types-pygments
-typing-extensions==4.7.1
+typing-extensions==4.8.0
     # via mypy
-virtualenv==20.24.4
+virtualenv==20.24.5
     # via tox
