@@ -112,7 +112,7 @@ renderopts.add_argument(
     "--search",
     action=BooleanOptionalAction,
     default=True,
-    help="Enable search functionality.",
+    help="Enable search functionality if multiple modules are documented.",
 )
 renderopts.add_argument(
     "--show-source",
