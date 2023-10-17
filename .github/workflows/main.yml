@@ -26,13 +26,13 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.12.0-rc.1 - 3.12.0
+            py: 3.12.0
             args: --cov-fail-under=100
           - os: macos-latest
-            py: 3.12.0-rc.1 - 3.12.0
+            py: 3.12.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.12.0-rc.1 - 3.12.0
+            py: 3.12.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
             py: 3.11.5
