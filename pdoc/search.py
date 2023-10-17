@@ -5,6 +5,11 @@ and works without any third-party services in a privacy-preserving way. When a u
 search box for the first time, pdoc will fetch the search index (`search.js`) and use that to
 answer all upcoming queries.
 
+##### Single-Page Documentation
+
+If pdoc is documenting a single module only, search functionality will be disabled.
+The browser's built-in search functionality will provide a better user experience in these cases.
+
 ##### Search Coverage
 
 The search functionality covers all documented elements and their docstrings.
