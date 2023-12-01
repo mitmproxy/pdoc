@@ -145,6 +145,7 @@ snapshots = [
         min_version=(3, 12),
     ),
     Snapshot("math_demo", render_options={"math": True}),
+    Snapshot("math_misc", render_options={"math": True}),
     Snapshot("mermaid_demo", render_options={"mermaid": True}, min_version=(3, 9)),
     Snapshot(
         "render_options",

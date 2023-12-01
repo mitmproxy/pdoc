@@ -1,0 +1,3 @@
+<module math_misc
+    <function def test_stars(): ...  # Markdown emphasis to…>
+>
