@@ -1,3 +1,6 @@
-<module math_misc
+<module math_misc  # Markdown should igno…
     <function def test_stars(): ...  # Markdown emphasis to…>
+    <function def test_math_newline(): ...  # Markdown should not …>
+    <function def test_markdown_newline(): ...  # Markdown newlines (`…>
+    <function def test_macros(): ...  # Markdown should not …>
 >

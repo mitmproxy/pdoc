@@ -48,6 +48,15 @@
             <li>
                     <a class="function" href="#test_stars">test_stars</a>
             </li>
+            <li>
+                    <a class="function" href="#test_math_newline">test_math_newline</a>
+            </li>
+            <li>
+                    <a class="function" href="#test_markdown_newline">test_markdown_newline</a>
+            </li>
+            <li>
+                    <a class="function" href="#test_macros">test_macros</a>
+            </li>
     </ul>
 
 
@@ -64,34 +73,96 @@
                     <h1 class="modulename">
 math_misc    </h1>
 
-                
+                        <div class="docstring"><p>Markdown should ignore tokens within inline <code>$...$</code> and displaymath <code>$$...$$</code>.
+<a href="https://github.com/mitmproxy/pdoc/issues/639">https://github.com/mitmproxy/pdoc/issues/639</a></p>
+</div>
+
                         <input id="mod-math_misc-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-math_misc-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="k">def</span> <span class="nf">test_stars</span><span class="p">():</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">    Markdown emphasis tokens (*) should be rendered correctly.</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">    https://github.com/mitmproxy/pdoc/issues/639</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Markdown should ignore tokens within inline `$...$` and displaymath `$$...$$`.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">https://github.com/mitmproxy/pdoc/issues/639</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">    Currently broken:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    $$</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    \begin{align*}</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">         &amp;= x \cdot x</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    \end{align*}</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    $$</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    Workaround:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    $$</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">    \begin{align\*}</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">         &amp;= x \cdot x</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    \end{align\*}</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    $$</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">def</span> <span class="nf">test_stars</span><span class="p">():</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    Markdown emphasis tokens (`*`) should not be captured in math mode.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    Currently broken: $*xyz*$</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    Workaround (escaping `*`): $\*xyz\*$</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    Workaround (extra whitespace): $* xyz *$</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">def</span> <span class="nf">test_math_newline</span><span class="p">():</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    Markdown should not consume double backslashes (math newlines) in math mode.</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    Currently broken:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    $$</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    \begin{align\*}</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">         &amp;= x \cdot x</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    \end{align\*}</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    $$</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Workaround (escaping `\\`):</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    $$</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    \begin{align\*}</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    f(x) &amp;= x^2\\\\</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">         &amp;= x \cdot x</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    \end{align\*}</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    $$</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="k">def</span> <span class="nf">test_markdown_newline</span><span class="p">():</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    Markdown newlines (`\n\n`) should not emit a paragraph break in math mode.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    </span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    Currently broken:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">    $$</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    x + y</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">    = z</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">    $$</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">    Workaround (no empty lines in math mode):</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    $$</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    x + y</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    % comment</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    = z</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">    $$</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="k">def</span> <span class="nf">test_macros</span><span class="p">():</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    Markdown should not capture headings (`#`) in math mode.</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">    Currently broken:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">    $$</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">    \newcommand{\define}[2]</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">    {</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">    #1 \quad \text{#2}</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">    }</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">    \define{e^{i\pi}+1=0}{Euler&#39;s identity}</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">    $$</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">    Workaround (no lines with leading `#`):</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    $$</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">    \newcommand{\define}[2]{#1 \quad \text{#2}}</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">    \define{e^{i\pi}+1=0}{Euler&#39;s identity}</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">    $$</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -107,51 +178,198 @@ math_misc    </h1>
 
     </div>
     <a class="headerlink" href="#test_stars"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="test_stars-2"><a href="#test_stars-2"><span class="linenos"> 2</span></a><span class="k">def</span> <span class="nf">test_stars</span><span class="p">():</span>
-</span><span id="test_stars-3"><a href="#test_stars-3"><span class="linenos"> 3</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="test_stars-4"><a href="#test_stars-4"><span class="linenos"> 4</span></a><span class="sd">    Markdown emphasis tokens (*) should be rendered correctly.</span>
-</span><span id="test_stars-5"><a href="#test_stars-5"><span class="linenos"> 5</span></a><span class="sd">    https://github.com/mitmproxy/pdoc/issues/639</span>
-</span><span id="test_stars-6"><a href="#test_stars-6"><span class="linenos"> 6</span></a>
-</span><span id="test_stars-7"><a href="#test_stars-7"><span class="linenos"> 7</span></a><span class="sd">    Currently broken:</span>
-</span><span id="test_stars-8"><a href="#test_stars-8"><span class="linenos"> 8</span></a>
-</span><span id="test_stars-9"><a href="#test_stars-9"><span class="linenos"> 9</span></a><span class="sd">    $$</span>
-</span><span id="test_stars-10"><a href="#test_stars-10"><span class="linenos">10</span></a><span class="sd">    \begin{align*}</span>
-</span><span id="test_stars-11"><a href="#test_stars-11"><span class="linenos">11</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
-</span><span id="test_stars-12"><a href="#test_stars-12"><span class="linenos">12</span></a><span class="sd">         &amp;= x \cdot x</span>
-</span><span id="test_stars-13"><a href="#test_stars-13"><span class="linenos">13</span></a><span class="sd">    \end{align*}</span>
-</span><span id="test_stars-14"><a href="#test_stars-14"><span class="linenos">14</span></a><span class="sd">    $$</span>
-</span><span id="test_stars-15"><a href="#test_stars-15"><span class="linenos">15</span></a>
-</span><span id="test_stars-16"><a href="#test_stars-16"><span class="linenos">16</span></a><span class="sd">    Workaround:</span>
-</span><span id="test_stars-17"><a href="#test_stars-17"><span class="linenos">17</span></a>
-</span><span id="test_stars-18"><a href="#test_stars-18"><span class="linenos">18</span></a><span class="sd">    $$</span>
-</span><span id="test_stars-19"><a href="#test_stars-19"><span class="linenos">19</span></a><span class="sd">    \begin{align\*}</span>
-</span><span id="test_stars-20"><a href="#test_stars-20"><span class="linenos">20</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
-</span><span id="test_stars-21"><a href="#test_stars-21"><span class="linenos">21</span></a><span class="sd">         &amp;= x \cdot x</span>
-</span><span id="test_stars-22"><a href="#test_stars-22"><span class="linenos">22</span></a><span class="sd">    \end{align\*}</span>
-</span><span id="test_stars-23"><a href="#test_stars-23"><span class="linenos">23</span></a><span class="sd">    $$</span>
-</span><span id="test_stars-24"><a href="#test_stars-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="test_stars-7"><a href="#test_stars-7"><span class="linenos"> 7</span></a><span class="k">def</span> <span class="nf">test_stars</span><span class="p">():</span>
+</span><span id="test_stars-8"><a href="#test_stars-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="test_stars-9"><a href="#test_stars-9"><span class="linenos"> 9</span></a><span class="sd">    Markdown emphasis tokens (`*`) should not be captured in math mode.</span>
+</span><span id="test_stars-10"><a href="#test_stars-10"><span class="linenos">10</span></a>
+</span><span id="test_stars-11"><a href="#test_stars-11"><span class="linenos">11</span></a><span class="sd">    Currently broken: $*xyz*$</span>
+</span><span id="test_stars-12"><a href="#test_stars-12"><span class="linenos">12</span></a>
+</span><span id="test_stars-13"><a href="#test_stars-13"><span class="linenos">13</span></a><span class="sd">    Workaround (escaping `*`): $\*xyz\*$</span>
+</span><span id="test_stars-14"><a href="#test_stars-14"><span class="linenos">14</span></a>
+</span><span id="test_stars-15"><a href="#test_stars-15"><span class="linenos">15</span></a><span class="sd">    Workaround (extra whitespace): $* xyz *$</span>
+</span><span id="test_stars-16"><a href="#test_stars-16"><span class="linenos">16</span></a>
+</span><span id="test_stars-17"><a href="#test_stars-17"><span class="linenos">17</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Markdown emphasis tokens (*) should be rendered correctly.
-<a href="https://github.com/mitmproxy/pdoc/issues/639">https://github.com/mitmproxy/pdoc/issues/639</a></p>
+            <div class="docstring"><p>Markdown emphasis tokens (<code>*</code>) should not be captured in math mode.</p>
+
+<p>Currently broken: $<em>xyz</em>$</p>
+
+<p>Workaround (escaping <code>*</code>): $*xyz*$</p>
+
+<p>Workaround (extra whitespace): $* xyz *$</p>
+</div>
+
+
+                </section>
+                <section id="test_math_newline">
+                            <input id="test_math_newline-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">test_math_newline</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="test_math_newline-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#test_math_newline"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="test_math_newline-19"><a href="#test_math_newline-19"><span class="linenos">19</span></a><span class="k">def</span> <span class="nf">test_math_newline</span><span class="p">():</span>
+</span><span id="test_math_newline-20"><a href="#test_math_newline-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="test_math_newline-21"><a href="#test_math_newline-21"><span class="linenos">21</span></a><span class="sd">    Markdown should not consume double backslashes (math newlines) in math mode.</span>
+</span><span id="test_math_newline-22"><a href="#test_math_newline-22"><span class="linenos">22</span></a>
+</span><span id="test_math_newline-23"><a href="#test_math_newline-23"><span class="linenos">23</span></a><span class="sd">    Currently broken:</span>
+</span><span id="test_math_newline-24"><a href="#test_math_newline-24"><span class="linenos">24</span></a>
+</span><span id="test_math_newline-25"><a href="#test_math_newline-25"><span class="linenos">25</span></a><span class="sd">    $$</span>
+</span><span id="test_math_newline-26"><a href="#test_math_newline-26"><span class="linenos">26</span></a><span class="sd">    \begin{align\*}</span>
+</span><span id="test_math_newline-27"><a href="#test_math_newline-27"><span class="linenos">27</span></a><span class="sd">    f(x) &amp;= x^2\\</span>
+</span><span id="test_math_newline-28"><a href="#test_math_newline-28"><span class="linenos">28</span></a><span class="sd">         &amp;= x \cdot x</span>
+</span><span id="test_math_newline-29"><a href="#test_math_newline-29"><span class="linenos">29</span></a><span class="sd">    \end{align\*}</span>
+</span><span id="test_math_newline-30"><a href="#test_math_newline-30"><span class="linenos">30</span></a><span class="sd">    $$</span>
+</span><span id="test_math_newline-31"><a href="#test_math_newline-31"><span class="linenos">31</span></a>
+</span><span id="test_math_newline-32"><a href="#test_math_newline-32"><span class="linenos">32</span></a><span class="sd">    Workaround (escaping `\\`):</span>
+</span><span id="test_math_newline-33"><a href="#test_math_newline-33"><span class="linenos">33</span></a>
+</span><span id="test_math_newline-34"><a href="#test_math_newline-34"><span class="linenos">34</span></a><span class="sd">    $$</span>
+</span><span id="test_math_newline-35"><a href="#test_math_newline-35"><span class="linenos">35</span></a><span class="sd">    \begin{align\*}</span>
+</span><span id="test_math_newline-36"><a href="#test_math_newline-36"><span class="linenos">36</span></a><span class="sd">    f(x) &amp;= x^2\\\\</span>
+</span><span id="test_math_newline-37"><a href="#test_math_newline-37"><span class="linenos">37</span></a><span class="sd">         &amp;= x \cdot x</span>
+</span><span id="test_math_newline-38"><a href="#test_math_newline-38"><span class="linenos">38</span></a><span class="sd">    \end{align\*}</span>
+</span><span id="test_math_newline-39"><a href="#test_math_newline-39"><span class="linenos">39</span></a><span class="sd">    $$</span>
+</span><span id="test_math_newline-40"><a href="#test_math_newline-40"><span class="linenos">40</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Markdown should not consume double backslashes (math newlines) in math mode.</p>
 
 <p>Currently broken:</p>
-
-<p>$$
-\begin{align<em>}
-f(x) &amp;= x^2\
-     &amp;= x \cdot x
-\end{align</em>}
-$$</p>
-
-<p>Workaround:</p>
 
 <p>$$
 \begin{align*}
 f(x) &amp;= x^2\
      &amp;= x \cdot x
 \end{align*}
+$$</p>
+
+<p>Workaround (escaping <code>\\</code>):</p>
+
+<p>$$
+\begin{align*}
+f(x) &amp;= x^2\\
+     &amp;= x \cdot x
+\end{align*}
+$$</p>
+</div>
+
+
+                </section>
+                <section id="test_markdown_newline">
+                            <input id="test_markdown_newline-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">test_markdown_newline</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="test_markdown_newline-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#test_markdown_newline"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="test_markdown_newline-42"><a href="#test_markdown_newline-42"><span class="linenos">42</span></a><span class="k">def</span> <span class="nf">test_markdown_newline</span><span class="p">():</span>
+</span><span id="test_markdown_newline-43"><a href="#test_markdown_newline-43"><span class="linenos">43</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="test_markdown_newline-44"><a href="#test_markdown_newline-44"><span class="linenos">44</span></a><span class="sd">    Markdown newlines (`\n\n`) should not emit a paragraph break in math mode.</span>
+</span><span id="test_markdown_newline-45"><a href="#test_markdown_newline-45"><span class="linenos">45</span></a><span class="sd">    </span>
+</span><span id="test_markdown_newline-46"><a href="#test_markdown_newline-46"><span class="linenos">46</span></a><span class="sd">    Currently broken:</span>
+</span><span id="test_markdown_newline-47"><a href="#test_markdown_newline-47"><span class="linenos">47</span></a>
+</span><span id="test_markdown_newline-48"><a href="#test_markdown_newline-48"><span class="linenos">48</span></a><span class="sd">    $$</span>
+</span><span id="test_markdown_newline-49"><a href="#test_markdown_newline-49"><span class="linenos">49</span></a><span class="sd">    x + y</span>
+</span><span id="test_markdown_newline-50"><a href="#test_markdown_newline-50"><span class="linenos">50</span></a>
+</span><span id="test_markdown_newline-51"><a href="#test_markdown_newline-51"><span class="linenos">51</span></a><span class="sd">    = z</span>
+</span><span id="test_markdown_newline-52"><a href="#test_markdown_newline-52"><span class="linenos">52</span></a><span class="sd">    $$</span>
+</span><span id="test_markdown_newline-53"><a href="#test_markdown_newline-53"><span class="linenos">53</span></a>
+</span><span id="test_markdown_newline-54"><a href="#test_markdown_newline-54"><span class="linenos">54</span></a><span class="sd">    Workaround (no empty lines in math mode):</span>
+</span><span id="test_markdown_newline-55"><a href="#test_markdown_newline-55"><span class="linenos">55</span></a>
+</span><span id="test_markdown_newline-56"><a href="#test_markdown_newline-56"><span class="linenos">56</span></a><span class="sd">    $$</span>
+</span><span id="test_markdown_newline-57"><a href="#test_markdown_newline-57"><span class="linenos">57</span></a><span class="sd">    x + y</span>
+</span><span id="test_markdown_newline-58"><a href="#test_markdown_newline-58"><span class="linenos">58</span></a><span class="sd">    % comment</span>
+</span><span id="test_markdown_newline-59"><a href="#test_markdown_newline-59"><span class="linenos">59</span></a><span class="sd">    = z</span>
+</span><span id="test_markdown_newline-60"><a href="#test_markdown_newline-60"><span class="linenos">60</span></a><span class="sd">    $$</span>
+</span><span id="test_markdown_newline-61"><a href="#test_markdown_newline-61"><span class="linenos">61</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Markdown newlines (<code>\n\n</code>) should not emit a paragraph break in math mode.</p>
+
+<p>Currently broken:</p>
+
+<p>$$
+x + y</p>
+
+<p>= z
+$$</p>
+
+<p>Workaround (no empty lines in math mode):</p>
+
+<p>$$
+x + y
+% comment
+= z
+$$</p>
+</div>
+
+
+                </section>
+                <section id="test_macros">
+                            <input id="test_macros-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">test_macros</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="test_macros-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#test_macros"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="test_macros-63"><a href="#test_macros-63"><span class="linenos">63</span></a><span class="k">def</span> <span class="nf">test_macros</span><span class="p">():</span>
+</span><span id="test_macros-64"><a href="#test_macros-64"><span class="linenos">64</span></a><span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="test_macros-65"><a href="#test_macros-65"><span class="linenos">65</span></a><span class="sd">    Markdown should not capture headings (`#`) in math mode.</span>
+</span><span id="test_macros-66"><a href="#test_macros-66"><span class="linenos">66</span></a><span class="sd">    Currently broken:</span>
+</span><span id="test_macros-67"><a href="#test_macros-67"><span class="linenos">67</span></a>
+</span><span id="test_macros-68"><a href="#test_macros-68"><span class="linenos">68</span></a><span class="sd">    $$</span>
+</span><span id="test_macros-69"><a href="#test_macros-69"><span class="linenos">69</span></a><span class="sd">    \newcommand{\define}[2]</span>
+</span><span id="test_macros-70"><a href="#test_macros-70"><span class="linenos">70</span></a><span class="sd">    {</span>
+</span><span id="test_macros-71"><a href="#test_macros-71"><span class="linenos">71</span></a><span class="sd">    #1 \quad \text{#2}</span>
+</span><span id="test_macros-72"><a href="#test_macros-72"><span class="linenos">72</span></a><span class="sd">    }</span>
+</span><span id="test_macros-73"><a href="#test_macros-73"><span class="linenos">73</span></a><span class="sd">    \define{e^{i\pi}+1=0}{Euler&#39;s identity}</span>
+</span><span id="test_macros-74"><a href="#test_macros-74"><span class="linenos">74</span></a><span class="sd">    $$</span>
+</span><span id="test_macros-75"><a href="#test_macros-75"><span class="linenos">75</span></a>
+</span><span id="test_macros-76"><a href="#test_macros-76"><span class="linenos">76</span></a>
+</span><span id="test_macros-77"><a href="#test_macros-77"><span class="linenos">77</span></a><span class="sd">    Workaround (no lines with leading `#`):</span>
+</span><span id="test_macros-78"><a href="#test_macros-78"><span class="linenos">78</span></a>
+</span><span id="test_macros-79"><a href="#test_macros-79"><span class="linenos">79</span></a><span class="sd">    $$</span>
+</span><span id="test_macros-80"><a href="#test_macros-80"><span class="linenos">80</span></a><span class="sd">    \newcommand{\define}[2]{#1 \quad \text{#2}}</span>
+</span><span id="test_macros-81"><a href="#test_macros-81"><span class="linenos">81</span></a><span class="sd">    \define{e^{i\pi}+1=0}{Euler&#39;s identity}</span>
+</span><span id="test_macros-82"><a href="#test_macros-82"><span class="linenos">82</span></a><span class="sd">    $$</span>
+</span><span id="test_macros-83"><a href="#test_macros-83"><span class="linenos">83</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Markdown should not capture headings (<code>#</code>) in math mode.
+Currently broken:</p>
+
+<p>$$
+\newcommand{\define}[2]
+{</p>
+
+<h1 id="1-quad-text2">1 \quad \text{#2}</h1>
+
+<p>}
+\define{e^{i\pi}+1=0}{Euler's identity}
+$$</p>
+
+<p>Workaround (no lines with leading <code>#</code>):</p>
+
+<p>$$
+\newcommand{\define}[2]{#1 \quad \text{#2}}
+\define{e^{i\pi}+1=0}{Euler's identity}
 $$</p>
 </div>
 
