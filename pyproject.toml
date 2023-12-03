@@ -52,6 +52,7 @@ dev = [
     "pytest-timeout",
     "hypothesis",
     "pygments >= 2.14.0",
+    "pdoc-pyo3-sample-library==1.0.11",
 ]
 
 [build-system]

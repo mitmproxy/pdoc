@@ -28,7 +28,6 @@ from functools import wraps
 import inspect
 import os
 from pathlib import Path
-import pkgutil
 import re
 import sys
 import textwrap
@@ -454,9 +453,6 @@ class Module(Namespace[types.ModuleType]):
     @cached_property
     def submodules(self) -> list[Module]:
         """A list of all (direct) submodules."""
-        if not self.is_package:
-            return []
-
         include: Callable[[str], bool]
         mod_all = _safe_getattr(self.obj, "__all__", False)
         if mod_all is not False:
@@ -471,9 +467,8 @@ class Module(Namespace[types.ModuleType]):
                 # (think of OS-specific modules, e.g. _linux.py failing to import on Windows).
                 return not name.startswith("_")
 
-        submodules = []
-        for mod in pkgutil.iter_modules(self.obj.__path__, f"{self.fullname}."):
-            _, _, mod_name = mod.name.rpartition(".")
+        submodules: list[Module] = []
+        for mod_name, mod in extract.iter_modules2(self.obj).items():
             if not include(mod_name):
                 continue
             try:
