@@ -1,0 +1,5 @@
+<module dunder  # Example where double…
+    <class dunder.HasDunderMethods
+        <method def __init__(): ...>
+    >
+>

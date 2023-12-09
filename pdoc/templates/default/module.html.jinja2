@@ -234,7 +234,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% defaultmacro is_public(doc) %}
     {#
     This macro is a bit unconventional in that its output is not rendered, but treated as a boolean:
-    Returning no text is interpreted as false, returning any other text is iterpreted as true.
+    Returning no text is interpreted as false, returning any other text is interpreted as true.
     Implementing this as a macro makes it very easy to override with a custom template, see
     https://github.com/mitmproxy/pdoc/tree/main/examples/custom-template.
     #}
@@ -257,6 +257,9 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% elif not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
         true
+    {% elif include_dunder and doc.docstring %}
+        {# explicitly include documentation for double-underscore methods if available #}
+	true
     {% endif %}
 {% enddefaultmacro %}
 {# fmt: off #}

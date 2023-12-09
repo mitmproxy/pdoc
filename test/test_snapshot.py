@@ -169,6 +169,12 @@ snapshots = [
             "include_undocumented": False,
         },
     ),
+    Snapshot(
+        "dunder",
+        render_options={
+            "include_dunder": True,
+        },
+    ),
 ]
 
 

@@ -34,6 +34,7 @@ def configure(
     docformat: Literal[
         "markdown", "google", "numpy", "restructuredtext"  # noqa: F821
     ] = "restructuredtext",
+    include_dunder: bool = False,
     include_undocumented: bool = True,
     edit_url_map: Mapping[str, str] | None = None,
     favicon: str | None = None,
@@ -77,6 +78,7 @@ def configure(
     env.loader = FileSystemLoader(searchpath)
 
     env.globals["docformat"] = docformat
+    env.globals["include_dunder"] = include_dunder
     env.globals["include_undocumented"] = include_undocumented
     env.globals["edit_url_map"] = edit_url_map or {}
     env.globals["math"] = math

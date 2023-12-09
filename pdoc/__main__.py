@@ -56,6 +56,12 @@ renderopts.add_argument(
     "Markdown and then process everything as Markdown.",
 )
 renderopts.add_argument(
+    "--include-dunder",
+    action=BooleanOptionalAction,
+    default=False,
+    help="Show double-underscore methods that have a docstring.",
+)
+renderopts.add_argument(
     "--include-undocumented",
     action=BooleanOptionalAction,
     default=True,
@@ -182,6 +188,7 @@ def cli(args: list[str] | None = None) -> None:
 
     pdoc.render.configure(
         docformat=opts.docformat,
+        include_dunder=opts.include_dunder,
         include_undocumented=opts.include_undocumented,
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         favicon=opts.favicon,
