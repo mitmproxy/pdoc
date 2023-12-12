@@ -281,6 +281,7 @@ You can include external Markdown files in your documentation by using reStructu
 ```
 
 Since version 11, pdoc processes such reStructuredText elements by default.
+This will process your Markdown file as a Python string, meaning extra backslashes for escape might be required (e.g. linebreaks \\ -> \\\)
 
 
 ## ...add a title page?
