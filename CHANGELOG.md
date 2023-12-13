@@ -8,6 +8,7 @@
    ([#633](https://github.com/mitmproxy/pdoc/issues/633), @mhils)
  - Imports in a TYPE_CHECKING section that reference members defined in another module's TYPE_CHECKING section now work
    correctly.
+   ([#649](https://github.com/mitmproxy/pdoc/pull/649), @mhils)
  - Add support for `code-block` ReST directives
    ([#624](https://github.com/mitmproxy/pdoc/pull/624), @JCGoran)
  - If a variable's value meets certain entropy criteria and matches an environment variable value,
