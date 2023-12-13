@@ -60,6 +60,14 @@ def test_walk_specs():
         "test.mod_with_main.__main__",
     ]
 
+    assert walk_specs(["pdoc_pyo3_sample_library"]) == [
+        "pdoc_pyo3_sample_library",
+        "pdoc_pyo3_sample_library.submodule",
+        "pdoc_pyo3_sample_library.submodule.subsubmodule",
+        "pdoc_pyo3_sample_library.explicit_submodule",
+        "pdoc_pyo3_sample_library.correct_name_submodule",
+    ]
+
 
 def test_parse_spec(monkeypatch):
     p = sys.path

@@ -1,0 +1,1 @@
+<module pdoc_pyo3_sample_library  # This is a PyO3 demo …>

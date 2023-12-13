@@ -29,14 +29,14 @@ class Snapshot:
     def __init__(
         self,
         id: str,
-        filenames: list[str] | None = None,
+        specs: list[str] | None = None,
         render_options: dict | None = None,
         with_output_directory: bool = False,
         min_version: tuple[int, int] = (3, 7),
         warnings: list[str] | None = None,
     ):
         self.id = id
-        self.specs = filenames or [f"{id}.py"]
+        self.specs = specs or [f"{id}.py"]
         self.render_options = render_options or {}
         self.with_output_directory = with_output_directory
         self.min_version = min_version
@@ -160,6 +160,7 @@ snapshots = [
         },
         with_output_directory=True,
     ),
+    Snapshot("pyo3_sample_library", specs=["pdoc_pyo3_sample_library"]),
     Snapshot("top_level_reimports", ["top_level_reimports"]),
     Snapshot("type_checking_imports"),
     Snapshot("type_stub", min_version=(3, 10)),

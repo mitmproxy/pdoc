@@ -229,22 +229,71 @@ but we don't want to catch a user's KeyboardInterrupt.
 """
 
 
+def iter_modules2(module: types.ModuleType) -> dict[str, pkgutil.ModuleInfo]:
+    """
+    Returns all direct child modules of a given module.
+    This function is similar to `pkgutil.iter_modules`, but
+
+      1. Respects a package's `__all__` attribute if specified.
+         If `__all__` is defined, submodules not listed in `__all__` are excluded.
+      2. It will try to detect submodules that are not findable with iter_modules,
+         but are present in the module object.
+    """
+    mod_all = getattr(module, "__all__", None)
+
+    submodules = {}
+
+    for submodule in pkgutil.iter_modules(
+        getattr(module, "__path__", []), f"{module.__name__}."
+    ):
+        name = submodule.name.rpartition(".")[2]
+        if mod_all is None or name in mod_all:
+            submodules[name] = submodule
+
+    # 2023-12: PyO3 and pybind11 submodules are not detected by pkgutil
+    # This is a hacky workaround to register them.
+    members = dir(module) if mod_all is None else mod_all
+    for name in members:
+        if name in submodules or name == "__main__":
+            continue
+        member = getattr(module, name, None)
+        is_wild_child_module = (
+            isinstance(member, types.ModuleType)
+            # the name is either just "bar", but can also be "foo.bar",
+            # see https://github.com/PyO3/pyo3/issues/759#issuecomment-1811992321
+            and (
+                member.__name__ == f"{module.__name__}.{name}"
+                or (
+                    member.__name__ == name
+                    and sys.modules.get(member.__name__, None) is not member
+                )
+            )
+        )
+        if is_wild_child_module:
+            # fixup the module name so that the rest of pdoc does not break
+            assert member
+            member.__name__ = f"{module.__name__}.{name}"
+            sys.modules[f"{module.__name__}.{name}"] = member
+            submodules[name] = pkgutil.ModuleInfo(
+                None,  # type: ignore
+                name=f"{module.__name__}.{name}",
+                ispkg=True,
+            )
+
+    submodules.pop("__main__", None)  # https://github.com/mitmproxy/pdoc/issues/438
+
+    return submodules
+
+
 def walk_packages2(
     modules: Iterable[pkgutil.ModuleInfo],
 ) -> Iterator[pkgutil.ModuleInfo]:
     """
     For a given list of modules, recursively yield their names and all their submodules' names.
 
-    This function is similar to `pkgutil.walk_packages`, but respects a package's `__all__` attribute if specified.
-    If `__all__` is defined, submodules not listed in `__all__` are excluded.
+    This function is similar to `pkgutil.walk_packages`, but based on `iter_modules2`.
     """
-
-    # noinspection PyDefaultArgument
-    def seen(p, m={}):  # pragma: no cover
-        if p in m:
-            return True
-        m[p] = True
-
+    # the original walk_packages implementation has a recursion check for path, but that does not seem to be needed?
     for mod in modules:
         yield mod
 
@@ -255,19 +304,8 @@ def walk_packages2(
                 warnings.warn(f"Error loading {mod.name}:\n{traceback.format_exc()}")
                 continue
 
-            mod_all = getattr(module, "__all__", None)
-            # don't traverse path items we've seen before
-            path = [p for p in (getattr(module, "__path__", None) or []) if not seen(p)]
-
-            submodules = []
-            for submodule in pkgutil.iter_modules(path, f"{mod.name}."):
-                name = submodule.name.rpartition(".")[2]
-                if name == "__main__":
-                    continue  # https://github.com/mitmproxy/pdoc/issues/438
-                if mod_all is None or name in mod_all:
-                    submodules.append(submodule)
-
-            yield from walk_packages2(submodules)
+            submodules = iter_modules2(module)
+            yield from walk_packages2(submodules.values())
 
 
 def module_mtime(modulename: str) -> float | None:
