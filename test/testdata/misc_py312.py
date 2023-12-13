@@ -1,11 +1,27 @@
+# mypy: ignore-errors
+# https://github.com/python/mypy/issues/16607
 """
 Testing features that either are 3.12+ only or render slightly different on 3.12.
 """
 from __future__ import annotations
 
+import typing
 from typing import NamedTuple
 from typing import Optional
 from typing import TypedDict
+
+# Testing the new Python 3.12 `type` statement.
+type MyType = int
+"""A custom Python 3.12 type."""
+
+foo: MyType
+"""A custom type instance."""
+
+
+type MyTypeWithoutDocstring = int
+
+MyTypeClassic: typing.TypeAlias = int
+"""A "classic" typing.TypeAlias."""
 
 # Testing a typing.NamedTuple
 # we do not care very much about collections.namedtuple,
