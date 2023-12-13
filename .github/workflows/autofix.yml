@@ -22,7 +22,7 @@ jobs:
       - run: pip install --no-deps -e .
 
       - run: ruff --fix-only .
-      - run: black .
+      - run: ruff format .
 
       - run: git checkout test/testdata/ pdoc/markdown2/
       - run: test/test_snapshot.py

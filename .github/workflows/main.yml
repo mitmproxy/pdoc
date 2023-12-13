@@ -18,7 +18,7 @@ jobs:
   lint:
     uses: mhils/workflows/.github/workflows/python-tox.yml@main
     with:
-      cmd: tox -e lint -- -v ${{ matrix.args }}
+      cmd: tox -e lint
 
   test:
     strategy:

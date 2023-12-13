@@ -204,9 +204,7 @@ def mock_some_common_side_effects():
         "os.startfile", new=_noop, create=True
     ), patch("sys.stdout", new=io.StringIO()), patch(
         "sys.stderr", new=io.StringIO()
-    ), patch(
-        "sys.stdin", new=io.StringIO()
-    ):
+    ), patch("sys.stdin", new=io.StringIO()):
         yield
 
 

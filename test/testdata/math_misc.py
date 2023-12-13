@@ -3,6 +3,7 @@ Markdown should ignore tokens within inline `$...$` and displaymath `$$...$$`.
 https://github.com/mitmproxy/pdoc/issues/639
 """
 
+
 def test_stars():
     r"""
     Markdown emphasis tokens (`*`) should not be captured in math mode.
@@ -14,6 +15,7 @@ def test_stars():
     Workaround (extra whitespace): $* xyz *$
 
     """
+
 
 def test_math_newline():
     r"""
@@ -38,10 +40,11 @@ def test_math_newline():
     $$
     """
 
+
 def test_markdown_newline():
     r"""
     Markdown newlines (`\n\n`) should not emit a paragraph break in math mode.
-    
+
     Currently broken:
 
     $$
@@ -58,6 +61,7 @@ def test_markdown_newline():
     = z
     $$
     """
+
 
 def test_macros():
     r"""
