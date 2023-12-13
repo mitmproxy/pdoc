@@ -16,6 +16,24 @@ else:  # pragma: no cover
     def ast_unparse(t):  # type: ignore
         return _unparse(t).strip("\t\n \"'")
 
+if sys.version_info >= (3, 12):
+    from ast import TypeAlias as ast_TypeAlias
+else:  # pragma: no cover
+    class ast_TypeAlias:
+        pass
+
+if sys.version_info >= (3, 12):
+    from typing import TypeAliasType
+else:  # pragma: no cover
+    class TypeAliasType:
+        """Placeholder class for TypeAliasType"""
+
+if sys.version_info >= (3, 10):
+    from typing import TypeAlias
+else:  # pragma: no cover
+    class TypeAlias:
+        pass
+
 if sys.version_info >= (3, 9):
     from types import GenericAlias
 else:  # pragma: no cover
@@ -108,6 +126,9 @@ else:  # pragma: no cover
 __all__ = [
     "cache",
     "ast_unparse",
+    "ast_TypeAlias",
+    "TypeAliasType",
+    "TypeAlias",
     "GenericAlias",
     "UnionType",
     "removesuffix",

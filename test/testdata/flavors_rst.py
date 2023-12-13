@@ -40,6 +40,9 @@ def admonitions():
     .. versionchanged:: 2.5
        The *spam* parameter.
 
+    .. code-block::
+        This is a code block.
+
     .. deprecated:: 3.1
        Use :func:`spam` instead.
 

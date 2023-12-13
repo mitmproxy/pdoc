@@ -9,6 +9,8 @@
  - Imports in a TYPE_CHECKING section that reference members defined in another module's TYPE_CHECKING section now work
    correctly.
    ([#649](https://github.com/mitmproxy/pdoc/pull/649), @mhils)
+ - pdoc now supports Python 3.12's `type` statements and has improved `TypeAlias` rendering.
+   ([#651](https://github.com/mitmproxy/pdoc/pull/651), @mhils)
  - Add support for `code-block` ReST directives
    ([#624](https://github.com/mitmproxy/pdoc/pull/624), @JCGoran)
  - If a variable's value meets certain entropy criteria and matches an environment variable value,

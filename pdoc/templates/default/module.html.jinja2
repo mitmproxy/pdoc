@@ -177,6 +177,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro variable(var) -%}
+    {%- if var.is_type_alias_type %}<span class="def">type</span> {% endif -%}
     <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
 {% enddefaultmacro %}
 {% defaultmacro submodule(mod) -%}
