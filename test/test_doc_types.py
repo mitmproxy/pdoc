@@ -40,12 +40,7 @@ def test_eval_fail3(monkeypatch):
         UserWarning,
         match="Error parsing type annotation .+ after evaluating TYPE_CHECKING blocks",
     ):
-        assert (
-            safe_eval_type(
-                "FooFn[int]", a.__dict__, None, a, "a"
-            )
-            == "FooFn[int]"
-        )
+        assert safe_eval_type("FooFn[int]", a.__dict__, None, a, "a") == "FooFn[int]"
 
 
 def test_eval_fail_import_nonexistent(monkeypatch):
@@ -64,7 +59,7 @@ def test_eval_union_types_on_old_python(monkeypatch):
     with pytest.warns(
         UserWarning,
         match=r"You are likely attempting to use Python 3.10 syntax \(PEP 604 union types\) "
-              r"with an older Python release.",
+        r"with an older Python release.",
     ):
         # str never implements `|`, so we can use that to trigger the error on newer versions.
         safe_eval_type('"foo" | "bar"', {}, None, None, "example")
