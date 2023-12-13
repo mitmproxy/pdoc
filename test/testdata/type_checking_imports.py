@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typing
 from typing import TYPE_CHECKING
+
 import type_checking_imports2
 
 if typing.TYPE_CHECKING:
@@ -9,6 +10,7 @@ if typing.TYPE_CHECKING:
 
 if TYPE_CHECKING:
     from typing import Dict
+
     from type_checking_imports2 import StrOrInt  # in module cache
     from type_checking_imports4 import StrOrBool  # not in module cache
 
