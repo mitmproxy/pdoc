@@ -125,8 +125,7 @@ def safe_eval_type(
     # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
     if module:
         try:
-            code = compile(type_checking_sections(module), "<string>", "exec")
-            eval(code, globalns, globalns)
+            _eval_type_checking_sections(module, set())
         except Exception as e:
             warnings.warn(
                 f"Failed to run TYPE_CHECKING code while parsing {t} type annotation for {fullname}: {e}"
@@ -149,6 +148,31 @@ def safe_eval_type(
         )
         return t
     return safe_eval_type(t, {mod: val, **globalns}, localns, module, fullname)
+
+
+def _eval_type_checking_sections(module: types.ModuleType, seen: set) -> None:
+    """
+    Evaluate all TYPE_CHECKING sections within a module.
+
+    The added complication here is that TYPE_CHECKING sections may import members from other modules' TYPE_CHECKING
+    sections. So we try to recursively execute those other modules' TYPE_CHECKING sections as well.
+    See https://github.com/mitmproxy/pdoc/issues/648 for a real world example.
+    """
+    if module.__name__ in seen:
+        raise RecursionError(f"Recursion error when importing {module.__name__}.")
+    seen.add(module.__name__)
+
+    code = compile(type_checking_sections(module), "<string>", "exec")
+    while True:
+        try:
+            eval(code, module.__dict__, module.__dict__)
+        except ImportError as e:
+            if mod := sys.modules.get(e.name, None):
+                _eval_type_checking_sections(mod, seen)
+            else:
+                raise
+        else:
+            break
 
 
 def _eval_type(t, globalns, localns, recursive_guard=frozenset()):

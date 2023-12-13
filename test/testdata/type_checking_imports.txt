@@ -1,4 +1,6 @@
 <module type_checking_imports
     <function def foo(a: Sequence[str], b: Dict[str, str]): ...  # A method with TYPE_C…>
     <var var: Sequence[int] = (1, 2, 3)  # A variable with TYPE…>
+    <var imported_from_cached_module: str | int = 42  # A variable with a ty…>
+    <var imported_from_uncached_module: str | bool = True  # A variable with a ty…>
 >

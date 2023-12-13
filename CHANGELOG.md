@@ -6,6 +6,8 @@
 
  - pdoc now documents PyO3 or pybind11 submodules that are not picked up by Python's builtin pkgutil module.
    ([#633](https://github.com/mitmproxy/pdoc/issues/633), @mhils)
+ - Imports in a TYPE_CHECKING section that reference members defined in another module's TYPE_CHECKING section now work
+   correctly.
  - Add support for `code-block` ReST directives
    ([#624](https://github.com/mitmproxy/pdoc/pull/624), @JCGoran)
  - If a variable's value meets certain entropy criteria and matches an environment variable value,
