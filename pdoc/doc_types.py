@@ -124,6 +124,7 @@ def safe_eval_type(
 
     # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
     if module:
+        assert module.__dict__ is globalns
         try:
             _eval_type_checking_sections(module, set())
         except Exception as e:
@@ -147,7 +148,9 @@ def safe_eval_type(
             f"Error parsing type annotation {t} for {fullname}. Import of {mod} failed: {err}"
         )
         return t
-    return safe_eval_type(t, {mod: val, **globalns}, localns, module, fullname)
+    else:
+        globalns[mod] = val
+    return safe_eval_type(t, globalns, localns, module, fullname)
 
 
 def _eval_type_checking_sections(module: types.ModuleType, seen: set) -> None:
@@ -167,7 +170,7 @@ def _eval_type_checking_sections(module: types.ModuleType, seen: set) -> None:
         try:
             eval(code, module.__dict__, module.__dict__)
         except ImportError as e:
-            if mod := sys.modules.get(e.name, None):
+            if e.name is not None and (mod := sys.modules.get(e.name, None)):
                 _eval_type_checking_sections(mod, seen)
             else:
                 raise

@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from typing import TYPE_CHECKING
 
-import type_checking_imports2
+from . import cached_submodule
 
 if typing.TYPE_CHECKING:
     from typing import Sequence
@@ -11,10 +11,10 @@ if typing.TYPE_CHECKING:
 if TYPE_CHECKING:
     from typing import Dict
 
-    from type_checking_imports2 import StrOrInt  # in module cache
-    from type_checking_imports4 import StrOrBool  # not in module cache
+    from .cached_submodule import StrOrInt
+    from .uncached_submodule import StrOrBool
 
-assert type_checking_imports2
+assert cached_submodule
 
 
 def foo(a: Sequence[str], b: Dict[str, str]):

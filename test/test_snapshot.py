@@ -162,7 +162,7 @@ snapshots = [
     ),
     Snapshot("pyo3_sample_library", specs=["pdoc_pyo3_sample_library"]),
     Snapshot("top_level_reimports", ["top_level_reimports"]),
-    Snapshot("type_checking_imports"),
+    Snapshot("type_checking_imports", ["type_checking_imports.main"]),
     Snapshot("type_stub", min_version=(3, 10)),
     Snapshot(
         "visibility",
