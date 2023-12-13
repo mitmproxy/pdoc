@@ -44,14 +44,15 @@ import warnings
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
+from pdoc._compat import TypeAlias
+from pdoc._compat import TypeAliasType
+from pdoc._compat import cache
+from pdoc._compat import formatannotation
 from pdoc.doc_types import GenericAlias
 from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty
 from pdoc.doc_types import resolve_annotations
 from pdoc.doc_types import safe_eval_type
-
-from ._compat import cache
-from ._compat import formatannotation
 
 
 def _include_fullname_in_traceback(f):
@@ -1090,6 +1091,11 @@ class Variable(Doc[None]):
             return False
 
     @cached_property
+    def is_type_alias_type(self) -> bool:
+        """`True` if the variable is a `typing.TypeAliasType`, `False` otherwise."""
+        return isinstance(self.default_value, TypeAliasType)
+
+    @cached_property
     def is_enum_member(self) -> bool:
         """`True` if the variable is an enum member, `False` otherwise."""
         if isinstance(self.default_value, enum.Enum):
@@ -1102,6 +1108,10 @@ class Variable(Doc[None]):
         """The variable's default value as a pretty-printed str."""
         if self.default_value is empty:
             return ""
+        if isinstance(self.default_value, TypeAliasType):
+            return formatannotation(self.default_value.__value__)
+        elif self.annotation == TypeAlias:
+            return formatannotation(self.default_value)
 
         # This is not perfect, but a solid attempt at preventing accidental leakage of secrets.
         # If you have input on how to improve the heuristic, please send a pull request!

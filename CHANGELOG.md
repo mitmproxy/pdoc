@@ -6,6 +6,8 @@
 
  - pdoc now documents PyO3 or pybind11 submodules that are not picked up by Python's builtin pkgutil module.
    ([#633](https://github.com/mitmproxy/pdoc/issues/633), @mhils)
+ - pdoc now supports Python 3.12's `type` statements and has improved `TypeAlias` rendering.
+   ([#651](https://github.com/mitmproxy/pdoc/pull/651), @mhils)
  - Add support for `code-block` ReST directives
    ([#624](https://github.com/mitmproxy/pdoc/pull/624), @JCGoran)
  - If a variable's value meets certain entropy criteria and matches an environment variable value,

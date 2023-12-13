@@ -21,6 +21,7 @@ import warnings
 
 import pdoc
 
+from ._compat import ast_TypeAlias
 from ._compat import ast_unparse
 from ._compat import cache
 
@@ -115,7 +116,11 @@ def _walk_tree(
     func_docstrings = {}
     annotations = {}
     for a, b in _pairwise_longest(_nodes(tree)):
-        if isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple:
+        if isinstance(a, ast_TypeAlias):
+            name = a.name.id
+        elif (
+            isinstance(a, ast.AnnAssign) and isinstance(a.target, ast.Name) and a.simple
+        ):
             name = a.target.id
             annotations[name] = unparse(a.annotation)
         elif (
@@ -183,6 +188,8 @@ def sort_by_source(
             name = a.target.id
         elif isinstance(a, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             name = a.name
+        elif isinstance(a, ast_TypeAlias):
+            name = a.name.id
         else:
             continue
 

@@ -1,4 +1,8 @@
 <module misc_py312  # Testing features tha…
+    <var MyType = int  # A custom Python 3.12…>
+    <var foo: MyType  # A custom type instan…>
+    <var MyTypeWithoutDocstring = int>
+    <var MyTypeClassic: TypeAlias = int  # inherited from builtins.int, A "classic" typing.T…>
     <class misc_py312.NamedTupleExample  # An example for a typ…
         <method def __init__(_cls, name: str, id: int = 3): ...  # Create new instance …>
         <var name: str  # Name of our example …>
