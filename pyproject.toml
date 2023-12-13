@@ -44,7 +44,6 @@ pdoc = "pdoc.__main__:cli"
 dev = [
     "tox",
     "ruff",
-    "black",
     "mypy",
     "types-pygments",
     "pytest",
@@ -90,9 +89,6 @@ markers = [
     "slow: marks tests as slow.",
 ]
 
-[tool.black]
-extend-exclude = "test/testdata/demo.py"
-
 [[tool.mypy.overrides]]
 module = "pytest.*"
 ignore_missing_imports = true
@@ -102,8 +98,9 @@ module = "demopackage2"
 ignore_missing_imports = true
 
 [tool.ruff]
-line-length = 140
+extend-exclude = ["test/testdata/demo.py"]
 select = ["E", "F", "I"]
+ignore = ["E501"]
 
 [tool.ruff.isort]
 force-single-line = true

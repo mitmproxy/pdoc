@@ -1001,7 +1001,9 @@ class Function(Doc[types.FunctionType]):
                 )
             )
         for p in sig.parameters.values():
-            p._annotation = safe_eval_type(p.annotation, globalns, localns, mod, self.fullname)  # type: ignore
+            p._annotation = safe_eval_type(  # type: ignore
+                p.annotation, globalns, localns, mod, self.fullname
+            )
         return sig
 
     @cached_property
