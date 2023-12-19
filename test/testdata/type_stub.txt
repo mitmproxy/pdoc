@@ -11,5 +11,6 @@
             <method def meth(self, y: bool) -> bool: ...  # A simple method.>
         >
         <method def no_type_annotation(self, z): ...  # A method not present…>
+        <method def overloaded(*args, **kwds): ...  # An overloaded method…>
     >
 >

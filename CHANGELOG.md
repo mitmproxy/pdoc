@@ -1,8 +1,11 @@
 # Release History
 
+<!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
+
 ## Unreleased: pdoc next
 
-<!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
+ - Improve rendering of `.pyi` type stubs containing `@typing.overload`.
+   ([#652](https://github.com/mitmproxy/pdoc/pull/652), @mhils)
 
 ## 2023-12-13: pdoc 14.2.0
 
