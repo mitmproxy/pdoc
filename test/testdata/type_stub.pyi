@@ -1,5 +1,7 @@
 from typing import Any
 from typing import Iterable
+from typing import overload
+
 
 def func(x: str, y: Any, z: "Iterable[str]") -> int: ...
 
@@ -15,3 +17,8 @@ class Class:
         attr: str
 
         def meth(self, y: bool) -> bool: ...
+
+    @overload
+    def overloaded(self, x: int) -> int: ...
+    @overload
+    def overloaded(self, x: str) -> str: ...

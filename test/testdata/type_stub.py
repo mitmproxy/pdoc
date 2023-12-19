@@ -27,3 +27,6 @@ class Class:
 
     def no_type_annotation(self, z):
         """A method not present in the .pyi file."""
+
+    def overloaded(self, x):
+        """An overloaded method."""

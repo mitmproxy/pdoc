@@ -5,6 +5,7 @@ This makes it possible to add type hints for native modules such as modules writ
 """
 from __future__ import annotations
 
+import typing
 from pathlib import Path
 import sys
 import traceback
@@ -16,6 +17,7 @@ from pdoc import doc
 
 from ._compat import cache
 
+overload_docstr = typing.overload(lambda: None).__doc__
 
 @cache
 def find_stub_file(module_name: str) -> Path | None:
@@ -68,6 +70,11 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
         stub_doc = stub_mod
 
     if isinstance(target_doc, doc.Function) and isinstance(stub_doc, doc.Function):
+        # pyi files have functions where all defs have @overload.
+        # We don't want to pick up the docstring from the typing helper.
+        if stub_doc.docstring == overload_docstr:
+            stub_doc.docstring = ""
+
         target_doc.signature = stub_doc.signature
         target_doc.funcdef = stub_doc.funcdef
         target_doc.docstring = stub_doc.docstring or target_doc.docstring
