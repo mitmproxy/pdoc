@@ -5,11 +5,11 @@ This makes it possible to add type hints for native modules such as modules writ
 """
 from __future__ import annotations
 
-import typing
 from pathlib import Path
 import sys
 import traceback
 import types
+import typing
 from unittest import mock
 import warnings
 
@@ -18,6 +18,7 @@ from pdoc import doc
 from ._compat import cache
 
 overload_docstr = typing.overload(lambda: None).__doc__
+
 
 @cache
 def find_stub_file(module_name: str) -> Path | None:

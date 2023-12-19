@@ -5,6 +5,7 @@
 ## Unreleased: pdoc next
 
  - Improve rendering of `.pyi` type stubs containing `@typing.overload`.
+   ([#652](https://github.com/mitmproxy/pdoc/pull/652), @mhils)
 
 ## 2023-12-13: pdoc 14.2.0
 
