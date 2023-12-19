@@ -24,7 +24,6 @@ jobs:
       - run: ruff --fix-only .
       - run: ruff format .
 
-      - run: git checkout test/testdata/ pdoc/markdown2/
       - run: test/test_snapshot.py
 
       - uses: mhils/add-pr-ref-in-changelog@main
