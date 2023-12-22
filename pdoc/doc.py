@@ -283,6 +283,9 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     default_value=empty,
                     taken_from=taken_from,
                 )
+                doc.source = doc_f.source
+                doc.source_file = doc_f.source_file
+                doc.source_lines = doc_f.source_lines
             elif inspect.isroutine(obj):
                 doc = Function(self.modulename, qualname, obj, taken_from)  # type: ignore
             elif (

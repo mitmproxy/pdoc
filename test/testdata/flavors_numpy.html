@@ -1439,26 +1439,47 @@ Description of <code>param3</code>.</li>
 
                             </div>
                             <div id="ExampleClass.readonly_property" class="classattr">
-                                <div class="attr variable">
+                                        <input id="ExampleClass.readonly_property-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">readonly_property</span>
 
-        
+                <label class="view-source-button" for="ExampleClass.readonly_property-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#ExampleClass.readonly_property"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readonly_property-295"><a href="#ExampleClass.readonly_property-295"><span class="linenos">295</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass.readonly_property-296"><a href="#ExampleClass.readonly_property-296"><span class="linenos">296</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readonly_property-297"><a href="#ExampleClass.readonly_property-297"><span class="linenos">297</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
+</span><span id="ExampleClass.readonly_property-298"><a href="#ExampleClass.readonly_property-298"><span class="linenos">298</span></a>        <span class="k">return</span> <span class="s2">&quot;readonly_property&quot;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>str: Properties should be documented in their getter method.</p>
 </div>
 
 
                             </div>
                             <div id="ExampleClass.readwrite_property" class="classattr">
-                                <div class="attr variable">
+                                        <input id="ExampleClass.readwrite_property-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">readwrite_property</span>
 
-        
+                <label class="view-source-button" for="ExampleClass.readwrite_property-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#ExampleClass.readwrite_property"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readwrite_property-300"><a href="#ExampleClass.readwrite_property-300"><span class="linenos">300</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass.readwrite_property-301"><a href="#ExampleClass.readwrite_property-301"><span class="linenos">301</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readwrite_property-302"><a href="#ExampleClass.readwrite_property-302"><span class="linenos">302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
+</span><span id="ExampleClass.readwrite_property-303"><a href="#ExampleClass.readwrite_property-303"><span class="linenos">303</span></a><span class="sd">        should only be documented in their getter method.</span>
+</span><span id="ExampleClass.readwrite_property-304"><a href="#ExampleClass.readwrite_property-304"><span class="linenos">304</span></a>
+</span><span id="ExampleClass.readwrite_property-305"><a href="#ExampleClass.readwrite_property-305"><span class="linenos">305</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
+</span><span id="ExampleClass.readwrite_property-306"><a href="#ExampleClass.readwrite_property-306"><span class="linenos">306</span></a><span class="sd">        mentioned here.</span>
+</span><span id="ExampleClass.readwrite_property-307"><a href="#ExampleClass.readwrite_property-307"><span class="linenos">307</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass.readwrite_property-308"><a href="#ExampleClass.readwrite_property-308"><span class="linenos">308</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;readwrite_property&quot;</span><span class="p">]</span>
+</span></pre></div>
+
+
             <div class="docstring"><p><code>list</code> of <code>str</code>: Properties with both a getter and setter
 should only be documented in their getter method.</p>
 
