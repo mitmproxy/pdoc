@@ -1051,7 +1051,7 @@ class Variable(Doc[None]):
         docstring: str,
         annotation: type | empty = empty,
         default_value: Any | empty = empty,
-        source: str | empty = empty,
+        source: str = "",
     ):
         """
         Construct a variable doc object.
@@ -1066,7 +1066,7 @@ class Variable(Doc[None]):
         self.docstring = inspect.cleandoc(docstring)
         self.annotation = annotation
         self.default_value = default_value
-        if source is not empty:
+        if source:
             self.source = source
 
     @cache
