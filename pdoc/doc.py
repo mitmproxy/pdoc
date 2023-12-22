@@ -282,8 +282,10 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     annotation=doc_f.signature.return_annotation,
                     default_value=empty,
                     taken_from=taken_from,
-                    source=doc_f.source,
                 )
+                doc.source = doc_f.source
+                doc.source_file = doc_f.source_file
+                doc.source_lines = doc_f.source_lines
             elif inspect.isroutine(obj):
                 doc = Function(self.modulename, qualname, obj, taken_from)  # type: ignore
             elif (
@@ -1051,7 +1053,6 @@ class Variable(Doc[None]):
         docstring: str,
         annotation: type | empty = empty,
         default_value: Any | empty = empty,
-        source: str = "",
     ):
         """
         Construct a variable doc object.
@@ -1066,8 +1067,6 @@ class Variable(Doc[None]):
         self.docstring = inspect.cleandoc(docstring)
         self.annotation = annotation
         self.default_value = default_value
-        if source:
-            self.source = source
 
     @cache
     @_include_fullname_in_traceback
