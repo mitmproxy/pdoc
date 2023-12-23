@@ -180,9 +180,11 @@ ways.
 - If `__all__` is defined in the module, then all identifiers in that list will be considered public.
    No other identifiers will be considered public.
 - If `__all__` is not defined, then pdoc will consider all members public that
-   1. do not start with an underscore,
+   1. do not start with an underscore or have @public in their docstring,
    2. don't have `@private` in their docstring,
-   2. and are defined in the current module (i.e. they are not imported).
+   3. and are defined in the current module (i.e. they are not imported).
+
+
 
 In general, we recommend keeping these conventions:
 
