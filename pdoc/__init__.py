@@ -184,8 +184,6 @@ ways.
    2. don't have `@private` in their docstring,
    3. and are defined in the current module (i.e. they are not imported).
 
-
-
 In general, we recommend keeping these conventions:
 
 - If you want to document a private member, consider making it public.
