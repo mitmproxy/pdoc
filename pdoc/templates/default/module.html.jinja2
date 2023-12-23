@@ -255,11 +255,12 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
         true
+    {% elif "@public" in doc.docstring %}
+        {# show members explicitly marked as @public #}
+        true
     {% elif not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
         true
-    {% elif "@public" in doc.docstring %}
-        {# show members explicitly marked as @public #}
     {% endif %}
 {% enddefaultmacro %}
 {# fmt: off #}
