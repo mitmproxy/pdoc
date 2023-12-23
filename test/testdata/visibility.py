@@ -1,5 +1,8 @@
 """
-Example where only the children `__private_func` and  `__private_func_explicitly_public` should be rendered.
+Example where only the these children should be rendered:
+    * `__private_func_explicitly_public`,
+    * `my_other_func` and
+    * `yet_another_func` should be rendered.
 """
 
 
@@ -37,4 +40,11 @@ def my_other_func():
     """
     This is another public method that's shown. It should show without additional
     whitespace above.
+    """
+
+
+def yet_another_func():
+    """
+    This is yet another public method to give gauge for the expected amount of
+    whitespace between too methods.
     """
