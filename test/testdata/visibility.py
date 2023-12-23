@@ -45,6 +45,6 @@ def my_other_func():
 
 def yet_another_func():
     """
-    This is yet another public method to give gauge for the expected amount of
+    This is yet another public method to give a gauge for the expected amount of
     whitespace between too methods.
     """
