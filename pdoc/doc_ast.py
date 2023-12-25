@@ -10,9 +10,9 @@ from collections.abc import Iterable
 from collections.abc import Iterator
 from dataclasses import dataclass
 import inspect
-from pathlib import Path
 from itertools import tee
 from itertools import zip_longest
+from pathlib import Path
 import types
 from typing import TYPE_CHECKING
 from typing import Any
@@ -72,7 +72,10 @@ def _get_source_file(obj: Any) -> Path | None:
         return Path(inspect.getsourcefile(obj) or inspect.getfile(obj))  # type: ignore
     except TypeError:
         try:
-            return Path(inspect.getsourcefile(obj.__wrapped__) or inspect.getfile(obj.__wrapped__))  # type: ignore
+            return Path(
+                inspect.getsourcefile(obj.__wrapped__)
+                or inspect.getfile(obj.__wrapped__)
+            )  # type: ignore
         except Exception:
             return None
 
