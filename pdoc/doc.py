@@ -172,10 +172,7 @@ class Doc(Generic[T]):
     @cached_property
     def source_file(self) -> Path | None:
         """The name of the Python source file in which this object was defined. `None` for built-in objects."""
-        try:
-            return Path(inspect.getsourcefile(self.obj) or inspect.getfile(self.obj))  # type: ignore
-        except TypeError:
-            return None
+        return doc_ast.get_source_file(self.obj)
 
     @cached_property
     def source_lines(self) -> tuple[int, int] | None:
