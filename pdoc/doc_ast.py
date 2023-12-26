@@ -12,7 +12,6 @@ from dataclasses import dataclass
 import inspect
 from itertools import tee
 from itertools import zip_longest
-from pathlib import Path
 import types
 from typing import TYPE_CHECKING
 from typing import Any
@@ -50,34 +49,6 @@ def _get_source(obj: Any) -> str:
         return inspect.getsource(obj)
     except Exception:
         return ""
-
-
-def get_source_file(obj: Any) -> Path | None:
-    """
-    Returns the source code of the Python object `obj` as a str.
-    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.
-
-    If this fails, an empty string is returned.
-    """
-    # Some objects may not be hashable, so we fall back to the non-cached version if that is the case.
-    try:
-        return _get_source_file(obj)
-    except TypeError:
-        return _get_source_file.__wrapped__(obj)
-
-
-@cache
-def _get_source_file(obj: Any) -> Path | None:
-    try:
-        return Path(inspect.getsourcefile(obj) or inspect.getfile(obj))  # type: ignore
-    except TypeError:
-        try:
-            return Path(
-                inspect.getsourcefile(obj.__wrapped__)
-                or inspect.getfile(obj.__wrapped__)
-            )  # type: ignore
-        except Exception:
-            return None
 
 
 @overload
