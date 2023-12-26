@@ -32,7 +32,6 @@ if TYPE_CHECKING:
 def get_source(obj: Any) -> str:
     """
     Returns the source code of the Python object `obj` as a str.
-    This tries to first unwrap the method if it is wrapped and then calls `inspect.getsource`.
 
     If this fails, an empty string is returned.
     """
