@@ -24,7 +24,7 @@ hypothesis==6.92.2
     # via pdoc (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
-jinja2==3.1.2
+jinja2==3.1.3
     # via pdoc (pyproject.toml)
 markupsafe==2.1.3
     # via
