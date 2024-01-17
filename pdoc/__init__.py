@@ -189,8 +189,8 @@ you can do so by including an annotation in its docstring:
 
 In general, we recommend keeping the following conventions:
 
-- If you want to document a private member, consider making it public.<br>
-- If you want to hide a public member, consider making it private.<br>
+- If you want to document a private member, consider making it public.
+- If you want to hide a public member, consider making it private.
 - If you want to document a special `__dunder__` method, the recommended way to do so is
   to not document the dunder method specifically, but to add some usage examples in the class documentation.
 
