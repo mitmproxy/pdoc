@@ -3,6 +3,6 @@
         <method def __init__(): ...>
     >
     <function def my_func(): ...  # This is a public met…>
-    <function def my_other_func(): ...  # This is another publ…>
+    <function def public_func(): ...  # This is another publ…>
     <function def yet_another_func(): ...  # This is yet another …>
 >
