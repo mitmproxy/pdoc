@@ -1,7 +1,7 @@
 """
 Example where only the these children should be rendered:
-    * `__private_func_explicitly_public` and
-    * `public_func` 
+ * `__private_func_explicitly_public` and
+ * `public_func` 
 """
 
 
