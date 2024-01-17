@@ -4,11 +4,16 @@
 
 ## Unreleased: pdoc next
 
+
+## 2024-01-18: pdoc 14.4.0
+
  - Private methods can now be included in the documentation by adding `@public` to the docstring.
    This complements the existing `@private` annotation.
    ([#655](https://github.com/mitmproxy/pdoc/pull/655), @tmeyier)
- - pdoc now correctly extracts the source_file of wrapped functions.
+ - pdoc now correctly detects the source file for wrapped functions.
    ([#657](https://github.com/mitmproxy/pdoc/pull/657), @tmeyier)
+ - Fixed a bug where memory addresses were not removed from output.
+   ([#663](https://github.com/mitmproxy/pdoc/pull/663), @mhils)
 
 ## 2023-12-22: pdoc 14.3.0
 
