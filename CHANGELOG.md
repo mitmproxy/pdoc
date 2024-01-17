@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+ - pdoc now correctly extracts the source_file of wrapped functions.
 
 ## 2023-12-22: pdoc 14.3.0
 
