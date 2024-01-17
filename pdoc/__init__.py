@@ -176,18 +176,21 @@ class GoldenRetriever(Dog):
 
 The public interface of a module is determined through one of two
 ways.
-
 - If `__all__` is defined in the module, then all identifiers in that list will be considered public.
    No other identifiers will be considered public.
-- If `__all__` is not defined, then pdoc will consider all members public that
-   1. do not start with an underscore,
-   2. don't have `@private` in their docstring,
-   2. and are defined in the current module (i.e. they are not imported).
+- If `__all__` is not defined, then pdoc will consider all items public that do not start with an
+  underscore and that are defined in the current module (i.e. they are not imported).
 
-In general, we recommend keeping these conventions:
+If you want to override the default behavior for a particular item,
+you can do so by including an annotation in its docstring:
+
+- `@private` hides an item unconditionally.
+- <code>&#64;public</code> shows an item unconditionally.
+
+In general, we recommend keeping the following conventions:
 
 - If you want to document a private member, consider making it public.
-- If you want to hide a public member, consider making it private or add `@private` to their docstring,
+- If you want to hide a public member, consider making it private.
 - If you want to document a special `__dunder__` method, the recommended way to do so is
   to not document the dunder method specifically, but to add some usage examples in the class documentation.
 

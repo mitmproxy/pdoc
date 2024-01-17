@@ -1,6 +1,7 @@
-<module visibility  # Example where no chi…
+<module visibility  # Example where only t…
     <class visibility.Undocumented
         <method def __init__(): ...>
     >
-    <function def my_func(): ...  # This is a public met…>
+    <function def public_func_marked_private(): ...  # This is a public met…>
+    <function def public_func(): ...  # This is another publ…>
 >
