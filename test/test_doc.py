@@ -175,3 +175,13 @@ def test_default_value_masks_env_vars(monkeypatch):
         assert v2.default_value_str == "'42.0.1'"
     finally:
         _environ_lookup.cache_clear()
+
+
+def test_source_file_method():
+    mod = extract.load_module(extract.parse_spec(here / "testdata" / "demo_long.py"))
+
+    m = Module(mod)
+
+    assert m.members["Foo"].members["a_cached_function"].source_file == (
+        here / "testdata" / "demo_long.py"
+    )
