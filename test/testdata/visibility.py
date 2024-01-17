@@ -36,7 +36,7 @@ def __private_func_explicitly_public():
     @public"""
 
 
-def my_other_func():
+def public_func():
     """
     This is another public method that's shown. It should show without additional
     whitespace above.
