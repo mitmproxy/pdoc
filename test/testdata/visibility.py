@@ -30,10 +30,10 @@ def __private_func():
 
 
 def __private_func_explicitly_public():
-    """
+    """@public
     This is a private method that's shown because it is explicitly marked
     as public.
-    @public"""
+    """
 
 
 def public_func():
