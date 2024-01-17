@@ -4,5 +4,4 @@
     >
     <function def public_func_marked_private(): ...  # This is a public met…>
     <function def public_func(): ...  # This is another publ…>
-    <function def yet_another_func(): ...  # This is yet another …>
 >
