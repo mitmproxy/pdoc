@@ -17,7 +17,7 @@ def public_func_marked_private():
     """
 
 
-def __protected_func():
+def _protected_func():
     """
     This is a protected method that's not shown because its name starts with _.
     """
