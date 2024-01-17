@@ -887,6 +887,8 @@ class Function(Doc[types.FunctionType]):
             unwrapped = func.__func__  # type: ignore
         elif isinstance(func, singledispatchmethod):
             unwrapped = func.func  # type: ignore
+        elif hasattr(func, "__wrapped__"):
+            unwrapped = func.__wrapped__
         else:
             unwrapped = func
         super().__init__(modulename, qualname, unwrapped, taken_from)
