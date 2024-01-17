@@ -1139,7 +1139,7 @@ class Variable(Doc[None]):
             warnings.warn(f"repr({self.fullname}) raised an exception ({e!r})")
             return ""
 
-        pretty = re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", pretty)
+        pretty = _remove_memory_addresses(pretty)
         return pretty
 
     @cached_property
@@ -1180,7 +1180,8 @@ class _PrettySignature(inspect.Signature):
         render_pos_only_separator = False
         render_kw_only_separator = True
         for param in self.parameters.values():
-            formatted = re.sub(r" at 0x[0-9a-fA-F]+(?=>$)", "", str(param))
+            formatted = str(param)
+            formatted = _remove_memory_addresses(formatted)
 
             kind = param.kind
 
@@ -1298,3 +1299,8 @@ def _safe_getdoc(obj: Any) -> str:
         return ""
     else:
         return doc.strip()
+
+
+def _remove_memory_addresses(x: str) -> str:
+    """Remove memory addresses from repr() output"""
+    return re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", pretty)
