@@ -6,6 +6,7 @@
 
  - Private methods can now be included in the documentation by adding `@public` to the docstring.
    This mirrors the existing `@private` annotation.
+   ([#655](https://github.com/mitmproxy/pdoc/pull/655), @tmeyier)
  - pdoc now correctly extracts the source_file of wrapped functions.
    ([#657](https://github.com/mitmproxy/pdoc/pull/657), @tmeyier)
 
