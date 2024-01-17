@@ -41,6 +41,3 @@ def public_func():
     This is another public method that's shown. It should show without additional
     whitespace above.
     """
-
-    whitespace between too methods.
-    """
