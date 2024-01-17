@@ -239,10 +239,13 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     Implementing this as a macro makes it very easy to override with a custom template, see
     https://github.com/mitmproxy/pdoc/tree/main/examples/custom-template.
     #}
-    {% if not include_undocumented and not doc.docstring %}
-        {# hide members that are undocumented if include_undocumented has been toggled off. #}
-    {% elif doc.docstring and "@private" in doc.docstring %}
+    {% if "@private" in doc.docstring %}
         {# hide members explicitly marked as @private #}
+    {% elif "@public" in doc.docstring %}
+        {# show members explicitly marked as @public #}
+        true
+    {% elif not include_undocumented and not doc.docstring %}
+        {# hide members that are undocumented if include_undocumented has been toggled off. #}
     {% elif doc.name == "__init__" and (doc.docstring or (doc.kind == "function" and doc.signature_without_self.parameters)) %}
         {# show constructors that have a docstring or at least one extra argument #}
         true
@@ -254,9 +257,6 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         {# Skip modules that were manually excluded, https://github.com/mitmproxy/pdoc/issues/334 #}
     {% elif (doc.qualname or doc.name) is in(module.obj.__all__ or []) %}
         {# members starting with an underscore are still public if mentioned in __all__ #}
-        true
-    {% elif "@public" in doc.docstring %}
-        {# show members explicitly marked as @public #}
         true
     {% elif not doc.name.startswith("_") %}
         {# members not starting with an underscore are considered public by default #}
