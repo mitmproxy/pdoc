@@ -11,7 +11,7 @@ class Undocumented:
     pass
 
 
-def my_func():
+def public_func_marked_private():
     """
     This is a public method that's not shown because it's marked as @private.
     """
