@@ -44,7 +44,7 @@ try:
     # This only exists on Python 3.11 and later. On older versions,
     # we just replace it with a function that does nothing.
     from typing import get_overloads
-except ImportError:
+except ImportError:  # pragma: no cover
     from typing import Sequence
 
     def get_overloads(func: Callable[..., object]) -> Sequence[Callable[..., object]]:
@@ -991,18 +991,7 @@ class Function(Doc[types.FunctionType]):
 
         If the signature cannot be determined, a placeholder Signature object is returned.
         """
-        if self.obj is object.__init__:
-            # there is a weird edge case were inspect.signature returns a confusing (self, /, *args, **kwargs)
-            # signature for the default __init__ method.
-            return inspect.Signature()
-        try:
-            sig = _PrettySignature.from_callable(self.obj)
-        except Exception:
-            return inspect.Signature(
-                [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
-            )
-
-        return self._process_signature(sig)
+        return self._prepare_signature(self.obj)
 
     @cached_property
     def signature_without_self(self) -> inspect.Signature:
@@ -1022,31 +1011,13 @@ class Function(Doc[types.FunctionType]):
         This should do the same processing as `signature`, but can return a list
         of additional signatures when available.
         """
-
-        if self.obj is object.__init__:
-            # See `signature`.
-            return [inspect.Signature()]
-
         try:
             values = get_overloads(self.obj)
-        except Exception:
+            print("Found", values)
+            return [self._prepare_signature(value) for value in values]
+        except Exception as e:
+            print("Error", e)
             return []
-
-        results = []
-        for value in values:
-            try:
-                sig = _PrettySignature.from_callable(value)
-                results.append(self._process_signature(sig))
-            except Exception:
-                sig_err = inspect.Signature(
-                    [
-                        inspect.Parameter(
-                            "unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD
-                        )
-                    ]
-                )
-                results.append(sig_err)
-        return results
 
     @cached_property
     def overloads_without_self(self) -> list[inspect.Signature]:
@@ -1055,15 +1026,26 @@ class Function(Doc[types.FunctionType]):
         This is useful to display constructors.
         """
         return [
-            sig.replace(parameters=list(self.signature.parameters.values())[1:])
+            sig.replace(parameters=list(sig.parameters.values())[1:])
             for sig in self.overloads
         ]
 
-    def _process_signature(self, sig: inspect.Signature) -> inspect.Signature:
+    def _prepare_signature(self, value: Callable[..., object]) -> inspect.Signature:
         """
         A helper method for `signature` and `overloads` which performs
         necessary post-processing on a signature object.
         """
+        if value is object.__init__:
+            # there is a weird edge case were inspect.signature returns a confusing (self, /, *args, **kwargs)
+            # signature for the default __init__ method.
+            return inspect.Signature()
+        try:
+            sig = _PrettySignature.from_callable(value)
+        except Exception:
+            return inspect.Signature(
+                [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
+            )
+
         mod = inspect.getmodule(self.obj)
         globalns = _safe_getattr(mod, "__dict__", {})
         localns = globalns
