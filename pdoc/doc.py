@@ -1013,10 +1013,8 @@ class Function(Doc[types.FunctionType]):
         """
         try:
             values = get_overloads(self.obj)
-            print("Found", values)
             return [self._prepare_signature(value) for value in values]
         except Exception as e:
-            print("Error", e)
             return []
 
     @cached_property
