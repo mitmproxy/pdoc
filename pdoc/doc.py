@@ -1014,7 +1014,7 @@ class Function(Doc[types.FunctionType]):
         try:
             values = get_overloads(self.obj)
             return [self._prepare_signature(value) for value in values]
-        except Exception as e:
+        except Exception:
             return []
 
     @cached_property
