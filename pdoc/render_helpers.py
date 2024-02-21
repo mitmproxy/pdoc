@@ -336,23 +336,27 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
         else:
             # It's not, but we now know the parent module. Does the target exist?
             doc = context["all_modules"][module]
-            if qualname:
-                assert isinstance(doc, pdoc.doc.Module)
-                doc = doc.get(qualname)
-            target_exists_and_public = (
-                doc is not None and context["is_public"](doc).strip()
-            )
-            if target_exists_and_public:
-                assert doc is not None  # mypy
+            # Check again if the object was re-exposed
+            for module, qualname in possible_sources(
+                context["all_modules"], identifier
+            ):
                 if qualname:
-                    qualname = f"#{qualname}"
-                if plain_text.endswith("()"):
-                    plain_text = f"{doc.fullname}()"
+                    assert isinstance(doc, pdoc.doc.Module)
+                    doc = doc.get(qualname)
+                target_exists_and_public = (
+                    doc is not None and context["is_public"](doc).strip()
+                )
+                if target_exists_and_public:
+                    assert doc is not None  # mypy
+                    if qualname:
+                        qualname = f"#{qualname}"
+                    if plain_text.endswith("()"):
+                        plain_text = f"{doc.fullname}()"
+                    else:
+                        plain_text = doc.fullname
+                    return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}{qualname}">{plain_text}</a>'
                 else:
-                    plain_text = doc.fullname
-                return f'<a href="{relative_link(context["module"].modulename, module)}{qualname}">{plain_text}</a>'
-            else:
-                return text
+                    return text
 
     return Markup(
         re.sub(
