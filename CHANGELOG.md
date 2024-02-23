@@ -3,6 +3,7 @@
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
 ## Unreleased: pdoc next
+-  pdoc correctly links modules in parameters or return values that are in referenced in `__all__` of a submodule. ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe)
 
 
 ## 2024-01-18: pdoc 14.4.0
