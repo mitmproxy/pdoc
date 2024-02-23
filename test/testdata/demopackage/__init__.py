@@ -21,5 +21,5 @@ __all__ = [
     "_child_e",
     "child_excluded",
     "subpackage",
-    "F"
+    "F",
 ]
