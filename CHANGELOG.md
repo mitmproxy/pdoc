@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Support type-hints from stub-only packages. E.g: `scipy-stubs`
+  ([#671](https://github.com/mitmproxy/pdoc/pull/671), @erikdesmedt)
 
 ## 2024-01-18: pdoc 14.4.0
 
