@@ -20,6 +20,7 @@ This is a test module demonstrating pdoc's parsing capabilities.
 You can have multiple sections in your module docstring,
 which will also show up in the navigation.
 """
+
 from __future__ import annotations
 
 import abc

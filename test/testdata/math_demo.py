@@ -31,6 +31,7 @@ You can create a `math.html.jinja2` file in your pdoc template directory to over
 
 # Example
 '''
+
 import math
 
 

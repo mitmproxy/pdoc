@@ -15,6 +15,7 @@ All documentation types make heavy use of `@functools.cached_property` decorator
 This means they have a large set of attributes that are lazily computed on first access.
 By convention, all attributes are read-only, although this is not enforced at runtime.
 """
+
 from __future__ import annotations
 
 from abc import ABCMeta
@@ -1030,7 +1031,9 @@ class Variable(Doc[None]):
 
     kind = "variable"
 
-    default_value: Any | empty  # technically Any includes empty, but this conveys intent.
+    default_value: (
+        Any | empty
+    )  # technically Any includes empty, but this conveys intent.
     """
     The variable's default value.
     

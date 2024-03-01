@@ -1,4 +1,5 @@
 """child_c docstr"""
+
 from . import child_b
 
 

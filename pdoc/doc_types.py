@@ -5,6 +5,7 @@ In particular, it provides functionality to resolve
 [typing.ForwardRef](https://docs.python.org/3/library/typing.html#typing.ForwardRef) objects without raising an
 exception.
 """
+
 from __future__ import annotations
 
 import functools

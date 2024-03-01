@@ -3,6 +3,7 @@ This module handles all interpretation of the *Abstract Syntax Tree (AST)* in pd
 
 Parsing the AST is done to extract docstrings, type annotations, and variable declarations from `__init__`.
 """
+
 from __future__ import annotations
 
 import ast
@@ -51,18 +52,15 @@ def _get_source(obj: Any) -> str:
 
 
 @overload
-def parse(obj: types.ModuleType) -> ast.Module:
-    ...
+def parse(obj: types.ModuleType) -> ast.Module: ...
 
 
 @overload
-def parse(obj: types.FunctionType) -> ast.FunctionDef | ast.AsyncFunctionDef:
-    ...
+def parse(obj: types.FunctionType) -> ast.FunctionDef | ast.AsyncFunctionDef: ...
 
 
 @overload
-def parse(obj: type) -> ast.ClassDef:
-    ...
+def parse(obj: type) -> ast.ClassDef: ...
 
 
 def parse(obj):
