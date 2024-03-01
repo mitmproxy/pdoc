@@ -10,6 +10,7 @@ If you miss a particular feature for your favorite flavor, contributions are wel
 That being said, please keep the complexity low and make sure that changes are
 accompanied by matching snapshot tests in `test/testdata/`.
 """
+
 from __future__ import annotations
 
 import base64

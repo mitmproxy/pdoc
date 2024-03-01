@@ -462,6 +462,7 @@ to your Python code before pdoc is used.
 It is also possible to create `pdoc.doc.Module` objects directly and modify them before rendering.
 You can find an example in [`examples/library-usage`](https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage).
 '''
+
 from __future__ import annotations
 
 __docformat__ = "markdown"  # explicitly disable rST processing in the examples above.

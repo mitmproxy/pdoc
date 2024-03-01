@@ -1,6 +1,7 @@
 """
 Example module. We use pure Python here, but this could also be a compiled native module.
 """
+
 import enum
 
 

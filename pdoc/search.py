@@ -41,6 +41,7 @@ to 27kB.
 
 If you wish to disable the search functionality, you can pass `--no-search` when invoking pdoc.
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable

@@ -3,6 +3,7 @@ This module handles the interaction with Python's module system,
 that is it loads the correct module based on whatever the user specified,
 and provides the rest of pdoc with some additional module metadata.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterable
