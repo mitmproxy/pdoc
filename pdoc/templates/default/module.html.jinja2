@@ -172,9 +172,29 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         {{- fn.signature_without_self | format_signature(colon=False) | linkify }}
     {% else %}
         <span class="def">{{ fn.funcdef }}</span>
-        <span class="name">{{ fn.name }}</span>
-        {{- fn.signature | format_signature(colon=True) | linkify }}
+        <span class="name">{{ fn.name }}</span>        
+        {{- fn.signature | format_signature(colon=True) | linkify }}        
     {% endif %}
+{% enddefaultmacro %}
+{% defaultmacro overloads(fn) -%}
+    <div class="overloads">            
+        {% if fn.name == "__init__" %}
+            {% for sig in fn.overloads_without_self %}
+                <div class="extra-attr {{ fn.kind }}">
+                    <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
+                    {{- sig | format_signature(colon=False) | linkify }}
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for sig in fn.overloads %}                        
+                <div class="extra-attr {{ fn.kind }}">
+                    <span class="def">{{ fn.funcdef }}</span>
+                    <span class="name">{{ fn.name }}</span>        
+                    {{- sig | format_signature(colon=True) | linkify }}
+                </div>
+            {% endfor %}    
+        {% endif %}
+    </div>
 {% enddefaultmacro %}
 {% defaultmacro variable(var) -%}
     {%- if var.is_type_alias_type %}<span class="def">type</span> {% endif -%}
@@ -203,6 +223,9 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
         {% endif %}
         {{ view_source_button(doc) }}
     </div>
+    {% if doc.kind == "function" and doc.overloads|length > 0 %}
+        {{ overloads(doc) }}
+    {% endif %}
     <a class="headerlink" href="#{{ doc.qualname or doc.name }}"></a>
     {{ view_source_code(doc) }}
     {{ docstring(doc) }}

@@ -300,6 +300,19 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     overflow-x: auto;
 }
 
+.pdoc .overloads {
+    margin-left: 2rem;
+}
+
+/*  The same as .pdoc .attr, but without the focused/target/hover rules. */
+.pdoc .extra-attr {
+    display: block;
+    margin: .5rem 0 .5rem;
+    padding: .4rem .4rem .4rem 1rem;
+    background-color: var(--accent);
+    overflow-x: auto;
+}
+
 .pdoc .classattr {
     margin-left: 2rem;
 }
