@@ -366,11 +366,48 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
     <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>
     """
 
+    def _rst_extract_options(contents: str) -> tuple[str, dict[str, str]]:
+        """
+        Extract options from the beginning of reStructuredText directives.
+        """
+        matches = re.finditer(r"\s*:(.+?):\s*?(.*?)$", contents, re.MULTILINE)
+        options = {}
+        if matches is None:
+            return options
+
+        end_of_last_match = 0
+        for match in matches:
+            if match.span()[0] != end_of_last_match:
+                break
+            key, value = match.groups()
+            options[key] = value
+            end_of_last_match = match.span()[1]
+        return contents[end_of_last_match:], options
+
+    def _trim_string(contents: str, options: dict[str, str]) -> str:
+        """
+        <https://docutils.sourceforge.io/docs/ref/rst/directives.html#include-options>
+        """
+        if "start-line" in options:
+            line = int(options["start-line"])
+            contents = "\n".join(contents.split("\n")[line:])
+        if "end-line" in options:
+            line = int(options["end-line"])
+            contents = "\n".join(contents.split("\n")[:line])
+        if "start-after" in options:
+            pattern = options["start-after"].strip()
+            contents = contents.split(pattern)[1]
+        if "end-before" in options:
+            pattern = options["end-before"].strip()
+            contents = contents.split(pattern)[0]
+        return contents
+
     def _rst_admonition(m: re.Match[str]) -> str:
         ind = m.group("indent")
         type = m.group("type")
         val = m.group("val").strip()
         contents = dedent(m.group("contents")).strip()
+        contents, options = _rst_extract_options(contents)
 
         if type == "include":
             loc = source_file or Path(".")
@@ -380,6 +417,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
                 warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
             included = _rst_admonitions(included, loc.parent / val)
+            included = _trim_string(included, options)
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"
