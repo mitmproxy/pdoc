@@ -275,13 +275,16 @@ See [*Customizing pdoc*](#customizing-pdoc).
 ## ...include Markdown files?
 
 You can include external Markdown files in your documentation by using reStructuredText's
-`.. include::` directive. For example, a common pattern is to include your project's README in your top-level `__init__.py` like this:
+`.. include::` directive. For example, a common pattern is to include your project's README in your top-level `__init__.py` like this (skipping the first line to ignore the top-level heading):
 
 ```python
 """
 .. include:: ../README.md
+   :start-line: 1
 """
 ```
+
+This supports the `:start-line:`, `:end-line:`, `:start-after:`, and `:end-before:` options to mirror [docutils](https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment).
 
 Since version 11, pdoc processes such reStructuredText elements by default.
 
