@@ -135,6 +135,21 @@ def include():
     .. include:: flavors_rst_include/include.rst
     """
 
+def include_options():
+    """
+    Included from another file:
+
+    .. include:: flavors_rst_include/include_2.md
+       :start-line: 3
+       :end-line: 6
+
+
+    Also included:
+
+    .. include:: flavors_rst_include/include_2.md
+       :start-after: <!-- start here -->
+       :end-before: <!-- end here -->
+    """
 
 def fields(foo: str = "foo", bar: bool = True) -> str:
     """This method has field descriptions.
