@@ -140,8 +140,8 @@ def include_options():
     Included from another file:
 
     .. include:: flavors_rst_include/include_2.md
-       :start-line: 3
-       :end-line: 6
+       :start-line: 2
+       :end-line: 5
 
 
     Also included:

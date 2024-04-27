@@ -392,14 +392,14 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             line = int(options["start-line"])
             contents = "\n".join(contents.split("\n")[line:])
         if "end-line" in options:
-            line = int(options["end-line"])
-            contents = "\n".join(contents.split("\n")[:line])
+            line = int(options["end-line"]) - int(options.get("start-line", 0))
+            contents = "\n".join(contents.split("\n")[:line]) + "\n"
         if "start-after" in options:
             pattern = options["start-after"].strip()
             contents = contents.split(pattern)[1]
         if "end-before" in options:
             pattern = options["end-before"].strip()
-            contents = contents.split(pattern)[0]
+            contents = contents.split(pattern)[0] + "\n"
         return contents
 
     def _rst_admonition(m: re.Match[str]) -> str:
