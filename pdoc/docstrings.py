@@ -371,11 +371,9 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
         Extract options from the beginning of reStructuredText directives.
         """
         options = {}
-        while match := re.match(r"^\s*:(.+?):[ \t]*(.*)[\s]*$", contents, re.MULTILINE):
-            key, value = match.groups()
+        while match := re.match(r"^\s*:(.+?):[ \t]*(.*)([\s\S]*)", contents):
+            key, value, contents = match.groups()
             options[key] = value
-            match_end = match.span()[1]
-            contents = contents[match_end:]
 
         return contents, options
 
