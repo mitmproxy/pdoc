@@ -381,15 +381,12 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
         """
         <https://docutils.sourceforge.io/docs/ref/rst/directives.html#include-options>
         """
-        if "start-line" in options:
-            line = int(options["start-line"])
-            contents = "\n".join(contents.split("\n")[line:])
-        if "end-line" in options:
-            line = int(options["end-line"]) - int(options.get("start-line", 0))
-            contents = "\n".join(contents.split("\n")[:line]) + "\n"
+        start_line = int(options.get("start-line", 0))
+        end_line = int(options["end-line"]) if "end-line" in options else None
+        contents = "\n".join(contents.split("\n")[start_line:end_line] + [""])
         if "start-after" in options:
             pattern = options["start-after"].strip()
-            contents = contents.split(pattern)[1]
+            contents = contents.split(pattern, 1)[1]
         if "end-before" in options:
             pattern = options["end-before"].strip()
             contents = contents.split(pattern)[0] + "\n"
