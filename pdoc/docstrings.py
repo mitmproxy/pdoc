@@ -360,37 +360,42 @@ def _rst_links(contents: str) -> str:
     return contents
 
 
+def _rst_extract_options(contents: str) -> tuple[str, dict[str, str]]:
+    """
+    Extract options from the beginning of reStructuredText directives.
+
+    Return the trimmed content and a dict of options.
+    """
+    options = {}
+    while match := re.match(r"^\s*:(.+?):(.*)([\s\S]*)", contents):
+        key, value, contents = match.groups()
+        options[key] = value.strip()
+
+    return contents, options
+
+
+def _rst_include_trim(contents: str, options: dict[str, str]) -> str:
+    """
+    <https://docutils.sourceforge.io/docs/ref/rst/directives.html#include-options>
+    """
+    if "end-line" in options or "start-line" in options:
+        lines = contents.splitlines()
+        if i := options.get("end-line"):
+            lines = lines[:int(i)]
+        if i := options.get("start-line"):
+            lines = lines[int(i):]
+        contents = "\n".join(lines)
+    if x := options.get("end-before"):
+        contents = contents[:contents.index(x)]
+    if x := options.get("start-after"):
+        contents = contents[contents.index(x) + len(x):]
+    return contents
+
 def _rst_admonitions(contents: str, source_file: Path | None) -> str:
     """
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
     <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>
     """
-
-    def _rst_extract_options(contents: str) -> tuple[str, dict[str, str]]:
-        """
-        Extract options from the beginning of reStructuredText directives.
-        """
-        options = {}
-        while match := re.match(r"^\s*:(.+?):[ \t]*(.*)([\s\S]*)", contents):
-            key, value, contents = match.groups()
-            options[key] = value
-
-        return contents, options
-
-    def _trim_string(contents: str, options: dict[str, str]) -> str:
-        """
-        <https://docutils.sourceforge.io/docs/ref/rst/directives.html#include-options>
-        """
-        start_line = int(options.get("start-line", 0))
-        end_line = int(options["end-line"]) if "end-line" in options else None
-        contents = "\n".join(contents.split("\n")[start_line:end_line] + [""])
-        if "start-after" in options:
-            pattern = options["start-after"].strip()
-            contents = contents.split(pattern, 1)[1]
-        if "end-before" in options:
-            pattern = options["end-before"].strip()
-            contents = contents.split(pattern)[0] + "\n"
-        return contents
 
     def _rst_admonition(m: re.Match[str]) -> str:
         ind = m.group("indent")
@@ -406,8 +411,11 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             except OSError as e:
                 warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
+            try:
+                included = _rst_include_trim(included, options) + "\n"
+            except ValueError as e:
+                warnings.warn(f"Failed to process include options for {val!r}: {e}")
             included = _rst_admonitions(included, loc.parent / val)
-            included = _trim_string(included, options)
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"
