@@ -381,15 +381,16 @@ def _rst_include_trim(contents: str, options: dict[str, str]) -> str:
     if "end-line" in options or "start-line" in options:
         lines = contents.splitlines()
         if i := options.get("end-line"):
-            lines = lines[:int(i)]
+            lines = lines[: int(i)]
         if i := options.get("start-line"):
-            lines = lines[int(i):]
+            lines = lines[int(i) :]
         contents = "\n".join(lines)
     if x := options.get("end-before"):
-        contents = contents[:contents.index(x)]
+        contents = contents[: contents.index(x)]
     if x := options.get("start-after"):
-        contents = contents[contents.index(x) + len(x):]
+        contents = contents[contents.index(x) + len(x) :]
     return contents
+
 
 def _rst_admonitions(contents: str, source_file: Path | None) -> str:
     """

@@ -283,7 +283,7 @@ You can include external Markdown files in your documentation by using reStructu
 """
 ```
 
-You can also include only parts of a file with the 
+You can also include only parts of a file with the
 [`start-line`, `end-line`, `start-after`, and `end-after` options](https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment):
 
 ```python
