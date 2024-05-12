@@ -1,3 +1,4 @@
+from hypothesis import assume
 from hypothesis import given
 from hypothesis.strategies import text
 import pytest
@@ -24,6 +25,65 @@ def test_numpy(s):
 def test_rst(s):
     ret = docstrings.rst(s, None)
     assert not s or ret
+
+
+@given(text())
+def test_rst_extract_options_fuzz(s):
+    assume(not s.startswith(":"))
+    content, options = docstrings._rst_extract_options(s)
+    assert not options
+    assert content == s
+
+
+def test_rst_extract_options():
+    content = (
+        ":alpha: beta\n"
+        ":charlie:delta:foxtrot\n"
+        "rest of content\n"
+        ":option ignored: as follows content\n"
+    )
+    content, options = docstrings._rst_extract_options(content)
+    assert options == {
+        "alpha": "beta",
+        "charlie": "delta:foxtrot",
+    }
+    assert content == (
+        "\nrest of content\n"
+        ":option ignored: as follows content\n"
+    )
+
+
+@given(text())
+def test_rst_include_trim_fuzz(s):
+    content = docstrings._rst_include_trim(s, {})
+    assert content == s
+
+
+def test_rst_include_trim_lines():
+    content = "alpha\nbeta\ncharlie\ndelta\necho"
+    trimmed = docstrings._rst_include_trim(
+        content,
+        { "start-line": "2", "end-line": "4" }
+    )
+    assert trimmed == "charlie\ndelta"
+
+
+def test_rst_include_trim_pattern():
+    content = "alpha\nbeta\ncharlie\ndelta\necho"
+    trimmed = docstrings._rst_include_trim(
+        content,
+        { "start-after": "beta", "end-before": "echo" }
+    )
+    assert trimmed == "\ncharlie\ndelta\n"
+
+
+def test_rst_include_trim_mixture():
+    content = "alpha\nbeta\ncharlie\ndelta\necho"
+    trimmed = docstrings._rst_include_trim(
+        content,
+        { "start-after": "beta", "end-line": "4" }
+    )
+    assert trimmed == "\ncharlie\ndelta"
 
 
 def test_rst_include_nonexistent():
