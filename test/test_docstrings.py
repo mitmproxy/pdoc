@@ -47,10 +47,7 @@ def test_rst_extract_options():
         "alpha": "beta",
         "charlie": "delta:foxtrot",
     }
-    assert content == (
-        "\nrest of content\n"
-        ":option ignored: as follows content\n"
-    )
+    assert content == ("\nrest of content\n" ":option ignored: as follows content\n")
 
 
 @given(text())
@@ -62,8 +59,7 @@ def test_rst_include_trim_fuzz(s):
 def test_rst_include_trim_lines():
     content = "alpha\nbeta\ncharlie\ndelta\necho"
     trimmed = docstrings._rst_include_trim(
-        content,
-        { "start-line": "2", "end-line": "4" }
+        content, {"start-line": "2", "end-line": "4"}
     )
     assert trimmed == "charlie\ndelta"
 
@@ -71,8 +67,7 @@ def test_rst_include_trim_lines():
 def test_rst_include_trim_pattern():
     content = "alpha\nbeta\ncharlie\ndelta\necho"
     trimmed = docstrings._rst_include_trim(
-        content,
-        { "start-after": "beta", "end-before": "echo" }
+        content, {"start-after": "beta", "end-before": "echo"}
     )
     assert trimmed == "\ncharlie\ndelta\n"
 
@@ -80,8 +75,7 @@ def test_rst_include_trim_pattern():
 def test_rst_include_trim_mixture():
     content = "alpha\nbeta\ncharlie\ndelta\necho"
     trimmed = docstrings._rst_include_trim(
-        content,
-        { "start-after": "beta", "end-line": "4" }
+        content, {"start-after": "beta", "end-line": "4"}
     )
     assert trimmed == "\ncharlie\ndelta"
 
