@@ -1,11 +1,15 @@
 from hypothesis import given
 from hypothesis.strategies import text
 import pytest
+from pathlib import Path
 
 from pdoc import docstrings
 
 # The important tests are in test_snapshot.py (and, by extension, testdata/)
-# only some fuzzing here.
+# mostly some fuzzing here.
+
+
+here = Path(__file__).parent.absolute()
 
 
 @given(text())
@@ -74,3 +78,7 @@ def test_rst_include_trim_mixture():
 def test_rst_include_nonexistent():
     with pytest.warns(UserWarning, match="Cannot include 'nonexistent.txt'"):
         docstrings.rst(".. include:: nonexistent.txt", None)
+
+def test_rst_include_invalid_options():
+    with pytest.warns(UserWarning, match="Failed to process include options"):
+        docstrings.rst(".. include:: ../README.md\n.  :start-line: invalid", here / "test_docstrings.py")
