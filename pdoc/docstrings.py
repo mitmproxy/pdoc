@@ -380,6 +380,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
                 warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
             included = _rst_admonitions(included, loc.parent / val)
+            included = embed_images(included, loc.parent / val)
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"
