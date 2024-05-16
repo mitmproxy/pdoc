@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Fix image embedding in included rST files.
+  ([#692](https://github.com/mitmproxy/pdoc/pull/692), @meghprkh)
 - Support type-hints from stub-only packages. E.g: `scipy-stubs`
   ([#671](https://github.com/mitmproxy/pdoc/pull/671), @erikdesmedt)
 - Modify css styles for MathJax to remove unnessesary scroll bars
