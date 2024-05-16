@@ -28,7 +28,7 @@ def test_rst(s):
 
 @given(text())
 def test_rst_extract_options_fuzz(s):
-    content, options, docstrings._rst_extract_options(s)
+    content, options = docstrings._rst_extract_options(s)
     assert not s or content or options
 
 
