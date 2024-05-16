@@ -1,5 +1,5 @@
 Hello
 
-![pdoc logo](./test-include-pdoc-logo.svg)
+![pdoc logo](../../../pdoc/templates/resources/pdoc-logo.svg)
 
 .. include:: subinclude.rst
