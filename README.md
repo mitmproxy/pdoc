@@ -66,10 +66,6 @@ As an open source project, pdoc welcomes contributions of all forms.
 
 [![Dev Guide](https://shields.mitmproxy.org/badge/dev_docs-CONTRIBUTING.md-blue)](https://github.com/mitmproxy/pdoc/blob/main/CONTRIBUTING.md)
 
-Also, please feel free to join our developer Slack!
-
-[![Slack Developer Chat](https://shields.mitmproxy.org/badge/slack-mitmproxy-E01563.svg)](http://slack.mitmproxy.org/)
-
 
 ## pdoc vs. pdoc3
 
