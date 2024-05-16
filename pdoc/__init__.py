@@ -283,7 +283,16 @@ You can include external Markdown files in your documentation by using reStructu
 """
 ```
 
-Since version 11, pdoc processes such reStructuredText elements by default.
+You can also include only parts of a file with the
+[`start-line`, `end-line`, `start-after`, and `end-after` options](https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment):
+
+```python
+"""
+.. include:: ../README.md
+   :start-line: 1
+   :end-before: Changelog
+"""
+```
 
 
 ## ...add a title page?

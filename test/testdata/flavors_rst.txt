@@ -14,6 +14,7 @@
     <function def footnote3(): ...  # Auto-symbol footnote…>
     <function def footnote4(): ...  # There is no footnote…>
     <function def include(): ...  # Included from anothe…>
+    <function def include_options(): ...  # Included from anothe…>
     <function def fields(foo: str = 'foo', bar: bool = True) -> str: ...  # This method has fiel…>
     <function def fields_text_after_param(foo): ...  # This method has text…>
     <function def fields_invalid(foo: str = 'foo') -> str: ...  # This method has inva…>
