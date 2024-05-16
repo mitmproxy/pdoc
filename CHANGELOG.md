@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2024-05-16: pdoc 14.5.0
+
 - The `.. include:` rST directive now supports start-line, end-line, start-after, end-before options.
   ([#684](https://github.com/mitmproxy/pdoc/pull/684), @frankharkins)
 - Fix image embedding in included rST files.
