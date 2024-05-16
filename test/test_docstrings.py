@@ -1,4 +1,3 @@
-from hypothesis import assume
 from hypothesis import given
 from hypothesis.strategies import text
 import pytest
