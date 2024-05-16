@@ -417,6 +417,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             except ValueError as e:
                 warnings.warn(f"Failed to process include options for {val!r}: {e}")
             included = _rst_admonitions(included, loc.parent / val)
+            included = embed_images(included, loc.parent / val)
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"
