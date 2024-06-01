@@ -12,7 +12,7 @@ chardet==5.2.0
     # via tox
 colorama==0.4.6
     # via tox
-coverage[toml]==7.5.0
+coverage[toml]==7.5.3
     # via pytest-cov
 distlib==0.3.8
     # via virtualenv
@@ -20,7 +20,7 @@ filelock==3.14.0
     # via
     #   tox
     #   virtualenv
-hypothesis==6.100.2
+hypothesis==6.103.0
     # via pdoc (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
@@ -41,7 +41,7 @@ packaging==24.0
     #   tox
 pdoc-pyo3-sample-library==1.0.11
     # via pdoc (pyproject.toml)
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via
     #   tox
     #   virtualenv
@@ -49,11 +49,11 @@ pluggy==1.5.0
     # via
     #   pytest
     #   tox
-pygments==2.17.2
+pygments==2.18.0
     # via pdoc (pyproject.toml)
 pyproject-api==1.6.1
     # via tox
-pytest==8.2.0
+pytest==8.2.1
     # via
     #   pdoc (pyproject.toml)
     #   pytest-cov
@@ -62,7 +62,7 @@ pytest-cov==5.0.0
     # via pdoc (pyproject.toml)
 pytest-timeout==2.3.1
     # via pdoc (pyproject.toml)
-ruff==0.4.2
+ruff==0.4.7
     # via pdoc (pyproject.toml)
 sortedcontainers==2.4.0
     # via hypothesis
@@ -70,11 +70,11 @@ tox==4.15.0
     # via pdoc (pyproject.toml)
 types-docutils==0.21.0.20240423
     # via types-pygments
-types-pygments==2.17.0.20240310
+types-pygments==2.18.0.20240506
     # via pdoc (pyproject.toml)
-types-setuptools==69.5.0.20240423
+types-setuptools==70.0.0.20240524
     # via types-pygments
-typing-extensions==4.11.0
+typing-extensions==4.12.0
     # via mypy
-virtualenv==20.26.1
+virtualenv==20.26.2
     # via tox
