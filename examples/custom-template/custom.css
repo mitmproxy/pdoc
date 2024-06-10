@@ -1,4 +1,6 @@
-/* You can add additional CSS rules in custom.css. */
+/* 
+You can provide additional CSS rules by adding a `custom.css` file in your template directory.
+*/
 
 .modulename {
     color: orange;
