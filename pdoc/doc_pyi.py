@@ -3,6 +3,7 @@ This module is responsible for patching `pdoc.doc.Doc` objects with type annotat
 in `.pyi` type stub files ([PEP 561](https://peps.python.org/pep-0561/)).
 This makes it possible to add type hints for native modules such as modules written using [PyO3](https://pyo3.rs/).
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -25,10 +26,17 @@ def find_stub_file(module_name: str) -> Path | None:
     """Try to find a .pyi file with type stubs for the given module name."""
     module_path = module_name.replace(".", "/")
 
-    for dir in sys.path:
+    # Find .pyi-file in a PEP 0561 compatible stub-package
+    module_part_name = module_name.split(".")
+    module_part_name[0] = f"{module_part_name[0]}-stubs"
+    module_stub_path = "/".join(module_part_name)
+
+    for search_dir in sys.path:
         file_candidates = [
-            Path(dir) / (module_path + ".pyi"),
-            Path(dir) / (module_path + "/__init__.pyi"),
+            Path(search_dir) / (module_path + ".pyi"),
+            Path(search_dir) / (module_path + "/__init__.pyi"),
+            Path(search_dir) / (module_stub_path + ".pyi"),
+            Path(search_dir) / (module_stub_path + "/__init__.pyi"),
         ]
         for f in file_candidates:
             if f.exists():

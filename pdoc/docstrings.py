@@ -10,6 +10,7 @@ If you miss a particular feature for your favorite flavor, contributions are wel
 That being said, please keep the complexity low and make sure that changes are
 accompanied by matching snapshot tests in `test/testdata/`.
 """
+
 from __future__ import annotations
 
 import base64
@@ -359,6 +360,38 @@ def _rst_links(contents: str) -> str:
     return contents
 
 
+def _rst_extract_options(contents: str) -> tuple[str, dict[str, str]]:
+    """
+    Extract options from the beginning of reStructuredText directives.
+
+    Return the trimmed content and a dict of options.
+    """
+    options = {}
+    while match := re.match(r"^\s*:(.+?):(.*)([\s\S]*)", contents):
+        key, value, contents = match.groups()
+        options[key] = value.strip()
+
+    return contents, options
+
+
+def _rst_include_trim(contents: str, options: dict[str, str]) -> str:
+    """
+    <https://docutils.sourceforge.io/docs/ref/rst/directives.html#include-options>
+    """
+    if "end-line" in options or "start-line" in options:
+        lines = contents.splitlines()
+        if i := options.get("end-line"):
+            lines = lines[: int(i)]
+        if i := options.get("start-line"):
+            lines = lines[int(i) :]
+        contents = "\n".join(lines)
+    if x := options.get("end-before"):
+        contents = contents[: contents.index(x)]
+    if x := options.get("start-after"):
+        contents = contents[contents.index(x) + len(x) :]
+    return contents
+
+
 def _rst_admonitions(contents: str, source_file: Path | None) -> str:
     """
     Convert reStructuredText admonitions - a bit tricky because they may already be indented themselves.
@@ -370,6 +403,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
         type = m.group("type")
         val = m.group("val").strip()
         contents = dedent(m.group("contents")).strip()
+        contents, options = _rst_extract_options(contents)
 
         if type == "include":
             loc = source_file or Path(".")
@@ -378,7 +412,12 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             except OSError as e:
                 warnings.warn(f"Cannot include {val!r}: {e}")
                 included = "\n"
+            try:
+                included = _rst_include_trim(included, options) + "\n"
+            except ValueError as e:
+                warnings.warn(f"Failed to process include options for {val!r}: {e}")
             included = _rst_admonitions(included, loc.parent / val)
+            included = embed_images(included, loc.parent / val)
             return indent(included, ind)
         if type == "math":
             return f"{ind}$${val}{contents}$$\n"

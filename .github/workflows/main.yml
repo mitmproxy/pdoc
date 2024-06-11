@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   lint:
-    uses: mhils/workflows/.github/workflows/python-tox.yml@main
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v5
     with:
       cmd: tox -e lint
 
@@ -42,14 +42,14 @@ jobs:
             py: 3.9.18
           - os: ubuntu-latest
             py: 3.8.18
-    uses: mhils/workflows/.github/workflows/python-tox.yml@main
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v5
     with:
       cmd: tox -e py -- -vvv ${{ matrix.args }}
       os: ${{ matrix.os }}
       python-version: ${{ matrix.py }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@main
+    uses: mhils/workflows/.github/workflows/python-build.yml@v5
 
   check:
     if: always()
@@ -57,12 +57,14 @@ jobs:
     - lint
     - test
     - build
-    uses: mhils/workflows/.github/workflows/alls-green.yml@main
+    uses: mhils/workflows/.github/workflows/alls-green.yml@v5
     with:
       jobs: ${{ toJSON(needs) }}
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@main
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@v5
+    with:
+      artifact-name: wheels
     needs: check
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     secrets:

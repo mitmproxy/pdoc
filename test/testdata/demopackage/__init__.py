@@ -1,4 +1,5 @@
 """A test package with a sub-package at `.subpackage`."""
+
 import demopackage2
 
 from . import _child_e

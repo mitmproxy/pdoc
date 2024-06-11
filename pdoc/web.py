@@ -5,6 +5,7 @@ We want to keep the number of dependencies as small as possible,
 so we are content with the builtin `http.server` module.
 It is a bit unergonomic compared to let's say flask, but good enough for our purposes.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterable
