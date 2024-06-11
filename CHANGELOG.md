@@ -5,7 +5,6 @@
 ## Unreleased: pdoc next
 -  pdoc correctly links modules in parameters or return values that are in referenced in `__all__` of a submodule. ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe)
 
-
 ## 2024-05-16: pdoc 14.5.0
 
 - The `.. include:` rST directive now supports start-line, end-line, start-after, end-before options.

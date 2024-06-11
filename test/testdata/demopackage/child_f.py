@@ -1,4 +1,5 @@
 """child_f docstr"""
+
 from .subpackage import G
 
 
