@@ -4,6 +4,10 @@
 
 ## Unreleased: pdoc next
 
+- **Security:** Documentation generated with math mode (`pdoc --math`) does not include scripts
+  from polyfill.io anymore. See https://sansec.io/research/polyfill-supply-chain-attack for details.
+  Users who produce documentation with math mode should update immediately. All other users are unaffected.
+  ([#703](https://github.com/mitmproxy/pdoc/pull/703), @adhintz)
 
 ## 2024-05-16: pdoc 14.5.0
 
