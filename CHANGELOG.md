@@ -2,7 +2,7 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
-## Unreleased: pdoc next
+## 2024-06-25: pdoc 14.5.1
 
 - **Security:** Documentation generated with math mode (`pdoc --math`) does not include scripts
   from polyfill.io anymore. See https://sansec.io/research/polyfill-supply-chain-attack for details.
