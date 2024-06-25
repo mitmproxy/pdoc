@@ -4,9 +4,8 @@
 
 ## 2024-06-25: pdoc 14.5.1
 
-- **Security:** Documentation generated with math mode (`pdoc --math`) does not include scripts
-  from polyfill.io anymore. See https://sansec.io/research/polyfill-supply-chain-attack for details.
-  Users who produce documentation with math mode should update immediately. All other users are unaffected.
+- **[CVE-2024-38526](https://github.com/mitmproxy/pdoc/security/advisories/GHSA-5vgj-ggm4-fg62):** Documentation generated with math mode (`pdoc --math`) does not include scripts
+  from polyfill.io anymore. Users who produce documentation with math mode should update immediately. All other users are unaffected.
   ([#703](https://github.com/mitmproxy/pdoc/pull/703), @adhintz)
 
 ## 2024-05-16: pdoc 14.5.0
