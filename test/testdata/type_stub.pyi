@@ -10,6 +10,10 @@ var: list[str]
 class Class:
     attr: int
 
+    @overload
+    def __init__(self, x: int): ...
+    @overload
+    def __init__(self, x: str): ...
     def meth(self, y: bool) -> bool: ...
 
     class Subclass:

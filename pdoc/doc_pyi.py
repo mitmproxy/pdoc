@@ -85,6 +85,7 @@ def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
             stub_doc.docstring = ""
 
         target_doc.signature = stub_doc.signature
+        target_doc.overloads = stub_doc.overloads
         target_doc.funcdef = stub_doc.funcdef
         target_doc.docstring = stub_doc.docstring or target_doc.docstring
     elif isinstance(target_doc, doc.Variable) and isinstance(stub_doc, doc.Variable):

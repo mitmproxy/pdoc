@@ -15,6 +15,9 @@ class Class:
     attr = 42
     """An attribute"""
 
+    def __init__(self, x):
+        """An overloaded `__init__` method."""
+
     def meth(self, y):
         """A simple method."""
 
