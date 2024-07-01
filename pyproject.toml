@@ -123,6 +123,6 @@ commands =
 
 [testenv:lint]
 commands =
-    ruff . {posargs}
+    ruff check . {posargs}
     mypy pdoc test {posargs}
 """
