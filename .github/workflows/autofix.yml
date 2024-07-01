@@ -21,7 +21,7 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: pip install --no-deps -e .
 
-      - run: ruff --fix-only .
+      - run: ruff check --fix-only .
       - run: ruff format .
 
       - run: test/test_snapshot.py
