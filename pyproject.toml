@@ -3,7 +3,7 @@ name = "pdoc"
 description = "API Documentation for Python Projects"
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text="Unlicense" }
+license = { text="MIT-0" }
 authors = [{name = "Maximilian Hils", email = "pdoc@maximilianhils.com"}]
 dynamic = ["version"]
 
