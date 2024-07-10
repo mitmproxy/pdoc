@@ -26,6 +26,7 @@
             <ul>
                     <li><a href="demopackage/child_b.html">child_b</a></li>
                     <li><a href="demopackage/child_c.html">child_c</a></li>
+                    <li><a href="demopackage/child_f.html">child_f</a></li>
                     <li><a href="demopackage/_child_e.html">_child_e</a></li>
                     <li><a href="demopackage/subpackage.html">subpackage</a></li>
             </ul>
@@ -68,6 +69,18 @@
                         <li>
                                 <a class="function" href="#F.g">g</a>
                         </li>
+                        <li>
+                                <a class="class" href="#F.G">F.G</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#G">G</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#G.g">g</a>
+                        </li>
                 </ul>
 
             </li>
@@ -104,22 +117,25 @@ demopackage    </h1>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span> <span class="nn">.child_b</span> <span class="kn">import</span> <span class="n">B</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span> <span class="nn">.child_c</span> <span class="kn">import</span> <span class="n">C</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">.child_f</span> <span class="kn">import</span> <span class="n">F</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">if</span> <span class="n">demopackage2</span><span class="p">:</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">pass</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="s2">&quot;Test&quot;</span><span class="p">,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="s2">&quot;B&quot;</span><span class="p">,</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="s2">&quot;C&quot;</span><span class="p">,</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="s2">&quot;child_b&quot;</span><span class="p">,</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="s2">&quot;child_c&quot;</span><span class="p">,</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="s2">&quot;demopackage2&quot;</span><span class="p">,</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="s2">&quot;_child_e&quot;</span><span class="p">,</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="s2">&quot;child_excluded&quot;</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="s2">&quot;subpackage&quot;</span><span class="p">,</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="s2">&quot;F&quot;</span><span class="p">,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="p">]</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span> <span class="nn">.subpackage</span> <span class="kn">import</span> <span class="n">G</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">if</span> <span class="n">demopackage2</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="k">pass</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="s2">&quot;B&quot;</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="s2">&quot;child_b&quot;</span><span class="p">,</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="s2">&quot;child_c&quot;</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="s2">&quot;child_f&quot;</span><span class="p">,</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="s2">&quot;demopackage2&quot;</span><span class="p">,</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="s2">&quot;_child_e&quot;</span><span class="p">,</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="s2">&quot;child_excluded&quot;</span><span class="p">,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="s2">&quot;subpackage&quot;</span><span class="p">,</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -240,14 +256,14 @@ demopackage    </h1>
     </div>
     <a class="headerlink" href="#C"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="C-7"><a href="#C-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">child_b</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
-</span><span id="C-8"><a href="#C-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in .child_c and inherits from .child_b.B&quot;&quot;&quot;</span>
+</span><span id="C-8"><a href="#C-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in .child_c and inherits from .child_b.B.&quot;&quot;&quot;</span>
 </span><span id="C-9"><a href="#C-9"><span class="linenos"> 9</span></a>
 </span><span id="C-10"><a href="#C-10"><span class="linenos">10</span></a>    <span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="C-11"><a href="#C-11"><span class="linenos">11</span></a>        <span class="k">return</span> <span class="mi">2</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This class is defined in <a href="demopackage/child_c.html">demopackage.child_c</a> and inherits from <a href="#B">B</a></p>
+            <div class="docstring"><p>This class is defined in <a href="demopackage/child_c.html">demopackage.child_c</a> and inherits from <a href="#B">B</a>.</p>
 </div>
 
 
@@ -293,14 +309,32 @@ demopackage    </h1>
     </div>
     <a class="headerlink" href="#F"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="F-7"><a href="#F-7"><span class="linenos"> 7</span></a><span class="k">class</span> <span class="nc">F</span><span class="p">:</span>
-</span><span id="F-8"><a href="#F-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in .child_f links to demopackage.subpackage.G.&quot;&quot;&quot;</span>
-</span><span id="F-9"><a href="#F-9"><span class="linenos"> 9</span></a>
-</span><span id="F-10"><a href="#F-10"><span class="linenos">10</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">G</span><span class="p">:</span>
-</span><span id="F-11"><a href="#F-11"><span class="linenos">11</span></a>        <span class="k">return</span> <span class="n">G</span><span class="p">()</span>
+</span><span id="F-8"><a href="#F-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="F-9"><a href="#F-9"><span class="linenos"> 9</span></a><span class="sd">    This class defined in .child_f links to subpackage&#39;s G which is re-exposed as `G` directly in demopackage.</span>
+</span><span id="F-10"><a href="#F-10"><span class="linenos">10</span></a>
+</span><span id="F-11"><a href="#F-11"><span class="linenos">11</span></a><span class="sd">    We want to make sure that these links render:</span>
+</span><span id="F-12"><a href="#F-12"><span class="linenos">12</span></a>
+</span><span id="F-13"><a href="#F-13"><span class="linenos">13</span></a><span class="sd">    - demopackage.G</span>
+</span><span id="F-14"><a href="#F-14"><span class="linenos">14</span></a><span class="sd">    - demopackage.subpackage.G</span>
+</span><span id="F-15"><a href="#F-15"><span class="linenos">15</span></a><span class="sd">    - demopackage.subpackage.child_g.G</span>
+</span><span id="F-16"><a href="#F-16"><span class="linenos">16</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="F-17"><a href="#F-17"><span class="linenos">17</span></a>
+</span><span id="F-18"><a href="#F-18"><span class="linenos">18</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">subpackage</span><span class="o">.</span><span class="n">G</span><span class="p">:</span>
+</span><span id="F-19"><a href="#F-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">subpackage</span><span class="o">.</span><span class="n">G</span><span class="p">()</span>
+</span><span id="F-20"><a href="#F-20"><span class="linenos">20</span></a>
+</span><span id="F-21"><a href="#F-21"><span class="linenos">21</span></a>    <span class="n">G</span> <span class="o">=</span> <span class="n">subpackage</span><span class="o">.</span><span class="n">G</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This class is defined in .child_f links to <a href="demopackage/subpackage.html#G">demopackage.subpackage.G</a>.</p>
+            <div class="docstring"><p>This class defined in <a href="demopackage/child_f.html">demopackage.child_f</a> links to subpackage's G which is re-exposed as <code><a href="#F.G">G</a></code> directly in demopackage.</p>
+
+<p>We want to make sure that these links render:</p>
+
+<ul>
+<li><a href="#G">G</a></li>
+<li><a href="#G">G</a></li>
+<li><a href="#G">G</a></li>
+</ul>
 </div>
 
 
@@ -309,14 +343,90 @@ demopackage    </h1>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">g</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="demopackage/subpackage.html#G">demopackage.subpackage.G</a></span>:</span></span>
+        <span class="name">g</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#G">G</a></span>:</span></span>
 
                 <label class="view-source-button" for="F.g-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#F.g"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="F.g-10"><a href="#F.g-10"><span class="linenos">10</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">G</span><span class="p">:</span>
-</span><span id="F.g-11"><a href="#F.g-11"><span class="linenos">11</span></a>        <span class="k">return</span> <span class="n">G</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="F.g-18"><a href="#F.g-18"><span class="linenos">18</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">subpackage</span><span class="o">.</span><span class="n">G</span><span class="p">:</span>
+</span><span id="F.g-19"><a href="#F.g-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">subpackage</span><span class="o">.</span><span class="n">G</span><span class="p">()</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                </section>
+                <section id="F.G">
+                            <input id="F.G-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">F.G</span>:
+
+                <label class="view-source-button" for="F.G-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#F.G"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="F.G-5"><a href="#F.G-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">G</span><span class="p">:</span>
+</span><span id="F.G-6"><a href="#F.G-6"><span class="linenos">6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in subpackage&#39;s child_g, but reexposed in the `demopackage.subpackage` namespace.&quot;&quot;&quot;</span>
+</span><span id="F.G-7"><a href="#F.G-7"><span class="linenos">7</span></a>
+</span><span id="F.G-8"><a href="#F.G-8"><span class="linenos">8</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">():</span>
+</span><span id="F.G-9"><a href="#F.G-9"><span class="linenos">9</span></a>        <span class="k">pass</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>This class is defined in subpackage's child_g, but reexposed in the <code><a href="demopackage/subpackage.html">demopackage.subpackage</a></code> namespace.</p>
+</div>
+
+
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="#G">G</a></dt>
+                                <dd id="F.G.g" class="function"><a href="#G.g">g</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="G">
+                            <input id="G-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">G</span>:
+
+                <label class="view-source-button" for="G-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#G"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="G-5"><a href="#G-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">G</span><span class="p">:</span>
+</span><span id="G-6"><a href="#G-6"><span class="linenos">6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This class is defined in subpackage&#39;s child_g, but reexposed in the `demopackage.subpackage` namespace.&quot;&quot;&quot;</span>
+</span><span id="G-7"><a href="#G-7"><span class="linenos">7</span></a>
+</span><span id="G-8"><a href="#G-8"><span class="linenos">8</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">():</span>
+</span><span id="G-9"><a href="#G-9"><span class="linenos">9</span></a>        <span class="k">pass</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>This class is defined in subpackage's child_g, but reexposed in the <code><a href="demopackage/subpackage.html">demopackage.subpackage</a></code> namespace.</p>
+</div>
+
+
+                            <div id="G.g" class="classattr">
+                                        <input id="G.g-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">g</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="G.g-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#G.g"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="G.g-8"><a href="#G.g-8"><span class="linenos">8</span></a>    <span class="k">def</span> <span class="nf">g</span><span class="p">():</span>
+</span><span id="G.g-9"><a href="#G.g-9"><span class="linenos">9</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 

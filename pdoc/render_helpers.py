@@ -207,6 +207,10 @@ def possible_sources(
     We return both candidates as we don't know if _internal.py exists.
     It may not be in all_modules because it's been excluded by `__all__`.
     However, if `examplepkg._internal` is in all_modules we know that it can only be that option.
+
+    >>> possible_sources(["examplepkg"], "examplepkg.Foo.bar")
+    examplepkg.Foo, bar
+    examplepkg, Foo.bar
     """
     if identifier in all_modules:
         yield identifier, ""
@@ -273,6 +277,34 @@ def qualname_candidates(identifier: str, context_qualname: str) -> list[str]:
     return ret
 
 
+def module_candidates(identifier: str, current_module: str) -> Iterable[str]:
+    """
+    Given an identifier and the current module name, return the module names we should look at
+    to find where the target object is exposed. Module names are ordered by preferences, i.e.
+    we always prefer the current module and then top-level modules over their children.
+
+    >>> module_candidates("foo.bar.baz", "qux")
+    qux
+    foo
+    foo.bar
+    foo.bar.baz
+    >>> module_candidates("foo.bar.baz", "foo.bar")
+    foo.bar
+    foo
+    foo.bar.baz
+    """
+    yield current_module
+
+    end = identifier.find(".")
+    while end > 0:
+        if (name := identifier[:end]) != current_module:
+            yield name
+        end = identifier.find(".", end + 1)
+
+    if identifier != current_module:
+        yield identifier
+
+
 @pass_context
 def linkify(context: Context, code: str, namespace: str = "") -> str:
     """
@@ -282,6 +314,9 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
     """
 
     def linkify_repl(m: re.Match):
+        """
+        Resolve `text` to the most suitable documentation object.
+        """
         text = m.group(0)
         plain_text = text.replace(
             '</span><span class="o">.</span><span class="n">', "."
@@ -289,7 +324,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
         identifier = removesuffix(plain_text, "()")
         mod: pdoc.doc.Module = context["module"]
 
-        # Check if this is a relative reference?
+        # Check if this is a relative reference. These cannot be local and need to be resolved.
         if identifier.startswith("."):
             taken_from_mod = mod
             if namespace and (ns := mod.get(namespace)):
@@ -306,57 +341,56 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                 parent_module = parent_module.rpartition(".")[0]
             identifier = parent_module + identifier
         else:
-            # Check if this is a local reference within this module?
+            # Is this a local reference within this module?
             for qualname in qualname_candidates(identifier, namespace):
                 doc = mod.get(qualname)
                 if doc and context["is_public"](doc).strip():
                     return f'<a href="#{qualname}">{plain_text}</a>'
 
-        module = ""
-        qualname = ""
+        # Is this a reference pointing straight at a module?
+        if identifier in context["all_modules"]:
+            return f'<a href="{relative_link(context["module"].modulename, identifier)}">{identifier}</a>'
+
         try:
-            # Check if the object we are interested in is imported and re-exposed in the current namespace.
-            for module, qualname in possible_sources(
-                context["all_modules"], identifier
-            ):
-                doc = mod.get(qualname)
-                if (
-                    doc
-                    and doc.taken_from == (module, qualname)
-                    and context["is_public"](doc).strip()
-                ):
-                    if plain_text.endswith("()"):
-                        plain_text = f"{doc.qualname}()"
-                    else:
-                        plain_text = doc.qualname
-                    return f'<a href="#{qualname}">{plain_text}</a>'
+            sources = list(possible_sources(context["all_modules"], identifier))
         except ValueError:
             # possible_sources did not find a parent module.
             return text
-        else:
-            # It's not, but we now know the parent module. Does the target exist?
-            doc = context["all_modules"][module]
-            # Check again if the object was re-exposed
-            for module, qualname in possible_sources(
-                context["all_modules"], identifier
-            ):
-                if qualname:
-                    assert isinstance(doc, pdoc.doc.Module)
-                    doc = doc.get(qualname)
+
+        # Try to find the actual target object so that we can then later verify
+        # that objects exposed at a parent module with the same name point to it.
+        target_object = None
+        for module, qualname in sources:
+            if doc := context["all_modules"].get(module, {}).get(qualname):
+                target_object = doc.obj
+                break
+
+        # Look at the different modules where our target object may be exposed.
+        for parent_module_name in module_candidates(identifier, mod.modulename):
+            parent_module = context["all_modules"].get(parent_module_name)
+            if not parent_module:
+                continue
+
+            for _, qualname in sources:
+                doc = parent_module.get(qualname)
+                # Check if they have an object with the same name,
+                # and verify that it's pointing to the right thing and is public.
                 target_exists_and_public = (
-                    doc is not None and context["is_public"](doc).strip()
+                    doc
+                    and (target_object is doc.obj or target_object is None)
+                    and context["is_public"](doc).strip()
                 )
                 if target_exists_and_public:
-                    assert doc is not None  # mypy
-                    if qualname:
-                        qualname = f"#{qualname}"
-                    if plain_text.endswith("()"):
-                        plain_text = f"{doc.fullname}()"
+                    if parent_module == mod:
+                        url_text = qualname
                     else:
-                        plain_text = doc.fullname
-                    return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}{qualname}">{plain_text}</a>'
-                else:
-                    return text
+                        url_text = doc.fullname
+                    if plain_text.endswith("()"):
+                        url_text += "()"
+                    return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}#{qualname}">{url_text}</a>'
+
+        # No matches found.
+        return text
 
     return Markup(
         re.sub(

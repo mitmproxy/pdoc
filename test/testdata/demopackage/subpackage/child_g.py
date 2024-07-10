@@ -2,6 +2,7 @@
 
 
 class G:
-    """This class is defined in demopackage.subpackage."""
+    """This class is defined in subpackage's child_g, but reexposed in the `demopackage.subpackage` namespace."""
 
-    pass
+    def g():
+        pass

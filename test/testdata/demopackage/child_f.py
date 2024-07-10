@@ -1,10 +1,20 @@
 """child_f docstr"""
 
-from .subpackage import G
+from . import subpackage
 
 
 class F:
-    """This class is defined in .child_f links to demopackage.subpackage.G."""
+    """
+    This class defined in .child_f links to subpackage's G which is re-exposed as `G` directly in demopackage.
 
-    def g(self) -> G:
-        return G()
+    We want to make sure that these links render:
+
+    - demopackage.G
+    - demopackage.subpackage.G
+    - demopackage.subpackage.child_g.G
+    """
+
+    def g(self) -> subpackage.G:
+        return subpackage.G()
+
+    G = subpackage.G

@@ -10,6 +10,7 @@ from pdoc.render_helpers import qualname_candidates
 from pdoc.render_helpers import relative_link
 from pdoc.render_helpers import split_identifier
 from pdoc.render_helpers import to_html
+from pdoc.render_helpers import module_candidates
 
 
 @pytest.mark.parametrize(
@@ -37,6 +38,18 @@ def test_relative_link(current, target, relative):
 )
 def test_qualname_candidates(context, candidates):
     assert qualname_candidates("qux", context) == candidates
+
+
+@pytest.mark.parametrize(
+    "identifier,current_module,candidates",
+    [
+        ["foo.bar.baz", "qux", ["qux", "foo", "foo.bar", "foo.bar.baz"]],
+        ["foo.bar.baz", "foo.bar", ["foo.bar", "foo", "foo.bar.baz"]],
+        ["foo.bar.baz", "foo", ["foo", "foo.bar", "foo.bar.baz"]],
+    ],
+)
+def test_module_candidates(identifier, current_module, candidates):
+    assert list(module_candidates(identifier, current_module)) == candidates
 
 
 @pytest.mark.parametrize(
