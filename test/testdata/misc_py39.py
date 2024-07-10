@@ -6,7 +6,8 @@ from __future__ import annotations
 
 import functools
 from typing import Union
-
+from dataclasses import dataclass
+from ctypes import Structure
 
 class SingleDispatchMethodExample:
     @functools.singledispatchmethod
@@ -32,3 +33,8 @@ class SingleDispatchMethodExample:
         :param int_to_handle: int which will be handled
         """
         print(f"{type(int_to_handle)} = '{int_to_handle:x}'")
+
+
+@dataclass(init=False)
+class DataclassStructure(Structure):
+    """DataclassStructure raises for `inspect.signature`."""

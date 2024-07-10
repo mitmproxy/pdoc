@@ -4,9 +4,6 @@ from functools import lru_cache
 import sched
 from typing import Generic
 from typing import TypeVar
-from dataclasses import dataclass
-from ctypes import Structure
-from ctypes import c_char_p
 
 # https://github.com/mitmproxy/pdoc/issues/226
 
@@ -438,10 +435,6 @@ class DocstringFromNew:
     def __new__(cls, *args, **kwargs):
         """This is a class with a docstring inferred from `__new__`."""
 
-
-@dataclass(init=False)
-class DataclassStructure(Structure):
-    """DataclassStructure raises for `inspect.signature`."""
 
 __all__ = [
     "Issue226",
