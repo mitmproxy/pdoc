@@ -19,11 +19,11 @@
         <method def g(self) -> demopackage.subpackage.child_g.G: ...  # inherited from demopackage.child_f.F.g>
         <class demopackage.F.G  # inherited from demopackage.child_f.F.G, This class is define…
             <method def __init__(): ...  # inherited from demopackage.subpackage.child_g.G.__init__>
-            <method def g(): ...  # inherited from demopackage.subpackage.child_g.G.g>
+            <method def g(self): ...  # inherited from demopackage.subpackage.child_g.G.g>
         >
     >
     <class demopackage.G  # inherited from demopackage.subpackage.child_g.G, This class is define…
         <method def __init__(): ...  # inherited from demopackage.subpackage.child_g.G.__init__>
-        <method def g(): ...  # inherited from demopackage.subpackage.child_g.G.g>
+        <method def g(self): ...  # inherited from demopackage.subpackage.child_g.G.g>
     >
 >
