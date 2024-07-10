@@ -68,6 +68,8 @@ def test_walk_specs():
         "pdoc_pyo3_sample_library.correct_name_submodule",
     ]
 
+    assert walk_specs([here / "boguous_dir"]) == ["test.boguous_dir"]
+
 
 def test_parse_spec(monkeypatch):
     p = sys.path

@@ -4,6 +4,8 @@ Testing features that either are 3.9+ only or render slightly different on 3.9.
 
 from __future__ import annotations
 
+from ctypes import Structure
+from dataclasses import dataclass
 import functools
 from typing import Union
 
@@ -32,3 +34,8 @@ class SingleDispatchMethodExample:
         :param int_to_handle: int which will be handled
         """
         print(f"{type(int_to_handle)} = '{int_to_handle:x}'")
+
+
+@dataclass(init=False)
+class DataclassStructure(Structure):
+    """DataclassStructure raises for `inspect.signature`."""

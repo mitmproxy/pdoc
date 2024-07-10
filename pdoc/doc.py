@@ -587,15 +587,21 @@ class Class(Namespace[type]):
         if doc == dict.__doc__:
             # Don't display default docstring for dict subclasses (primarily TypedDict).
             return ""
-        is_dataclass_with_default_docstring = (
-            dataclasses.is_dataclass(self.obj)
-            # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
-            and doc
-            == self.obj.__name__
-            + str(inspect.signature(self.obj)).replace(" -> None", "")
-        )
-        if is_dataclass_with_default_docstring:
+        if doc in _Enum_default_docstrings:
+            # Don't display default docstring for enum subclasses.
             return ""
+        if dataclasses.is_dataclass(self.obj) and doc.startswith(self.obj.__name__):
+            try:
+                sig = inspect.signature(self.obj)
+            except Exception:
+                pass
+            else:
+                # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
+                is_dataclass_with_default_docstring = doc == self.obj.__name__ + str(
+                    sig
+                ).replace(" -> None", "")
+                if is_dataclass_with_default_docstring:
+                    return ""
         return doc
 
     @cached_property
@@ -1304,6 +1310,15 @@ def _safe_getdoc(obj: Any) -> str:
         return ""
     else:
         return doc.strip()
+
+
+_Enum_default_docstrings = tuple(
+    {
+        _safe_getdoc(enum.Enum),
+        _safe_getdoc(enum.IntEnum),
+        _safe_getdoc(_safe_getattr(enum, "StrEnum", enum.Enum)),
+    }
+)
 
 
 def _remove_memory_addresses(x: str) -> str:

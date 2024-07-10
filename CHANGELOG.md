@@ -3,7 +3,23 @@
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
 ## Unreleased: pdoc next
--  pdoc correctly links modules in parameters or return values that are in referenced in `__all__` of a submodule. ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe)
+
+- If `example.data.Data` is also exposed as `example.Data`, pdoc now links to `example.Data` in documentation.
+  ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe, @mhils)
+- Improve rendering of enums on Python 3.12+.
+  ([#708](https://github.com/mitmproxy/pdoc/pull/708), @mhils)
+- Fix a bug where hyperlinks would get parsed as docstring references.
+  ([#709](https://github.com/mitmproxy/pdoc/pull/709), @mhils)
+- Fix a TypeError when trying to parse modules that implement `__dir__` incorrectly.
+  ([#710](https://github.com/mitmproxy/pdoc/pull/710), @mhils)
+- Fix a bug where a combination of `@dataclass` and `ctypes.Structure` would crash pdoc.
+  ([#711](https://github.com/mitmproxy/pdoc/pull/711), @mhils)
+
+## 2024-06-25: pdoc 14.5.1
+
+- **[CVE-2024-38526](https://github.com/mitmproxy/pdoc/security/advisories/GHSA-5vgj-ggm4-fg62):** Documentation generated with math mode (`pdoc --math`) does not include scripts
+  from polyfill.io anymore. Users who produce documentation with math mode should update immediately. All other users are unaffected.
+  ([#703](https://github.com/mitmproxy/pdoc/pull/703), @adhintz)
 
 ## 2024-05-16: pdoc 14.5.0
 
