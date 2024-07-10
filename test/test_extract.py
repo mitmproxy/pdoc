@@ -27,6 +27,7 @@ def test_walk_specs():
         "demopackage._child_e",
         "demopackage.child_b",
         "demopackage.child_c",
+        "demopackage.child_f",
         "demopackage.subpackage",
     ]
     with pytest.raises(ValueError, match="No modules found matching spec: unknown"):

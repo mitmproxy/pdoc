@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- If `example.data.Data` is also exposed as `example.Data`, pdoc now links to `example.Data` in documentation.
+  ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe, @mhils)
 - Improve rendering of enums on Python 3.12+.
   ([#708](https://github.com/mitmproxy/pdoc/pull/708), @mhils)
 - Fix a bug where hyperlinks would get parsed as docstring references.
