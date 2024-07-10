@@ -5,6 +5,7 @@
 ## Unreleased: pdoc next
 
 - Fix a bug where hyperlinks would get parsed as docstring references.
+  ([#709](https://github.com/mitmproxy/pdoc/pull/709), @mhils)
 
 ## 2024-06-25: pdoc 14.5.1
 
