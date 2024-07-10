@@ -477,5 +477,4 @@ __all__ = [
     "dynamically_modify_docstring4",
     "MyDict",
     "DocstringFromNew",
-    "DataclassStructure",
 ]
