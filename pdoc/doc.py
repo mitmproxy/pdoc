@@ -1309,11 +1309,11 @@ def _safe_getdoc(obj: Any) -> str:
         return doc.strip()
 
 
-_Enum_default_docstrings = (
+_Enum_default_docstrings = tuple({
     _safe_getdoc(enum.Enum),
     _safe_getdoc(enum.IntEnum),
-    _safe_getdoc(enum.StrEnum),
-)
+    _safe_getdoc(_safe_getattr(enum, "StrEnum", enum.Enum)),
+})
 
 
 def _remove_memory_addresses(x: str) -> str:
