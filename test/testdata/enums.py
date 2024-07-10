@@ -1,5 +1,6 @@
 import enum
 
+
 class EnumDemo(enum.Enum):
     """
     This is an example of an Enum.
@@ -13,13 +14,16 @@ class EnumDemo(enum.Enum):
     """I am green."""
     BLUE = enum.auto()
 
+
 class EnumWithoutDocstrings(enum.Enum):
     FOO = enum.auto()
     BAR = enum.auto()
 
+
 class IntEnum(enum.IntEnum):
     FOO = enum.auto()
     BAR = enum.auto()
+
 
 class StrEnum(enum.StrEnum):
     FOO = enum.auto()

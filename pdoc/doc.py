@@ -1315,6 +1315,7 @@ _Enum_default_docstrings = (
     _safe_getdoc(enum.StrEnum),
 )
 
+
 def _remove_memory_addresses(x: str) -> str:
     """Remove memory addresses from repr() output"""
     return re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", x)
