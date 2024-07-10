@@ -2,6 +2,10 @@
 
 <!-- ✨ You do not need to add a pull request reference or an author, this will be added automatically by CI. ✨ -->
 
+## Unreleased: pdoc next
+
+- Fix a bug where hyperlinks would get parsed as docstring references.
+
 ## 2024-06-25: pdoc 14.5.1
 
 - **[CVE-2024-38526](https://github.com/mitmproxy/pdoc/security/advisories/GHSA-5vgj-ggm4-fg62):** Documentation generated with math mode (`pdoc --math`) does not include scripts

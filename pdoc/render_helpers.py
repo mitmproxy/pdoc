@@ -358,7 +358,7 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
         re.sub(
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
-            (?<![/=?#&])  # heuristic: not part of a URL
+            (?<![/=?#&\.])  # heuristic: not part of a URL
             # First part of the identifier (e.g. "foo") - this is optional for relative references.
             (?:
                 \b
