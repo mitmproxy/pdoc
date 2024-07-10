@@ -590,15 +590,18 @@ class Class(Namespace[type]):
         if doc in _Enum_default_docstrings:
             # Don't display default docstring for enum subclasses.
             return ""
-        is_dataclass_with_default_docstring = (
-            dataclasses.is_dataclass(self.obj)
-            # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
-            and doc
-            == self.obj.__name__
-            + str(inspect.signature(self.obj)).replace(" -> None", "")
-        )
-        if is_dataclass_with_default_docstring:
-            return ""
+        if dataclasses.is_dataclass(self.obj) and doc.startswith(self.obj.__name__):
+            try:
+                sig = inspect.signature(self.obj)
+            except Exception:
+                pass
+            else:
+                # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
+                is_dataclass_with_default_docstring = (
+                    doc == self.obj.__name__ + str(sig).replace(" -> None", "")
+                )
+                if is_dataclass_with_default_docstring:
+                    return ""
         return doc
 
     @cached_property

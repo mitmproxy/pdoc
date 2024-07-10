@@ -135,4 +135,7 @@
     <class misc.DocstringFromNew
         <method def __init__(cls, *args, **kwargs): ...  # This is a class with…>
     >
+    <@dataclass(init=False) class misc.DataclassStructure  # DataclassStructure r…
+        <method def __init__(self, /, *args, **kwargs): ...  # inherited from _ctypes.Structure.__init__>
+    >
 >
