@@ -4,10 +4,11 @@ Testing features that either are 3.9+ only or render slightly different on 3.9.
 
 from __future__ import annotations
 
+from ctypes import Structure
+from dataclasses import dataclass
 import functools
 from typing import Union
-from dataclasses import dataclass
-from ctypes import Structure
+
 
 class SingleDispatchMethodExample:
     @functools.singledispatchmethod

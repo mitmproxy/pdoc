@@ -597,9 +597,9 @@ class Class(Namespace[type]):
                 pass
             else:
                 # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
-                is_dataclass_with_default_docstring = (
-                    doc == self.obj.__name__ + str(sig).replace(" -> None", "")
-                )
+                is_dataclass_with_default_docstring = doc == self.obj.__name__ + str(
+                    sig
+                ).replace(" -> None", "")
                 if is_dataclass_with_default_docstring:
                     return ""
         return doc
