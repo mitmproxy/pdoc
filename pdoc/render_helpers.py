@@ -360,28 +360,27 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
         # Try to find the actual target object so that we can then later verify
         # that objects exposed at a parent module with the same name point to it.
         target_object = None
-        for module, qualname in sources:
-            if doc := context["all_modules"].get(module, {}).get(qualname):
+        for module_name, qualname in sources:
+            if doc := context["all_modules"].get(module_name, {}).get(qualname):
                 target_object = doc.obj
                 break
 
         # Look at the different modules where our target object may be exposed.
-        for parent_module_name in module_candidates(identifier, mod.modulename):
-            parent_module = context["all_modules"].get(parent_module_name)
-            if not parent_module:
+        for module_name in module_candidates(identifier, mod.modulename):
+            module: pdoc.doc.Module | None = context["all_modules"].get(module_name)
+            if not module:
                 continue
 
             for _, qualname in sources:
-                doc = parent_module.get(qualname)
+                doc = module.get(qualname)
                 # Check if they have an object with the same name,
                 # and verify that it's pointing to the right thing and is public.
-                target_exists_and_public = (
+                if (
                     doc
                     and (target_object is doc.obj or target_object is None)
                     and context["is_public"](doc).strip()
-                )
-                if target_exists_and_public:
-                    if parent_module == mod:
+                ):
+                    if module == mod:
                         url_text = qualname
                     else:
                         url_text = doc.fullname
