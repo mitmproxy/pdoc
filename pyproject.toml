@@ -99,12 +99,11 @@ ignore_missing_imports = true
 
 [tool.ruff]
 extend-exclude = ["test/testdata/demo.py"]
+
+[tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = ["E501"]
-
-[tool.ruff.isort]
-force-single-line = true
-force-sort-within-sections = true
+isort = { force-single-line = true, force-sort-within-sections = true }
 
 [tool.tox]
 legacy_tox_ini = """
