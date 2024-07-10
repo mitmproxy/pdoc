@@ -97,6 +97,7 @@ class Snapshot:
 snapshots = [
     Snapshot("ast_parsing"),
     Snapshot("demo", min_version=(3, 9)),
+    Snapshot("enums"),
     Snapshot("flavors_google"),
     Snapshot("flavors_numpy"),
     Snapshot("flavors_rst"),
