@@ -9,6 +9,7 @@
 - Fix a bug where hyperlinks would get parsed as docstring references.
   ([#709](https://github.com/mitmproxy/pdoc/pull/709), @mhils)
 - Fix a TypeError when trying to parse modules that implement `__dir__` incorrectly.
+  ([#710](https://github.com/mitmproxy/pdoc/pull/710), @mhils)
 
 ## 2024-06-25: pdoc 14.5.1
 
