@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- Improve rendering of enums on Python 3.12+.
 - Fix a bug where hyperlinks would get parsed as docstring references.
   ([#709](https://github.com/mitmproxy/pdoc/pull/709), @mhils)
 
