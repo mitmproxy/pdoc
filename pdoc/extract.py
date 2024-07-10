@@ -253,7 +253,7 @@ def iter_modules2(module: types.ModuleType) -> dict[str, pkgutil.ModuleInfo]:
     # This is a hacky workaround to register them.
     members = dir(module) if mod_all is None else mod_all
     for name in members:
-        if name in submodules or name == "__main__":
+        if name in submodules or name == "__main__" or not isinstance(name, str):
             continue
         member = getattr(module, name, None)
         is_wild_child_module = (
