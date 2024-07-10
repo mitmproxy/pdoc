@@ -5,12 +5,12 @@ from collections.abc import Mapping
 import pytest
 
 from pdoc.render_helpers import edit_url
+from pdoc.render_helpers import module_candidates
 from pdoc.render_helpers import possible_sources
 from pdoc.render_helpers import qualname_candidates
 from pdoc.render_helpers import relative_link
 from pdoc.render_helpers import split_identifier
 from pdoc.render_helpers import to_html
-from pdoc.render_helpers import module_candidates
 
 
 @pytest.mark.parametrize(
