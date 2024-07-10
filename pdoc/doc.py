@@ -587,6 +587,9 @@ class Class(Namespace[type]):
         if doc == dict.__doc__:
             # Don't display default docstring for dict subclasses (primarily TypedDict).
             return ""
+        if doc in _Enum_default_docstrings:
+            # Don't display default docstring for enum subclasses.
+            return ""
         is_dataclass_with_default_docstring = (
             dataclasses.is_dataclass(self.obj)
             # from https://github.com/python/cpython/blob/3.10/Lib/dataclasses.py
@@ -1304,6 +1307,15 @@ def _safe_getdoc(obj: Any) -> str:
         return ""
     else:
         return doc.strip()
+
+
+_Enum_default_docstrings = tuple(
+    {
+        _safe_getdoc(enum.Enum),
+        _safe_getdoc(enum.IntEnum),
+        _safe_getdoc(_safe_getattr(enum, "StrEnum", enum.Enum)),
+    }
+)
 
 
 def _remove_memory_addresses(x: str) -> str:

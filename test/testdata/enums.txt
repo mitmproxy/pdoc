@@ -1,0 +1,85 @@
+<module enums
+    <class enums.EnumDemo  # This is an example o…
+        <var RED = <EnumDemo.RED: 1>  # I am the red.>
+        <var GREEN = <EnumDemo.GREEN: 2>  # I am green.>
+        <var BLUE = <EnumDemo.BLUE: 3>>
+        <var name  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>
+    >
+    <class enums.EnumWithoutDocstrings
+        <var FOO = <EnumWithoutDocstrings.FOO: 1>>
+        <var BAR = <EnumWithoutDocstrings.BAR: 2>>
+        <var name  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>
+    >
+    <class enums.IntEnum
+        <var FOO = <IntEnum.FOO: 1>>
+        <var BAR = <IntEnum.BAR: 2>>
+        <var name  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>
+        <method def conjugate(unknown): ...  # inherited from builtins.int.conjugate, Returns self, the co…>
+        <method def bit_length(self, /): ...  # inherited from builtins.int.bit_length, Number of bits neces…>
+        <method def bit_count(self, /): ...  # inherited from builtins.int.bit_count, Number of ones in th…>
+        <method def to_bytes(self, /, length=1, byteorder='big', *, signed=False): ...  # inherited from builtins.int.to_bytes, Return an array of b…>
+        <method def from_bytes(type, /, bytes, byteorder='big', *, signed=False): ...  # inherited from builtins.int.from_bytes, Return the integer r…>
+        <method def as_integer_ratio(self, /): ...  # inherited from builtins.int.as_integer_ratio, Return a pair of int…>
+        <method def is_integer(self, /): ...  # inherited from builtins.int.is_integer, Returns True. Exists…>
+        <var real  # inherited from builtins.int.real, the real part of a c…>
+        <var imag  # inherited from builtins.int.imag, the imaginary part o…>
+        <var numerator  # inherited from builtins.int.numerator, the numerator of a r…>
+        <var denominator  # inherited from builtins.int.denominator, the denominator of a…>
+    >
+    <class enums.StrEnum
+        <var FOO = <StrEnum.FOO: 'foo'>>
+        <var BAR = <StrEnum.BAR: 'bar'>>
+        <var name  # inherited from enum.Enum.name, The name of the Enum…>
+        <var value  # inherited from enum.Enum.value, The value of the Enu…>
+        <method def encode(self, /, encoding='utf-8', errors='strict'): ...  # inherited from builtins.str.encode, Encode the string us…>
+        <method def replace(self, old, new, count=-1, /): ...  # inherited from builtins.str.replace, Return a copy with a…>
+        <method def split(self, /, sep=None, maxsplit=-1): ...  # inherited from builtins.str.split, Return a list of the…>
+        <method def rsplit(self, /, sep=None, maxsplit=-1): ...  # inherited from builtins.str.rsplit, Return a list of the…>
+        <method def join(self, iterable, /): ...  # inherited from builtins.str.join, Concatenate any numb…>
+        <method def capitalize(self, /): ...  # inherited from builtins.str.capitalize, Return a capitalized…>
+        <method def casefold(self, /): ...  # inherited from builtins.str.casefold, Return a version of …>
+        <method def title(self, /): ...  # inherited from builtins.str.title, Return a version of …>
+        <method def center(self, width, fillchar=' ', /): ...  # inherited from builtins.str.center, Return a centered st…>
+        <method def count(unknown): ...  # inherited from builtins.str.count, S.count(sub[, start[…>
+        <method def expandtabs(self, /, tabsize=8): ...  # inherited from builtins.str.expandtabs, Return a copy where …>
+        <method def find(unknown): ...  # inherited from builtins.str.find, S.find(sub[, start[,…>
+        <method def partition(self, sep, /): ...  # inherited from builtins.str.partition, Partition the string…>
+        <method def index(unknown): ...  # inherited from builtins.str.index, S.index(sub[, start[…>
+        <method def ljust(self, width, fillchar=' ', /): ...  # inherited from builtins.str.ljust, Return a left-justif…>
+        <method def lower(self, /): ...  # inherited from builtins.str.lower, Return a copy of the…>
+        <method def lstrip(self, chars=None, /): ...  # inherited from builtins.str.lstrip, Return a copy of the…>
+        <method def rfind(unknown): ...  # inherited from builtins.str.rfind, S.rfind(sub[, start[…>
+        <method def rindex(unknown): ...  # inherited from builtins.str.rindex, S.rindex(sub[, start…>
+        <method def rjust(self, width, fillchar=' ', /): ...  # inherited from builtins.str.rjust, Return a right-justi…>
+        <method def rstrip(self, chars=None, /): ...  # inherited from builtins.str.rstrip, Return a copy of the…>
+        <method def rpartition(self, sep, /): ...  # inherited from builtins.str.rpartition, Partition the string…>
+        <method def splitlines(self, /, keepends=False): ...  # inherited from builtins.str.splitlines, Return a list of the…>
+        <method def strip(self, chars=None, /): ...  # inherited from builtins.str.strip, Return a copy of the…>
+        <method def swapcase(self, /): ...  # inherited from builtins.str.swapcase, Convert uppercase ch…>
+        <method def translate(self, table, /): ...  # inherited from builtins.str.translate, Replace each charact…>
+        <method def upper(self, /): ...  # inherited from builtins.str.upper, Return a copy of the…>
+        <method def startswith(unknown): ...  # inherited from builtins.str.startswith, S.startswith(prefix[…>
+        <method def endswith(unknown): ...  # inherited from builtins.str.endswith, S.endswith(suffix[, …>
+        <method def removeprefix(self, prefix, /): ...  # inherited from builtins.str.removeprefix, Return a str with th…>
+        <method def removesuffix(self, suffix, /): ...  # inherited from builtins.str.removesuffix, Return a str with th…>
+        <method def isascii(self, /): ...  # inherited from builtins.str.isascii, Return True if all c…>
+        <method def islower(self, /): ...  # inherited from builtins.str.islower, Return True if the s…>
+        <method def isupper(self, /): ...  # inherited from builtins.str.isupper, Return True if the s…>
+        <method def istitle(self, /): ...  # inherited from builtins.str.istitle, Return True if the s…>
+        <method def isspace(self, /): ...  # inherited from builtins.str.isspace, Return True if the s…>
+        <method def isdecimal(self, /): ...  # inherited from builtins.str.isdecimal, Return True if the s…>
+        <method def isdigit(self, /): ...  # inherited from builtins.str.isdigit, Return True if the s…>
+        <method def isnumeric(self, /): ...  # inherited from builtins.str.isnumeric, Return True if the s…>
+        <method def isalpha(self, /): ...  # inherited from builtins.str.isalpha, Return True if the s…>
+        <method def isalnum(self, /): ...  # inherited from builtins.str.isalnum, Return True if the s…>
+        <method def isidentifier(self, /): ...  # inherited from builtins.str.isidentifier, Return True if the s…>
+        <method def isprintable(self, /): ...  # inherited from builtins.str.isprintable, Return True if the s…>
+        <method def zfill(self, width, /): ...  # inherited from builtins.str.zfill, Pad a numeric string…>
+        <method def format(unknown): ...  # inherited from builtins.str.format, S.format(*args, **kw…>
+        <method def format_map(unknown): ...  # inherited from builtins.str.format_map, S.format_map(mapping…>
+        <static def maketrans(unknown): ...  # inherited from builtins.str.maketrans, Return a translation…>
+    >
+>
