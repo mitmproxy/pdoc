@@ -199,6 +199,8 @@ As a last resort, you can override pdoc's behavior with a custom module template
 You can find an example at
 [`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2).
 
+Hiding an item only removes it from documentation. It is still displayed in the source code when clicking the "View Source" button.
+
 ## ...exclude submodules from being documented?
 
 If you would like to exclude specific submodules from the documentation, the recommended way is to specify `__all__` as
