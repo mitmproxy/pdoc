@@ -2,7 +2,7 @@
     <function def func(x: str, y: Any, z: Iterable[str]) -> int: ...  # A simple function.>
     <var var: list[str] = []  # Docstring override f…>
     <class type_stub.Class
-        <method def __init__(): ...>
+        <method def __init__(*args, **kwds): ...  # An overloaded `__ini…>
         <var attr: int = 42  # An attribute>
         <method def meth(self, y: bool) -> bool: ...  # A simple method.>
         <class type_stub.Class.Subclass

@@ -40,6 +40,18 @@ from typing import Generic
 from typing import TypeVar
 from typing import Union
 from typing import get_origin
+
+try:
+    # This only exists on Python 3.11 and later. On older versions,
+    # we just replace it with a function that does nothing.
+    from typing import get_overloads
+except ImportError:  # pragma: no cover
+    from typing import Sequence
+
+    def get_overloads(func: Callable[..., object]) -> Sequence[Callable[..., object]]:
+        return []
+
+
 import warnings
 
 from pdoc import doc_ast
@@ -986,16 +998,59 @@ class Function(Doc[types.FunctionType]):
 
         If the signature cannot be determined, a placeholder Signature object is returned.
         """
-        if self.obj is object.__init__:
+        return self._prepare_signature(self.obj)
+
+    @cached_property
+    def signature_without_self(self) -> inspect.Signature:
+        """Like `signature`, but without the first argument.
+
+        This is useful to display constructors.
+        """
+        return self.signature.replace(
+            parameters=list(self.signature.parameters.values())[1:]
+        )
+
+    @cached_property
+    def overloads(self) -> list[inspect.Signature]:
+        """
+        The function's overloaded signatures, if any.
+
+        This should do the same processing as `signature`, but can return a list
+        of additional signatures when available.
+        """
+        try:
+            values = get_overloads(self.obj)
+            return [self._prepare_signature(value) for value in values]
+        except Exception:
+            return []
+
+    @cached_property
+    def overloads_without_self(self) -> list[inspect.Signature]:
+        """Like `overloads`, but without the first argument.
+
+        This is useful to display constructors.
+        """
+        return [
+            sig.replace(parameters=list(sig.parameters.values())[1:])
+            for sig in self.overloads
+        ]
+
+    def _prepare_signature(self, value: Callable[..., object]) -> inspect.Signature:
+        """
+        A helper method for `signature` and `overloads` which performs
+        necessary post-processing on a signature object.
+        """
+        if value is object.__init__:
             # there is a weird edge case were inspect.signature returns a confusing (self, /, *args, **kwargs)
             # signature for the default __init__ method.
             return inspect.Signature()
         try:
-            sig = _PrettySignature.from_callable(self.obj)
+            sig = _PrettySignature.from_callable(value)
         except Exception:
             return inspect.Signature(
                 [inspect.Parameter("unknown", inspect.Parameter.POSITIONAL_OR_KEYWORD)]
             )
+
         mod = inspect.getmodule(self.obj)
         globalns = _safe_getattr(mod, "__dict__", {})
         localns = globalns
@@ -1018,16 +1073,6 @@ class Function(Doc[types.FunctionType]):
                 p.annotation, globalns, localns, mod, self.fullname
             )
         return sig
-
-    @cached_property
-    def signature_without_self(self) -> inspect.Signature:
-        """Like `signature`, but without the first argument.
-
-        This is useful to display constructors.
-        """
-        return self.signature.replace(
-            parameters=list(self.signature.parameters.values())[1:]
-        )
 
 
 class Variable(Doc[None]):
