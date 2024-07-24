@@ -194,10 +194,16 @@ In general, we recommend keeping the following conventions:
 - If you want to document a special `__dunder__` method, the recommended way to do so is
   to not document the dunder method specifically, but to add some usage examples in the class documentation.
 
+> [!NOTE]
+> Hiding an item only removes it from documentation.
+> It is still displayed in the source code when clicking the "View Source" button.
+
 As a last resort, you can override pdoc's behavior with a custom module template (see
 [*How can I edit pdoc's HTML template?*](#edit-pdocs-html-template)).
 You can find an example at
 [`examples/custom-template/module.html.jinja2`](https://github.com/mitmproxy/pdoc/blob/main/examples/custom-template/module.html.jinja2).
+
+Hiding an item only removes it from documentation. It is still displayed in the source code when clicking the "View Source" button.
 
 ## ...exclude submodules from being documented?
 
