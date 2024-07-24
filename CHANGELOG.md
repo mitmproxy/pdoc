@@ -14,6 +14,8 @@
   ([#710](https://github.com/mitmproxy/pdoc/pull/710), @mhils)
 - Fix a bug where a combination of `@dataclass` and `ctypes.Structure` would crash pdoc.
   ([#711](https://github.com/mitmproxy/pdoc/pull/711), @mhils)
+- Update bundled version of markdown2.
+  ([#717](https://github.com/mitmproxy/pdoc/pull/717), @mhils)
 
 ## 2024-06-25: pdoc 14.5.1
 
