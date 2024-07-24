@@ -261,18 +261,21 @@ def embed_image():
 
 def admonitions():
     """
-    pdoc also supports basic reStructuredText admonitions:
+    pdoc also supports basic reStructuredText admonitions or GitHub's Markdown alerts:
 
     ```
+    > [!NOTE/WARNING/DANGER]
+    > Useful information that users should know, even when skimming content.
+
     .. note/warning/danger:: Optional title
        Body text
     ```
 
-    .. note::
-       Hi there!
+    > [!NOTE]
+    > Hi there!
 
     .. warning:: Be Careful!
-       This warning has both a title and content.
+       This warning has both a title *and* content.
 
     .. danger::
        Danger ahead.

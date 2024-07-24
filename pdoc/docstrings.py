@@ -427,7 +427,7 @@ def _rst_admonitions(contents: str, source_file: Path | None) -> str:
             else:
                 heading = ""
             return (
-                f'{ind}<div class="pdoc-alert pdoc-alert-{type}" markdown="1">\n'
+                f'{ind}<div class="alert {type}" markdown="1">\n'
                 f"{heading}"
                 f"{indent(contents, ind)}\n"
                 f"{ind}</div>\n"

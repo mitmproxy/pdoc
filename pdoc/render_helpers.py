@@ -57,6 +57,7 @@ Overwrite this to configure pygments highlighting of signatures.
 
 # Keep in sync with the documentation in pdoc/__init__.py!
 markdown_extensions = {
+    "alerts": None,
     "code-friendly": None,
     "cuddled-lists": None,
     "fenced-code-blocks": {"cssclass": formatter.cssclass},
