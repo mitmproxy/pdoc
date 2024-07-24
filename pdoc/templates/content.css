@@ -27,7 +27,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 
 
 /* Admonitions */
-.pdoc .pdoc-alert {
+.pdoc .alert {
     padding: 1rem 1rem 1rem calc(1.5rem + 24px);
     border: 1px solid transparent;
     border-radius: .25rem;
@@ -36,26 +36,30 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     margin-bottom: 1rem;
 }
 
-.pdoc .pdoc-alert > *:last-child {
+.pdoc .alert > em {
+    display: none;
+}
+
+.pdoc .alert > *:last-child {
     margin-bottom: 0;
 }
 
 /* Admonitions are currently not stylable via theme.css */
-.pdoc .pdoc-alert-note  {
+.pdoc .alert.note  {
     color: #084298;
     background-color: #cfe2ff;
     border-color: #b6d4fe;
     background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/info-circle-fill.svg' %}{% endfilter %}");
 }
 
-.pdoc .pdoc-alert-warning {
+.pdoc .alert.warning {
     color: #664d03;
     background-color: #fff3cd;
     border-color: #ffecb5;
     background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/exclamation-triangle-fill.svg' %}{% endfilter %}");
 }
 
-.pdoc .pdoc-alert-danger {
+.pdoc .alert.danger {
     color: #842029;
     background-color: #f8d7da;
     border-color: #f5c2c7;
