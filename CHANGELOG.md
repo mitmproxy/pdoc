@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+## 2024-07-24: pdoc 14.6.0
+
 - If `example.data.Data` is also exposed as `example.Data`, pdoc now links to `example.Data` in documentation.
   ([#670](https://github.com/mitmproxy/pdoc/pull/670), @nathanthorpe, @mhils)
 - Add support for [GitHub Markdown Alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
