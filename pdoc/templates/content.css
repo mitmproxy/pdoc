@@ -32,7 +32,7 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     border: 1px solid transparent;
     border-radius: .25rem;
     background-repeat: no-repeat;
-    background-position: 1rem center;
+    background-position: .75rem center;
     margin-bottom: 1rem;
 }
 
