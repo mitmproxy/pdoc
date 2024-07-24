@@ -49,7 +49,11 @@ jobs:
       python-version: ${{ matrix.py }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v5
+    uses: mhils/workflows/.github/workflows/python-build.yml@main
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
 
   check:
     if: always()
