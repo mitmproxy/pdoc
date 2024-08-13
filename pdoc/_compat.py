@@ -123,6 +123,16 @@ else:  # pragma: no cover
             return ' | '.join(self.option_strings)
 
 
+if sys.version_info >= (3, 10):
+    from typing import is_typeddict
+else:  # pragma: no cover
+    def is_typeddict(tp):
+        try:
+            return tp.__orig_bases__[-1].__name__ == "TypedDict"
+        except Exception:
+            return False
+
+
 __all__ = [
     "cache",
     "ast_unparse",
@@ -134,4 +144,5 @@ __all__ = [
     "removesuffix",
     "formatannotation",
     "BooleanOptionalAction",
+    "is_typeddict",
 ]
