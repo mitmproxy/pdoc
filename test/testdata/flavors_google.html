@@ -56,6 +56,9 @@
                         <li>
                                 <a class="function" href="#ExampleError.add_note">add_note</a>
                         </li>
+                        <li>
+                                <a class="function" href="#ExampleError.with_traceback">with_traceback</a>
+                        </li>
                 </ul>
 
             </li>
@@ -385,264 +388,266 @@ with it.</p></li>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is present on Python 3.11+ and manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">    in an ``Attributes`` section and follow the same formatting as a</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">    function&#39;s ``Args`` section. Alternatively, attributes may be documented</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">    inline with the attribute&#39;s declaration (see __init__ method below).</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    Properties created with the ``@property`` decorator should be documented</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    in the property&#39;s getter method.</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        attr1 (str): Description of `attr1`.</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">        attr2 (:obj:`int`, optional): Description of `attr2`.</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">    in an ``Attributes`` section and follow the same formatting as a</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">    function&#39;s ``Args`` section. Alternatively, attributes may be documented</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    inline with the attribute&#39;s declaration (see __init__ method below).</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">    Properties created with the ``@property`` decorator should be documented</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    in the property&#39;s getter method.</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        attr1 (str): Description of `attr1`.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">        attr2 (:obj:`int`, optional): Description of `attr2`.</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">        Note:</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">        Args:</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">                lines are supported.</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="nd">@property</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="nd">@property</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        should only be documented in their getter method.</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">        mentioned here.</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>        <span class="n">value</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">        Note:</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">        Args:</span>
-</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a><span class="sd">            param1: The first parameter.</span>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="sd">            param2: The second parameter.</span>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="sd">        Returns:</span>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">            True if successful, False otherwise.</span>
-</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
-</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
-</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>
-</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
-</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a><span class="sd">        end with a double underscore. Any special member with a docstring</span>
-</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a><span class="sd">        will be included in the output, if</span>
-</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a><span class="sd">        ``napoleon_include_special_with_doc`` is set to True.</span>
-</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>
-</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a><span class="sd">        This behavior can be enabled by changing the following setting in</span>
-</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a><span class="sd">        Sphinx&#39;s conf.py::</span>
-</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>
-</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="sd">            napoleon_include_special_with_doc = True</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">        Note:</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">        Args:</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">                lines are supported.</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="nd">@property</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="nd">@property</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">        should only be documented in their getter method.</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">        mentioned here.</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>        <span class="n">value</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">        Note:</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="sd">        Args:</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a><span class="sd">            param1: The first parameter.</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="sd">            param2: The second parameter.</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a><span class="sd">        Returns:</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="sd">            True if successful, False otherwise.</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a><span class="sd">        end with a double underscore. Any special member with a docstring</span>
+</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a><span class="sd">        will be included in the output, if</span>
+</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a><span class="sd">        ``napoleon_include_special_with_doc`` is set to True.</span>
+</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
+</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a><span class="sd">        This behavior can be enabled by changing the following setting in</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a><span class="sd">        Sphinx&#39;s conf.py::</span>
 </span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a>
-</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>        <span class="k">pass</span>
-</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a>
-</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>        <span class="k">pass</span>
-</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>
-</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
-</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>
-</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
-</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a><span class="sd">        underscore and are *not* special. By default they are not included</span>
-</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="sd">        in the output.</span>
-</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>
-</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="sd">        This behavior can be changed such that private members *are* included</span>
-</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a><span class="sd">        by changing the following setting in Sphinx&#39;s conf.py::</span>
-</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>
-</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="sd">            napoleon_include_private_with_doc = True</span>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">            napoleon_include_special_with_doc = True</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>
+</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>        <span class="k">pass</span>
+</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>        <span class="k">pass</span>
+</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a><span class="sd">        underscore and are *not* special. By default they are not included</span>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="sd">        in the output.</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a><span class="sd">        This behavior can be changed such that private members *are* included</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="sd">        by changing the following setting in Sphinx&#39;s conf.py::</span>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>
-</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>        <span class="k">pass</span>
-</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>
-</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>        <span class="k">pass</span>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>
-</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>
-</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-</span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
-</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
-</span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
-</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>
-</span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">    Args:</span>
-</span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a><span class="sd">        table_handle: An open smalltable.Table instance.</span>
-</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="sd">        keys: A sequence of strings representing the key of each table</span>
-</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a><span class="sd">          row to fetch.  String keys will be UTF-8 encoded.</span>
-</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a><span class="sd">        require_all_keys: Optional; If require_all_keys is True only</span>
-</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a><span class="sd">          rows with values set for all keys will be returned.</span>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="sd">    Returns:</span>
-</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="sd">        A dict mapping keys to the corresponding table row data</span>
-</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="sd">        fetched. Each row is represented as a tuple of strings. For</span>
-</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="sd">        example:</span>
-</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a>
-</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">        {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">         b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
-</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">         b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
-</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>
-</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">        Returned keys are always bytes.  If a key from the keys argument is</span>
-</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a><span class="sd">        missing from the dictionary, then that row was not found in the</span>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a><span class="sd">        table (and require_all_keys must have been False).</span>
-</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>
-</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="sd">    Raises:</span>
-</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a><span class="sd">        IOError: An error occurred accessing the smalltable.</span>
-</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>
-</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>
-</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
-</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>
-</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
-</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
-</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>
-</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a><span class="sd">    Args:</span>
-</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a><span class="sd">      table_handle:</span>
-</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a><span class="sd">        An open smalltable.Table instance.</span>
-</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="sd">      keys:</span>
-</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a><span class="sd">        A sequence of strings representing the key of each table row to</span>
-</span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a><span class="sd">        fetch.  String keys will be UTF-8 encoded.</span>
-</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="sd">      require_all_keys:</span>
-</span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a><span class="sd">        Optional; If require_all_keys is True only rows with values set</span>
-</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="sd">        for all keys will be returned.</span>
-</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a><span class="sd">    Returns:</span>
-</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a><span class="sd">      A dict mapping keys to the corresponding table row data</span>
-</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a><span class="sd">      fetched. Each row is represented as a tuple of strings. For</span>
-</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a><span class="sd">      example:</span>
-</span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>
-</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="sd">      {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a><span class="sd">       b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
-</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="sd">       b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
-</span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>
-</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="sd">      Returned keys are always bytes.  If a key from the keys argument is</span>
-</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="sd">      missing from the dictionary, then that row was not found in the</span>
-</span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a><span class="sd">      table (and require_all_keys must have been False).</span>
-</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>
-</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a><span class="sd">    Raises:</span>
-</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a><span class="sd">      IOError: An error occurred accessing the smalltable.</span>
-</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>
-</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>
-</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
-</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
-</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>
-</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="sd">    Longer class information....</span>
-</span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a><span class="sd">    Longer class information....</span>
-</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a>
-</span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a><span class="sd">        likes_spam: A boolean indicating if we like SPAM or not.</span>
-</span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
-</span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>
-</span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
-</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
-</span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>
-</span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-406"><a href="#L-406"><span class="linenos">406</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
-</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>
-</span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a>
-</span><span id="L-409"><a href="#L-409"><span class="linenos">409</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
-</span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
-</span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a>
-</span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a><span class="sd">    Args:</span>
-</span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a><span class="sd">      test</span>
-</span><span id="L-415"><a href="#L-415"><span class="linenos">415</span></a><span class="sd">        there is a colon missing in the previous line</span>
-</span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a><span class="sd">    Returns:</span>
-</span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a>
-</span><span id="L-418"><a href="#L-418"><span class="linenos">418</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="sd">            napoleon_include_private_with_doc = True</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>        <span class="k">pass</span>
+</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>        <span class="k">pass</span>
+</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>
+</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
+</span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>
+</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
+</span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
+</span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>
+</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="sd">    Args:</span>
+</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a><span class="sd">        table_handle: An open smalltable.Table instance.</span>
+</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a><span class="sd">        keys: A sequence of strings representing the key of each table</span>
+</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a><span class="sd">          row to fetch.  String keys will be UTF-8 encoded.</span>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a><span class="sd">        require_all_keys: Optional; If require_all_keys is True only</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="sd">          rows with values set for all keys will be returned.</span>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="sd">    Returns:</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="sd">        A dict mapping keys to the corresponding table row data</span>
+</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="sd">        fetched. Each row is represented as a tuple of strings. For</span>
+</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">        example:</span>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a>
+</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">        {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
+</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a><span class="sd">         b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">         b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a><span class="sd">        Returned keys are always bytes.  If a key from the keys argument is</span>
+</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a><span class="sd">        missing from the dictionary, then that row was not found in the</span>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a><span class="sd">        table (and require_all_keys must have been False).</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a><span class="sd">    Raises:</span>
+</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a><span class="sd">        IOError: An error occurred accessing the smalltable.</span>
+</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>
+</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
+</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
+</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>
+</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a><span class="sd">    Args:</span>
+</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="sd">      table_handle:</span>
+</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a><span class="sd">        An open smalltable.Table instance.</span>
+</span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a><span class="sd">      keys:</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="sd">        A sequence of strings representing the key of each table row to</span>
+</span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a><span class="sd">        fetch.  String keys will be UTF-8 encoded.</span>
+</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="sd">      require_all_keys:</span>
+</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a><span class="sd">        Optional; If require_all_keys is True only rows with values set</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a><span class="sd">        for all keys will be returned.</span>
+</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>
+</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a><span class="sd">    Returns:</span>
+</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a><span class="sd">      A dict mapping keys to the corresponding table row data</span>
+</span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a><span class="sd">      fetched. Each row is represented as a tuple of strings. For</span>
+</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="sd">      example:</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>
+</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="sd">      {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
+</span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a><span class="sd">       b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
+</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="sd">       b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
+</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>
+</span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a><span class="sd">      Returned keys are always bytes.  If a key from the keys argument is</span>
+</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">      missing from the dictionary, then that row was not found in the</span>
+</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a><span class="sd">      table (and require_all_keys must have been False).</span>
+</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>
+</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a><span class="sd">    Raises:</span>
+</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a><span class="sd">      IOError: An error occurred accessing the smalltable.</span>
+</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>
+</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>
+</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
+</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
+</span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a>
+</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">    Longer class information....</span>
+</span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a><span class="sd">    Longer class information....</span>
+</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a>
+</span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a><span class="sd">        likes_spam: A boolean indicating if we like SPAM or not.</span>
+</span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
+</span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>
+</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
+</span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
+</span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-406"><a href="#L-406"><span class="linenos">406</span></a>
+</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
+</span><span id="L-409"><a href="#L-409"><span class="linenos">409</span></a>
+</span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a>
+</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
+</span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
+</span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a>
+</span><span id="L-415"><a href="#L-415"><span class="linenos">415</span></a><span class="sd">    Args:</span>
+</span><span id="L-416"><a href="#L-416"><span class="linenos">416</span></a><span class="sd">      test</span>
+</span><span id="L-417"><a href="#L-417"><span class="linenos">417</span></a><span class="sd">        there is a colon missing in the previous line</span>
+</span><span id="L-418"><a href="#L-418"><span class="linenos">418</span></a><span class="sd">    Returns:</span>
 </span><span id="L-419"><a href="#L-419"><span class="linenos">419</span></a>
-</span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a>
-</span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
-</span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
-</span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a>
-</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="sd">    Example:</span>
+</span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a>
+</span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>
+</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
+</span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
 </span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a>
-</span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a><span class="sd">        ```python</span>
-</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a><span class="sd">        tmp = a2()</span>
-</span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a>
-</span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        tmp2 = a()</span>
-</span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a><span class="sd">        ```</span>
-</span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a>
-</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a>
-</span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
-</span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>
-</span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a><span class="sd">    Args:</span>
+</span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a><span class="sd">    Example:</span>
+</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a>
+</span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a><span class="sd">        ```python</span>
+</span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        tmp = a2()</span>
+</span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a>
+</span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a><span class="sd">        tmp2 = a()</span>
+</span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a><span class="sd">        ```</span>
+</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a>
+</span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>
+</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
 </span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a>
-</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a><span class="sd">      test</span>
-</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a><span class="sd">        there is unexpected whitespace before test.</span>
-</span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a>
-</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a>
-</span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
-</span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
-</span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a>
-</span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a><span class="sd">    Parameters:</span>
-</span><span id="L-452"><a href="#L-452"><span class="linenos">452</span></a><span class="sd">        test: the test string</span>
-</span><span id="L-453"><a href="#L-453"><span class="linenos">453</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a><span class="sd">    Args:</span>
+</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a>
+</span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a><span class="sd">      test</span>
+</span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a><span class="sd">        there is unexpected whitespace before test.</span>
+</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>
+</span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a>
+</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
+</span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
+</span><span id="L-452"><a href="#L-452"><span class="linenos">452</span></a>
+</span><span id="L-453"><a href="#L-453"><span class="linenos">453</span></a><span class="sd">    Parameters:</span>
+</span><span id="L-454"><a href="#L-454"><span class="linenos">454</span></a><span class="sd">        test: the test string</span>
+</span><span id="L-455"><a href="#L-455"><span class="linenos">455</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1003,6 +1008,9 @@ that are relevant to the interface.</li>
 </span><span id="ExampleError-193"><a href="#ExampleError-193"><span class="linenos">193</span></a>
 </span><span id="ExampleError-194"><a href="#ExampleError-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="ExampleError-195"><a href="#ExampleError-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is present on Python 3.11+ and manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
+</span><span id="ExampleError-196"><a href="#ExampleError-196"><span class="linenos">196</span></a>
+</span><span id="ExampleError-197"><a href="#ExampleError-197"><span class="linenos">197</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+</span><span id="ExampleError-198"><a href="#ExampleError-198"><span class="linenos">198</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1098,12 +1106,32 @@ convention to document the __init__ method and be consistent with it.</p>
 
 
                             </div>
+                            <div id="ExampleError.with_traceback" class="classattr">
+                                        <input id="ExampleError.with_traceback-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">with_traceback</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="nb">object</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="ExampleError.with_traceback-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#ExampleError.with_traceback"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.with_traceback-197"><a href="#ExampleError.with_traceback-197"><span class="linenos">197</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+</span><span id="ExampleError.with_traceback-198"><a href="#ExampleError.with_traceback-198"><span class="linenos">198</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.</p>
+</div>
+
+
+                            </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt>builtins.BaseException</dt>
-                                <dd id="ExampleError.with_traceback" class="function">with_traceback</dd>
-                <dd id="ExampleError.args" class="variable">args</dd>
+                                <dd id="ExampleError.args" class="variable">args</dd>
 
             </div>
                                 </dl>
@@ -1120,123 +1148,123 @@ convention to document the __init__ method and be consistent with it.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass-198"><a href="#ExampleClass-198"><span class="linenos">198</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-</span><span id="ExampleClass-199"><a href="#ExampleClass-199"><span class="linenos">199</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
-</span><span id="ExampleClass-200"><a href="#ExampleClass-200"><span class="linenos">200</span></a>
-</span><span id="ExampleClass-201"><a href="#ExampleClass-201"><span class="linenos">201</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
-</span><span id="ExampleClass-202"><a href="#ExampleClass-202"><span class="linenos">202</span></a><span class="sd">    in an ``Attributes`` section and follow the same formatting as a</span>
-</span><span id="ExampleClass-203"><a href="#ExampleClass-203"><span class="linenos">203</span></a><span class="sd">    function&#39;s ``Args`` section. Alternatively, attributes may be documented</span>
-</span><span id="ExampleClass-204"><a href="#ExampleClass-204"><span class="linenos">204</span></a><span class="sd">    inline with the attribute&#39;s declaration (see __init__ method below).</span>
-</span><span id="ExampleClass-205"><a href="#ExampleClass-205"><span class="linenos">205</span></a>
-</span><span id="ExampleClass-206"><a href="#ExampleClass-206"><span class="linenos">206</span></a><span class="sd">    Properties created with the ``@property`` decorator should be documented</span>
-</span><span id="ExampleClass-207"><a href="#ExampleClass-207"><span class="linenos">207</span></a><span class="sd">    in the property&#39;s getter method.</span>
-</span><span id="ExampleClass-208"><a href="#ExampleClass-208"><span class="linenos">208</span></a>
-</span><span id="ExampleClass-209"><a href="#ExampleClass-209"><span class="linenos">209</span></a><span class="sd">    Attributes:</span>
-</span><span id="ExampleClass-210"><a href="#ExampleClass-210"><span class="linenos">210</span></a><span class="sd">        attr1 (str): Description of `attr1`.</span>
-</span><span id="ExampleClass-211"><a href="#ExampleClass-211"><span class="linenos">211</span></a><span class="sd">        attr2 (:obj:`int`, optional): Description of `attr2`.</span>
-</span><span id="ExampleClass-212"><a href="#ExampleClass-212"><span class="linenos">212</span></a>
-</span><span id="ExampleClass-213"><a href="#ExampleClass-213"><span class="linenos">213</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass-200"><a href="#ExampleClass-200"><span class="linenos">200</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span id="ExampleClass-201"><a href="#ExampleClass-201"><span class="linenos">201</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
+</span><span id="ExampleClass-202"><a href="#ExampleClass-202"><span class="linenos">202</span></a>
+</span><span id="ExampleClass-203"><a href="#ExampleClass-203"><span class="linenos">203</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
+</span><span id="ExampleClass-204"><a href="#ExampleClass-204"><span class="linenos">204</span></a><span class="sd">    in an ``Attributes`` section and follow the same formatting as a</span>
+</span><span id="ExampleClass-205"><a href="#ExampleClass-205"><span class="linenos">205</span></a><span class="sd">    function&#39;s ``Args`` section. Alternatively, attributes may be documented</span>
+</span><span id="ExampleClass-206"><a href="#ExampleClass-206"><span class="linenos">206</span></a><span class="sd">    inline with the attribute&#39;s declaration (see __init__ method below).</span>
+</span><span id="ExampleClass-207"><a href="#ExampleClass-207"><span class="linenos">207</span></a>
+</span><span id="ExampleClass-208"><a href="#ExampleClass-208"><span class="linenos">208</span></a><span class="sd">    Properties created with the ``@property`` decorator should be documented</span>
+</span><span id="ExampleClass-209"><a href="#ExampleClass-209"><span class="linenos">209</span></a><span class="sd">    in the property&#39;s getter method.</span>
+</span><span id="ExampleClass-210"><a href="#ExampleClass-210"><span class="linenos">210</span></a>
+</span><span id="ExampleClass-211"><a href="#ExampleClass-211"><span class="linenos">211</span></a><span class="sd">    Attributes:</span>
+</span><span id="ExampleClass-212"><a href="#ExampleClass-212"><span class="linenos">212</span></a><span class="sd">        attr1 (str): Description of `attr1`.</span>
+</span><span id="ExampleClass-213"><a href="#ExampleClass-213"><span class="linenos">213</span></a><span class="sd">        attr2 (:obj:`int`, optional): Description of `attr2`.</span>
 </span><span id="ExampleClass-214"><a href="#ExampleClass-214"><span class="linenos">214</span></a>
-</span><span id="ExampleClass-215"><a href="#ExampleClass-215"><span class="linenos">215</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
-</span><span id="ExampleClass-216"><a href="#ExampleClass-216"><span class="linenos">216</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
-</span><span id="ExampleClass-217"><a href="#ExampleClass-217"><span class="linenos">217</span></a>
-</span><span id="ExampleClass-218"><a href="#ExampleClass-218"><span class="linenos">218</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
-</span><span id="ExampleClass-219"><a href="#ExampleClass-219"><span class="linenos">219</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
-</span><span id="ExampleClass-220"><a href="#ExampleClass-220"><span class="linenos">220</span></a>
-</span><span id="ExampleClass-221"><a href="#ExampleClass-221"><span class="linenos">221</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
-</span><span id="ExampleClass-222"><a href="#ExampleClass-222"><span class="linenos">222</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
-</span><span id="ExampleClass-223"><a href="#ExampleClass-223"><span class="linenos">223</span></a>
-</span><span id="ExampleClass-224"><a href="#ExampleClass-224"><span class="linenos">224</span></a><span class="sd">        Note:</span>
-</span><span id="ExampleClass-225"><a href="#ExampleClass-225"><span class="linenos">225</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="ExampleClass-226"><a href="#ExampleClass-226"><span class="linenos">226</span></a>
-</span><span id="ExampleClass-227"><a href="#ExampleClass-227"><span class="linenos">227</span></a><span class="sd">        Args:</span>
-</span><span id="ExampleClass-228"><a href="#ExampleClass-228"><span class="linenos">228</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
-</span><span id="ExampleClass-229"><a href="#ExampleClass-229"><span class="linenos">229</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
-</span><span id="ExampleClass-230"><a href="#ExampleClass-230"><span class="linenos">230</span></a><span class="sd">                lines are supported.</span>
-</span><span id="ExampleClass-231"><a href="#ExampleClass-231"><span class="linenos">231</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
-</span><span id="ExampleClass-232"><a href="#ExampleClass-232"><span class="linenos">232</span></a>
-</span><span id="ExampleClass-233"><a href="#ExampleClass-233"><span class="linenos">233</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass-234"><a href="#ExampleClass-234"><span class="linenos">234</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
-</span><span id="ExampleClass-235"><a href="#ExampleClass-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
-</span><span id="ExampleClass-236"><a href="#ExampleClass-236"><span class="linenos">236</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
-</span><span id="ExampleClass-237"><a href="#ExampleClass-237"><span class="linenos">237</span></a>
-</span><span id="ExampleClass-238"><a href="#ExampleClass-238"><span class="linenos">238</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
-</span><span id="ExampleClass-239"><a href="#ExampleClass-239"><span class="linenos">239</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
-</span><span id="ExampleClass-240"><a href="#ExampleClass-240"><span class="linenos">240</span></a>
-</span><span id="ExampleClass-241"><a href="#ExampleClass-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="ExampleClass-242"><a href="#ExampleClass-242"><span class="linenos">242</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
-</span><span id="ExampleClass-243"><a href="#ExampleClass-243"><span class="linenos">243</span></a>
-</span><span id="ExampleClass-244"><a href="#ExampleClass-244"><span class="linenos">244</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass-245"><a href="#ExampleClass-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-246"><a href="#ExampleClass-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
-</span><span id="ExampleClass-247"><a href="#ExampleClass-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
-</span><span id="ExampleClass-248"><a href="#ExampleClass-248"><span class="linenos">248</span></a>
-</span><span id="ExampleClass-249"><a href="#ExampleClass-249"><span class="linenos">249</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass-250"><a href="#ExampleClass-250"><span class="linenos">250</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-251"><a href="#ExampleClass-251"><span class="linenos">251</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
-</span><span id="ExampleClass-252"><a href="#ExampleClass-252"><span class="linenos">252</span></a><span class="sd">        should only be documented in their getter method.</span>
-</span><span id="ExampleClass-253"><a href="#ExampleClass-253"><span class="linenos">253</span></a>
-</span><span id="ExampleClass-254"><a href="#ExampleClass-254"><span class="linenos">254</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
-</span><span id="ExampleClass-255"><a href="#ExampleClass-255"><span class="linenos">255</span></a><span class="sd">        mentioned here.</span>
-</span><span id="ExampleClass-256"><a href="#ExampleClass-256"><span class="linenos">256</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass-257"><a href="#ExampleClass-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
-</span><span id="ExampleClass-258"><a href="#ExampleClass-258"><span class="linenos">258</span></a>
-</span><span id="ExampleClass-259"><a href="#ExampleClass-259"><span class="linenos">259</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="ExampleClass-260"><a href="#ExampleClass-260"><span class="linenos">260</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-</span><span id="ExampleClass-261"><a href="#ExampleClass-261"><span class="linenos">261</span></a>        <span class="n">value</span>
-</span><span id="ExampleClass-262"><a href="#ExampleClass-262"><span class="linenos">262</span></a>
-</span><span id="ExampleClass-263"><a href="#ExampleClass-263"><span class="linenos">263</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
-</span><span id="ExampleClass-264"><a href="#ExampleClass-264"><span class="linenos">264</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
-</span><span id="ExampleClass-265"><a href="#ExampleClass-265"><span class="linenos">265</span></a>
-</span><span id="ExampleClass-266"><a href="#ExampleClass-266"><span class="linenos">266</span></a><span class="sd">        Note:</span>
-</span><span id="ExampleClass-267"><a href="#ExampleClass-267"><span class="linenos">267</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="ExampleClass-268"><a href="#ExampleClass-268"><span class="linenos">268</span></a>
-</span><span id="ExampleClass-269"><a href="#ExampleClass-269"><span class="linenos">269</span></a><span class="sd">        Args:</span>
-</span><span id="ExampleClass-270"><a href="#ExampleClass-270"><span class="linenos">270</span></a><span class="sd">            param1: The first parameter.</span>
-</span><span id="ExampleClass-271"><a href="#ExampleClass-271"><span class="linenos">271</span></a><span class="sd">            param2: The second parameter.</span>
-</span><span id="ExampleClass-272"><a href="#ExampleClass-272"><span class="linenos">272</span></a>
-</span><span id="ExampleClass-273"><a href="#ExampleClass-273"><span class="linenos">273</span></a><span class="sd">        Returns:</span>
-</span><span id="ExampleClass-274"><a href="#ExampleClass-274"><span class="linenos">274</span></a><span class="sd">            True if successful, False otherwise.</span>
-</span><span id="ExampleClass-275"><a href="#ExampleClass-275"><span class="linenos">275</span></a>
-</span><span id="ExampleClass-276"><a href="#ExampleClass-276"><span class="linenos">276</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass-277"><a href="#ExampleClass-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="ExampleClass-278"><a href="#ExampleClass-278"><span class="linenos">278</span></a>
-</span><span id="ExampleClass-279"><a href="#ExampleClass-279"><span class="linenos">279</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-280"><a href="#ExampleClass-280"><span class="linenos">280</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
-</span><span id="ExampleClass-281"><a href="#ExampleClass-281"><span class="linenos">281</span></a>
-</span><span id="ExampleClass-282"><a href="#ExampleClass-282"><span class="linenos">282</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
-</span><span id="ExampleClass-283"><a href="#ExampleClass-283"><span class="linenos">283</span></a><span class="sd">        end with a double underscore. Any special member with a docstring</span>
-</span><span id="ExampleClass-284"><a href="#ExampleClass-284"><span class="linenos">284</span></a><span class="sd">        will be included in the output, if</span>
-</span><span id="ExampleClass-285"><a href="#ExampleClass-285"><span class="linenos">285</span></a><span class="sd">        ``napoleon_include_special_with_doc`` is set to True.</span>
-</span><span id="ExampleClass-286"><a href="#ExampleClass-286"><span class="linenos">286</span></a>
-</span><span id="ExampleClass-287"><a href="#ExampleClass-287"><span class="linenos">287</span></a><span class="sd">        This behavior can be enabled by changing the following setting in</span>
-</span><span id="ExampleClass-288"><a href="#ExampleClass-288"><span class="linenos">288</span></a><span class="sd">        Sphinx&#39;s conf.py::</span>
-</span><span id="ExampleClass-289"><a href="#ExampleClass-289"><span class="linenos">289</span></a>
-</span><span id="ExampleClass-290"><a href="#ExampleClass-290"><span class="linenos">290</span></a><span class="sd">            napoleon_include_special_with_doc = True</span>
+</span><span id="ExampleClass-215"><a href="#ExampleClass-215"><span class="linenos">215</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-216"><a href="#ExampleClass-216"><span class="linenos">216</span></a>
+</span><span id="ExampleClass-217"><a href="#ExampleClass-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+</span><span id="ExampleClass-218"><a href="#ExampleClass-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
+</span><span id="ExampleClass-219"><a href="#ExampleClass-219"><span class="linenos">219</span></a>
+</span><span id="ExampleClass-220"><a href="#ExampleClass-220"><span class="linenos">220</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
+</span><span id="ExampleClass-221"><a href="#ExampleClass-221"><span class="linenos">221</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
+</span><span id="ExampleClass-222"><a href="#ExampleClass-222"><span class="linenos">222</span></a>
+</span><span id="ExampleClass-223"><a href="#ExampleClass-223"><span class="linenos">223</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
+</span><span id="ExampleClass-224"><a href="#ExampleClass-224"><span class="linenos">224</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
+</span><span id="ExampleClass-225"><a href="#ExampleClass-225"><span class="linenos">225</span></a>
+</span><span id="ExampleClass-226"><a href="#ExampleClass-226"><span class="linenos">226</span></a><span class="sd">        Note:</span>
+</span><span id="ExampleClass-227"><a href="#ExampleClass-227"><span class="linenos">227</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="ExampleClass-228"><a href="#ExampleClass-228"><span class="linenos">228</span></a>
+</span><span id="ExampleClass-229"><a href="#ExampleClass-229"><span class="linenos">229</span></a><span class="sd">        Args:</span>
+</span><span id="ExampleClass-230"><a href="#ExampleClass-230"><span class="linenos">230</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
+</span><span id="ExampleClass-231"><a href="#ExampleClass-231"><span class="linenos">231</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
+</span><span id="ExampleClass-232"><a href="#ExampleClass-232"><span class="linenos">232</span></a><span class="sd">                lines are supported.</span>
+</span><span id="ExampleClass-233"><a href="#ExampleClass-233"><span class="linenos">233</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
+</span><span id="ExampleClass-234"><a href="#ExampleClass-234"><span class="linenos">234</span></a>
+</span><span id="ExampleClass-235"><a href="#ExampleClass-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-236"><a href="#ExampleClass-236"><span class="linenos">236</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
+</span><span id="ExampleClass-237"><a href="#ExampleClass-237"><span class="linenos">237</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
+</span><span id="ExampleClass-238"><a href="#ExampleClass-238"><span class="linenos">238</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
+</span><span id="ExampleClass-239"><a href="#ExampleClass-239"><span class="linenos">239</span></a>
+</span><span id="ExampleClass-240"><a href="#ExampleClass-240"><span class="linenos">240</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
+</span><span id="ExampleClass-241"><a href="#ExampleClass-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
+</span><span id="ExampleClass-242"><a href="#ExampleClass-242"><span class="linenos">242</span></a>
+</span><span id="ExampleClass-243"><a href="#ExampleClass-243"><span class="linenos">243</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="ExampleClass-244"><a href="#ExampleClass-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
+</span><span id="ExampleClass-245"><a href="#ExampleClass-245"><span class="linenos">245</span></a>
+</span><span id="ExampleClass-246"><a href="#ExampleClass-246"><span class="linenos">246</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass-247"><a href="#ExampleClass-247"><span class="linenos">247</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-248"><a href="#ExampleClass-248"><span class="linenos">248</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
+</span><span id="ExampleClass-249"><a href="#ExampleClass-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
+</span><span id="ExampleClass-250"><a href="#ExampleClass-250"><span class="linenos">250</span></a>
+</span><span id="ExampleClass-251"><a href="#ExampleClass-251"><span class="linenos">251</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass-252"><a href="#ExampleClass-252"><span class="linenos">252</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-253"><a href="#ExampleClass-253"><span class="linenos">253</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
+</span><span id="ExampleClass-254"><a href="#ExampleClass-254"><span class="linenos">254</span></a><span class="sd">        should only be documented in their getter method.</span>
+</span><span id="ExampleClass-255"><a href="#ExampleClass-255"><span class="linenos">255</span></a>
+</span><span id="ExampleClass-256"><a href="#ExampleClass-256"><span class="linenos">256</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
+</span><span id="ExampleClass-257"><a href="#ExampleClass-257"><span class="linenos">257</span></a><span class="sd">        mentioned here.</span>
+</span><span id="ExampleClass-258"><a href="#ExampleClass-258"><span class="linenos">258</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-259"><a href="#ExampleClass-259"><span class="linenos">259</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
+</span><span id="ExampleClass-260"><a href="#ExampleClass-260"><span class="linenos">260</span></a>
+</span><span id="ExampleClass-261"><a href="#ExampleClass-261"><span class="linenos">261</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
+</span><span id="ExampleClass-262"><a href="#ExampleClass-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="ExampleClass-263"><a href="#ExampleClass-263"><span class="linenos">263</span></a>        <span class="n">value</span>
+</span><span id="ExampleClass-264"><a href="#ExampleClass-264"><span class="linenos">264</span></a>
+</span><span id="ExampleClass-265"><a href="#ExampleClass-265"><span class="linenos">265</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="ExampleClass-266"><a href="#ExampleClass-266"><span class="linenos">266</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
+</span><span id="ExampleClass-267"><a href="#ExampleClass-267"><span class="linenos">267</span></a>
+</span><span id="ExampleClass-268"><a href="#ExampleClass-268"><span class="linenos">268</span></a><span class="sd">        Note:</span>
+</span><span id="ExampleClass-269"><a href="#ExampleClass-269"><span class="linenos">269</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="ExampleClass-270"><a href="#ExampleClass-270"><span class="linenos">270</span></a>
+</span><span id="ExampleClass-271"><a href="#ExampleClass-271"><span class="linenos">271</span></a><span class="sd">        Args:</span>
+</span><span id="ExampleClass-272"><a href="#ExampleClass-272"><span class="linenos">272</span></a><span class="sd">            param1: The first parameter.</span>
+</span><span id="ExampleClass-273"><a href="#ExampleClass-273"><span class="linenos">273</span></a><span class="sd">            param2: The second parameter.</span>
+</span><span id="ExampleClass-274"><a href="#ExampleClass-274"><span class="linenos">274</span></a>
+</span><span id="ExampleClass-275"><a href="#ExampleClass-275"><span class="linenos">275</span></a><span class="sd">        Returns:</span>
+</span><span id="ExampleClass-276"><a href="#ExampleClass-276"><span class="linenos">276</span></a><span class="sd">            True if successful, False otherwise.</span>
+</span><span id="ExampleClass-277"><a href="#ExampleClass-277"><span class="linenos">277</span></a>
+</span><span id="ExampleClass-278"><a href="#ExampleClass-278"><span class="linenos">278</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-279"><a href="#ExampleClass-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="ExampleClass-280"><a href="#ExampleClass-280"><span class="linenos">280</span></a>
+</span><span id="ExampleClass-281"><a href="#ExampleClass-281"><span class="linenos">281</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-282"><a href="#ExampleClass-282"><span class="linenos">282</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
+</span><span id="ExampleClass-283"><a href="#ExampleClass-283"><span class="linenos">283</span></a>
+</span><span id="ExampleClass-284"><a href="#ExampleClass-284"><span class="linenos">284</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
+</span><span id="ExampleClass-285"><a href="#ExampleClass-285"><span class="linenos">285</span></a><span class="sd">        end with a double underscore. Any special member with a docstring</span>
+</span><span id="ExampleClass-286"><a href="#ExampleClass-286"><span class="linenos">286</span></a><span class="sd">        will be included in the output, if</span>
+</span><span id="ExampleClass-287"><a href="#ExampleClass-287"><span class="linenos">287</span></a><span class="sd">        ``napoleon_include_special_with_doc`` is set to True.</span>
+</span><span id="ExampleClass-288"><a href="#ExampleClass-288"><span class="linenos">288</span></a>
+</span><span id="ExampleClass-289"><a href="#ExampleClass-289"><span class="linenos">289</span></a><span class="sd">        This behavior can be enabled by changing the following setting in</span>
+</span><span id="ExampleClass-290"><a href="#ExampleClass-290"><span class="linenos">290</span></a><span class="sd">        Sphinx&#39;s conf.py::</span>
 </span><span id="ExampleClass-291"><a href="#ExampleClass-291"><span class="linenos">291</span></a>
-</span><span id="ExampleClass-292"><a href="#ExampleClass-292"><span class="linenos">292</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass-293"><a href="#ExampleClass-293"><span class="linenos">293</span></a>        <span class="k">pass</span>
-</span><span id="ExampleClass-294"><a href="#ExampleClass-294"><span class="linenos">294</span></a>
-</span><span id="ExampleClass-295"><a href="#ExampleClass-295"><span class="linenos">295</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-296"><a href="#ExampleClass-296"><span class="linenos">296</span></a>        <span class="k">pass</span>
-</span><span id="ExampleClass-297"><a href="#ExampleClass-297"><span class="linenos">297</span></a>
-</span><span id="ExampleClass-298"><a href="#ExampleClass-298"><span class="linenos">298</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-299"><a href="#ExampleClass-299"><span class="linenos">299</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
-</span><span id="ExampleClass-300"><a href="#ExampleClass-300"><span class="linenos">300</span></a>
-</span><span id="ExampleClass-301"><a href="#ExampleClass-301"><span class="linenos">301</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
-</span><span id="ExampleClass-302"><a href="#ExampleClass-302"><span class="linenos">302</span></a><span class="sd">        underscore and are *not* special. By default they are not included</span>
-</span><span id="ExampleClass-303"><a href="#ExampleClass-303"><span class="linenos">303</span></a><span class="sd">        in the output.</span>
-</span><span id="ExampleClass-304"><a href="#ExampleClass-304"><span class="linenos">304</span></a>
-</span><span id="ExampleClass-305"><a href="#ExampleClass-305"><span class="linenos">305</span></a><span class="sd">        This behavior can be changed such that private members *are* included</span>
-</span><span id="ExampleClass-306"><a href="#ExampleClass-306"><span class="linenos">306</span></a><span class="sd">        by changing the following setting in Sphinx&#39;s conf.py::</span>
-</span><span id="ExampleClass-307"><a href="#ExampleClass-307"><span class="linenos">307</span></a>
-</span><span id="ExampleClass-308"><a href="#ExampleClass-308"><span class="linenos">308</span></a><span class="sd">            napoleon_include_private_with_doc = True</span>
+</span><span id="ExampleClass-292"><a href="#ExampleClass-292"><span class="linenos">292</span></a><span class="sd">            napoleon_include_special_with_doc = True</span>
+</span><span id="ExampleClass-293"><a href="#ExampleClass-293"><span class="linenos">293</span></a>
+</span><span id="ExampleClass-294"><a href="#ExampleClass-294"><span class="linenos">294</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-295"><a href="#ExampleClass-295"><span class="linenos">295</span></a>        <span class="k">pass</span>
+</span><span id="ExampleClass-296"><a href="#ExampleClass-296"><span class="linenos">296</span></a>
+</span><span id="ExampleClass-297"><a href="#ExampleClass-297"><span class="linenos">297</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-298"><a href="#ExampleClass-298"><span class="linenos">298</span></a>        <span class="k">pass</span>
+</span><span id="ExampleClass-299"><a href="#ExampleClass-299"><span class="linenos">299</span></a>
+</span><span id="ExampleClass-300"><a href="#ExampleClass-300"><span class="linenos">300</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-301"><a href="#ExampleClass-301"><span class="linenos">301</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
+</span><span id="ExampleClass-302"><a href="#ExampleClass-302"><span class="linenos">302</span></a>
+</span><span id="ExampleClass-303"><a href="#ExampleClass-303"><span class="linenos">303</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
+</span><span id="ExampleClass-304"><a href="#ExampleClass-304"><span class="linenos">304</span></a><span class="sd">        underscore and are *not* special. By default they are not included</span>
+</span><span id="ExampleClass-305"><a href="#ExampleClass-305"><span class="linenos">305</span></a><span class="sd">        in the output.</span>
+</span><span id="ExampleClass-306"><a href="#ExampleClass-306"><span class="linenos">306</span></a>
+</span><span id="ExampleClass-307"><a href="#ExampleClass-307"><span class="linenos">307</span></a><span class="sd">        This behavior can be changed such that private members *are* included</span>
+</span><span id="ExampleClass-308"><a href="#ExampleClass-308"><span class="linenos">308</span></a><span class="sd">        by changing the following setting in Sphinx&#39;s conf.py::</span>
 </span><span id="ExampleClass-309"><a href="#ExampleClass-309"><span class="linenos">309</span></a>
-</span><span id="ExampleClass-310"><a href="#ExampleClass-310"><span class="linenos">310</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass-311"><a href="#ExampleClass-311"><span class="linenos">311</span></a>        <span class="k">pass</span>
-</span><span id="ExampleClass-312"><a href="#ExampleClass-312"><span class="linenos">312</span></a>
-</span><span id="ExampleClass-313"><a href="#ExampleClass-313"><span class="linenos">313</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass-314"><a href="#ExampleClass-314"><span class="linenos">314</span></a>        <span class="k">pass</span>
+</span><span id="ExampleClass-310"><a href="#ExampleClass-310"><span class="linenos">310</span></a><span class="sd">            napoleon_include_private_with_doc = True</span>
+</span><span id="ExampleClass-311"><a href="#ExampleClass-311"><span class="linenos">311</span></a>
+</span><span id="ExampleClass-312"><a href="#ExampleClass-312"><span class="linenos">312</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass-313"><a href="#ExampleClass-313"><span class="linenos">313</span></a>        <span class="k">pass</span>
+</span><span id="ExampleClass-314"><a href="#ExampleClass-314"><span class="linenos">314</span></a>
+</span><span id="ExampleClass-315"><a href="#ExampleClass-315"><span class="linenos">315</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-316"><a href="#ExampleClass-316"><span class="linenos">316</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -1269,34 +1297,34 @@ in the property's getter method.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.__init__-215"><a href="#ExampleClass.__init__-215"><span class="linenos">215</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
-</span><span id="ExampleClass.__init__-216"><a href="#ExampleClass.__init__-216"><span class="linenos">216</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
-</span><span id="ExampleClass.__init__-217"><a href="#ExampleClass.__init__-217"><span class="linenos">217</span></a>
-</span><span id="ExampleClass.__init__-218"><a href="#ExampleClass.__init__-218"><span class="linenos">218</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
-</span><span id="ExampleClass.__init__-219"><a href="#ExampleClass.__init__-219"><span class="linenos">219</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
-</span><span id="ExampleClass.__init__-220"><a href="#ExampleClass.__init__-220"><span class="linenos">220</span></a>
-</span><span id="ExampleClass.__init__-221"><a href="#ExampleClass.__init__-221"><span class="linenos">221</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
-</span><span id="ExampleClass.__init__-222"><a href="#ExampleClass.__init__-222"><span class="linenos">222</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
-</span><span id="ExampleClass.__init__-223"><a href="#ExampleClass.__init__-223"><span class="linenos">223</span></a>
-</span><span id="ExampleClass.__init__-224"><a href="#ExampleClass.__init__-224"><span class="linenos">224</span></a><span class="sd">        Note:</span>
-</span><span id="ExampleClass.__init__-225"><a href="#ExampleClass.__init__-225"><span class="linenos">225</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="ExampleClass.__init__-226"><a href="#ExampleClass.__init__-226"><span class="linenos">226</span></a>
-</span><span id="ExampleClass.__init__-227"><a href="#ExampleClass.__init__-227"><span class="linenos">227</span></a><span class="sd">        Args:</span>
-</span><span id="ExampleClass.__init__-228"><a href="#ExampleClass.__init__-228"><span class="linenos">228</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
-</span><span id="ExampleClass.__init__-229"><a href="#ExampleClass.__init__-229"><span class="linenos">229</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
-</span><span id="ExampleClass.__init__-230"><a href="#ExampleClass.__init__-230"><span class="linenos">230</span></a><span class="sd">                lines are supported.</span>
-</span><span id="ExampleClass.__init__-231"><a href="#ExampleClass.__init__-231"><span class="linenos">231</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
-</span><span id="ExampleClass.__init__-232"><a href="#ExampleClass.__init__-232"><span class="linenos">232</span></a>
-</span><span id="ExampleClass.__init__-233"><a href="#ExampleClass.__init__-233"><span class="linenos">233</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass.__init__-234"><a href="#ExampleClass.__init__-234"><span class="linenos">234</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
-</span><span id="ExampleClass.__init__-235"><a href="#ExampleClass.__init__-235"><span class="linenos">235</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
-</span><span id="ExampleClass.__init__-236"><a href="#ExampleClass.__init__-236"><span class="linenos">236</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
-</span><span id="ExampleClass.__init__-237"><a href="#ExampleClass.__init__-237"><span class="linenos">237</span></a>
-</span><span id="ExampleClass.__init__-238"><a href="#ExampleClass.__init__-238"><span class="linenos">238</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
-</span><span id="ExampleClass.__init__-239"><a href="#ExampleClass.__init__-239"><span class="linenos">239</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
-</span><span id="ExampleClass.__init__-240"><a href="#ExampleClass.__init__-240"><span class="linenos">240</span></a>
-</span><span id="ExampleClass.__init__-241"><a href="#ExampleClass.__init__-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="ExampleClass.__init__-242"><a href="#ExampleClass.__init__-242"><span class="linenos">242</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.__init__-217"><a href="#ExampleClass.__init__-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+</span><span id="ExampleClass.__init__-218"><a href="#ExampleClass.__init__-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
+</span><span id="ExampleClass.__init__-219"><a href="#ExampleClass.__init__-219"><span class="linenos">219</span></a>
+</span><span id="ExampleClass.__init__-220"><a href="#ExampleClass.__init__-220"><span class="linenos">220</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
+</span><span id="ExampleClass.__init__-221"><a href="#ExampleClass.__init__-221"><span class="linenos">221</span></a><span class="sd">        docstring, or as a docstring on the __init__ method itself.</span>
+</span><span id="ExampleClass.__init__-222"><a href="#ExampleClass.__init__-222"><span class="linenos">222</span></a>
+</span><span id="ExampleClass.__init__-223"><a href="#ExampleClass.__init__-223"><span class="linenos">223</span></a><span class="sd">        Either form is acceptable, but the two should not be mixed. Choose one</span>
+</span><span id="ExampleClass.__init__-224"><a href="#ExampleClass.__init__-224"><span class="linenos">224</span></a><span class="sd">        convention to document the __init__ method and be consistent with it.</span>
+</span><span id="ExampleClass.__init__-225"><a href="#ExampleClass.__init__-225"><span class="linenos">225</span></a>
+</span><span id="ExampleClass.__init__-226"><a href="#ExampleClass.__init__-226"><span class="linenos">226</span></a><span class="sd">        Note:</span>
+</span><span id="ExampleClass.__init__-227"><a href="#ExampleClass.__init__-227"><span class="linenos">227</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="ExampleClass.__init__-228"><a href="#ExampleClass.__init__-228"><span class="linenos">228</span></a>
+</span><span id="ExampleClass.__init__-229"><a href="#ExampleClass.__init__-229"><span class="linenos">229</span></a><span class="sd">        Args:</span>
+</span><span id="ExampleClass.__init__-230"><a href="#ExampleClass.__init__-230"><span class="linenos">230</span></a><span class="sd">            param1 (str): Description of `param1`.</span>
+</span><span id="ExampleClass.__init__-231"><a href="#ExampleClass.__init__-231"><span class="linenos">231</span></a><span class="sd">            param2 (:obj:`int`, optional): Description of `param2`. Multiple</span>
+</span><span id="ExampleClass.__init__-232"><a href="#ExampleClass.__init__-232"><span class="linenos">232</span></a><span class="sd">                lines are supported.</span>
+</span><span id="ExampleClass.__init__-233"><a href="#ExampleClass.__init__-233"><span class="linenos">233</span></a><span class="sd">            param3 (:obj:`list` of :obj:`str`): Description of `param3`.</span>
+</span><span id="ExampleClass.__init__-234"><a href="#ExampleClass.__init__-234"><span class="linenos">234</span></a>
+</span><span id="ExampleClass.__init__-235"><a href="#ExampleClass.__init__-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass.__init__-236"><a href="#ExampleClass.__init__-236"><span class="linenos">236</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr1</span> <span class="o">=</span> <span class="n">param1</span>
+</span><span id="ExampleClass.__init__-237"><a href="#ExampleClass.__init__-237"><span class="linenos">237</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr2</span> <span class="o">=</span> <span class="n">param2</span>
+</span><span id="ExampleClass.__init__-238"><a href="#ExampleClass.__init__-238"><span class="linenos">238</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr3</span> <span class="o">=</span> <span class="n">param3</span>  <span class="c1">#: Doc comment *inline* with attribute</span>
+</span><span id="ExampleClass.__init__-239"><a href="#ExampleClass.__init__-239"><span class="linenos">239</span></a>
+</span><span id="ExampleClass.__init__-240"><a href="#ExampleClass.__init__-240"><span class="linenos">240</span></a>        <span class="c1">#: list of str: Doc comment *before* attribute, with type specified</span>
+</span><span id="ExampleClass.__init__-241"><a href="#ExampleClass.__init__-241"><span class="linenos">241</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;attr4&#39;</span><span class="p">]</span>
+</span><span id="ExampleClass.__init__-242"><a href="#ExampleClass.__init__-242"><span class="linenos">242</span></a>
+</span><span id="ExampleClass.__init__-243"><a href="#ExampleClass.__init__-243"><span class="linenos">243</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">attr5</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="ExampleClass.__init__-244"><a href="#ExampleClass.__init__-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1392,10 +1420,10 @@ lines are supported.</li>
 
     </div>
     <a class="headerlink" href="#ExampleClass.readonly_property"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readonly_property-244"><a href="#ExampleClass.readonly_property-244"><span class="linenos">244</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass.readonly_property-245"><a href="#ExampleClass.readonly_property-245"><span class="linenos">245</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass.readonly_property-246"><a href="#ExampleClass.readonly_property-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
-</span><span id="ExampleClass.readonly_property-247"><a href="#ExampleClass.readonly_property-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readonly_property-246"><a href="#ExampleClass.readonly_property-246"><span class="linenos">246</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass.readonly_property-247"><a href="#ExampleClass.readonly_property-247"><span class="linenos">247</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readonly_property-248"><a href="#ExampleClass.readonly_property-248"><span class="linenos">248</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
+</span><span id="ExampleClass.readonly_property-249"><a href="#ExampleClass.readonly_property-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
 </span></pre></div>
 
 
@@ -1413,15 +1441,15 @@ lines are supported.</li>
 
     </div>
     <a class="headerlink" href="#ExampleClass.readwrite_property"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readwrite_property-249"><a href="#ExampleClass.readwrite_property-249"><span class="linenos">249</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass.readwrite_property-250"><a href="#ExampleClass.readwrite_property-250"><span class="linenos">250</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="ExampleClass.readwrite_property-251"><a href="#ExampleClass.readwrite_property-251"><span class="linenos">251</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
-</span><span id="ExampleClass.readwrite_property-252"><a href="#ExampleClass.readwrite_property-252"><span class="linenos">252</span></a><span class="sd">        should only be documented in their getter method.</span>
-</span><span id="ExampleClass.readwrite_property-253"><a href="#ExampleClass.readwrite_property-253"><span class="linenos">253</span></a>
-</span><span id="ExampleClass.readwrite_property-254"><a href="#ExampleClass.readwrite_property-254"><span class="linenos">254</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
-</span><span id="ExampleClass.readwrite_property-255"><a href="#ExampleClass.readwrite_property-255"><span class="linenos">255</span></a><span class="sd">        mentioned here.</span>
-</span><span id="ExampleClass.readwrite_property-256"><a href="#ExampleClass.readwrite_property-256"><span class="linenos">256</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass.readwrite_property-257"><a href="#ExampleClass.readwrite_property-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readwrite_property-251"><a href="#ExampleClass.readwrite_property-251"><span class="linenos">251</span></a>    <span class="nd">@property</span>
+</span><span id="ExampleClass.readwrite_property-252"><a href="#ExampleClass.readwrite_property-252"><span class="linenos">252</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readwrite_property-253"><a href="#ExampleClass.readwrite_property-253"><span class="linenos">253</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
+</span><span id="ExampleClass.readwrite_property-254"><a href="#ExampleClass.readwrite_property-254"><span class="linenos">254</span></a><span class="sd">        should only be documented in their getter method.</span>
+</span><span id="ExampleClass.readwrite_property-255"><a href="#ExampleClass.readwrite_property-255"><span class="linenos">255</span></a>
+</span><span id="ExampleClass.readwrite_property-256"><a href="#ExampleClass.readwrite_property-256"><span class="linenos">256</span></a><span class="sd">        If the setter method contains notable behavior, it should be</span>
+</span><span id="ExampleClass.readwrite_property-257"><a href="#ExampleClass.readwrite_property-257"><span class="linenos">257</span></a><span class="sd">        mentioned here.</span>
+</span><span id="ExampleClass.readwrite_property-258"><a href="#ExampleClass.readwrite_property-258"><span class="linenos">258</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass.readwrite_property-259"><a href="#ExampleClass.readwrite_property-259"><span class="linenos">259</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -1445,21 +1473,21 @@ mentioned here.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass.example_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.example_method-263"><a href="#ExampleClass.example_method-263"><span class="linenos">263</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
-</span><span id="ExampleClass.example_method-264"><a href="#ExampleClass.example_method-264"><span class="linenos">264</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
-</span><span id="ExampleClass.example_method-265"><a href="#ExampleClass.example_method-265"><span class="linenos">265</span></a>
-</span><span id="ExampleClass.example_method-266"><a href="#ExampleClass.example_method-266"><span class="linenos">266</span></a><span class="sd">        Note:</span>
-</span><span id="ExampleClass.example_method-267"><a href="#ExampleClass.example_method-267"><span class="linenos">267</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
-</span><span id="ExampleClass.example_method-268"><a href="#ExampleClass.example_method-268"><span class="linenos">268</span></a>
-</span><span id="ExampleClass.example_method-269"><a href="#ExampleClass.example_method-269"><span class="linenos">269</span></a><span class="sd">        Args:</span>
-</span><span id="ExampleClass.example_method-270"><a href="#ExampleClass.example_method-270"><span class="linenos">270</span></a><span class="sd">            param1: The first parameter.</span>
-</span><span id="ExampleClass.example_method-271"><a href="#ExampleClass.example_method-271"><span class="linenos">271</span></a><span class="sd">            param2: The second parameter.</span>
-</span><span id="ExampleClass.example_method-272"><a href="#ExampleClass.example_method-272"><span class="linenos">272</span></a>
-</span><span id="ExampleClass.example_method-273"><a href="#ExampleClass.example_method-273"><span class="linenos">273</span></a><span class="sd">        Returns:</span>
-</span><span id="ExampleClass.example_method-274"><a href="#ExampleClass.example_method-274"><span class="linenos">274</span></a><span class="sd">            True if successful, False otherwise.</span>
-</span><span id="ExampleClass.example_method-275"><a href="#ExampleClass.example_method-275"><span class="linenos">275</span></a>
-</span><span id="ExampleClass.example_method-276"><a href="#ExampleClass.example_method-276"><span class="linenos">276</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="ExampleClass.example_method-277"><a href="#ExampleClass.example_method-277"><span class="linenos">277</span></a>        <span class="k">return</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.example_method-265"><a href="#ExampleClass.example_method-265"><span class="linenos">265</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="ExampleClass.example_method-266"><a href="#ExampleClass.example_method-266"><span class="linenos">266</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
+</span><span id="ExampleClass.example_method-267"><a href="#ExampleClass.example_method-267"><span class="linenos">267</span></a>
+</span><span id="ExampleClass.example_method-268"><a href="#ExampleClass.example_method-268"><span class="linenos">268</span></a><span class="sd">        Note:</span>
+</span><span id="ExampleClass.example_method-269"><a href="#ExampleClass.example_method-269"><span class="linenos">269</span></a><span class="sd">            Do not include the `self` parameter in the ``Args`` section.</span>
+</span><span id="ExampleClass.example_method-270"><a href="#ExampleClass.example_method-270"><span class="linenos">270</span></a>
+</span><span id="ExampleClass.example_method-271"><a href="#ExampleClass.example_method-271"><span class="linenos">271</span></a><span class="sd">        Args:</span>
+</span><span id="ExampleClass.example_method-272"><a href="#ExampleClass.example_method-272"><span class="linenos">272</span></a><span class="sd">            param1: The first parameter.</span>
+</span><span id="ExampleClass.example_method-273"><a href="#ExampleClass.example_method-273"><span class="linenos">273</span></a><span class="sd">            param2: The second parameter.</span>
+</span><span id="ExampleClass.example_method-274"><a href="#ExampleClass.example_method-274"><span class="linenos">274</span></a>
+</span><span id="ExampleClass.example_method-275"><a href="#ExampleClass.example_method-275"><span class="linenos">275</span></a><span class="sd">        Returns:</span>
+</span><span id="ExampleClass.example_method-276"><a href="#ExampleClass.example_method-276"><span class="linenos">276</span></a><span class="sd">            True if successful, False otherwise.</span>
+</span><span id="ExampleClass.example_method-277"><a href="#ExampleClass.example_method-277"><span class="linenos">277</span></a>
+</span><span id="ExampleClass.example_method-278"><a href="#ExampleClass.example_method-278"><span class="linenos">278</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="ExampleClass.example_method-279"><a href="#ExampleClass.example_method-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
 
@@ -1499,39 +1527,39 @@ mentioned here.</p>
 
     </div>
     <a class="headerlink" href="#fetch_smalltable_rows"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows-317"><a href="#fetch_smalltable_rows-317"><span class="linenos">317</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="fetch_smalltable_rows-318"><a href="#fetch_smalltable_rows-318"><span class="linenos">318</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="fetch_smalltable_rows-319"><a href="#fetch_smalltable_rows-319"><span class="linenos">319</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="fetch_smalltable_rows-320"><a href="#fetch_smalltable_rows-320"><span class="linenos">320</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-</span><span id="fetch_smalltable_rows-321"><a href="#fetch_smalltable_rows-321"><span class="linenos">321</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
-</span><span id="fetch_smalltable_rows-322"><a href="#fetch_smalltable_rows-322"><span class="linenos">322</span></a>
-</span><span id="fetch_smalltable_rows-323"><a href="#fetch_smalltable_rows-323"><span class="linenos">323</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
-</span><span id="fetch_smalltable_rows-324"><a href="#fetch_smalltable_rows-324"><span class="linenos">324</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
-</span><span id="fetch_smalltable_rows-325"><a href="#fetch_smalltable_rows-325"><span class="linenos">325</span></a>
-</span><span id="fetch_smalltable_rows-326"><a href="#fetch_smalltable_rows-326"><span class="linenos">326</span></a><span class="sd">    Args:</span>
-</span><span id="fetch_smalltable_rows-327"><a href="#fetch_smalltable_rows-327"><span class="linenos">327</span></a><span class="sd">        table_handle: An open smalltable.Table instance.</span>
-</span><span id="fetch_smalltable_rows-328"><a href="#fetch_smalltable_rows-328"><span class="linenos">328</span></a><span class="sd">        keys: A sequence of strings representing the key of each table</span>
-</span><span id="fetch_smalltable_rows-329"><a href="#fetch_smalltable_rows-329"><span class="linenos">329</span></a><span class="sd">          row to fetch.  String keys will be UTF-8 encoded.</span>
-</span><span id="fetch_smalltable_rows-330"><a href="#fetch_smalltable_rows-330"><span class="linenos">330</span></a><span class="sd">        require_all_keys: Optional; If require_all_keys is True only</span>
-</span><span id="fetch_smalltable_rows-331"><a href="#fetch_smalltable_rows-331"><span class="linenos">331</span></a><span class="sd">          rows with values set for all keys will be returned.</span>
-</span><span id="fetch_smalltable_rows-332"><a href="#fetch_smalltable_rows-332"><span class="linenos">332</span></a>
-</span><span id="fetch_smalltable_rows-333"><a href="#fetch_smalltable_rows-333"><span class="linenos">333</span></a><span class="sd">    Returns:</span>
-</span><span id="fetch_smalltable_rows-334"><a href="#fetch_smalltable_rows-334"><span class="linenos">334</span></a><span class="sd">        A dict mapping keys to the corresponding table row data</span>
-</span><span id="fetch_smalltable_rows-335"><a href="#fetch_smalltable_rows-335"><span class="linenos">335</span></a><span class="sd">        fetched. Each row is represented as a tuple of strings. For</span>
-</span><span id="fetch_smalltable_rows-336"><a href="#fetch_smalltable_rows-336"><span class="linenos">336</span></a><span class="sd">        example:</span>
-</span><span id="fetch_smalltable_rows-337"><a href="#fetch_smalltable_rows-337"><span class="linenos">337</span></a>
-</span><span id="fetch_smalltable_rows-338"><a href="#fetch_smalltable_rows-338"><span class="linenos">338</span></a><span class="sd">        {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
-</span><span id="fetch_smalltable_rows-339"><a href="#fetch_smalltable_rows-339"><span class="linenos">339</span></a><span class="sd">         b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
-</span><span id="fetch_smalltable_rows-340"><a href="#fetch_smalltable_rows-340"><span class="linenos">340</span></a><span class="sd">         b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
-</span><span id="fetch_smalltable_rows-341"><a href="#fetch_smalltable_rows-341"><span class="linenos">341</span></a>
-</span><span id="fetch_smalltable_rows-342"><a href="#fetch_smalltable_rows-342"><span class="linenos">342</span></a><span class="sd">        Returned keys are always bytes.  If a key from the keys argument is</span>
-</span><span id="fetch_smalltable_rows-343"><a href="#fetch_smalltable_rows-343"><span class="linenos">343</span></a><span class="sd">        missing from the dictionary, then that row was not found in the</span>
-</span><span id="fetch_smalltable_rows-344"><a href="#fetch_smalltable_rows-344"><span class="linenos">344</span></a><span class="sd">        table (and require_all_keys must have been False).</span>
-</span><span id="fetch_smalltable_rows-345"><a href="#fetch_smalltable_rows-345"><span class="linenos">345</span></a>
-</span><span id="fetch_smalltable_rows-346"><a href="#fetch_smalltable_rows-346"><span class="linenos">346</span></a><span class="sd">    Raises:</span>
-</span><span id="fetch_smalltable_rows-347"><a href="#fetch_smalltable_rows-347"><span class="linenos">347</span></a><span class="sd">        IOError: An error occurred accessing the smalltable.</span>
-</span><span id="fetch_smalltable_rows-348"><a href="#fetch_smalltable_rows-348"><span class="linenos">348</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="fetch_smalltable_rows-349"><a href="#fetch_smalltable_rows-349"><span class="linenos">349</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows-319"><a href="#fetch_smalltable_rows-319"><span class="linenos">319</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="fetch_smalltable_rows-320"><a href="#fetch_smalltable_rows-320"><span class="linenos">320</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="fetch_smalltable_rows-321"><a href="#fetch_smalltable_rows-321"><span class="linenos">321</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="fetch_smalltable_rows-322"><a href="#fetch_smalltable_rows-322"><span class="linenos">322</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+</span><span id="fetch_smalltable_rows-323"><a href="#fetch_smalltable_rows-323"><span class="linenos">323</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
+</span><span id="fetch_smalltable_rows-324"><a href="#fetch_smalltable_rows-324"><span class="linenos">324</span></a>
+</span><span id="fetch_smalltable_rows-325"><a href="#fetch_smalltable_rows-325"><span class="linenos">325</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
+</span><span id="fetch_smalltable_rows-326"><a href="#fetch_smalltable_rows-326"><span class="linenos">326</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
+</span><span id="fetch_smalltable_rows-327"><a href="#fetch_smalltable_rows-327"><span class="linenos">327</span></a>
+</span><span id="fetch_smalltable_rows-328"><a href="#fetch_smalltable_rows-328"><span class="linenos">328</span></a><span class="sd">    Args:</span>
+</span><span id="fetch_smalltable_rows-329"><a href="#fetch_smalltable_rows-329"><span class="linenos">329</span></a><span class="sd">        table_handle: An open smalltable.Table instance.</span>
+</span><span id="fetch_smalltable_rows-330"><a href="#fetch_smalltable_rows-330"><span class="linenos">330</span></a><span class="sd">        keys: A sequence of strings representing the key of each table</span>
+</span><span id="fetch_smalltable_rows-331"><a href="#fetch_smalltable_rows-331"><span class="linenos">331</span></a><span class="sd">          row to fetch.  String keys will be UTF-8 encoded.</span>
+</span><span id="fetch_smalltable_rows-332"><a href="#fetch_smalltable_rows-332"><span class="linenos">332</span></a><span class="sd">        require_all_keys: Optional; If require_all_keys is True only</span>
+</span><span id="fetch_smalltable_rows-333"><a href="#fetch_smalltable_rows-333"><span class="linenos">333</span></a><span class="sd">          rows with values set for all keys will be returned.</span>
+</span><span id="fetch_smalltable_rows-334"><a href="#fetch_smalltable_rows-334"><span class="linenos">334</span></a>
+</span><span id="fetch_smalltable_rows-335"><a href="#fetch_smalltable_rows-335"><span class="linenos">335</span></a><span class="sd">    Returns:</span>
+</span><span id="fetch_smalltable_rows-336"><a href="#fetch_smalltable_rows-336"><span class="linenos">336</span></a><span class="sd">        A dict mapping keys to the corresponding table row data</span>
+</span><span id="fetch_smalltable_rows-337"><a href="#fetch_smalltable_rows-337"><span class="linenos">337</span></a><span class="sd">        fetched. Each row is represented as a tuple of strings. For</span>
+</span><span id="fetch_smalltable_rows-338"><a href="#fetch_smalltable_rows-338"><span class="linenos">338</span></a><span class="sd">        example:</span>
+</span><span id="fetch_smalltable_rows-339"><a href="#fetch_smalltable_rows-339"><span class="linenos">339</span></a>
+</span><span id="fetch_smalltable_rows-340"><a href="#fetch_smalltable_rows-340"><span class="linenos">340</span></a><span class="sd">        {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
+</span><span id="fetch_smalltable_rows-341"><a href="#fetch_smalltable_rows-341"><span class="linenos">341</span></a><span class="sd">         b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
+</span><span id="fetch_smalltable_rows-342"><a href="#fetch_smalltable_rows-342"><span class="linenos">342</span></a><span class="sd">         b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
+</span><span id="fetch_smalltable_rows-343"><a href="#fetch_smalltable_rows-343"><span class="linenos">343</span></a>
+</span><span id="fetch_smalltable_rows-344"><a href="#fetch_smalltable_rows-344"><span class="linenos">344</span></a><span class="sd">        Returned keys are always bytes.  If a key from the keys argument is</span>
+</span><span id="fetch_smalltable_rows-345"><a href="#fetch_smalltable_rows-345"><span class="linenos">345</span></a><span class="sd">        missing from the dictionary, then that row was not found in the</span>
+</span><span id="fetch_smalltable_rows-346"><a href="#fetch_smalltable_rows-346"><span class="linenos">346</span></a><span class="sd">        table (and require_all_keys must have been False).</span>
+</span><span id="fetch_smalltable_rows-347"><a href="#fetch_smalltable_rows-347"><span class="linenos">347</span></a>
+</span><span id="fetch_smalltable_rows-348"><a href="#fetch_smalltable_rows-348"><span class="linenos">348</span></a><span class="sd">    Raises:</span>
+</span><span id="fetch_smalltable_rows-349"><a href="#fetch_smalltable_rows-349"><span class="linenos">349</span></a><span class="sd">        IOError: An error occurred accessing the smalltable.</span>
+</span><span id="fetch_smalltable_rows-350"><a href="#fetch_smalltable_rows-350"><span class="linenos">350</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="fetch_smalltable_rows-351"><a href="#fetch_smalltable_rows-351"><span class="linenos">351</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -1586,42 +1614,42 @@ rows with values set for all keys will be returned.</li>
 
     </div>
     <a class="headerlink" href="#fetch_smalltable_rows2"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows2-352"><a href="#fetch_smalltable_rows2-352"><span class="linenos">352</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="fetch_smalltable_rows2-353"><a href="#fetch_smalltable_rows2-353"><span class="linenos">353</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-</span><span id="fetch_smalltable_rows2-354"><a href="#fetch_smalltable_rows2-354"><span class="linenos">354</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="fetch_smalltable_rows2-355"><a href="#fetch_smalltable_rows2-355"><span class="linenos">355</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-</span><span id="fetch_smalltable_rows2-356"><a href="#fetch_smalltable_rows2-356"><span class="linenos">356</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
-</span><span id="fetch_smalltable_rows2-357"><a href="#fetch_smalltable_rows2-357"><span class="linenos">357</span></a>
-</span><span id="fetch_smalltable_rows2-358"><a href="#fetch_smalltable_rows2-358"><span class="linenos">358</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
-</span><span id="fetch_smalltable_rows2-359"><a href="#fetch_smalltable_rows2-359"><span class="linenos">359</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
-</span><span id="fetch_smalltable_rows2-360"><a href="#fetch_smalltable_rows2-360"><span class="linenos">360</span></a>
-</span><span id="fetch_smalltable_rows2-361"><a href="#fetch_smalltable_rows2-361"><span class="linenos">361</span></a><span class="sd">    Args:</span>
-</span><span id="fetch_smalltable_rows2-362"><a href="#fetch_smalltable_rows2-362"><span class="linenos">362</span></a><span class="sd">      table_handle:</span>
-</span><span id="fetch_smalltable_rows2-363"><a href="#fetch_smalltable_rows2-363"><span class="linenos">363</span></a><span class="sd">        An open smalltable.Table instance.</span>
-</span><span id="fetch_smalltable_rows2-364"><a href="#fetch_smalltable_rows2-364"><span class="linenos">364</span></a><span class="sd">      keys:</span>
-</span><span id="fetch_smalltable_rows2-365"><a href="#fetch_smalltable_rows2-365"><span class="linenos">365</span></a><span class="sd">        A sequence of strings representing the key of each table row to</span>
-</span><span id="fetch_smalltable_rows2-366"><a href="#fetch_smalltable_rows2-366"><span class="linenos">366</span></a><span class="sd">        fetch.  String keys will be UTF-8 encoded.</span>
-</span><span id="fetch_smalltable_rows2-367"><a href="#fetch_smalltable_rows2-367"><span class="linenos">367</span></a><span class="sd">      require_all_keys:</span>
-</span><span id="fetch_smalltable_rows2-368"><a href="#fetch_smalltable_rows2-368"><span class="linenos">368</span></a><span class="sd">        Optional; If require_all_keys is True only rows with values set</span>
-</span><span id="fetch_smalltable_rows2-369"><a href="#fetch_smalltable_rows2-369"><span class="linenos">369</span></a><span class="sd">        for all keys will be returned.</span>
-</span><span id="fetch_smalltable_rows2-370"><a href="#fetch_smalltable_rows2-370"><span class="linenos">370</span></a>
-</span><span id="fetch_smalltable_rows2-371"><a href="#fetch_smalltable_rows2-371"><span class="linenos">371</span></a><span class="sd">    Returns:</span>
-</span><span id="fetch_smalltable_rows2-372"><a href="#fetch_smalltable_rows2-372"><span class="linenos">372</span></a><span class="sd">      A dict mapping keys to the corresponding table row data</span>
-</span><span id="fetch_smalltable_rows2-373"><a href="#fetch_smalltable_rows2-373"><span class="linenos">373</span></a><span class="sd">      fetched. Each row is represented as a tuple of strings. For</span>
-</span><span id="fetch_smalltable_rows2-374"><a href="#fetch_smalltable_rows2-374"><span class="linenos">374</span></a><span class="sd">      example:</span>
-</span><span id="fetch_smalltable_rows2-375"><a href="#fetch_smalltable_rows2-375"><span class="linenos">375</span></a>
-</span><span id="fetch_smalltable_rows2-376"><a href="#fetch_smalltable_rows2-376"><span class="linenos">376</span></a><span class="sd">      {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
-</span><span id="fetch_smalltable_rows2-377"><a href="#fetch_smalltable_rows2-377"><span class="linenos">377</span></a><span class="sd">       b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
-</span><span id="fetch_smalltable_rows2-378"><a href="#fetch_smalltable_rows2-378"><span class="linenos">378</span></a><span class="sd">       b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
-</span><span id="fetch_smalltable_rows2-379"><a href="#fetch_smalltable_rows2-379"><span class="linenos">379</span></a>
-</span><span id="fetch_smalltable_rows2-380"><a href="#fetch_smalltable_rows2-380"><span class="linenos">380</span></a><span class="sd">      Returned keys are always bytes.  If a key from the keys argument is</span>
-</span><span id="fetch_smalltable_rows2-381"><a href="#fetch_smalltable_rows2-381"><span class="linenos">381</span></a><span class="sd">      missing from the dictionary, then that row was not found in the</span>
-</span><span id="fetch_smalltable_rows2-382"><a href="#fetch_smalltable_rows2-382"><span class="linenos">382</span></a><span class="sd">      table (and require_all_keys must have been False).</span>
-</span><span id="fetch_smalltable_rows2-383"><a href="#fetch_smalltable_rows2-383"><span class="linenos">383</span></a>
-</span><span id="fetch_smalltable_rows2-384"><a href="#fetch_smalltable_rows2-384"><span class="linenos">384</span></a><span class="sd">    Raises:</span>
-</span><span id="fetch_smalltable_rows2-385"><a href="#fetch_smalltable_rows2-385"><span class="linenos">385</span></a><span class="sd">      IOError: An error occurred accessing the smalltable.</span>
-</span><span id="fetch_smalltable_rows2-386"><a href="#fetch_smalltable_rows2-386"><span class="linenos">386</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="fetch_smalltable_rows2-387"><a href="#fetch_smalltable_rows2-387"><span class="linenos">387</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows2-354"><a href="#fetch_smalltable_rows2-354"><span class="linenos">354</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="fetch_smalltable_rows2-355"><a href="#fetch_smalltable_rows2-355"><span class="linenos">355</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+</span><span id="fetch_smalltable_rows2-356"><a href="#fetch_smalltable_rows2-356"><span class="linenos">356</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="fetch_smalltable_rows2-357"><a href="#fetch_smalltable_rows2-357"><span class="linenos">357</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+</span><span id="fetch_smalltable_rows2-358"><a href="#fetch_smalltable_rows2-358"><span class="linenos">358</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetches rows from a Smalltable.</span>
+</span><span id="fetch_smalltable_rows2-359"><a href="#fetch_smalltable_rows2-359"><span class="linenos">359</span></a>
+</span><span id="fetch_smalltable_rows2-360"><a href="#fetch_smalltable_rows2-360"><span class="linenos">360</span></a><span class="sd">    Retrieves rows pertaining to the given keys from the Table instance</span>
+</span><span id="fetch_smalltable_rows2-361"><a href="#fetch_smalltable_rows2-361"><span class="linenos">361</span></a><span class="sd">    represented by table_handle.  String keys will be UTF-8 encoded.</span>
+</span><span id="fetch_smalltable_rows2-362"><a href="#fetch_smalltable_rows2-362"><span class="linenos">362</span></a>
+</span><span id="fetch_smalltable_rows2-363"><a href="#fetch_smalltable_rows2-363"><span class="linenos">363</span></a><span class="sd">    Args:</span>
+</span><span id="fetch_smalltable_rows2-364"><a href="#fetch_smalltable_rows2-364"><span class="linenos">364</span></a><span class="sd">      table_handle:</span>
+</span><span id="fetch_smalltable_rows2-365"><a href="#fetch_smalltable_rows2-365"><span class="linenos">365</span></a><span class="sd">        An open smalltable.Table instance.</span>
+</span><span id="fetch_smalltable_rows2-366"><a href="#fetch_smalltable_rows2-366"><span class="linenos">366</span></a><span class="sd">      keys:</span>
+</span><span id="fetch_smalltable_rows2-367"><a href="#fetch_smalltable_rows2-367"><span class="linenos">367</span></a><span class="sd">        A sequence of strings representing the key of each table row to</span>
+</span><span id="fetch_smalltable_rows2-368"><a href="#fetch_smalltable_rows2-368"><span class="linenos">368</span></a><span class="sd">        fetch.  String keys will be UTF-8 encoded.</span>
+</span><span id="fetch_smalltable_rows2-369"><a href="#fetch_smalltable_rows2-369"><span class="linenos">369</span></a><span class="sd">      require_all_keys:</span>
+</span><span id="fetch_smalltable_rows2-370"><a href="#fetch_smalltable_rows2-370"><span class="linenos">370</span></a><span class="sd">        Optional; If require_all_keys is True only rows with values set</span>
+</span><span id="fetch_smalltable_rows2-371"><a href="#fetch_smalltable_rows2-371"><span class="linenos">371</span></a><span class="sd">        for all keys will be returned.</span>
+</span><span id="fetch_smalltable_rows2-372"><a href="#fetch_smalltable_rows2-372"><span class="linenos">372</span></a>
+</span><span id="fetch_smalltable_rows2-373"><a href="#fetch_smalltable_rows2-373"><span class="linenos">373</span></a><span class="sd">    Returns:</span>
+</span><span id="fetch_smalltable_rows2-374"><a href="#fetch_smalltable_rows2-374"><span class="linenos">374</span></a><span class="sd">      A dict mapping keys to the corresponding table row data</span>
+</span><span id="fetch_smalltable_rows2-375"><a href="#fetch_smalltable_rows2-375"><span class="linenos">375</span></a><span class="sd">      fetched. Each row is represented as a tuple of strings. For</span>
+</span><span id="fetch_smalltable_rows2-376"><a href="#fetch_smalltable_rows2-376"><span class="linenos">376</span></a><span class="sd">      example:</span>
+</span><span id="fetch_smalltable_rows2-377"><a href="#fetch_smalltable_rows2-377"><span class="linenos">377</span></a>
+</span><span id="fetch_smalltable_rows2-378"><a href="#fetch_smalltable_rows2-378"><span class="linenos">378</span></a><span class="sd">      {b&#39;Serak&#39;: (&#39;Rigel VII&#39;, &#39;Preparer&#39;),</span>
+</span><span id="fetch_smalltable_rows2-379"><a href="#fetch_smalltable_rows2-379"><span class="linenos">379</span></a><span class="sd">       b&#39;Zim&#39;: (&#39;Irk&#39;, &#39;Invader&#39;),</span>
+</span><span id="fetch_smalltable_rows2-380"><a href="#fetch_smalltable_rows2-380"><span class="linenos">380</span></a><span class="sd">       b&#39;Lrrr&#39;: (&#39;Omicron Persei 8&#39;, &#39;Emperor&#39;)}</span>
+</span><span id="fetch_smalltable_rows2-381"><a href="#fetch_smalltable_rows2-381"><span class="linenos">381</span></a>
+</span><span id="fetch_smalltable_rows2-382"><a href="#fetch_smalltable_rows2-382"><span class="linenos">382</span></a><span class="sd">      Returned keys are always bytes.  If a key from the keys argument is</span>
+</span><span id="fetch_smalltable_rows2-383"><a href="#fetch_smalltable_rows2-383"><span class="linenos">383</span></a><span class="sd">      missing from the dictionary, then that row was not found in the</span>
+</span><span id="fetch_smalltable_rows2-384"><a href="#fetch_smalltable_rows2-384"><span class="linenos">384</span></a><span class="sd">      table (and require_all_keys must have been False).</span>
+</span><span id="fetch_smalltable_rows2-385"><a href="#fetch_smalltable_rows2-385"><span class="linenos">385</span></a>
+</span><span id="fetch_smalltable_rows2-386"><a href="#fetch_smalltable_rows2-386"><span class="linenos">386</span></a><span class="sd">    Raises:</span>
+</span><span id="fetch_smalltable_rows2-387"><a href="#fetch_smalltable_rows2-387"><span class="linenos">387</span></a><span class="sd">      IOError: An error occurred accessing the smalltable.</span>
+</span><span id="fetch_smalltable_rows2-388"><a href="#fetch_smalltable_rows2-388"><span class="linenos">388</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="fetch_smalltable_rows2-389"><a href="#fetch_smalltable_rows2-389"><span class="linenos">389</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -1676,24 +1704,24 @@ for all keys will be returned.</li>
 
     </div>
     <a class="headerlink" href="#SampleClass"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass-390"><a href="#SampleClass-390"><span class="linenos">390</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
-</span><span id="SampleClass-391"><a href="#SampleClass-391"><span class="linenos">391</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
-</span><span id="SampleClass-392"><a href="#SampleClass-392"><span class="linenos">392</span></a>
-</span><span id="SampleClass-393"><a href="#SampleClass-393"><span class="linenos">393</span></a><span class="sd">    Longer class information....</span>
-</span><span id="SampleClass-394"><a href="#SampleClass-394"><span class="linenos">394</span></a><span class="sd">    Longer class information....</span>
-</span><span id="SampleClass-395"><a href="#SampleClass-395"><span class="linenos">395</span></a>
-</span><span id="SampleClass-396"><a href="#SampleClass-396"><span class="linenos">396</span></a><span class="sd">    Attributes:</span>
-</span><span id="SampleClass-397"><a href="#SampleClass-397"><span class="linenos">397</span></a><span class="sd">        likes_spam: A boolean indicating if we like SPAM or not.</span>
-</span><span id="SampleClass-398"><a href="#SampleClass-398"><span class="linenos">398</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
-</span><span id="SampleClass-399"><a href="#SampleClass-399"><span class="linenos">399</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="SampleClass-400"><a href="#SampleClass-400"><span class="linenos">400</span></a>
-</span><span id="SampleClass-401"><a href="#SampleClass-401"><span class="linenos">401</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="SampleClass-402"><a href="#SampleClass-402"><span class="linenos">402</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
-</span><span id="SampleClass-403"><a href="#SampleClass-403"><span class="linenos">403</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
-</span><span id="SampleClass-404"><a href="#SampleClass-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="SampleClass-405"><a href="#SampleClass-405"><span class="linenos">405</span></a>
-</span><span id="SampleClass-406"><a href="#SampleClass-406"><span class="linenos">406</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SampleClass-407"><a href="#SampleClass-407"><span class="linenos">407</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass-392"><a href="#SampleClass-392"><span class="linenos">392</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
+</span><span id="SampleClass-393"><a href="#SampleClass-393"><span class="linenos">393</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
+</span><span id="SampleClass-394"><a href="#SampleClass-394"><span class="linenos">394</span></a>
+</span><span id="SampleClass-395"><a href="#SampleClass-395"><span class="linenos">395</span></a><span class="sd">    Longer class information....</span>
+</span><span id="SampleClass-396"><a href="#SampleClass-396"><span class="linenos">396</span></a><span class="sd">    Longer class information....</span>
+</span><span id="SampleClass-397"><a href="#SampleClass-397"><span class="linenos">397</span></a>
+</span><span id="SampleClass-398"><a href="#SampleClass-398"><span class="linenos">398</span></a><span class="sd">    Attributes:</span>
+</span><span id="SampleClass-399"><a href="#SampleClass-399"><span class="linenos">399</span></a><span class="sd">        likes_spam: A boolean indicating if we like SPAM or not.</span>
+</span><span id="SampleClass-400"><a href="#SampleClass-400"><span class="linenos">400</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
+</span><span id="SampleClass-401"><a href="#SampleClass-401"><span class="linenos">401</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="SampleClass-402"><a href="#SampleClass-402"><span class="linenos">402</span></a>
+</span><span id="SampleClass-403"><a href="#SampleClass-403"><span class="linenos">403</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="SampleClass-404"><a href="#SampleClass-404"><span class="linenos">404</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
+</span><span id="SampleClass-405"><a href="#SampleClass-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
+</span><span id="SampleClass-406"><a href="#SampleClass-406"><span class="linenos">406</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="SampleClass-407"><a href="#SampleClass-407"><span class="linenos">407</span></a>
+</span><span id="SampleClass-408"><a href="#SampleClass-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SampleClass-409"><a href="#SampleClass-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1721,10 +1749,10 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#SampleClass.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.__init__-401"><a href="#SampleClass.__init__-401"><span class="linenos">401</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="SampleClass.__init__-402"><a href="#SampleClass.__init__-402"><span class="linenos">402</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
-</span><span id="SampleClass.__init__-403"><a href="#SampleClass.__init__-403"><span class="linenos">403</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
-</span><span id="SampleClass.__init__-404"><a href="#SampleClass.__init__-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.__init__-403"><a href="#SampleClass.__init__-403"><span class="linenos">403</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="SampleClass.__init__-404"><a href="#SampleClass.__init__-404"><span class="linenos">404</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
+</span><span id="SampleClass.__init__-405"><a href="#SampleClass.__init__-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
+</span><span id="SampleClass.__init__-406"><a href="#SampleClass.__init__-406"><span class="linenos">406</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
 </span></pre></div>
 
 
@@ -1766,8 +1794,8 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#SampleClass.public_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.public_method-406"><a href="#SampleClass.public_method-406"><span class="linenos">406</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SampleClass.public_method-407"><a href="#SampleClass.public_method-407"><span class="linenos">407</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.public_method-408"><a href="#SampleClass.public_method-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SampleClass.public_method-409"><a href="#SampleClass.public_method-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1788,16 +1816,16 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#invalid_format"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="invalid_format-410"><a href="#invalid_format-410"><span class="linenos">410</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
-</span><span id="invalid_format-411"><a href="#invalid_format-411"><span class="linenos">411</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="invalid_format-412"><a href="#invalid_format-412"><span class="linenos">412</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
-</span><span id="invalid_format-413"><a href="#invalid_format-413"><span class="linenos">413</span></a>
-</span><span id="invalid_format-414"><a href="#invalid_format-414"><span class="linenos">414</span></a><span class="sd">    Args:</span>
-</span><span id="invalid_format-415"><a href="#invalid_format-415"><span class="linenos">415</span></a><span class="sd">      test</span>
-</span><span id="invalid_format-416"><a href="#invalid_format-416"><span class="linenos">416</span></a><span class="sd">        there is a colon missing in the previous line</span>
-</span><span id="invalid_format-417"><a href="#invalid_format-417"><span class="linenos">417</span></a><span class="sd">    Returns:</span>
-</span><span id="invalid_format-418"><a href="#invalid_format-418"><span class="linenos">418</span></a>
-</span><span id="invalid_format-419"><a href="#invalid_format-419"><span class="linenos">419</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="invalid_format-412"><a href="#invalid_format-412"><span class="linenos">412</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
+</span><span id="invalid_format-413"><a href="#invalid_format-413"><span class="linenos">413</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="invalid_format-414"><a href="#invalid_format-414"><span class="linenos">414</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
+</span><span id="invalid_format-415"><a href="#invalid_format-415"><span class="linenos">415</span></a>
+</span><span id="invalid_format-416"><a href="#invalid_format-416"><span class="linenos">416</span></a><span class="sd">    Args:</span>
+</span><span id="invalid_format-417"><a href="#invalid_format-417"><span class="linenos">417</span></a><span class="sd">      test</span>
+</span><span id="invalid_format-418"><a href="#invalid_format-418"><span class="linenos">418</span></a><span class="sd">        there is a colon missing in the previous line</span>
+</span><span id="invalid_format-419"><a href="#invalid_format-419"><span class="linenos">419</span></a><span class="sd">    Returns:</span>
+</span><span id="invalid_format-420"><a href="#invalid_format-420"><span class="linenos">420</span></a>
+</span><span id="invalid_format-421"><a href="#invalid_format-421"><span class="linenos">421</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1826,18 +1854,18 @@ there is a colon missing in the previous line</li>
 
     </div>
     <a class="headerlink" href="#example_code"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="example_code-422"><a href="#example_code-422"><span class="linenos">422</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
-</span><span id="example_code-423"><a href="#example_code-423"><span class="linenos">423</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="example_code-424"><a href="#example_code-424"><span class="linenos">424</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
-</span><span id="example_code-425"><a href="#example_code-425"><span class="linenos">425</span></a>
-</span><span id="example_code-426"><a href="#example_code-426"><span class="linenos">426</span></a><span class="sd">    Example:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="example_code-424"><a href="#example_code-424"><span class="linenos">424</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
+</span><span id="example_code-425"><a href="#example_code-425"><span class="linenos">425</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="example_code-426"><a href="#example_code-426"><span class="linenos">426</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
 </span><span id="example_code-427"><a href="#example_code-427"><span class="linenos">427</span></a>
-</span><span id="example_code-428"><a href="#example_code-428"><span class="linenos">428</span></a><span class="sd">        ```python</span>
-</span><span id="example_code-429"><a href="#example_code-429"><span class="linenos">429</span></a><span class="sd">        tmp = a2()</span>
-</span><span id="example_code-430"><a href="#example_code-430"><span class="linenos">430</span></a>
-</span><span id="example_code-431"><a href="#example_code-431"><span class="linenos">431</span></a><span class="sd">        tmp2 = a()</span>
-</span><span id="example_code-432"><a href="#example_code-432"><span class="linenos">432</span></a><span class="sd">        ```</span>
-</span><span id="example_code-433"><a href="#example_code-433"><span class="linenos">433</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="example_code-428"><a href="#example_code-428"><span class="linenos">428</span></a><span class="sd">    Example:</span>
+</span><span id="example_code-429"><a href="#example_code-429"><span class="linenos">429</span></a>
+</span><span id="example_code-430"><a href="#example_code-430"><span class="linenos">430</span></a><span class="sd">        ```python</span>
+</span><span id="example_code-431"><a href="#example_code-431"><span class="linenos">431</span></a><span class="sd">        tmp = a2()</span>
+</span><span id="example_code-432"><a href="#example_code-432"><span class="linenos">432</span></a>
+</span><span id="example_code-433"><a href="#example_code-433"><span class="linenos">433</span></a><span class="sd">        tmp2 = a()</span>
+</span><span id="example_code-434"><a href="#example_code-434"><span class="linenos">434</span></a><span class="sd">        ```</span>
+</span><span id="example_code-435"><a href="#example_code-435"><span class="linenos">435</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1868,15 +1896,15 @@ there is a colon missing in the previous line</li>
 
     </div>
     <a class="headerlink" href="#newline_after_args"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="newline_after_args-436"><a href="#newline_after_args-436"><span class="linenos">436</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="newline_after_args-437"><a href="#newline_after_args-437"><span class="linenos">437</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="newline_after_args-438"><a href="#newline_after_args-438"><span class="linenos">438</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
-</span><span id="newline_after_args-439"><a href="#newline_after_args-439"><span class="linenos">439</span></a>
-</span><span id="newline_after_args-440"><a href="#newline_after_args-440"><span class="linenos">440</span></a><span class="sd">    Args:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="newline_after_args-438"><a href="#newline_after_args-438"><span class="linenos">438</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="newline_after_args-439"><a href="#newline_after_args-439"><span class="linenos">439</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="newline_after_args-440"><a href="#newline_after_args-440"><span class="linenos">440</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
 </span><span id="newline_after_args-441"><a href="#newline_after_args-441"><span class="linenos">441</span></a>
-</span><span id="newline_after_args-442"><a href="#newline_after_args-442"><span class="linenos">442</span></a><span class="sd">      test</span>
-</span><span id="newline_after_args-443"><a href="#newline_after_args-443"><span class="linenos">443</span></a><span class="sd">        there is unexpected whitespace before test.</span>
-</span><span id="newline_after_args-444"><a href="#newline_after_args-444"><span class="linenos">444</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="newline_after_args-442"><a href="#newline_after_args-442"><span class="linenos">442</span></a><span class="sd">    Args:</span>
+</span><span id="newline_after_args-443"><a href="#newline_after_args-443"><span class="linenos">443</span></a>
+</span><span id="newline_after_args-444"><a href="#newline_after_args-444"><span class="linenos">444</span></a><span class="sd">      test</span>
+</span><span id="newline_after_args-445"><a href="#newline_after_args-445"><span class="linenos">445</span></a><span class="sd">        there is unexpected whitespace before test.</span>
+</span><span id="newline_after_args-446"><a href="#newline_after_args-446"><span class="linenos">446</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -1903,14 +1931,14 @@ there is unexpected whitespace before test.</li>
 
     </div>
     <a class="headerlink" href="#alternative_section_names"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="alternative_section_names-447"><a href="#alternative_section_names-447"><span class="linenos">447</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="alternative_section_names-448"><a href="#alternative_section_names-448"><span class="linenos">448</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="alternative_section_names-449"><a href="#alternative_section_names-449"><span class="linenos">449</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
-</span><span id="alternative_section_names-450"><a href="#alternative_section_names-450"><span class="linenos">450</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
-</span><span id="alternative_section_names-451"><a href="#alternative_section_names-451"><span class="linenos">451</span></a>
-</span><span id="alternative_section_names-452"><a href="#alternative_section_names-452"><span class="linenos">452</span></a><span class="sd">    Parameters:</span>
-</span><span id="alternative_section_names-453"><a href="#alternative_section_names-453"><span class="linenos">453</span></a><span class="sd">        test: the test string</span>
-</span><span id="alternative_section_names-454"><a href="#alternative_section_names-454"><span class="linenos">454</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="alternative_section_names-449"><a href="#alternative_section_names-449"><span class="linenos">449</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="alternative_section_names-450"><a href="#alternative_section_names-450"><span class="linenos">450</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="alternative_section_names-451"><a href="#alternative_section_names-451"><span class="linenos">451</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
+</span><span id="alternative_section_names-452"><a href="#alternative_section_names-452"><span class="linenos">452</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
+</span><span id="alternative_section_names-453"><a href="#alternative_section_names-453"><span class="linenos">453</span></a>
+</span><span id="alternative_section_names-454"><a href="#alternative_section_names-454"><span class="linenos">454</span></a><span class="sd">    Parameters:</span>
+</span><span id="alternative_section_names-455"><a href="#alternative_section_names-455"><span class="linenos">455</span></a><span class="sd">        test: the test string</span>
+</span><span id="alternative_section_names-456"><a href="#alternative_section_names-456"><span class="linenos">456</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

@@ -1,5 +1,6 @@
-from typing import TypedDict
 from typing import Optional
+from typing import TypedDict
+
 
 class Foo(TypedDict):
     a: Optional[int]

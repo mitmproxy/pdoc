@@ -8,8 +8,6 @@ from __future__ import annotations
 
 import typing
 from typing import NamedTuple
-from typing import Optional
-from typing import TypedDict
 
 # Testing the new Python 3.12 `type` statement.
 type MyType = int

@@ -10,7 +10,7 @@
         <var msg>
         <var code>
         <method def add_note(self, note: str): ...  # This method is prese…>
-        <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
+        <method def with_traceback(self, object, /): ...  # This method has a ch…>
         <var args  # inherited from builtins.BaseException.args>
     >
     <class flavors_google.ExampleClass  # The summary line for…
