@@ -37,25 +37,3 @@ class NamedTupleExample(NamedTuple):
     name: str
     """Name of our example tuple."""
     id: int = 3
-
-
-# Testing some edge cases in our inlined implementation of ForwardRef._evaluate in _eval_type.
-class Foo(TypedDict):
-    a: Optional[int]
-    """First attribute."""
-
-
-class Bar(Foo, total=False):
-    """A TypedDict subclass. Before 3.12, TypedDict botches __mro__."""
-
-    b: int
-    """Second attribute."""
-    c: str
-    # undocumented attribute
-
-
-class Baz(Bar):
-    """A TypedDict subsubclass."""
-
-    d: bool
-    """new attribute"""

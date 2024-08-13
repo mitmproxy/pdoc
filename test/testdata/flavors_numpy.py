@@ -236,6 +236,8 @@ class ExampleError(Exception):
     def add_note(self, note: str):
         """This method is present on Python 3.11+ and manually added here so that snapshots are consistent."""
 
+    def with_traceback(self, object, /):
+        """This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent."""
 
 class ExampleClass(object):
     """The summary line for a class docstring should fit on one line.

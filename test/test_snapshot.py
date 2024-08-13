@@ -97,7 +97,7 @@ class Snapshot:
 snapshots = [
     Snapshot("ast_parsing"),
     Snapshot("demo", min_version=(3, 9)),
-    Snapshot("enums", min_version=(3, 12)),
+    Snapshot("enums", min_version=(3, 13)),
     Snapshot("flavors_google"),
     Snapshot("flavors_numpy"),
     Snapshot("flavors_rst"),
@@ -135,16 +135,10 @@ snapshots = [
         with_output_directory=True,
     ),
     Snapshot("misc"),
-    Snapshot(
-        "misc_py39",
-        min_version=(3, 9),
-    ),
+    Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
-    Snapshot("misc_py311", min_version=(3, 11)),
-    Snapshot(
-        "misc_py312",
-        min_version=(3, 12),
-    ),
+    Snapshot("misc_py312", min_version=(3, 12)),
+    Snapshot("misc_py313", min_version=(3, 13)),
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot("math_misc", render_options={"math": True}),
     Snapshot("mermaid_demo", render_options={"mermaid": True}, min_version=(3, 9)),
@@ -165,6 +159,7 @@ snapshots = [
     Snapshot("top_level_reimports", ["top_level_reimports"]),
     Snapshot("type_checking_imports", ["type_checking_imports.main"]),
     Snapshot("type_stub", min_version=(3, 10)),
+    Snapshot("typed_dict", min_version=(3, 13)),
     Snapshot(
         "visibility",
         render_options={
