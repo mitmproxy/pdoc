@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   lint:
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v6
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v9
     with:
       cmd: tox -e lint
 
@@ -42,14 +42,14 @@ jobs:
             py: 3.9.18
           - os: ubuntu-latest
             py: 3.8.18
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v6
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v9
     with:
       cmd: tox -e py -- -vvv ${{ matrix.args }}
       os: ${{ matrix.os }}
       python-version: ${{ matrix.py }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v6
+    uses: mhils/workflows/.github/workflows/python-build.yml@v9
     permissions:
       contents: read
       id-token: write
@@ -61,12 +61,12 @@ jobs:
     - lint
     - test
     - build
-    uses: mhils/workflows/.github/workflows/alls-green.yml@v6
+    uses: mhils/workflows/.github/workflows/alls-green.yml@v9
     with:
       jobs: ${{ toJSON(needs) }}
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@v6
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@v9
     with:
       artifact-name: wheels
     needs: check
