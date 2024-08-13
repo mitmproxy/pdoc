@@ -1,7 +1,6 @@
 import builtins
 import dataclasses
 from pathlib import Path
-import sys
 import types
 from unittest.mock import patch
 
