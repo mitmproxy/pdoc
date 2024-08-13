@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+- Fix a bug where entire modules would be excluded by `--no-include-undocumented`.
+  To exclude modules, see https://pdoc.dev/docs/pdoc.html#exclude-submodules-from-being-documented.
+
 ## 2024-07-24: pdoc 14.6.0
 
 - If `example.data.Data` is also exposed as `example.Data`, pdoc now links to `example.Data` in documentation.

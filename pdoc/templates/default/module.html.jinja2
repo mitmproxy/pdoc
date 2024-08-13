@@ -244,7 +244,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
     {% elif "@public" in doc.docstring %}
         {# show members explicitly marked as @public #}
         true
-    {% elif not include_undocumented and not doc.docstring %}
+    {% elif not include_undocumented and not doc.docstring and doc.kind != "module" %}
         {# hide members that are undocumented if include_undocumented has been toggled off. #}
     {% elif doc.name == "__init__" and (doc.docstring or (doc.kind == "function" and doc.signature_without_self.parameters)) %}
         {# show constructors that have a docstring or at least one extra argument #}
