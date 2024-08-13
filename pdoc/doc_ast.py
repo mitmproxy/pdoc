@@ -73,7 +73,7 @@ def parse(obj):
     if isinstance(obj, types.ModuleType):
         return _parse_module(src)
     elif isinstance(obj, type):
-        return _parse_class(src)
+        return _parse_class(src, obj)
     else:
         return _parse_function(src)
 
@@ -233,7 +233,7 @@ def _parse_module(source: str) -> ast.Module:
 
 
 @cache
-def _parse_class(source: str) -> ast.ClassDef:
+def _parse_class(source: str, obj) -> ast.ClassDef:
     """
     Parse the AST for the source code of a class and return the ast.ClassDef.
 
