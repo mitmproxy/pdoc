@@ -265,7 +265,7 @@ def _parse_function(source: str) -> ast.FunctionDef | ast.AsyncFunctionDef:
             # we have a lambda function,
             # to simplify the API return the ast.FunctionDef stub.
             pass
-    return ast.FunctionDef(name="pdoc_empty", body=[], decorator_list=[])  # type: ignore
+    return ast.FunctionDef(name="pdoc_empty", args=ast.arguments(), body=[], decorator_list=[])  # type: ignore
 
 
 def _parse(
