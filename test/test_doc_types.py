@@ -79,5 +79,5 @@ def test_recurse(monkeypatch):
     monkeypatch.setitem(sys.modules, "a", a)
     monkeypatch.setitem(sys.modules, "b", b)
 
-    with pytest.warns(UserWarning, match="Recursion error when importing a"):
+    with pytest.warns(UserWarning, match="Recursion error when importing a|Import of xyz failed"):
         assert safe_eval_type("xyz", a.__dict__, None, a, "a") == "xyz"

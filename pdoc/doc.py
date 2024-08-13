@@ -37,6 +37,7 @@ import types
 from typing import Any
 from typing import ClassVar
 from typing import Generic
+from typing import TypedDict
 from typing import TypeVar
 from typing import Union
 from typing import get_origin
@@ -49,6 +50,7 @@ from pdoc._compat import TypeAlias
 from pdoc._compat import TypeAliasType
 from pdoc._compat import cache
 from pdoc._compat import formatannotation
+from pdoc._compat import is_typeddict
 from pdoc.doc_types import GenericAlias
 from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty
@@ -655,14 +657,19 @@ class Class(Namespace[type]):
     @cached_property
     def _bases(self) -> tuple[type, ...]:
         orig_bases = _safe_getattr(self.obj, "__orig_bases__", ())
-        old_python_typeddict_workaround = (
-            sys.version_info < (3, 12)
-            and orig_bases
-            and _safe_getattr(orig_bases[-1], "__name__", None) == "TypedDict"
-        )
-        if old_python_typeddict_workaround:  # pragma: no cover
-            # TypedDicts on Python <3.12 have a botched __mro__. We need to fix it.
-            return (self.obj, *orig_bases[:-1])
+
+        if is_typeddict(self.obj):
+            if sys.version_info < (3, 12):  # pragma: no cover
+                # TypedDicts on Python <3.12 have a botched __mro__. We need to fix it.
+                return (self.obj, *orig_bases[:-1])
+            else:
+                # TypedDict on Python >=3.12 removes intermediate classes from __mro__,
+                # so we use orig_bases to recover the full mro.
+                while orig_bases and orig_bases[-1] is not TypedDict:
+                    parent_bases = _safe_getattr(orig_bases[-1], "__orig_bases__", ())
+                    if len(parent_bases) != 1 or parent_bases in orig_bases:  # sanity check that things look right
+                        break  # pragma: no cover
+                    orig_bases = (*orig_bases, parent_bases[0])
 
         # __mro__ and __orig_bases__ differ between Python versions and special cases like TypedDict/NamedTuple.
         # This here is a pragmatic approximation of what we want.

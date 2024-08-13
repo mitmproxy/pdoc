@@ -52,3 +52,8 @@ class Bar(Foo, total=False):
     """Second attribute."""
     c: str
     # undocumented attribute
+
+class Baz(Bar):
+    """A TypedDict subsubclass."""
+    d: bool
+    """new attribute"""
