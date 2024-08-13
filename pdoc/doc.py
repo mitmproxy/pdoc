@@ -667,7 +667,9 @@ class Class(Namespace[type]):
                 # so we use orig_bases to recover the full mro.
                 while orig_bases and orig_bases[-1] is not TypedDict:
                     parent_bases = _safe_getattr(orig_bases[-1], "__orig_bases__", ())
-                    if len(parent_bases) != 1 or parent_bases in orig_bases:  # sanity check that things look right
+                    if (
+                        len(parent_bases) != 1 or parent_bases in orig_bases
+                    ):  # sanity check that things look right
                         break  # pragma: no cover
                     orig_bases = (*orig_bases, parent_bases[0])
 
