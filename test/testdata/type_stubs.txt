@@ -1,0 +1,19 @@
+<module type_stubs  # This module has an a…
+    <function def func(x: str, y: Any, z: Iterable[str]) -> int: ...  # A simple function.>
+    <var var: list[str] = []  # Docstring override f…>
+    <class type_stubs.Class
+        <method def __init__(): ...>
+        <var attr: int = 42  # An attribute>
+        <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        <class type_stubs.Class.Subclass
+            <method def __init__(): ...>
+            <var attr: str = '42'  # An attribute>
+            <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        >
+        <method def no_type_annotation(self, z): ...  # A method not present…>
+        <method def overloaded(*args, **kwds): ...  # An overloaded method…>
+    >
+    <class type_stubs.ImportedClass  # inherited from type_stubs._utils.ImportedClass, Docstring from impor…
+        <method def __init__(): ...  # inherited from type_stubs._utils.ImportedClass.__init__>
+    >
+>

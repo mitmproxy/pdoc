@@ -52,20 +52,9 @@ def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
     Note that currently, for objects imported by the stub file, the _original_ module
     is used and not the corresponding stub file.
     """
-    sys.path_hooks.insert(
-        0,
+    sys.path_hooks.append(
         importlib.machinery.FileFinder.path_hook((importlib.machinery.SourceFileLoader, ['.pyi']))
     )
-
-    mods = {}
-    for k in list(sys.modules):
-        if k.startswith(module_name):
-            print("removing", k)
-            mods[k] = sys.modules.pop(k)
-
-    importlib.invalidate_caches()
-    sys.path_importer_cache.clear()
-    
     try:
         loader = importlib.machinery.SourceFileLoader(module_name, str(stub_file))
         spec = importlib.util.spec_from_file_location(module_name, stub_file, loader=loader)
@@ -73,12 +62,7 @@ def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
         loader.exec_module(m)
         return m
     finally:
-        sys.path_hooks.pop(0)
-        for k in list(sys.modules):
-            if k.startswith(module_name):
-                sys.modules.pop(k)
-        for k, v in mods.items():
-            sys.modules[k] = v
+        sys.path_hooks.pop()
 
 
 def _prepare_module(ns: doc.Namespace) -> None:
