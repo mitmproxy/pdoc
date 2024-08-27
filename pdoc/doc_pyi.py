@@ -48,16 +48,20 @@ def find_stub_file(module_name: str) -> Path | None:
 def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
     """
     Import the type stub outside of the normal import machinery.
-    
+
     Note that currently, for objects imported by the stub file, the _original_ module
     is used and not the corresponding stub file.
     """
     sys.path_hooks.append(
-        importlib.machinery.FileFinder.path_hook((importlib.machinery.SourceFileLoader, ['.pyi']))
+        importlib.machinery.FileFinder.path_hook(
+            (importlib.machinery.SourceFileLoader, [".pyi"])
+        )
     )
     try:
         loader = importlib.machinery.SourceFileLoader(module_name, str(stub_file))
-        spec = importlib.util.spec_from_file_location(module_name, stub_file, loader=loader)
+        spec = importlib.util.spec_from_file_location(
+            module_name, stub_file, loader=loader
+        )
         assert spec is not None
         m = importlib.util.module_from_spec(spec)
         loader.exec_module(m)

@@ -1,6 +1,7 @@
 """
 This module has an accompanying .pyi file with type stubs.
 """
+
 from ._utils import ImportedClass
 
 
@@ -31,6 +32,7 @@ class Class:
 
     def overloaded(self, x):
         """An overloaded method."""
+
 
 __all__ = [
     "func",
