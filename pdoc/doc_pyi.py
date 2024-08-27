@@ -58,6 +58,7 @@ def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
     try:
         loader = importlib.machinery.SourceFileLoader(module_name, str(stub_file))
         spec = importlib.util.spec_from_file_location(module_name, stub_file, loader=loader)
+        assert spec is not None
         m = importlib.util.module_from_spec(spec)
         loader.exec_module(m)
         return m
