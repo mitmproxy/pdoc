@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2024-08-27: pdoc 14.6.1
+
 - Fix a bug where entire modules would be excluded by `--no-include-undocumented`.
   To exclude modules, see https://pdoc.dev/docs/pdoc.html#exclude-submodules-from-being-documented.
   ([#728](https://github.com/mitmproxy/pdoc/pull/728), @mhils)
