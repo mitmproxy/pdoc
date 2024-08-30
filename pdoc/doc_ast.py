@@ -245,7 +245,7 @@ def _parse_class(source: str) -> ast.ClassDef:
         t = tree.body[0]
         assert isinstance(t, ast.ClassDef)
         return t
-    return ast.ClassDef(body=[], decorator_list=[])  # type: ignore
+    return ast.ClassDef(name="", body=[], decorator_list=[])  # type: ignore
 
 
 @cache
@@ -265,7 +265,7 @@ def _parse_function(source: str) -> ast.FunctionDef | ast.AsyncFunctionDef:
             # we have a lambda function,
             # to simplify the API return the ast.FunctionDef stub.
             pass
-    return ast.FunctionDef(body=[], decorator_list=[])  # type: ignore
+    return ast.FunctionDef(name="", body=[], decorator_list=[])  # type: ignore
 
 
 def _parse(
