@@ -1339,6 +1339,7 @@ def _remove_memory_addresses(x: str) -> str:
     """Remove memory addresses from repr() output"""
     return re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", x)
 
+
 def _remove_collections_abc(x: str) -> str:
     """Remove 'collections.abc' from type signatures."""
     return re.sub(r"(?!\.)\bcollections\.abc\.", "", x)
