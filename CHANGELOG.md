@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- pdoc now strips `collections.abc.` from type annotations to make them more concise.
 
 ## 2024-08-27: pdoc 14.6.1
 
