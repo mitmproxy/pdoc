@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   lint:
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v9
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v10
     with:
       cmd: tox -e lint
 
@@ -42,18 +42,36 @@ jobs:
             py: 3.9.18
           - os: ubuntu-latest
             py: 3.8.18
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v9
+    uses: mhils/workflows/.github/workflows/python-tox.yml@v10
     with:
       cmd: tox -e py -- -vvv ${{ matrix.args }}
       os: ${{ matrix.os }}
       python-version: ${{ matrix.py }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v9
+    uses: mhils/workflows/.github/workflows/python-build.yml@v10
     permissions:
       contents: read
       id-token: write
       attestations: write
+
+  
+  attest:
+    needs: build
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheels
+          path: dist/
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: 'dist/*'
 
   check:
     if: always()
@@ -61,12 +79,14 @@ jobs:
     - lint
     - test
     - build
-    uses: mhils/workflows/.github/workflows/alls-green.yml@v9
+    - attest
+    uses: mhils/workflows/.github/workflows/alls-green.yml@v10
     with:
       jobs: ${{ toJSON(needs) }}
+      allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@v9
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@v10
     with:
       artifact-name: wheels
     needs: check
