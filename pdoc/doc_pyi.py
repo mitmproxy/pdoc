@@ -6,6 +6,7 @@ This makes it possible to add type hints for native modules such as modules writ
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 import sys
 import traceback
@@ -45,13 +46,28 @@ def find_stub_file(module_name: str) -> Path | None:
 
 
 def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
-    """Import the type stub outside of the normal import machinery."""
-    code = compile(stub_file.read_text(), str(stub_file), "exec")
-    m = types.ModuleType(module_name)
-    m.__file__ = str(stub_file)
-    eval(code, m.__dict__, m.__dict__)
+    """
+    Import the type stub outside of the normal import machinery.
 
-    return m
+    Note that currently, for objects imported by the stub file, the _original_ module
+    is used and not the corresponding stub file.
+    """
+    sys.path_hooks.append(
+        importlib.machinery.FileFinder.path_hook(
+            (importlib.machinery.SourceFileLoader, [".pyi"])
+        )
+    )
+    try:
+        loader = importlib.machinery.SourceFileLoader(module_name, str(stub_file))
+        spec = importlib.util.spec_from_file_location(
+            module_name, stub_file, loader=loader
+        )
+        assert spec is not None
+        m = importlib.util.module_from_spec(spec)
+        loader.exec_module(m)
+        return m
+    finally:
+        sys.path_hooks.pop()
 
 
 def _prepare_module(ns: doc.Namespace) -> None:

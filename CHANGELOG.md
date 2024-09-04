@@ -4,9 +4,14 @@
 
 ## Unreleased: pdoc next
 
+
+## 2024-08-27: pdoc 14.6.1
+
 - Fix a bug where entire modules would be excluded by `--no-include-undocumented`.
   To exclude modules, see https://pdoc.dev/docs/pdoc.html#exclude-submodules-from-being-documented.
   ([#728](https://github.com/mitmproxy/pdoc/pull/728), @mhils)
+- Fix a bug where pdoc would crash when importing pyi files.
+  ([#732](https://github.com/mitmproxy/pdoc/pull/732), @mhils)
 - Fix a bug where subclasses of TypedDict subclasses would not render correctly.
   ([#729](https://github.com/mitmproxy/pdoc/pull/729), @mhils)
 
