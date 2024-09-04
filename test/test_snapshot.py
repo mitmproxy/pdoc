@@ -96,6 +96,7 @@ class Snapshot:
 
 snapshots = [
     Snapshot("ast_parsing"),
+    Snapshot("collections_abc", min_version=(3, 9)),
     Snapshot("demo", min_version=(3, 9)),
     Snapshot("enums", min_version=(3, 12)),
     Snapshot("flavors_google"),
