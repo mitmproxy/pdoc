@@ -1,0 +1,7 @@
+<module collections_abc  # Test that we remove …
+    <function def func(bar: Awaitable[None]) -> Awaitable[None]: ...>
+    <class collections_abc.Class  # For subclasses, we c…
+        <method def __init__(): ...>
+    >
+    <var var: Container[str] = 'baz'>
+>

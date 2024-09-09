@@ -1132,9 +1132,11 @@ class Variable(Doc[None]):
         if self.default_value is empty:
             return ""
         if isinstance(self.default_value, TypeAliasType):
-            return formatannotation(self.default_value.__value__)
+            formatted = formatannotation(self.default_value.__value__)
+            return _remove_collections_abc(formatted)
         elif self.annotation == TypeAlias:
-            return formatannotation(self.default_value)
+            formatted = formatannotation(self.default_value)
+            return _remove_collections_abc(formatted)
 
         # This is not perfect, but a solid attempt at preventing accidental leakage of secrets.
         # If you have input on how to improve the heuristic, please send a pull request!
@@ -1166,7 +1168,8 @@ class Variable(Doc[None]):
     def annotation_str(self) -> str:
         """The variable's type annotation as a pretty-printed str."""
         if self.annotation is not empty:
-            return f": {formatannotation(self.annotation)}"
+            formatted = formatannotation(self.annotation)
+            return f": {_remove_collections_abc(formatted)}"
         else:
             return ""
 
@@ -1202,6 +1205,7 @@ class _PrettySignature(inspect.Signature):
         for param in self.parameters.values():
             formatted = str(param)
             formatted = _remove_memory_addresses(formatted)
+            formatted = _remove_collections_abc(formatted)
 
             kind = param.kind
 
@@ -1238,7 +1242,8 @@ class _PrettySignature(inspect.Signature):
 
     def _return_annotation_str(self) -> str:
         if self.return_annotation is not empty:
-            return formatannotation(self.return_annotation)
+            formatted = formatannotation(self.return_annotation)
+            return _remove_collections_abc(formatted)
         else:
             return ""
 
@@ -1333,3 +1338,8 @@ _Enum_default_docstrings = tuple(
 def _remove_memory_addresses(x: str) -> str:
     """Remove memory addresses from repr() output"""
     return re.sub(r" at 0x[0-9a-fA-F]+(?=>)", "", x)
+
+
+def _remove_collections_abc(x: str) -> str:
+    """Remove 'collections.abc' from type signatures."""
+    return re.sub(r"(?!\.)\bcollections\.abc\.", "", x)
