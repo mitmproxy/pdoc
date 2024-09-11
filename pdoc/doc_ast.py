@@ -243,9 +243,9 @@ def _parse_class(source: str, obj) -> ast.ClassDef:
     assert len(tree.body) <= 1
     if tree.body:
         t = tree.body[0]
-        assert isinstance(t, ast.ClassDef)
-        return t
-    return ast.ClassDef(name="pdocEmpty", body=[], decorator_list=[])  # type: ignore
+        if isinstance(t, ast.ClassDef):
+            return t
+    return ast.ClassDef(name="PdocStub", body=[], decorator_list=[])  # type: ignore
 
 
 @cache
@@ -256,8 +256,7 @@ def _parse_function(source: str) -> ast.FunctionDef | ast.AsyncFunctionDef:
     Returns an empty ast.FunctionDef if source is empty.
     """
     tree = _parse(source)
-    assert len(tree.body) <= 1
-    if tree.body:
+    if tree.body and len(tree.body) == 1:
         t = tree.body[0]
         if isinstance(t, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return t
@@ -266,7 +265,7 @@ def _parse_function(source: str) -> ast.FunctionDef | ast.AsyncFunctionDef:
             # to simplify the API return the ast.FunctionDef stub.
             pass
     return ast.FunctionDef(
-        name="pdoc_empty", args=ast.arguments(), body=[], decorator_list=[]
+        name="pdoc_stub", args=ast.arguments(), body=[], decorator_list=[]
     )  # type: ignore
 
 
