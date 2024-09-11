@@ -73,7 +73,7 @@ def parse(obj):
     if isinstance(obj, types.ModuleType):
         return _parse_module(src)
     elif isinstance(obj, type):
-        return _parse_class(src, obj)
+        return _parse_class(src)
     else:
         return _parse_function(src)
 
@@ -233,15 +233,14 @@ def _parse_module(source: str) -> ast.Module:
 
 
 @cache
-def _parse_class(source: str, obj) -> ast.ClassDef:
+def _parse_class(source: str) -> ast.ClassDef:
     """
     Parse the AST for the source code of a class and return the ast.ClassDef.
 
     Returns an empty ast.ClassDef if source is empty.
     """
     tree = _parse(source)
-    assert len(tree.body) <= 1
-    if tree.body:
+    if tree.body and len(tree.body) == 1:
         t = tree.body[0]
         if isinstance(t, ast.ClassDef):
             return t
