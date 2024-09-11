@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (major.minor.patch)'
+        required: true
+        type: string
+      skip-branch-status-check:
+        description: 'Skip CI status check.'
+        default: false
+        required: false
+        type: boolean
+
+permissions: {}
+
+jobs:
+  release:
+    environment: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GH_PUSH_TOKEN }}  # this token works to push to the protected main branch.
+    - uses: mhils/releasetool@v1
+    - run: ./.github/release
+      env:
+        PROJECT_VERSION: ${{ inputs.version }}
+        STATUS_CHECK_SKIP_GIT: ${{ inputs.skip-branch-status-check }}

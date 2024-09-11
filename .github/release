@@ -1,0 +1,27 @@
+#!/usr/bin/env -S python3 -u
+import logging
+
+from releasetool import branch
+from releasetool import get_next_dev_version
+from releasetool import git_commit
+from releasetool import git_push
+from releasetool import git_tag
+from releasetool import status_check
+from releasetool import update_changelog
+from releasetool import update_python_version
+
+logger = logging.getLogger(__name__)
+
+if __name__ == "__main__":
+    status_check()
+    update_python_version()
+    update_changelog()
+    git_commit()
+    git_tag()
+
+    if branch == "main":
+        update_python_version(version=get_next_dev_version())
+        git_commit(message="reopen main for development")
+
+    git_push()
+    logger.info("✅ All done. 🥳")

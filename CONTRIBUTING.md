@@ -53,11 +53,5 @@ Please check [docs/README.md](./docs/README.md) for instructions.
 If you are the current maintainer of pdoc,
 you can perform the following steps to ship a release:
 
-1. Make sure that...
-   - you are on the `main` branch with a clean working tree.
-   - `tox` is passing without errors.
-2. Bump the version in [`pdoc/__init__.py`](pdoc/__init__.py).
-3. Update [`CHANGELOG.md`](./CHANGELOG.md).
-4. Commit the changes and tag them.
-   - Convention: Tag name is `v` + version number, e.g. `v1.0.1`.
-5. Manually confirm the CI deploy step on GitHub.
+1. Invoke the release workflow from the GitHub UI: https://github.com/mitmproxy/pdoc/actions/workflows/release.yml
+2. The spawned workflow run will require manual deploy confirmation on GitHub twice: https://github.com/mitmproxy/pdoc/actions
