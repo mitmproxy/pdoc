@@ -209,7 +209,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | replace("@public", "") | to_markdown | to_html | linkify(namespace=var.qualname) }}</div>
+        <div class="docstring">{{ var.docstring | replace("@public", "") | to_markdown | to_html | linkify(namespace=var.qualname, shorten=False) }}</div>
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}

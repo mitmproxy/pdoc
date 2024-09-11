@@ -307,11 +307,17 @@ def module_candidates(identifier: str, current_module: str) -> Iterable[str]:
 
 
 @pass_context
-def linkify(context: Context, code: str, namespace: str = "") -> str:
+def linkify(
+    context: Context, code: str, namespace: str = "", shorten: bool = True
+) -> str:
     """
     Link all identifiers in a block of text. Identifiers referencing unknown modules or modules that
     are not rendered at the moment will be ignored.
     A piece of text is considered to be an identifier if it either contains a `.` or is surrounded by `<code>` tags.
+
+    If `shorten` is True, replace identifiers with short forms where possible.
+    For example, replace "current_module.Foo" with "Foo". This is useful for annotations
+    (which are verbose), but undesired for docstrings (where we want to preserve intent).
     """
 
     def linkify_repl(m: re.Match):
@@ -381,12 +387,15 @@ def linkify(context: Context, code: str, namespace: str = "") -> str:
                     and (target_object is doc.obj or target_object is None)
                     and context["is_public"](doc).strip()
                 ):
-                    if module == mod:
-                        url_text = qualname
+                    if shorten:
+                        if module == mod:
+                            url_text = qualname
+                        else:
+                            url_text = doc.fullname
+                        if plain_text.endswith("()"):
+                            url_text += "()"
                     else:
-                        url_text = doc.fullname
-                    if plain_text.endswith("()"):
-                        url_text += "()"
+                        url_text = plain_text
                     return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}#{qualname}">{url_text}</a>'
 
         # No matches found.
