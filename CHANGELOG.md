@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 11 September 2024: pdoc 14.7.0
+
 - Do not shorten `current_module.func` to `func` in docstrings when linking.
   This prevents logical errors in code examples with imports.
   ([#740](https://github.com/mitmproxy/pdoc/pull/740), @mhils)
