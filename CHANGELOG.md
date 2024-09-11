@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- Add support for Python 3.13.
 - pdoc now strips `collections.abc.` from type annotations to make them more concise.
   ([#736](https://github.com/mitmproxy/pdoc/pull/736), @mhils)
 
