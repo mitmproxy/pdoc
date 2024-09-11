@@ -18,10 +18,5 @@ if __name__ == "__main__":
     update_changelog()
     git_commit()
     git_tag()
-
-    if branch == "main":
-        update_python_version(version=get_next_dev_version())
-        git_commit(message="reopen main for development")
-
     git_push()
     logger.info("✅ All done. 🥳")
