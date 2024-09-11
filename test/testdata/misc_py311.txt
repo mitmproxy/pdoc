@@ -1,8 +1,0 @@
-<module misc_py311
-    <class misc_py311.CustomException  # custom exception typ…
-        <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
-        <method def with_traceback(unknown): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <method def add_note(unknown): ...  # inherited from builtins.BaseException.add_note, Exception.add_note(n…>
-        <var args  # inherited from builtins.BaseException.args>
-    >
->

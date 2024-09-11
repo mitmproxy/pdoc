@@ -1,4 +1,5 @@
-# Testing that Exceptions render properly
+class MyDict(dict):
+    pass
 
 
 class CustomException(RuntimeError):

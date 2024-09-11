@@ -1,7 +1,6 @@
 import builtins
 import dataclasses
 from pathlib import Path
-import sys
 import types
 from unittest.mock import patch
 
@@ -120,13 +119,15 @@ def test_builtin_source():
     assert m.source_lines is None
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="3.9+ only")
 def test_raising_getdoc():
-    class Foo:
-        @classmethod
-        @property
-        def __doc__(self):
-            raise RuntimeError
+    class FooMeta(type):
+        def __getattribute__(cls, name):
+            if name == "__doc__":
+                raise RuntimeError
+            return super().__getattribute__(name)
+
+    class Foo(metaclass=FooMeta):
+        pass
 
     x = Class(Foo.__module__, Foo.__qualname__, Foo, (Foo.__module__, Foo.__qualname__))
     with pytest.warns(UserWarning, match="inspect.getdoc(.+) raised an exception"):

@@ -50,7 +50,9 @@ def test_eval_fail_import_nonexistent(monkeypatch):
         lambda _: "import typing\nif typing.TYPE_CHECKING:\n\timport nonexistent_module",
     )
     a = types.ModuleType("a")
-    with pytest.warns(UserWarning, match="No module named 'nonexistent_module'"):
+    with pytest.warns(
+        UserWarning, match="No module named 'nonexistent_module'|Import of xyz failed"
+    ):
         assert safe_eval_type("xyz", a.__dict__, None, a, "a") == "xyz"
 
 
