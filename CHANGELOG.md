@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Do not shorten `current_module.func` to `func` in docstrings when linking.
+  This prevents logical errors in code examples with imports.
 - Add support for Python 3.13.
 - pdoc now strips `collections.abc.` from type annotations to make them more concise.
   ([#736](https://github.com/mitmproxy/pdoc/pull/736), @mhils)
