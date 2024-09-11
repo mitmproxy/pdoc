@@ -481,7 +481,7 @@ You can find an example in [`examples/library-usage`](https://github.com/mitmpro
 from __future__ import annotations
 
 __docformat__ = "markdown"  # explicitly disable rST processing in the examples above.
-__version__ = "14.7.0"  # this is read from setup.py
+__version__ = "15.7.0-dev"  # this is read from setup.py
 
 from pathlib import Path
 from typing import overload
