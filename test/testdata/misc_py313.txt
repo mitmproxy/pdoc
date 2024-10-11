@@ -18,4 +18,5 @@
         <method def add_note(self, object, /): ...  # inherited from builtins.BaseException.add_note, Exception.add_note(n…>
         <var args  # inherited from builtins.BaseException.args>
     >
+    <@deprecated('Do not use this anymore') function def deprecated_func(): ...>
 >
