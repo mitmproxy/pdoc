@@ -122,4 +122,12 @@
     <class misc.DocstringFromNew
         <method def __init__(cls, *args, **kwargs): ...  # This is a class with…>
     >
+    <class misc.SingleDispatchMethodExample
+        <method def __init__(): ...>
+        <@functools.singledispatchmethod method def fancymethod(self, str_or_int: Union[str, int]): ...  # A fancy method which…>
+        <@fancymethod.register method def fancymethod_handle_str(self, str_to_handle: str): ...  # Fancy method handles…>
+    >
+    <@dataclass(init=False) class misc.DataclassStructure  # DataclassStructure r…
+        <method def __init__(self, /, *args, **kwargs): ...  # inherited from _ctypes.Structure.__init__>
+    >
 >
