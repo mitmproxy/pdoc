@@ -10,7 +10,7 @@ dynamic = ["version"]
 dependencies = [
     "Jinja2 >= 2.11.0",
     "pygments >= 2.12.0",
-    "MarkupSafe",
+    "MarkupSafe >= 1.1.1",
     "astunparse; python_version<'3.9'",
 ]
 
@@ -41,18 +41,18 @@ Issues = "https://github.com/mitmproxy/pdoc/issues"
 [project.scripts]
 pdoc = "pdoc.__main__:cli"
 
-[project.optional-dependencies]
-dev = [
-    "tox",
-    "ruff",
-    "mypy",
-    "types-pygments",
-    "pytest",
-    "pytest-cov",
-    "pytest-timeout",
-    "hypothesis",
-    "pygments >= 2.14.0",
-    "pdoc-pyo3-sample-library==1.0.11",
+[tool.uv]
+dev-dependencies = [
+    "tox>=4.21.2",
+    "tox-uv>=1.13.0",
+    "ruff>=0.6.9",
+    "mypy>=1.11.2",
+    "types-pygments>=2.18.0.20240506",
+    "pytest>=8.3.3",
+    "pytest-cov>=5.0.0",
+    "pytest-timeout>=2.3.1",
+    "hypothesis>=6.113.0",
+    "pdoc-pyo3-sample-library>=1.0.11",
 ]
 
 [build-system]
@@ -110,16 +110,16 @@ isort = { force-single-line = true, force-sort-within-sections = true }
 legacy_tox_ini = """
 [tox]
 envlist = lint, py
-skipsdist = True
 toxworkdir = {env:TOX_WORK_DIR:.tox}
+runner = uv-venv-lock-runner
 
 [testenv]
-deps =
-    -r requirements-dev.txt
-    -e .
 commands =
     pdoc --version
     pytest --cov=pdoc --cov-report term-missing {posargs:-m "not slow"}
+
+[testenv:old-dependencies]
+uv_resolution = lowest
 
 [testenv:lint]
 commands =

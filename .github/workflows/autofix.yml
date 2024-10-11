@@ -2,7 +2,7 @@ name: autofix.ci
 on:
   pull_request:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "ci" ]
 permissions:
   contents: read
 concurrency:
@@ -13,19 +13,15 @@ jobs:
   autofix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: .github/python-version.txt
+      - uses: mhils/workflows/checkout@v11
+      - uses: mhils/workflows/setup-python@v11
+      - uses: mhils/workflows/setup-uv@v11
 
-      - run: pip install -r requirements-dev.txt
-      - run: pip install --no-deps -e .
+      - run: uv run ruff check --fix-only .
+      - run: uv run ruff format .
 
-      - run: ruff check --fix-only .
-      - run: ruff format .
+      - run: uv run test/test_snapshot.py
 
-      - run: test/test_snapshot.py
-
-      - uses: mhils/add-pr-ref-in-changelog@main
+      - uses: mhils/add-pr-ref-in-changelog@v1
 
       - uses: autofix-ci/action@dd55f44df8f7cdb7a6bf74c78677eb8acd40cd0a
