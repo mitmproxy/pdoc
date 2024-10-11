@@ -177,7 +177,7 @@ _default_searchpath = [
 
 env = Environment(
     loader=FileSystemLoader(_default_searchpath),
-    extensions=[DefaultMacroExtension],
+    extensions=["jinja2.ext.loopcontrols", DefaultMacroExtension],
     autoescape=True,
     trim_blocks=True,
     lstrip_blocks=True,

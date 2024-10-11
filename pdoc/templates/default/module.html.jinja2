@@ -266,6 +266,10 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {# fmt: off #}
 {% defaultmacro inherited(cls) %}
     {% for base, members in cls.inherited_members.items() %}
+        {% if base[0] not in all_modules %}
+            {# hide inherited members from modules that are not in the documentation, https://github.com/mitmproxy/pdoc/issues/715 #}
+            {% continue %}
+        {% endif %}
         {% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
         {% set member_html %}
             {% for m in members if is_public(m) | trim %}
