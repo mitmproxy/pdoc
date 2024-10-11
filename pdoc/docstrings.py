@@ -14,16 +14,15 @@ accompanied by matching snapshot tests in `test/testdata/`.
 from __future__ import annotations
 
 import base64
+from functools import cache
 import inspect
 import mimetypes
 import os
-from functools import cache
 from pathlib import Path
 import re
 from textwrap import dedent
 from textwrap import indent
 import warnings
-
 
 
 @cache

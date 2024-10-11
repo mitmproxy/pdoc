@@ -10,9 +10,9 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from collections.abc import Iterator
+from functools import cache
 import http.server
 import traceback
-from functools import cache
 from typing import Mapping
 import warnings
 import webbrowser

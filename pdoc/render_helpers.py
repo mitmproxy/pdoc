@@ -4,11 +4,11 @@ from collections.abc import Collection
 from collections.abc import Iterable
 from collections.abc import Mapping
 from contextlib import contextmanager
+from functools import cache
 import html
 import inspect
 import os
 import re
-from functools import cache
 from unittest.mock import patch
 import warnings
 

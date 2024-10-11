@@ -10,8 +10,8 @@ import ast
 from collections.abc import Iterable
 from collections.abc import Iterator
 from dataclasses import dataclass
-import inspect
 from functools import cache
+import inspect
 from itertools import tee
 from itertools import zip_longest
 import types
