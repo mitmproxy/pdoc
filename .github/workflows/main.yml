@@ -16,9 +16,20 @@ concurrency:
 
 jobs:
   lint:
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v10
-    with:
-      cmd: tox -e lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mhils/workflows/checkout@v11
+      - uses: mhils/workflows/setup-python@v11
+      - uses: mhils/workflows/setup-uv@v11
+      - run: uv run tox -e lint
+
+  old-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mhils/workflows/checkout@v11
+      - uses: mhils/workflows/setup-python@v11
+      - uses: mhils/workflows/setup-uv@v11
+      - run: uv run tox -e old-dependencies
 
   test:
     strategy:
@@ -26,13 +37,13 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.13-dev
+            py: 3.13.0
             args: --cov-fail-under=100
           - os: macos-latest
-            py: 3.13-dev
+            py: 3.13.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.13-dev
+            py: 3.13.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
             py: 3.12.4
@@ -44,20 +55,22 @@ jobs:
             py: 3.9.18
           - os: ubuntu-latest
             py: 3.8.18
-    uses: mhils/workflows/.github/workflows/python-tox.yml@v10
-    with:
-      cmd: tox -e py -- -vvv ${{ matrix.args }}
-      os: ${{ matrix.os }}
-      python-version: ${{ matrix.py }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: mhils/workflows/checkout@v11
+      - uses: mhils/workflows/setup-python@v11
+        with:
+          python-version: ${{ matrix.py }}
+      - uses: mhils/workflows/setup-uv@main
+      - run: uv run tox -e py -- -vvv ${{ matrix.args }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v10
+    uses: mhils/workflows/.github/workflows/python-build.yml@v11
     permissions:
       contents: read
       id-token: write
       attestations: write
 
-  
   attest:
     needs: build
     if: github.event_name != 'pull_request'
@@ -82,13 +95,13 @@ jobs:
     - test
     - build
     - attest
-    uses: mhils/workflows/.github/workflows/alls-green.yml@v10
+    uses: mhils/workflows/.github/workflows/alls-green.yml@v11
     with:
       jobs: ${{ toJSON(needs) }}
       allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@v10
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@v11
     with:
       artifact-name: wheels
     needs: check
