@@ -4,6 +4,7 @@ from collections.abc import Collection
 from collections.abc import Iterable
 from collections.abc import Mapping
 from contextlib import contextmanager
+from functools import cache
 import html
 import inspect
 import os
@@ -28,8 +29,6 @@ from markupsafe import Markup
 import pdoc.markdown2
 
 from . import docstrings
-from ._compat import cache
-from ._compat import removesuffix
 
 lexer = pygments.lexers.PythonLexer()
 """
@@ -328,7 +327,7 @@ def linkify(
         plain_text = text.replace(
             '</span><span class="o">.</span><span class="n">', "."
         )
-        identifier = removesuffix(plain_text, "()")
+        identifier = plain_text.removesuffix("()")
         mod: pdoc.doc.Module = context["module"]
 
         # Check if this is a relative reference. These cannot be local and need to be resolved.
@@ -462,7 +461,7 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> st
     if mod.modulename == modulename:
         fullname = qualname
     else:
-        fullname = removesuffix(f"{modulename}.{qualname}", ".")
+        fullname = f"{modulename}.{qualname}".removesuffix(".")
 
     if qualname:
         qualname = f"#{qualname}"

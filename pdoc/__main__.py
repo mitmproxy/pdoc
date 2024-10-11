@@ -7,7 +7,6 @@ import subprocess
 import sys
 import warnings
 
-from pdoc._compat import BooleanOptionalAction
 import pdoc.doc
 import pdoc.extract
 import pdoc.render
@@ -57,7 +56,7 @@ renderopts.add_argument(
 )
 renderopts.add_argument(
     "--include-undocumented",
-    action=BooleanOptionalAction,
+    action=argparse.BooleanOptionalAction,
     default=True,
     help="Show classes/functions/variables that do not have a docstring.",
 )
@@ -98,25 +97,25 @@ renderopts.add_argument(
 )
 renderopts.add_argument(
     "--math",
-    action=BooleanOptionalAction,
+    action=argparse.BooleanOptionalAction,
     default=False,
     help="Include MathJax from a CDN to enable math formula rendering.",
 )
 renderopts.add_argument(
     "--mermaid",
-    action=BooleanOptionalAction,
+    action=argparse.BooleanOptionalAction,
     default=False,
     help="Include Mermaid.js from a CDN to enable Mermaid diagram rendering.",
 )
 renderopts.add_argument(
     "--search",
-    action=BooleanOptionalAction,
+    action=argparse.BooleanOptionalAction,
     default=True,
     help="Enable search functionality if multiple modules are documented.",
 )
 renderopts.add_argument(
     "--show-source",
-    action=BooleanOptionalAction,
+    action=argparse.BooleanOptionalAction,
     default=True,
     help='Display "View Source" buttons.',
 )
