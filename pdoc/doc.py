@@ -23,6 +23,7 @@ from abc import abstractmethod
 from collections.abc import Callable
 import dataclasses
 import enum
+from functools import cache
 from functools import cached_property
 from functools import singledispatchmethod
 from functools import wraps
@@ -48,7 +49,6 @@ from pdoc import doc_pyi
 from pdoc import extract
 from pdoc._compat import TypeAlias
 from pdoc._compat import TypeAliasType
-from pdoc._compat import cache
 from pdoc._compat import formatannotation
 from pdoc._compat import is_typeddict
 from pdoc.doc_types import GenericAlias

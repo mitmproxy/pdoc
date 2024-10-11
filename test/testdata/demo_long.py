@@ -27,6 +27,7 @@ import abc
 from dataclasses import dataclass
 from dataclasses import field
 import enum
+from functools import cache
 from functools import cached_property
 import os
 from typing import ClassVar
@@ -35,8 +36,6 @@ from typing import Optional
 from typing import Sequence
 from typing import TypeVar
 from typing import Union
-
-from pdoc._compat import cache
 
 FOO_CONSTANT: int = 42
 """

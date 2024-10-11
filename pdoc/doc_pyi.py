@@ -7,6 +7,7 @@ This makes it possible to add type hints for native modules such as modules writ
 from __future__ import annotations
 
 import importlib.util
+from functools import cache
 from pathlib import Path
 import sys
 import traceback
@@ -17,7 +18,6 @@ import warnings
 
 from pdoc import doc
 
-from ._compat import cache
 
 overload_docstr = typing.overload(lambda: None).__doc__
 

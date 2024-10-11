@@ -17,13 +17,13 @@ import base64
 import inspect
 import mimetypes
 import os
+from functools import cache
 from pathlib import Path
 import re
 from textwrap import dedent
 from textwrap import indent
 import warnings
 
-from ._compat import cache
 
 
 @cache

@@ -12,6 +12,7 @@ from collections.abc import Iterable
 from collections.abc import Iterator
 import http.server
 import traceback
+from functools import cache
 from typing import Mapping
 import warnings
 import webbrowser
@@ -19,8 +20,6 @@ import webbrowser
 from pdoc import doc
 from pdoc import extract
 from pdoc import render
-from pdoc._compat import cache
-from pdoc._compat import removesuffix
 
 
 class DocHandler(http.server.BaseHTTPRequestHandler):
@@ -52,7 +51,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             self.send_header("content-type", "application/javascript")
             self.end_headers()
             return self.server.render_search_index()
-        elif "." in removesuffix(path, ".html"):
+        elif "." in path.removesuffix(".html"):
             # See https://github.com/mitmproxy/pdoc/issues/615: All module separators should be normalized to "/".
             # We could redirect here, but that would create the impression of a working link, which will fall apart
             # when pdoc prerenders to static HTML. So we rather fail early.
@@ -60,7 +59,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             return "Not Found: Please normalize all module separators to '/'."
         else:
-            module_name = removesuffix(path.lstrip("/"), ".html").replace("/", ".")
+            module_name = path.lstrip("/").removesuffix(".html").replace("/", ".")
             if module_name not in self.server.all_modules:
                 self.send_response(404)
                 self.send_header("content-type", "text/html")

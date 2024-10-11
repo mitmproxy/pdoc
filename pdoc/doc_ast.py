@@ -11,6 +11,7 @@ from collections.abc import Iterable
 from collections.abc import Iterator
 from dataclasses import dataclass
 import inspect
+from functools import cache
 from itertools import tee
 from itertools import zip_longest
 import types
@@ -23,8 +24,6 @@ import warnings
 import pdoc
 
 from ._compat import ast_TypeAlias
-from ._compat import ast_unparse
-from ._compat import cache
 
 if TYPE_CHECKING:
     import pdoc.doc_types
@@ -81,7 +80,7 @@ def parse(obj):
 @cache
 def unparse(tree: ast.AST):
     """`ast.unparse`, but cached."""
-    return ast_unparse(tree)
+    return ast.unparse(tree)
 
 
 @dataclass
