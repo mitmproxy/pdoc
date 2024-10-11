@@ -144,4 +144,5 @@ def test_mock_sideeffects():
     """https://github.com/mitmproxy/pdoc/issues/745"""
     with mock_some_common_side_effects():
         import sys
-        sys.stdout.reconfigure(encoding='utf-8')
+
+        sys.stdout.reconfigure(encoding="utf-8")
