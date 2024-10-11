@@ -11,6 +11,8 @@
 - Inherited members are now hidden by default if the base class is not part of the documentation.
   Please make yourself heard in https://github.com/mitmproxy/pdoc/issues/715 if you relied on the old behavior.
   ([#748](https://github.com/mitmproxy/pdoc/pull/748), @mhils)
+- Improve mocking of `sys.stdin`, `sys.stdout`, and `sys.stderr` to fix runtime errors with some packages.
+  ([#751](https://github.com/mitmproxy/pdoc/pull/751), @mhils)
 
 ## 2024-09-11: pdoc 14.7.0
 
