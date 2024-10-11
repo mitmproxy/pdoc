@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2024-10-11: pdoc 15.0.0
+
 - Remove support for Python 3.8, which has reached end-of-life on 2024-10-07.
   ([#747](https://github.com/mitmproxy/pdoc/pull/747), @mhils)
 - Inherited members are now hidden by default if the base class is not part of the documentation.
