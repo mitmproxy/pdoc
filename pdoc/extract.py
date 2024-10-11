@@ -204,9 +204,9 @@ def mock_some_common_side_effects():
     with (
         patch("subprocess.Popen", new=_PdocDefusedPopen),
         patch("os.startfile", new=_noop, create=True),
-        patch("sys.stdout", new=io.StringIO()),
-        patch("sys.stderr", new=io.StringIO()),
-        patch("sys.stdin", new=io.StringIO()),
+        patch("sys.stdout", new=io.TextIOWrapper(io.BytesIO())),
+        patch("sys.stderr", new=io.TextIOWrapper(io.BytesIO())),
+        patch("sys.stdin", new=io.TextIOWrapper(io.BytesIO())),
     ):
         yield
 

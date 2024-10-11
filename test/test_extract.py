@@ -5,6 +5,7 @@ import sys
 import pytest
 
 from pdoc.extract import invalidate_caches
+from pdoc.extract import mock_some_common_side_effects
 from pdoc.extract import module_mtime
 from pdoc.extract import parse_spec
 from pdoc.extract import walk_specs
@@ -137,3 +138,10 @@ def test_invalidate_caches(monkeypatch):
     monkeypatch.setattr(importlib, "reload", raise_)
     with pytest.warns(UserWarning, match="Error reloading"):
         invalidate_caches("pdoc.render_helpers")
+
+
+def test_mock_sideeffects():
+    """https://github.com/mitmproxy/pdoc/issues/745"""
+    with mock_some_common_side_effects():
+        import sys
+        sys.stdout.reconfigure(encoding='utf-8')
