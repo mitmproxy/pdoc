@@ -201,11 +201,13 @@ def mock_some_common_side_effects():
 
     Note that this function must not be used for security purposes, it's easily bypassable.
     """
-    with patch("subprocess.Popen", new=_PdocDefusedPopen), patch(
-        "os.startfile", new=_noop, create=True
-    ), patch("sys.stdout", new=io.StringIO()), patch(
-        "sys.stderr", new=io.StringIO()
-    ), patch("sys.stdin", new=io.StringIO()):
+    with (
+        patch("subprocess.Popen", new=_PdocDefusedPopen),
+        patch("os.startfile", new=_noop, create=True),
+        patch("sys.stdout", new=io.StringIO()),
+        patch("sys.stderr", new=io.StringIO()),
+        patch("sys.stdin", new=io.StringIO()),
+    ):
         yield
 
 

@@ -136,7 +136,6 @@ snapshots = [
         with_output_directory=True,
     ),
     Snapshot("misc"),
-    Snapshot("misc_py39", min_version=(3, 9)),
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("misc_py312", min_version=(3, 12)),
     Snapshot("misc_py313", min_version=(3, 13)),
