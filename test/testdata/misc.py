@@ -1,9 +1,13 @@
 import abc
+from ctypes import Structure
+from dataclasses import dataclass
+import functools
 from functools import cached_property
 from functools import lru_cache
 import sched
 from typing import Generic
 from typing import TypeVar
+from typing import Union
 
 # https://github.com/mitmproxy/pdoc/issues/226
 
@@ -432,6 +436,41 @@ class DocstringFromNew:
         """This is a class with a docstring inferred from `__new__`."""
 
 
+
+
+
+
+class SingleDispatchMethodExample:
+    @functools.singledispatchmethod
+    def fancymethod(self, str_or_int: Union[str, int]):
+        """A fancy method which is capable of handling either `str` or `int`.
+
+        :param str_or_int: string or integer to handle
+        """
+        raise NotImplementedError(f"{type(str_or_int)=} not implemented!")
+
+    @fancymethod.register
+    def fancymethod_handle_str(self, str_to_handle: str):
+        """Fancy method handles a string.
+
+        :param str_to_handle: string which will be handled
+        """
+        print(f"{type(str_to_handle)} = '{str_to_handle}")
+
+    @fancymethod.register
+    def _fancymethod_handle_int(self, int_to_handle: int):
+        """Fancy method handles int (not shown in doc).
+
+        :param int_to_handle: int which will be handled
+        """
+        print(f"{type(int_to_handle)} = '{int_to_handle:x}'")
+
+
+@dataclass(init=False)
+class DataclassStructure(Structure):
+    """DataclassStructure raises for `inspect.signature`."""
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -472,4 +511,6 @@ __all__ = [
     "dynamically_modify_docstring3",
     "dynamically_modify_docstring4",
     "DocstringFromNew",
+    "SingleDispatchMethodExample",
+    "DataclassStructure",
 ]
