@@ -35,6 +35,9 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="function" href="#deprecated_func">deprecated_func</a>
+            </li>
     </ul>
 
 
@@ -56,12 +59,20 @@ misc_py313    </h1>
 
                         <label class="view-source-button" for="mod-misc_py313-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="k">class</span> <span class="nc">MyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>    <span class="k">pass</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">deprecated</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span> <span class="nc">MyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="k">pass</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@deprecated</span><span class="p">(</span><span class="s2">&quot;Do not use this anymore&quot;</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">def</span> <span class="nf">deprecated_func</span><span class="p">():</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -77,8 +88,8 @@ misc_py313    </h1>
 
     </div>
     <a class="headerlink" href="#MyDict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MyDict-2"><a href="#MyDict-2"><span class="linenos">2</span></a><span class="k">class</span> <span class="nc">MyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-</span><span id="MyDict-3"><a href="#MyDict-3"><span class="linenos">3</span></a>    <span class="k">pass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MyDict-5"><a href="#MyDict-5"><span class="linenos">5</span></a><span class="k">class</span> <span class="nc">MyDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+</span><span id="MyDict-6"><a href="#MyDict-6"><span class="linenos">6</span></a>    <span class="k">pass</span>
 </span></pre></div>
 
 
@@ -96,14 +107,35 @@ misc_py313    </h1>
 
     </div>
     <a class="headerlink" href="#CustomException"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CustomException-6"><a href="#CustomException-6"><span class="linenos">6</span></a><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-</span><span id="CustomException-7"><a href="#CustomException-7"><span class="linenos">7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CustomException-9"><a href="#CustomException-9"><span class="linenos"> 9</span></a><span class="k">class</span> <span class="nc">CustomException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+</span><span id="CustomException-10"><a href="#CustomException-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;custom exception type&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>custom exception type</p>
 </div>
 
+
+                </section>
+                <section id="deprecated_func">
+                            <input id="deprecated_func-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator">@deprecated(&#39;Do not use this anymore&#39;)</div>
+
+        <span class="def">def</span>
+        <span class="name">deprecated_func</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="deprecated_func-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#deprecated_func"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="deprecated_func-13"><a href="#deprecated_func-13"><span class="linenos">13</span></a><span class="nd">@deprecated</span><span class="p">(</span><span class="s2">&quot;Do not use this anymore&quot;</span><span class="p">)</span>
+</span><span id="deprecated_func-14"><a href="#deprecated_func-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">deprecated_func</span><span class="p">():</span>
+</span><span id="deprecated_func-15"><a href="#deprecated_func-15"><span class="linenos">15</span></a>    <span class="k">pass</span>
+</span></pre></div>
+
+
+    
 
                 </section>
     </main>

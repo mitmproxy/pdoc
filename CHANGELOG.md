@@ -4,8 +4,9 @@
 
 ## Unreleased: pdoc next
 
-- Remove support for Python 3.8, which has reached end-of-life on 2024-10-07 .
+- Remove support for Python 3.8, which has reached end-of-life on 2024-10-07.
   ([#747](https://github.com/mitmproxy/pdoc/pull/747), @mhils)
+- Python 3.13: `@deprecated` decorators are now rendered with visual emphasis.
 - Inherited members are now hidden by default if the base class is not part of the documentation.
   Please make yourself heard in https://github.com/mitmproxy/pdoc/issues/715 if you relied on the old behavior.
   ([#748](https://github.com/mitmproxy/pdoc/pull/748), @mhils)

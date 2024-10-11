@@ -308,6 +308,13 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     margin-left: 2rem;
 }
 
+.pdoc .decorator-deprecated {
+    color: #842029;
+}
+.pdoc .decorator-deprecated ~ span {
+    filter: grayscale(1) opacity(0.8);
+}
+
 .pdoc .name {
     color: var(--name);
     font-weight: bold;

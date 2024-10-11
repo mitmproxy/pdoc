@@ -162,7 +162,7 @@ See https://pdoc.dev/docs/pdoc/render_helpers.html#DefaultMacroExtension for an 
 {% enddefaultmacro %}
 {% defaultmacro decorators(doc) %}
     {% for d in doc.decorators if not d.startswith("@_") %}
-        <div class="decorator">{{ d }}</div>
+        <div class="decorator decorator-{{ d[1:].partition("(")[0] }}">{{ d }}</div>
     {% endfor %}
 {% enddefaultmacro %}
 {% defaultmacro function(fn) -%}
