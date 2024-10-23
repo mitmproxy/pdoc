@@ -445,7 +445,7 @@ class Module(Namespace[types.ModuleType]):
 
         mod = _safe_getattr(obj, "__module__", None)
         qual = _safe_getattr(obj, "__qualname__", None)
-        if mod and qual and "<locals>" not in qual:
+        if mod and isinstance(qual, str) and "<locals>" not in qual:
             return mod, qual
         else:
             # This might be wrong, but it's the best guess we have.

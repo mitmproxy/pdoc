@@ -12,7 +12,7 @@ modules = [
     m.name
     for m in pkgutil.iter_modules()
     if not m.name.startswith("_") and m.name not in ("test", "idlelib", "py")
-]
+] + ["unittest.mock"]
 
 
 @pytest.mark.slow
