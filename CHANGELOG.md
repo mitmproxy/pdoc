@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Update Mermaid.js version.
+  ([#763](https://github.com/mitmproxy/pdoc/pull/763), @CodeMelted)
 
 ## 2024-10-11: pdoc 15.0.0
 
