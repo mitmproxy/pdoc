@@ -637,7 +637,7 @@ class Class(Namespace[type]):
                 for attr, unresolved_annotation in dynamic_annotations.items():
                     cls_annotations[attr] = unresolved_annotation
             cls_fullname = (
-                _safe_getattr(cls, "__module__", "") + "." + cls.__qualname__
+                _safe_getattr(cls, "__module__", "") or "" + "." + cls.__qualname__
             ).lstrip(".")
 
             new_annotations = {
