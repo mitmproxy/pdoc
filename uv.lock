@@ -295,7 +295,7 @@ wheels = [
 
 [[package]]
 name = "pdoc"
-version = "14.7.0"
+version = "15.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },
