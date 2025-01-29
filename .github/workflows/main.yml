@@ -18,17 +18,17 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@v11
-      - uses: mhils/workflows/setup-python@v11
-      - uses: mhils/workflows/setup-uv@v11
+      - uses: mhils/workflows/checkout@v16
+      - uses: mhils/workflows/setup-python@v16
+      - uses: mhils/workflows/setup-uv@v16
       - run: uv run tox -e lint
 
   old-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@v11
-      - uses: mhils/workflows/setup-python@v11
-      - uses: mhils/workflows/setup-uv@v11
+      - uses: mhils/workflows/checkout@v16
+      - uses: mhils/workflows/setup-python@v16
+      - uses: mhils/workflows/setup-uv@v16
       - run: uv run tox -e old-dependencies
 
   test:
@@ -55,15 +55,12 @@ jobs:
             py: 3.9.18
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: mhils/workflows/checkout@v11
-      - uses: mhils/workflows/setup-python@v11
-        with:
-          python-version: ${{ matrix.py }}
-      - uses: mhils/workflows/setup-uv@main
-      - run: uv run tox -e py -- -vvv ${{ matrix.args }}
+      - uses: mhils/workflows/checkout@v16
+      - uses: mhils/workflows/setup-uv@v16
+      - run: uv run --python ${{ matrix.py }} tox -e py -- -vvv ${{ matrix.args }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v11
+    uses: mhils/workflows/.github/workflows/python-build.yml@v16
     permissions:
       contents: read
       id-token: write
@@ -93,13 +90,13 @@ jobs:
     - test
     - build
     - attest
-    uses: mhils/workflows/.github/workflows/alls-green.yml@v11
+    uses: mhils/workflows/.github/workflows/alls-green.yml@v16
     with:
       jobs: ${{ toJSON(needs) }}
       allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@v11
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@v16
     with:
       artifact-name: wheels
     needs: check

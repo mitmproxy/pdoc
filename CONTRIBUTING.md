@@ -12,13 +12,12 @@ please consider contributing in the following areas:
 
 ## Development Setup
 
-To get started hacking on pdoc, please install a recent version of Python (we recommend at least Python 3.9). Then, do
-the following:
+To get started hacking on pdoc, please install [uv](https://docs.astral.sh/uv/). Then, do the following:
 
 ```shell
 git clone https://github.com/mitmproxy/pdoc.git
 cd pdoc
-pip3 install -e .[dev]
+uv run pdoc --help
 ```
 
 ## Testing
@@ -27,7 +26,7 @@ If you've followed the procedure above, you already have all the development req
 basic test suite with [tox](https://tox.readthedocs.io/):
 
 ```shell
-tox
+uv run tox
 ```
 
 Please ensure that all patches are accompanied by matching changes in the test suite. The project strictly maintains
@@ -36,12 +35,13 @@ Please ensure that all patches are accompanied by matching changes in the test s
 ### Fixing Snapshot Tests
 
 pdoc makes heavy use of snapshot tests, which compare the rendered output with a stored copy in the [test/testdata](test/testdata) directory.
-These tests are very useful to catch regressions, but also have a tendency to break quickly. If you encounter failing snapshot tests, run
+These tests are very useful to catch regressions, but also have a tendency to break quickly. You can overwrite failing snapshots tests by running
 
 ```shell
-python3 ./test/test_snapshot.py
+uv run test/test_snapshot.py
 ```
-to overwrite the stored snapshots with the new rendered output. This will fix the tests.
+
+Alternatively, CI will automatically update all snapshots.
 
 ## Documentation
 
