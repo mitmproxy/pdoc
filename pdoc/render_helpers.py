@@ -99,7 +99,7 @@ Link pattern used for markdown2's [`link-patterns` extra](https://github.com/tre
 
 
 @cache
-def highlight(doc: pdoc.doc.Doc) -> str:
+def highlight(doc: pdoc.doc.Doc) -> Markup:
     """Highlight the source code of a documentation object using pygments."""
     if isinstance(doc, str):  # pragma: no cover
         warnings.warn(
@@ -114,7 +114,7 @@ def highlight(doc: pdoc.doc.Doc) -> str:
     return Markup(pygments.highlight(doc.source, lexer, formatter))
 
 
-def format_signature(sig: inspect.Signature, colon: bool) -> str:
+def format_signature(sig: inspect.Signature, colon: bool) -> Markup:
     """Format and highlight a function signature using pygments. Returns HTML."""
     # First get a list with all params as strings.
     result = pdoc.doc._PrettySignature._params(sig)  # type: ignore
@@ -308,7 +308,7 @@ def module_candidates(identifier: str, current_module: str) -> Iterable[str]:
 @pass_context
 def linkify(
     context: Context, code: str, namespace: str = "", shorten: bool = True
-) -> str:
+) -> Markup:
     """
     Link all identifiers in a block of text. Identifiers referencing unknown modules or modules that
     are not rendered at the moment will be ignored.
@@ -436,7 +436,7 @@ def linkify(
 
 
 @pass_context
-def link(context: Context, spec: tuple[str, str], text: str | None = None) -> str:
+def link(context: Context, spec: tuple[str, str], text: str | None = None) -> Markup:
     """Create a link for a specific `(modulename, qualname)` tuple."""
     mod: pdoc.doc.Module = context["module"]
     modulename, qualname = spec
@@ -469,7 +469,7 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> st
         return Markup(
             f'<a href="{relative_link(context["module"].modulename, modulename)}{qualname}">{text or fullname}</a>'
         )
-    return text or fullname
+    return Markup.escape(text or fullname)
 
 
 def edit_url(
@@ -507,7 +507,7 @@ def root_module_name(all_modules: Mapping[str, pdoc.doc.Module]) -> str | None:
         return None
 
 
-def minify_css(css: str) -> str:
+def minify_css(css: str) -> Markup:
     """Do some very basic CSS minification."""
     css = re.sub(r"[ ]{4}|\n|(?<=[:{}]) | (?=[{}])", "", css)
     css = re.sub(
