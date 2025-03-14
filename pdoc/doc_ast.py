@@ -273,7 +273,7 @@ def _parse(
     try:
         return ast.parse(_dedent(source))
     except Exception as e:
-        warnings.warn(f"Error parsing source code: {e}\n" f"===\n" f"{source}\n" f"===")
+        warnings.warn(f"Error parsing source code: {e}\n===\n{source}\n===")
         return ast.parse("")
 
 

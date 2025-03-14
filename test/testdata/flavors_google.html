@@ -237,7 +237,7 @@ with it.</p></li>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="n">__docformat__</span> <span class="o">=</span> <span class="s2">&quot;google&quot;</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="n">module_level_variable1</span> <span class="o">=</span> <span class="mi">12345</span>
@@ -250,7 +250,7 @@ with it.</p></li>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">def</span> <span class="nf">function_with_types_in_docstring</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">def</span><span class="w"> </span><span class="nf">function_with_types_in_docstring</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Example function with types documented in the docstring.</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    `PEP 484`_ type annotations are supported. If attribute, parameter, and</span>
@@ -270,7 +270,7 @@ with it.</p></li>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="k">def</span> <span class="nf">function_with_pep484_type_annotations</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">function_with_pep484_type_annotations</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Example function with PEP 484 type annotations.</span>
 </span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    Args:</span>
@@ -284,7 +284,7 @@ with it.</p></li>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="k">def</span> <span class="nf">module_level_function</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="k">def</span><span class="w"> </span><span class="nf">module_level_function</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is an example of a module level function.</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    Function parameters should be documented in the ``Args`` section. The name</span>
@@ -338,7 +338,7 @@ with it.</p></li>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>    <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="k">def</span> <span class="nf">example_generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="k">def</span><span class="w"> </span><span class="nf">example_generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Generators have a ``Yields`` section instead of a ``Returns`` section.</span>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    Args:</span>
@@ -359,7 +359,7 @@ with it.</p></li>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="k">yield</span> <span class="n">i</span>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="k">class</span> <span class="nc">ExampleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Exceptions are documented in the same way as classes.</span>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">    The __init__ method may be documented in either the class level</span>
@@ -381,17 +381,17 @@ with it.</p></li>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
 </span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is present on Python 3.11+ and manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
@@ -408,7 +408,7 @@ with it.</p></li>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
 </span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
@@ -438,12 +438,12 @@ with it.</p></li>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
 </span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="nd">@property</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
 </span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
 </span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="nd">@property</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">        should only be documented in their getter method.</span>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
@@ -453,10 +453,10 @@ with it.</p></li>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
 </span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 </span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>        <span class="n">value</span>
 </span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>
 </span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">        Note:</span>
@@ -472,7 +472,7 @@ with it.</p></li>
 </span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>
-</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
 </span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>
 </span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
@@ -488,10 +488,10 @@ with it.</p></li>
 </span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a>        <span class="k">pass</span>
 </span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a>
-</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>        <span class="k">pass</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>
-</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
 </span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>
 </span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
@@ -506,11 +506,11 @@ with it.</p></li>
 </span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>        <span class="k">pass</span>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>        <span class="k">pass</span>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>
-</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
@@ -545,7 +545,7 @@ with it.</p></li>
 </span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>
 </span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>
-</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
@@ -583,7 +583,7 @@ with it.</p></li>
 </span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>
 </span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>
-</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
+</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SampleClass</span><span class="p">:</span>
 </span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
 </span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a>
 </span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">    Longer class information....</span>
@@ -594,16 +594,16 @@ with it.</p></li>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a>
-</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
 </span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
 </span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-406"><a href="#L-406"><span class="linenos">406</span></a>
-</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
 </span><span id="L-409"><a href="#L-409"><span class="linenos">409</span></a>
 </span><span id="L-410"><a href="#L-410"><span class="linenos">410</span></a>
-</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
+</span><span id="L-411"><a href="#L-411"><span class="linenos">411</span></a><span class="k">def</span><span class="w"> </span><span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
 </span><span id="L-412"><a href="#L-412"><span class="linenos">412</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-413"><a href="#L-413"><span class="linenos">413</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
 </span><span id="L-414"><a href="#L-414"><span class="linenos">414</span></a>
@@ -615,7 +615,7 @@ with it.</p></li>
 </span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a>
 </span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>
-</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
+</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a><span class="k">def</span><span class="w"> </span><span class="nf">example_code</span><span class="p">():</span>
 </span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
 </span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a>
@@ -629,7 +629,7 @@ with it.</p></li>
 </span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a>
 </span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>
-</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a><span class="k">def</span><span class="w"> </span><span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
 </span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a>
@@ -640,7 +640,7 @@ with it.</p></li>
 </span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>
 </span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a>
-</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
 </span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
@@ -692,7 +692,7 @@ on the first line, separated by a colon.</p>
 
     </div>
     <a class="headerlink" href="#function_with_types_in_docstring"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="function_with_types_in_docstring-59"><a href="#function_with_types_in_docstring-59"><span class="linenos">59</span></a><span class="k">def</span> <span class="nf">function_with_types_in_docstring</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="function_with_types_in_docstring-59"><a href="#function_with_types_in_docstring-59"><span class="linenos">59</span></a><span class="k">def</span><span class="w"> </span><span class="nf">function_with_types_in_docstring</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
 </span><span id="function_with_types_in_docstring-60"><a href="#function_with_types_in_docstring-60"><span class="linenos">60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Example function with types documented in the docstring.</span>
 </span><span id="function_with_types_in_docstring-61"><a href="#function_with_types_in_docstring-61"><span class="linenos">61</span></a>
 </span><span id="function_with_types_in_docstring-62"><a href="#function_with_types_in_docstring-62"><span class="linenos">62</span></a><span class="sd">    `PEP 484`_ type annotations are supported. If attribute, parameter, and</span>
@@ -746,7 +746,7 @@ included in the docstring:</p>
 
     </div>
     <a class="headerlink" href="#function_with_pep484_type_annotations"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="function_with_pep484_type_annotations-79"><a href="#function_with_pep484_type_annotations-79"><span class="linenos">79</span></a><span class="k">def</span> <span class="nf">function_with_pep484_type_annotations</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="function_with_pep484_type_annotations-79"><a href="#function_with_pep484_type_annotations-79"><span class="linenos">79</span></a><span class="k">def</span><span class="w"> </span><span class="nf">function_with_pep484_type_annotations</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="function_with_pep484_type_annotations-80"><a href="#function_with_pep484_type_annotations-80"><span class="linenos">80</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Example function with PEP 484 type annotations.</span>
 </span><span id="function_with_pep484_type_annotations-81"><a href="#function_with_pep484_type_annotations-81"><span class="linenos">81</span></a>
 </span><span id="function_with_pep484_type_annotations-82"><a href="#function_with_pep484_type_annotations-82"><span class="linenos">82</span></a><span class="sd">    Args:</span>
@@ -790,7 +790,7 @@ included in the docstring:</p>
 
     </div>
     <a class="headerlink" href="#module_level_function"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="module_level_function-93"><a href="#module_level_function-93"><span class="linenos"> 93</span></a><span class="k">def</span> <span class="nf">module_level_function</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="module_level_function-93"><a href="#module_level_function-93"><span class="linenos"> 93</span></a><span class="k">def</span><span class="w"> </span><span class="nf">module_level_function</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="module_level_function-94"><a href="#module_level_function-94"><span class="linenos"> 94</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This is an example of a module level function.</span>
 </span><span id="module_level_function-95"><a href="#module_level_function-95"><span class="linenos"> 95</span></a>
 </span><span id="module_level_function-96"><a href="#module_level_function-96"><span class="linenos"> 96</span></a><span class="sd">    Function parameters should be documented in the ``Args`` section. The name</span>
@@ -917,7 +917,7 @@ that are relevant to the interface.</li>
 
     </div>
     <a class="headerlink" href="#example_generator"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="example_generator-147"><a href="#example_generator-147"><span class="linenos">147</span></a><span class="k">def</span> <span class="nf">example_generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="example_generator-147"><a href="#example_generator-147"><span class="linenos">147</span></a><span class="k">def</span><span class="w"> </span><span class="nf">example_generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
 </span><span id="example_generator-148"><a href="#example_generator-148"><span class="linenos">148</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Generators have a ``Yields`` section instead of a ``Returns`` section.</span>
 </span><span id="example_generator-149"><a href="#example_generator-149"><span class="linenos">149</span></a>
 </span><span id="example_generator-150"><a href="#example_generator-150"><span class="linenos">150</span></a><span class="sd">    Args:</span>
@@ -980,7 +980,7 @@ that are relevant to the interface.</li>
 
     </div>
     <a class="headerlink" href="#ExampleError"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError-168"><a href="#ExampleError-168"><span class="linenos">168</span></a><span class="k">class</span> <span class="nc">ExampleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError-168"><a href="#ExampleError-168"><span class="linenos">168</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 </span><span id="ExampleError-169"><a href="#ExampleError-169"><span class="linenos">169</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Exceptions are documented in the same way as classes.</span>
 </span><span id="ExampleError-170"><a href="#ExampleError-170"><span class="linenos">170</span></a>
 </span><span id="ExampleError-171"><a href="#ExampleError-171"><span class="linenos">171</span></a><span class="sd">    The __init__ method may be documented in either the class level</span>
@@ -1002,14 +1002,14 @@ that are relevant to the interface.</li>
 </span><span id="ExampleError-187"><a href="#ExampleError-187"><span class="linenos">187</span></a>
 </span><span id="ExampleError-188"><a href="#ExampleError-188"><span class="linenos">188</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="ExampleError-189"><a href="#ExampleError-189"><span class="linenos">189</span></a>
-</span><span id="ExampleError-190"><a href="#ExampleError-190"><span class="linenos">190</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+</span><span id="ExampleError-190"><a href="#ExampleError-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
 </span><span id="ExampleError-191"><a href="#ExampleError-191"><span class="linenos">191</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
 </span><span id="ExampleError-192"><a href="#ExampleError-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
 </span><span id="ExampleError-193"><a href="#ExampleError-193"><span class="linenos">193</span></a>
-</span><span id="ExampleError-194"><a href="#ExampleError-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="ExampleError-194"><a href="#ExampleError-194"><span class="linenos">194</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="ExampleError-195"><a href="#ExampleError-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is present on Python 3.11+ and manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span><span id="ExampleError-196"><a href="#ExampleError-196"><span class="linenos">196</span></a>
-</span><span id="ExampleError-197"><a href="#ExampleError-197"><span class="linenos">197</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+</span><span id="ExampleError-197"><a href="#ExampleError-197"><span class="linenos">197</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
 </span><span id="ExampleError-198"><a href="#ExampleError-198"><span class="linenos">198</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1054,7 +1054,7 @@ convention to document the __init__ method and be consistent with it.</p>
 
     </div>
     <a class="headerlink" href="#ExampleError.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.__init__-190"><a href="#ExampleError.__init__-190"><span class="linenos">190</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.__init__-190"><a href="#ExampleError.__init__-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
 </span><span id="ExampleError.__init__-191"><a href="#ExampleError.__init__-191"><span class="linenos">191</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
 </span><span id="ExampleError.__init__-192"><a href="#ExampleError.__init__-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
 </span></pre></div>
@@ -1096,7 +1096,7 @@ convention to document the __init__ method and be consistent with it.</p>
 
     </div>
     <a class="headerlink" href="#ExampleError.add_note"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.add_note-194"><a href="#ExampleError.add_note-194"><span class="linenos">194</span></a>    <span class="k">def</span> <span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.add_note-194"><a href="#ExampleError.add_note-194"><span class="linenos">194</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="ExampleError.add_note-195"><a href="#ExampleError.add_note-195"><span class="linenos">195</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is present on Python 3.11+ and manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1117,7 +1117,7 @@ convention to document the __init__ method and be consistent with it.</p>
 
     </div>
     <a class="headerlink" href="#ExampleError.with_traceback"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.with_traceback-197"><a href="#ExampleError.with_traceback-197"><span class="linenos">197</span></a>    <span class="k">def</span> <span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleError.with_traceback-197"><a href="#ExampleError.with_traceback-197"><span class="linenos">197</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">with_traceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
 </span><span id="ExampleError.with_traceback-198"><a href="#ExampleError.with_traceback-198"><span class="linenos">198</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has a changed docstring in Python 3.13+ and is manually added here so that snapshots are consistent.&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1139,7 +1139,7 @@ convention to document the __init__ method and be consistent with it.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass-200"><a href="#ExampleClass-200"><span class="linenos">200</span></a><span class="k">class</span> <span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass-200"><a href="#ExampleClass-200"><span class="linenos">200</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 </span><span id="ExampleClass-201"><a href="#ExampleClass-201"><span class="linenos">201</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The summary line for a class docstring should fit on one line.</span>
 </span><span id="ExampleClass-202"><a href="#ExampleClass-202"><span class="linenos">202</span></a>
 </span><span id="ExampleClass-203"><a href="#ExampleClass-203"><span class="linenos">203</span></a><span class="sd">    If the class has public attributes, they may be documented here</span>
@@ -1156,7 +1156,7 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-214"><a href="#ExampleClass-214"><span class="linenos">214</span></a>
 </span><span id="ExampleClass-215"><a href="#ExampleClass-215"><span class="linenos">215</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="ExampleClass-216"><a href="#ExampleClass-216"><span class="linenos">216</span></a>
-</span><span id="ExampleClass-217"><a href="#ExampleClass-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+</span><span id="ExampleClass-217"><a href="#ExampleClass-217"><span class="linenos">217</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
 </span><span id="ExampleClass-218"><a href="#ExampleClass-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
 </span><span id="ExampleClass-219"><a href="#ExampleClass-219"><span class="linenos">219</span></a>
 </span><span id="ExampleClass-220"><a href="#ExampleClass-220"><span class="linenos">220</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
@@ -1186,12 +1186,12 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-244"><a href="#ExampleClass-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Docstring *after* attribute, with type specified.&quot;&quot;&quot;</span>
 </span><span id="ExampleClass-245"><a href="#ExampleClass-245"><span class="linenos">245</span></a>
 </span><span id="ExampleClass-246"><a href="#ExampleClass-246"><span class="linenos">246</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass-247"><a href="#ExampleClass-247"><span class="linenos">247</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-247"><a href="#ExampleClass-247"><span class="linenos">247</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-248"><a href="#ExampleClass-248"><span class="linenos">248</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
 </span><span id="ExampleClass-249"><a href="#ExampleClass-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
 </span><span id="ExampleClass-250"><a href="#ExampleClass-250"><span class="linenos">250</span></a>
 </span><span id="ExampleClass-251"><a href="#ExampleClass-251"><span class="linenos">251</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass-252"><a href="#ExampleClass-252"><span class="linenos">252</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-252"><a href="#ExampleClass-252"><span class="linenos">252</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-253"><a href="#ExampleClass-253"><span class="linenos">253</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
 </span><span id="ExampleClass-254"><a href="#ExampleClass-254"><span class="linenos">254</span></a><span class="sd">        should only be documented in their getter method.</span>
 </span><span id="ExampleClass-255"><a href="#ExampleClass-255"><span class="linenos">255</span></a>
@@ -1201,10 +1201,10 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-259"><a href="#ExampleClass-259"><span class="linenos">259</span></a>        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;readwrite_property&#39;</span><span class="p">]</span>
 </span><span id="ExampleClass-260"><a href="#ExampleClass-260"><span class="linenos">260</span></a>
 </span><span id="ExampleClass-261"><a href="#ExampleClass-261"><span class="linenos">261</span></a>    <span class="nd">@readwrite_property</span><span class="o">.</span><span class="n">setter</span>
-</span><span id="ExampleClass-262"><a href="#ExampleClass-262"><span class="linenos">262</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span id="ExampleClass-262"><a href="#ExampleClass-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 </span><span id="ExampleClass-263"><a href="#ExampleClass-263"><span class="linenos">263</span></a>        <span class="n">value</span>
 </span><span id="ExampleClass-264"><a href="#ExampleClass-264"><span class="linenos">264</span></a>
-</span><span id="ExampleClass-265"><a href="#ExampleClass-265"><span class="linenos">265</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+</span><span id="ExampleClass-265"><a href="#ExampleClass-265"><span class="linenos">265</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
 </span><span id="ExampleClass-266"><a href="#ExampleClass-266"><span class="linenos">266</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
 </span><span id="ExampleClass-267"><a href="#ExampleClass-267"><span class="linenos">267</span></a>
 </span><span id="ExampleClass-268"><a href="#ExampleClass-268"><span class="linenos">268</span></a><span class="sd">        Note:</span>
@@ -1220,7 +1220,7 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-278"><a href="#ExampleClass-278"><span class="linenos">278</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="ExampleClass-279"><a href="#ExampleClass-279"><span class="linenos">279</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span><span id="ExampleClass-280"><a href="#ExampleClass-280"><span class="linenos">280</span></a>
-</span><span id="ExampleClass-281"><a href="#ExampleClass-281"><span class="linenos">281</span></a>    <span class="k">def</span> <span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-281"><a href="#ExampleClass-281"><span class="linenos">281</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__special__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-282"><a href="#ExampleClass-282"><span class="linenos">282</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default special members with docstrings are not included.</span>
 </span><span id="ExampleClass-283"><a href="#ExampleClass-283"><span class="linenos">283</span></a>
 </span><span id="ExampleClass-284"><a href="#ExampleClass-284"><span class="linenos">284</span></a><span class="sd">        Special members are any methods or attributes that start with and</span>
@@ -1236,10 +1236,10 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-294"><a href="#ExampleClass-294"><span class="linenos">294</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="ExampleClass-295"><a href="#ExampleClass-295"><span class="linenos">295</span></a>        <span class="k">pass</span>
 </span><span id="ExampleClass-296"><a href="#ExampleClass-296"><span class="linenos">296</span></a>
-</span><span id="ExampleClass-297"><a href="#ExampleClass-297"><span class="linenos">297</span></a>    <span class="k">def</span> <span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-297"><a href="#ExampleClass-297"><span class="linenos">297</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__special_without_docstring__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-298"><a href="#ExampleClass-298"><span class="linenos">298</span></a>        <span class="k">pass</span>
 </span><span id="ExampleClass-299"><a href="#ExampleClass-299"><span class="linenos">299</span></a>
-</span><span id="ExampleClass-300"><a href="#ExampleClass-300"><span class="linenos">300</span></a>    <span class="k">def</span> <span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-300"><a href="#ExampleClass-300"><span class="linenos">300</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_private</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-301"><a href="#ExampleClass-301"><span class="linenos">301</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;By default private members are not included.</span>
 </span><span id="ExampleClass-302"><a href="#ExampleClass-302"><span class="linenos">302</span></a>
 </span><span id="ExampleClass-303"><a href="#ExampleClass-303"><span class="linenos">303</span></a><span class="sd">        Private members are any methods or attributes that start with an</span>
@@ -1254,7 +1254,7 @@ convention to document the __init__ method and be consistent with it.</p>
 </span><span id="ExampleClass-312"><a href="#ExampleClass-312"><span class="linenos">312</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="ExampleClass-313"><a href="#ExampleClass-313"><span class="linenos">313</span></a>        <span class="k">pass</span>
 </span><span id="ExampleClass-314"><a href="#ExampleClass-314"><span class="linenos">314</span></a>
-</span><span id="ExampleClass-315"><a href="#ExampleClass-315"><span class="linenos">315</span></a>    <span class="k">def</span> <span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass-315"><a href="#ExampleClass-315"><span class="linenos">315</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_private_without_docstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass-316"><a href="#ExampleClass-316"><span class="linenos">316</span></a>        <span class="k">pass</span>
 </span></pre></div>
 
@@ -1288,7 +1288,7 @@ in the property's getter method.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.__init__-217"><a href="#ExampleClass.__init__-217"><span class="linenos">217</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.__init__-217"><a href="#ExampleClass.__init__-217"><span class="linenos">217</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="n">param3</span><span class="p">):</span>
 </span><span id="ExampleClass.__init__-218"><a href="#ExampleClass.__init__-218"><span class="linenos">218</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Example of docstring on the __init__ method.</span>
 </span><span id="ExampleClass.__init__-219"><a href="#ExampleClass.__init__-219"><span class="linenos">219</span></a>
 </span><span id="ExampleClass.__init__-220"><a href="#ExampleClass.__init__-220"><span class="linenos">220</span></a><span class="sd">        The __init__ method may be documented in either the class level</span>
@@ -1412,7 +1412,7 @@ lines are supported.</li>
     </div>
     <a class="headerlink" href="#ExampleClass.readonly_property"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readonly_property-246"><a href="#ExampleClass.readonly_property-246"><span class="linenos">246</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass.readonly_property-247"><a href="#ExampleClass.readonly_property-247"><span class="linenos">247</span></a>    <span class="k">def</span> <span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readonly_property-247"><a href="#ExampleClass.readonly_property-247"><span class="linenos">247</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readonly_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass.readonly_property-248"><a href="#ExampleClass.readonly_property-248"><span class="linenos">248</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;str: Properties should be documented in their getter method.&quot;&quot;&quot;</span>
 </span><span id="ExampleClass.readonly_property-249"><a href="#ExampleClass.readonly_property-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="s1">&#39;readonly_property&#39;</span>
 </span></pre></div>
@@ -1433,7 +1433,7 @@ lines are supported.</li>
     </div>
     <a class="headerlink" href="#ExampleClass.readwrite_property"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.readwrite_property-251"><a href="#ExampleClass.readwrite_property-251"><span class="linenos">251</span></a>    <span class="nd">@property</span>
-</span><span id="ExampleClass.readwrite_property-252"><a href="#ExampleClass.readwrite_property-252"><span class="linenos">252</span></a>    <span class="k">def</span> <span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="ExampleClass.readwrite_property-252"><a href="#ExampleClass.readwrite_property-252"><span class="linenos">252</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">readwrite_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="ExampleClass.readwrite_property-253"><a href="#ExampleClass.readwrite_property-253"><span class="linenos">253</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`str`: Properties with both a getter and setter</span>
 </span><span id="ExampleClass.readwrite_property-254"><a href="#ExampleClass.readwrite_property-254"><span class="linenos">254</span></a><span class="sd">        should only be documented in their getter method.</span>
 </span><span id="ExampleClass.readwrite_property-255"><a href="#ExampleClass.readwrite_property-255"><span class="linenos">255</span></a>
@@ -1464,7 +1464,7 @@ mentioned here.</p>
 
     </div>
     <a class="headerlink" href="#ExampleClass.example_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.example_method-265"><a href="#ExampleClass.example_method-265"><span class="linenos">265</span></a>    <span class="k">def</span> <span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ExampleClass.example_method-265"><a href="#ExampleClass.example_method-265"><span class="linenos">265</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">example_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
 </span><span id="ExampleClass.example_method-266"><a href="#ExampleClass.example_method-266"><span class="linenos">266</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Class methods are similar to regular functions.</span>
 </span><span id="ExampleClass.example_method-267"><a href="#ExampleClass.example_method-267"><span class="linenos">267</span></a>
 </span><span id="ExampleClass.example_method-268"><a href="#ExampleClass.example_method-268"><span class="linenos">268</span></a><span class="sd">        Note:</span>
@@ -1518,7 +1518,7 @@ mentioned here.</p>
 
     </div>
     <a class="headerlink" href="#fetch_smalltable_rows"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows-319"><a href="#fetch_smalltable_rows-319"><span class="linenos">319</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows-319"><a href="#fetch_smalltable_rows-319"><span class="linenos">319</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_smalltable_rows</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="fetch_smalltable_rows-320"><a href="#fetch_smalltable_rows-320"><span class="linenos">320</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="fetch_smalltable_rows-321"><a href="#fetch_smalltable_rows-321"><span class="linenos">321</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="fetch_smalltable_rows-322"><a href="#fetch_smalltable_rows-322"><span class="linenos">322</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
@@ -1605,7 +1605,7 @@ rows with values set for all keys will be returned.</li>
 
     </div>
     <a class="headerlink" href="#fetch_smalltable_rows2"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows2-354"><a href="#fetch_smalltable_rows2-354"><span class="linenos">354</span></a><span class="k">def</span> <span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="fetch_smalltable_rows2-354"><a href="#fetch_smalltable_rows2-354"><span class="linenos">354</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_smalltable_rows2</span><span class="p">(</span><span class="n">table_handle</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 </span><span id="fetch_smalltable_rows2-355"><a href="#fetch_smalltable_rows2-355"><span class="linenos">355</span></a>                          <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 </span><span id="fetch_smalltable_rows2-356"><a href="#fetch_smalltable_rows2-356"><span class="linenos">356</span></a>                          <span class="n">require_all_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="fetch_smalltable_rows2-357"><a href="#fetch_smalltable_rows2-357"><span class="linenos">357</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
@@ -1695,7 +1695,7 @@ for all keys will be returned.</li>
 
     </div>
     <a class="headerlink" href="#SampleClass"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass-392"><a href="#SampleClass-392"><span class="linenos">392</span></a><span class="k">class</span> <span class="nc">SampleClass</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass-392"><a href="#SampleClass-392"><span class="linenos">392</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SampleClass</span><span class="p">:</span>
 </span><span id="SampleClass-393"><a href="#SampleClass-393"><span class="linenos">393</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summary of class here.</span>
 </span><span id="SampleClass-394"><a href="#SampleClass-394"><span class="linenos">394</span></a>
 </span><span id="SampleClass-395"><a href="#SampleClass-395"><span class="linenos">395</span></a><span class="sd">    Longer class information....</span>
@@ -1706,12 +1706,12 @@ for all keys will be returned.</li>
 </span><span id="SampleClass-400"><a href="#SampleClass-400"><span class="linenos">400</span></a><span class="sd">        eggs: An integer count of the eggs we have laid.</span>
 </span><span id="SampleClass-401"><a href="#SampleClass-401"><span class="linenos">401</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="SampleClass-402"><a href="#SampleClass-402"><span class="linenos">402</span></a>
-</span><span id="SampleClass-403"><a href="#SampleClass-403"><span class="linenos">403</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="SampleClass-403"><a href="#SampleClass-403"><span class="linenos">403</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 </span><span id="SampleClass-404"><a href="#SampleClass-404"><span class="linenos">404</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
 </span><span id="SampleClass-405"><a href="#SampleClass-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
 </span><span id="SampleClass-406"><a href="#SampleClass-406"><span class="linenos">406</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="SampleClass-407"><a href="#SampleClass-407"><span class="linenos">407</span></a>
-</span><span id="SampleClass-408"><a href="#SampleClass-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SampleClass-408"><a href="#SampleClass-408"><span class="linenos">408</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="SampleClass-409"><a href="#SampleClass-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1740,7 +1740,7 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#SampleClass.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.__init__-403"><a href="#SampleClass.__init__-403"><span class="linenos">403</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.__init__-403"><a href="#SampleClass.__init__-403"><span class="linenos">403</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">likes_spam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 </span><span id="SampleClass.__init__-404"><a href="#SampleClass.__init__-404"><span class="linenos">404</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inits SampleClass with blah.&quot;&quot;&quot;</span>
 </span><span id="SampleClass.__init__-405"><a href="#SampleClass.__init__-405"><span class="linenos">405</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">likes_spam</span> <span class="o">=</span> <span class="n">likes_spam</span>
 </span><span id="SampleClass.__init__-406"><a href="#SampleClass.__init__-406"><span class="linenos">406</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">eggs</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1785,7 +1785,7 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#SampleClass.public_method"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.public_method-408"><a href="#SampleClass.public_method-408"><span class="linenos">408</span></a>    <span class="k">def</span> <span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SampleClass.public_method-408"><a href="#SampleClass.public_method-408"><span class="linenos">408</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">public_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="SampleClass.public_method-409"><a href="#SampleClass.public_method-409"><span class="linenos">409</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs operation blah.&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -1807,7 +1807,7 @@ Longer class information....</p>
 
     </div>
     <a class="headerlink" href="#invalid_format"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="invalid_format-412"><a href="#invalid_format-412"><span class="linenos">412</span></a><span class="k">def</span> <span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="invalid_format-412"><a href="#invalid_format-412"><span class="linenos">412</span></a><span class="k">def</span><span class="w"> </span><span class="nf">invalid_format</span><span class="p">(</span><span class="n">test</span><span class="p">):</span>
 </span><span id="invalid_format-413"><a href="#invalid_format-413"><span class="linenos">413</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="invalid_format-414"><a href="#invalid_format-414"><span class="linenos">414</span></a><span class="sd">    In this example, there is no colon after the argument and an empty section.</span>
 </span><span id="invalid_format-415"><a href="#invalid_format-415"><span class="linenos">415</span></a>
@@ -1845,7 +1845,7 @@ there is a colon missing in the previous line</li>
 
     </div>
     <a class="headerlink" href="#example_code"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="example_code-424"><a href="#example_code-424"><span class="linenos">424</span></a><span class="k">def</span> <span class="nf">example_code</span><span class="p">():</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="example_code-424"><a href="#example_code-424"><span class="linenos">424</span></a><span class="k">def</span><span class="w"> </span><span class="nf">example_code</span><span class="p">():</span>
 </span><span id="example_code-425"><a href="#example_code-425"><span class="linenos">425</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="example_code-426"><a href="#example_code-426"><span class="linenos">426</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/issues/264.</span>
 </span><span id="example_code-427"><a href="#example_code-427"><span class="linenos">427</span></a>
@@ -1887,7 +1887,7 @@ there is a colon missing in the previous line</li>
 
     </div>
     <a class="headerlink" href="#newline_after_args"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="newline_after_args-438"><a href="#newline_after_args-438"><span class="linenos">438</span></a><span class="k">def</span> <span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="newline_after_args-438"><a href="#newline_after_args-438"><span class="linenos">438</span></a><span class="k">def</span><span class="w"> </span><span class="nf">newline_after_args</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="newline_after_args-439"><a href="#newline_after_args-439"><span class="linenos">439</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="newline_after_args-440"><a href="#newline_after_args-440"><span class="linenos">440</span></a><span class="sd">    Test case for https://github.com/mitmproxy/pdoc/pull/458.</span>
 </span><span id="newline_after_args-441"><a href="#newline_after_args-441"><span class="linenos">441</span></a>
@@ -1922,7 +1922,7 @@ there is unexpected whitespace before test.</li>
 
     </div>
     <a class="headerlink" href="#alternative_section_names"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="alternative_section_names-449"><a href="#alternative_section_names-449"><span class="linenos">449</span></a><span class="k">def</span> <span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="alternative_section_names-449"><a href="#alternative_section_names-449"><span class="linenos">449</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alternative_section_names</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 </span><span id="alternative_section_names-450"><a href="#alternative_section_names-450"><span class="linenos">450</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="alternative_section_names-451"><a href="#alternative_section_names-451"><span class="linenos">451</span></a><span class="sd">    In this example, we check whether alternative section names aliased to</span>
 </span><span id="alternative_section_names-452"><a href="#alternative_section_names-452"><span class="linenos">452</span></a><span class="sd">    &#39;Args&#39; are handled properly.</span>
