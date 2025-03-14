@@ -181,7 +181,13 @@ def numpy(docstring: str) -> str:
         if content.startswith(" "):
             # If the first line of section content is indented, we consider the section to be finished
             # on the first non-indented line. We take out the rest - the tail - here.
-            content, tail = re.split(r"\n(?![ \n])", content, maxsplit=1)
+            try:
+                content, tail = re.split(r"\n(?![ \n])", content, maxsplit=1)
+            except ValueError as e:
+                raise ValueError(
+                    f"Could not split content from section '{heading}' with the "
+                    f"following content:\n\n{content}\n\nIs a type descriptor missing?"
+                ) from e
         else:
             tail = ""
 
