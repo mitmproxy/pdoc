@@ -24,7 +24,6 @@ from textwrap import dedent
 from textwrap import indent
 import warnings
 
-
 AnyException = (SystemExit, GeneratorExit, Exception)
 """BaseException, but excluding KeyboardInterrupt.
 
@@ -55,7 +54,7 @@ def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
 
     except AnyException as e:
         raise RuntimeError(
-            f'Docstring processing failed for docstring=\n"""\n'
+            'Docstring processing failed for docstring=\n"""\n'
             + docstring
             + f'\n"""\n{source_file=}\n{docformat=}'
         ) from e
