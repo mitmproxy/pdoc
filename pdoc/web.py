@@ -14,6 +14,7 @@ from functools import cache
 import http.server
 import traceback
 from typing import Mapping
+import urllib.parse
 import warnings
 import webbrowser
 
@@ -60,6 +61,7 @@ class DocHandler(http.server.BaseHTTPRequestHandler):
             return "Not Found: Please normalize all module separators to '/'."
         else:
             module_name = path.lstrip("/").removesuffix(".html").replace("/", ".")
+            module_name = urllib.parse.unquote(module_name)
             if module_name not in self.server.all_modules:
                 self.send_response(404)
                 self.send_header("content-type", "text/html")

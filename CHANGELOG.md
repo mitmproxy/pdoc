@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- Fix handling of URL-escaped module names ([#787](https://github.com/mitmproxy/pdoc/pull/787), @iFreilicht)
 
 ## 2024-12-12: pdoc 15.0.1
 
