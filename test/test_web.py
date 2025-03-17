@@ -69,6 +69,11 @@ def test_get_module():
     )
 
 
+def test_get_module_url_escape_sequences():
+    assert b"make_dataclass" in handle_request(
+        b"GET /%64atac%6Ca%73se%73.html HTTP/1.1\r\n\r\n"
+    )
+
 def test_get_dependency():
     assert b"a template engine written in pure Python" in handle_request(
         b"GET /jinja2.html HTTP/1.1\r\n\r\n"
