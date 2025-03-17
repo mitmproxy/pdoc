@@ -25,6 +25,14 @@ from textwrap import indent
 import warnings
 
 
+AnyException = (SystemExit, GeneratorExit, Exception)
+"""BaseException, but excluding KeyboardInterrupt.
+
+Modules may raise SystemExit on import (which we want to catch),
+but we don't want to catch a user's KeyboardInterrupt.
+"""
+
+
 @cache
 def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
     """
@@ -32,17 +40,25 @@ def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
     """
     docformat = docformat.lower()
 
-    if any(x in docformat for x in ["google", "numpy", "restructuredtext"]):
-        docstring = rst(docstring, source_file)
+    try:
+        if any(x in docformat for x in ["google", "numpy", "restructuredtext"]):
+            docstring = rst(docstring, source_file)
 
-    if "google" in docformat:
-        docstring = google(docstring)
+        if "google" in docformat:
+            docstring = google(docstring)
 
-    if "numpy" in docformat:
-        docstring = numpy(docstring)
+        if "numpy" in docformat:
+            docstring = numpy(docstring)
 
-    if source_file is not None and os.environ.get("PDOC_EMBED_IMAGES") != "0":
-        docstring = embed_images(docstring, source_file)
+        if source_file is not None and os.environ.get("PDOC_EMBED_IMAGES") != "0":
+            docstring = embed_images(docstring, source_file)
+
+    except AnyException as e:
+        raise RuntimeError(
+            f'Docstring processing failed for docstring=\n"""\n'
+            + docstring
+            + f'\n"""\n{source_file=}\n{docformat=}'
+        ) from e
 
     return docstring
 
@@ -181,13 +197,7 @@ def numpy(docstring: str) -> str:
         if content.startswith(" "):
             # If the first line of section content is indented, we consider the section to be finished
             # on the first non-indented line. We take out the rest - the tail - here.
-            try:
-                content, tail = re.split(r"\n(?![ \n])", content, maxsplit=1)
-            except ValueError as e:
-                raise ValueError(
-                    f"Could not split content from section '{heading}' with the "
-                    f"following content:\n\n{content}\n\nIs a type descriptor missing?"
-                ) from e
+            content, tail = re.split(r"\n(?![ \n])", content, maxsplit=1)
         else:
             tail = ""
 
