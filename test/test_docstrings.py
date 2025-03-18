@@ -37,6 +37,15 @@ def test_rst_extract_options_fuzz(s):
     assert not s or content or options
 
 
+def test_convert_exception():
+    with pytest.raises(RuntimeError, match="Docstring processing failed"):
+        docstrings.convert(
+            "Parameters\n----------\n    Parameter without a name or type",
+            "numpy",
+            None,
+        )
+
+
 def test_rst_extract_options():
     content = (
         ":alpha: beta\n"
