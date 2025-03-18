@@ -22,7 +22,7 @@ def test_smoke(module):
     try:
         with pdoc.extract.mock_some_common_side_effects():
             importlib.import_module(module)
-    except pdoc.extract.AnyException:
+    except pdoc.docstrings.AnyException:
         pass
     else:
         try:
