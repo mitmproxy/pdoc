@@ -39,14 +39,14 @@ from typing import Union
 
 FOO_CONSTANT: int = 42
 """
-A happy constant. ✨  
+A happy constant. ✨
 pdoc documents constants with their type annotation and default value.
 """
 
 FOO_SINGLETON: "Foo"
 """
 This variable is annotated with a type only, but not assigned to a value.
-We also haven't defined the associated type (`Foo`) yet, 
+We also haven't defined the associated type (`Foo`) yet,
 so the type annotation in the code in the source code is actually a string literal:
 
 ```python
@@ -255,6 +255,12 @@ def embed_image():
     ```
 
     ![pdoc logo](../../docs/logo.png)
+
+    ```
+    <img src="../docs/logo.png" alt="pdoc logo" width="150">
+    ```
+
+    <img src="../../docs/logo.png" alt="pdoc logo" width="150">
     """
 
 

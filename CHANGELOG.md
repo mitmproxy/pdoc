@@ -10,6 +10,8 @@
   ([#784](https://github.com/mitmproxy/pdoc/pull/784), @tobiscode)
 - Fix handling of URL-escaped module names
   ([#787](https://github.com/mitmproxy/pdoc/pull/787), @iFreilicht)
+- Embed local images referenced in docstrings with an HTML image tag (`<img src="./image.png">`) in addition to Markdown (`![image](./image.png)`) 
+  ([#785](https://github.com/mitmproxy/pdoc/pull/785), @earshinov)
 
 ## 2024-12-12: pdoc 15.0.1
 

@@ -63,23 +63,28 @@ def convert(docstring: str, docformat: str, source_file: Path | None) -> str:
 
 
 def embed_images(docstring: str, source_file: Path) -> str:
+    def local_image_to_data_uri(href: str) -> str:
+        image_path = source_file.parent / href
+        image_data = image_path.read_bytes()
+        image_mime = mimetypes.guess_type(image_path)[0]
+        image_data_b64 = base64.b64encode(image_data).decode()
+        return f"data:{image_mime};base64,{image_data_b64}"
+
     def embed_local_image(m: re.Match) -> str:
-        image_path = source_file.parent / m["href"]
         try:
-            image_data = image_path.read_bytes()
-            image_mime = mimetypes.guess_type(image_path)[0]
+            href = local_image_to_data_uri(m["href"])
         except Exception:
             return m[0]
         else:
-            data = base64.b64encode(image_data).decode()
-            return f"![{m['alt']}](data:{image_mime};base64,{data})"
+            return m["before"] + href + m["after"]
 
-    return re.sub(
-        r"!\[\s*(?P<alt>.*?)\s*]\(\s*(?P<href>.+?)\s*\)",
-        embed_local_image,
-        docstring,
-    )
-    # TODO: Could probably do more here, e.g. support rST or raw HTML replacements.
+    # TODO: Could probably do more here, e.g. support rST replacements.
+    for regex in [
+        r"(?P<before>!\[\s*.*?\s*]\(\s*)(?P<href>.+?)(?P<after>\s*\))",
+        r"""(?P<before>src=['"])(?P<href>.+?)(?P<after>['"])""",
+    ]:
+        docstring = re.sub(regex, embed_local_image, docstring)
+    return docstring
 
 
 def google(docstring: str) -> str:
