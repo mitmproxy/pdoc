@@ -61,7 +61,7 @@ def walk_specs(specs: Sequence[Path | str]) -> list[str]:
                 modspec = importlib.util.find_spec(modname)
                 if modspec is None:
                     raise ModuleNotFoundError(modname)
-        except AnyException:
+        except pdoc.docstrings.AnyException:
             warnings.warn(
                 f"Cannot find spec for {modname} (from {spec}):\n{traceback.format_exc()}",
                 stacklevel=2,
@@ -110,7 +110,7 @@ def parse_spec(spec: Path | str) -> str:
                 modspec = importlib.util.find_spec(spec)
                 if modspec is None:
                     raise ModuleNotFoundError
-        except AnyException:
+        except pdoc.docstrings.AnyException:
             # Module does not exist, use local file.
             spec = pspec
         else:
@@ -218,16 +218,8 @@ def load_module(module: str) -> types.ModuleType:
     Returns the imported module."""
     try:
         return importlib.import_module(module)
-    except AnyException as e:
+    except pdoc.docstrings.AnyException as e:
         raise RuntimeError(f"Error importing {module}") from e
-
-
-AnyException = (SystemExit, GeneratorExit, Exception)
-"""BaseException, but excluding KeyboardInterrupt.
-
-Modules may raise SystemExit on import (which we want to catch),
-but we don't want to catch a user's KeyboardInterrupt.
-"""
 
 
 def iter_modules2(module: types.ModuleType) -> dict[str, pkgutil.ModuleInfo]:
@@ -315,7 +307,7 @@ def module_mtime(modulename: str) -> float | None:
     try:
         with mock_some_common_side_effects():
             spec = importlib.util.find_spec(modulename)
-    except AnyException:
+    except pdoc.docstrings.AnyException:
         pass
     else:
         if spec is not None and spec.origin is not None:
@@ -365,7 +357,7 @@ def invalidate_caches(module_name: str) -> None:
                 continue  # some funky stuff going on - one example is typing.io, which is a class.
             with mock_some_common_side_effects():
                 importlib.reload(sys.modules[modname])
-        except AnyException:
+        except pdoc.docstrings.AnyException:
             warnings.warn(
                 f"Error reloading {modname}:\n{traceback.format_exc()}",
                 stacklevel=2,

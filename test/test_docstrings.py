@@ -37,6 +37,19 @@ def test_rst_extract_options_fuzz(s):
     assert not s or content or options
 
 
+def test_convert_exception(monkeypatch):
+    def raise_(*_):
+        raise Exception
+
+    monkeypatch.setattr(docstrings, "rst", raise_)
+    with pytest.raises(RuntimeError, match="Docstring processing failed"):
+        docstrings.convert(
+            "Valid minimal docstring without in- or output.",
+            "numpy",
+            None,
+        )
+
+
 def test_rst_extract_options():
     content = (
         ":alpha: beta\n"
