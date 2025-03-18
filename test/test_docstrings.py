@@ -58,7 +58,7 @@ def test_rst_extract_options():
         "alpha": "beta",
         "charlie": "delta:foxtrot",
     }
-    assert content == ("\nrest of content\n" ":option ignored: as follows content\n")
+    assert content == ("\nrest of content\n:option ignored: as follows content\n")
 
 
 def test_rst_include_trim_lines():
