@@ -4,8 +4,14 @@
 
 ## Unreleased: pdoc next
 
-- Fix handling of URL-escaped module names ([#787](https://github.com/mitmproxy/pdoc/pull/787), @iFreilicht)
-- Embed local images referenced in docstrings with an HTML image tag (`<img src="./image.png">`) in addition to Markdown (`![image](./image.png)`) ([#785](https://github.com/mitmproxy/pdoc/pull/785), @earshinov)
+- Fix a bug where invalid Numpydoc docstrings would raise an exception.
+  ([#789](https://github.com/mitmproxy/pdoc/pull/789), @mhils)
+- Improve debuggability of docstring processing
+  ([#784](https://github.com/mitmproxy/pdoc/pull/784), @tobiscode)
+- Fix handling of URL-escaped module names
+  ([#787](https://github.com/mitmproxy/pdoc/pull/787), @iFreilicht)
+- Embed local images referenced in docstrings with an HTML image tag (`<img src="./image.png">`) in addition to Markdown (`![image](./image.png)`) 
+  ([#785](https://github.com/mitmproxy/pdoc/pull/785), @earshinov)
 
 ## 2024-12-12: pdoc 15.0.1
 

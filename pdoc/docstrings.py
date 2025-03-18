@@ -198,12 +198,14 @@ def numpy(docstring: str) -> str:
     )
     contents = sections[0]
     for heading, content in zip(sections[1::2], sections[2::2]):
-        if content.startswith(" "):
+        if content.startswith(" ") and re.search(r"\n(?![ \n])", content):
             # If the first line of section content is indented, we consider the section to be finished
             # on the first non-indented line. We take out the rest - the tail - here.
             content, tail = re.split(r"\n(?![ \n])", content, maxsplit=1)
         else:
             tail = ""
+
+        content = dedent(content)
 
         if heading in (
             "Parameters",
@@ -219,7 +221,7 @@ def numpy(docstring: str) -> str:
         elif heading == "See Also":
             contents += f"###### {heading}\n{_numpy_seealso(content)}"
         else:
-            contents += f"###### {heading}\n{dedent(content)}"
+            contents += f"###### {heading}\n{content}"
         contents += tail
     return contents
 

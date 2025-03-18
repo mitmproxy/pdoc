@@ -475,3 +475,22 @@ def invalid_format(test):
     param1
 
     """
+
+def invalid_format2() -> None:
+    """
+    Another example without description, but this time indented.
+
+    Returns
+    -------
+        Text describing the return value.
+    """
+
+def invalid_format3() -> None:
+    """
+    Another example with a multiline text.
+
+    Returns
+    -------
+        Multiline text
+        describing the return value.
+    """
