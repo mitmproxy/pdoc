@@ -487,6 +487,8 @@ def invalid_format2() -> None:
 
 def invalid_format3() -> None:
     """
+    Another example with a multiline text.
+
     Returns
     -------
         Multiline text
