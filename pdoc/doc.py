@@ -1095,7 +1095,7 @@ class Variable(Doc[None]):
             default = f" = {self.default_value_str}"
         else:
             default = ""
-        return f'<var {self.qualname.rsplit(".")[-1]}{self.annotation_str}{default}{_docstr(self)}>'
+        return f"<var {self.qualname.rsplit('.')[-1]}{self.annotation_str}{default}{_docstr(self)}>"
 
     @cached_property
     def is_classvar(self) -> bool:
