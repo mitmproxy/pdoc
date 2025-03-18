@@ -5,6 +5,7 @@
 ## Unreleased: pdoc next
 
 - Fix a bug where invalid Numpydoc docstrings would raise an exception.
+  ([#789](https://github.com/mitmproxy/pdoc/pull/789), @mhils)
 - Improve debuggability of docstring processing
   ([#784](https://github.com/mitmproxy/pdoc/pull/784), @tobiscode)
 - Fix handling of URL-escaped module names
