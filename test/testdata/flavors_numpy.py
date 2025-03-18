@@ -484,3 +484,11 @@ def invalid_format2() -> None:
     -------
         Text describing the return value.
     """
+
+def invalid_format3() -> None:
+    """
+    Returns
+    -------
+        Multiline text
+        describing the return value.
+    """
