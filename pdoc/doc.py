@@ -1169,6 +1169,9 @@ class Variable(Doc[None]):
         """The variable's type annotation as a pretty-printed str."""
         if self.annotation is not empty:
             formatted = formatannotation(self.annotation)
+            # type aliases don't include the module name in their __repr__, so we add it here.
+            if isinstance(self.annotation, TypeAliasType):
+                formatted = f"{self.annotation.__module__ }.{formatted}"
             return f": {_remove_collections_abc(formatted)}"
         else:
             return ""
