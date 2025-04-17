@@ -5,6 +5,7 @@
 ## Unreleased: pdoc next
 
 - Fix a bug where type aliases wouldn't be linked.
+  ([#798](https://github.com/mitmproxy/pdoc/pull/798), @mhils)
 - Fix a bug where invalid Numpydoc docstrings would raise an exception.
   ([#789](https://github.com/mitmproxy/pdoc/pull/789), @mhils)
 - Improve debuggability of docstring processing

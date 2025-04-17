@@ -1171,7 +1171,7 @@ class Variable(Doc[None]):
             formatted = formatannotation(self.annotation)
             # type aliases don't include the module name in their __repr__, so we add it here.
             if isinstance(self.annotation, TypeAliasType):
-                formatted = f"{self.annotation.__module__ }.{formatted}"
+                formatted = f"{self.annotation.__module__}.{formatted}"
             return f": {_remove_collections_abc(formatted)}"
         else:
             return ""
