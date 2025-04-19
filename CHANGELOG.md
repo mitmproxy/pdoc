@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- Add missing styles for Github's markdown alerts.
 
 ## 2025-04-17: pdoc 15.0.2
 
