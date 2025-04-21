@@ -45,11 +45,25 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 }
 
 /* Admonitions are currently not stylable via theme.css */
-.pdoc .alert.note  {
+.pdoc .alert.note {
     color: #084298;
     background-color: #cfe2ff;
     border-color: #b6d4fe;
     background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/info-circle-fill.svg' %}{% endfilter %}");
+}
+
+.pdoc .alert.tip {
+    color: #0a3622;
+    background-color: #d1e7dd;
+    border-color: #a3cfbb;
+    background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/lightbulb.svg' %}{% endfilter %}");
+}
+
+.pdoc .alert.important {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #9eeaf9;
+    background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/exclamation-square-fill.svg' %}{% endfilter %}");
 }
 
 .pdoc .alert.warning {
@@ -57,6 +71,13 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     background-color: #fff3cd;
     border-color: #ffecb5;
     background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/exclamation-triangle-fill.svg' %}{% endfilter %}");
+}
+
+.pdoc .alert.caution {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    background-image: url("data:image/svg+xml,{% filter urlencode %}{% include 'resources/exclamation-octagon-fill.svg' %}{% endfilter %}");
 }
 
 .pdoc .alert.danger {
