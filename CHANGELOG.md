@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2025-04-21: pdoc 15.0.3
+
 - Add missing styles for Github's markdown alerts.
   ([#796](https://github.com/mitmproxy/pdoc/pull/796), @Steve-Tech)
 
