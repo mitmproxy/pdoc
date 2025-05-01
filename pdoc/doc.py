@@ -314,12 +314,19 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
             else:
+                try:
+                    default_value = self._member_objects["__pydantic_fields__"][
+                        name
+                    ].default
+                except KeyError:
+                    default_value = obj
+
                 doc = Variable(
                     self.modulename,
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=obj,
+                    default_value=default_value,
                     taken_from=taken_from,
                 )
             if self._var_docstrings.get(name):
