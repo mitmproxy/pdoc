@@ -1,3 +1,7 @@
+"""
+A small example with Pydantic entities.
+"""
+
 import pydantic
 from pydantic.dataclasses import dataclass
 
@@ -7,8 +11,3 @@ class Foo(pydantic.BaseModel):
 
     b: int = 2
     """Docstring for b."""
-
-
-@dataclass
-class PydanticStyleDataclass:
-    a: int = 1

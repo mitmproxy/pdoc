@@ -134,34 +134,6 @@ def test_raising_getdoc():
         assert x.docstring == ""
 
 
-@pytest.mark.parametrize(
-    "member, defaults",
-    [
-        (
-            "Foo",
-            {
-                "a": "1",
-                "b": "2",
-            },
-        ),
-        (
-            "PydanticStyleDataclass",
-            {
-                "a": "1",
-            },
-        ),
-    ],
-)
-def test_with_pydantic(member, defaults):
-    m = Module.from_name("test.with_pydantic")
-    assert "Foo" in m.members
-
-    cls: Class = m.members[member]
-
-    for k, v in defaults.items():
-        assert cls.members[k].default_value_str == v
-
-
 def test_raising_submodules():
     f = here / "syntax_err" / "syntax_err.py"
     f.write_bytes(b"class")
