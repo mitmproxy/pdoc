@@ -3,7 +3,6 @@ A small example with Pydantic entities.
 """
 
 import pydantic
-from pydantic.dataclasses import dataclass
 
 
 class Foo(pydantic.BaseModel):
