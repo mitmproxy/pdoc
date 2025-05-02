@@ -61,9 +61,9 @@ _PYDANTIC_ENABLED: bool
 
 try:  # pragma: no cover
     import pydantic
-except ImportError:
+except ImportError:  # pragma: no cover
     _PYDANTIC_ENABLED = False
-finally:
+finally:  # pragma: no cover
     _PYDANTIC_ENABLED = True
 
 
