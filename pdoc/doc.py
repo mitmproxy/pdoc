@@ -59,7 +59,7 @@ from pdoc.doc_types import safe_eval_type
 
 _PYDANTIC_ENABLED: bool
 
-try:
+try:  # pragma: no cover
     import pydantic
 except ImportError:
     _PYDANTIC_ENABLED = False
