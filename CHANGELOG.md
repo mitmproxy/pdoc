@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Include included HTML headers in the ToC by default by enabling markdown2's `mixed=True` option of the `header-ids` extra
+  (#806, @mrossinek)
 
 ## 2025-04-21: pdoc 15.0.3
 

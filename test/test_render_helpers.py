@@ -110,6 +110,22 @@ def test_markdown_toc():
     assert to_html("#foo\n#bar").toc_html  # type: ignore
 
 
+def test_mixed_toc():
+    """
+    markdown2 can handle mixed markdown and HTML headings.
+
+    Let's test that this works as expected.
+    """
+    expected = [
+        "<ul>",
+        '  <li><a href="#foo">foo</a></li>',
+        '  <li><a href="#bar">bar</a></li>',
+        "</ul>",
+        "",
+    ]
+    assert to_html("#foo\n<h1>bar</h1>").toc_html == "\n".join(expected)
+
+
 @pytest.mark.parametrize(
     "md,html",
     [

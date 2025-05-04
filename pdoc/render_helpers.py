@@ -61,7 +61,7 @@ markdown_extensions = {
     "cuddled-lists": None,
     "fenced-code-blocks": {"cssclass": formatter.cssclass},
     "footnotes": None,
-    "header-ids": None,
+    "header-ids": {"mixed": True, "prefix": None, "reset-count": True},
     "link-patterns": None,
     "markdown-in-html": None,
     "mermaid": None,
