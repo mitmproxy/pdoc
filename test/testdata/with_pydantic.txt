@@ -1,0 +1,1 @@
+<module with_pydantic  # A small example with…>

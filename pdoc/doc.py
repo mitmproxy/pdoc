@@ -57,6 +57,15 @@ from pdoc.doc_types import empty
 from pdoc.doc_types import resolve_annotations
 from pdoc.doc_types import safe_eval_type
 
+_PYDANTIC_ENABLED: bool
+
+try:  # pragma: no cover
+    import pydantic
+except ImportError:  # pragma: no cover
+    _PYDANTIC_ENABLED = False
+finally:  # pragma: no cover
+    _PYDANTIC_ENABLED = True
+
 
 def _include_fullname_in_traceback(f):
     """
@@ -314,12 +323,27 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
             else:
+                default_value = obj
+
+                if (
+                    _PYDANTIC_ENABLED
+                    and isinstance(self.obj, type)
+                    and issubclass(self.obj, pydantic.BaseModel)
+                ):
+                    pydantic_fields = self.obj.__pydantic_fields__
+
+                    default_value = (
+                        pydantic_fields[name].default
+                        if name in pydantic_fields
+                        else obj
+                    )
+
                 doc = Variable(
                     self.modulename,
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=obj,
+                    default_value=default_value,
                     taken_from=taken_from,
                 )
             if self._var_docstrings.get(name):
