@@ -18,17 +18,17 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@v19
-      - uses: mhils/workflows/setup-python@v19
-      - uses: mhils/workflows/setup-uv@v19
+      - uses: mhils/workflows/checkout@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-python@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-uv@b71b699e73564a34763a256b9efc8139a5d1c3fd
       - run: uv run tox -e lint
 
   old-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@v19
-      - uses: mhils/workflows/setup-python@v19
-      - uses: mhils/workflows/setup-uv@v19
+      - uses: mhils/workflows/checkout@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-python@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-uv@b71b699e73564a34763a256b9efc8139a5d1c3fd
       - run: uv run tox -e old-dependencies
 
   test:
@@ -55,12 +55,12 @@ jobs:
             py: 3.9.18
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: mhils/workflows/checkout@v19
-      - uses: mhils/workflows/setup-uv@v19
+      - uses: mhils/workflows/checkout@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-uv@b71b699e73564a34763a256b9efc8139a5d1c3fd
       - run: uv run --python ${{ matrix.py }} tox -e py -- -vvv ${{ matrix.args }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@v19
+    uses: mhils/workflows/.github/workflows/python-build.yml@b71b699e73564a34763a256b9efc8139a5d1c3fd
     permissions:
       contents: read
       id-token: write
@@ -90,13 +90,13 @@ jobs:
     - test
     - build
     - attest
-    uses: mhils/workflows/.github/workflows/alls-green.yml@v19
+    uses: mhils/workflows/.github/workflows/alls-green.yml@b71b699e73564a34763a256b9efc8139a5d1c3fd
     with:
       jobs: ${{ toJSON(needs) }}
       allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@v19
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@b71b699e73564a34763a256b9efc8139a5d1c3fd
     with:
       artifact-name: wheels
     needs: check
