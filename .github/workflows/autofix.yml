@@ -13,15 +13,17 @@ jobs:
   autofix:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@v19
-      - uses: mhils/workflows/setup-python@v19
-      - uses: mhils/workflows/setup-uv@v19
+      - uses: mhils/workflows/checkout@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-python@b71b699e73564a34763a256b9efc8139a5d1c3fd
+      - uses: mhils/workflows/setup-uv@b71b699e73564a34763a256b9efc8139a5d1c3fd
+
+      - run: uv lock
 
       - run: uv run ruff check --fix-only .
       - run: uv run ruff format .
 
       - run: uv run test/test_snapshot.py
 
-      - uses: mhils/add-pr-ref-in-changelog@v1
+      - uses: mhils/add-pr-ref-in-changelog@6df8cd5a0c4d0a8c0353b663153d4a36384054f4
 
       - uses: autofix-ci/action@551dded8c6cc8a1054039c8bc0b8b48c51dfc6ef
