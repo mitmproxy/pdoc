@@ -112,7 +112,7 @@ def parse_spec(spec: Path | str) -> str:
                     raise ModuleNotFoundError
         except pdoc.docstrings.AnyException:
             # Module does not exist, use local file.
-            spec = pspec
+            spec = pspec.resolve()
         else:
             # Module does exist. We now check if the local file/directory is the same (e.g. after pip install -e),
             # and emit a warning if that's not the case.
