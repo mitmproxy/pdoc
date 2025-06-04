@@ -101,13 +101,8 @@ def test_parse_spec(monkeypatch):
     sys.path = p
 
     monkeypatch.chdir(here / "testdata" / "demopackage" / "subpackage")
-    assert (
-            parse_spec(".") == "demopackage.subpackage"
-    )
-    assert (
-            parse_spec("..") == "demopackage"
-    )
-
+    assert parse_spec(".") == "demopackage.subpackage"
+    assert parse_spec("..") == "demopackage"
 
 
 def test_parse_spec_mod_and_dir(tmp_path, monkeypatch):
