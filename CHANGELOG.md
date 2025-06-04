@@ -6,6 +6,8 @@
 
 - Include included HTML headers in the ToC by default by enabling markdown2's `mixed=True` option of the `header-ids` extra
   (#806, @mrossinek)
+- Make `pdoc .` work to document the module in the current directory.
+  ([#813](https://github.com/mitmproxy/pdoc/pull/813), @mhils)
 
 ## 2025-04-21: pdoc 15.0.3
 

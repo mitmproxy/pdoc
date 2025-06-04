@@ -100,6 +100,10 @@ def test_parse_spec(monkeypatch):
     assert str(here / "testdata") in sys.path
     sys.path = p
 
+    monkeypatch.chdir(here / "testdata" / "demopackage" / "subpackage")
+    assert parse_spec(".") == "demopackage.subpackage"
+    assert parse_spec("..") == "demopackage"
+
 
 def test_parse_spec_mod_and_dir(tmp_path, monkeypatch):
     """Test that we display a warning when both a module and a local directory exist with the provided name."""
