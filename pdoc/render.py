@@ -68,7 +68,7 @@ def configure(
         {"pdoc": "https://pdoc.dev/docs/pdoc.html"}
         ```
 
-      will make all "pdoc" type annotation to link to the provided URL, but will not link if it is "pdoc.doc.Module". 
+      will make all "pdoc" type annotation to link to the provided URL, but will not link if it is "pdoc.doc.Module".
       It accept wildcard for such cases, for instance:
 
         ```json

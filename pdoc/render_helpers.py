@@ -599,11 +599,11 @@ def get_stdlib_doc_link(path: str) -> str | None:
         str | None: URL to documentation or None if not valid/standard
     """
     try:
-        module_path, obj_name = path.rsplit('.', 1)
+        module_path, obj_name = path.rsplit(".", 1)
         module = importlib.import_module(module_path)
 
         # Check if it's a standard library module
-        module_file: str | None = getattr(module, '__file__', None)
+        module_file: str | None = getattr(module, "__file__", None)
         if module_file is None:
             if module_path in sys.builtin_module_names:
                 base_url = f"https://docs.python.org/3/library/{module_path}.html"
@@ -611,13 +611,13 @@ def get_stdlib_doc_link(path: str) -> str | None:
             else:
                 return None
 
-        stdlib_path = sysconfig.get_paths()['stdlib']
+        stdlib_path = sysconfig.get_paths()["stdlib"]
         module_file = os.path.realpath(module_file)
 
         if not module_file.startswith(os.path.realpath(stdlib_path)):
             return None
 
-        base_module = module_path.split('.')[0]  # Top-level module name
+        base_module = module_path.split(".")[0]  # Top-level module name
         base_url = f"https://docs.python.org/3/library/{base_module}.html"
         return f"{base_url}#{module_path}.{obj_name}"
     except Exception:
