@@ -479,9 +479,9 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> Ma
         )
     for lib in context["link_library"]:
         if fnmatch.fnmatch(text, lib):
-            return Markup(f'<a href="{context["link_library"][lib]}">{text}</a>')
-    if standard_link := get_stdlib_doc_link(text):
-        return Markup(f'<a href="{standard_link}">{text}</a>')
+            return Markup(f'<a href="{context["link_library"][lib]}">{text or fullname}</a>')
+    if standard_link := get_stdlib_doc_link(text or fullname):
+        return Markup(f'<a href="{standard_link}">{text or fullname}</a>')
     return Markup.escape(text or fullname)
 
 
