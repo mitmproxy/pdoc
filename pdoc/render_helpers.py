@@ -4,11 +4,15 @@ from collections.abc import Collection
 from collections.abc import Iterable
 from collections.abc import Mapping
 from contextlib import contextmanager
+import fnmatch
 from functools import cache
 import html
+import importlib
 import inspect
 import os
 import re
+import sys
+import sysconfig
 from unittest.mock import patch
 import warnings
 
@@ -359,43 +363,47 @@ def linkify(
 
         try:
             sources = list(possible_sources(context["all_modules"], identifier))
-        except ValueError:
-            # possible_sources did not find a parent module.
-            return text
 
-        # Try to find the actual target object so that we can then later verify
-        # that objects exposed at a parent module with the same name point to it.
-        target_object = None
-        for module_name, qualname in sources:
-            if doc := context["all_modules"].get(module_name, {}).get(qualname):
-                target_object = doc.obj
-                break
+            # Try to find the actual target object so that we can then later verify
+            # that objects exposed at a parent module with the same name point to it.
+            target_object = None
+            for module_name, qualname in sources:
+                if doc := context["all_modules"].get(module_name, {}).get(qualname):
+                    target_object = doc.obj
+                    break
 
-        # Look at the different modules where our target object may be exposed.
-        for module_name in module_candidates(identifier, mod.modulename):
-            module: pdoc.doc.Module | None = context["all_modules"].get(module_name)
-            if not module:
-                continue
+            # Look at the different modules where our target object may be exposed.
+            for module_name in module_candidates(identifier, mod.modulename):
+                module: pdoc.doc.Module | None = context["all_modules"].get(module_name)
+                if not module:
+                    continue
 
-            for _, qualname in sources:
-                doc = module.get(qualname)
-                # Check if they have an object with the same name,
-                # and verify that it's pointing to the right thing and is public.
-                if (
-                    doc
-                    and (target_object is doc.obj or target_object is None)
-                    and context["is_public"](doc).strip()
-                ):
-                    if shorten:
-                        if module == mod:
-                            url_text = qualname
+                for _, qualname in sources:
+                    doc = module.get(qualname)
+                    # Check if they have an object with the same name,
+                    # and verify that it's pointing to the right thing and is public.
+                    if (
+                        doc
+                        and (target_object is doc.obj or target_object is None)
+                        and context["is_public"](doc).strip()
+                    ):
+                        if shorten:
+                            if module == mod:
+                                url_text = qualname
+                            else:
+                                url_text = doc.fullname
+                            if plain_text.endswith("()"):
+                                url_text += "()"
                         else:
-                            url_text = doc.fullname
-                        if plain_text.endswith("()"):
-                            url_text += "()"
-                    else:
-                        url_text = plain_text
-                    return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}#{qualname}">{url_text}</a>'
+                            url_text = plain_text
+                        return f'<a href="{relative_link(context["module"].modulename, doc.modulename)}#{qualname}">{url_text}</a>'
+        except ValueError:
+            pass
+        for lib in context["link_library"]:
+            if fnmatch.fnmatch(plain_text, lib):
+                return f'<a href="{context["link_library"][lib]}">{plain_text}</a>'
+        if standard_link := get_stdlib_doc_link(plain_text):
+            return f'<a href="{standard_link}">{plain_text}</a>'
 
         # No matches found.
         return text
@@ -469,6 +477,11 @@ def link(context: Context, spec: tuple[str, str], text: str | None = None) -> Ma
         return Markup(
             f'<a href="{relative_link(context["module"].modulename, modulename)}{qualname}">{text or fullname}</a>'
         )
+    for lib in context["link_library"]:
+        if fnmatch.fnmatch(text, lib):
+            return Markup(f'<a href="{context["link_library"][lib]}">{text}</a>')
+    if standard_link := get_stdlib_doc_link(text):
+        return Markup(f'<a href="{standard_link}">{text}</a>')
     return Markup.escape(text or fullname)
 
 
@@ -572,3 +585,40 @@ class DefaultMacroExtension(ext.Extension):
             [],
         )
         return [m, if_stmt]
+
+
+def get_stdlib_doc_link(path: str) -> str | None:
+    """
+    If the object is from the standard library, return a hyperlink
+    to the official Python documentation (approximate).
+
+    Args:
+        path (str): e.g. 'math.sqrt' or 'datetime.datetime'
+
+    Returns:
+        str | None: URL to documentation or None if not valid/standard
+    """
+    try:
+        module_path, obj_name = path.rsplit('.', 1)
+        module = importlib.import_module(module_path)
+
+        # Check if it's a standard library module
+        module_file: str | None = getattr(module, '__file__', None)
+        if module_file is None:
+            if module_path in sys.builtin_module_names:
+                base_url = f"https://docs.python.org/3/library/{module_path}.html"
+                return f"{base_url}#{module_path}.{obj_name}"
+            else:
+                return None
+
+        stdlib_path = sysconfig.get_paths()['stdlib']
+        module_file = os.path.realpath(module_file)
+
+        if not module_file.startswith(os.path.realpath(stdlib_path)):
+            return None
+
+        base_module = module_path.split('.')[0]  # Top-level module name
+        base_url = f"https://docs.python.org/3/library/{base_module}.html"
+        return f"{base_url}#{module_path}.{obj_name}"
+    except Exception:
+        return None
