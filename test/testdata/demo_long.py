@@ -288,11 +288,12 @@ def admonitions():
     """
 
 
-class MötörCrüe():
+class MötörCrüe:
     "A fictional band with Unicode-characters in its name."
 
     def créer_naïveté():
         "A function with Unicode-characters in its name."
+
 
 def link_to_unicode():
     """The following link should be created properly:
