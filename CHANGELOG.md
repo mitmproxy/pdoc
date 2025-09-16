@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Fix linking of identifiers that contain unicode characters.
+  ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 
 ## 2025-06-04: pdoc 15.0.4
 
