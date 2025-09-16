@@ -99,4 +99,9 @@ This …
     >
     <function def embed_image(): ...  # This docstring inclu…>
     <function def admonitions(): ...  # pdoc also supports b…>
+    <class demo_long.MötörCrüe  # A fictional band wit…
+        <method def __init__(): ...>
+        <method def créer_naïveté(): ...  # A function with Unic…>
+    >
+    <function def link_to_unicode(): ...  # The following link s…>
 >
