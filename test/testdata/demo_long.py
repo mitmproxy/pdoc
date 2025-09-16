@@ -291,7 +291,7 @@ def admonitions():
 class MötörCrüe:
     "A fictional band with Unicode-characters in its name."
 
-    def créer_naïveté():
+    def créer_naïveté(self):
         "A function with Unicode-characters in its name."
 
 
