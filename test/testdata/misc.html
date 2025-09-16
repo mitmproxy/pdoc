@@ -305,6 +305,18 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="class" href="#MötörCrüe">MötörCrüe</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#MötörCrüe.créer_naïveté">créer_naïveté</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="function" href="#link_to_unicode">link_to_unicode</a>
+            </li>
     </ul>
 
 
@@ -799,49 +811,65 @@ misc    </h1>
 </span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;DataclassStructure raises for `inspect.signature`.&quot;&quot;&quot;</span>
 </span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>
 </span><span id="L-473"><a href="#L-473"><span class="linenos">473</span></a>
-</span><span id="L-474"><a href="#L-474"><span class="linenos">474</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>    <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
-</span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>    <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
-</span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>    <span class="s2">&quot;var_with_default_func&quot;</span><span class="p">,</span>
-</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>    <span class="s2">&quot;func_with_defaults&quot;</span><span class="p">,</span>
-</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>    <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
-</span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
-</span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a>    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
-</span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a>    <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
-</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>    <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
-</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a>    <span class="s2">&quot;_Private&quot;</span><span class="p">,</span>
-</span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a>    <span class="s2">&quot;LambdaAttr&quot;</span><span class="p">,</span>
-</span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
-</span><span id="L-487"><a href="#L-487"><span class="linenos">487</span></a>    <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a>    <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
-</span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>    <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
-</span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>    <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
-</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>    <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
-</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>    <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
-</span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>    <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
-</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a>    <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
-</span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>    <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
-</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a>    <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
-</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>    <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
-</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>    <span class="s2">&quot;Issue352a&quot;</span><span class="p">,</span>
-</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>    <span class="s2">&quot;Issue352b&quot;</span><span class="p">,</span>
-</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>    <span class="s2">&quot;CustomCall&quot;</span><span class="p">,</span>
-</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a>    <span class="s2">&quot;Headings&quot;</span><span class="p">,</span>
-</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a>    <span class="s2">&quot;repr_not_syntax_highlightable&quot;</span><span class="p">,</span>
-</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>    <span class="s2">&quot;ClassDecorator&quot;</span><span class="p">,</span>
-</span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>    <span class="s2">&quot;another_decorated_function&quot;</span><span class="p">,</span>
-</span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>    <span class="s2">&quot;SubclassRef&quot;</span><span class="p">,</span>
-</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>    <span class="s2">&quot;ClassAsAttribute&quot;</span><span class="p">,</span>
-</span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>    <span class="s2">&quot;scheduler&quot;</span><span class="p">,</span>
-</span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a>    <span class="s2">&quot;__init__&quot;</span><span class="p">,</span>
-</span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a>    <span class="s2">&quot;dynamically_modify_docstring1&quot;</span><span class="p">,</span>
-</span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a>    <span class="s2">&quot;dynamically_modify_docstring2&quot;</span><span class="p">,</span>
-</span><span id="L-511"><a href="#L-511"><span class="linenos">511</span></a>    <span class="s2">&quot;dynamically_modify_docstring3&quot;</span><span class="p">,</span>
-</span><span id="L-512"><a href="#L-512"><span class="linenos">512</span></a>    <span class="s2">&quot;dynamically_modify_docstring4&quot;</span><span class="p">,</span>
-</span><span id="L-513"><a href="#L-513"><span class="linenos">513</span></a>    <span class="s2">&quot;DocstringFromNew&quot;</span><span class="p">,</span>
-</span><span id="L-514"><a href="#L-514"><span class="linenos">514</span></a>    <span class="s2">&quot;SingleDispatchMethodExample&quot;</span><span class="p">,</span>
-</span><span id="L-515"><a href="#L-515"><span class="linenos">515</span></a>    <span class="s2">&quot;DataclassStructure&quot;</span><span class="p">,</span>
-</span><span id="L-516"><a href="#L-516"><span class="linenos">516</span></a><span class="p">]</span>
+</span><span id="L-474"><a href="#L-474"><span class="linenos">474</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MötörCrüe</span><span class="p">:</span>
+</span><span id="L-475"><a href="#L-475"><span class="linenos">475</span></a>    <span class="s2">&quot;A fictional band with Unicode-characters in its name.&quot;</span>
+</span><span id="L-476"><a href="#L-476"><span class="linenos">476</span></a>
+</span><span id="L-477"><a href="#L-477"><span class="linenos">477</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">créer_naïveté</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-478"><a href="#L-478"><span class="linenos">478</span></a>        <span class="s2">&quot;A function with Unicode-characters in its name.&quot;</span>
+</span><span id="L-479"><a href="#L-479"><span class="linenos">479</span></a>
+</span><span id="L-480"><a href="#L-480"><span class="linenos">480</span></a>
+</span><span id="L-481"><a href="#L-481"><span class="linenos">481</span></a><span class="k">def</span><span class="w"> </span><span class="nf">link_to_unicode</span><span class="p">():</span>
+</span><span id="L-482"><a href="#L-482"><span class="linenos">482</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The following link should be created properly:</span>
+</span><span id="L-483"><a href="#L-483"><span class="linenos">483</span></a>
+</span><span id="L-484"><a href="#L-484"><span class="linenos">484</span></a><span class="sd">    - `MötörCrüe.créer_naïveté`</span>
+</span><span id="L-485"><a href="#L-485"><span class="linenos">485</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-486"><a href="#L-486"><span class="linenos">486</span></a>
+</span><span id="L-487"><a href="#L-487"><span class="linenos">487</span></a>
+</span><span id="L-488"><a href="#L-488"><span class="linenos">488</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-489"><a href="#L-489"><span class="linenos">489</span></a>    <span class="s2">&quot;Issue226&quot;</span><span class="p">,</span>
+</span><span id="L-490"><a href="#L-490"><span class="linenos">490</span></a>    <span class="s2">&quot;var_with_default_obj&quot;</span><span class="p">,</span>
+</span><span id="L-491"><a href="#L-491"><span class="linenos">491</span></a>    <span class="s2">&quot;var_with_default_func&quot;</span><span class="p">,</span>
+</span><span id="L-492"><a href="#L-492"><span class="linenos">492</span></a>    <span class="s2">&quot;func_with_defaults&quot;</span><span class="p">,</span>
+</span><span id="L-493"><a href="#L-493"><span class="linenos">493</span></a>    <span class="s2">&quot;ClassmethodLink&quot;</span><span class="p">,</span>
+</span><span id="L-494"><a href="#L-494"><span class="linenos">494</span></a>    <span class="s2">&quot;GenericParent&quot;</span><span class="p">,</span>
+</span><span id="L-495"><a href="#L-495"><span class="linenos">495</span></a>    <span class="s2">&quot;NonGenericChild&quot;</span><span class="p">,</span>
+</span><span id="L-496"><a href="#L-496"><span class="linenos">496</span></a>    <span class="s2">&quot;Child&quot;</span><span class="p">,</span>
+</span><span id="L-497"><a href="#L-497"><span class="linenos">497</span></a>    <span class="s2">&quot;only_annotated&quot;</span><span class="p">,</span>
+</span><span id="L-498"><a href="#L-498"><span class="linenos">498</span></a>    <span class="s2">&quot;_Private&quot;</span><span class="p">,</span>
+</span><span id="L-499"><a href="#L-499"><span class="linenos">499</span></a>    <span class="s2">&quot;LambdaAttr&quot;</span><span class="p">,</span>
+</span><span id="L-500"><a href="#L-500"><span class="linenos">500</span></a>    <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+</span><span id="L-501"><a href="#L-501"><span class="linenos">501</span></a>    <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+</span><span id="L-502"><a href="#L-502"><span class="linenos">502</span></a>    <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+</span><span id="L-503"><a href="#L-503"><span class="linenos">503</span></a>    <span class="s2">&quot;qux&quot;</span><span class="p">,</span>
+</span><span id="L-504"><a href="#L-504"><span class="linenos">504</span></a>    <span class="s2">&quot;Indented&quot;</span><span class="p">,</span>
+</span><span id="L-505"><a href="#L-505"><span class="linenos">505</span></a>    <span class="s2">&quot;fun_with_protected_decorator&quot;</span><span class="p">,</span>
+</span><span id="L-506"><a href="#L-506"><span class="linenos">506</span></a>    <span class="s2">&quot;unhashable&quot;</span><span class="p">,</span>
+</span><span id="L-507"><a href="#L-507"><span class="linenos">507</span></a>    <span class="s2">&quot;AbstractClass&quot;</span><span class="p">,</span>
+</span><span id="L-508"><a href="#L-508"><span class="linenos">508</span></a>    <span class="s2">&quot;add_four&quot;</span><span class="p">,</span>
+</span><span id="L-509"><a href="#L-509"><span class="linenos">509</span></a>    <span class="s2">&quot;add_five&quot;</span><span class="p">,</span>
+</span><span id="L-510"><a href="#L-510"><span class="linenos">510</span></a>    <span class="s2">&quot;add_six&quot;</span><span class="p">,</span>
+</span><span id="L-511"><a href="#L-511"><span class="linenos">511</span></a>    <span class="s2">&quot;linkify_links&quot;</span><span class="p">,</span>
+</span><span id="L-512"><a href="#L-512"><span class="linenos">512</span></a>    <span class="s2">&quot;Issue352a&quot;</span><span class="p">,</span>
+</span><span id="L-513"><a href="#L-513"><span class="linenos">513</span></a>    <span class="s2">&quot;Issue352b&quot;</span><span class="p">,</span>
+</span><span id="L-514"><a href="#L-514"><span class="linenos">514</span></a>    <span class="s2">&quot;CustomCall&quot;</span><span class="p">,</span>
+</span><span id="L-515"><a href="#L-515"><span class="linenos">515</span></a>    <span class="s2">&quot;Headings&quot;</span><span class="p">,</span>
+</span><span id="L-516"><a href="#L-516"><span class="linenos">516</span></a>    <span class="s2">&quot;repr_not_syntax_highlightable&quot;</span><span class="p">,</span>
+</span><span id="L-517"><a href="#L-517"><span class="linenos">517</span></a>    <span class="s2">&quot;ClassDecorator&quot;</span><span class="p">,</span>
+</span><span id="L-518"><a href="#L-518"><span class="linenos">518</span></a>    <span class="s2">&quot;another_decorated_function&quot;</span><span class="p">,</span>
+</span><span id="L-519"><a href="#L-519"><span class="linenos">519</span></a>    <span class="s2">&quot;SubclassRef&quot;</span><span class="p">,</span>
+</span><span id="L-520"><a href="#L-520"><span class="linenos">520</span></a>    <span class="s2">&quot;ClassAsAttribute&quot;</span><span class="p">,</span>
+</span><span id="L-521"><a href="#L-521"><span class="linenos">521</span></a>    <span class="s2">&quot;scheduler&quot;</span><span class="p">,</span>
+</span><span id="L-522"><a href="#L-522"><span class="linenos">522</span></a>    <span class="s2">&quot;__init__&quot;</span><span class="p">,</span>
+</span><span id="L-523"><a href="#L-523"><span class="linenos">523</span></a>    <span class="s2">&quot;dynamically_modify_docstring1&quot;</span><span class="p">,</span>
+</span><span id="L-524"><a href="#L-524"><span class="linenos">524</span></a>    <span class="s2">&quot;dynamically_modify_docstring2&quot;</span><span class="p">,</span>
+</span><span id="L-525"><a href="#L-525"><span class="linenos">525</span></a>    <span class="s2">&quot;dynamically_modify_docstring3&quot;</span><span class="p">,</span>
+</span><span id="L-526"><a href="#L-526"><span class="linenos">526</span></a>    <span class="s2">&quot;dynamically_modify_docstring4&quot;</span><span class="p">,</span>
+</span><span id="L-527"><a href="#L-527"><span class="linenos">527</span></a>    <span class="s2">&quot;DocstringFromNew&quot;</span><span class="p">,</span>
+</span><span id="L-528"><a href="#L-528"><span class="linenos">528</span></a>    <span class="s2">&quot;SingleDispatchMethodExample&quot;</span><span class="p">,</span>
+</span><span id="L-529"><a href="#L-529"><span class="linenos">529</span></a>    <span class="s2">&quot;DataclassStructure&quot;</span><span class="p">,</span>
+</span><span id="L-530"><a href="#L-530"><span class="linenos">530</span></a>    <span class="s2">&quot;MötörCrüe&quot;</span><span class="p">,</span>
+</span><span id="L-531"><a href="#L-531"><span class="linenos">531</span></a>    <span class="s2">&quot;link_to_unicode&quot;</span><span class="p">,</span>
+</span><span id="L-532"><a href="#L-532"><span class="linenos">532</span></a><span class="p">]</span>
 </span></pre></div>
 
 
@@ -2545,6 +2573,79 @@ indents</p>
 
 
             <div class="docstring"><p>DataclassStructure raises for <code>inspect.signature</code>.</p>
+</div>
+
+
+                </section>
+                <section id="MötörCrüe">
+                            <input id="MötörCrüe-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">MötörCrüe</span>:
+
+                <label class="view-source-button" for="MötörCrüe-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MötörCrüe"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MötörCrüe-475"><a href="#MötörCrüe-475"><span class="linenos">475</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MötörCrüe</span><span class="p">:</span>
+</span><span id="MötörCrüe-476"><a href="#MötörCrüe-476"><span class="linenos">476</span></a>    <span class="s2">&quot;A fictional band with Unicode-characters in its name.&quot;</span>
+</span><span id="MötörCrüe-477"><a href="#MötörCrüe-477"><span class="linenos">477</span></a>
+</span><span id="MötörCrüe-478"><a href="#MötörCrüe-478"><span class="linenos">478</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">créer_naïveté</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="MötörCrüe-479"><a href="#MötörCrüe-479"><span class="linenos">479</span></a>        <span class="s2">&quot;A function with Unicode-characters in its name.&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A fictional band with Unicode-characters in its name.</p>
+</div>
+
+
+                            <div id="MötörCrüe.créer_naïveté" class="classattr">
+                                        <input id="MötörCrüe.créer_naïveté-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">créer_naïveté</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="MötörCrüe.créer_naïveté-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MötörCrüe.créer_naïveté"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MötörCrüe.créer_naïveté-478"><a href="#MötörCrüe.créer_naïveté-478"><span class="linenos">478</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">créer_naïveté</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="MötörCrüe.créer_naïveté-479"><a href="#MötörCrüe.créer_naïveté-479"><span class="linenos">479</span></a>        <span class="s2">&quot;A function with Unicode-characters in its name.&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>A function with Unicode-characters in its name.</p>
+</div>
+
+
+                            </div>
+                </section>
+                <section id="link_to_unicode">
+                            <input id="link_to_unicode-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">link_to_unicode</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="link_to_unicode-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#link_to_unicode"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="link_to_unicode-482"><a href="#link_to_unicode-482"><span class="linenos">482</span></a><span class="k">def</span><span class="w"> </span><span class="nf">link_to_unicode</span><span class="p">():</span>
+</span><span id="link_to_unicode-483"><a href="#link_to_unicode-483"><span class="linenos">483</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The following link should be created properly:</span>
+</span><span id="link_to_unicode-484"><a href="#link_to_unicode-484"><span class="linenos">484</span></a>
+</span><span id="link_to_unicode-485"><a href="#link_to_unicode-485"><span class="linenos">485</span></a><span class="sd">    - `MötörCrüe.créer_naïveté`</span>
+</span><span id="link_to_unicode-486"><a href="#link_to_unicode-486"><span class="linenos">486</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>The following link should be created properly:</p>
+
+<ul>
+<li><code><a href="#MötörCrüe.créer_naïveté">MötörCrüe.créer_naïveté</a></code></li>
+</ul>
 </div>
 
 

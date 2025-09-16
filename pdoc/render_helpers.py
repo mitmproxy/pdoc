@@ -408,7 +408,7 @@ def linkify(
             # First part of the identifier (e.g. "foo") - this is optional for relative references.
             (?:
                 \b
-                (?!\d)[a-zA-Z0-9_]+
+                (?!\d)\w+
                 |
                 \.*  # We may also start with multiple dots.
             )
@@ -416,7 +416,7 @@ def linkify(
             (?:
                 # A single dot or a dot surrounded with pygments highlighting.
                 (?:\.|</span><span\ class="o">\.</span><span\ class="n">)
-                (?!\d)[a-zA-Z0-9_]+
+                (?!\d)\w+
             )+
             (?:\(\)|\b(?!\(\)))  # we either end on () or on a word boundary.
             (?!</a>)  # not an existing link
@@ -424,7 +424,7 @@ def linkify(
 
             | # Part 2: `foo` or `foo()`. `foo.bar` is already covered with part 1.
             (?<=<code>)
-                 (?!\d)[a-zA-Z0-9_]+
+                 (?!\d)\w+
             (?:\(\))?
             (?=</code>(?!</a>))
             """,
