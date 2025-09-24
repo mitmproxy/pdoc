@@ -72,6 +72,17 @@ renderopts.add_argument(
     "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
 )
 renderopts.add_argument(
+    "-l",
+    "--link-library",
+    action="append",
+    type=str,
+    default=[],
+    metavar="module=url",
+    help="A mapping between module names and URL prefixes, used to link modules to external documentation. "
+    "May be passed multiple times. "
+    "Example: pdoc=https://pdoc.dev/docs/pdoc.html",
+)
+renderopts.add_argument(
     "--favicon",
     type=str,
     metavar="URL",
@@ -185,6 +196,7 @@ def cli(args: list[str] | None = None) -> None:
         edit_url_map=dict(x.split("=", 1) for x in opts.edit_url),
         favicon=opts.favicon,
         footer_text=opts.footer_text,
+        link_library=dict(x.split("=", 1) for x in opts.link_library),
         logo=opts.logo,
         logo_link=opts.logo_link,
         math=opts.math,
