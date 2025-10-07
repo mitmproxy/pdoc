@@ -471,6 +471,20 @@ class DataclassStructure(Structure):
     """DataclassStructure raises for `inspect.signature`."""
 
 
+class MötörCrüe:
+    "A fictional band with Unicode-characters in its name."
+
+    def créer_naïveté(self):
+        "A function with Unicode-characters in its name."
+
+
+def link_to_unicode():
+    """The following link should be created properly:
+
+    - `MötörCrüe.créer_naïveté`
+    """
+
+
 __all__ = [
     "Issue226",
     "var_with_default_obj",
@@ -513,4 +527,6 @@ __all__ = [
     "DocstringFromNew",
     "SingleDispatchMethodExample",
     "DataclassStructure",
+    "MötörCrüe",
+    "link_to_unicode",
 ]

@@ -130,4 +130,9 @@
     <@dataclass(init=False) class misc.DataclassStructure  # DataclassStructure r…
         <method def __init__(self, /, *args, **kwargs): ...  # inherited from _ctypes.Structure.__init__>
     >
+    <class misc.MötörCrüe  # A fictional band wit…
+        <method def __init__(): ...>
+        <method def créer_naïveté(self): ...  # A function with Unic…>
+    >
+    <function def link_to_unicode(): ...  # The following link s…>
 >
