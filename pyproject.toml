@@ -64,12 +64,6 @@ version = {attr = "pdoc.__version__"}
 [tool.setuptools.packages.find]
 include = ["pdoc*"]
 
-[tool.coverage.run]
-branch = false
-omit = [
-    "pdoc/markdown2/*",
-]
-
 # continue exclude: https://github.com/nedbat/coveragepy/issues/198
 [tool.coverage.report]
 show_missing = true
@@ -95,6 +89,10 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "demopackage2"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "markdown2"
 ignore_missing_imports = true
 
 [tool.ruff]
