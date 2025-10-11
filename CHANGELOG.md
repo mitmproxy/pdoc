@@ -8,6 +8,7 @@
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 - Add support for Pydantic-style field docstrings,
   e.g. `pydantic.Field(description="...")`
+  ([#802](https://github.com/mitmproxy/pdoc/pull/802), @jinnovation)
 
 ## 2025-06-04: pdoc 15.0.4
 
