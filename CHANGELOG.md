@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- pdoc has a new logo. 🐍
 - Fix linking of identifiers that contain unicode characters.
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 - Replace vendored version of `markdown2` with the [official
