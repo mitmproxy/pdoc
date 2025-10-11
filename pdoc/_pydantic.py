@@ -1,16 +1,16 @@
 """Work with Pydantic models."""
 
-_PYDANTIC_ENABLED: bool
+import importlib
+from typing import Final
 
-try:  # pragma: no cover
+_PYDANTIC_ENABLED: Final[bool] = importlib.util.find_spec("pydantic") is not None
+"""True when pydantic is found on the PYTHONPATH."""
+
+if _PYDANTIC_ENABLED:
     import pydantic
-except ImportError:  # pragma: no cover
-    _PYDANTIC_ENABLED = False
-finally:  # pragma: no cover
-    _PYDANTIC_ENABLED = True
 
-
-_IGNORED_FIELDS = ["__fields__"]
+_IGNORED_FIELDS: Final[list[str]] = ["__fields__"]
+"""Fields to ignore when generating docs, e.g. those that emit deprecation warnings."""
 
 
 def default_value(parent, name, obj):

@@ -58,15 +58,6 @@ from pdoc.doc_types import empty
 from pdoc.doc_types import resolve_annotations
 from pdoc.doc_types import safe_eval_type
 
-_PYDANTIC_ENABLED: bool
-
-try:  # pragma: no cover
-    import pydantic
-except ImportError:  # pragma: no cover
-    _PYDANTIC_ENABLED = False
-finally:  # pragma: no cover
-    _PYDANTIC_ENABLED = True
-
 
 def _include_fullname_in_traceback(f):
     """
