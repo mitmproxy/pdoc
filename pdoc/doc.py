@@ -44,6 +44,7 @@ from typing import Union
 from typing import get_origin
 import warnings
 
+from pdoc import _pydantic
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
@@ -56,8 +57,6 @@ from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty
 from pdoc.doc_types import resolve_annotations
 from pdoc.doc_types import safe_eval_type
-
-from pdoc import _pydantic
 
 _PYDANTIC_ENABLED: bool
 
