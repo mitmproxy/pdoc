@@ -1,6 +1,6 @@
 """Work with Pydantic models."""
 
-import importlib
+import importlib.util
 from typing import Final
 
 _PYDANTIC_ENABLED: Final[bool] = importlib.util.find_spec("pydantic") is not None
