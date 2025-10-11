@@ -259,6 +259,9 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
 
+            # For Pydantic models, filter out all methods on the BaseModel
+            # class, as they are almost never relevant to the consumers of the
+            # inheriting model itself.
             if (
                 _pydantic._PYDANTIC_ENABLED
                 and self.kind == "class"
