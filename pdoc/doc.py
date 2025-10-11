@@ -256,11 +256,15 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         """
         members: dict[str, Doc] = {}
         for name, obj in self._member_objects.items():
-            if _pydantic._PYDANTIC_ENABLED and name in _pydantic._IGNORED_FIELDS:
-                continue
-
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
+
+            if _pydantic._PYDANTIC_ENABLED and (
+                name in _pydantic._IGNORED_FIELDS
+                or taken_from[0].startswith("pydantic")
+            ):
+                continue
+
             doc: Doc[Any]
 
             is_classmethod = isinstance(obj, classmethod)
