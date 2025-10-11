@@ -44,6 +44,7 @@ from typing import Union
 from typing import get_origin
 import warnings
 
+from pdoc import _pydantic
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
@@ -257,6 +258,21 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         for name, obj in self._member_objects.items():
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
+
+            # For Pydantic models, filter out all methods on the BaseModel
+            # class, as they are almost never relevant to the consumers of the
+            # inheriting model itself.
+            if (
+                _pydantic._PYDANTIC_ENABLED
+                and self.kind == "class"
+                and _pydantic.is_pydantic_model(self.obj)
+                and (
+                    name in _pydantic._IGNORED_FIELDS
+                    or taken_from[0].startswith("pydantic")
+                )
+            ):
+                continue
+
             doc: Doc[Any]
 
             is_classmethod = isinstance(obj, classmethod)
@@ -314,12 +330,17 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
             else:
+                default_value = obj
+
+                if _pydantic._PYDANTIC_ENABLED:
+                    default_value = _pydantic.default_value(self.obj, name, obj)
+
                 doc = Variable(
                     self.modulename,
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=obj,
+                    default_value=default_value,
                     taken_from=taken_from,
                 )
             if self._var_docstrings.get(name):
