@@ -24,9 +24,9 @@ except ImportError:  # pragma: no cover
     from jinja2 import contextfilter as pass_context  # type: ignore
 
 from jinja2.runtime import Context
+import markdown2
 from markupsafe import Markup
 
-import markdown2
 import pdoc
 
 from . import docstrings
