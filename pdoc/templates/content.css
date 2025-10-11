@@ -445,9 +445,9 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
 
 .pdoc .attribution img {
     margin-left: 5px;
-    height: 35px;
-    vertical-align: middle;
-    width: 70px;
+    height: 27px;
+    vertical-align: bottom;
+    width: 50px;
     transition: all 200ms;
 }
 
