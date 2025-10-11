@@ -6,6 +6,8 @@
 
 - Fix linking of identifiers that contain unicode characters.
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
+- Replace vendored version of `markdown2` with the [official
+  upstream](https://github.com/trentm/python-markdown2)
 - Add support for Pydantic-style field docstrings,
   e.g. `pydantic.Field(description="...")`
   ([#802](https://github.com/mitmproxy/pdoc/pull/802), @jinnovation)

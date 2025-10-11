@@ -24,9 +24,10 @@ except ImportError:  # pragma: no cover
     from jinja2 import contextfilter as pass_context  # type: ignore
 
 from jinja2.runtime import Context
+import markdown2
 from markupsafe import Markup
 
-import pdoc.markdown2
+import pdoc
 
 from . import docstrings
 
@@ -175,7 +176,7 @@ def to_html(docstring: str) -> str:
     # careful: markdown2 returns a subclass of str with an extra
     # .toc_html attribute. don't further process the result,
     # otherwise this attribute will be lost.
-    return pdoc.markdown2.markdown(  # type: ignore
+    return markdown2.markdown(  # type: ignore
         docstring,
         extras=markdown_extensions,
         link_patterns=markdown_link_patterns,
