@@ -1,0 +1,2 @@
+test/testdata/*.html linguist-generated=true
+test/testdata/*.txt linguist-generated=true
