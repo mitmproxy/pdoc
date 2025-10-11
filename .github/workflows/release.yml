@@ -20,10 +20,11 @@ jobs:
     environment: deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         token: ${{ secrets.GH_PUSH_TOKEN }}  # this token works to push to the protected main branch.
-    - uses: mhils/releasetool@v1
+        persist-credentials: true
+    - uses: mhils/releasetool@ba705fb9672350ee29b1359bbf5710c16672cd41
     - run: ./.github/release
       env:
         PROJECT_VERSION: ${{ inputs.version }}
