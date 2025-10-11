@@ -13,6 +13,10 @@ _IGNORED_FIELDS: Final[list[str]] = ["__fields__"]
 """Fields to ignore when generating docs, e.g. those that emit deprecation warnings."""
 
 
+def is_pydantic_model(obj):
+    return pydantic.BaseModel in obj.__bases__
+
+
 def default_value(parent, name, obj):
     if (
         _PYDANTIC_ENABLED
