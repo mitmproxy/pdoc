@@ -1,26 +1,35 @@
 """Work with Pydantic models."""
 
-import importlib.util
 from typing import Any
 from typing import Final
+from typing import TypeVar
 
-_PYDANTIC_ENABLED: Final[bool] = importlib.util.find_spec("pydantic") is not None
-"""True when pydantic is found on the PYTHONPATH."""
+from pdoc.docstrings import AnyException
 
-if _PYDANTIC_ENABLED:
+try:
     import pydantic
+except AnyException:
+    pydantic = None
 
 _IGNORED_FIELDS: Final[list[str]] = ["__fields__"]
 """Fields to ignore when generating docs, e.g. those that emit deprecation warnings."""
 
+T = TypeVar("T")
 
-def is_pydantic_model(obj):
+
+def is_pydantic_model(obj) -> bool:
     return pydantic.BaseModel in obj.__bases__
 
 
-def default_value(parent, name, obj):
+def default_value(parent, name: str, obj: T) -> T:
+    """Determine the default value of obj.
+
+    If pydantic is not installed or the parent type is not a Pydantic model,
+    simply returns obj.
+
+    """
     if (
-        _PYDANTIC_ENABLED
+        pydantic is not None
         and isinstance(parent, type)
         and issubclass(parent, pydantic.BaseModel)
     ):
@@ -30,9 +39,9 @@ def default_value(parent, name, obj):
     return obj
 
 
-def get_field_docstring(parent, field_name) -> str | None:
+def get_field_docstring(parent, field_name: str) -> str | None:
     if (
-        _PYDANTIC_ENABLED
+        pydantic is not None
         and isinstance(parent, type)
         and issubclass(parent, pydantic.BaseModel)
     ):
@@ -59,7 +68,7 @@ def skip_field(
     """
 
     return (
-        _PYDANTIC_ENABLED
+        pydantic is not None
         and parent_kind == "class"
         and is_pydantic_model(parent_obj)
         and (name in _IGNORED_FIELDS or taken_from[0].startswith("pydantic"))

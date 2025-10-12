@@ -326,8 +326,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             else:
                 default_value = obj
 
-                if _pydantic._PYDANTIC_ENABLED:
-                    default_value = _pydantic.default_value(self.obj, name, obj)
+                default_value = _pydantic.default_value(self.obj, name, obj)
 
                 doc = Variable(
                     self.modulename,
@@ -340,7 +339,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
 
             _docstring: str | None = None
             if (
-                _pydantic._PYDANTIC_ENABLED
+                _pydantic.pydantic is not None
                 and self.kind == "class"
                 and _pydantic.is_pydantic_model(self.obj)
             ):
