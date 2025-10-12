@@ -260,7 +260,7 @@ pdoc only interprets a subset of the reStructuredText specification.
 Adding additional syntax elements is usually easy. If you feel that pdoc doesn't parse a docstring element properly,
 please amend `pdoc.docstrings` and send us a pull request!
 
-## ...document Pydantic model fields?
+## ...document Pydantic models?
 
 For [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/), pdoc
 will extract [field](https://docs.pydantic.dev/latest/concepts/fields/)
