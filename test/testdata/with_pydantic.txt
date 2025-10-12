@@ -1,7 +1,7 @@
 <module with_pydantic  # A small example with…
     <class with_pydantic.Foo  # Foo class documentat…
-        <var a: int = 1>
+        <var model_config = {'use_attribute_docstrings': True}>
+        <var a: int = 1  # Docstring for a>
         <var b: int = 2  # Docstring for b.>
-        <var model_config: ClassVar[pydantic.config.ConfigDict] = {}  # Configuration for th…>
     >
 >

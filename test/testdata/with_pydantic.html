@@ -27,13 +27,13 @@
                     <a class="class" href="#Foo">Foo</a>
                             <ul class="memberlist">
                         <li>
+                                <a class="variable" href="#Foo.model_config">model_config</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#Foo.a">a</a>
                         </li>
                         <li>
                                 <a class="variable" href="#Foo.b">b</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#Foo.model_config">model_config</a>
                         </li>
                 </ul>
 
@@ -71,10 +71,15 @@ with_pydantic    </h1>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Foo class documentation.&quot;&quot;&quot;</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Docstring for a&quot;</span><span class="p">)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for b.&quot;&quot;&quot;</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">ConfigDict</span><span class="p">(</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>        <span class="n">use_attribute_docstrings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="p">)</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;@private&quot;&quot;&quot;</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Docstring for a&quot;</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for b.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -93,10 +98,15 @@ with_pydantic    </h1>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-9"><a href="#Foo-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="Foo-10"><a href="#Foo-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Foo class documentation.&quot;&quot;&quot;</span>
 </span><span id="Foo-11"><a href="#Foo-11"><span class="linenos">11</span></a>
-</span><span id="Foo-12"><a href="#Foo-12"><span class="linenos">12</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Docstring for a&quot;</span><span class="p">)</span>
-</span><span id="Foo-13"><a href="#Foo-13"><span class="linenos">13</span></a>
-</span><span id="Foo-14"><a href="#Foo-14"><span class="linenos">14</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="Foo-15"><a href="#Foo-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for b.&quot;&quot;&quot;</span>
+</span><span id="Foo-12"><a href="#Foo-12"><span class="linenos">12</span></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">ConfigDict</span><span class="p">(</span>
+</span><span id="Foo-13"><a href="#Foo-13"><span class="linenos">13</span></a>        <span class="n">use_attribute_docstrings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="Foo-14"><a href="#Foo-14"><span class="linenos">14</span></a>    <span class="p">)</span>
+</span><span id="Foo-15"><a href="#Foo-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;@private&quot;&quot;&quot;</span>
+</span><span id="Foo-16"><a href="#Foo-16"><span class="linenos">16</span></a>
+</span><span id="Foo-17"><a href="#Foo-17"><span class="linenos">17</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Docstring for a&quot;</span><span class="p">)</span>
+</span><span id="Foo-18"><a href="#Foo-18"><span class="linenos">18</span></a>
+</span><span id="Foo-19"><a href="#Foo-19"><span class="linenos">19</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="Foo-20"><a href="#Foo-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Docstring for b.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -104,6 +114,18 @@ with_pydantic    </h1>
 </div>
 
 
+                            <div id="Foo.model_config" class="classattr">
+                                <div class="attr variable">
+            <span class="name">model_config</span>        =
+<span class="default_value">{&#39;use_attribute_docstrings&#39;: True}</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Foo.model_config"></a>
+    
+    
+
+                            </div>
                             <div id="Foo.a" class="classattr">
                                 <div class="attr variable">
             <span class="name">a</span><span class="annotation">: int</span>        =
@@ -113,7 +135,9 @@ with_pydantic    </h1>
     </div>
     <a class="headerlink" href="#Foo.a"></a>
     
-    
+            <div class="docstring"><p>Docstring for a</p>
+</div>
+
 
                             </div>
                             <div id="Foo.b" class="classattr">
@@ -126,20 +150,6 @@ with_pydantic    </h1>
     <a class="headerlink" href="#Foo.b"></a>
     
             <div class="docstring"><p>Docstring for b.</p>
-</div>
-
-
-                            </div>
-                            <div id="Foo.model_config" class="classattr">
-                                <div class="attr variable">
-            <span class="name">model_config</span><span class="annotation">: ClassVar[pydantic.config.ConfigDict]</span>        =
-<span class="default_value">{}</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Foo.model_config"></a>
-    
-            <div class="docstring"><p>Configuration for the model, should be a dictionary conforming to [<code>ConfigDict</code>][pydantic.config.ConfigDict].</p>
 </div>
 
 

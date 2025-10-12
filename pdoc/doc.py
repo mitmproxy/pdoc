@@ -343,10 +343,19 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     default_value=default_value,
                     taken_from=taken_from,
                 )
-            if self._var_docstrings.get(name):
-                doc.docstring = self._var_docstrings[name]
-            if self._func_docstrings.get(name) and not doc.docstring:
-                doc.docstring = self._func_docstrings[name]
+
+            if (
+                _pydantic._PYDANTIC_ENABLED
+                and self.kind == "class"
+                and _pydantic.is_pydantic_model(self.obj)
+            ):
+                doc.docstring = _pydantic.get_field_docstring(self.obj, name)
+            else:
+                if self._var_docstrings.get(name):
+                    doc.docstring = self._var_docstrings[name]
+                if self._func_docstrings.get(name) and not doc.docstring:
+                    doc.docstring = self._func_docstrings[name]
+
             members[doc.name] = doc
 
         if isinstance(self, Module):

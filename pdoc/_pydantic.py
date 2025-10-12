@@ -27,3 +27,19 @@ def default_value(parent, name, obj):
         return pydantic_fields[name].default if name in pydantic_fields else obj
 
     return obj
+
+
+def get_field_docstring(parent, field_name) -> str:
+    if (
+        _PYDANTIC_ENABLED
+        and isinstance(parent, type)
+        and issubclass(parent, pydantic.BaseModel)
+    ):
+        pydantic_fields = parent.__pydantic_fields__
+        return (
+            pydantic_fields[field_name].description
+            if field_name in pydantic_fields
+            else ""
+        )
+
+    return ""
