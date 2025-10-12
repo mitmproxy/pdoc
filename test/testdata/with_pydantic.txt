@@ -1,6 +1,6 @@
 <module with_pydantic  # A small example with…
     <class with_pydantic.Foo  # Foo class documentat…
-        <var model_config = {'use_attribute_docstrings': True}>
+        <var model_config = {'use_attribute_docstrings': True}  # Configuration for th…>
         <var a: int = 1  # Docstring for a>
         <var b: int = 2  # Docstring for b.>
     >

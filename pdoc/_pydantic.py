@@ -30,7 +30,7 @@ def default_value(parent, name, obj):
     return obj
 
 
-def get_field_docstring(parent, field_name) -> str:
+def get_field_docstring(parent, field_name) -> str | None:
     if (
         _PYDANTIC_ENABLED
         and isinstance(parent, type)
@@ -40,10 +40,10 @@ def get_field_docstring(parent, field_name) -> str:
         return (
             pydantic_fields[field_name].description
             if field_name in pydantic_fields
-            else ""
+            else None
         )
 
-    return ""
+    return None
 
 
 def skip_field(
