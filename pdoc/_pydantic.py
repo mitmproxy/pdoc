@@ -1,7 +1,7 @@
 """Work with Pydantic models."""
 
 import importlib.util
-from typing import Final
+from typing import Any, Final
 
 _PYDANTIC_ENABLED: Final[bool] = importlib.util.find_spec("pydantic") is not None
 """True when pydantic is found on the PYTHONPATH."""
@@ -43,3 +43,23 @@ def get_field_docstring(parent, field_name) -> str:
         )
 
     return ""
+
+
+def skip_field(
+    *,
+    parent_kind: str,
+    parent_obj: Any,
+    name: str,
+    taken_from: tuple[str, str],
+) -> bool:
+    """For Pydantic models, filter out all methods on the BaseModel
+    class, as they are almost never relevant to the consumers of the
+    inheriting model itself.
+    """
+
+    return (
+        _PYDANTIC_ENABLED
+        and parent_kind == "class"
+        and is_pydantic_model(parent_obj)
+        and (name in _IGNORED_FIELDS or taken_from[0].startswith("pydantic"))
+    )
