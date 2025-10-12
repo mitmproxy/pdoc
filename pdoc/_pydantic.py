@@ -27,7 +27,7 @@ _IGNORED_FIELDS: Final[list[str]] = ["__fields__"]
 T = TypeVar("T")
 
 
-def is_pydantic_model(obj) -> bool:
+def is_pydantic_model(obj: Any) -> bool:
     """Returns whether an object is a Pydantic model.
 
     Raises:
@@ -42,7 +42,7 @@ def is_pydantic_model(obj) -> bool:
     return pydantic.BaseModel in obj.__bases__
 
 
-def default_value(parent, name: str, obj: T) -> T:
+def default_value(parent: Any, name: str, obj: T) -> T:
     """Determine the default value of obj.
 
     If pydantic is not installed or the parent type is not a Pydantic model,
@@ -61,7 +61,7 @@ def default_value(parent, name: str, obj: T) -> T:
     return obj
 
 
-def get_field_docstring(parent, field_name: str) -> Optional[str]:
+def get_field_docstring(parent: Any, field_name: str) -> Optional[str]:
     if (
         pydantic is not None
         and isinstance(parent, type)
