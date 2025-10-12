@@ -5,6 +5,7 @@ from types import ModuleType
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
+from typing import Optional
 from typing import TypeVar
 from typing import cast
 
@@ -13,7 +14,7 @@ from pdoc.docstrings import AnyException
 if TYPE_CHECKING:
     import pydantic
 else:
-    pydantic: ModuleType | None
+    pydantic: Optional[ModuleType]
     try:
         pydantic = import_module("pydantic")
     except AnyException:
@@ -60,7 +61,7 @@ def default_value(parent, name: str, obj: T) -> T:
     return obj
 
 
-def get_field_docstring(parent, field_name: str) -> str | None:
+def get_field_docstring(parent, field_name: str) -> Optional[str]:
     if (
         pydantic is not None
         and isinstance(parent, type)
