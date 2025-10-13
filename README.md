@@ -49,7 +49,7 @@ pdoc's main feature is a focus on simplicity: pdoc aims to do one thing and do i
 * Understands numpydoc and Google-style docstrings.
 * Standalone HTML output without additional dependencies.
   
-Under the hood...
+Under the hood... 
 
 * `pdoc` will automatically link identifiers in your docstrings to their corresponding documentation.
 * `pdoc` respects your `__all__` variable when present.
