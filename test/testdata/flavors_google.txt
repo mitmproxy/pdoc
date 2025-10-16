@@ -44,4 +44,5 @@
     <function def example_code(): ...  # Test case for https:…>
     <function def newline_after_args(test: str): ...  # Test case for https:…>
     <function def alternative_section_names(test: str): ...  # In this example, we …>
+    <function def keyword_arguments(**kwargs): ...  # This an example for …>
 >
