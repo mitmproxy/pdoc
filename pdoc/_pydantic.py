@@ -21,9 +21,14 @@ else:  # pragma: no cover
         pydantic = None
 
 
-_IGNORED_FIELDS: Final[list[str]] = [
-    "__fields__",
-] + list(pydantic.BaseModel.__dict__.keys()) if pydantic is not None else []
+_IGNORED_FIELDS: Final[list[str]] = (
+    [
+        "__fields__",
+    ]
+    + list(pydantic.BaseModel.__dict__.keys())
+    if pydantic is not None
+    else []
+)
 """Fields to ignore when generating docs, e.g. those that emit deprecation
 warnings or that are not relevant to users of BaseModel-derived classes."""
 
