@@ -41,6 +41,7 @@ from typing import Generic
 from typing import TypedDict
 from typing import TypeVar
 from typing import Union
+from typing import cast
 from typing import get_origin
 import warnings
 
@@ -339,7 +340,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
 
             _docstring: str | None = None
             if self.kind == "class":
-                _docstring = _pydantic.get_field_docstring(self.obj, name)
+                _docstring = _pydantic.get_field_docstring(cast(type, self.obj), name)
 
             if _docstring is None:
                 if self._var_docstrings.get(name):
