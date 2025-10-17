@@ -23,7 +23,7 @@ else:  # pragma: no cover
 
 _IGNORED_FIELDS: Final[list[str]] = [
     "__fields__",
-] + list(pydantic.BaseModel.__dict__.keys())
+] + list(pydantic.BaseModel.__dict__.keys()) if pydantic is not None else []
 """Fields to ignore when generating docs, e.g. those that emit deprecation
 warnings or that are not relevant to users of BaseModel-derived classes."""
 
@@ -74,23 +74,3 @@ def get_field_docstring(parent: type, field_name: str) -> Optional[str]:
         )
 
     return None
-
-
-def skip_field(
-    *,
-    parent_kind: str,
-    parent_obj: Any,
-    name: str,
-    taken_from: tuple[str, str],
-) -> bool:
-    """For Pydantic models, filter out all methods on the BaseModel
-    class, as they are almost never relevant to the consumers of the
-    inheriting model itself.
-    """
-
-    return (
-        pydantic is not None
-        and parent_kind == "class"
-        and is_pydantic_model(parent_obj)
-        and (name in _IGNORED_FIELDS or taken_from[0].startswith("pydantic"))
-    )
