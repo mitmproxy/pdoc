@@ -13,7 +13,7 @@ from pdoc.docstrings import AnyException
 
 if TYPE_CHECKING:
     import pydantic
-else:                           # pragma: no cover
+else:  # pragma: no cover
     pydantic: Optional[ModuleType]
     try:
         pydantic = import_module("pydantic")
@@ -34,7 +34,7 @@ def is_pydantic_model(obj: Any) -> bool:
         ModuleNotFoundError: when function is called but Pydantic is not on the PYTHONPATH.
 
     """
-    if pydantic is None:        # pragma: no cover
+    if pydantic is None:  # pragma: no cover
         raise ModuleNotFoundError(
             "_pydantic.is_pydantic_model() needs Pydantic installed"
         )
@@ -62,10 +62,7 @@ def default_value(parent: Any, name: str, obj: T) -> T:
 
 
 def get_field_docstring(parent: type, field_name: str) -> Optional[str]:
-    if (
-        pydantic is not None
-        and issubclass(parent, pydantic.BaseModel)
-    ):
+    if pydantic is not None and issubclass(parent, pydantic.BaseModel):
         pydantic_fields = parent.__pydantic_fields__
         return (
             pydantic_fields[field_name].description
