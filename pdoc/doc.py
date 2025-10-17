@@ -317,16 +317,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
             else:
-                default_value = obj
-
-                default_value = _pydantic.default_value(self.obj, name, obj)
-
                 doc = Variable(
                     self.modulename,
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=default_value,
+                    default_value=_pydantic.default_value(self.obj, name, obj),
                     taken_from=taken_from,
                 )
 
