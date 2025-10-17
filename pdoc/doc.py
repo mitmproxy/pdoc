@@ -338,11 +338,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                 )
 
             _docstring: str | None = None
-            if (
-                _pydantic.pydantic is not None
-                and self.kind == "class"
-                and _pydantic.is_pydantic_model(self.obj)
-            ):
+            if self.kind == "class":
                 _docstring = _pydantic.get_field_docstring(self.obj, name)
 
             if _docstring is None:
