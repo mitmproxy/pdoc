@@ -41,9 +41,11 @@ from typing import Generic
 from typing import TypedDict
 from typing import TypeVar
 from typing import Union
+from typing import cast
 from typing import get_origin
 import warnings
 
+from pdoc import _pydantic
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
@@ -257,6 +259,7 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         for name, obj in self._member_objects.items():
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
+
             doc: Doc[Any]
 
             is_classmethod = isinstance(obj, classmethod)
@@ -319,13 +322,22 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=obj,
+                    default_value=_pydantic.default_value(self.obj, name, obj),
                     taken_from=taken_from,
                 )
-            if self._var_docstrings.get(name):
-                doc.docstring = self._var_docstrings[name]
-            if self._func_docstrings.get(name) and not doc.docstring:
-                doc.docstring = self._func_docstrings[name]
+
+            _docstring: str | None = None
+            if self.kind == "class":
+                _docstring = _pydantic.get_field_docstring(cast(type, self.obj), name)
+
+            if _docstring is None:
+                if self._var_docstrings.get(name):
+                    doc.docstring = self._var_docstrings[name]
+                if self._func_docstrings.get(name) and not doc.docstring:
+                    doc.docstring = self._func_docstrings[name]
+            else:
+                doc.docstring = _docstring
+
             members[doc.name] = doc
 
         if isinstance(self, Module):
@@ -775,6 +787,11 @@ class Class(Namespace[type]):
         for cls in self._bases:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
+
+        if _pydantic.pydantic is not None and _pydantic.is_pydantic_model(self.obj):
+            for field in _pydantic._IGNORED_FIELDS:
+                sorted.pop(field, None)
+
         return sorted
 
     @cached_property
