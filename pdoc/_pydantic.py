@@ -35,7 +35,7 @@ warnings or that are not relevant to users of BaseModel-derived classes."""
 T = TypeVar("T")
 
 
-def is_pydantic_model(obj: Any) -> bool:
+def is_pydantic_model(obj: type) -> bool:
     """Returns whether an object is a Pydantic model.
 
     Raises:
