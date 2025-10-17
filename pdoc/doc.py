@@ -260,14 +260,6 @@ class Namespace(Doc[T], metaclass=ABCMeta):
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
 
-            if _pydantic.skip_field(
-                parent_kind=self.kind,
-                parent_obj=self.obj,
-                name=name,
-                taken_from=taken_from,
-            ):
-                continue
-
             doc: Doc[Any]
 
             is_classmethod = isinstance(obj, classmethod)
@@ -799,6 +791,11 @@ class Class(Namespace[type]):
         for cls in self._bases:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
+
+        if _pydantic.pydantic is not None and _pydantic.is_pydantic_model(self.obj):
+            for field in _pydantic._IGNORED_FIELDS:
+                sorted.pop(field, None)
+
         return sorted
 
     @cached_property
