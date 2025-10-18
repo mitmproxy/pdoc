@@ -14,7 +14,7 @@ A custom template could override this by setting root_module_name to false befor
 </html>
 {% else %}
 {% extends "frame.html.jinja2" %}
-{% block title %}Module List &ndash; pdoc {{ __version__ }}{% endblock %}
+{% block title %}Module List{% endblock %}
 {% block style %}
     {{ super() | safe }}
     <style>
