@@ -21,7 +21,7 @@ else:  # pragma: no cover
         pydantic = None
 
 
-_IGNORED_FIELDS: Final[list[str]] = (
+_IGNORED_FIELDS: frozenset[str] = frozenset(
     [
         "__fields__",
     ]
