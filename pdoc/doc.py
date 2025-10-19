@@ -326,17 +326,19 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
 
-            _docstring: str | None = _pydantic.get_field_docstring(
-                cast(type, self.obj), name
+            doc.docstring = next(
+                (
+                    d
+                    for d in [
+                        _pydantic.get_field_docstring(cast(type, self.obj), name),
+                        self._var_docstrings.get(name),
+                        doc.docstring,
+                        self._func_docstrings.get(name),
+                    ]
+                    if d
+                ),
+                doc.docstring,
             )
-
-            if _docstring is None:
-                if self._var_docstrings.get(name):
-                    doc.docstring = self._var_docstrings[name]
-                if self._func_docstrings.get(name) and not doc.docstring:
-                    doc.docstring = self._func_docstrings[name]
-            else:
-                doc.docstring = _docstring
 
             members[doc.name] = doc
 
