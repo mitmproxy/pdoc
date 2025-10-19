@@ -39,7 +39,7 @@ def is_pydantic_model(obj: type) -> TypeGuard[pydantic.BaseModel]:
     if not _HAVE_PYDANTIC:  # pragma: no cover
         return False
 
-    return issubclass(obj, pydantic.BaseModel)
+    return isinstance(obj, type) and issubclass(obj, pydantic.BaseModel)
 
 
 def default_value(parent: Any, name: str, obj: T) -> T:
