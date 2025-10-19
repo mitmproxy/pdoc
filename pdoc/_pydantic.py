@@ -57,11 +57,7 @@ def default_value(parent: Any, name: str, obj: T) -> T:
     simply returns obj.
 
     """
-    if (
-        pydantic is not None
-        and isinstance(parent, type)
-        and issubclass(parent, pydantic.BaseModel)
-    ):
+    if isinstance(parent, type) and is_pydantic_model(parent):
         _parent = cast(pydantic.BaseModel, parent)
         pydantic_fields = _parent.__pydantic_fields__
         return pydantic_fields[name].default if name in pydantic_fields else obj
@@ -70,7 +66,7 @@ def default_value(parent: Any, name: str, obj: T) -> T:
 
 
 def get_field_docstring(parent: type, field_name: str) -> Optional[str]:
-    if pydantic is not None and issubclass(parent, pydantic.BaseModel):
+    if is_pydantic_model(parent):
         pydantic_fields = parent.__pydantic_fields__
         return (
             pydantic_fields[field_name].description
