@@ -5,6 +5,7 @@ from types import ModuleType
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Optional
+from typing import TypeGuard
 from typing import TypeVar
 from typing import cast
 
@@ -34,17 +35,14 @@ warnings or that are not relevant to users of BaseModel-derived classes."""
 T = TypeVar("T")
 
 
-def is_pydantic_model(obj: type) -> bool:
+def is_pydantic_model(obj: type) -> TypeGuard[pydantic.BaseModel]:
     """Returns whether an object is a Pydantic model.
 
-    Raises:
-        ModuleNotFoundError: when function is called but Pydantic is not on the PYTHONPATH.
+    If Pydantic is not isntalled, returns False unconditionally.
 
     """
     if pydantic is None:  # pragma: no cover
-        raise ModuleNotFoundError(
-            "_pydantic.is_pydantic_model() needs Pydantic installed"
-        )
+        return False
 
     return issubclass(obj, pydantic.BaseModel)
 
