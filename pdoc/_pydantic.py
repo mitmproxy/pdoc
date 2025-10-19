@@ -47,7 +47,7 @@ def is_pydantic_model(obj: type) -> bool:
             "_pydantic.is_pydantic_model() needs Pydantic installed"
         )
 
-    return pydantic.BaseModel in obj.__bases__
+    return issubclass(obj, pydantic.BaseModel)
 
 
 def default_value(parent: Any, name: str, obj: T) -> T:
