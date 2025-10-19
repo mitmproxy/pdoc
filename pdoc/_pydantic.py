@@ -1,32 +1,27 @@
 """Work with Pydantic models."""
 
-from importlib import import_module
-from types import ModuleType
-from typing import TYPE_CHECKING
+from __future__ import annotations
+
 from typing import Any
 from typing import Optional
 from typing import TypeGuard
 from typing import TypeVar
 from typing import cast
 
-from pdoc.docstrings import AnyException
-
-if TYPE_CHECKING:
+_HAVE_PYDANTIC: bool = False
+try:
     import pydantic
-else:  # pragma: no cover
-    pydantic: Optional[ModuleType]
-    try:
-        pydantic = import_module("pydantic")
-    except AnyException:
-        pydantic = None
 
+    _HAVE_PYDANTIC = True
+except ImportError:  # pragma: no cover
+    _HAVE_PYDANTIC = False
 
 _IGNORED_FIELDS: frozenset[str] = frozenset(
     [
         "__fields__",
     ]
     + list(pydantic.BaseModel.__dict__.keys())
-    if pydantic is not None
+    if _HAVE_PYDANTIC
     else []
 )
 """Fields to ignore when generating docs, e.g. those that emit deprecation
@@ -41,7 +36,7 @@ def is_pydantic_model(obj: type) -> TypeGuard[pydantic.BaseModel]:
     If Pydantic is not isntalled, returns False unconditionally.
 
     """
-    if pydantic is None:  # pragma: no cover
+    if not _HAVE_PYDANTIC:  # pragma: no cover
         return False
 
     return issubclass(obj, pydantic.BaseModel)
