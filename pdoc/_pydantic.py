@@ -4,7 +4,6 @@ from importlib import import_module
 from types import ModuleType
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 from typing import Optional
 from typing import TypeVar
 from typing import cast
