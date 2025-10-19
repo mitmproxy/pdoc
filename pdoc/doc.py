@@ -788,9 +788,10 @@ class Class(Namespace[type]):
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
 
-        if _pydantic.pydantic is not None and _pydantic.is_pydantic_model(self.obj):
-            for field in _pydantic._IGNORED_FIELDS:
-                sorted.pop(field, None)
+        if _pydantic.is_pydantic_model(self.obj):
+            sorted = {
+                k: v for k, v in sorted.items() if k not in _pydantic._IGNORED_FIELDS
+            }
 
         return sorted
 
