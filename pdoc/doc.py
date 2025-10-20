@@ -259,7 +259,6 @@ class Namespace(Doc[T], metaclass=ABCMeta):
         for name, obj in self._member_objects.items():
             qualname = f"{self.qualname}.{name}".lstrip(".")
             taken_from = self._taken_from(name, obj)
-
             doc: Doc[Any]
 
             is_classmethod = isinstance(obj, classmethod)
