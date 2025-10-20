@@ -136,6 +136,7 @@ snapshots = [
     Snapshot("misc_py310", min_version=(3, 10)),
     Snapshot("misc_py312", min_version=(3, 12)),
     Snapshot("misc_py313", min_version=(3, 13)),
+    Snapshot("misc_py313", min_version=(3, 14)),
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot("math_misc", render_options={"math": True}),
     Snapshot("mermaid_demo", render_options={"mermaid": True}),

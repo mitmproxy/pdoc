@@ -1,10 +1,9 @@
 # no from __future__ import annotations!
 from typing import List
 from typing import Literal
-from typing import Union
 
 
-def foo(x: Literal["r", "w"]) -> Union[str, int]:
+def foo(x: Literal["r", "w"]) -> str | int:
     raise NotImplementedError
 
 

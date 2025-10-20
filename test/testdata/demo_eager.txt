@@ -1,4 +1,4 @@
 <module demo_eager
-    <function def foo(x: Literal['r', 'w']) -> Union[str, int]: ...>
+    <function def foo(x: Literal['r', 'w']) -> str | int: ...>
     <function def bar(x: list[int], /) -> List[int]: ...>
 >
