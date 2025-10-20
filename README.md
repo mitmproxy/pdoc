@@ -21,7 +21,7 @@ API Documentation for Python Projects.
 pip install pdoc
 ```
 
-pdoc is compatible with Python 3.9 and newer.
+pdoc is compatible with Python 3.10 and newer.
 
 
 # Usage

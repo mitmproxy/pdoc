@@ -47,10 +47,10 @@ import warnings
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
-from pdoc._compat import TypeAlias
+from typing import TypeAlias
 from pdoc._compat import TypeAliasType
 from pdoc._compat import formatannotation
-from pdoc._compat import is_typeddict
+from typing import is_typeddict
 from pdoc.doc_types import GenericAlias
 from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty
@@ -868,10 +868,7 @@ class Class(Namespace[type]):
         ]
 
 
-if sys.version_info >= (3, 10):
-    WrappedFunction = types.FunctionType | staticmethod | classmethod
-else:  # pragma: no cover
-    WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
+WrappedFunction = types.FunctionType | staticmethod | classmethod
 
 
 class Function(Doc[types.FunctionType]):
