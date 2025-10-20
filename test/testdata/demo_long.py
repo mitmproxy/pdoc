@@ -31,11 +31,8 @@ from functools import cache
 from functools import cached_property
 import os
 from typing import ClassVar
-from typing import List
-from typing import Optional
 from typing import Sequence
 from typing import TypeVar
-from typing import Union
 
 FOO_CONSTANT: int = 42
 """
@@ -75,14 +72,17 @@ T = TypeVar("T")
 
 
 def a_complex_function(
-    a: str, b: Union["Foo", str], *, c: Optional[T] = None
-) -> Optional[T]:
+    first_argument: str,
+    second_argument: Foo | str,
+    *,
+    keyword_only_argument: T,
+) -> T:
     """
     This is a function with a fairly complex signature,
-    involving type annotations with `typing.Union`, a `typing.TypeVar` (~T),
+    involving union types (|), a `typing.TypeVar` (~T),
     as well as a keyword-only arguments (*).
     """
-    return None
+    return keyword_only_argument
 
 
 class Foo:
@@ -94,7 +94,7 @@ class Foo:
     Functions in the current scope can be referenced without prefix: `a_regular_function()`.
     """
 
-    an_attribute: Union[str, List["int"]]
+    an_attribute: str | list["int"]
     """A regular attribute with type annotations"""
 
     a_class_attribute: ClassVar[str] = "lots of foo!"
@@ -107,7 +107,7 @@ class Foo:
         """This attribute is defined in the constructor only, but still picked up by pdoc's AST traversal."""
 
         self.undocumented_constructor_attribute = 42
-        a_complex_function("a", "Foo")
+        a_complex_function("a", "Foo", keyword_only_argument=1)
 
     def a_regular_function(self) -> "Foo":
         """This is a regular method, returning the object itself."""

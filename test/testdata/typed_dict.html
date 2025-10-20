@@ -74,29 +74,28 @@ typed_dict    </h1>
 
                         <label class="view-source-button" for="mod-typed_dict-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subclass. Before 3.12, TypedDict botches __mro__.&quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="c1"># undocumented attribute</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subclass. Before 3.12, TypedDict botches __mro__.&quot;&quot;&quot;</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="c1"># undocumented attribute</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Baz</span><span class="p">(</span><span class="n">Bar</span><span class="p">):</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subsubclass.&quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">d</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;new attribute&quot;&quot;&quot;</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Baz</span><span class="p">(</span><span class="n">Bar</span><span class="p">):</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subsubclass.&quot;&quot;&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">d</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;new attribute&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -112,9 +111,9 @@ typed_dict    </h1>
 
     </div>
     <a class="headerlink" href="#Foo"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-6"><a href="#Foo-6"><span class="linenos">6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-</span><span id="Foo-7"><a href="#Foo-7"><span class="linenos">7</span></a>    <span class="n">a</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-</span><span id="Foo-8"><a href="#Foo-8"><span class="linenos">8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo-5"><a href="#Foo-5"><span class="linenos">5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+</span><span id="Foo-6"><a href="#Foo-6"><span class="linenos">6</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="Foo-7"><a href="#Foo-7"><span class="linenos">7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;First attribute.&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -145,13 +144,13 @@ typed_dict    </h1>
 
     </div>
     <a class="headerlink" href="#Bar"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-11"><a href="#Bar-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-</span><span id="Bar-12"><a href="#Bar-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subclass. Before 3.12, TypedDict botches __mro__.&quot;&quot;&quot;</span>
-</span><span id="Bar-13"><a href="#Bar-13"><span class="linenos">13</span></a>
-</span><span id="Bar-14"><a href="#Bar-14"><span class="linenos">14</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Bar-15"><a href="#Bar-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
-</span><span id="Bar-16"><a href="#Bar-16"><span class="linenos">16</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="Bar-17"><a href="#Bar-17"><span class="linenos">17</span></a>    <span class="c1"># undocumented attribute</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar-10"><a href="#Bar-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="Bar-11"><a href="#Bar-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subclass. Before 3.12, TypedDict botches __mro__.&quot;&quot;&quot;</span>
+</span><span id="Bar-12"><a href="#Bar-12"><span class="linenos">12</span></a>
+</span><span id="Bar-13"><a href="#Bar-13"><span class="linenos">13</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Bar-14"><a href="#Bar-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Second attribute.&quot;&quot;&quot;</span>
+</span><span id="Bar-15"><a href="#Bar-15"><span class="linenos">15</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="Bar-16"><a href="#Bar-16"><span class="linenos">16</span></a>    <span class="c1"># undocumented attribute</span>
 </span></pre></div>
 
 
@@ -204,11 +203,11 @@ typed_dict    </h1>
 
     </div>
     <a class="headerlink" href="#Baz"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Baz-20"><a href="#Baz-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Baz</span><span class="p">(</span><span class="n">Bar</span><span class="p">):</span>
-</span><span id="Baz-21"><a href="#Baz-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subsubclass.&quot;&quot;&quot;</span>
-</span><span id="Baz-22"><a href="#Baz-22"><span class="linenos">22</span></a>
-</span><span id="Baz-23"><a href="#Baz-23"><span class="linenos">23</span></a>    <span class="n">d</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="Baz-24"><a href="#Baz-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;new attribute&quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Baz-19"><a href="#Baz-19"><span class="linenos">19</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Baz</span><span class="p">(</span><span class="n">Bar</span><span class="p">):</span>
+</span><span id="Baz-20"><a href="#Baz-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A TypedDict subsubclass.&quot;&quot;&quot;</span>
+</span><span id="Baz-21"><a href="#Baz-21"><span class="linenos">21</span></a>
+</span><span id="Baz-22"><a href="#Baz-22"><span class="linenos">22</span></a>    <span class="n">d</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span id="Baz-23"><a href="#Baz-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;new attribute&quot;&quot;&quot;</span>
 </span></pre></div>
 
 

@@ -32,6 +32,7 @@
     <class enums.StrEnum
         <var FOO = <StrEnum.FOO: 'foo'>>
         <var BAR = <StrEnum.BAR: 'bar'>>
+        <method def isprintable(self) -> bool: ...  # This method has diff…>
         <var name  # inherited from enum.Enum.name, The name of the Enum…>
         <var value  # inherited from enum.Enum.value, The value of the Enu…>
         <method def encode(self, /, encoding='utf-8', errors='strict'): ...  # inherited from builtins.str.encode, Encode the string us…>
@@ -76,7 +77,6 @@
         <method def isalpha(self, /): ...  # inherited from builtins.str.isalpha, Return True if the s…>
         <method def isalnum(self, /): ...  # inherited from builtins.str.isalnum, Return True if the s…>
         <method def isidentifier(self, /): ...  # inherited from builtins.str.isidentifier, Return True if the s…>
-        <method def isprintable(self, /): ...  # inherited from builtins.str.isprintable, Return True if all c…>
         <method def zfill(self, width, /): ...  # inherited from builtins.str.zfill, Pad a numeric string…>
         <method def format(self, /, *args, **kwargs): ...  # inherited from builtins.str.format, Return a formatted v…>
         <method def format_map(self, mapping, /): ...  # inherited from builtins.str.format_map, Return a formatted v…>

@@ -28,3 +28,7 @@ class IntEnum(enum.IntEnum):
 class StrEnum(enum.StrEnum):
     FOO = enum.auto()
     BAR = enum.auto()
+
+    def isprintable(self) -> bool:
+        """This method has different docstrings depending on the Python version, so we override here for testing purposes."""
+        raise NotImplementedError
