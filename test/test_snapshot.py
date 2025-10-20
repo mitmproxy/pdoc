@@ -96,8 +96,8 @@ class Snapshot:
 
 snapshots = [
     Snapshot("ast_parsing"),
-    Snapshot("collections_abc", min_version=(3, 9)),
-    Snapshot("demo", min_version=(3, 9)),
+    Snapshot("collections_abc"),
+    Snapshot("demo"),
     Snapshot("enums", min_version=(3, 13)),
     Snapshot("flavors_google"),
     Snapshot("flavors_numpy"),
@@ -106,22 +106,19 @@ snapshots = [
         "example_customtemplate",
         ["demo.py"],
         {"template_directory": here / ".." / "examples" / "custom-template"},
-        min_version=(3, 9),
     ),
     Snapshot(
         "example_darkmode",
         ["demo.py"],
         {"template_directory": here / ".." / "examples" / "dark-mode"},
-        min_version=(3, 9),
     ),
     Snapshot(
         "example_mkdocs",
         ["demo.py"],
         {"template_directory": here / ".." / "examples" / "mkdocs" / "pdoc-template"},
-        min_version=(3, 9),
     ),
-    Snapshot("demo_long", min_version=(3, 9)),
-    Snapshot("demo_eager", min_version=(3, 9)),
+    Snapshot("demo_long"),
+    Snapshot("demo_eager"),
     Snapshot("demopackage", ["demopackage", "!demopackage.child_excluded"]),
     Snapshot(
         "demopackage_dir",
@@ -141,7 +138,7 @@ snapshots = [
     Snapshot("misc_py313", min_version=(3, 13)),
     Snapshot("math_demo", render_options={"math": True}),
     Snapshot("math_misc", render_options={"math": True}),
-    Snapshot("mermaid_demo", render_options={"mermaid": True}, min_version=(3, 9)),
+    Snapshot("mermaid_demo", render_options={"mermaid": True}),
     Snapshot(
         "render_options",
         ["render_options", "math_demo"],

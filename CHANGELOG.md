@@ -6,6 +6,9 @@
 
 - pdoc has a new logo. 🐍
   ([#838](https://github.com/mitmproxy/pdoc/pull/838), @mhils)
+- Drop support for Python 3.9, which as reached
+  [end of life](https://devguide.python.org/versions/).
+  ([#842](https://github.com/mitmproxy/pdoc/pull/842), @mhils)
 - Fix linking of identifiers that contain unicode characters.
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 - Replace vendored version of `markdown2` with the [official

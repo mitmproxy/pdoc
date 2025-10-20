@@ -51,8 +51,6 @@ jobs:
             py: 3.11.5
           - os: ubuntu-latest
             py: 3.10.13
-          - os: ubuntu-latest
-            py: 3.9.18
     runs-on: ${{ matrix.os }}
     steps:
       - uses: mhils/workflows/checkout@cc6add7a662663ad7ad3017a86bcb91c361c9cc9
