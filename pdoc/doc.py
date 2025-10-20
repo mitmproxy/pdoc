@@ -38,19 +38,18 @@ import types
 from typing import Any
 from typing import ClassVar
 from typing import Generic
+from typing import TypeAlias
 from typing import TypedDict
 from typing import TypeVar
-from typing import Union
 from typing import get_origin
+from typing import is_typeddict
 import warnings
 
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
-from typing import TypeAlias
 from pdoc._compat import TypeAliasType
 from pdoc._compat import formatannotation
-from typing import is_typeddict
 from pdoc.doc_types import GenericAlias
 from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty

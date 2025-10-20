@@ -16,6 +16,7 @@ import types
 from types import BuiltinFunctionType
 from types import GenericAlias
 from types import ModuleType
+from types import UnionType
 import typing
 from typing import TYPE_CHECKING
 from typing import Any
@@ -25,7 +26,6 @@ from typing import get_origin
 import warnings
 
 from . import extract
-from types import UnionType
 from .doc_ast import type_checking_sections
 
 if TYPE_CHECKING:
