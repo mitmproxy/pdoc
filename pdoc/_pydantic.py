@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import TypeVar
-from typing import cast
 
 from typing_extensions import TypeGuard
 
@@ -50,9 +49,8 @@ def default_value(parent: Any, name: str, obj: T) -> T:
     simply returns obj.
 
     """
-    if isinstance(parent, type) and is_pydantic_model(parent):
-        _parent = cast(pydantic.BaseModel, parent)
-        pydantic_fields = _parent.__pydantic_fields__
+    if is_pydantic_model(parent):
+        pydantic_fields = parent.__pydantic_fields__
         return pydantic_fields[name].default if name in pydantic_fields else obj
 
     return obj
