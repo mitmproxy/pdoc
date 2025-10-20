@@ -13,9 +13,9 @@
         <method def copy(self, /): ...  # inherited from builtins.dict.copy, Return a shallow cop…>
     >
     <class misc_py313.CustomException  # custom exception typ…
-        <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.RuntimeError.__init__>
-        <method def with_traceback(self, object, /): ...  # inherited from builtins.BaseException.with_traceback, Exception.with_trace…>
-        <method def add_note(self, object, /): ...  # inherited from builtins.BaseException.add_note, Exception.add_note(n…>
+        <method def __init__(self, /, *args, **kwargs): ...  # inherited from builtins.BaseException.__init__>
+        <method def with_traceback(self, tb, /): ...  # inherited from builtins.BaseException.with_traceback, Set self.__traceback…>
+        <method def add_note(self, note, /): ...  # inherited from builtins.BaseException.add_note, Add a note to the ex…>
         <var args  # inherited from builtins.BaseException.args>
     >
     <@deprecated('Do not use this anymore') function def deprecated_func(): ...>

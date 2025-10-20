@@ -6,6 +6,8 @@
 
 - pdoc has a new logo. 🐍
   ([#838](https://github.com/mitmproxy/pdoc/pull/838), @mhils)
+- Add support for Python 3.14.
+  ([#843](https://github.com/mitmproxy/pdoc/pull/843), @mhils)
 - Drop support for Python 3.9, which as reached
   [end of life](https://devguide.python.org/versions/).
   ([#842](https://github.com/mitmproxy/pdoc/pull/842), @mhils)

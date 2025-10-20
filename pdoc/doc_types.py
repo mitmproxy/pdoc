@@ -183,24 +183,22 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
         # https://github.com/python/cpython/blob/4f51fa9e2d3ea9316e674fb9a9f3e3112e83661c/Lib/typing.py#L684-L707
         if t.__forward_arg__ in recursive_guard:  # pragma: no cover
             return t
-        if not t.__forward_evaluated__ or localns is not globalns:
-            if globalns is None and localns is None:  # pragma: no cover
-                globalns = localns = {}
-            elif globalns is None:  # pragma: no cover
-                globalns = localns
-            elif localns is None:  # pragma: no cover
-                localns = globalns
-            __forward_module__ = getattr(t, "__forward_module__", None)
-            if __forward_module__ is not None:
-                globalns = getattr(
-                    sys.modules.get(__forward_module__, None), "__dict__", globalns
-                )
-            (type_,) = (eval(t.__forward_code__, globalns, localns),)
-            t.__forward_value__ = _eval_type(
-                type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+
+        if globalns is None and localns is None:  # pragma: no cover
+            globalns = localns = {}
+        elif globalns is None:  # pragma: no cover
+            globalns = localns
+        elif localns is None:  # pragma: no cover
+            localns = globalns
+        __forward_module__ = getattr(t, "__forward_module__", None)
+        if __forward_module__ is not None:
+            globalns = getattr(
+                sys.modules.get(__forward_module__, None), "__dict__", globalns
             )
-            t.__forward_evaluated__ = True
-        return t.__forward_value__
+        (type_,) = (eval(t.__forward_code__, globalns, localns),)
+        return _eval_type(
+            type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+        )
 
     # https://github.com/python/cpython/blob/main/Lib/typing.py#L333-L343
     # fmt: off

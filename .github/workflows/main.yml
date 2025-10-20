@@ -37,20 +37,22 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            py: 3.13.0
+            py: 3.14.0
             args: --cov-fail-under=100
           - os: macos-latest
-            py: 3.13.0
+            py: 3.14.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.13.0
+            py: 3.14.0
             args: --cov-fail-under=100
           - os: ubuntu-latest
-            py: 3.12.4
+            py: 3.13.7
           - os: ubuntu-latest
-            py: 3.11.5
+            py: 3.12.11
           - os: ubuntu-latest
-            py: 3.10.13
+            py: 3.11.13
+          - os: ubuntu-latest
+            py: 3.10.18
     runs-on: ${{ matrix.os }}
     steps:
       - uses: mhils/workflows/checkout@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6

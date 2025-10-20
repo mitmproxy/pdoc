@@ -7,15 +7,10 @@ This …
     <var NO_DOCSTRING: int>
     <function def a_simple_function(a: str) -> str: ...  # This is a basic modu…>
     <var T = ~T>
-    <function def a_complex_function(
-        a: str,
-        b: Union[demo_long.Foo, str],
-        *,
-        c: Optional[~T] = None
-    ) -> Optional[~T]: ...  # This is a function w…>
+    <function def a_complex_function(a: str, b: demo_long.Foo | str, *, c: ~T | None = None) -> ~T | None: ...  # This is a function w…>
     <class demo_long.Foo  # `Foo` is a basic cla…
         <method def __init__(self): ...  # The constructor is c…>
-        <var an_attribute: Union[str, List[int]]  # A regular attribute …>
+        <var an_attribute: str | List[int]  # A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # An attribute with a …>
         <var a_constructor_only_attribute: int  # This attribute is de…>
         <var undocumented_constructor_attribute>
@@ -34,7 +29,7 @@ This …
             <method def __init__(): ...>
             <method def wat(self): ...  # A regular method. Ab…>
         >
-        <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
+        <var an_attribute: str | List[int]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
         <var undocumented_constructor_attribute  # inherited from demo_long.Foo.undocumented_constructor_attribute>
@@ -51,7 +46,7 @@ This …
     <function def security(test=os.environ): ...  # Default values are g…>
     <class demo_long.DoubleInherit  # This is an example o…
         <method def __init__(self): ...  # inherited from demo_long.Foo.__init__, The constructor is c…>
-        <var an_attribute: Union[str, List[int]]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
+        <var an_attribute: str | List[int]  # inherited from demo_long.Foo.an_attribute, A regular attribute …>
         <var a_class_attribute: ClassVar[str] = 'lots of foo!'  # inherited from demo_long.Foo.a_class_attribute, An attribute with a …>
         <var a_constructor_only_attribute: int  # inherited from demo_long.Foo.a_constructor_only_attribute, This attribute is de…>
         <var undocumented_constructor_attribute  # inherited from demo_long.Foo.undocumented_constructor_attribute>
