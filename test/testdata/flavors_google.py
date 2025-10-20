@@ -453,3 +453,15 @@ def alternative_section_names(test: str):
     Parameters:
         test: the test string
     """
+
+def keyword_arguments(**kwargs):
+    """
+    This an example for a function with keyword arguments documented in the docstring.
+
+    Args:
+        **kwargs: A dictionary containing user info.
+
+    Keyword Arguments:
+        str_arg (str): First string argument.
+        int_arg (int): Second integer argument.
+    """

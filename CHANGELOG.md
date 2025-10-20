@@ -13,6 +13,8 @@
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 - Replace vendored version of `markdown2` with the [official
   upstream](https://github.com/trentm/python-markdown2)
+- Add support for keyword args for Google flavor docs.
+  ([#840](https://github.com/mitmproxy/pdoc/pull/840), @aleksslitvinovs)
 
 ## 2025-06-04: pdoc 15.0.4
 
