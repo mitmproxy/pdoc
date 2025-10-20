@@ -38,6 +38,7 @@ def configure(
     edit_url_map: Mapping[str, str] | None = None,
     favicon: str | None = None,
     footer_text: str = "",
+    link_library: Mapping[str, str] | None = None,
     logo: str | None = None,
     logo_link: str | None = None,
     math: bool = False,
@@ -61,6 +62,20 @@ def configure(
       renders the "Edit on GitHub" button on this page. The URL prefix can be modified to pin a particular version.
     - `favicon` is an optional path/URL for a favicon image
     - `footer_text` is additional text that should appear in the navigation footer.
+    - `link_library` is a mapping from module names to URL documentation. For example,
+
+        ```json
+        {"pdoc": "https://pdoc.dev/docs/pdoc.html"}
+        ```
+
+      will make all "pdoc" type annotation to link to the provided URL, but will not link if it is "pdoc.doc.Module".
+      It accept wildcard for such cases, for instance:
+
+        ```json
+        {"pdoc*": "https://pdoc.dev/docs/pdoc.html"}
+        ```
+
+       will also match "pdoc.doc.Module".
     - `logo` is an optional URL to the project's logo image
     - `logo_link` is an optional URL the logo should point to
     - `math` enables math rendering by including MathJax into the rendered documentation.
@@ -83,6 +98,7 @@ def configure(
     env.globals["mermaid"] = mermaid
     env.globals["show_source"] = show_source
     env.globals["favicon"] = favicon
+    env.globals["link_library"] = link_library or {}
     env.globals["logo"] = logo
     env.globals["logo_link"] = logo_link
     env.globals["footer_text"] = footer_text
