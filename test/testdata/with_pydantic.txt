@@ -1,0 +1,6 @@
+<module with_pydantic  # A small example with…
+    <class with_pydantic.Foo  # Foo class documentat…
+        <var a: int = 1  # Docstring for a>
+        <var b: int = 2  # Docstring for b.>
+    >
+>

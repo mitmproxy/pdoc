@@ -41,10 +41,12 @@ from typing import Generic
 from typing import TypeAlias
 from typing import TypedDict
 from typing import TypeVar
+from typing import cast
 from typing import get_origin
 from typing import is_typeddict
 import warnings
 
+from pdoc import _pydantic
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
@@ -318,13 +320,17 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     qualname,
                     docstring="",
                     annotation=self._var_annotations.get(name, empty),
-                    default_value=obj,
+                    default_value=_pydantic.default_value(self.obj, name, obj),
                     taken_from=taken_from,
                 )
-            if self._var_docstrings.get(name):
+
+            if _doc := _pydantic.get_field_docstring(cast(type, self.obj), name):
+                doc.docstring = _doc
+            elif self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
-            if self._func_docstrings.get(name) and not doc.docstring:
+            elif self._func_docstrings.get(name) and not doc.docstring:
                 doc.docstring = self._func_docstrings[name]
+
             members[doc.name] = doc
 
         if isinstance(self, Module):
@@ -774,6 +780,12 @@ class Class(Namespace[type]):
         for cls in self._bases:
             sorted, unsorted = doc_ast.sort_by_source(cls, sorted, unsorted)
         sorted.update(unsorted)
+
+        if _pydantic.is_pydantic_model(self.obj):
+            sorted = {
+                k: v for k, v in sorted.items() if k not in _pydantic._IGNORED_FIELDS
+            }
+
         return sorted
 
     @cached_property
