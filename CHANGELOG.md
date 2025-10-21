@@ -6,10 +6,17 @@
 
 - pdoc has a new logo. 🐍
   ([#838](https://github.com/mitmproxy/pdoc/pull/838), @mhils)
+- Add support for Python 3.14.
+  ([#843](https://github.com/mitmproxy/pdoc/pull/843), @mhils)
+- Drop support for Python 3.9, which as reached
+  [end of life](https://devguide.python.org/versions/).
+  ([#842](https://github.com/mitmproxy/pdoc/pull/842), @mhils)
 - Fix linking of identifiers that contain unicode characters.
   ([#831](https://github.com/mitmproxy/pdoc/issues/831), @iFreilicht)
 - Replace vendored version of `markdown2` with the [official
   upstream](https://github.com/trentm/python-markdown2)
+- Add support for keyword args for Google flavor docs.
+  ([#840](https://github.com/mitmproxy/pdoc/pull/840), @aleksslitvinovs)
 - Add support for Pydantic-style field docstrings,
   e.g. `pydantic.Field(description="...")`
   ([#802](https://github.com/mitmproxy/pdoc/pull/802), @jinnovation)

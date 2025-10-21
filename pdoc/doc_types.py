@@ -16,6 +16,7 @@ import types
 from types import BuiltinFunctionType
 from types import GenericAlias
 from types import ModuleType
+from types import UnionType
 import typing
 from typing import TYPE_CHECKING
 from typing import Any
@@ -25,7 +26,6 @@ from typing import get_origin
 import warnings
 
 from . import extract
-from ._compat import UnionType
 from .doc_ast import type_checking_sections
 
 if TYPE_CHECKING:
@@ -108,19 +108,7 @@ def safe_eval_type(
         err = str(e)
         _, mod, _ = err.split("'")
     except Exception as e:
-        if "unsupported operand type(s) for |" in str(e) and sys.version_info < (3, 10):
-            py_ver = ".".join(str(x) for x in sys.version_info[:3])
-            warnings.warn(
-                f"Error parsing type annotation {t} for {fullname}: {e}. "
-                f"You are likely attempting to use Python 3.10 syntax (PEP 604 union types) with an older Python "
-                f"release. `X | Y`-style type annotations are invalid syntax on Python {py_ver}, which is what your "
-                f"pdoc instance is using. `from __future__ import annotations` (PEP 563) postpones evaluation of "
-                f"annotations, which is why your program won't crash right away. However, pdoc needs to evaluate your "
-                f"type annotations and is unable to do so on Python {py_ver}. To fix this issue, either invoke pdoc "
-                f"from Python 3.10+, or switch to `typing.Union[]` syntax."
-            )
-        else:
-            warnings.warn(f"Error parsing type annotation {t} for {fullname}: {e}")
+        warnings.warn(f"Error parsing type annotation {t} for {fullname}: {e}")
         return t
 
     # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
@@ -185,8 +173,6 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
     # Added a special check for typing.Literal, whose literal strings would otherwise be evaluated.
 
     if isinstance(t, str):
-        if sys.version_info < (3, 9):  # pragma: no cover
-            t = t.strip("\"'")
         t = typing.ForwardRef(t)
 
     if get_origin(t) is Literal:
@@ -197,24 +183,22 @@ def _eval_type(t, globalns, localns, recursive_guard=frozenset()):
         # https://github.com/python/cpython/blob/4f51fa9e2d3ea9316e674fb9a9f3e3112e83661c/Lib/typing.py#L684-L707
         if t.__forward_arg__ in recursive_guard:  # pragma: no cover
             return t
-        if not t.__forward_evaluated__ or localns is not globalns:
-            if globalns is None and localns is None:  # pragma: no cover
-                globalns = localns = {}
-            elif globalns is None:  # pragma: no cover
-                globalns = localns
-            elif localns is None:  # pragma: no cover
-                localns = globalns
-            __forward_module__ = getattr(t, "__forward_module__", None)
-            if __forward_module__ is not None:
-                globalns = getattr(
-                    sys.modules.get(__forward_module__, None), "__dict__", globalns
-                )
-            (type_,) = (eval(t.__forward_code__, globalns, localns),)
-            t.__forward_value__ = _eval_type(
-                type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+
+        if globalns is None and localns is None:  # pragma: no cover
+            globalns = localns = {}
+        elif globalns is None:  # pragma: no cover
+            globalns = localns
+        elif localns is None:  # pragma: no cover
+            localns = globalns
+        __forward_module__ = getattr(t, "__forward_module__", None)
+        if __forward_module__ is not None:
+            globalns = getattr(
+                sys.modules.get(__forward_module__, None), "__dict__", globalns
             )
-            t.__forward_evaluated__ = True
-        return t.__forward_value__
+        (type_,) = (eval(t.__forward_code__, globalns, localns),)
+        return _eval_type(
+            type_, globalns, localns, recursive_guard | {t.__forward_arg__}
+        )
 
     # https://github.com/python/cpython/blob/main/Lib/typing.py#L333-L343
     # fmt: off

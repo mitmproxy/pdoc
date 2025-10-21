@@ -7,7 +7,6 @@ from functools import lru_cache
 import sched
 from typing import Generic
 from typing import TypeVar
-from typing import Union
 
 # https://github.com/mitmproxy/pdoc/issues/226
 
@@ -442,7 +441,7 @@ class DocstringFromNew:
 
 class SingleDispatchMethodExample:
     @functools.singledispatchmethod
-    def fancymethod(self, str_or_int: Union[str, int]):
+    def fancymethod(self, str_or_int: str | int):
         """A fancy method which is capable of handling either `str` or `int`.
 
         :param str_or_int: string or integer to handle

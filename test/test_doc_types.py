@@ -56,17 +56,6 @@ def test_eval_fail_import_nonexistent(monkeypatch):
         assert safe_eval_type("xyz", a.__dict__, None, a, "a") == "xyz"
 
 
-def test_eval_union_types_on_old_python(monkeypatch):
-    monkeypatch.setattr(sys, "version_info", (3, 9, 0))
-    with pytest.warns(
-        UserWarning,
-        match=r"You are likely attempting to use Python 3.10 syntax \(PEP 604 union types\) "
-        r"with an older Python release.",
-    ):
-        # str never implements `|`, so we can use that to trigger the error on newer versions.
-        safe_eval_type('"foo" | "bar"', {}, None, None, "example")
-
-
 def test_recurse(monkeypatch):
     def get_source(mod):
         if mod == a:

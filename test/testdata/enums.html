@@ -71,6 +71,9 @@
                         <li>
                                 <a class="variable" href="#StrEnum.BAR">BAR</a>
                         </li>
+                        <li>
+                                <a class="function" href="#StrEnum.isprintable">isprintable</a>
+                        </li>
                 </ul>
 
             </li>
@@ -125,6 +128,10 @@ enums    </h1>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrEnum</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">StrEnum</span><span class="p">):</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">FOO</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">BAR</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">isprintable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has different docstrings depending on the Python version, so we override here for testing purposes.&quot;&quot;&quot;</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -304,6 +311,10 @@ enums    </h1>
             <div class="pdoc-code codehilite"><pre><span></span><span id="StrEnum-29"><a href="#StrEnum-29"><span class="linenos">29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrEnum</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">StrEnum</span><span class="p">):</span>
 </span><span id="StrEnum-30"><a href="#StrEnum-30"><span class="linenos">30</span></a>    <span class="n">FOO</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
 </span><span id="StrEnum-31"><a href="#StrEnum-31"><span class="linenos">31</span></a>    <span class="n">BAR</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span><span id="StrEnum-32"><a href="#StrEnum-32"><span class="linenos">32</span></a>
+</span><span id="StrEnum-33"><a href="#StrEnum-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">isprintable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="StrEnum-34"><a href="#StrEnum-34"><span class="linenos">34</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has different docstrings depending on the Python version, so we override here for testing purposes.&quot;&quot;&quot;</span>
+</span><span id="StrEnum-35"><a href="#StrEnum-35"><span class="linenos">35</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 </span></pre></div>
 
 
@@ -331,6 +342,28 @@ enums    </h1>
     <a class="headerlink" href="#StrEnum.BAR"></a>
     
     
+
+                            </div>
+                            <div id="StrEnum.isprintable" class="classattr">
+                                        <input id="StrEnum.isprintable-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">isprintable</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+
+                <label class="view-source-button" for="StrEnum.isprintable-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#StrEnum.isprintable"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StrEnum.isprintable-33"><a href="#StrEnum.isprintable-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">isprintable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="StrEnum.isprintable-34"><a href="#StrEnum.isprintable-34"><span class="linenos">34</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;This method has different docstrings depending on the Python version, so we override here for testing purposes.&quot;&quot;&quot;</span>
+</span><span id="StrEnum.isprintable-35"><a href="#StrEnum.isprintable-35"><span class="linenos">35</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>This method has different docstrings depending on the Python version, so we override here for testing purposes.</p>
+</div>
+
 
                             </div>
                 </section>

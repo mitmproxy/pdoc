@@ -1,9 +1,8 @@
-from typing import Optional
 from typing import TypedDict
 
 
 class Foo(TypedDict):
-    a: Optional[int]
+    a: int | None
     """First attribute."""
 
 

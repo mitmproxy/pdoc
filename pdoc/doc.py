@@ -38,21 +38,19 @@ import types
 from typing import Any
 from typing import ClassVar
 from typing import Generic
+from typing import TypeAlias
 from typing import TypedDict
 from typing import TypeVar
-from typing import Union
-from typing import cast
 from typing import get_origin
+from typing import is_typeddict
 import warnings
 
 from pdoc import _pydantic
 from pdoc import doc_ast
 from pdoc import doc_pyi
 from pdoc import extract
-from pdoc._compat import TypeAlias
 from pdoc._compat import TypeAliasType
 from pdoc._compat import formatannotation
-from pdoc._compat import is_typeddict
 from pdoc.doc_types import GenericAlias
 from pdoc.doc_types import NonUserDefinedCallables
 from pdoc.doc_types import empty
@@ -887,10 +885,7 @@ class Class(Namespace[type]):
         ]
 
 
-if sys.version_info >= (3, 10):
-    WrappedFunction = types.FunctionType | staticmethod | classmethod
-else:  # pragma: no cover
-    WrappedFunction = Union[types.FunctionType, staticmethod, classmethod]
+WrappedFunction = types.FunctionType | staticmethod | classmethod
 
 
 class Function(Doc[types.FunctionType]):
