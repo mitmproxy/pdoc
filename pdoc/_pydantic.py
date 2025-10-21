@@ -32,7 +32,7 @@ T = TypeVar("T")
 def is_pydantic_model(obj: type) -> TypeGuard[pydantic.BaseModel]:
     """Returns whether an object is a Pydantic model.
 
-    If Pydantic is not isntalled, returns False unconditionally.
+    If Pydantic is not installed, returns False unconditionally.
 
     """
     if not _HAVE_PYDANTIC:  # pragma: no cover
