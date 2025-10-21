@@ -324,19 +324,12 @@ class Namespace(Doc[T], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
 
-            doc.docstring = next(
-                (
-                    d
-                    for d in [
-                        _pydantic.get_field_docstring(cast(type, self.obj), name),
-                        self._var_docstrings.get(name),
-                        doc.docstring,
-                        self._func_docstrings.get(name),
-                    ]
-                    if d
-                ),
-                doc.docstring,
-            )
+            if _doc := _pydantic.get_field_docstring(cast(type, self.obj), name):
+                doc.docstring = _doc
+            elif self._var_docstrings.get(name):
+                doc.docstring = self._var_docstrings[name]
+            elif self._func_docstrings.get(name) and not doc.docstring:
+                doc.docstring = self._func_docstrings[name]
 
             members[doc.name] = doc
 
