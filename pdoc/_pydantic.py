@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Optional
+from typing import TypeGuard
 from typing import TypeVar
-
-from typing_extensions import TypeGuard
 
 _HAVE_PYDANTIC: bool = False
 try:
