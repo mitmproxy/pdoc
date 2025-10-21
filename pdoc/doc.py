@@ -41,6 +41,7 @@ from typing import Generic
 from typing import TypeAlias
 from typing import TypedDict
 from typing import TypeVar
+from typing import cast
 from typing import get_origin
 from typing import is_typeddict
 import warnings
