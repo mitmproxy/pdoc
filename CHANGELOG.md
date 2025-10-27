@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+
+## 2025-10-27: pdoc 16.0.0
+
 - pdoc has a new logo. 🐍
   ([#838](https://github.com/mitmproxy/pdoc/pull/838), @mhils)
 - Add support for Python 3.14.
