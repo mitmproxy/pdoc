@@ -52,6 +52,7 @@ dev-dependencies = [
     "pytest-timeout>=2.3.1",
     "hypothesis>=6.113.0",
     "pdoc-pyo3-sample-library>=1.0.11",
+    "pydantic>=2.12.0",
 ]
 
 [build-system]
@@ -102,6 +103,11 @@ extend-exclude = ["test/testdata/demo.py"]
 select = ["E", "F", "I"]
 ignore = ["E501"]
 isort = { force-single-line = true, force-sort-within-sections = true }
+
+[tool.ruff.per-file-target-version]
+"test/testdata/misc_py312.py" = "py312"
+"test/testdata/misc_py313.py" = "py313"
+"test/testdata/misc_py314.py" = "py314"
 
 [tool.tox]
 legacy_tox_ini = """

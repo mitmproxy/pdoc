@@ -164,6 +164,7 @@ snapshots = [
             "include_undocumented": False,
         },
     ),
+    Snapshot("with_pydantic"),
 ]
 
 
