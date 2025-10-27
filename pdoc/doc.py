@@ -211,7 +211,10 @@ class Doc(Generic[T]):
         )
 
 
-class Namespace(Doc[T], metaclass=ABCMeta):
+U = TypeVar("U", bound=types.ModuleType | type)
+
+
+class Namespace(Doc[U], metaclass=ABCMeta):
     """
     A documentation object that can have children. In other words, either a module or a class.
     """
@@ -783,7 +786,7 @@ class Class(Namespace[type]):
 
         if _pydantic.is_pydantic_model(self.obj):
             sorted = {
-                k: v for k, v in sorted.items() if k not in _pydantic._IGNORED_FIELDS
+                k: v for k, v in sorted.items() if k not in _pydantic.IGNORED_FIELDS
             }
 
         return sorted
@@ -916,7 +919,7 @@ class Function(Doc[types.FunctionType]):
         else:
             unwrapped = func
         super().__init__(modulename, qualname, unwrapped, taken_from)
-        self.wrapped = func
+        self.wrapped = func  # type: ignore
 
     @cache
     @_include_fullname_in_traceback

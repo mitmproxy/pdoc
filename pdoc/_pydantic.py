@@ -2,51 +2,43 @@
 
 from __future__ import annotations
 
+import types
 from typing import Any
-from typing import Optional
+from typing import TypeAlias
 from typing import TypeGuard
-from typing import TypeVar
 
-_HAVE_PYDANTIC: bool = False
 try:
     import pydantic
-
-    _HAVE_PYDANTIC = True
 except ImportError:  # pragma: no cover
-    _HAVE_PYDANTIC = False
+    pydantic = None  # type: ignore
 
-_IGNORED_FIELDS: frozenset[str] = frozenset(
-    [
-        "__fields__",
-    ]
-    + list(pydantic.BaseModel.__dict__.keys())
-    if _HAVE_PYDANTIC
+ClassOrModule: TypeAlias = type | types.ModuleType
+"""Type alias for the type of `Namespace.obj`."""
+
+IGNORED_FIELDS: frozenset[str] = frozenset(
+    (["__fields__"] + list(pydantic.BaseModel.__dict__.keys()))
+    if pydantic is not None
     else []
 )
 """Fields to ignore when generating docs, e.g. those that emit deprecation
 warnings or that are not relevant to users of BaseModel-derived classes."""
 
-T = TypeVar("T")
 
-
-def is_pydantic_model(obj: type) -> TypeGuard[pydantic.BaseModel]:
-    """Returns whether an object is a Pydantic model.
-
-    If Pydantic is not installed, returns False unconditionally.
-
-    """
-    if not _HAVE_PYDANTIC:  # pragma: no cover
+def is_pydantic_model(obj: ClassOrModule) -> TypeGuard[pydantic.BaseModel]:
+    """Returns whether an object is a Pydantic model."""
+    if pydantic is None:  # pragma: no cover
+        # classes that subclass pydantic.BaseModel can only be instantiated if pydantic is importable
+        # => if we cannot import pydantic, the passed object cannot be a subclass of BaseModel.
         return False
 
     return isinstance(obj, type) and issubclass(obj, pydantic.BaseModel)
 
 
-def default_value(parent: Any, name: str, obj: T) -> T:
+def default_value(parent: ClassOrModule, name: str, obj: Any) -> Any:
     """Determine the default value of obj.
 
-    If pydantic is not installed or the parent type is not a Pydantic model,
-    simply returns obj.
-
+    For pydantic BaseModels, extract the default value from field metadata.
+    For all other objects, return `obj` as-is.
     """
     if is_pydantic_model(parent):
         pydantic_fields = parent.__pydantic_fields__
@@ -55,13 +47,8 @@ def default_value(parent: Any, name: str, obj: T) -> T:
     return obj
 
 
-def get_field_docstring(parent: type, field_name: str) -> Optional[str]:
+def get_field_docstring(parent: ClassOrModule, field_name: str) -> str | None:
     if is_pydantic_model(parent):
-        pydantic_fields = parent.__pydantic_fields__
-        return (
-            pydantic_fields[field_name].description
-            if field_name in pydantic_fields
-            else None
-        )
-
+        if field := parent.__pydantic_fields__.get(field_name, None):
+            return field.description
     return None
