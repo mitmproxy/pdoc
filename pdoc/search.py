@@ -46,6 +46,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from collections.abc import Mapping
+import functools
 import html
 import json
 from pathlib import Path
@@ -124,6 +125,16 @@ def make_index(
     return documents
 
 
+@functools.cache
+def node_executable() -> str | None:
+    if shutil.which("nodejs"):
+        return "nodejs"
+    elif shutil.which("node"):
+        return "node"
+    else:
+        return None
+
+
 def precompile_index(documents: list[dict], compile_js: Path) -> str:
     """
     This method tries to precompile the Elasticlunr.js search index by invoking `nodejs` or `node`.
@@ -136,12 +147,11 @@ def precompile_index(documents: list[dict], compile_js: Path) -> str:
     """
     raw = json.dumps(documents)
     try:
-        if shutil.which("nodejs"):
-            executable = "nodejs"
-        else:
-            executable = "node"
+        node = node_executable()
+        if node is None:
+            raise FileNotFoundError("No such file or directory: 'node'")
         out = subprocess.check_output(
-            [executable, compile_js],
+            [node, compile_js],
             input=raw.encode(),
             cwd=Path(__file__).parent / "templates",
             stderr=subprocess.STDOUT,

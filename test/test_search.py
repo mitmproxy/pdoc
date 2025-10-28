@@ -26,15 +26,15 @@ def test_precompile_index(monkeypatch, capsys):
         == '{"foo": 42, "_isPrebuiltIndex": true}'
     )
 
-    monkeypatch.setattr(shutil, "which", lambda _: "C:\\nodejs.exe")
+    monkeypatch.setattr(search, "node_executable", lambda: "C:\\nodejs.exe")
     assert (
         search.precompile_index(docs, compile_js)
         == '{"foo": 42, "_isPrebuiltIndex": true}'
     )
-    monkeypatch.setattr(shutil, "which", lambda _: None)
+    monkeypatch.setattr(search, "node_executable", lambda: None)
     assert (
         search.precompile_index(docs, compile_js)
-        == '{"foo": 42, "_isPrebuiltIndex": true}'
+        == json.dumps(docs)
     )
 
     def _raise(*_, **__):
