@@ -190,7 +190,7 @@ def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
 
 if __name__ == "__main__":
     warnings.simplefilter("error")
-    pdoc.search.node_executable = lambda: None
+    pdoc.search.node_executable = lambda: None  # type: ignore
     os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
