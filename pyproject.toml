@@ -11,7 +11,7 @@ dependencies = [
     "Jinja2 >= 2.11.0",
     "pygments >= 2.12.0",
     "MarkupSafe >= 1.1.1",
-    "markdown2>=2.5.4",
+    "markdown2 >= 2.5.4",
 ]
 
 classifiers = [
@@ -40,8 +40,8 @@ Issues = "https://github.com/mitmproxy/pdoc/issues"
 [project.scripts]
 pdoc = "pdoc.__main__:cli"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "tox>=4.21.2",
     "tox-uv>=1.13.0",
     "ruff>=0.6.9",
