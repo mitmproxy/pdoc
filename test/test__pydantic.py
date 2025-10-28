@@ -12,14 +12,15 @@ def test_no_pydantic(monkeypatch):
     assert _pydantic.default_value(pdoc.doc.Module, "kind", "module") == "module"
 
 
-def test_with_pydantic(monkeypatch):
-    class User(pydantic.BaseModel):
-        id: int
-        name: str = pydantic.Field(description="desc", default="Jane Doe")
+class ExampleModel(pydantic.BaseModel):
+    id: int
+    name: str = pydantic.Field(description="desc", default="Jane Doe")
 
-    assert _pydantic.is_pydantic_model(User)
-    assert _pydantic.get_field_docstring(User, "name") == "desc"
-    assert _pydantic.default_value(User, "name", None) == "Jane Doe"
+
+def test_with_pydantic(monkeypatch):
+    assert _pydantic.is_pydantic_model(ExampleModel)
+    assert _pydantic.get_field_docstring(ExampleModel, "name") == "desc"
+    assert _pydantic.default_value(ExampleModel, "name", None) == "Jane Doe"
 
     assert not _pydantic.is_pydantic_model(pdoc.doc.Module)
     assert _pydantic.get_field_docstring(pdoc.doc.Module, "kind") is None

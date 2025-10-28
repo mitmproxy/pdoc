@@ -4,7 +4,6 @@ from __future__ import annotations
 from contextlib import ExitStack
 import os
 from pathlib import Path
-import shutil
 import sys
 import tempfile
 import warnings
@@ -12,6 +11,7 @@ import warnings
 import pytest
 
 import pdoc.render
+import pdoc.search
 
 here = Path(__file__).parent.absolute()
 
@@ -175,6 +175,7 @@ def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
     Compare pdoc's rendered output against stored snapshots.
     """
     monkeypatch.chdir(snapshot_dir)
+    monkeypatch.setattr(pdoc.search, "node_executable", lambda: None)
     if sys.version_info < snapshot.min_version:
         pytest.skip(
             f"Snapshot only works on Python {'.'.join(str(x) for x in snapshot.min_version)} and above."
@@ -189,12 +190,7 @@ def test_snapshots(snapshot: Snapshot, format: str, monkeypatch):
 
 if __name__ == "__main__":
     warnings.simplefilter("error")
-    if not shutil.which("nodejs") and not shutil.which("node"):
-        print(
-            "Snapshots include precompiled search indices, "
-            "but this system does not have Node.js installed to render them. Aborting."
-        )
-        sys.exit(1)
+    pdoc.search.node_executable = lambda: None  # type: ignore
     os.chdir(snapshot_dir)
     skipped_some = False
     for snapshot in snapshots:
