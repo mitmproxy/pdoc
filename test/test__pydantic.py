@@ -1,4 +1,5 @@
 import pydantic
+from functools import cached_property
 
 from pdoc import _pydantic
 import pdoc.doc
@@ -21,13 +22,17 @@ class ExampleModel(pydantic.BaseModel):
     def computed(self) -> str:
         return "computed_value"
 
+    @pydantic.computed_field(description="cached")
+    @cached_property
+    def cached(self) -> str:
+        return "computed_value"
+
 
 def test_with_pydantic(monkeypatch):
     assert _pydantic.is_pydantic_model(ExampleModel)
     assert _pydantic.get_field_docstring(ExampleModel, "name") == "desc"
-    assert (
-        _pydantic.get_computed_field_docstring(ExampleModel, "computed") == "computed"
-    )
+    assert _pydantic.get_field_docstring(ExampleModel, "computed") == "computed"
+    assert _pydantic.get_field_docstring(ExampleModel, "cached") == "cached"
     assert _pydantic.default_value(ExampleModel, "name", None) == "Jane Doe"
 
     assert not _pydantic.is_pydantic_model(pdoc.doc.Module)

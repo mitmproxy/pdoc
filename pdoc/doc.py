@@ -327,19 +327,8 @@ class Namespace(Doc[U], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
 
-            ## Try get docstring from Pydantic field.
-            if _doc := _pydantic.get_field_docstring(
-                cast(type, self.obj),
-                name,
-            ):
+            if _doc := _pydantic.get_field_docstring(cast(type, self.obj), name):
                 doc.docstring = _doc
-            ## Try get docstring from Pydantic computed field.
-            elif _doc := _pydantic.get_computed_field_docstring(
-                cast(type, self.obj),
-                name,
-            ):
-                doc.docstring = _doc
-
             elif self._var_docstrings.get(name):
                 doc.docstring = self._var_docstrings[name]
             elif self._func_docstrings.get(name) and not doc.docstring:
