@@ -1,5 +1,6 @@
-import pydantic
 from functools import cached_property
+
+import pydantic
 
 from pdoc import _pydantic
 import pdoc.doc
