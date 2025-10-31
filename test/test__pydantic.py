@@ -18,12 +18,12 @@ class ExampleModel(pydantic.BaseModel):
     id: int
     name: str = pydantic.Field(description="desc", default="Jane Doe")
 
-    @pydantic.computed_field(description="computed")
+    @pydantic.computed_field(description="computed")  # type: ignore[misc]
     @property
     def computed(self) -> str:
         return "computed_value"
 
-    @pydantic.computed_field(description="cached")
+    @pydantic.computed_field(description="cached")  # type: ignore[misc]
     @cached_property
     def cached(self) -> str:
         return "computed_value"

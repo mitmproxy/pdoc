@@ -51,6 +51,6 @@ def get_field_docstring(parent: ClassOrModule, field_name: str) -> str | None:
     if is_pydantic_model(parent):
         if field := parent.__pydantic_fields__.get(field_name, None):
             return field.description
-        if field := parent.__pydantic_computed_fields__.get(field_name, None):
-            return field.description
+        if computed := parent.__pydantic_computed_fields__.get(field_name, None):
+            return computed.description
     return None
