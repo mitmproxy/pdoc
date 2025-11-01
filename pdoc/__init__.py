@@ -265,11 +265,11 @@ please amend `pdoc.docstrings` and send us a pull request!
 For [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/), pdoc
 will extract [field](https://docs.pydantic.dev/latest/concepts/fields/)
 descriptions and treat them just like [documented
-variables](#document-variables). For example, the following two Pydantic models
+variables](#document-variables). For example, the following Pydantic models
 would have identical pdoc-rendered documentation:
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
 class Foo(BaseModel):
     a: int = Field(description="Docs for field a.")
@@ -278,6 +278,11 @@ class OtherFoo(BaseModel):
     a: int
     """Docs for field a."""
 
+class ComputedFoo(BaseModel):
+    @computed_field(description="Docs for field a.")
+    @property
+    def a(self) -> int:
+        ...
 ```
 
 ## ...render math formulas?
