@@ -4,6 +4,7 @@
 
 ## Unreleased: pdoc next
 
+- Support Pydantic [`computed_field`](https://docs.pydantic.dev/2.0/usage/computed_fields/) descriptions ([#855](https://github.com/mitmproxy/pdoc/pull/855), @avhz)
 
 ## 2025-10-27: pdoc 16.0.0
 
