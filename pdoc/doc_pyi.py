@@ -120,6 +120,11 @@ def _patch_doc_from_stub_imports(target_doc: doc.Doc) -> doc.Doc:
     if stub_doc.docstring == overload_docstr:
         stub_doc.docstring = ""
 
+    # always pull source information from a real py module if available
+    stub_doc.source = target_doc.source or stub_doc.source
+    stub_doc.source_file = target_doc.source_file or stub_doc.source_file
+    stub_doc.source_lines = target_doc.source_lines or stub_doc.source_lines
+
     # since stubs are mainly for types, they may be missing a docstring
     # in which case we want to pull from the original target
     stub_doc.docstring = stub_doc.docstring or target_doc.docstring
