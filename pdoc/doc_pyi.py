@@ -44,6 +44,7 @@ def find_stub_file(module_name: str) -> Path | None:
     return None
 
 
+@cache
 def _import_stub_file(module_name: str, stub_file: Path) -> types.ModuleType:
     """
     Import the type stub outside of the normal import machinery.
@@ -79,6 +80,51 @@ def _prepare_module(ns: doc.Namespace) -> None:
     for member in ns.members.values():
         if isinstance(member, doc.Class):
             _prepare_module(member)
+
+
+def _patch_doc_from_stub_imports(target_doc: doc.Doc) -> doc.Doc:
+    """
+    Patch members of a target doc (a "real" Python module, e.g. a ".py" file)
+    with the type information from original stub files (e.g., a ".pyi" file).
+
+    Handles cases such as
+    ```
+    # __init__.py
+    from ._lib import foo as foo
+
+    # _lib.py
+    def foo(): ...
+
+    # _lib.pyi
+    def foo() -> str: ...
+    ```
+    """
+    if isinstance(target_doc, doc.Namespace):
+        for name, member in target_doc.members.items():
+            target_doc.members[name] = _patch_doc_from_stub_imports(member)
+        return target_doc
+
+    modulename, identifier = target_doc.taken_from
+    stub_file = find_stub_file(modulename)
+    if stub_file is None:
+        return target_doc
+
+    imported_stub = _import_stub_file(modulename, stub_file)
+
+    stub_doc = doc.Module(imported_stub).get(identifier)
+    if stub_doc is None:
+        return target_doc
+
+    # pyi files have functions where all defs have @overload.
+    # We don't want to pick up the docstring from the typing helper.
+    if stub_doc.docstring == overload_docstr:
+        stub_doc.docstring = ""
+
+    # since stubs are mainly for types, they may be missing a docstring
+    # in which case we want to pull from the original target
+    stub_doc.docstring = stub_doc.docstring or target_doc.docstring
+
+    return stub_doc
 
 
 def _patch_doc(target_doc: doc.Doc, stub_mod: doc.Module) -> None:
@@ -127,6 +173,7 @@ def include_typeinfo_from_stub_files(module: doc.Module) -> None:
 
     stub_file = find_stub_file(module.modulename)
     if not stub_file:
+        _patch_doc_from_stub_imports(module)
         return
 
     try:

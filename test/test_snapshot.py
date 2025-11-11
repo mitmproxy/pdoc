@@ -158,6 +158,7 @@ snapshots = [
     Snapshot("type_checking_imports", ["type_checking_imports.main"]),
     Snapshot("typed_dict", min_version=(3, 13)),
     Snapshot("type_stubs", ["type_stubs"], min_version=(3, 10)),
+    Snapshot("type_stubs_from_import", ["type_stubs_from_import"], min_version=(3, 10)),
     Snapshot(
         "visibility",
         render_options={
