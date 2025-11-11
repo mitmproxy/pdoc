@@ -36,3 +36,15 @@ def test_invalid_stub_file(monkeypatch):
         UserWarning, match=r"Error parsing type stubs[\s\S]+RuntimeError"
     ):
         _ = doc.Module(doc).members
+
+
+def test_invalid_imported_stub_file(monkeypatch):
+    monkeypatch.setattr(
+        doc_pyi,
+        "find_stub_file",
+        lambda m: here / "import_err/err/__init__.py" if m == "inspect" else None,
+    )
+    with pytest.warns(
+        UserWarning, match=r"Error parsing type stubs[\s\S]+RuntimeError"
+    ):
+        _ = doc.Module(doc).members

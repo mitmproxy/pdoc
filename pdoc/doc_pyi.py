@@ -109,7 +109,13 @@ def _patch_doc_from_stub_imports(target_doc: doc.Doc) -> doc.Doc:
     if stub_file is None:
         return target_doc
 
-    imported_stub = _import_stub_file(modulename, stub_file)
+    try:
+        imported_stub = _import_stub_file(modulename, stub_file)
+    except Exception:
+        warnings.warn(
+            f"Error parsing type stubs for {modulename}:\n{traceback.format_exc()}"
+        )
+        return target_doc
 
     stub_doc = doc.Module(imported_stub).get(identifier)
     if stub_doc is None:
