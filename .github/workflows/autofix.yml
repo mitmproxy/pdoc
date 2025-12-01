@@ -13,9 +13,9 @@ jobs:
   autofix:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-python@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-uv@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+      - uses: mhils/workflows/checkout@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-python@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-uv@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
 
       - run: uv lock
 

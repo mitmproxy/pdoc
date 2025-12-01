@@ -18,17 +18,17 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-python@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-uv@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+      - uses: mhils/workflows/checkout@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-python@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-uv@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
       - run: uv run tox -e lint
 
   old-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-python@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-uv@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+      - uses: mhils/workflows/checkout@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-python@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-uv@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
       - run: uv run tox -e old-dependencies
 
   test:
@@ -55,12 +55,12 @@ jobs:
             py: 3.10.18
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: mhils/workflows/checkout@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
-      - uses: mhils/workflows/setup-uv@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+      - uses: mhils/workflows/checkout@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
+      - uses: mhils/workflows/setup-uv@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
       - run: uv run --python ${{ matrix.py }} tox -e py -- -vvv ${{ matrix.args }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+    uses: mhils/workflows/.github/workflows/python-build.yml@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
     permissions:
       contents: read
       id-token: write
@@ -90,13 +90,13 @@ jobs:
     - test
     - build
     - attest
-    uses: mhils/workflows/.github/workflows/alls-green.yml@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+    uses: mhils/workflows/.github/workflows/alls-green.yml@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
     with:
       jobs: ${{ toJSON(needs) }}
       allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@8a2bdd081227cbdd6f5d3bbb54a759607feac0b6
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@481eaf3cc2ad8eb664a4c9a20cc635d46e02b5c6
     with:
       artifact-name: wheels
     needs: check
