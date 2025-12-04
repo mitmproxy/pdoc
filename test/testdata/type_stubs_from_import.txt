@@ -1,0 +1,17 @@
+<module type_stubs_from_import
+    <class type_stubs_from_import.Class  # inherited from type_stubs_from_import._lib.Class
+        <method def __init__(): ...>
+        <var attr: int  # An attribute>
+        <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        <class type_stubs_from_import.Class.Subclass  # inherited from type_stubs_from_import._lib.Class.Subclass
+            <method def __init__(): ...>
+            <var attr: str  # An attribute>
+            <method def meth(self, y: bool) -> bool: ...  # A simple method.>
+        >
+        <method def no_type_annotation(self, z): ...  # inherited from type_stubs_from_import._lib.Class.no_type_annotation, A method not present…>
+        <method def overloaded(*args, **kwds): ...  # An overloaded method…>
+    >
+    <function def bar(x: float, y: float, z: float) -> int: ...  # docstring in py file…>
+    <function def foo(x: int, y: str, z: bool) -> None: ...  # docstring in stub fi…>
+    <function def not_in_pyi(x: int) -> str: ...  # inherited from type_stubs_from_import._lib.not_in_pyi>
+>

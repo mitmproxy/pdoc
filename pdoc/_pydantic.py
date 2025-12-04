@@ -31,7 +31,11 @@ def is_pydantic_model(obj: ClassOrModule) -> TypeGuard[pydantic.BaseModel]:
         # => if we cannot import pydantic, the passed object cannot be a subclass of BaseModel.
         return False
 
-    return isinstance(obj, type) and issubclass(obj, pydantic.BaseModel)
+    return (
+        isinstance(obj, type)
+        and issubclass(obj, pydantic.BaseModel)
+        and obj is not pydantic.BaseModel  # BaseModel doesn't have __pydantic_fields__
+    )
 
 
 def default_value(parent: ClassOrModule, name: str, obj: Any) -> Any:
