@@ -32,7 +32,7 @@
     <class typed_dict.Baz  # A TypedDict subsubcl…
         <var b: int  # inherited from typed_dict.Bar.b, Second attribute.>
         <var c: str  # inherited from typed_dict.Bar.c>
-        <var a: int | None  # inherited from typed_dict.Foo.a, First attribute.>
+        <var a: int | None  # inherited from typed_dict.Bar.a, First attribute.>
         <var d: bool  # new attribute>
         <method def get(self, key, default=None, /): ...  # inherited from builtins.dict.get, Return the value for…>
         <method def setdefault(self, key, default=None, /): ...  # inherited from builtins.dict.setdefault, Insert key with a va…>
