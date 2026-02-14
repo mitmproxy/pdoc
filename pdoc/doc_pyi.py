@@ -77,7 +77,8 @@ def _prepare_module(ns: doc.Namespace) -> None:
 
     # at the moment, .members is the only lazy property that is accessed.
     for member in ns.members.values():
-        if isinstance(member, doc.Class):
+        # prevent infinite recursion for nested classes derived from the outer class
+        if isinstance(member, doc.Class) and not member.is_inherited:
             _prepare_module(member)
 
 
