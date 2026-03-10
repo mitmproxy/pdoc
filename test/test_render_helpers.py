@@ -5,6 +5,7 @@ from collections.abc import Mapping
 import pytest
 
 from pdoc.render_helpers import edit_url
+from pdoc.render_helpers import linkify
 from pdoc.render_helpers import module_candidates
 from pdoc.render_helpers import possible_sources
 from pdoc.render_helpers import qualname_candidates
@@ -161,3 +162,25 @@ def test_mixed_toc():
 )
 def test_markdown_autolink(md, html):
     assert to_html(md) == html
+
+
+def test_external_link_with_anchor_preserved():
+    """
+    External links with anchors must not be rewritten as relative documentation links.
+    """
+    md = "See [HttpResponseNotFound](https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.HttpResponseNotFound)."
+    html = to_html(md)
+
+    # Minimal context so linkify runs (no modules to link to); tests that external links are preserved.
+    class FakeModule:
+        modulename = "test"
+
+        def get(self, name):
+            return None
+
+    ctx = {"module": FakeModule(), "all_modules": {}, "is_public": lambda doc: ""}
+    result = str(linkify(ctx, html))
+    assert (
+        "https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.HttpResponseNotFound"
+        in result
+    )
