@@ -81,6 +81,14 @@ def test_rst_include_trim_pattern():
     assert trimmed == "\ncharlie\ndelta\n"
 
 
+def test_rst_include_trim_start_after_applied_first():
+    content = 'alpha\n"""\nbeta\ncharlie\ndelta\n"""\necho'
+    trimmed = docstrings._rst_include_trim(
+        content, {"start-after": '"""\n', "end-before": '"""'}
+    )
+    assert trimmed == "beta\ncharlie\ndelta\n"
+
+
 def test_rst_include_trim_mixture():
     content = "alpha\nbeta\ncharlie\ndelta\necho"
     trimmed = docstrings._rst_include_trim(

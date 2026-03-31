@@ -408,10 +408,10 @@ def _rst_include_trim(contents: str, options: dict[str, str]) -> str:
         if i := options.get("start-line"):
             lines = lines[int(i) :]
         contents = "\n".join(lines)
-    if x := options.get("end-before"):
-        contents = contents[: contents.index(x)]
     if x := options.get("start-after"):
         contents = contents[contents.index(x) + len(x) :]
+    if x := options.get("end-before"):
+        contents = contents[: contents.index(x)]
     return contents
 
 
