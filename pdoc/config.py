@@ -140,8 +140,11 @@ class Config:
         if maybe := cls._from_toml_dir(path):
             return maybe
         for p in path.resolve().parents:
-            if maybe := cls._from_toml_dir(p):
-                return maybe
+            try:
+                if maybe := cls._from_toml_dir(p):
+                    return maybe
+            except PermissionError:
+                break
         return cls()
 
     @classmethod
