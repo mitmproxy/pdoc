@@ -192,7 +192,7 @@ class Config:
         ]:
             val = f.get(name)
             if val is not None:
-                f[name] = fn(val)
+                f[name] = fn(val)  # type:ignore
 
         return cls(**f)
 
