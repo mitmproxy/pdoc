@@ -1,12 +1,17 @@
 from contextlib import contextmanager
 import os
 from pathlib import Path
+import sys
 
 import pytest
-import tomllib
 
 from pdoc.config import Config
 from pdoc.config import ConfigError
+
+if sys.version_info < (3, 15):
+    import tomli as tomllib
+else:
+    import tomllib
 
 config_dir = Path(__file__).resolve().parent / "config"
 

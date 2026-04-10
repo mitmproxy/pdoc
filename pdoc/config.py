@@ -10,12 +10,16 @@ from dataclasses import dataclass
 from dataclasses import fields
 import logging
 from pathlib import Path
+import sys
 from typing import Any
 from typing import BinaryIO
 from typing import Literal
 from typing import TypeVar
 
-import tomllib
+if sys.version_info < (3, 15):
+    import tomli as tomllib
+else:
+    import tomllib
 
 logger = logging.getLogger(__name__)
 
