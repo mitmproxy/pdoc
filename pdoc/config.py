@@ -16,9 +16,9 @@ from typing import BinaryIO
 from typing import Literal
 from typing import TypeVar
 
-if sys.version_info < (3, 15):
+if sys.version_info < (3, 15):  # pragma: no cover
     import tomli as tomllib
-else:
+else:  # pragma: no cover
     import tomllib
 
 logger = logging.getLogger(__name__)
