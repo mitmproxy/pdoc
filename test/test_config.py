@@ -6,12 +6,12 @@ import pytest
 import tomllib
 
 from pdoc.config import Config
+from pdoc.config import ConfigError
 
 config_dir = Path(__file__).resolve().parent / "config"
 
 
-expected_dict = tomllib.loads(
-    """
+expected_str = """
 modules = ["a.b", "a/b/c.py", "!hidden.py"]
 output-directory = "path/to/output/"
 docformat = "markdown"
@@ -30,12 +30,11 @@ host = "remotehost"
 port = 1234
 no-browser = true
 """
-)
 
 
 @pytest.fixture(scope="session")
 def expected_config() -> Config:
-    return Config.from_toml_table(expected_dict)
+    return Config.from_toml_str(expected_str)
 
 
 def test_read_pyproject(expected_config: Config):
@@ -62,6 +61,36 @@ def test_finds_parent(expected_config: Config):
     assert c == expected_config
 
 
+def test_empty():
+    path = config_dir / "parent/child"
+    c = Config.from_toml_dir(path)
+    assert c == Config()
+
+
+def test_discover_not_dir():
+    with pytest.raises(NotADirectoryError):
+        Config.from_toml_discover(config_dir / "pdoc/pdoc.toml")
+
+
+def test_parses_str():
+    Config.from_toml_str(expected_str)
+
+
+def test_parses_table():
+    Config.from_toml_table(tomllib.loads(expected_str))
+
+
+def test_not_table():
+    with pytest.raises(ConfigError):
+        Config.from_toml_str('tool = "spade"', True)
+    with pytest.raises(ConfigError):
+        Config.from_toml_str('tool.pdoc = "spade"', True)
+
+
+def test_extra_keys():
+    Config.from_toml_str('potato = "spade"')
+
+
 @contextmanager
 def chdir_tmp(path: Path):
     old = Path.cwd()
@@ -74,3 +103,23 @@ def test_with_cwd(expected_config: Config):
     with chdir_tmp(config_dir / "parent/child"):
         c = Config.from_toml_discover()
     assert c == expected_config
+
+
+def test_from_arg(expected_config):
+    c = Config.from_config_arg(config_dir / "pdoc")
+    assert c == expected_config
+
+
+def test_permissions(tmpdir, expected_config):
+    root = Path(tmpdir)
+    p = root / "pdoc.toml"
+    p.write_text(expected_str)
+    sub = root / "sub"
+    sub.mkdir()
+    # check that the file was read correctly
+    assert Config.from_toml_discover(sub) == expected_config
+
+    # nobody can read, everyone can write and execute
+    p.chmod(mode=222)
+    # check that the file was not read
+    assert Config.from_toml_discover(sub) == Config()

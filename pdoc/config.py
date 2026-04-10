@@ -102,11 +102,10 @@ class Config:
     def from_config_arg(cls, path: Path | None) -> Config:
         if path is None:
             return cls.from_toml_discover()
-        elif path.is_file():
-            return cls.from_toml_path(path)
         elif path.is_dir():
             return cls.from_toml_dir(path)
-        raise FileNotFoundError(f"Config path is not a file or directory: {path}")
+        else:
+            return cls.from_toml_path(path)
 
     @classmethod
     def _from_toml_dir(cls, path: Path) -> Config | None:
