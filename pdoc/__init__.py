@@ -500,6 +500,19 @@ to your Python code before pdoc is used.
 
 It is also possible to create `pdoc.doc.Module` objects directly and modify them before rendering.
 You can find an example in [`examples/library-usage`](https://github.com/mitmproxy/pdoc/tree/main/examples/library-usage).
+
+# Configuration
+
+All arguments except `config`, `help`, and `version` can be defined in a configuration file, in TOML format.
+pdoc looks for configuration files in the current working directory and then each of its ancestors in turn.
+If it finds a file called `pdoc.toml` it will look in the top-level table;
+otherwise, if it finds a file called `pyproject.toml` it will look in the `[tool.pdoc]` table.
+
+The keys are the long names of the arguments, in the original `kebab-case`.
+These values are then used as defaults for the CLI, which can be overridden by explicitly giving arguments.
+
+Multi-parameter arguments like `modules` are given as TOML arrays,
+except for `edit-url` which is a table from module names to URL prefixes.
 '''
 
 from __future__ import annotations
