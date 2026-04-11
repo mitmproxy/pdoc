@@ -344,6 +344,7 @@ def linkify(
     For example, replace "current_module.Foo" with "Foo". This is useful for annotations
     (which are verbose), but undesired for docstrings (where we want to preserve intent).
     """
+
     def linkify_repl(m: re.Match):
         """
         Resolve `text` to the most suitable documentation object.
