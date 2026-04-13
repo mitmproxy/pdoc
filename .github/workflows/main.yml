@@ -18,17 +18,17 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@af886cbabab992a8e7db75c6af3516af2b1f5a1c
-      - uses: mhils/workflows/setup-python@af886cbabab992a8e7db75c6af3516af2b1f5a1c
-      - uses: mhils/workflows/setup-uv@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+      - uses: mhils/workflows/checkout@8fe88b311a66c441e01edfebe4cd90d8a47fa335
+      - uses: mhils/workflows/setup-python@8fe88b311a66c441e01edfebe4cd90d8a47fa335
+      - uses: mhils/workflows/setup-uv@8fe88b311a66c441e01edfebe4cd90d8a47fa335
       - run: uv run tox -e lint
 
   old-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - uses: mhils/workflows/checkout@af886cbabab992a8e7db75c6af3516af2b1f5a1c
-      - uses: mhils/workflows/setup-python@af886cbabab992a8e7db75c6af3516af2b1f5a1c
-      - uses: mhils/workflows/setup-uv@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+      - uses: mhils/workflows/checkout@8fe88b311a66c441e01edfebe4cd90d8a47fa335
+      - uses: mhils/workflows/setup-python@8fe88b311a66c441e01edfebe4cd90d8a47fa335
+      - uses: mhils/workflows/setup-uv@8fe88b311a66c441e01edfebe4cd90d8a47fa335
       - run: uv run tox -e old-dependencies
 
   test:
@@ -55,12 +55,12 @@ jobs:
             py: 3.10.18
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: mhils/workflows/checkout@af886cbabab992a8e7db75c6af3516af2b1f5a1c
-      - uses: mhils/workflows/setup-uv@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+      - uses: mhils/workflows/checkout@8fe88b311a66c441e01edfebe4cd90d8a47fa335
+      - uses: mhils/workflows/setup-uv@8fe88b311a66c441e01edfebe4cd90d8a47fa335
       - run: uv run --python ${{ matrix.py }} tox -e py -- -vvv ${{ matrix.args }}
 
   build:
-    uses: mhils/workflows/.github/workflows/python-build.yml@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+    uses: mhils/workflows/.github/workflows/python-build.yml@8fe88b311a66c441e01edfebe4cd90d8a47fa335
     permissions:
       contents: read
       id-token: write
@@ -75,11 +75,11 @@ jobs:
       attestations: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: wheels
           path: dist/
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: 'dist/*'
 
@@ -90,13 +90,13 @@ jobs:
     - test
     - build
     - attest
-    uses: mhils/workflows/.github/workflows/alls-green.yml@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+    uses: mhils/workflows/.github/workflows/alls-green.yml@8fe88b311a66c441e01edfebe4cd90d8a47fa335
     with:
       jobs: ${{ toJSON(needs) }}
       allowed-skips: '["attest"]'
 
   deploy:
-    uses: mhils/workflows/.github/workflows/python-deploy.yml@af886cbabab992a8e7db75c6af3516af2b1f5a1c
+    uses: mhils/workflows/.github/workflows/python-deploy.yml@8fe88b311a66c441e01edfebe4cd90d8a47fa335
     with:
       artifact-name: wheels
     needs: check

@@ -98,6 +98,7 @@ ignore_missing_imports = true
 
 [tool.ruff]
 extend-exclude = ["test/testdata/demo.py"]
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
