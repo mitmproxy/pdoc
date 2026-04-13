@@ -5,6 +5,7 @@
 ## Unreleased: pdoc next
 
 - Fix incorrect ordering of `start-after`/`end-before` in RST include directives.
+  ([#876](https://github.com/mitmproxy/pdoc/pull/876), @JohanKarlbergg)
 - Support Pydantic [`computed_field`](https://docs.pydantic.dev/2.0/usage/computed_fields/) descriptions ([#855](https://github.com/mitmproxy/pdoc/pull/855), @avhz)
 
 ## 2025-10-27: pdoc 16.0.0
