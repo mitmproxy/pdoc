@@ -1,0 +1,18 @@
+[tool.pdoc]
+modules = ["a.b", "a/b/c.py", "!hidden.py"]
+output-directory = "path/to/output/"
+docformat = "markdown"
+include-undocumented = false
+edit-url = { key = "https://value.com", key2 = "https://value.com/somethingelse" }
+favicon = "https://pictures.com/sheep"
+footer-text = "And that's the way the cookie crumbles."
+logo = "./logo.png"
+logo-link = "https://pictures.com/logo.png"
+math = true
+mermaid = true
+search = false
+show-source = false
+template-directory = "path/to/templates"
+host = "remotehost"
+port = 1234
+no-browser = true

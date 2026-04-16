@@ -27,6 +27,28 @@ def test_cli_version(capsys):
     assert "pdoc:" in capsys.readouterr().out
 
 
+def test_cli_config(capsys):
+    try:
+        cli(["--config", str(here / "config/pdoc/pdoc.toml"), "--help"])
+    except SystemExit as e:
+        # --help does an early exit which quits the test,
+        # so catch that here
+        assert e.code == 0
+
+    out = capsys.readouterr().out
+    # normalise for automatic line breaks
+    normalised = " ".join(out.split())
+
+    # check that values defined in the config are shown as defaults
+    for default in [
+        "['a.b', 'a/b/c.py', '!hidden.py']",
+        "markdown",
+        "['key=https://value.com', 'key2=https://value.com/somethingelse']",
+        1234,
+    ]:
+        assert f"(default: {default})" in normalised
+
+
 def test_cli_web(capsys):
     with patch("pdoc.web.open_browser") as open_browser:
         with patch(

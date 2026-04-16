@@ -7,8 +7,8 @@ import subprocess
 import sys
 import warnings
 
-import pdoc.doc
-import pdoc.extract
+from pdoc.config import Config
+from pdoc.config import or_else
 import pdoc.render
 import pdoc.web
 
@@ -21,146 +21,178 @@ if sys.stdout.isatty():  # pragma: no cover
 else:
     red = yellow = gray = white = default = ""
 
-parser = argparse.ArgumentParser(
-    description="Automatically generate API docs for Python modules.",
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    add_help=False,
-)
-mainargs = parser.add_argument_group(f"{white}Main Arguments{default}")
-mainargs.add_argument(
-    "modules",
-    type=str,
-    default=[],
-    metavar="module",
-    nargs="*",
-    help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py")'
-    '. Exclude submodules by specifying a negative !regex pattern, e.g. "foo !foo.bar".',
-)
-mainargs.add_argument(
-    "-o",
-    "--output-directory",
-    metavar="DIR",
-    type=Path,
-    help="Write rendered documentation to the specified directory, don't start a webserver.",
-)
 
-renderopts = parser.add_argument_group(f"{white}Customize Rendering{default}")
-renderopts.add_argument(
-    "-d",
-    "--docformat",
-    type=str,
-    default="restructuredtext",
-    choices=("markdown", "google", "numpy", "restructuredtext"),
-    help="The default docstring format. For non-Markdown formats, pdoc will first convert matching syntax elements to "
-    "Markdown and then process everything as Markdown.",
-)
-renderopts.add_argument(
-    "--include-undocumented",
-    action=argparse.BooleanOptionalAction,
-    default=True,
-    help="Show classes/functions/variables that do not have a docstring.",
-)
-renderopts.add_argument(
-    "-e",
-    "--edit-url",
-    action="append",
-    type=str,
-    default=[],
-    metavar="module=url",
-    help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
-    "May be passed multiple times. "
-    "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
-)
-renderopts.add_argument(
-    "--favicon",
-    type=str,
-    metavar="URL",
-    help="Specify a custom favicon URL.",
-)
-renderopts.add_argument(
-    "--footer-text",
-    type=str,
-    metavar="TEXT",
-    help="Custom text for the page footer, for example the project name and current version number.",
-)
-renderopts.add_argument(
-    "--logo",
-    type=str,
-    metavar="URL",
-    help="Add a project logo image.",
-)
-renderopts.add_argument(
-    "--logo-link",
-    type=str,
-    metavar="URL",
-    help="Optional URL the logo should point to.",
-)
-renderopts.add_argument(
-    "--math",
-    action=argparse.BooleanOptionalAction,
-    default=False,
-    help="Include MathJax from a CDN to enable math formula rendering.",
-)
-renderopts.add_argument(
-    "--mermaid",
-    action=argparse.BooleanOptionalAction,
-    default=False,
-    help="Include Mermaid.js from a CDN to enable Mermaid diagram rendering.",
-)
-renderopts.add_argument(
-    "--search",
-    action=argparse.BooleanOptionalAction,
-    default=True,
-    help="Enable search functionality if multiple modules are documented.",
-)
-renderopts.add_argument(
-    "--show-source",
-    action=argparse.BooleanOptionalAction,
-    default=True,
-    help='Display "View Source" buttons.',
-)
-renderopts.add_argument(
-    "-t",
-    "--template-directory",
-    metavar="DIR",
-    type=Path,
-    default=None,
-    help="A directory containing Jinja2 templates to customize output. "
-    "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
-)
+def build_parser(config: Config) -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Automatically generate API docs for Python modules.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        add_help=False,
+    )
+    mainargs = parser.add_argument_group(f"{white}Main Arguments{default}")
+    mainargs.add_argument(
+        "modules",
+        type=str,
+        default=or_else(config.modules, []),
+        metavar="module",
+        nargs="*",
+        help='Python module names. These may be importable Python module names ("pdoc.doc") or file paths ("./pdoc/doc.py")'
+        '. Exclude submodules by specifying a negative !regex pattern, e.g. "foo !foo.bar".',
+    )
+    mainargs.add_argument(
+        "-o",
+        "--output-directory",
+        metavar="DIR",
+        type=Path,
+        default=config.output_directory,
+        help="Write rendered documentation to the specified directory, don't start a webserver.",
+    )
 
-miscargs = parser.add_argument_group(f"{white}Miscellaneous Options{default}")
-miscargs.add_argument(
-    "-h",
-    "--host",
-    type=str,
-    default="localhost",
-    help="The host on which to run the HTTP server.",
-)
-miscargs.add_argument(
-    "-p",
-    "--port",
-    type=int,
-    default=None,
-    help="The port on which to run the HTTP server.",
-)
-miscargs.add_argument(
-    "-n",
-    "--no-browser",
-    action="store_true",
-    help="Don't open a browser after the web server has started.",
-)
-miscargs.add_argument("--help", action="help", help="Show this help message and exit.")
-miscargs.add_argument(
-    "--version",
-    action="store_true",
-    default=argparse.SUPPRESS,
-    help="Show version information and exit.",
-)
+    # this is only here for documentation purposes;
+    # the value is parsed earlier
+    mainargs.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        help="Path to TOML configuration file. "
+        "If the file name is `pyproject.toml`, config is under the `tool.pdoc` key; "
+        "otherwise, look in the root of the TOML file.",
+    )
+
+    renderopts = parser.add_argument_group(f"{white}Customize Rendering{default}")
+    renderopts.add_argument(
+        "-d",
+        "--docformat",
+        type=str,
+        default=or_else(config.docformat, "restructuredtext"),
+        choices=("markdown", "google", "numpy", "restructuredtext"),
+        help="The default docstring format. For non-Markdown formats, pdoc will first convert matching syntax elements to "
+        "Markdown and then process everything as Markdown.",
+    )
+    renderopts.add_argument(
+        "--include-undocumented",
+        action=argparse.BooleanOptionalAction,
+        default=or_else(config.include_undocumented, True),
+        help="Show classes/functions/variables that do not have a docstring.",
+    )
+    renderopts.add_argument(
+        "-e",
+        "--edit-url",
+        action="append",
+        type=str,
+        default=or_else(config.edit_url, []),
+        metavar="module=url",
+        help="A mapping between module names and URL prefixes, used to display an 'Edit' button. "
+        "May be passed multiple times. "
+        "Example: pdoc=https://github.com/mitmproxy/pdoc/blob/main/pdoc/",
+    )
+    renderopts.add_argument(
+        "--favicon",
+        type=str,
+        default=config.favicon,
+        metavar="URL",
+        help="Specify a custom favicon URL.",
+    )
+    renderopts.add_argument(
+        "--footer-text",
+        type=str,
+        default=config.footer_text,
+        metavar="TEXT",
+        help="Custom text for the page footer, for example the project name and current version number.",
+    )
+    renderopts.add_argument(
+        "--logo",
+        type=str,
+        default=config.logo,
+        metavar="URL",
+        help="Add a project logo image.",
+    )
+    renderopts.add_argument(
+        "--logo-link",
+        type=str,
+        default=config.logo_link,
+        metavar="URL",
+        help="Optional URL the logo should point to.",
+    )
+    renderopts.add_argument(
+        "--math",
+        action=argparse.BooleanOptionalAction,
+        default=or_else(config.math, False),
+        help="Include MathJax from a CDN to enable math formula rendering.",
+    )
+    renderopts.add_argument(
+        "--mermaid",
+        action=argparse.BooleanOptionalAction,
+        default=or_else(config.mermaid, False),
+        help="Include Mermaid.js from a CDN to enable Mermaid diagram rendering.",
+    )
+    renderopts.add_argument(
+        "--search",
+        action=argparse.BooleanOptionalAction,
+        default=or_else(config.search, True),
+        help="Enable search functionality if multiple modules are documented.",
+    )
+    renderopts.add_argument(
+        "--show-source",
+        action=argparse.BooleanOptionalAction,
+        default=or_else(config.show_source, True),
+        help='Display "View Source" buttons.',
+    )
+    renderopts.add_argument(
+        "-t",
+        "--template-directory",
+        metavar="DIR",
+        type=Path,
+        default=config.template_directory,
+        help="A directory containing Jinja2 templates to customize output. "
+        "Alternatively, put your templates in $XDG_CONFIG_HOME/pdoc and pdoc will automatically find them.",
+    )
+
+    miscargs = parser.add_argument_group(f"{white}Miscellaneous Options{default}")
+    miscargs.add_argument(
+        "-h",
+        "--host",
+        type=str,
+        default=or_else(config.host, "localhost"),
+        help="The host on which to run the HTTP server.",
+    )
+    miscargs.add_argument(
+        "-p",
+        "--port",
+        type=int,
+        default=or_else(config.port, None),
+        help="The port on which to run the HTTP server.",
+    )
+    miscargs.add_argument(
+        "-n",
+        "--no-browser",
+        action="store_true",
+        default=config.no_browser,
+        help="Don't open a browser after the web server has started.",
+    )
+    miscargs.add_argument(
+        "--help", action="help", help="Show this help message and exit."
+    )
+    miscargs.add_argument(
+        "--version",
+        action="store_true",
+        default=argparse.SUPPRESS,
+        help="Show version information and exit.",
+    )
+    return parser
+
+
+def get_config(args: list[str] | None = None) -> Config:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-c", "--config", type=Path)
+    known, _ = parser.parse_known_args(args)
+    return Config.from_config_arg(known.config)
 
 
 def cli(args: list[str] | None = None) -> None:
     """Command-line entry point"""
+    config = get_config(args)
+
+    parser = build_parser(config)
     opts = parser.parse_args(args)
     if getattr(opts, "version", False):
         print(
