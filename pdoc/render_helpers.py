@@ -306,6 +306,31 @@ def module_candidates(identifier: str, current_module: str) -> Iterable[str]:
         yield identifier
 
 
+@contextmanager
+def shield_fragments(code: str, pattern: str | re.Pattern[str], flags: int = 0):
+    """
+    Context manager that shields regex matches in `code` from being modified,
+    then restores them afterward.
+
+    Yields a tuple ``(shielded_code, restore)`` where ``shielded_code`` is the
+    input with all matches replaced by unique placeholders, and ``restore`` is a
+    callable that replaces the placeholders back with the original matches.
+    """
+    placeholders: list[str] = []
+
+    def save(m: re.Match[str]) -> str:
+        placeholders.append(m.group(0))
+        return f"\u200b\u200bPDOC_FRAGMENT_{len(placeholders) - 1}\u200b\u200b"
+
+    def restore(text: str) -> str:
+        for i, original in enumerate(placeholders):
+            text = text.replace(f"\u200b\u200bPDOC_FRAGMENT_{i}\u200b\u200b", original)
+        return text
+
+    shielded = re.sub(pattern, save, code, flags=flags)
+    yield shielded, restore
+
+
 @pass_context
 def linkify(
     context: Context, code: str, namespace: str = "", shorten: bool = True
@@ -401,8 +426,10 @@ def linkify(
         # No matches found.
         return text
 
-    return Markup(
-        re.sub(
+    with shield_fragments(
+        code, r'<a\s+href="https?://[^"]*"[^>]*>.*?</a>', re.DOTALL
+    ) as (code, restore):
+        result = re.sub(
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&\.])  # heuristic: not part of a URL
@@ -433,7 +460,7 @@ def linkify(
             code,
             flags=re.VERBOSE,
         )
-    )
+    return Markup(restore(result))
 
 
 @pass_context
