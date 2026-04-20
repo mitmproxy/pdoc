@@ -701,6 +701,8 @@ class Class(Namespace[type]):
                 decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
             for name in cls.__dict__:
                 decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
+            for name in _safe_getattr(cls, "__annotations__", []):
+                decls.setdefault(name, (cls.__module__, f"{cls.__qualname__}.{name}"))
         if decls.get("__init__", None) == ("builtins", "object.__init__"):
             decls["__init__"] = (
                 self.obj.__module__,
