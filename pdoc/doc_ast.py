@@ -93,8 +93,12 @@ class AstInfo:
     """A qualname -> docstring mapping for functions."""
     annotations: dict[str, str | type[pdoc.doc_types.empty]]
     """A qualname -> annotation mapping.
-    
+
     Annotations are not evaluated by this module and only returned as strings."""
+    var_source_lines: dict[str, tuple[int, int]]
+    """A qualname -> (start_line, end_line) mapping for variable assignments.
+
+    Line numbers are 1-based and relative to the parsed source."""
 
 
 def walk_tree(obj: types.ModuleType | type) -> AstInfo:
@@ -111,6 +115,7 @@ def _walk_tree(
     var_docstrings = {}
     func_docstrings = {}
     annotations = {}
+    var_source_lines: dict[str, tuple[int, int]] = {}
     for a, b in _pairwise_longest(_nodes(tree)):
         if isinstance(a, ast_TypeAlias):
             name = a.name.id
@@ -139,6 +144,10 @@ def _walk_tree(
             continue
         else:
             continue
+        # Record source line info for variables (skip synthetic nodes from _init_nodes)
+        lineno = getattr(a, "lineno", None)
+        if lineno is not None:
+            var_source_lines[name] = (lineno, getattr(a, "end_lineno", None) or lineno)
         if (
             isinstance(b, ast.Expr)
             and isinstance(b.value, ast.Constant)
@@ -149,6 +158,7 @@ def _walk_tree(
         var_docstrings,
         func_docstrings,
         annotations,
+        var_source_lines,
     )
 
 

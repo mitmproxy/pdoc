@@ -522,14 +522,19 @@ which will also show up in the navigation.</p>
 
             </section>
                 <section id="FOO_CONSTANT">
-                    <div class="attr variable">
+                            <input id="FOO_CONSTANT-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">FOO_CONSTANT</span><span class="annotation">: int</span>        =
 <span class="default_value">42</span>
 
-        
+                <label class="view-source-button" for="FOO_CONSTANT-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#FOO_CONSTANT"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FOO_CONSTANT-37"><a href="#FOO_CONSTANT-37"><span class="linenos">37</span></a><span class="n">FOO_CONSTANT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A happy constant. ✨
 pdoc documents constants with their type annotation and default value.</p>
 </div>
@@ -537,13 +542,18 @@ pdoc documents constants with their type annotation and default value.</p>
 
                 </section>
                 <section id="FOO_SINGLETON">
-                    <div class="attr variable">
+                            <input id="FOO_SINGLETON-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">FOO_SINGLETON</span><span class="annotation">: <a href="#Foo">Foo</a></span>
 
-        
+                <label class="view-source-button" for="FOO_SINGLETON-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#FOO_SINGLETON"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FOO_SINGLETON-43"><a href="#FOO_SINGLETON-43"><span class="linenos">43</span></a><span class="n">FOO_SINGLETON</span><span class="p">:</span> <span class="s2">&quot;Foo&quot;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>This variable is annotated with a type only, but not assigned to a value.
 We also haven't defined the associated type (<code><a href="#Foo">Foo</a></code>) yet,
 so the type annotation in the code in the source code is actually a string literal:</p>
@@ -561,13 +571,18 @@ automatically.</p>
 
                 </section>
                 <section id="NO_DOCSTRING">
-                    <div class="attr variable">
+                            <input id="NO_DOCSTRING-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">NO_DOCSTRING</span><span class="annotation">: int</span>
 
-        
+                <label class="view-source-button" for="NO_DOCSTRING-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#NO_DOCSTRING"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NO_DOCSTRING-58"><a href="#NO_DOCSTRING-58"><span class="linenos">58</span></a><span class="n">NO_DOCSTRING</span><span class="p">:</span> <span class="nb">int</span>
+</span></pre></div>
+
+
     
 
                 </section>
@@ -739,27 +754,37 @@ as well as a keyword-only arguments (*).</p>
 
                             </div>
                             <div id="Foo.an_attribute" class="classattr">
-                                <div class="attr variable">
+                                        <input id="Foo.an_attribute-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">an_attribute</span><span class="annotation">: str | list[int]</span>
 
-        
+                <label class="view-source-button" for="Foo.an_attribute-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#Foo.an_attribute"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.an_attribute-98"><a href="#Foo.an_attribute-98"><span class="linenos">98</span></a>    <span class="n">an_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A regular attribute with type annotations</p>
 </div>
 
 
                             </div>
                             <div id="Foo.a_class_attribute" class="classattr">
-                                <div class="attr variable">
+                                        <input id="Foo.a_class_attribute-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">a_class_attribute</span><span class="annotation">: ClassVar[str]</span>        =
 <span class="default_value">&#39;lots of foo!&#39;</span>
 
-        
+                <label class="view-source-button" for="Foo.a_class_attribute-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#Foo.a_class_attribute"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Foo.a_class_attribute-101"><a href="#Foo.a_class_attribute-101"><span class="linenos">101</span></a>    <span class="n">a_class_attribute</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;lots of foo!&quot;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>An attribute with a ClassVar annotation.</p>
 </div>
 
@@ -990,13 +1015,18 @@ as well as a keyword-only arguments (*).</p>
 
 
                             <div id="Bar.bar" class="classattr">
-                                <div class="attr variable">
+                                        <input id="Bar.bar-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">bar</span><span class="annotation">: str</span>
 
-        
+                <label class="view-source-button" for="Bar.bar-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#Bar.bar"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Bar.bar-150"><a href="#Bar.bar-150"><span class="linenos">150</span></a>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A new attribute defined on this subclass.</p>
 </div>
 
@@ -1223,28 +1253,38 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
                             </div>
                 </section>
                 <section id="CONST_B">
-                    <div class="attr variable">
+                            <input id="CONST_B-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">CONST_B</span>        =
 <span class="default_value">&#39;yes&#39;</span>
 
-        
+                <label class="view-source-button" for="CONST_B-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#CONST_B"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CONST_B-203"><a href="#CONST_B-203"><span class="linenos">203</span></a><span class="n">CONST_B</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A constant without type annotation</p>
 </div>
 
 
                 </section>
                 <section id="CONST_NO_DOC">
-                    <div class="attr variable">
+                            <input id="CONST_NO_DOC-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">CONST_NO_DOC</span>        =
 <span class="default_value">&#39;SHOULD NOT APPEAR&#39;</span>
 
-        
+                <label class="view-source-button" for="CONST_NO_DOC-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#CONST_NO_DOC"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CONST_NO_DOC-206"><a href="#CONST_NO_DOC-206"><span class="linenos">206</span></a><span class="n">CONST_NO_DOC</span> <span class="o">=</span> <span class="s2">&quot;SHOULD NOT APPEAR&quot;</span>
+</span></pre></div>
+
+
     
 
                 </section>
@@ -1300,62 +1340,87 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
                             </div>
                             <div id="DataDemo.a" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemo.a-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">a</span><span class="annotation">: int</span>
 
-        
+                <label class="view-source-button" for="DataDemo.a-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemo.a"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo.a-218"><a href="#DataDemo.a-218"><span class="linenos">218</span></a>    <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>Again, we can document individual properties with docstrings.</p>
 </div>
 
 
                             </div>
                             <div id="DataDemo.a2" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemo.a2-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">a2</span><span class="annotation">: Sequence[str]</span>
 
-        
+                <label class="view-source-button" for="DataDemo.a2-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemo.a2"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo.a2-220"><a href="#DataDemo.a2-220"><span class="linenos">220</span></a>    <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span></pre></div>
+
+
     
 
                             </div>
                             <div id="DataDemo.a3" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemo.a3-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">a3</span>        =
 <span class="default_value">&#39;a3&#39;</span>
 
-        
+                <label class="view-source-button" for="DataDemo.a3-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemo.a3"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo.a3-222"><a href="#DataDemo.a3-222"><span class="linenos">222</span></a>    <span class="n">a3</span> <span class="o">=</span> <span class="s2">&quot;a3&quot;</span>
+</span></pre></div>
+
+
     
 
                             </div>
                             <div id="DataDemo.a4" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemo.a4-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">a4</span><span class="annotation">: str</span>        =
 <span class="default_value">&#39;a4&#39;</span>
 
-        
+                <label class="view-source-button" for="DataDemo.a4-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemo.a4"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo.a4-224"><a href="#DataDemo.a4-224"><span class="linenos">224</span></a>    <span class="n">a4</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;a4&quot;</span>
+</span></pre></div>
+
+
     
 
                             </div>
                             <div id="DataDemo.b" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemo.b-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">b</span><span class="annotation">: bool</span>        =
 <span class="default_value">True</span>
 
-        
+                <label class="view-source-button" for="DataDemo.b-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemo.b"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemo.b-226"><a href="#DataDemo.b-226"><span class="linenos">226</span></a>    <span class="n">b</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>This property is assigned to <code>dataclasses.field()</code>, which works just as well.</p>
 </div>
 
@@ -1396,14 +1461,19 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
                             </div>
                             <div id="DataDemoExtended.c" class="classattr">
-                                <div class="attr variable">
+                                        <input id="DataDemoExtended.c-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">c</span><span class="annotation">: str</span>        =
 <span class="default_value">&#39;42&#39;</span>
 
-        
+                <label class="view-source-button" for="DataDemoExtended.c-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#DataDemoExtended.c"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DataDemoExtended.c-232"><a href="#DataDemoExtended.c-232"><span class="linenos">232</span></a>    <span class="n">c</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;42&quot;</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A new attribute.</p>
 </div>
 
@@ -1456,42 +1526,57 @@ but some special cases -- like os.environ -- are overridden to avoid leaking sen
 
 
                             <div id="EnumDemo.RED" class="classattr">
-                                <div class="attr variable">
+                                        <input id="EnumDemo.RED-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">RED</span>        =
 <span class="default_value">&lt;<a href="#EnumDemo.RED">EnumDemo.RED</a>: 1&gt;</span>
 
-        
+                <label class="view-source-button" for="EnumDemo.RED-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#EnumDemo.RED"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo.RED-243"><a href="#EnumDemo.RED-243"><span class="linenos">243</span></a>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>I am the red.</p>
 </div>
 
 
                             </div>
                             <div id="EnumDemo.GREEN" class="classattr">
-                                <div class="attr variable">
+                                        <input id="EnumDemo.GREEN-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">GREEN</span>        =
 <span class="default_value">&lt;<a href="#EnumDemo.GREEN">EnumDemo.GREEN</a>: 2&gt;</span>
 
-        
+                <label class="view-source-button" for="EnumDemo.GREEN-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#EnumDemo.GREEN"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo.GREEN-245"><a href="#EnumDemo.GREEN-245"><span class="linenos">245</span></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">2</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>I am green.</p>
 </div>
 
 
                             </div>
                             <div id="EnumDemo.BLUE" class="classattr">
-                                <div class="attr variable">
+                                        <input id="EnumDemo.BLUE-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">BLUE</span>        =
 <span class="default_value">&lt;<a href="#EnumDemo.BLUE">EnumDemo.BLUE</a>: 3&gt;</span>
 
-        
+                <label class="view-source-button" for="EnumDemo.BLUE-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#EnumDemo.BLUE"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EnumDemo.BLUE-247"><a href="#EnumDemo.BLUE-247"><span class="linenos">247</span></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+</span></pre></div>
+
+
     
 
                             </div>

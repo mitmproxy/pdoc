@@ -327,6 +327,21 @@ class Namespace(Doc[U], metaclass=ABCMeta):
                     taken_from=taken_from,
                 )
 
+            if isinstance(doc, Variable) and not is_property:
+                _ast_info = doc_ast.walk_tree(self.obj)
+                if name in _ast_info.var_source_lines:
+                    start, end = _ast_info.var_source_lines[name]
+                    parent_source = doc_ast.get_source(self.obj)
+                    if parent_source:
+                        src_lines = parent_source.splitlines(True)
+                        doc.source = "".join(src_lines[start - 1 : end])
+                        parent_start = self.source_lines[0] if self.source_lines else 1
+                        doc.source_lines = (
+                            parent_start + start - 1,
+                            parent_start + end - 1,
+                        )
+                        doc.source_file = self.source_file
+
             if _doc := _pydantic.get_field_docstring(cast(type, self.obj), name):
                 doc.docstring = _doc
             elif self._var_docstrings.get(name):

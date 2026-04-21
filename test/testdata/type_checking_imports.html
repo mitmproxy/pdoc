@@ -122,28 +122,38 @@ type_checking_imports<wbr>.main    </h1>
 
                 </section>
                 <section id="var">
-                    <div class="attr variable">
+                            <input id="var-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">var</span><span class="annotation">: Sequence[int]</span>        =
 <span class="default_value">(1, 2, 3)</span>
 
-        
+                <label class="view-source-button" for="var-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#var"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="var-24"><a href="#var-24"><span class="linenos">24</span></a><span class="n">var</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A variable with TYPE_CHECKING type annotations.</p>
 </div>
 
 
                 </section>
                 <section id="imported_from_cached_module">
-                    <div class="attr variable">
+                            <input id="imported_from_cached_module-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">imported_from_cached_module</span><span class="annotation">: str | int</span>        =
 <span class="default_value">42</span>
 
-        
+                <label class="view-source-button" for="imported_from_cached_module-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#imported_from_cached_module"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="imported_from_cached_module-28"><a href="#imported_from_cached_module-28"><span class="linenos">28</span></a><span class="n">imported_from_cached_module</span><span class="p">:</span> <span class="n">StrOrInt</span> <span class="o">=</span> <span class="mi">42</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A variable with a type annotation that's imported from another file's TYPE_CHECKING block.</p>
 
 <p><a href="https://github.com/mitmproxy/pdoc/issues/648">https://github.com/mitmproxy/pdoc/issues/648</a></p>
@@ -152,14 +162,19 @@ type_checking_imports<wbr>.main    </h1>
 
                 </section>
                 <section id="imported_from_uncached_module">
-                    <div class="attr variable">
+                            <input id="imported_from_uncached_module-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">imported_from_uncached_module</span><span class="annotation">: str | bool</span>        =
 <span class="default_value">True</span>
 
-        
+                <label class="view-source-button" for="imported_from_uncached_module-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#imported_from_uncached_module"></a>
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="imported_from_uncached_module-35"><a href="#imported_from_uncached_module-35"><span class="linenos">35</span></a><span class="n">imported_from_uncached_module</span><span class="p">:</span> <span class="n">StrOrBool</span> <span class="o">=</span> <span class="kc">True</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>A variable with a type annotation that's imported from another file's TYPE_CHECKING block.</p>
 
 <p>In this case, the module is not in sys.modules outside of TYPE_CHECKING.</p>
