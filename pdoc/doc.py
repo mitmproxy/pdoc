@@ -683,9 +683,15 @@ class Class(Namespace[type]):
 
         # __mro__ and __orig_bases__ differ between Python versions and special cases like TypedDict/NamedTuple.
         # This here is a pragmatic approximation of what we want.
+        # Only prepend __orig_bases__ entries absent from __mro__, so a plain base cannot shadow the class itself.
+        mro = self.obj.__mro__
         return (
-            *(base for base in orig_bases if isinstance(base, type)),
-            *self.obj.__mro__,
+            *(
+                base
+                for base in orig_bases
+                if isinstance(base, type) and base not in mro
+            ),
+            *mro,
         )
 
     @cached_property
