@@ -186,3 +186,19 @@ def test_source_file_method():
     assert m.members["Foo"].members["a_cached_function"].source_file == (
         here / "testdata" / "demo_long.py"
     )
+
+
+def test_overridden_method_with_generic_base():
+    mod = extract.load_module(
+        extract.parse_spec(here / "testdata" / "generic_mixin.py")
+    )
+
+    m = Module(mod)
+    cls = m.members["Mixed"]
+    assert isinstance(cls, Class)
+
+    for name in ("generic_method", "plain_method"):
+        member = cls.members[name]
+        assert member.taken_from == ("generic_mixin", f"Mixed.{name}")
+        assert member.docstring == f"{name} implementation docstring"
+        assert member in cls.own_members
