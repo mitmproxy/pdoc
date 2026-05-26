@@ -468,3 +468,8 @@ This makes sure that the pdoc styling doesn't leak to the rest of the page when 
     padding: 6px 13px;
     border: 1px solid var(--accent2);
 }
+
+.pdoc img {
+    height: auto;
+    max-width: 100%;
+}
