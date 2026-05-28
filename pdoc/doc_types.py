@@ -115,7 +115,7 @@ def safe_eval_type(
     if module:
         assert module.__dict__ is globalns
         # Guard against re-entering this block for the same module (prevents infinite recursion)
-        if getattr(module, '_pdoc_evaluating_type_checking', False):
+        if getattr(module, "_pdoc_evaluating_type_checking", False):
             warnings.warn(
                 f"Circular dependency detected while resolving type annotation {t} for {fullname} in module {module.__name__}. Returning unevaluated."
             )
