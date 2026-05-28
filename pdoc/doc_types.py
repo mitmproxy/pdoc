@@ -114,12 +114,21 @@ def safe_eval_type(
     # Simple _eval_type has failed. We now execute all TYPE_CHECKING sections in the module and try again.
     if module:
         assert module.__dict__ is globalns
+        # Guard against re-entering this block for the same module (prevents infinite recursion)
+        if getattr(module, "_pdoc_evaluating_type_checking", False):
+            warnings.warn(
+                f"Circular dependency detected while resolving type annotation {t} for {fullname} in module {module.__name__}. Returning unevaluated."
+            )
+            return t
+        module._pdoc_evaluating_type_checking = True
         try:
             _eval_type_checking_sections(module, set())
         except Exception as e:
             warnings.warn(
                 f"Failed to run TYPE_CHECKING code while parsing {t} type annotation for {fullname}: {e}"
             )
+        finally:
+            del module._pdoc_evaluating_type_checking
         try:
             return _eval_type(t, globalns, None)
         except (AttributeError, NameError):
