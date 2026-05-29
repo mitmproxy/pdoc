@@ -176,6 +176,7 @@ def open_browser(url: str) -> bool:  # pragma: no cover
         "wslview %s",
         "x-www-browser %s",
         "gnome-open %s",
+        "xdg-open",
         "google-chrome",
         "chrome",
         "chromium",
