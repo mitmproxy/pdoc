@@ -79,7 +79,7 @@ jobs:
         with:
           name: wheels
           path: dist/
-      - uses: actions/attest-build-provenance@v4
+      - uses: actions/attest-build-provenance@v4.1.0
         with:
           subject-path: 'dist/*'
 
