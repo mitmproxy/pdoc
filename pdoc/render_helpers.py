@@ -405,7 +405,7 @@ def linkify(
         re.sub(
             r"""
             # Part 1: foo.bar or foo.bar() (without backticks)
-            (?<![/=?#&\.])  # heuristic: not part of a URL
+            (?<![/=?#&\.\w])  # heuristic: not part of a URL or word
             # First part of the identifier (e.g. "foo") - this is optional for relative references.
             (?:
                 \b
