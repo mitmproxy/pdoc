@@ -4,6 +4,9 @@
 
 ## Unreleased: pdoc next
 
+- Display `subprocess.Popen` in type annotations instead of the internal
+  `_PdocDefusedPopen` import wrapper.
+  ([#819](https://github.com/mitmproxy/pdoc/issues/819))
 - Fix incorrect ordering of `start-after`/`end-before` in RST include directives.
   ([#876](https://github.com/mitmproxy/pdoc/pull/876), @JohanKarlbergg)
 - Support Pydantic [`computed_field`](https://docs.pydantic.dev/2.0/usage/computed_fields/) descriptions ([#855](https://github.com/mitmproxy/pdoc/pull/855), @avhz)

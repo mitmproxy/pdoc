@@ -160,6 +160,12 @@ def _noop(*args, **kwargs):
 class _PdocDefusedPopen(subprocess.Popen):
     """A small wrapper around subprocess.Popen that converts most executions into no-ops."""
 
+    # Present as subprocess.Popen in type annotations so docs don't leak this wrapper.
+    # https://github.com/mitmproxy/pdoc/issues/819
+    __name__ = "Popen"
+    __qualname__ = "Popen"
+    __module__ = "subprocess"
+
     if platform.system() == "Windows":  # pragma: no cover
         _noop_exe = "echo.exe"
     else:  # pragma: no cover

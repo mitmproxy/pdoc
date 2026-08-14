@@ -7,11 +7,13 @@ from unittest.mock import patch
 import pytest
 
 from pdoc import extract
+from pdoc._compat import formatannotation
 from pdoc.doc import Class
 from pdoc.doc import Module
 from pdoc.doc import Variable
 from pdoc.doc import _environ_lookup
 from pdoc.doc_types import empty
+from pdoc.extract import _PdocDefusedPopen
 
 here = Path(__file__).parent
 
@@ -185,4 +187,28 @@ def test_source_file_method():
 
     assert m.members["Foo"].members["a_cached_function"].source_file == (
         here / "testdata" / "demo_long.py"
+    )
+
+
+def test_defused_popen_annotation_displays_as_subprocess_popen(tmp_path):
+    """https://github.com/mitmproxy/pdoc/issues/819"""
+    assert formatannotation(_PdocDefusedPopen) == "subprocess.Popen"
+    assert formatannotation(_PdocDefusedPopen[str]) == "subprocess.Popen[str]"
+
+    f = tmp_path / "popen_anno.py"
+    f.write_text(
+        "import subprocess\n"
+        "\n"
+        "class Bar:\n"
+        "    foo: subprocess.Popen[str]\n"
+        "\n"
+        "def make() -> subprocess.Popen[bytes]:\n"
+        "    raise NotImplementedError\n"
+    )
+    mod = extract.load_module(extract.parse_spec(f))
+    m = Module(mod)
+    assert m.members["Bar"].members["foo"].annotation_str == ": subprocess.Popen[str]"
+    assert (
+        m.members["make"].signature._return_annotation_str()
+        == "subprocess.Popen[bytes]"
     )
