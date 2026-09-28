@@ -1143,7 +1143,20 @@ class Variable(Doc[None]):
         if self.default_value is empty:
             return ""
         if isinstance(self.default_value, TypeAliasType):
-            formatted = formatannotation(self.default_value.__value__)
+            try:
+                value = self.default_value.__value__
+            except NameError:
+                module_name = self.default_value.__module__
+                module = sys.modules.get(module_name) if module_name else None
+                if module is None:
+                    return self.default_value.__name__
+                expression = f"{self.default_value.__name__}.__value__"
+                value = safe_eval_type(
+                    expression, module.__dict__, None, module, self.fullname
+                )
+                if isinstance(value, str) and value == expression:
+                    return self.default_value.__name__
+            formatted = formatannotation(value)
             return _remove_collections_abc(formatted)
         elif self.annotation == TypeAlias:
             formatted = formatannotation(self.default_value)
