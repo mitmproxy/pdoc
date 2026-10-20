@@ -1,11 +1,13 @@
 import builtins
 import dataclasses
 from pathlib import Path
+import sys
 import types
 from unittest.mock import patch
 
 import pytest
 
+import pdoc
 from pdoc import extract
 from pdoc.doc import Class
 from pdoc.doc import Module
@@ -14,6 +16,43 @@ from pdoc.doc import _environ_lookup
 from pdoc.doc_types import empty
 
 here = Path(__file__).parent
+
+
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="requires type statements")
+def test_type_alias_with_type_checking_import(tmp_path):
+    module_file = tmp_path / "alias_with_type_checking.py"
+    module_file.write_text(
+        "from __future__ import annotations\n"
+        "import typing\n"
+        "if typing.TYPE_CHECKING:\n"
+        "    from collections.abc import Sequence\n"
+        "type Values = Sequence[int]\n"
+    )
+    mod = extract.load_module(extract.parse_spec(module_file))
+    alias = Module(mod).members["Values"]
+    assert isinstance(alias, Variable)
+    assert alias.default_value_str == "Sequence[int]"
+    assert "Sequence[int]" in pdoc.pdoc(str(module_file))
+
+
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="requires type statements")
+def test_type_alias_with_unresolvable_value(tmp_path):
+    module_file = tmp_path / "unresolvable_alias.py"
+    module_file.write_text("type Missing = DoesNotExist\n")
+    mod = extract.load_module(extract.parse_spec(module_file))
+    with pytest.warns(UserWarning, match="Error parsing type annotation"):
+        assert Module(mod).members["Missing"].default_value_str == "Missing"
+
+    namespace = {"__name__": "unregistered_module"}
+    exec("type Hidden = DoesNotExist", namespace)
+    alias = Variable(
+        "unregistered_module",
+        "Hidden",
+        taken_from=("unregistered_module", "Hidden"),
+        docstring="",
+        default_value=namespace["Hidden"],
+    )
+    assert alias.default_value_str == "Hidden"
 
 
 def test_repr_tb(monkeypatch):

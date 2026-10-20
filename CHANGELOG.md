@@ -4,6 +4,8 @@
 
 ## Unreleased: pdoc next
 
+- Fix a crash when a `type` alias references a name that is only imported in an `if TYPE_CHECKING:` block.
+  ([#900](https://github.com/mitmproxy/pdoc/pull/900), @cristianchiriac)
 - Fix incorrect ordering of `start-after`/`end-before` in RST include directives.
   ([#876](https://github.com/mitmproxy/pdoc/pull/876), @JohanKarlbergg)
 - Support Pydantic [`computed_field`](https://docs.pydantic.dev/2.0/usage/computed_fields/) descriptions ([#855](https://github.com/mitmproxy/pdoc/pull/855), @avhz)
