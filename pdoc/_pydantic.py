@@ -41,7 +41,9 @@ def default_value(parent: ClassOrModule, name: str, obj: Any) -> Any:
     For all other objects, return `obj` as-is.
     """
     if is_pydantic_model(parent):
-        pydantic_fields = parent.__pydantic_fields__
+        pydantic_fields = getattr(parent, "__pydantic_fields__", None)
+        if pydantic_fields is None:
+            pydantic_fields = parent.__fields__
         return pydantic_fields[name].default if name in pydantic_fields else obj
 
     return obj
@@ -49,7 +51,12 @@ def default_value(parent: ClassOrModule, name: str, obj: Any) -> Any:
 
 def get_field_docstring(parent: ClassOrModule, field_name: str) -> str | None:
     if is_pydantic_model(parent):
-        if field := parent.__pydantic_fields__.get(field_name, None):
+        pydantic_fields = getattr(parent, "__pydantic_fields__", None)
+        if pydantic_fields is None:
+            if field := parent.__fields__.get(field_name):
+                return getattr(field, "field_info", field).description
+            return None
+        if field := pydantic_fields.get(field_name):
             return field.description
         if computed := parent.__pydantic_computed_fields__.get(field_name, None):
             return computed.description
