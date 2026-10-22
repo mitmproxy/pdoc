@@ -37,6 +37,26 @@ def test_rst_extract_options_fuzz(s):
     assert not s or content or options
 
 
+def test_google_fenced_code_block():
+    """Google section headers inside a fenced code block are left alone (#775)."""
+    s = "Lorem dolor sit amet.\n\n```\nABC:\n    DEF\nGHI\n```\n"
+    assert docstrings.google(s) == s
+
+    s = "Args:\n    x: foo\n\n~~~\nABC:\n    DEF\n~~~\n\nReturns:\n    bar\n"
+    ret = docstrings.google(s)
+    assert "~~~\nABC:\n    DEF\n~~~" in ret
+    assert "###### Arguments:" in ret
+    assert "###### Returns:" in ret
+
+    # a longer fence is only closed by a fence of at least the same length
+    s = "````md\n```\nx\n```\nABC:\n    DEF\n````\n"
+    assert docstrings.google(s) == s
+
+    # unterminated fences are treated as regular text
+    s = "```\nArgs:\n    x: foo\n"
+    assert "###### Arguments:" in docstrings.google(s)
+
+
 def test_convert_exception(monkeypatch):
     def raise_(*_):
         raise Exception

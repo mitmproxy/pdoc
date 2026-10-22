@@ -14,6 +14,7 @@ accompanied by matching snapshot tests in `test/testdata/`.
 from __future__ import annotations
 
 import base64
+from collections.abc import Callable
 from functools import cache
 import inspect
 import mimetypes
@@ -89,19 +90,57 @@ def embed_images(docstring: str, source_file: Path) -> str:
 
 def google(docstring: str) -> str:
     """Convert Google-style docstring sections into Markdown."""
-    return re.sub(
-        r"""
-        ^(?P<name>[A-Z][A-Z a-z]+):\n
-        (?P<contents>(
-            \n        # empty lines
-            |         # or
-            [ \t]+.+  # lines with indentation
-        )+)$
-        """,
-        _google_section,
+    return _outside_fenced_code_blocks(
         docstring,
-        flags=re.VERBOSE | re.MULTILINE,
+        lambda text: re.sub(
+            r"""
+            ^(?P<name>[A-Z][A-Z a-z]+):\n
+            (?P<contents>(
+                \n        # empty lines
+                |         # or
+                [ \t]+.+  # lines with indentation
+            )+)$
+            """,
+            _google_section,
+            text,
+            flags=re.VERBOSE | re.MULTILINE,
+        ),
     )
+
+
+_FENCE_OPEN = re.compile(r"(?P<fence>`{3,}|~{3,})(?P<info>.*)")
+_FENCE_CLOSE = re.compile(r"(?P<fence>`{3,}|~{3,})[ \t]*")
+
+
+def _outside_fenced_code_blocks(docstring: str, convert: Callable[[str], str]) -> str:
+    """
+    Apply `convert` to all parts of `docstring` that are not in a fenced code block.
+
+    Only fences at the start of a line are considered: indented ones are part of a
+    section's contents and are left in place. A block is closed by a fence of the same
+    character that is at least as long as the opening one. An unterminated fence is
+    treated as regular text.
+    """
+    lines = docstring.splitlines(keepends=True)
+    parts = []
+    text_start = 0
+    block_start: int | None = None
+    fence = ""
+    for i, line in enumerate(lines):
+        if block_start is None:
+            m = _FENCE_OPEN.fullmatch(line.rstrip("\r\n"))
+            if m and not (m["fence"][0] == "`" and "`" in m["info"]):
+                block_start = i
+                fence = m["fence"]
+        else:
+            m = _FENCE_CLOSE.fullmatch(line.rstrip("\r\n"))
+            if m and m["fence"][0] == fence[0] and len(m["fence"]) >= len(fence):
+                parts.append(convert("".join(lines[text_start:block_start])))
+                parts.append("".join(lines[block_start : i + 1]))
+                text_start = i + 1
+                block_start = None
+    parts.append(convert("".join(lines[text_start:])))
+    return "".join(parts)
 
 
 GOOGLE_LIST_SECTIONS = ["Args", "Raises", "Attributes", "Keyword Args"]
