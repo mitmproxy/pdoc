@@ -2,6 +2,8 @@ import builtins
 import dataclasses
 from pathlib import Path
 import types
+from typing import Callable
+from typing import ClassVar
 from unittest.mock import patch
 
 import pytest
@@ -55,6 +57,59 @@ def test_attrs():
     c = m.members["FOO_CONSTANT"]
     assert isinstance(c, Variable)
     assert not c.is_enum_member
+
+
+def test_dataclass_initvars():
+    @dataclasses.dataclass
+    class Example:
+        value: int
+        init_only: "dataclasses.InitVar[int]"
+        untyped: dataclasses.InitVar
+        computed: int = dataclasses.field(init=False)
+        optional: dataclasses.InitVar[int] = 7
+        callback: dataclasses.InitVar[Callable[[int], int]] = lambda value: value
+        category: ClassVar[str] = "example"
+
+    c = Class("test", "Example", Example, ("test", "Example"))
+    assert {"__init__", "value", "computed", "category"} <= c.members.keys()
+    assert {"init_only", "untyped", "optional", "callback"}.isdisjoint(c.members)
+
+    @dataclasses.dataclass
+    class Child(Example):
+        init_only: int
+
+    child = Class("test", "Child", Child, ("test", "Child"))
+    assert {"init_only", "value", "computed", "category"} <= child.members.keys()
+    assert {"untyped", "optional", "callback"}.isdisjoint(child.members)
+
+
+def test_initvar_in_ordinary_class():
+    class Ordinary:
+        value: dataclasses.InitVar[int]
+
+    c = Class("test", "Ordinary", Ordinary, ("test", "Ordinary"))
+    assert "value" in c.members
+
+
+@pytest.mark.parametrize("wrap", [property, lambda f: f])
+def test_initvar_overridden_by_member(wrap):
+    @dataclasses.dataclass
+    class Parent:
+        seed: dataclasses.InitVar[int]
+
+        def __post_init__(self, seed):
+            self._seed = seed
+
+    @dataclasses.dataclass
+    class Child(Parent):
+        @wrap  # type: ignore[misc]
+        def seed(self) -> int:
+            """The stored input."""
+            return self._seed
+
+    c = Class("test", "Child", Child, ("test", "Child"))
+    assert "seed" in c.members
+    assert c.members["seed"].docstring == "The stored input."
 
 
 def test_all_with_import_err():
