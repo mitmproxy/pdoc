@@ -271,6 +271,20 @@ class Namespace(Doc[U], metaclass=ABCMeta):
                 is_classmethod
                 and isinstance(obj.__func__, (property, cached_property))
             )
+            annotation = self._var_annotations.get(name, empty)
+            if dataclasses.is_dataclass(self.obj) and (
+                annotation is dataclasses.InitVar
+                or isinstance(annotation, dataclasses.InitVar)
+            ):
+                field = self.obj.__dataclass_fields__.get(name)
+                # A subclass may replace an init-only variable with a real member.
+                if (
+                    field is not None
+                    and not is_property
+                    and not inspect.isdatadescriptor(obj)
+                    and (obj is empty or obj is field.default)
+                ):
+                    continue
             if is_property:
                 func = obj
                 if is_classmethod:
@@ -322,7 +336,7 @@ class Namespace(Doc[U], metaclass=ABCMeta):
                     self.modulename,
                     qualname,
                     docstring="",
-                    annotation=self._var_annotations.get(name, empty),
+                    annotation=annotation,
                     default_value=_pydantic.default_value(self.obj, name, obj),
                     taken_from=taken_from,
                 )
