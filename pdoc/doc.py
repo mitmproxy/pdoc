@@ -683,9 +683,19 @@ class Class(Namespace[type]):
 
         # __mro__ and __orig_bases__ differ between Python versions and special cases like TypedDict/NamedTuple.
         # This here is a pragmatic approximation of what we want.
-        return (
-            *(base for base in orig_bases if isinstance(base, type)),
-            *self.obj.__mro__,
+        mro = self.obj.__mro__
+        return tuple(
+            dict.fromkeys(
+                (
+                    mro[0],
+                    *(
+                        base
+                        for base in orig_bases
+                        if isinstance(base, type) and base not in mro
+                    ),
+                    *mro[1:],
+                )
+            )
         )
 
     @cached_property

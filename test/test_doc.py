@@ -1,6 +1,7 @@
 import builtins
 import dataclasses
 from pathlib import Path
+import sys
 import types
 from unittest.mock import patch
 
@@ -186,3 +187,76 @@ def test_source_file_method():
     assert m.members["Foo"].members["a_cached_function"].source_file == (
         here / "testdata" / "demo_long.py"
     )
+
+
+def test_bases_mro_order_with_orig_bases(tmp_path, monkeypatch):
+    mod_file = tmp_path / "orig_bases_mod.py"
+    mod_file.write_text(
+        '''
+from typing import Iterable, TypedDict
+
+
+class Base:
+    def __init__(self) -> None:
+        """Base has a nice __init__"""
+
+    def method(self) -> None:
+        """Base method"""
+
+
+class Mixin(Base):
+    pass
+
+
+class OtherBase:
+    def method(self) -> None:
+        """OtherBase method"""
+
+
+class Stuff(Base, Iterable):
+    """Stuff is great."""
+
+    def __init__(self) -> None:
+        """init stuff"""
+
+    def __iter__(self):
+        return iter(())
+
+
+class Indirect(Mixin, OtherBase, Iterable):
+    def __iter__(self):
+        return iter(())
+
+
+class ParentTD(TypedDict):
+    a: int
+    """Parent docstring."""
+
+
+class ChildTD(ParentTD):
+    a: str
+    """Child docstring."""
+''',
+        encoding="utf-8",
+    )
+    monkeypatch.syspath_prepend(str(tmp_path))
+    mod = extract.load_module("orig_bases_mod")
+    monkeypatch.setitem(sys.modules, "orig_bases_mod", mod)
+
+    m = Module(mod)
+
+    stuff = m.members["Stuff"]
+    assert isinstance(stuff, Class)
+    assert stuff.members["__init__"].taken_from == ("orig_bases_mod", "Stuff.__init__")
+    assert stuff.members["__init__"].docstring == "init stuff"
+    assert stuff.members["__init__"] in stuff.own_members
+
+    indirect = m.members["Indirect"]
+    assert isinstance(indirect, Class)
+    assert indirect.members["method"].taken_from == ("orig_bases_mod", "Base.method")
+    assert indirect.members["method"].docstring == "Base method"
+
+    child_td = m.members["ChildTD"]
+    assert isinstance(child_td, Class)
+    assert child_td.members["a"].taken_from == ("orig_bases_mod", "ChildTD.a")
+    assert child_td.members["a"].docstring == "Child docstring."
