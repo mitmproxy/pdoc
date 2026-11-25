@@ -325,6 +325,8 @@ def linkify(
         Resolve `text` to the most suitable documentation object.
         """
         text = m.group(0)
+        if m.lastgroup == "skip":
+            return text
         plain_text = text.replace(
             '</span><span class="o">.</span><span class="n">', "."
         )
@@ -404,6 +406,12 @@ def linkify(
     return Markup(
         re.sub(
             r"""
+            (?P<skip>
+                (?i:<a\b(?:"[^"]*"|'[^']*'|[^>"'])*>[\s\S]*?</a>)  # existing links
+                |
+                <(?:"[^"]*"|'[^']*'|[^>"'])+>  # HTML tags and their attributes
+            )
+            |
             # Part 1: foo.bar or foo.bar() (without backticks)
             (?<![/=?#&\.])  # heuristic: not part of a URL
             # First part of the identifier (e.g. "foo") - this is optional for relative references.
@@ -411,7 +419,7 @@ def linkify(
                 \b
                 (?!\d)\w+
                 |
-                \.*  # We may also start with multiple dots.
+                (?<!\w)\.*  # We may also start with multiple dots.
             )
             # Rest of the identifier (e.g. ".bar" or "..bar")
             (?:
