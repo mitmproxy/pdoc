@@ -161,3 +161,47 @@ def test_mixed_toc():
 )
 def test_markdown_autolink(md, html):
     assert to_html(md) == html
+
+
+def test_linkify_external_urls_and_tags(tmp_path, monkeypatch):
+    pkg = tmp_path / "issue817"
+    pkg.mkdir()
+    (pkg / "__init__.py").write_text(
+        '''
+example = 0
+
+
+def com():
+    """
+    [something](https://example.com)
+
+    https://api.example.com/
+
+    [See issue817.com for details](https://example.org)
+
+    `https://example.com` and `https://api.example.com/`
+
+    <img src="https://example.com/img.com.png" alt="issue817.com">
+
+    Relative `.com` and .com in text.
+    """
+''',
+        encoding="utf-8",
+    )
+    monkeypatch.syspath_prepend(str(tmp_path))
+
+    import pdoc
+
+    rendered = pdoc.pdoc("issue817")
+    assert '<a href="https://example.com">something</a>' in rendered
+    assert '<a href="https://api.example.com/">https://api.example.com/</a>' in rendered
+    assert '<a href="https://example.org">See issue817.com for details</a>' in rendered
+    assert (
+        "<code>https://example.com</code> and <code>https://api.example.com/</code>"
+        in rendered
+    )
+    assert '<img src="https://example.com/img.com.png" alt="issue817.com">' in rendered
+    assert (
+        'Relative <code><a href="#com">.com</a></code> and <a href="#com">.com</a> in text.'
+        in rendered
+    )
